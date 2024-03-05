@@ -1,43 +1,12 @@
 import React from 'react';
-import { ContextMenu } from '@mstr/rc';
 import { sessionHelper } from './storage/session-helper';
 import mstrObjectType from './mstr-object/mstr-object-type-enum';
 
-export const DevelopmentImportList = () => {
-  const menuItems = [
-    {
-      itemIndex: 'SeasonalReport',
-      title: objectList.SeasonalReport.name
-    },
-    {
-      itemIndex: 'SubtotalsAllTypes',
-      title: objectList.SubtotalsAllTypes.name
-    },
-    {
-      itemIndex: 'Crosstab123',
-      title: objectList.Crosstab123.name
-    },
-    {
-      itemIndex: 'CrosstabSubtotal',
-      title: objectList.CrosstabSubtotal.name
-    },
-  ];
-
-  const onItemClick = (event) => {
-    if (event.key === 'SeasonalReport') { sessionHelper.importObjectWithouPopup(objectList.SeasonalReport); }
-    if (event.key === 'SubtotalsAllTypes') { sessionHelper.importObjectWithouPopup(objectList.SubtotalsAllTypes); }
-    if (event.key === 'Crosstab123') { sessionHelper.importObjectWithouPopup(objectList.Crosstab123); }
-    if (event.key === 'CrosstabSubtotal') { sessionHelper.importObjectWithouPopup(objectList.CrosstabSubtotal); }
-  };
-
-  return (
-    <div className="refresh-button-container">
-      <ContextMenu items={menuItems} onItemClick={onItemClick}>
-        <button type="button" onClick={() => sessionHelper.importObjectWithouPopup(objectList.SeasonalReport)}>Quick Import</button>
-      </ContextMenu>
-    </div>
-  );
-};
+export const DevelopmentImportList = () => (
+  <div className="refresh-button-container">
+    <button type="button" onClick={() => sessionHelper.importObjectWithouPopup(objectList.SeasonalReport)}>Quick Import</button>
+  </div>
+);
 
 const objectList = {
   SeasonalReport: {
