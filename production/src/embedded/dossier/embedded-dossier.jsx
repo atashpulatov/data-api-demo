@@ -130,7 +130,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
    *
    * @param {Object} error - payload thrown by embedded.api after the error occured
    */
-  // eslint-disable-next-line class-methods-use-this
   onEmbeddedError = (error) => {
     if (error.title !== 'Notification') {
       // TODO: improve this, so it doesn't depend on i18n
