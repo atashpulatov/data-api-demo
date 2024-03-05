@@ -253,7 +253,7 @@ class ErrorService {
     // triggered from overview (popupType is set to repromptDossierDataOverview or
     // repromptReportDataOverviewDataOverview).
     if (repromptsQueueReducer?.total && popupStateReducer?.popupType) {
-      const { total = 0 } = repromptsQueueReducer;
+      const { total } = repromptsQueueReducer;
       const { popupType } = popupStateReducer;
 
       // Show Overview table if there are any reprompts in queue if error occured
