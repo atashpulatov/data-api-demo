@@ -34,11 +34,9 @@ class OperationErrorHandler {
       await errorService.handleObjectBasedError(objectData.objectWorkingId, error, callback, operationData);
     }
 
-    const { repromptsQueueReducer, popupStateReducer } = this.reduxStore.getState();
-
     // Get state from redux to check if there are any reprompts in queue and if there is any popup displayed
     // If there are any reprompts in queue and the popup is displayed, change the popup to importedDataOverview.
-    this.handleRepromptOperationError(repromptsQueueReducer, popupStateReducer);
+    this.handleRepromptOperationError();
   };
 
   /**
@@ -155,11 +153,13 @@ class OperationErrorHandler {
   /**
    * Determines whether to force the Overview table display if there are any reprompts in queue
    * and an error has occurred while reprompting dossier/report in Overview window only.
-   *
-   * @param {*} repromptsQueueReducer reprompt queue state
-   * @param {*} popupStateReducer popup state
    */
-  handleRepromptOperationError = (repromptsQueueReducer, popupStateReducer) => {
+  handleRepromptOperationError = () => {
+    const { repromptsQueueReducer, popupStateReducer } = this.reduxStore.getState();
+
+    // Verify if there are any reprompts in queue to determine whether it's multiple re-prompt
+    // triggered from overview (popupType is set to repromptDossierDataOverview or
+    // repromptReportDataOverviewDataOverview).
     if (repromptsQueueReducer?.total && popupStateReducer?.popupType) {
       const { total = 0 } = repromptsQueueReducer;
       const { popupType } = popupStateReducer;
