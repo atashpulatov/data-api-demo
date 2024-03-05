@@ -6,6 +6,15 @@ class OverviewDialogBrowserPage(BaseBrowserPage):
     ACTION_BUTTON = '//button[text()="%s"]'
     SELECT_ALL_CHECKBOX = 'div[col-id="name"] > .ag-header-select-all'
     STATUS_COLUMN = '//div[@class="status-container"]'
+    BUTTONS_SELECTOR = {
+        "Add Data": ACTION_BUTTON,
+        "Refresh": ACTION_BUTTON,
+        "Re-Prompt": ACTION_BUTTON,
+        "Duplicate": ACTION_BUTTON,
+        "Delete": ACTION_BUTTON,
+        "Filter": FILTER_BUTTON,
+        "Close": ACTION_BUTTON
+    }
 
     def check_if_overview_dialog_is_opened(self):
         self.focus_on_add_in_popup_frame()
@@ -14,22 +23,14 @@ class OverviewDialogBrowserPage(BaseBrowserPage):
     
     def is_action_button_visible(self, button_text):
         self.focus_on_add_in_popup_frame()
-        selector = OverviewDialogBrowserPage.ACTION_BUTTON
-
-        if button_text == 'Filter':
-            selector = OverviewDialogBrowserPage.FILTER_BUTTON
-
+        selector = OverviewDialogBrowserPage.BUTTONS_SELECTOR[button_text]
         element = self.get_element_by_xpath(selector % button_text)
 
         return element.is_displayed()
 
     def is_action_button_enabled(self, button_text):
         self.focus_on_add_in_popup_frame()
-        selector = OverviewDialogBrowserPage.ACTION_BUTTON
-
-        if button_text == 'Filter':
-            selector = OverviewDialogBrowserPage.FILTER_BUTTON
-        
+        selector = OverviewDialogBrowserPage.BUTTONS_SELECTOR[button_text]
         element = self.get_element_by_xpath(selector % button_text)
 
         return element.is_enabled_by_attribute_html()
@@ -42,10 +43,7 @@ class OverviewDialogBrowserPage(BaseBrowserPage):
     def click_action_button(self, button_text):
         self.focus_on_add_in_popup_frame()
 
-        selector = OverviewDialogBrowserPage.ACTION_BUTTON
-
-        if button_text == 'Filter':
-            selector = OverviewDialogBrowserPage.FILTER_BUTTON
+        selector = OverviewDialogBrowserPage.BUTTONS_SELECTOR[button_text]
 
         self.get_element_by_xpath(selector % button_text).click()
 
