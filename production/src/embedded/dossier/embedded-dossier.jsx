@@ -127,17 +127,16 @@ export default class EmbeddedDossierNotConnected extends React.Component {
    * Retrives the error type (based on title).
    * If error type is not a notification - handles it by closing the window
    *
-   * @param {Object} error - payload throwed by embedded.api after the error occured
+   * @param {Object} error - payload thrown by embedded.api after the error occured
    */
   // eslint-disable-next-line class-methods-use-this
-  onEmbeddedError(error) {
-    const { title } = error;
-    if (title !== 'Notification') {
+  onEmbeddedError = (error) => {
+    if (error.title !== 'Notification') {
       // TODO: improve this, so it doesn't depend on i18n
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
       popupHelper.handlePopupErrors(error);
     }
-  }
+  };
 
   /**
    * This function handles the instance creation of the Dossier.
