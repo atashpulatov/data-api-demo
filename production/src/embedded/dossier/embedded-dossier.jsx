@@ -2,6 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { t } from 'i18next';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { popupHelper } from '../../popup/popup-helper';
 import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
@@ -253,12 +254,16 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       popupHelper.handlePopupErrors(error);
     }
 
-    if (instance?.mid) {
-      this.dossierData = {
-        ...this.dossierData,
-        instanceId: instance.mid,
-      };
+    // Do not proceeed with the embedded dossier creation if the instance is not ready.
+    if (!instance?.mid) {
+      console.log('Returning...');
+      return;
     }
+
+    this.dossierData = {
+      ...this.dossierData,
+      instanceId: instance.mid,
+    };
 
     const serverURL = envUrl.slice(0, envUrl.lastIndexOf('/api'));
     // delete last occurence of '/api' from the enviroment url
@@ -349,9 +354,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       }
     };
 
-    // Do not proceeed with the embedded dossier creation if the instance is not ready,
-    // or an error preparing the dossier was thrown.
-    if (instance?.mid) {
+    if (microstrategy?.dossier) {
       const embeddedDossier = await microstrategy.dossier.create(props);
       this.embeddedDossier = embeddedDossier;
 
@@ -375,7 +378,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
 
       handleEmbeddedDossierLoad();
     } else {
-      console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
+      console.warn(errorMessages.MICROSTRATEGY_API_MISSING);
     }
   };
 
