@@ -147,10 +147,10 @@ class OperationErrorHandler {
   };
 
   /**
-   * Determines whether to force the Overview table display if there are any reprompts in queue
+   * Determines whether to force the Overview table reload or refresh if there are any reprompts in queue
    * and an error has occurred while reprompting dossier/report in Overview window only.
    */
-  handleRepromptOperationError = () => {
+  refreshOverviewToShowRepromptError = () => {
     const { repromptsQueueReducer, popupStateReducer } = this.reduxStore.getState();
 
     // Verify if there are any reprompts in queue to determine whether it's multiple re-prompt
