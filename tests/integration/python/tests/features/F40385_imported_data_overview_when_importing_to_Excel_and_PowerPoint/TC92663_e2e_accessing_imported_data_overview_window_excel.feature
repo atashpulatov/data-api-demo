@@ -11,7 +11,8 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
       And I clicked import dossier without waiting for results
       And I selected "Books" as an answer for "1. Category" prompt - object prompt
       And I selected "Music" as an answer for "1. Category" prompt - object prompt
-      And I clicked Apply button
+    #TODO: Run button should be renamed to Apply button
+      And I clicked Run button
       And I waited for object to be imported successfully
 
     #Import report 2: Page-by report
