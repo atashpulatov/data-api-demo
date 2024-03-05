@@ -17,6 +17,7 @@ import {
   preparePromptedDossier,
   ObjectExecutionStatus
 } from '../../helpers/prompts-handling-helper';
+import { errorMessages } from '../../error/constants';
 
 const { microstrategy, Office } = window;
 
@@ -49,7 +50,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
 
     // Do not embed the dossier if the Microstrategy API is not available
     if (!microstrategy?.dossier) {
-      console.warn('Cannot find microstrategy.dossier, please check if embeddinglib.js is present in your environment.');
+      console.warn(errorMessages.MICROSTRATEGY_API_MISSING);
       return;
     }
 

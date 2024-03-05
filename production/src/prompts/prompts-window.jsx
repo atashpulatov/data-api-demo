@@ -24,6 +24,7 @@ import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-st
 import { prepareGivenPromptAnswers, preparePromptedReport } from '../helpers/prompts-handling-helper';
 import { objectImportType } from '../mstr-object/constants';
 import i18n from '../i18n';
+import { errorMessages } from '../error/constants';
 
 const { microstrategy } = window;
 const { deleteDossierInstance } = mstrObjectRestService;
@@ -321,7 +322,7 @@ export const PromptsWindowNotConnected = (props) => {
     scriptInjectionHelper.watchForIframeAddition(localContainer, onIframeLoad);
 
     if (!microstrategy?.dossier) {
-      console.warn('Cannot find microstrategy.dossier, please check if embeddinglib.js is present in your environment.');
+      console.warn(errorMessages.MICROSTRATEGY_API_MISSING);
       return;
     }
 
