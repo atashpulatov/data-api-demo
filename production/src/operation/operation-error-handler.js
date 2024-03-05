@@ -150,7 +150,7 @@ class OperationErrorHandler {
   };
 
   /**
-   * Determines whether to close/hide Reprompt dialog in Overview window if an error has occured
+   * Close/hide Reprompt dialog only in Overview window if an error has occured
    * and needs to be displayed in Overview. Normally, it's triggered when reprompting dossier/report
    * and user interacts with Prompts' dialog or cube is not published or dossier/report is not
    * available in the environment as it was deleted at the time of reprompting.
