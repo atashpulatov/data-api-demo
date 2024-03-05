@@ -227,8 +227,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     } = mstrData;
 
     let instance = {};
-    let dossierPreparationErrorThrown = false;
-
     try {
       // Create instance and handle it different if it is prompted or multiple reprompt is triggered.
       instance = await this.handleInstanceId(instanceId, projectId, dossierId, isPrompted, isMultipleRepromptWithReuse);
@@ -252,17 +250,16 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       // Proceed with opening prompt dialog if applicable.
       await this.openPromptDialog(dossierId, instance, projectId, dossierOpenRequested, isImportedObjectPrompted, isMultipleRepromptWithReuse);
     } catch (error) {
-      // Update the flag to indicate that an error was thrown during the dossier preparation.
-      dossierPreparationErrorThrown = true;
-
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
       popupHelper.handlePopupErrors(error);
     }
 
-    this.dossierData = {
-      ...this.dossierData,
-      instanceId: instance.mid,
-    };
+    if (instance?.mid) {
+      this.dossierData = {
+        ...this.dossierData,
+        instanceId: instance.mid,
+      };
+    }
 
     const serverURL = envUrl.slice(0, envUrl.lastIndexOf('/api'));
     // delete last occurence of '/api' from the enviroment url
@@ -355,7 +352,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
 
     // Do not proceeed with the embedded dossier creation if the instance is not ready,
     // or an error preparing the dossier was thrown.
-    if (!dossierPreparationErrorThrown) {
+    if (instance?.mid) {
       const embeddedDossier = await microstrategy.dossier.create(props);
       this.embeddedDossier = embeddedDossier;
 
