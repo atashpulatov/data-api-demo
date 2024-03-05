@@ -509,7 +509,7 @@ describe('PopupController', () => {
 
     const handleUpdateCommandSpy = jest.spyOn(popupController, 'getIsMultipleRepromptQueueEmpty').mockImplementation(() => true);
     const spyValidateAuthToken = jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementation(() => { });
-    const processCancelCommandSpy = jest.spyOn(popupController, 'processCancelCommand').mockImplementation(() => { });
+    const manageDialogTypeSpy = jest.spyOn(popupController, 'manageDialogType').mockImplementation(() => { });
     const runImportedDataOverviewPopupSpy = jest.spyOn(popupController, 'runImportedDataOverviewPopup').mockImplementation(() => { });
 
     jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementationOnce(() => { });
@@ -527,7 +527,7 @@ describe('PopupController', () => {
     // then
     expect(handleUpdateCommandSpy).toHaveBeenCalled();
     expect(spyValidateAuthToken).toHaveBeenCalled();
-    expect(processCancelCommandSpy).toHaveBeenCalled();
+    expect(manageDialogTypeSpy).toHaveBeenCalled();
     expect(runImportedDataOverviewPopupSpy).toHaveBeenCalled();
   });
 

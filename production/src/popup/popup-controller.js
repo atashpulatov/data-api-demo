@@ -356,7 +356,7 @@ class PopupController {
     this.reduxStore.dispatch(clearRepromptTask());
 
     if (!isMultipleRepromptQueueEmpty && !isDataOverviewOpen) {
-      // Close dialog when user cancels, but only if there are objects left to Multiple Reprompt,
+      // Close dialog when user cancels or an error occurs, but only if there are objects left to Multiple Reprompt,
       // since we were previously keeping the dialog open in between objects.
       // Otherwise, the dialog will close and reset popup state anyway, so no need to do it here.
       await this.closeDialog(dialog);
