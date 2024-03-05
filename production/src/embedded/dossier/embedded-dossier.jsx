@@ -47,6 +47,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   componentDidMount() {
     scriptInjectionHelper.watchForIframeAddition(this.container.current, this.onIframeLoad);
 
+    // Do not embed the dossier if the Microstrategy API is not available
     if (!microstrategy?.dossier) {
       console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment.');
       return;
@@ -258,12 +259,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       popupHelper.handlePopupErrors(error);
     }
 
-    // Do not proceeed with the embedded dossier creation if the instance is not ready,
-    // or an error preparing the dossier was thrown.
-    if (!instance || dossierPreparationErrorThrown) {
-      return;
-    }
-
     this.dossierData = {
       ...this.dossierData,
       instanceId: instance.mid,
@@ -358,7 +353,8 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       }
     };
 
-    // Proceed with emebedding dossier if no error was thrown during the preparation.
+    // Do not proceeed with the embedded dossier creation if the instance is not ready,
+    // or an error preparing the dossier was thrown.
     if (!dossierPreparationErrorThrown) {
       const embeddedDossier = await microstrategy.dossier.create(props);
       this.embeddedDossier = embeddedDossier;
