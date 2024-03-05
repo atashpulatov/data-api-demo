@@ -86,11 +86,11 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   };
 
   /**
- * Handles the event throwed after new vizualization selection.
+ * Handles the event thrown after new vizualization selection.
  * Retrives the selected vizualizationKey and chapterKey.
  * Passes new data to parent component by handleSelection function.
  *
- * @param {Object} payload - payload throwed by embedded.api after the visualization was selected
+ * @param {Object} payload - payload thrown by embedded.api after the visualization was selected
  */
   onVizSelectionHandler(payload) {
     const { handleSelection } = this.props;
@@ -124,7 +124,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   }
 
   /**
-   * Handles the event throwed after new error in embedded dossier.
+   * Handles the event thrown after new error in embedded dossier.
    * Retrives the error type (based on title).
    * If error type is not a notification - handles it by closing the window
    *

@@ -103,7 +103,7 @@ export const PromptsWindowNotConnected = (props) => {
   };
 
   /**
-   * Handles the event throwed after new error in embedded dossier.
+   * Handles the event thrown after new error in embedded dossier.
    * Retrives the error type (based on title).
    * If error type is not a notification - handles it by closing the window
    *
