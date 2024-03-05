@@ -239,7 +239,7 @@ class PopupController {
         default:
           break;
       }
-      
+
       // Only show overview table if there are no more prompted items left to Multiple Reprompt
       // This check will keep the prompts dialog open in between reports/dossiers, if there are more to prompt
       // as long as there are no errors.
