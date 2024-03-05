@@ -62,20 +62,28 @@ describe('PopupButtons', () => {
     // given
     const disableActiveActions = true;
     // when
-    const { container } = render(<PopupButtonsNotConnected
+    const { getByText } = render(<PopupButtonsNotConnected
       disableActiveActions={disableActiveActions}
     />);
+
+    const button = getByText('Import Data');
+    fireEvent.focus(button);
+
     // then
-    expect(container.querySelector('span.mstr-rc-tooltip-source')).toBeInTheDocument();
+    expect(document.querySelector('.mstr-rc-3-tooltip__content')).toBeInTheDocument();
   });
 
   it('should render a tooltip span if the cube Isn’t  published', () => {
     // when
-    const { container } = render(<PopupButtonsNotConnected
+    const { getByText } = render(<PopupButtonsNotConnected
       isPublished={false}
     />);
+
+    const button = getByText('Import Data');
+    fireEvent.focus(button);
+
     // then
-    expect(container.querySelector('span.mstr-rc-tooltip-source')).toBeInTheDocument();
+    expect(document.querySelector('.mstr-rc-3-tooltip__content')).toBeInTheDocument();
   });
 
   it('should NOT display secondary button when hideSecondary prop is provided',

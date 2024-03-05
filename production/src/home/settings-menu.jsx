@@ -23,7 +23,6 @@ const APP_VERSION = packageJson.build;
 const { Office } = window;
 export const SettingsMenuNotConnected = ({
   userFullName,
-  userID,
   userInitials,
   isSecured,
   objects,
@@ -118,7 +117,11 @@ export const SettingsMenuNotConnected = ({
         {userInitials !== null
           ? <span className="no-trigger-close" id="initials" alt={t('User profile')}>{userInitials}</span>
           : <img className="no-trigger-close" id="profile-image" src={logo} alt={t('User profile')} />}
-        <OverflowTooltip placement="bottom" theme="dark" content={userNameDisplay} mouseEnterDelay={1} containerClassName="user-name-tooltip" sourceClassName="user-name">{userNameDisplay}</OverflowTooltip>
+        <OverflowTooltip placement="bottom" content={userNameDisplay} mouseEnterDelay={1} containerClassName="user-name-tooltip" sourceClassName="user-name">
+          <div>
+            {userNameDisplay}
+          </div>
+        </OverflowTooltip>
       </li>
       <li
         className={`no-trigger-close imported-data-overview not-linked-list ${isSecured ? 'imported-data-overview-inactive' : ''}`}
@@ -232,7 +235,6 @@ async function logout(hideSettingsPopup) {
 }
 
 SettingsMenuNotConnected.propTypes = {
-  userID: PropTypes.string,
   userFullName: PropTypes.string,
   userInitials: PropTypes.string,
   isSecured: PropTypes.bool,

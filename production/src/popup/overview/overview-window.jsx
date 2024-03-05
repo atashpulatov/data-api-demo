@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { DataOverview, objectNotificationTypes } from '@mstr/connector-components';
 
-import { Button } from '@mstr/rc-3';
+import { Button } from '@mstr/rc';
 import { useTranslation } from 'react-i18next';
 import { ApplicationTypeEnum } from '../../office-constants';
 import overviewHelper from './overview-helper';

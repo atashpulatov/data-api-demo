@@ -76,7 +76,6 @@ export const PopupButtonsNotConnected = ({
             handleOk={handleOk}
             isPrimaryBtn={isImportReport ? !handleSecondary : true}
             disableReason={disableReasonForImport}
-            t={t}
             actionType={useImportAsRunButton ? importActionTypes.APPLY : primaryImportBtnString}
           />
         ) : (
@@ -85,7 +84,6 @@ export const PopupButtonsNotConnected = ({
             handleOk={handleSecondary}
             isPrimaryBtn
             disableReason={disableReasonForImport}
-            t={t}
             actionType={useImportAsRunButton ? importActionTypes.APPLY : importActionTypes.IMPORT_IMAGE}
           />
         )
@@ -98,7 +96,6 @@ export const PopupButtonsNotConnected = ({
             handleOk={handleSecondary}
             isPrimaryBtn={false}
             disableReason={disableReasonForImport}
-            t={t}
             actionType={importActionTypes.IMPORT_IMAGE}
           />
         ) : (
