@@ -223,18 +223,16 @@ class PopupController {
           }
           break;
         case commandCancel:
-          await this.processCancelCommand(isMultipleRepromptQueueEmpty, isDataOverviewOpen, dialog, dialogType);
+          await this.manageDialogType(isMultipleRepromptQueueEmpty, isDataOverviewOpen, dialog, dialogType);
           break;
         case commandError:
-          await this.processCancelCommand(isMultipleRepromptQueueEmpty, isDataOverviewOpen, dialog, dialogType);
+          await this.manageDialogType(isMultipleRepromptQueueEmpty, isDataOverviewOpen, dialog, dialogType);
 
           // Reset state if an error has occurred and show error message.
-          if (command === commandError) {
-            if (isDataOverviewOpen) {
-              this.reduxStore.dispatch(this.popupActions.resetState());
-            }
-            errorService.handleError(response.error);
+          if (isDataOverviewOpen) {
+            this.reduxStore.dispatch(this.popupActions.resetState());
           }
+          errorService.handleError(response.error);
           break;
         default:
           break;
@@ -353,7 +351,7 @@ class PopupController {
     return total > 1 && index > 1;
   };
 
-  processCancelCommand = async (isMultipleRepromptQueueEmpty, isDataOverviewOpen, dialog, dialogType) => {
+  manageDialogType = async (isMultipleRepromptQueueEmpty, isDataOverviewOpen, dialog, dialogType) => {
     // First, clear reprompt task queue if the user cancels the popup.
     this.reduxStore.dispatch(clearRepromptTask());
 
