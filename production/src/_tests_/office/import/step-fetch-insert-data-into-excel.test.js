@@ -196,8 +196,6 @@ describe('StepFetchInsertDataIntoExcel', () => {
         excelContext: excelContextMock,
         excelRows: [42, 42],
         rowIndex: 0,
-        operationType: 'operationTypeTest',
-        tableChanged: 'tableChangedTest',
         contextPromises: [],
         header: 'headerTest',
         mstrTable: {
@@ -382,8 +380,6 @@ describe('StepFetchInsertDataIntoExcel', () => {
         excelContext: excelContextMock,
         excelRows: [42, 42],
         rowIndex: 0,
-        operationType: 'operationTypeTest',
-        tableChanged: 'tableChangedTest',
         contextPromises: [],
         header: 'headerOneTest',
         mstrTable: {
@@ -398,8 +394,6 @@ describe('StepFetchInsertDataIntoExcel', () => {
         excelContext: excelContextMock,
         excelRows: [42, 42, 42, 42],
         rowIndex: 2,
-        operationType: 'operationTypeTest',
-        tableChanged: 'tableChangedTest',
         contextPromises: [],
         header: 'headerTwoTest',
         mstrTable: {

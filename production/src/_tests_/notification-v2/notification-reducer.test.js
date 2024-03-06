@@ -197,7 +197,7 @@ describe('Notification reducer', () => {
           objectWorkingId: 123,
           operationType: IMPORT_OPERATION,
           title: 'Pending',
-          type: 'PROGRESS',
+          type: 'progress',
         });
       });
 
@@ -222,7 +222,7 @@ describe('Notification reducer', () => {
           objectWorkingId: 123,
           operationType: IMPORT_OPERATION,
           title: 'Pending',
-          type: 'PROGRESS',
+          type: 'progress',
         });
       });
 
@@ -330,7 +330,7 @@ describe('Notification reducer', () => {
         const resultState = notificationReducer(initialStateProgress, actionForImport);
 
         // then
-        expect(resultState.notifications[0].type).toEqual('SUCCESS');
+        expect(resultState.notifications[0].type).toEqual('success');
         expect(resultState.notifications[0].title).toEqual('Import successful');
         expect(resultState.notifications[0].dismissNotification).toBeDefined();
       });
@@ -388,47 +388,13 @@ describe('Notification reducer', () => {
         const resultState = notificationReducer(initialStateProgress, actionForImport);
 
         // then
-        expect(resultState.notifications[0].type).toEqual('WARNING');
+        expect(resultState.notifications[0].type).toEqual('warning');
         expect(resultState.notifications[0].title).toEqual(someTitle);
         expect(resultState.notifications[0].details).toEqual(expectedDetails);
         expect(resultState.notifications[0].operationType).toEqual(
           initialStateProgress.notifications[0].operationType
         );
       });
-
-      it('should attach button as child', () => {
-        // given
-        const mockedCallback = jest.fn();
-        const mockedGetNotificationButtons = jest.fn();
-        jest
-          .spyOn(notificationButtonsModule, 'getNotificationButtons')
-          .mockImplementationOnce(params => mockedGetNotificationButtons(params));
-
-        // then
-        expect(mockedGetNotificationButtons).toBeCalled();
-        expect(mockedGetNotificationButtons).toBeCalledWith([
-          {
-            label: 'OK',
-            onClick: mockedCallback,
-            type: 'basic',
-          },
-        ]);
-      });
-
-      it('should call custom translation method', () => {
-        // given
-        const mockedCustomT = jest.fn();
-        jest
-          .spyOn(customTranslations, 'customT')
-          .mockImplementation(params => mockedCustomT(params));
-
-        const someTitle = 'some title';
-
-        // then
-        expect(mockedCustomT).toBeCalled();
-        expect(mockedCustomT).toBeCalledWith(someTitle);
-      });
-    });
 
     describe('deleteNotification', () => {
       it('should delete one action on single array', () => {

@@ -74,7 +74,7 @@ export const PopupButtonsNotConnected = ({
     <div className='popup-buttons popup-footer'>
       {handleBack && <BackButton handleBack={handleBack} t={t} />}
       {!hideSecondary && !handleSecondary && (
-        <DataPreviewButton onPreviewClick={onPreviewClick} disableReason={disableReason} />
+        <DataPreviewButton onPreviewClick={onPreviewClick} disableReason={disableReason} t={t} />
       )}
       {!hideOk &&
         (primaryImportType === objectImportType.TABLE ? (
