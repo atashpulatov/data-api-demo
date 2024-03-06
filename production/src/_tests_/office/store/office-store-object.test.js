@@ -1,3 +1,4 @@
+/* eslint-disable no-import-assign */
 import officeStoreHelper from "../../../office/store/office-store-helper";
 
 import officeStoreObject from "../../../office/store/office-store-object";

@@ -1,3 +1,4 @@
+/* eslint-disable no-import-assign */
 import { homeHelper } from "../../home/home-helper";
 import { notificationService } from "../../notification-v2/notification-service";
 import { officeApiHelper } from "../../office/api/office-api-helper";

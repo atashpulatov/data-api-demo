@@ -1,3 +1,4 @@
+/* eslint-disable no-import-assign */
 import { objectTypes } from "@mstr/mstr-react-library";
 
 import { authenticationHelper } from "../../authentication/authentication-helper";

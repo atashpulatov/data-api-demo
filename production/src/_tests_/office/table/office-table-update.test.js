@@ -1,3 +1,4 @@
+/* eslint-disable no-import-assign */
 import * as mstrObjectRestService from "../../../mstr-object/mstr-object-rest-service";
 import { officeApiCrosstabHelper } from "../../../office/api/office-api-crosstab-helper";
 import { officeRemoveHelper } from "../../../office/remove/office-remove-helper";
