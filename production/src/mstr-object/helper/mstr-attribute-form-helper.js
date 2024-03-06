@@ -1,4 +1,4 @@
-import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
+import { officeProperties } from "../../redux-reducer/office-reducer/office-properties";
 
 class MstrAttributeFormHelper {
   /**
@@ -14,7 +14,7 @@ class MstrAttributeFormHelper {
     columns.forEach((column) => {
       const type = column.type ? column.type.toLowerCase() : null;
       switch (type) {
-        case 'metric':
+        case "metric":
           fullColumnInformation.push({
             category: column.numberFormatting.category,
             formatString: column.numberFormatting.formatString,
@@ -23,9 +23,9 @@ class MstrAttributeFormHelper {
             name: column.name,
           });
           break;
-        case 'attribute':
-        case 'customgroup':
-        case 'consolidation':
+        case "attribute":
+        case "customgroup":
+        case "consolidation":
           if (column.forms && supportForms) {
             for (const form of column.forms) {
               fullColumnInformation.push({
@@ -64,7 +64,7 @@ class MstrAttributeFormHelper {
     const { displayAttrFormNames } = officeProperties;
     const titles = [];
 
-    if (supportForms && e.type === 'attribute' && e.forms.length >= 0) {
+    if (supportForms && e.type === "attribute" && e.forms.length >= 0) {
       const singleForm = e.forms.length === 1;
 
       for (let index = 0; index < e.forms.length; index++) {
@@ -97,7 +97,9 @@ class MstrAttributeFormHelper {
   };
 
   getAttributeWithForms = (elements, attrforms) => {
-    if (!elements) { return []; }
+    if (!elements) {
+      return [];
+    }
 
     let names = [];
     for (const element of elements) {

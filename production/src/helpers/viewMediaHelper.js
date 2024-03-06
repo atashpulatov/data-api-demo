@@ -27,7 +27,7 @@ const EnumDSSXMLViewMedia = {
   DssXmlViewMediaExportTablet: 0x00040000,
   DssXmlViewMediaExportJSON: 0x00080000,
   DssXmlViewMediaStatic: 0x08000000,
-  DssXmlViewMediaAll: 0x7FFFFFF,
+  DssXmlViewMediaAll: 0x7ffffff,
 };
 
 const DOCUMENT_TYPES = Object.freeze({
@@ -44,7 +44,7 @@ function getDefaultViewMode(viewMedia) {
   if (defModePosition === 0) {
     return 0;
   }
-  return EnumDSSXMLViewMedia.DssXmlViewMediaViewStatic << defModePosition - 1;
+  return EnumDSSXMLViewMedia.DssXmlViewMediaViewStatic << (defModePosition - 1);
 }
 
 /**
@@ -55,8 +55,10 @@ function getTypeFromViewMedia(viewMedia) {
   if (!defaultViewMedia) {
     return null;
   }
-  if (defaultViewMedia & EnumDSSXMLViewMedia.DssXmlViewMediaViewAnalysis
-    | defaultViewMedia & EnumDSSXMLViewMedia.DssXmlViewMediaHTML5Dashboard) {
+  if (
+    (defaultViewMedia & EnumDSSXMLViewMedia.DssXmlViewMediaViewAnalysis) |
+    (defaultViewMedia & EnumDSSXMLViewMedia.DssXmlViewMediaHTML5Dashboard)
+  ) {
     return DOCUMENT_TYPES.DOSSIER;
   }
   if (defaultViewMedia & EnumDSSXMLViewMedia.DssXmlViewMediaViewStatic) {

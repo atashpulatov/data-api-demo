@@ -1,11 +1,12 @@
-import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
-import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
-import officeStoreHelper from '../../office/store/office-store-helper';
+import officeStoreHelper from "../../office/store/office-store-helper";
 
-describe('Office Actions', () => {
-  it('should dispatch proper toggleStoreSecuredFlag action', () => {
+import { officeActions } from "../../redux-reducer/office-reducer/office-actions";
+import { officeProperties } from "../../redux-reducer/office-reducer/office-properties";
+
+describe("Office Actions", () => {
+  it("should dispatch proper toggleStoreSecuredFlag action", () => {
     // given
-    jest.spyOn(officeStoreHelper, 'setFileSecuredFlag').mockImplementation();
+    jest.spyOn(officeStoreHelper, "setFileSecuredFlag").mockImplementation();
     const listener = jest.fn();
 
     // when
@@ -21,7 +22,7 @@ describe('Office Actions', () => {
     expect(officeStoreHelper.setFileSecuredFlag).toBeCalledWith(true);
   });
 
-  it('should dispatch proper toggleIsSettingsFlag action', () => {
+  it("should dispatch proper toggleIsSettingsFlag action", () => {
     // given
     const listener = jest.fn();
 
@@ -35,7 +36,7 @@ describe('Office Actions', () => {
     });
   });
 
-  it('should dispatch proper toggleIsConfirmFlag action', () => {
+  it("should dispatch proper toggleIsConfirmFlag action", () => {
     // given
     const listener = jest.fn();
 
@@ -49,7 +50,7 @@ describe('Office Actions', () => {
     });
   });
 
-  it('should dispatch proper toggleSettingsPanelLoadedFlag action', () => {
+  it("should dispatch proper toggleSettingsPanelLoadedFlag action", () => {
     // given
     const listener = jest.fn();
 
@@ -63,7 +64,7 @@ describe('Office Actions', () => {
     });
   });
 
-  it('should dispatch proper toggleReusePromptAnswersFlag action', () => {
+  it("should dispatch proper toggleReusePromptAnswersFlag action", () => {
     // given
     const listener = jest.fn();
 
@@ -77,7 +78,7 @@ describe('Office Actions', () => {
     });
   });
 
-  it('should dispatch proper toggleRenderSettingsFlag action', () => {
+  it("should dispatch proper toggleRenderSettingsFlag action", () => {
     // given
     const listener = jest.fn();
 
@@ -90,9 +91,9 @@ describe('Office Actions', () => {
     });
   });
 
-  it('should dispatch proper toggleIsClearDataFailedFlag action', () => {
+  it("should dispatch proper toggleIsClearDataFailedFlag action", () => {
     // given
-    jest.spyOn(officeStoreHelper, 'setIsClearDataFailed').mockImplementation();
+    jest.spyOn(officeStoreHelper, "setIsClearDataFailed").mockImplementation();
     const listener = jest.fn();
 
     // when

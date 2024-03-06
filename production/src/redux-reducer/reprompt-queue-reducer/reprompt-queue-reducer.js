@@ -2,11 +2,11 @@ import {
   ADD_REPROMPT_TASK,
   CLEAR_REPROMPT_TASKS,
   EXECUTE_NEXT_REPROMPT_TASK,
-} from './reprompt-queue-actions';
+} from "./reprompt-queue-actions";
 
 const initialState = { repromptsQueue: [], index: 0, total: 0 };
 
-export const repromptsQueueReducer = (state = initialState, action) => {
+export const repromptsQueueReducer = (state = initialState, action = {}) => {
   switch (action.type) {
     case ADD_REPROMPT_TASK:
       return {
@@ -26,11 +26,11 @@ export const repromptsQueueReducer = (state = initialState, action) => {
       }
       // If there is no more task in queue, and the index is at the end of the queue,
       // then reset queue and index by returning initial state.
-      return { ...initialState, };
+      return { ...initialState };
     }
 
     case CLEAR_REPROMPT_TASKS:
-      return { ...initialState, };
+      return { ...initialState };
 
     default:
       return state;

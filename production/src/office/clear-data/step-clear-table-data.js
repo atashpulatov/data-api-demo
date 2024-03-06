@@ -1,7 +1,7 @@
-import { officeRemoveHelper } from '../remove/office-remove-helper';
+import { officeRemoveHelper } from "../remove/office-remove-helper";
 
-import operationErrorHandler from '../../operation/operation-error-handler';
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import operationErrorHandler from "../../operation/operation-error-handler";
+import operationStepDispatcher from "../../operation/operation-step-dispatcher";
 
 class StepClearTableData {
   /**
@@ -21,13 +21,21 @@ class StepClearTableData {
     const { objectWorkingId, excelContext, objectExist } = operationData;
     try {
       if (objectExist) {
-        await officeRemoveHelper.removeOfficeTableBody(excelContext, objectData, true);
+        await officeRemoveHelper.removeOfficeTableBody(
+          excelContext,
+          objectData,
+          true,
+        );
       }
 
       operationStepDispatcher.completeClearTableData(objectWorkingId);
     } catch (error) {
       console.error(error);
-      operationErrorHandler.handleOperationError(objectData, operationData, error);
+      operationErrorHandler.handleOperationError(
+        objectData,
+        operationData,
+        error,
+      );
     }
   };
 }

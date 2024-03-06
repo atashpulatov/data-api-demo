@@ -1,7 +1,7 @@
 hr {
   margin-left: 20px;
   margin-right: 20px;
-  color: #75808B;
+  color: #75808b;
 }
 
 .padding {
@@ -77,11 +77,11 @@ hr {
 .get-started-container {
   text-align: center;
   padding: 40px 40px 10px 40px;
-  color: #4D5154;
+  color: #4d5154;
 }
 
 .get-started-container h2 {
-  color: #4D5154;
+  color: #4d5154;
   font-weight: 500;
   font-size: 20px;
   padding: 24px 0;
@@ -130,7 +130,7 @@ hr {
 #app-header .settings-btn .ant-btn:disabled {
   vertical-align: middle;
   align-self: center;
-  background: #FFFFFF;
+  background: #ffffff;
   box-shadow: none;
   border: none;
   padding: 0;
@@ -151,7 +151,7 @@ hr {
   top: 24.8px;
 }
 
-#settings-button{
+#settings-button {
   min-width: inherit;
   left: 0;
 }

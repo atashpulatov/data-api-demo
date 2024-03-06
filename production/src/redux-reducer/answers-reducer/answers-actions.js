@@ -1,6 +1,6 @@
-export const RESTORE_ALL_ANSWERS = 'RESTORE_ALL_ANSWERS';
-export const CLEAR_ANSWERS = 'CLEAR_ANSWERS';
-export const UPDATE_ANSWERS = 'UPDATE_ANSWERS';
+export const RESTORE_ALL_ANSWERS = "RESTORE_ALL_ANSWERS";
+export const CLEAR_ANSWERS = "CLEAR_ANSWERS";
+export const UPDATE_ANSWERS = "UPDATE_ANSWERS";
 
 /**
  * Function to restore all answers.
@@ -30,4 +30,4 @@ export const updateAnswers = (updatedAnswers) => ({
  * "Re-use Prompt answers" setting or logs off.
  * @returns
  */
-export const clearAnswers = () => ({ type: CLEAR_ANSWERS, });
+export const clearAnswers = () => ({ type: CLEAR_ANSWERS });

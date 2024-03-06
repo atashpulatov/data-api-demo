@@ -1,14 +1,12 @@
-import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
-import { officeApiHelper } from '../api/office-api-helper';
-import { officeApiWorksheetHelper } from '../api/office-api-worksheet-helper';
-import getOfficeTableHelper from './get-office-table-helper';
-import officeTableHelperRange from './office-table-helper-range';
+import { officeApiCrosstabHelper } from "../api/office-api-crosstab-helper";
+import { officeApiHelper } from "../api/office-api-helper";
+import { officeApiWorksheetHelper } from "../api/office-api-worksheet-helper";
+import getOfficeTableHelper from "./get-office-table-helper";
+import officeTableHelperRange from "./office-table-helper-range";
 
-import { objectImportType } from '../../mstr-object/constants';
+import { objectImportType } from "../../mstr-object/constants";
 
-const DEFAULT_TABLE_STYLE = 'TableStyleLight11';
-const TABLE_HEADER_FONT_COLOR = '#000000';
-const TABLE_HEADER_FILL_COLOR = '#ffffff';
+const DEFAULT_TABLE_STYLE = "TableStyleLight11";
 
 class OfficeTableCreate {
   /**
@@ -25,44 +23,57 @@ class OfficeTableCreate {
    * @param {Boolean} insertNewWorksheet Specify if new worksheet has to be created before creating the table
    *
    */
-  createOfficeTable = async (
-    {
-      instanceDefinition,
-      excelContext,
-      startCell,
-      tableName,
-      prevOfficeTable,
-      tableChanged = false,
-      isRepeatStep,
-      insertNewWorksheet
-    }
-  ) => {
+  createOfficeTable = async ({
+    instanceDefinition,
+    excelContext,
+    startCell,
+    tableName,
+    prevOfficeTable,
+    tableChanged = false,
+    isRepeatStep,
+    insertNewWorksheet,
+  }) => {
     const {
-      rows, columns, mstrTable, mstrTable: { isCrosstab, crosstabHeaderDimensions, name }
+      rows,
+      columns,
+      mstrTable,
+      mstrTable: { isCrosstab, crosstabHeaderDimensions, name },
     } = instanceDefinition;
 
-    const newOfficeTableName = getOfficeTableHelper.createTableName(mstrTable, tableName);
+    const newOfficeTableName = getOfficeTableHelper.createTableName(
+      mstrTable,
+      tableName,
+    );
 
     if (insertNewWorksheet) {
       startCell = await officeApiWorksheetHelper.getStartCell(
         objectImportType.TABLE,
         insertNewWorksheet,
         excelContext,
-        name
+        name,
       );
     }
 
-    const worksheet = this.getExcelWorksheet(prevOfficeTable, insertNewWorksheet, excelContext);
+    const worksheet = this.getExcelWorksheet(
+      prevOfficeTable,
+      insertNewWorksheet,
+      excelContext,
+    );
     const tableStartCell = this.getTableStartCell(
       startCell,
       worksheet,
       instanceDefinition,
       prevOfficeTable,
-      tableChanged
+      tableChanged,
     );
 
     const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
-    const range = this.getObjectRange(tableStartCell, worksheet, tableRange, mstrTable);
+    const range = this.getObjectRange(
+      tableStartCell,
+      worksheet,
+      tableRange,
+      mstrTable,
+    );
     excelContext.trackedObjects.add(range);
 
     await officeTableHelperRange.checkObjectRangeValidity(
@@ -70,17 +81,22 @@ class OfficeTableCreate {
       excelContext,
       range,
       instanceDefinition,
-      isRepeatStep
+      isRepeatStep,
     );
 
-    range.numberFormat = '';
+    range.numberFormat = "";
 
     if (isCrosstab) {
-      officeApiCrosstabHelper.createCrosstabHeaders(tableStartCell, mstrTable, worksheet, crosstabHeaderDimensions,);
+      officeApiCrosstabHelper.createCrosstabHeaders(
+        tableStartCell,
+        mstrTable,
+        worksheet,
+        crosstabHeaderDimensions,
+      );
     }
 
     const officeTable = worksheet.tables.add(tableRange, true); // create office table based on the range
-    this.styleHeaders(officeTable, TABLE_HEADER_FONT_COLOR, TABLE_HEADER_FILL_COLOR);
+    this.styleHeaders(officeTable);
 
     return this.setOfficeTableProperties({
       officeTable,
@@ -99,12 +115,8 @@ class OfficeTableCreate {
    * @param {string} fillColor
    *
    */
-  styleHeaders = (officeTable, fontColor, fillColor) => {
+  styleHeaders = (officeTable) => {
     officeTable.style = DEFAULT_TABLE_STYLE;
-    // Temporarily disabling header formatting
-    // const headerRowRange = officeTable.getHeaderRowRange();
-    // headerRowRange.format.fill.color = fillColor;
-    // headerRowRange.format.font.color = fontColor;
   };
 
   /**
@@ -134,7 +146,11 @@ class OfficeTableCreate {
   getObjectRange = (tableStartCell, sheet, tableRange, mstrTable) => {
     const { isCrosstab, crosstabHeaderDimensions } = mstrTable;
     if (isCrosstab) {
-      return officeApiCrosstabHelper.getCrosstabRange(tableStartCell, crosstabHeaderDimensions, sheet);
+      return officeApiCrosstabHelper.getCrosstabRange(
+        tableStartCell,
+        crosstabHeaderDimensions,
+        sheet,
+      );
     }
     return sheet.getRange(tableRange);
   };
@@ -149,9 +165,19 @@ class OfficeTableCreate {
    * @param {Boolean} tableChanged Specify if table columns has been changed.
    *
    */
-  getTableStartCell = (startCell, sheet, instanceDefinition, prevOfficeTable, tableChanged) => {
+  getTableStartCell = (
+    startCell,
+    sheet,
+    instanceDefinition,
+    prevOfficeTable,
+    tableChanged,
+  ) => {
     const { mstrTable } = instanceDefinition;
-    const { isCrosstab, prevCrosstabDimensions = false, crosstabHeaderDimensions = false } = mstrTable;
+    const {
+      isCrosstab,
+      prevCrosstabDimensions = false,
+      crosstabHeaderDimensions = false,
+    } = mstrTable;
     const { rowsX: prevRowsX, columnsY: prevColumnsY } = prevCrosstabDimensions;
     const { rowsX, columnsY } = crosstabHeaderDimensions;
 
@@ -160,14 +186,26 @@ class OfficeTableCreate {
       sheet,
       instanceDefinition,
       prevOfficeTable,
-      tableChanged
+      tableChanged,
     });
 
-    if (prevCrosstabDimensions && prevCrosstabDimensions !== crosstabHeaderDimensions && isCrosstab) {
+    if (
+      prevCrosstabDimensions &&
+      prevCrosstabDimensions !== crosstabHeaderDimensions &&
+      isCrosstab
+    ) {
       if (tableChanged) {
-        tableStartCell = officeApiHelper.offsetCellBy(tableStartCell, columnsY, rowsX);
+        tableStartCell = officeApiHelper.offsetCellBy(
+          tableStartCell,
+          columnsY,
+          rowsX,
+        );
       } else {
-        tableStartCell = officeApiHelper.offsetCellBy(tableStartCell, columnsY - prevColumnsY, rowsX - prevRowsX);
+        tableStartCell = officeApiHelper.offsetCellBy(
+          tableStartCell,
+          columnsY - prevColumnsY,
+          rowsX - prevRowsX,
+        );
       }
     }
 
@@ -189,21 +227,23 @@ class OfficeTableCreate {
     newOfficeTableName,
     mstrTable,
     worksheet,
-    excelContext
+    excelContext,
   }) => {
     const { isCrosstab } = mstrTable;
     try {
-      officeTable.load(['name', 'id']);
+      officeTable.load(["name", "id"]);
       officeTable.name = newOfficeTableName;
       if (isCrosstab) {
         officeTable.showFilterButton = false;
         officeTable.showHeaders = false;
       } else {
-        officeTable.getHeaderRowRange().values = [mstrTable.headers.columns[mstrTable.headers.columns.length - 1]];
+        officeTable.getHeaderRowRange().values = [
+          mstrTable.headers.columns[mstrTable.headers.columns.length - 1],
+        ];
       }
 
       worksheet.activate();
-      worksheet.load(['name', 'id']);
+      worksheet.load(["name", "id"]);
 
       await excelContext.sync();
 
@@ -212,7 +252,10 @@ class OfficeTableCreate {
       const { id, name } = worksheet;
 
       return {
-        officeTable, bindId, tableName: newOfficeTableName, worksheet: { id, name }
+        officeTable,
+        bindId,
+        tableName: newOfficeTableName,
+        worksheet: { id, name },
       };
     } catch (error) {
       await excelContext.sync();

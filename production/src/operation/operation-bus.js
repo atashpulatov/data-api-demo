@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 /**
  * This class suits as an event bus for operations.
  *
@@ -13,18 +14,20 @@ class OperationBus {
     this.subscribedCallbacksMap = {};
 
     const { operationReducer } = this.store.getState();
-    const currentOperation = operationReducer
-      && operationReducer.operations
-      && operationReducer.operations[0];
+    const currentOperation =
+      operationReducer &&
+      operationReducer.operations &&
+      operationReducer.operations[0];
     this.previousOperationCopy = copyOperationInfo(currentOperation);
     this.store.subscribe(this.listener);
   };
 
   listener = () => {
     const { operationReducer } = this.store.getState();
-    const currentOperation = operationReducer
-      && operationReducer.operations
-      && operationReducer.operations[0];
+    const currentOperation =
+      operationReducer &&
+      operationReducer.operations &&
+      operationReducer.operations[0];
 
     if (!currentOperation) {
       this.previousOperationCopy = null;
@@ -40,7 +43,9 @@ class OperationBus {
     this.previousOperationCopy = copyOperationInfo(currentOperation);
     const subscribedCallback = this.subscribedCallbacksMap[nextStep];
     if (subscribedCallback) {
-      const currentObject = this.getCurrentObject(currentOperation.objectWorkingId);
+      const currentObject = this.getCurrentObject(
+        currentOperation.objectWorkingId,
+      );
       subscribedCallback(currentObject, currentOperation);
     }
   };
@@ -67,7 +72,7 @@ class OperationBus {
    */
   getCurrentObject = (objectWorkingId) => {
     const { objects } = this.store.getState().objectReducer;
-    return objects.find(object => object.objectWorkingId === objectWorkingId);
+    return objects.find((object) => object.objectWorkingId === objectWorkingId);
   };
 }
 
@@ -85,9 +90,13 @@ const copyOperationInfo = (currentOperation) => {
 const didOperationNotChange = (previousOperationCopy, currentOperation) => {
   if (previousOperationCopy && !currentOperation.repeatStep) {
     const currentOperationToCompare = copyOperationInfo(currentOperation);
-    return previousOperationCopy.operationType === currentOperationToCompare.operationType
-      && previousOperationCopy.objectWorkingId === currentOperationToCompare.objectWorkingId
-      && previousOperationCopy.stepsQueue === currentOperationToCompare.stepsQueue;
+    return (
+      previousOperationCopy.operationType ===
+        currentOperationToCompare.operationType &&
+      previousOperationCopy.objectWorkingId ===
+        currentOperationToCompare.objectWorkingId &&
+      previousOperationCopy.stepsQueue === currentOperationToCompare.stepsQueue
+    );
   }
   return false;
 };

@@ -9,9 +9,15 @@ class MstrCompoundGridFlatten {
     const { headers, metricValues } = data;
     const { grid } = definition;
 
-    grid.columnSets = grid.columnSets.filter(({ columns }) => columns.length > 0);
-    headers.columnSets = headers.columnSets.filter((columnHeaders) => columnHeaders.length > 0);
-    metricValues.columnSets = metricValues.columnSets.filter(({ raw }) => raw.length > 0);
+    grid.columnSets = grid.columnSets.filter(
+      ({ columns }) => columns.length > 0,
+    );
+    headers.columnSets = headers.columnSets.filter(
+      (columnHeaders) => columnHeaders.length > 0,
+    );
+    metricValues.columnSets = metricValues.columnSets.filter(
+      ({ raw }) => raw.length > 0,
+    );
   };
 
   /**
@@ -93,12 +99,14 @@ class MstrCompoundGridFlatten {
    */
   flattenColumnSetsMetricElemets = (grid) => {
     const columSetsNumber = grid.columnSets.length;
-    const gridColumns = [{
-      name: 'Metrics',
-      id: '00000000000000000000000000000000',
-      type: 'templateMetrics',
-      elements: []
-    }];
+    const gridColumns = [
+      {
+        name: "Metrics",
+        id: "00000000000000000000000000000000",
+        type: "templateMetrics",
+        elements: [],
+      },
+    ];
 
     for (let i = 0; i < columSetsNumber; i++) {
       const columnSetColumn = grid.columnSets[i].columns[0];

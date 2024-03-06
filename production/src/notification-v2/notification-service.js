@@ -1,4 +1,4 @@
-import officeReducerHelper from '../office/store/office-reducer-helper';
+import officeReducerHelper from "../office/store/office-reducer-helper";
 
 import {
   clearGlobalNotification,
@@ -7,9 +7,9 @@ import {
   deleteObjectNotification,
   displayGlobalNotification,
   displayObjectWarning,
-} from '../redux-reducer/notification-reducer/notification-action-creators';
-import { removeObject } from '../redux-reducer/object-reducer/object-actions';
-import { cancelOperation } from '../redux-reducer/operation-reducer/operation-actions';
+} from "../redux-reducer/notification-reducer/notification-action-creators";
+import { removeObject } from "../redux-reducer/object-reducer/object-actions";
+import { cancelOperation } from "../redux-reducer/operation-reducer/operation-actions";
 
 class NotificationService {
   init = (reduxStore) => {
@@ -41,7 +41,9 @@ class NotificationService {
   };
 
   showObjectWarning = (objectWorkingId, notification) => {
-    this.reduxStore.dispatch(displayObjectWarning(objectWorkingId, notification));
+    this.reduxStore.dispatch(
+      displayObjectWarning(objectWorkingId, notification),
+    );
   };
 
   dismissNotification = (objectWorkingId) => {
@@ -67,7 +69,10 @@ class NotificationService {
    * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
    */
   removeExistingNotification = (objectWorkingId) => {
-    const notification = officeReducerHelper.getNotificationFromNotificationReducer(objectWorkingId);
+    const notification =
+      officeReducerHelper.getNotificationFromNotificationReducer(
+        objectWorkingId,
+      );
     if (notification) {
       this.callDismissNotification(notification);
     }

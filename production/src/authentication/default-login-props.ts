@@ -1,12 +1,12 @@
-import { LoginProps } from './basic-login-types';
+import { LoginProps } from "./basic-login-types";
 
-const isDev = process.env.NODE_ENV !== 'production';
+const isDev = process.env.NODE_ENV !== "production";
 
 // eslint-disable-next-line import/no-mutable-exports
 let defaultLoginProps: LoginProps = {
-  username: '',
-  password: '',
-  envUrl: '',
+  username: "",
+  password: "",
+  envUrl: "",
   rememberMe: true,
   loginMode: 1,
 };
@@ -14,8 +14,9 @@ let defaultLoginProps: LoginProps = {
 if (isDev) {
   defaultLoginProps = {
     ...defaultLoginProps,
-    username: 'mstr',
-    envUrl: 'https://env-000000.customer.cloud.microstrategy.com/MicroStrategyLibrary',
+    username: "mstr",
+    envUrl:
+      "https://env-000000.customer.cloud.microstrategy.com/MicroStrategyLibrary",
   };
 }
 

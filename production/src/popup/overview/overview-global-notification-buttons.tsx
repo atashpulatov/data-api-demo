@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement } from "react";
 
 export interface NotificationButton {
   label: string;
@@ -8,7 +8,9 @@ export type NotificationButtonsProps = {
   buttons: NotificationButton[];
 };
 
-export const OverviewGlobalNotificationButtons = (props: NotificationButtonsProps): ReactElement => {
+export const OverviewGlobalNotificationButtons = (
+  props: NotificationButtonsProps,
+): ReactElement => {
   const { buttons } = props;
   return (
     <>

@@ -1,25 +1,32 @@
-import React, { useEffect, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
-import { connect } from 'react-redux';
-import { DataOverview, objectNotificationTypes } from '@mstr/connector-components';
-import { Button } from '@mstr/rc';
+// issue with proptype import
+// eslint-disable-next-line simple-import-sort/imports
+import React, { useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { connect } from "react-redux";
+import {
+  DataOverview,
+  OfficeApplicationType,
+  objectNotificationTypes,
+} from "@mstr/connector-components";
+import { Button } from "@mstr/rc";
 
-import PropTypes from 'prop-types';
-import useStateSyncOnDialogMessage from './use-state-sync-on-dialog-message';
+import PropTypes from "prop-types";
+import useStateSyncOnDialogMessage from "./use-state-sync-on-dialog-message";
 
-import { popupHelper } from '../popup-helper';
-import overviewHelper from './overview-helper';
+import { popupHelper } from "../popup-helper";
+import overviewHelper from "./overview-helper";
 
+import { selectorProperties } from "../../attribute-selector/selector-properties";
+import i18n from "../../i18n";
+import { REMOVE_OPERATION } from "../../operation/operation-type-names";
+import { restoreAllNotifications } from "../../redux-reducer/notification-reducer/notification-action-creators";
+import { restoreAllObjects } from "../../redux-reducer/object-reducer/object-actions";
+import {
+  refreshRequested,
+  removeRequested,
+} from "../../redux-reducer/operation-reducer/operation-actions";
 
-import { selectorProperties } from '../../attribute-selector/selector-properties';
-import i18n from '../../i18n';
-import { REMOVE_OPERATION } from '../../operation/operation-type-names';
-import { restoreAllNotifications } from '../../redux-reducer/notification-reducer/notification-action-creators';
-import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
-import { refreshRequested, removeRequested } from '../../redux-reducer/operation-reducer/operation-actions';
-import { ApplicationTypeEnum } from '../../office-constants';
-
-import './overview-window.scss';
+import "./overview-window.scss";
 
 export const OverviewWindowNotConnected = (props) => {
   const {
@@ -36,29 +43,35 @@ export const OverviewWindowNotConnected = (props) => {
     onGoToWorksheet,
     onDismissNotification,
     popupData,
-    activeCellAddress
+    activeCellAddress,
   } = props;
 
   useStateSyncOnDialogMessage();
 
-  const [t] = useTranslation('common', { i18n });
+  const [t] = useTranslation("common", { i18n });
   const [dialogPopup, setDialogPopup] = React.useState(null);
 
   const shouldDisableActions = useMemo(
-    () => notifications.some(
-      (notification) => notification.type === objectNotificationTypes.PROGRESS
-    ),
-    [notifications]
+    () =>
+      notifications.some(
+        (notification) =>
+          notification.type === objectNotificationTypes.PROGRESS,
+      ),
+    [notifications],
   );
 
   const objectsToRender = useMemo(
     () => overviewHelper.transformExcelObjects(objects, notifications),
-    [objects, notifications]
+    [objects, notifications],
   );
 
   const notificationsToDisplay = useMemo(
-    () => overviewHelper.getWarningsToDisplay({ notifications, globalNotification }),
-    [notifications, globalNotification]
+    () =>
+      overviewHelper.getWarningsToDisplay({
+        notifications,
+        globalNotification,
+      }),
+    [notifications, globalNotification],
   );
 
   const handleCloseDialog = () => {
@@ -67,17 +80,21 @@ export const OverviewWindowNotConnected = (props) => {
     popupHelper.officeMessageParent(message);
   };
 
-  const handleDuplicate = (objectWorkingId) => overviewHelper.setDuplicatePopup({
-    objectWorkingId,
-    activeCellAddress,
-    onDuplicate,
-    setDialogPopup
-  });
+  const handleDuplicate = (objectWorkingId) =>
+    overviewHelper.setDuplicatePopup({
+      objectWorkingId,
+      activeCellAddress,
+      onDuplicate,
+      setDialogPopup,
+    });
 
   // TODO: Move logic for controlling popup visibility to Redux
   useEffect(() => {
     if (popupData) {
-      overviewHelper.setRangeTakenPopup({ objectWorkingId: popupData.objectWorkingId, setDialogPopup });
+      overviewHelper.setRangeTakenPopup({
+        objectWorkingId: popupData.objectWorkingId,
+        setDialogPopup,
+      });
     } else {
       setDialogPopup(null);
     }
@@ -86,7 +103,10 @@ export const OverviewWindowNotConnected = (props) => {
   useEffect(() => {
     notifications.forEach((notification) => {
       setTimeout(() => {
-        if (notification.type === objectNotificationTypes.SUCCESS && notification.operationType === REMOVE_OPERATION) {
+        if (
+          notification.type === objectNotificationTypes.SUCCESS &&
+          notification.operationType === REMOVE_OPERATION
+        ) {
           onDismissNotification([notification.objectWorkingId]);
         }
       }, [500]);
@@ -98,7 +118,7 @@ export const OverviewWindowNotConnected = (props) => {
       <DataOverview
         loadedObjects={objectsToRender}
         popup={dialogPopup}
-        applicationType={ApplicationTypeEnum.EXCEL}
+        applicationType={OfficeApplicationType.EXCEL}
         onAddData={onImport}
         onEdit={onEdit}
         onReprompt={onReprompt}
@@ -110,7 +130,9 @@ export const OverviewWindowNotConnected = (props) => {
         shouldDisableActions={shouldDisableActions}
         globalNotifications={notificationsToDisplay}
       />
-      <Button className="overview-close-button" onClick={handleCloseDialog}>{t('Close')}</Button>
+      <Button className="overview-close-button" onClick={handleCloseDialog}>
+        {t("Close")}
+      </Button>
     </div>
   );
 };
@@ -129,20 +151,34 @@ OverviewWindowNotConnected.propTypes = {
   notifications: PropTypes.arrayOf(PropTypes.shape({})),
   globalNotification: PropTypes.shape({}),
   popupData: PropTypes.shape({ objectWorkingId: PropTypes.number }),
-  activeCellAddress: PropTypes.string
+  activeCellAddress: PropTypes.string,
 };
 
-export const mapStateToProps = ({ objectReducer, notificationReducer, officeReducer }) => {
+export const mapStateToProps = ({
+  objectReducer,
+  notificationReducer,
+  officeReducer,
+}) => {
   const { objects } = objectReducer;
   const { notifications, globalNotification } = notificationReducer;
   const { popupData, activeCellAddress } = officeReducer;
 
   return {
-    objects, notifications, globalNotification, popupData, activeCellAddress
+    objects,
+    notifications,
+    globalNotification,
+    popupData,
+    activeCellAddress,
   };
 };
 
 export const mapActionsToProps = {
-  refreshRequested, removeRequested, restoreAllObjects, restoreAllNotifications
+  refreshRequested,
+  removeRequested,
+  restoreAllObjects,
+  restoreAllNotifications,
 };
-export const OverviewWindow = connect(mapStateToProps, mapActionsToProps)(OverviewWindowNotConnected);
+export const OverviewWindow = connect(
+  mapStateToProps,
+  mapActionsToProps,
+)(OverviewWindowNotConnected);

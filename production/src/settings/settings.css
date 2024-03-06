@@ -1,26 +1,26 @@
 .settings-bar {
   display: flex;
-  justify-content: center; 
+  justify-content: center;
   color: #333333;
   font-weight: 700;
   font-size: 15px;
   line-height: 36px;
   padding: 14px 0;
-  border-top: 1px solid #E8EDF0;
-  border-bottom: 1px solid #E8EDF0;
+  border-top: 1px solid #e8edf0;
+  border-bottom: 1px solid #e8edf0;
   box-shadow: 0 2px 4px #ccc;
   position: relative;
   cursor: default;
   -webkit-user-select: none;
   -khtml-user-select: none;
-  -moz-user-select: none;	
+  -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
 
-.back-wrapper{
+.back-wrapper {
   position: absolute;
-  left:0;
+  left: 0;
   cursor: pointer;
   padding: 0 14px;
 }

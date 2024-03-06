@@ -1,4 +1,4 @@
-import { errorMessages,errorTypes } from './constants';
+import { errorMessages, errorTypes } from "./constants";
 
 export function ProtectedSheetError(message = errorMessages.PROTECTED_SHEET) {
   this.message = message;

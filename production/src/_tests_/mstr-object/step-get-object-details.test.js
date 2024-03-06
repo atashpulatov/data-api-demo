@@ -1,39 +1,50 @@
-import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
-import stepGetObjectDetails from '../../mstr-object/step-get-object-details';
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
-import * as objectDetailsMethods from '../../mstr-object/get-object-details-methods';
+import { mstrObjectRestService } from "../../mstr-object/mstr-object-rest-service";
 
-describe('StepGetObjectDetails', () => {
+import * as objectDetailsMethods from "../../mstr-object/get-object-details-methods";
+import stepGetObjectDetails from "../../mstr-object/step-get-object-details";
+import operationStepDispatcher from "../../operation/operation-step-dispatcher";
+
+describe("StepGetObjectDetails", () => {
   const objectDataMock = {
     objectWorkingId: 1,
     objectId: 12,
     projectId: 123,
-    mstrObjectType: 'sumType',
+    mstrObjectType: "sumType",
   };
   const operationDataMock = {
-    instanceDefinition: { instanceId: 2 } };
+    instanceDefinition: { instanceId: 2 },
+  };
   const mockedReturn = {
-    ancestors: { mockedProp: 'some ancestors' },
-    certifiedInfo: { mockedProp: 'some certified info' },
-    dateModified: { mockedProp: 'some date modified' },
-    owner: { mockedProp: 'some owner' },
-    name: 'testName',
+    ancestors: { mockedProp: "some ancestors" },
+    certifiedInfo: { mockedProp: "some certified info" },
+    dateModified: { mockedProp: "some date modified" },
+    owner: { mockedProp: "some owner" },
+    name: "testName",
   };
 
   beforeAll(() => {
-    jest.spyOn(mstrObjectRestService, 'getObjectInfo').mockImplementation(() => mockedReturn);
-    jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation(() => jest.fn());
-    jest.spyOn(operationStepDispatcher, 'completeGetObjectDetails').mockImplementation(() => jest.fn());
+    jest
+      .spyOn(mstrObjectRestService, "getObjectInfo")
+      .mockImplementation(() => mockedReturn);
+    jest
+      .spyOn(operationStepDispatcher, "updateObject")
+      .mockImplementation(() => jest.fn());
+    jest
+      .spyOn(operationStepDispatcher, "completeGetObjectDetails")
+      .mockImplementation(() => jest.fn());
   });
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should call mstrObjectRestService.getObjectInfo', async () => {
+  it("should call mstrObjectRestService.getObjectInfo", async () => {
     // given
     // when
-    await stepGetObjectDetails.getObjectDetails(objectDataMock, operationDataMock);
+    await stepGetObjectDetails.getObjectDetails(
+      objectDataMock,
+      operationDataMock
+    );
     // then
     expect(mstrObjectRestService.getObjectInfo).toBeCalled();
     expect(mstrObjectRestService.getObjectInfo).toBeCalledWith(
@@ -43,11 +54,16 @@ describe('StepGetObjectDetails', () => {
     );
   });
 
-  it('should call getObjectPrompts', async () => {
+  it("should call getObjectPrompts", async () => {
     // given
-    jest.spyOn(objectDetailsMethods, 'getObjectPrompts').mockImplementation(() => {});
+    jest
+      .spyOn(objectDetailsMethods, "getObjectPrompts")
+      .mockImplementation(() => {});
     // when
-    await stepGetObjectDetails.getObjectDetails(objectDataMock, operationDataMock);
+    await stepGetObjectDetails.getObjectDetails(
+      objectDataMock,
+      operationDataMock
+    );
     // then
     expect(objectDetailsMethods.getObjectPrompts).toBeCalled();
     expect(objectDetailsMethods.getObjectPrompts).toBeCalledWith(
@@ -58,62 +74,106 @@ describe('StepGetObjectDetails', () => {
     );
   });
 
-  it('should call populateDetails', async () => {
+  it("should call populateDetails", async () => {
     // given
-    jest.spyOn(objectDetailsMethods, 'getObjectPrompts').mockImplementation(() => {});
-    jest.spyOn(objectDetailsMethods, 'populateDetails').mockImplementation(() => {});
+    jest
+      .spyOn(objectDetailsMethods, "getObjectPrompts")
+      .mockImplementation(() => {});
+    jest
+      .spyOn(objectDetailsMethods, "populateDetails")
+      .mockImplementation(() => {});
     // when
-    await stepGetObjectDetails.getObjectDetails(objectDataMock, operationDataMock);
+    await stepGetObjectDetails.getObjectDetails(
+      objectDataMock,
+      operationDataMock
+    );
     // then
     expect(objectDetailsMethods.populateDetails).toBeCalled();
     expect(objectDetailsMethods.populateDetails).toBeCalledWith(
       mockedReturn.ancestors,
       mockedReturn.certifiedInfo,
       mockedReturn.dateModified,
-      mockedReturn.owner,
+      mockedReturn.owner
     );
   });
 
-  it('should call populateDefinition', async () => {
+  it("should call populateDefinition", async () => {
     // given
-    const mockedPromptsAnswer = ['some prompts'];
-    jest.spyOn(objectDetailsMethods, 'getObjectPrompts').mockImplementation(() => mockedPromptsAnswer);
-    jest.spyOn(objectDetailsMethods, 'populateDetails').mockImplementation(() => {});
-    jest.spyOn(objectDetailsMethods, 'populateDefinition').mockImplementation(() => {});
+    const mockedPromptsAnswer = ["some prompts"];
+    jest
+      .spyOn(objectDetailsMethods, "getObjectPrompts")
+      .mockImplementation(() => mockedPromptsAnswer);
+    jest
+      .spyOn(objectDetailsMethods, "populateDetails")
+      .mockImplementation(() => {});
+    jest
+      .spyOn(objectDetailsMethods, "populateDefinition")
+      .mockImplementation(() => {});
     // when
-    await stepGetObjectDetails.getObjectDetails(objectDataMock, operationDataMock);
+    await stepGetObjectDetails.getObjectDetails(
+      objectDataMock,
+      operationDataMock
+    );
     // then
     expect(objectDetailsMethods.populateDefinition).toBeCalled();
-    expect(objectDetailsMethods.populateDefinition).toBeCalledWith(objectDataMock, mockedPromptsAnswer, 'testName');
+    expect(objectDetailsMethods.populateDefinition).toBeCalledWith(
+      objectDataMock,
+      mockedPromptsAnswer,
+      "testName"
+    );
   });
 
-  it('should combine objectData with details if no prompts present and call updateObject', async () => {
+  it("should combine objectData with details if no prompts present and call updateObject", async () => {
     // given
-    const mockedDetailsReturn = { someProp: 'some data' };
-    jest.spyOn(objectDetailsMethods, 'getObjectPrompts').mockImplementation(() => {});
-    jest.spyOn(objectDetailsMethods, 'populateDetails').mockImplementation(() => mockedDetailsReturn);
-    jest.spyOn(objectDetailsMethods, 'populateDefinition').mockImplementation(() => {});
+    const mockedDetailsReturn = { someProp: "some data" };
+    jest
+      .spyOn(objectDetailsMethods, "getObjectPrompts")
+      .mockImplementation(() => {});
+    jest
+      .spyOn(objectDetailsMethods, "populateDetails")
+      .mockImplementation(() => mockedDetailsReturn);
+    jest
+      .spyOn(objectDetailsMethods, "populateDefinition")
+      .mockImplementation(() => {});
     // when
-    await stepGetObjectDetails.getObjectDetails(objectDataMock, operationDataMock);
-    // then
-    expect(operationStepDispatcher.updateObject).toBeCalled();
-    expect(operationStepDispatcher.updateObject).toBeCalledWith({ ...objectDataMock, details: mockedDetailsReturn });
-  });
-
-  it('should combine objectData with definition and details', async () => {
-    // given
-    const mockedDetailsReturn = { someProp: 'some data' };
-    const mockedPopulateDefinitionReturn = { someOtherProp: 'some data from prop' };
-    jest.spyOn(objectDetailsMethods, 'getObjectPrompts').mockImplementation(() => {});
-    jest.spyOn(objectDetailsMethods, 'populateDetails').mockImplementation(() => mockedDetailsReturn);
-    jest.spyOn(objectDetailsMethods, 'populateDefinition').mockImplementation(() => mockedPopulateDefinitionReturn);
-    // when
-    await stepGetObjectDetails.getObjectDetails(objectDataMock, operationDataMock);
+    await stepGetObjectDetails.getObjectDetails(
+      objectDataMock,
+      operationDataMock
+    );
     // then
     expect(operationStepDispatcher.updateObject).toBeCalled();
     expect(operationStepDispatcher.updateObject).toBeCalledWith({
       ...objectDataMock,
       details: mockedDetailsReturn,
-      definition: mockedPopulateDefinitionReturn });
+    });
+  });
+
+  it("should combine objectData with definition and details", async () => {
+    // given
+    const mockedDetailsReturn = { someProp: "some data" };
+    const mockedPopulateDefinitionReturn = {
+      someOtherProp: "some data from prop",
+    };
+    jest
+      .spyOn(objectDetailsMethods, "getObjectPrompts")
+      .mockImplementation(() => {});
+    jest
+      .spyOn(objectDetailsMethods, "populateDetails")
+      .mockImplementation(() => mockedDetailsReturn);
+    jest
+      .spyOn(objectDetailsMethods, "populateDefinition")
+      .mockImplementation(() => mockedPopulateDefinitionReturn);
+    // when
+    await stepGetObjectDetails.getObjectDetails(
+      objectDataMock,
+      operationDataMock
+    );
+    // then
+    expect(operationStepDispatcher.updateObject).toBeCalled();
+    expect(operationStepDispatcher.updateObject).toBeCalledWith({
+      ...objectDataMock,
+      details: mockedDetailsReturn,
+      definition: mockedPopulateDefinitionReturn,
+    });
   });
 });

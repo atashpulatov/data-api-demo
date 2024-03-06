@@ -1,30 +1,33 @@
-import { userRestService } from '../home/user-rest-service';
-import { officeApiHelper } from '../office/api/office-api-helper';
-import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
-import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
-import officeReducerHelper from '../office/store/office-reducer-helper';
+import { userRestService } from "../home/user-rest-service";
+import { officeApiHelper } from "../office/api/office-api-helper";
+import { officeApiWorksheetHelper } from "../office/api/office-api-worksheet-helper";
+import { officeShapeApiHelper } from "../office/shapes/office-shape-api-helper";
+import officeReducerHelper from "../office/store/office-reducer-helper";
 
-import officeStoreObject from '../office/store/office-store-object';
+import officeStoreObject from "../office/store/office-store-object";
 
-import { PopupTypeEnum } from '../home/popup-type-enum';
-import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { popupController } from '../popup/popup-controller';
-import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
-import { updateObject } from '../redux-reducer/object-reducer/object-actions';
-import { officeActions } from '../redux-reducer/office-reducer/office-actions';
+import { PopupTypeEnum } from "../home/popup-type-enum";
+import mstrObjectEnum from "../mstr-object/mstr-object-type-enum";
+import { popupController } from "../popup/popup-controller";
+import { navigationTreeActions } from "../redux-reducer/navigation-tree-reducer/navigation-tree-actions";
+import { updateObject } from "../redux-reducer/object-reducer/object-actions";
+import { officeActions } from "../redux-reducer/office-reducer/office-actions";
 import {
-duplicateRequested, highlightRequested,
-  refreshRequested, removeRequested, } from '../redux-reducer/operation-reducer/operation-actions';
-import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
-import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
+  duplicateRequested,
+  highlightRequested,
+  refreshRequested,
+  removeRequested,
+} from "../redux-reducer/operation-reducer/operation-actions";
+import { popupActions } from "../redux-reducer/popup-reducer/popup-actions";
+import { popupStateActions } from "../redux-reducer/popup-state-reducer/popup-state-actions";
 import {
   addRepromptTask,
   clearRepromptTask,
   executeNextRepromptTask,
-} from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
-import { objectImportType } from '../mstr-object/constants';
+} from "../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions";
+import { objectImportType } from "../mstr-object/constants";
 
-const EXCEL_REUSE_PROMPT_ANSWERS = 'excelReusePromptAnswers';
+const EXCEL_REUSE_PROMPT_ANSWERS = "excelReusePromptAnswers";
 class SidePanelService {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
@@ -77,9 +80,14 @@ class SidePanelService {
    * @param {Array} objectWorkingIds Contains unique Id of the objects, allowing to reference source object.
    */
   refresh = (objectWorkingIds) => {
-    objectWorkingIds.forEach(objectWorkingId => {
-      const sourceObject = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
-      this.reduxStore.dispatch(refreshRequested(objectWorkingId, sourceObject?.importType));
+    objectWorkingIds.forEach((objectWorkingId) => {
+      const sourceObject =
+        officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(
+          objectWorkingId,
+        );
+      this.reduxStore.dispatch(
+        refreshRequested(objectWorkingId, sourceObject?.importType),
+      );
     });
   };
 
@@ -90,9 +98,14 @@ class SidePanelService {
    * @param {Array} objectWorkingIds Contains unique Id of the objects, allowing to reference source object.
    */
   remove = async (objectWorkingIds) => {
-    objectWorkingIds.forEach(objectWorkingId => {
-      const sourceObject = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
-      this.reduxStore.dispatch(removeRequested(objectWorkingId, sourceObject?.importType));
+    objectWorkingIds.forEach((objectWorkingId) => {
+      const sourceObject =
+        officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(
+          objectWorkingId,
+        );
+      this.reduxStore.dispatch(
+        removeRequested(objectWorkingId, sourceObject?.importType),
+      );
     });
   };
 
@@ -109,7 +122,10 @@ class SidePanelService {
    * @param {Boolean} withEdit Flag which shows whether the duplication should happen with additional edit popup.
    */
   duplicate = async (objectWorkingId, insertNewWorksheet, withEdit) => {
-    const sourceObject = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
+    const sourceObject =
+      officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(
+        objectWorkingId,
+      );
     const object = JSON.parse(JSON.stringify(sourceObject));
     object.insertNewWorksheet = insertNewWorksheet;
     object.objectWorkingId = Date.now();
@@ -123,7 +139,9 @@ class SidePanelService {
     delete object.refreshDate;
     delete object.preparedInstanceId;
     delete object.previousTableDimensions;
-    if (object.subtotalsInfo) { delete object.subtotalsInfo.subtotalsAddresses; }
+    if (object.subtotalsInfo) {
+      delete object.subtotalsInfo.subtotalsAddresses;
+    }
 
     if (withEdit) {
       this.reduxStore.dispatch(popupActions.callForDuplicate(object));
@@ -144,15 +162,27 @@ class SidePanelService {
       ? objectWorkingIds
       : [objectWorkingIds];
     for (const objectWorkingId of aWorkingIds) {
-      const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
+      const objectData =
+        officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(
+          objectWorkingId,
+        );
       const { bindId, mstrObjectType } = objectData;
       const excelContext = await officeApiHelper.getExcelContext();
-      await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
+      await officeApiWorksheetHelper.isCurrentReportSheetProtected(
+        excelContext,
+        bindId,
+      );
 
-      if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-        this.reduxStore.dispatch(popupActions.callForEditDossier({ bindId, mstrObjectType }));
+      if (
+        mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name
+      ) {
+        this.reduxStore.dispatch(
+          popupActions.callForEditDossier({ bindId, mstrObjectType }),
+        );
       } else {
-        this.reduxStore.dispatch(popupActions.callForEdit({ bindId, mstrObjectType }));
+        this.reduxStore.dispatch(
+          popupActions.callForEdit({ bindId, mstrObjectType }),
+        );
       }
     }
   };
@@ -170,18 +200,25 @@ class SidePanelService {
     isPrompted: true,
     callback: async () => {
       const excelContext = await officeApiHelper.getExcelContext();
-      await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
+      await officeApiWorksheetHelper.isCurrentReportSheetProtected(
+        excelContext,
+        bindId,
+      );
 
-      const isDossier = mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
+      const isDossier =
+        mstrObjectType.name ===
+        mstrObjectEnum.mstrObjectType.visualization.name;
 
       if (isFromDataOverviewDialog) {
-        const popupType = isDossier ? PopupTypeEnum.repromptDossierDataOverview
+        const popupType = isDossier
+          ? PopupTypeEnum.repromptDossierDataOverview
           : PopupTypeEnum.repromptReportDataOverview;
         this.reduxStore.dispatch(popupStateActions.setPopupType(popupType));
       }
 
       // Based on the type of object, call the appropriate popup
-      const popupAction = isDossier ? popupActions.callForRepromptDossier({ bindId, mstrObjectType })
+      const popupAction = isDossier
+        ? popupActions.callForRepromptDossier({ bindId, mstrObjectType })
         : popupActions.callForReprompt({ bindId, mstrObjectType });
 
       this.reduxStore.dispatch(popupAction);
@@ -200,13 +237,22 @@ class SidePanelService {
     const dispatchTasks = [];
 
     // Reprompt each object (only if prompted) in the order of selection
-    objectWorkingIds.forEach(objectWorkingId => {
-      const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
+    objectWorkingIds.forEach((objectWorkingId) => {
+      const objectData =
+        officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(
+          objectWorkingId,
+        );
       const { bindId, mstrObjectType, isPrompted } = objectData;
 
       // Add a task to the queue only if the object is prompted
       if (isPrompted) {
-        dispatchTasks.push(this.createRepromptTask(bindId, mstrObjectType, isFromDataOverviewDialog));
+        dispatchTasks.push(
+          this.createRepromptTask(
+            bindId,
+            mstrObjectType,
+            isFromDataOverviewDialog,
+          ),
+        );
       }
     });
 
@@ -215,7 +261,9 @@ class SidePanelService {
 
     // Dispatch all actions together to start re-prompting in sequence
     // regardless of how many objects are selected.
-    dispatchTasks.forEach(task => this.reduxStore.dispatch(addRepromptTask(task)));
+    dispatchTasks.forEach((task) =>
+      this.reduxStore.dispatch(addRepromptTask(task)),
+    );
 
     // Dispatch executeRepromptTask() once after all actions are dispatched
     this.reduxStore.dispatch(executeNextRepromptTask());
@@ -228,10 +276,16 @@ class SidePanelService {
    * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object.
    */
   initReusePromptAnswers = async () => {
-    const { value } = await userRestService.getUserPreference(EXCEL_REUSE_PROMPT_ANSWERS);
-    const reusePromptAnswersFlag = !Number.isNaN(+value) ? !!parseInt(value, 10) : JSON.parse(value);
+    const { value } = await userRestService.getUserPreference(
+      EXCEL_REUSE_PROMPT_ANSWERS,
+    );
+    const reusePromptAnswersFlag = !Number.isNaN(+value)
+      ? !!parseInt(value, 10)
+      : JSON.parse(value);
 
-    this.reduxStore.dispatch(officeActions.toggleReusePromptAnswersFlag(reusePromptAnswersFlag));
+    this.reduxStore.dispatch(
+      officeActions.toggleReusePromptAnswersFlag(reusePromptAnswersFlag),
+    );
   };
 
   /**
@@ -241,10 +295,17 @@ class SidePanelService {
    * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object.
    */
   toggleReusePromptAnswers = async (reusePromptAnswers) => {
-    const { value } = await userRestService.setUserPreference(EXCEL_REUSE_PROMPT_ANSWERS, !reusePromptAnswers);
-    const reusePromptAnswersFlag = !Number.isNaN(+value) ? !!parseInt(value, 10) : JSON.parse(value);
+    const { value } = await userRestService.setUserPreference(
+      EXCEL_REUSE_PROMPT_ANSWERS,
+      !reusePromptAnswers,
+    );
+    const reusePromptAnswersFlag = !Number.isNaN(+value)
+      ? !!parseInt(value, 10)
+      : JSON.parse(value);
 
-    this.reduxStore.dispatch(officeActions.toggleReusePromptAnswersFlag(reusePromptAnswersFlag));
+    this.reduxStore.dispatch(
+      officeActions.toggleReusePromptAnswersFlag(reusePromptAnswersFlag),
+    );
   };
 
   /**
@@ -254,21 +315,26 @@ class SidePanelService {
    * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object.
    */
   toggleSettingsPanel = (settingsPanelLoded) => {
-    this.reduxStore.dispatch(officeActions.toggleSettingsPanelLoadedFlag(settingsPanelLoded));
+    this.reduxStore.dispatch(
+      officeActions.toggleSettingsPanelLoadedFlag(settingsPanelLoded),
+    );
   };
 
   highlightImageObject = async (objectData) => {
     const excelContext = await officeApiHelper.getExcelContext();
 
     const { bindId } = objectData;
-    const shapeInWorksheet = bindId && await officeShapeApiHelper.getShape(excelContext, bindId);
+    const shapeInWorksheet =
+      bindId && (await officeShapeApiHelper.getShape(excelContext, bindId));
 
     // Omit the highlight operation, if shape(visualization image) was removed manually from the worksheet.
     if (!shapeInWorksheet) {
       return;
     }
 
-    const worksheet = excelContext.workbook.worksheets.getItem(shapeInWorksheet?.worksheetId);
+    const worksheet = excelContext.workbook.worksheets.getItem(
+      shapeInWorksheet?.worksheetId,
+    );
 
     worksheet.activate();
     await excelContext.sync();

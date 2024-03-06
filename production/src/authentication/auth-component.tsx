@@ -1,16 +1,17 @@
-import React, { FC, useCallback } from 'react';
-import { connect } from 'react-redux';
+/* eslint-disable react/no-multi-comp */
+import React, { FC, useCallback } from "react";
+import { connect } from "react-redux";
 
-import { authenticationHelper } from './authentication-helper';
+import { authenticationHelper } from "./authentication-helper";
 
-import { AuthenticateComponent } from './auth-component-types';
-import { InputProps, LoginProps, SelectInputProps } from './basic-login-types';
+import { AuthenticateComponent } from "./auth-component-types";
+import { InputProps, LoginProps, SelectInputProps } from "./basic-login-types";
 
-import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
-import defaultLoginProps from './default-login-props';
+import { popupActions } from "../redux-reducer/popup-reducer/popup-actions";
+import defaultLoginProps from "./default-login-props";
 
-import './basic-login.scss';
-import './auth-component.css';
+import "./basic-login.scss";
+import "./auth-component.css";
 
 const Input = (props: InputProps): React.ReactElement => {
   const { label } = props;
@@ -41,15 +42,17 @@ const getApiUrl = (url: string): string => {
   const { pathname } = new URL(url);
   const apiURL = new URL(`${pathname}`, url);
   // Remove trailing /
-  return apiURL.href.replace(/\/?$/, '');
+  return apiURL.href.replace(/\/?$/, "");
 };
 
 export const AuthenticateNotConnected: FC<AuthenticateComponent> = (props) => {
-  const [formData, setFormData] = React.useState<LoginProps>({ ...defaultLoginProps });
+  const [formData, setFormData] = React.useState<LoginProps>({
+    ...defaultLoginProps,
+  });
 
   const { session, resetState } = props;
 
-  localStorage.removeItem('refreshData');
+  localStorage.removeItem("refreshData");
   resetState();
 
   const onLoginUser = useCallback(
@@ -59,17 +62,21 @@ export const AuthenticateNotConnected: FC<AuthenticateComponent> = (props) => {
         await authenticationHelper.loginUser(null, formData);
       }
     },
-    [formData]
+    [formData],
   );
 
-  const onChange = ({ target }: React.ChangeEvent<HTMLInputElement & HTMLSelectElement>): void => {
-    const isCheckbox = target.type === 'checkbox';
-    const newFormValue = { [target.name]: isCheckbox ? target.checked : target.value };
+  const onChange = ({
+    target,
+  }: React.ChangeEvent<HTMLInputElement & HTMLSelectElement>): void => {
+    const isCheckbox = target.type === "checkbox";
+    const newFormValue = {
+      [target.name]: isCheckbox ? target.checked : target.value,
+    };
     setFormData((prevFormData) => ({ ...prevFormData, ...newFormValue }));
   };
 
   const normalizeURL = (url: any): void => {
-    const trimmedURL = url.replace(/\/$/, '');
+    const trimmedURL = url.replace(/\/$/, "");
     const normalizedURL = getApiUrl(trimmedURL);
     setFormData((prevFormData) => ({ ...prevFormData, envUrl: normalizedURL }));
   };
@@ -111,7 +118,12 @@ export const AuthenticateNotConnected: FC<AuthenticateComponent> = (props) => {
           required
         />
 
-        <SelectInput label="Login Mode" name="loginMode" onChange={onChange} defaultValue={session.loginMode}>
+        <SelectInput
+          label="Login Mode"
+          name="loginMode"
+          onChange={onChange}
+          defaultValue={session.loginMode}
+        >
           <option value={1}>Standard (1)</option>
           <option value={16}>LDAP (16)</option>
         </SelectInput>
@@ -130,10 +142,13 @@ export const AuthenticateNotConnected: FC<AuthenticateComponent> = (props) => {
   );
 };
 
-function mapStateToProps(state: any) {
+function mapStateToProps(state: any): any {
   return { session: state.sessionReducer };
 }
 
 const mapDispatchToProps = { resetState: popupActions.resetState };
 
-export const Authenticate = connect(mapStateToProps, mapDispatchToProps)(AuthenticateNotConnected);
+export const Authenticate = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AuthenticateNotConnected);

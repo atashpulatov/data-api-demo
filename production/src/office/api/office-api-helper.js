@@ -1,18 +1,21 @@
-import { authenticationHelper } from '../../authentication/authentication-helper';
-import { officeApiCrosstabHelper } from './office-api-crosstab-helper';
+import { authenticationHelper } from "../../authentication/authentication-helper";
+import { officeApiCrosstabHelper } from "./office-api-crosstab-helper";
 
-import { OutsideOfRangeError } from '../../error/outside-of-range-error';
-import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
-import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
-import { IncorrectInputTypeError } from '../incorrect-input-type';
-import { DEFAULT_CELL_POSITION, DEFAULT_RANGE_POSITION } from '../../mstr-object/constants';
+import { OutsideOfRangeError } from "../../error/outside-of-range-error";
+import { officeActions } from "../../redux-reducer/office-reducer/office-actions";
+import { officeProperties } from "../../redux-reducer/office-reducer/office-properties";
+import { IncorrectInputTypeError } from "../incorrect-input-type";
+import {
+  DEFAULT_CELL_POSITION,
+  DEFAULT_RANGE_POSITION,
+} from "../../mstr-object/constants";
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
 const ASCII_CAPITAL_LETTER_INDEX = 65;
 const EXCEL_ROW_LIMIT = 1048576;
 const EXCEL_COL_LIMIT = 16384;
-const INVALID_SELECTION = 'InvalidSelection';
+const INVALID_SELECTION = "InvalidSelection";
 
 class OfficeApiHelper {
   init = (reduxStore) => {
@@ -37,7 +40,8 @@ class OfficeApiHelper {
    * @param {String} bindId Id of the Office table created on import used for referencing the Excel table
    * @return {Office} Reference to Excel Range
    */
-  getBindingRange = (excelContext, bindId) => excelContext.workbook.bindings.getItem(bindId).getTable().getRange();
+  getBindingRange = (excelContext, bindId) =>
+    excelContext.workbook.bindings.getItem(bindId).getTable().getRange();
 
   /**
    * Gets Excel table added to Workbook binded item collection.
@@ -46,14 +50,19 @@ class OfficeApiHelper {
    * @param {String} bindId Id of the Office table created on import used for referencing the Excel table
    * @return {Office} Reference to Excel Table
    */
-  getTable = (excelContext, bindId) => excelContext.workbook.bindings.getItem(bindId).getTable();
+  getTable = (excelContext, bindId) =>
+    excelContext.workbook.bindings.getItem(bindId).getTable();
 
   /**
    * Gets a new Excel Context.
    *
    * @return {Office} Reference to a new Excel Context used by Excel API functions
    */
-  getExcelContext = async () => window.Excel.run({ delayForCellEdit: true }, async (excelContext) => excelContext);
+  getExcelContext = async () =>
+    window.Excel.run(
+      { delayForCellEdit: true },
+      async (excelContext) => excelContext,
+    );
 
   /**
    * Gets Office Context.
@@ -67,7 +76,7 @@ class OfficeApiHelper {
    *
    * @return {Boolean} Returns true if the Excel session is active, false otherwise
    */
-  getExcelSessionStatus = async () => !!await this.getExcelContext();
+  getExcelSessionStatus = async () => !!(await this.getExcelContext());
 
   /**
    * Returns top left cell of selected range. If the selected cell is invalid,
@@ -79,7 +88,9 @@ class OfficeApiHelper {
    */
   getSelectedCell = async (excelContext) => {
     try {
-      const selectedRangeStart = excelContext.workbook.getSelectedRange().getCell(0, 0);
+      const selectedRangeStart = excelContext.workbook
+        .getSelectedRange()
+        .getCell(0, 0);
       selectedRangeStart.load(officeProperties.officeAddress);
       await excelContext.sync();
       return this.getStartCellOfRange(selectedRangeStart.address);
@@ -103,7 +114,9 @@ class OfficeApiHelper {
       } else {
         defaultCellAddress = DEFAULT_CELL_POSITION;
         // Update the active cell address with default cell address
-        this.reduxStore.dispatch(officeActions.setActiveCellAddress(DEFAULT_CELL_POSITION));
+        this.reduxStore.dispatch(
+          officeActions.setActiveCellAddress(DEFAULT_CELL_POSITION),
+        );
       }
 
       return defaultCellAddress;
@@ -120,8 +133,10 @@ class OfficeApiHelper {
    */
   getSelectedRangePosition = async (excelContext) => {
     try {
-      const selectedRange = excelContext.workbook.getSelectedRange().getCell(0, 0);
-      selectedRange.load(['top', 'left']);
+      const selectedRange = excelContext.workbook
+        .getSelectedRange()
+        .getCell(0, 0);
+      selectedRange.load(["top", "left"]);
       await excelContext.sync();
       return {
         top: selectedRange.top,
@@ -143,11 +158,16 @@ class OfficeApiHelper {
       const { activeCellAddress } = this.reduxStore.getState().officeReducer;
       // If the active cell address is valid, then select the last active range
       if (activeCellAddress) {
-        defaultRangePosition = await this.convertCellAddressToRangePosition(excelContext, activeCellAddress);
+        defaultRangePosition = await this.convertCellAddressToRangePosition(
+          excelContext,
+          activeCellAddress,
+        );
       } else {
         defaultRangePosition = DEFAULT_RANGE_POSITION;
         // Update the active cell address with default cell address
-        this.reduxStore.dispatch(officeActions.setActiveCellAddress(DEFAULT_CELL_POSITION));
+        this.reduxStore.dispatch(
+          officeActions.setActiveCellAddress(DEFAULT_CELL_POSITION),
+        );
       }
 
       return defaultRangePosition;
@@ -165,7 +185,7 @@ class OfficeApiHelper {
     const currentExcelSheet = this.getCurrentExcelSheet(excelContext);
     const rangePosition = currentExcelSheet.getRange(cellAddress);
 
-    rangePosition.load(['top', 'left']);
+    rangePosition.load(["top", "left"]);
     await excelContext.sync();
 
     return {
@@ -180,7 +200,8 @@ class OfficeApiHelper {
    * @param {Office} excelAddress Reference to Excel Context used by Excel API functions
    * @return {String} Address of the cell.
    */
-  getStartCellOfRange = (excelAddress) => excelAddress.match(/!(\w+\d+)(:|$)/)[1];
+  getStartCellOfRange = (excelAddress) =>
+    excelAddress.match(/!(\w+\d+)(:|$)/)[1];
 
   /**
    * Gets Excel range based on starting cell and number of columns and rows.
@@ -202,7 +223,9 @@ class OfficeApiHelper {
     const endRow = Number(startCellArray[1]) + rowCount;
 
     if (endRow > EXCEL_ROW_LIMIT || headerCount > EXCEL_COL_LIMIT) {
-      throw new OutsideOfRangeError('The table you try to import exceeds the worksheet limits.');
+      throw new OutsideOfRangeError(
+        "The table you try to import exceeds the worksheet limits.",
+      );
     }
     return `${startCell}:${endColumn}${endRow}`;
   };
@@ -230,7 +253,8 @@ class OfficeApiHelper {
    *
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    */
-  getCurrentExcelSheet = (excelContext) => excelContext.workbook.worksheets.getActiveWorksheet();
+  getCurrentExcelSheet = (excelContext) =>
+    excelContext.workbook.worksheets.getActiveWorksheet();
 
   /**
    * Converts number of column to Excel column name.
@@ -239,15 +263,17 @@ class OfficeApiHelper {
    * @return {String} Excel column indicator
    */
   numberToLetters = (headerCount) => {
-    let result = '';
+    let result = "";
     let firstNumber = ALPHABET_RANGE_START;
     let secondNumber = ALPHABET_RANGE_END;
 
     headerCount -= firstNumber;
     while (headerCount >= 0) {
-      result = String.fromCharCode(parseInt((headerCount % secondNumber) / firstNumber, 10)
-        + ASCII_CAPITAL_LETTER_INDEX)
-        + result;
+      result =
+        String.fromCharCode(
+          parseInt((headerCount % secondNumber) / firstNumber, 10) +
+            ASCII_CAPITAL_LETTER_INDEX,
+        ) + result;
 
       firstNumber = secondNumber;
       secondNumber *= ALPHABET_RANGE_END;
@@ -267,7 +293,9 @@ class OfficeApiHelper {
     if (!letters.match(/^[A-Z]*[A-Z]$/)) {
       throw new IncorrectInputTypeError();
     }
-    return letters.split('').reduce((r, a) => r * ALPHABET_RANGE_END + parseInt(a, 36) - 9, 0);
+    return letters
+      .split("")
+      .reduce((r, a) => r * ALPHABET_RANGE_END + parseInt(a, 36) - 9, 0);
   };
 
   /**
@@ -282,7 +310,9 @@ class OfficeApiHelper {
     const cellArray = cell.split(/(\d+)/);
     const [column, row] = cellArray;
     const endRow = parseInt(row, 10) + parseInt(rowOffset, 10);
-    const endColumn = this.numberToLetters(parseInt(this.lettersToNumber(column) + colOffset, 10));
+    const endColumn = this.numberToLetters(
+      parseInt(this.lettersToNumber(column) + colOffset, 10),
+    );
     return `${endColumn}${endRow}`;
   };
 
@@ -313,7 +343,7 @@ class OfficeApiHelper {
       crosstabRange = await officeApiCrosstabHelper.getCrosstabRangeSafely(
         officeTable,
         tmpXtabDimensions,
-        excelContext
+        excelContext,
       );
       crosstabRange.select();
     } else {
@@ -329,17 +359,25 @@ class OfficeApiHelper {
    * @param {Office} namedItem Excel Table
    * @param {String} bindId Id of the Office table created on import used for referencing the Excel table
    */
-  bindNamedItem = (namedItem, bindId) => new Promise((resolve, reject) => {
-    window.Office.context.document.bindings.addFromNamedItemAsync(namedItem, 'table', { id: bindId }, (result) => {
-      if (result.status === 'succeeded') {
-        console.log(`Added new binding with type: ${result.value.type} and id: ${result.value.id}`);
-        resolve();
-      } else {
-        console.error(`Error: ${result.error.message}`);
-        reject(result.error);
-      }
+  bindNamedItem = (namedItem, bindId) =>
+    new Promise((resolve, reject) => {
+      window.Office.context.document.bindings.addFromNamedItemAsync(
+        namedItem,
+        "table",
+        { id: bindId },
+        (result) => {
+          if (result.status === "succeeded") {
+            console.log(
+              `Added new binding with type: ${result.value.type} and id: ${result.value.id}`,
+            );
+            resolve();
+          } else {
+            console.error(`Error: ${result.error.message}`);
+            reject(result.error);
+          }
+        },
+      );
     });
-  });
 
   /**
    * Returns the new initial cell considering crosstabs.
@@ -359,11 +397,15 @@ class OfficeApiHelper {
         crosstabHeaderDimensions,
         toCrosstabChange,
         fromCrosstabChange,
-      }
+      },
     } = instanceDefinition;
 
     if (fromCrosstabChange) {
-      return this.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX);
+      return this.offsetCellBy(
+        startCell,
+        -prevCrosstabDimensions.columnsY,
+        -prevCrosstabDimensions.rowsX,
+      );
     }
 
     if (!toCrosstabChange && (!isCrosstab || prevOfficeTable)) {
@@ -382,7 +424,10 @@ class OfficeApiHelper {
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {Function} setActiveCellAddress Callback to save the active cell address value.
    */
-  addOnSelectionChangedListener = async (excelContext, setActiveCellAddress) => {
+  addOnSelectionChangedListener = async (
+    excelContext,
+    setActiveCellAddress,
+  ) => {
     excelContext.workbook.onSelectionChanged.add(async () => {
       const activeCellAddress = await this.getSelectedCell(excelContext);
       setActiveCellAddress(activeCellAddress);
@@ -400,14 +445,17 @@ class OfficeApiHelper {
    */
   getCellAddressWithDollars = (cellAddress) => {
     try {
-      const splitAt = (string, index) => [string.slice(0, index), string.slice(index)];
-      const [cell] = cellAddress.split('!').reverse();
+      const splitAt = (string, index) => [
+        string.slice(0, index),
+        string.slice(index),
+      ];
+      const [cell] = cellAddress.split("!").reverse();
       const indexOfRowAddress = cell.search(/\d+/);
       const [column, row] = splitAt(cell, indexOfRowAddress);
       return `$${column}$${row}`;
     } catch (error) {
       console.error(error);
-      return '';
+      return "";
     }
   };
 
@@ -420,13 +468,17 @@ class OfficeApiHelper {
    * @returns {Object} Shape imported into worksheet
    */
   addGeometricShape = async (excelContext, shapeProps, visualizationName) => {
-    const sheet = excelContext.workbook.worksheets.getItem(shapeProps?.worksheetId);
-    const shape = sheet?.shapes?.addGeometricShape(Excel.GeometricShapeType.rectangle);
+    const sheet = excelContext.workbook.worksheets.getItem(
+      shapeProps?.worksheetId,
+    );
+    const shape = sheet?.shapes?.addGeometricShape(
+      Excel.GeometricShapeType.rectangle,
+    );
 
     if (shape) {
       const shapeFill = shape.fill;
       shapeFill.transparency = 0.1;
-      shapeFill.foregroundColor = 'white';
+      shapeFill.foregroundColor = "white";
 
       shape.left = shapeProps?.left;
       shape.top = shapeProps?.top;
@@ -434,7 +486,7 @@ class OfficeApiHelper {
       shape.width = shapeProps?.width;
       shape.name = visualizationName;
 
-      shape.load(['id']);
+      shape.load(["id"]);
       await excelContext.sync();
     }
 

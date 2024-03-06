@@ -1,67 +1,77 @@
-import officeApiDataLoader from '../../office/api/office-api-data-loader';
+import officeApiDataLoader from "../../office/api/office-api-data-loader";
 
-describe('OfficeApiDataLoader', () => {
+describe("OfficeApiDataLoader", () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
 
   it.each`
-  excelContext | object       | key          | msg
-  
-  ${undefined} | ${undefined} | ${undefined} | ${'Cannot load data from Excel, excel context is [undefined]'}
-  ${{}}        | ${undefined} | ${undefined} | ${'Cannot load data from Excel, item.object is [undefined]'}
-  ${{}}        | ${{}}        | ${undefined} | ${'Cannot load data from Excel, item.key is [undefined]'}
-  
-  `('should throw an Error on invalid data - loadSingleExcelData', async ({ excelContext, object, key, msg }) => {
-    // when
-    let result;
-    try {
-      result = await officeApiDataLoader.loadSingleExcelData(excelContext, object, key);
-    } catch (error) {
-      // then
-      expect(error).toBeInstanceOf(Error);
-      expect(error.message).toEqual(msg);
-      expect(result).toBeUndefined();
-    }
-  });
+    excelContext | object       | key          | msg
+    ${undefined} | ${undefined} | ${undefined} | ${"Cannot load data from Excel, excel context is [undefined]"}
+    ${{}}        | ${undefined} | ${undefined} | ${"Cannot load data from Excel, item.object is [undefined]"}
+    ${{}}        | ${{}}        | ${undefined} | ${"Cannot load data from Excel, item.key is [undefined]"}
+  `(
+    "should throw an Error on invalid data - loadSingleExcelData",
+    async ({ excelContext, object, key, msg }) => {
+      // when
+      let result;
+      try {
+        result = await officeApiDataLoader.loadSingleExcelData(
+          excelContext,
+          object,
+          key,
+        );
+      } catch (error) {
+        // then
+        expect(error).toBeInstanceOf(Error);
+        expect(error.message).toEqual(msg);
+        expect(result).toBeUndefined();
+      }
+    },
+  );
 
-  it('should call loadExcelData and return mock value', async () => {
+  it("should call loadExcelData and return mock value", async () => {
     // given
-    const mockLoadExcelData = jest.spyOn(officeApiDataLoader, 'loadExcelData').mockImplementation(
-      () => ({ testKey: 'testValue' })
-    );
+    const mockLoadExcelData = jest
+      .spyOn(officeApiDataLoader, "loadExcelData")
+      .mockImplementation(() => ({ testKey: "testValue" }));
 
     // when
-    const result = await officeApiDataLoader.loadSingleExcelData(undefined, undefined, 'testKey');
+    const result = await officeApiDataLoader.loadSingleExcelData(
+      undefined,
+      undefined,
+      "testKey",
+    );
 
     // then
     expect(mockLoadExcelData).toBeCalledTimes(1);
-    expect(result).toEqual('testValue');
+    expect(result).toEqual("testValue");
   });
 
   it.each`
-  excelContext | items                     | msg
-  
-  ${undefined} | ${undefined}              | ${'Cannot load data from Excel, excel context is [undefined]'}
-  ${{}}        | ${[undefined]}            | ${'Cannot load data from Excel, item is [undefined]'}
-  ${{}}        | ${[{}]}                   | ${'Cannot load data from Excel, item.object is [undefined]'}
-  ${{}}        | ${[{ key: 'key' }]}       | ${'Cannot load data from Excel, item.object is [undefined]'}
-  ${{}}        | ${[{ object: 'object' }]} | ${'Cannot load data from Excel, item.key is [undefined]'}
-  
-  `('should throw an Error on invalid data - loadExcelData', async ({ excelContext, items, msg }) => {
-    // when
-    let result;
-    try {
-      result = await officeApiDataLoader.loadExcelData(excelContext, items);
-    } catch (error) {
-      // then
-      expect(error).toBeInstanceOf(Error);
-      expect(error.message).toEqual(msg);
-      expect(result).toBeUndefined();
-    }
-  });
+    excelContext | items                     | msg
+    ${undefined} | ${undefined}              | ${"Cannot load data from Excel, excel context is [undefined]"}
+    ${{}}        | ${[undefined]}            | ${"Cannot load data from Excel, item is [undefined]"}
+    ${{}}        | ${[{}]}                   | ${"Cannot load data from Excel, item.object is [undefined]"}
+    ${{}}        | ${[{ key: "key" }]}       | ${"Cannot load data from Excel, item.object is [undefined]"}
+    ${{}}        | ${[{ object: "object" }]} | ${"Cannot load data from Excel, item.key is [undefined]"}
+  `(
+    "should throw an Error on invalid data - loadExcelData",
+    async ({ excelContext, items, msg }) => {
+      // when
+      let result;
+      try {
+        result = await officeApiDataLoader.loadExcelData(excelContext, items);
+      } catch (error) {
+        // then
+        expect(error).toBeInstanceOf(Error);
+        expect(error.message).toEqual(msg);
+        expect(result).toBeUndefined();
+      }
+    },
+  );
 
-  it('should return empty map when empty items given', async () => {
+  it("should return empty map when empty items given", async () => {
     // when
     const result = await officeApiDataLoader.loadExcelData({}, []);
 
@@ -69,10 +79,13 @@ describe('OfficeApiDataLoader', () => {
     expect(result).toEqual({});
   });
 
-  it('should work correctly for 1 item, 1 object', async () => {
+  it("should work correctly for 1 item, 1 object", async () => {
     // given
-    const mockValidateExcelContext = jest.spyOn(officeApiDataLoader, 'validateExcelContext');
-    const mockValidateItem = jest.spyOn(officeApiDataLoader, 'validateItem');
+    const mockValidateExcelContext = jest.spyOn(
+      officeApiDataLoader,
+      "validateExcelContext",
+    );
+    const mockValidateItem = jest.spyOn(officeApiDataLoader, "validateItem");
     const mockSync = jest.fn();
     const mockExcelContext = {
       sync: mockSync,
@@ -80,24 +93,29 @@ describe('OfficeApiDataLoader', () => {
     const mockLoad = jest.fn();
     const mockObject = {
       load: mockLoad,
-      testKey: 'testValue',
+      testKey: "testValue",
     };
 
     // when
-    const result = await officeApiDataLoader.loadExcelData(mockExcelContext, [{ object: mockObject, key: 'testKey' }]);
+    const result = await officeApiDataLoader.loadExcelData(mockExcelContext, [
+      { object: mockObject, key: "testKey" },
+    ]);
 
     // then
-    expect(result).toEqual({ testKey: 'testValue' });
+    expect(result).toEqual({ testKey: "testValue" });
     expect(mockValidateExcelContext).toHaveBeenCalledTimes(1);
     expect(mockValidateItem).toHaveBeenCalledTimes(1);
     expect(mockSync).toHaveBeenCalledTimes(1);
     expect(mockLoad).toHaveBeenCalledTimes(1);
   });
 
-  it('should work correctly for many items, 1 object', async () => {
+  it("should work correctly for many items, 1 object", async () => {
     // given
-    const mockValidateExcelContext = jest.spyOn(officeApiDataLoader, 'validateExcelContext');
-    const mockValidateItem = jest.spyOn(officeApiDataLoader, 'validateItem');
+    const mockValidateExcelContext = jest.spyOn(
+      officeApiDataLoader,
+      "validateExcelContext",
+    );
+    const mockValidateItem = jest.spyOn(officeApiDataLoader, "validateItem");
     const mockSync = jest.fn();
     const mockExcelContext = {
       sync: mockSync,
@@ -105,71 +123,70 @@ describe('OfficeApiDataLoader', () => {
     const mockLoad = jest.fn();
     const mockObject = {
       load: mockLoad,
-      testKeyOne: 'testValueOne',
-      testKeyTwo: 'testValueTwo',
+      testKeyOne: "testValueOne",
+      testKeyTwo: "testValueTwo",
     };
 
     // when
     const result = await officeApiDataLoader.loadExcelData(mockExcelContext, [
       {
         object: mockObject,
-        key: 'testKeyOne'
+        key: "testKeyOne",
       },
       {
         object: mockObject,
-        key: 'testKeyTwo'
-      }
+        key: "testKeyTwo",
+      },
     ]);
 
     // then
-    expect(result).toEqual(
-      {
-        testKeyOne: 'testValueOne',
-        testKeyTwo: 'testValueTwo'
-      },
-    );
+    expect(result).toEqual({
+      testKeyOne: "testValueOne",
+      testKeyTwo: "testValueTwo",
+    });
     expect(mockValidateExcelContext).toHaveBeenCalledTimes(1);
     expect(mockValidateItem).toHaveBeenCalledTimes(2);
     expect(mockSync).toHaveBeenCalledTimes(1);
     expect(mockLoad).toHaveBeenCalledTimes(2);
   });
 
-  it('should work correctly for many items, many object', async () => {
+  it("should work correctly for many items, many object", async () => {
     // given
-    const mockValidateExcelContext = jest.spyOn(officeApiDataLoader, 'validateExcelContext');
-    const mockValidateItem = jest.spyOn(officeApiDataLoader, 'validateItem');
+    const mockValidateExcelContext = jest.spyOn(
+      officeApiDataLoader,
+      "validateExcelContext",
+    );
+    const mockValidateItem = jest.spyOn(officeApiDataLoader, "validateItem");
     const mockSync = jest.fn();
-    const mockExcelContext = { sync: mockSync, };
+    const mockExcelContext = { sync: mockSync };
     const mockLoadOne = jest.fn();
     const mockLoadTwo = jest.fn();
     const mockObjectOne = {
       load: mockLoadOne,
-      testKeyOne: 'testValueOne',
+      testKeyOne: "testValueOne",
     };
     const mockObjectTwo = {
       load: mockLoadTwo,
-      testKeyTwo: 'testValueTwo',
+      testKeyTwo: "testValueTwo",
     };
 
     // when
     const result = await officeApiDataLoader.loadExcelData(mockExcelContext, [
       {
         object: mockObjectOne,
-        key: 'testKeyOne'
+        key: "testKeyOne",
       },
       {
         object: mockObjectTwo,
-        key: 'testKeyTwo'
-      }
+        key: "testKeyTwo",
+      },
     ]);
 
     // then
-    expect(result).toEqual(
-      {
-        testKeyOne: 'testValueOne',
-        testKeyTwo: 'testValueTwo'
-      },
-    );
+    expect(result).toEqual({
+      testKeyOne: "testValueOne",
+      testKeyTwo: "testValueTwo",
+    });
     expect(mockValidateExcelContext).toHaveBeenCalledTimes(1);
     expect(mockValidateItem).toHaveBeenCalledTimes(2);
     expect(mockSync).toHaveBeenCalledTimes(1);

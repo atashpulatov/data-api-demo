@@ -1,4 +1,4 @@
-import MstrObjectType from '../mstr-object-type-enum';
+import MstrObjectType from "../mstr-object-type-enum";
 
 class MstrAttributeMetricHelper {
   /**
@@ -10,7 +10,10 @@ class MstrAttributeMetricHelper {
    */
   extractAttributesMetricsCompoundGrid(grid) {
     // equivalent to grid.columnSets.flatMap(columnSet => columnSet.columns);
-    const columns = grid.columnSets.reduce((allColumns, currColumnSet) => allColumns.concat(currColumnSet.columns), []);
+    const columns = grid.columnSets.reduce(
+      (allColumns, currColumnSet) => allColumns.concat(currColumnSet.columns),
+      [],
+    );
     const { rows } = grid;
     const attributes = this.extractAttributes(rows, columns);
     const metrics = this.extractMetrics(rows, columns);
@@ -41,10 +44,11 @@ class MstrAttributeMetricHelper {
    *
    * @returns {Object[]} Array of attribute objects with id and name properties
    */
-  extractAttributes = (rows, columns) => columns
-    .filter(({ type }) => type === 'attribute')
-    .concat(rows.filter(({ type }) => type === 'attribute'))
-    .map(({ id, name }) => ({ id, name }));
+  extractAttributes = (rows, columns) =>
+    columns
+      .filter(({ type }) => type === "attribute")
+      .concat(rows.filter(({ type }) => type === "attribute"))
+      .map(({ id, name }) => ({ id, name }));
 
   /**
    * Extracts metrics from rows and columns that we get from MSTR REST API
@@ -54,12 +58,17 @@ class MstrAttributeMetricHelper {
    *
    * @returns {Object[]} Array of metric objects with id and name properties
    */
-  extractMetrics = (rows, columns) => columns
-    .filter(({ type }) => type === 'templateMetrics')
-    .concat(rows.filter(({ type }) => type === 'templateMetrics'))
-    // equivalent to flatMap(({ elements }) => elements)
-    .reduce((allElements, { elements: currElements }) => allElements.concat(currElements), [])
-    .map(({ id, name }) => ({ id, name }));
+  extractMetrics = (rows, columns) =>
+    columns
+      .filter(({ type }) => type === "templateMetrics")
+      .concat(rows.filter(({ type }) => type === "templateMetrics"))
+      // equivalent to flatMap(({ elements }) => elements)
+      .reduce(
+        (allElements, { elements: currElements }) =>
+          allElements.concat(currElements),
+        [],
+      )
+      .map(({ id, name }) => ({ id, name }));
 
   /**
    * Extracts metrics from body of the response we get from MSTR REST API
@@ -69,10 +78,14 @@ class MstrAttributeMetricHelper {
    * @returns {Object[]} Array of metric objects with id and name properties
    */
   extractMetricsInRows = (body) => {
-    const columns = body.visualizationType === MstrObjectType.visualizationType.COMPOUND_GRID
-      ? body.definition.grid.columnSets
-        .reduce((allColumns, currColumnSet) => allColumns.concat(currColumnSet.columns), [])
-      : body.definition.grid.columns;
+    const columns =
+      body.visualizationType === MstrObjectType.visualizationType.COMPOUND_GRID
+        ? body.definition.grid.columnSets.reduce(
+            (allColumns, currColumnSet) =>
+              allColumns.concat(currColumnSet.columns),
+            [],
+          )
+        : body.definition.grid.columns;
     const { rows } = body.definition.grid;
 
     return this.extractMetrics(rows, columns);
@@ -87,8 +100,13 @@ class MstrAttributeMetricHelper {
    * @returns {Object[]} Array of unique metrics that are present in fetchedMetrics
    * and not present in currentMetrics; Empty array if there are no such metrics
    */
-  getMetricsDifference = (fetchedMetrics, currentMetrics) => fetchedMetrics
-    .filter(fetchedMetric => !currentMetrics.some(currentMetric => currentMetric.id === fetchedMetric.id));
+  getMetricsDifference = (fetchedMetrics, currentMetrics) =>
+    fetchedMetrics.filter(
+      (fetchedMetric) =>
+        !currentMetrics.some(
+          (currentMetric) => currentMetric.id === fetchedMetric.id,
+        ),
+    );
 
   /**
    * Extracts metrics from body and returns the difference
@@ -111,9 +129,10 @@ class MstrAttributeMetricHelper {
    *
    * @returns {boolean} true if metrics are in rows false otherwise
    */
-  isMetricInRows = (body) => (body.definition.grid.metricsPosition
-    ? body.definition.grid.metricsPosition.axis === 'rows'
-    : false);
+  isMetricInRows = (body) =>
+    body.definition.grid.metricsPosition
+      ? body.definition.grid.metricsPosition.axis === "rows"
+      : false;
 
   /**
    * Gets information about metrics in rows based on provided parameters
@@ -125,11 +144,11 @@ class MstrAttributeMetricHelper {
    * @returns {Object} object containing information about metrics in rows
    */
   getMetricsInRowsInfo(body, metricsInRows, fetchedBody) {
-    const isMetricInRows = mstrAttributeMetricHelper.isMetricInRows(body);
+    const isMetricInRows = this.isMetricInRows(body);
     const metricsRows = [];
 
     if (isMetricInRows) {
-      metricsInRows = mstrAttributeMetricHelper.getMetricsInRows(body, metricsInRows);
+      metricsInRows = this.getMetricsInRows(body, metricsInRows);
 
       const { grid } = fetchedBody.definition;
 
@@ -138,7 +157,9 @@ class MstrAttributeMetricHelper {
         const { rows } = fetchedBody.data.headers;
 
         rows.forEach((fetchedBodyRow) => {
-          metricsRows.push(grid.rows[metricsIndex].elements[fetchedBodyRow[metricsIndex]]);
+          metricsRows.push(
+            grid.rows[metricsIndex].elements[fetchedBodyRow[metricsIndex]],
+          );
         });
       }
     }

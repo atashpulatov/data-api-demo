@@ -1,4 +1,4 @@
-import { CONTEXT_LIMIT } from '../../mstr-object/mstr-object-rest-service';
+import { CONTEXT_LIMIT } from "../../mstr-object/mstr-object-rest-service";
 
 class OfficeFormatSubtotals {
   /**
@@ -9,11 +9,18 @@ class OfficeFormatSubtotals {
    * @param {Object} mstrTable contains information about mstr object
    * @param {Boolean} [shouldBold=true] Specify if the function should add or remove bold formatting
    */
-  applySubtotalFormatting = async (officeTable, excelContext, mstrTable, shouldBold = true) => {
-    console.time('Subtotal Formatting');
+  applySubtotalFormatting = async (
+    officeTable,
+    excelContext,
+    mstrTable,
+    shouldBold = true,
+  ) => {
+    console.time("Subtotal Formatting");
     try {
       const { isCrosstab } = mstrTable;
-      let { subtotalsInfo: { subtotalsAddresses } } = mstrTable;
+      let {
+        subtotalsInfo: { subtotalsAddresses },
+      } = mstrTable;
       let reportStartCell;
       if (isCrosstab) {
         subtotalsAddresses = new Set(subtotalsAddresses);
@@ -23,13 +30,19 @@ class OfficeFormatSubtotals {
       }
 
       excelContext.trackedObjects.add(reportStartCell);
-      await this.formatSubtotals(reportStartCell, subtotalsAddresses, mstrTable, excelContext, shouldBold);
+      await this.formatSubtotals(
+        reportStartCell,
+        subtotalsAddresses,
+        mstrTable,
+        excelContext,
+        shouldBold,
+      );
       excelContext.trackedObjects.remove(reportStartCell);
     } catch (error) {
       console.error(error);
-      console.log('Cannot apply subtotal formatting, skipping');
+      console.log("Cannot apply subtotal formatting, skipping");
     }
-    console.timeEnd('Subtotal Formatting');
+    console.timeEnd("Subtotal Formatting");
   };
 
   /**
@@ -52,23 +65,29 @@ class OfficeFormatSubtotals {
         verticalLastCell: cell.rowIndex + 1,
         horizontalLastCell: mstrTable.tableSize.columns - 1,
       };
-    } else if (axis === 'rows') {
+    } else if (axis === "rows") {
       offsets = {
         verticalFirstCell: cell.colIndex,
         horizontalFirstCell: -(headers.rows[0].length - cell.attributeIndex),
         verticalLastCell: cell.colIndex,
         horizontalLastCell: headers.columns[0].length - 1,
       };
-    } else if (axis === 'columns') {
+    } else if (axis === "columns") {
       offsets = {
-        verticalFirstCell: -((headers.columns.length - cell.attributeIndex) + 1),
+        verticalFirstCell: -(headers.columns.length - cell.attributeIndex + 1),
         horizontalFirstCell: cell.colIndex,
         verticalLastCell: mstrTable.tableSize.rows,
         horizontalLastCell: cell.colIndex,
       };
     }
-    const firstSubtotalCell = startCell.getOffsetRange(offsets.verticalFirstCell, offsets.horizontalFirstCell);
-    const lastSubtotalCell = startCell.getOffsetRange(offsets.verticalLastCell, offsets.horizontalLastCell);
+    const firstSubtotalCell = startCell.getOffsetRange(
+      offsets.verticalFirstCell,
+      offsets.horizontalFirstCell,
+    );
+    const lastSubtotalCell = startCell.getOffsetRange(
+      offsets.verticalLastCell,
+      offsets.horizontalLastCell,
+    );
     return firstSubtotalCell.getBoundingRect(lastSubtotalCell);
   };
 
@@ -82,11 +101,23 @@ class OfficeFormatSubtotals {
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {Boolean} shouldBold Specify if the function should add or remove bold formatting
    */
-  formatSubtotals = async (startCell, subtotalCells, mstrTable, excelContext, shouldBold) => {
+  formatSubtotals = async (
+    startCell,
+    subtotalCells,
+    mstrTable,
+    excelContext,
+    shouldBold,
+  ) => {
     let contextPromises = [];
     for (const cell of subtotalCells) {
-      const subtotalRowRange = this.getSubtotalRange(startCell, cell, mstrTable);
-      if (subtotalRowRange) { subtotalRowRange.format.font.bold = shouldBold; }
+      const subtotalRowRange = this.getSubtotalRange(
+        startCell,
+        cell,
+        mstrTable,
+      );
+      if (subtotalRowRange) {
+        subtotalRowRange.format.font.bold = shouldBold;
+      }
       contextPromises.push(excelContext.sync());
       if (contextPromises.length % CONTEXT_LIMIT === 0) {
         await Promise.all(contextPromises);

@@ -1,4 +1,4 @@
-import operationStepDispatcher from '../operation/operation-step-dispatcher';
+import operationStepDispatcher from "../operation/operation-step-dispatcher";
 
 class StepModifyObject {
   /**
@@ -22,15 +22,23 @@ class StepModifyObject {
         body: objectEditedData.body,
       };
 
-      if (!objectEditedData.visualizationInfo
-        && subtotalsInfo.importSubtotal !== objectEditedData.subtotalsInfo.importSubtotal) {
+      if (
+        !objectEditedData.visualizationInfo &&
+        subtotalsInfo.importSubtotal !==
+          objectEditedData.subtotalsInfo.importSubtotal
+      ) {
         const subtotalsInformation = { ...subtotalsInfo };
-        subtotalsInformation.importSubtotal = objectEditedData.subtotalsInfo.importSubtotal;
+        subtotalsInformation.importSubtotal =
+          objectEditedData.subtotalsInfo.importSubtotal;
         updatedObject.subtotalsInfo = subtotalsInformation;
       }
 
-      if (objectData.displayAttrFormNames !== objectEditedData.displayAttrFormNames) {
-        updatedObject.displayAttrFormNames = objectEditedData.displayAttrFormNames;
+      if (
+        objectData.displayAttrFormNames !==
+        objectEditedData.displayAttrFormNames
+      ) {
+        updatedObject.displayAttrFormNames =
+          objectEditedData.displayAttrFormNames;
       }
 
       if (objectEditedData.promptsAnswers) {
@@ -38,10 +46,14 @@ class StepModifyObject {
       }
 
       if (objectEditedData.isEdit) {
-        if (objectData.visualizationInfo.visualizationKey !== objectEditedData.visualizationInfo.visualizationKey) {
+        if (
+          objectData.visualizationInfo.visualizationKey !==
+          objectEditedData.visualizationInfo.visualizationKey
+        ) {
           objectEditedData.visualizationInfo.nameAndFormatShouldUpdate = true;
           updatedObject.visualizationInfo = objectEditedData.visualizationInfo;
-          updatedObject.displayAttrFormNames = objectEditedData.displayAttrFormNames;
+          updatedObject.displayAttrFormNames =
+            objectEditedData.displayAttrFormNames;
         }
 
         updatedObject.preparedInstanceId = objectEditedData.preparedInstanceId;
@@ -49,7 +61,7 @@ class StepModifyObject {
       }
 
       if (objectEditedData.filterDetails) {
-        updatedObject.definition = { filters: objectEditedData.filterDetails, };
+        updatedObject.definition = { filters: objectEditedData.filterDetails };
       }
 
       operationStepDispatcher.updateObject(updatedObject);

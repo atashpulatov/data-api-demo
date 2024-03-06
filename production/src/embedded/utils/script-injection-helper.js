@@ -9,9 +9,9 @@ class ScriptInjectionHelper {
   applyFile = (contentDocument, fileLocationRelativePath) => {
     if (contentDocument) {
       const fileLocation = this.createFileLocation(fileLocationRelativePath);
-      const script = contentDocument.createElement('script');
+      const script = contentDocument.createElement("script");
       script.src = encodeURI(fileLocation);
-      const title = contentDocument.head.getElementsByTagName('title')[0];
+      const title = contentDocument.head.getElementsByTagName("title")[0];
       contentDocument.head.insertBefore(script, title);
     }
   };
@@ -25,11 +25,13 @@ class ScriptInjectionHelper {
    */
   applyStyle = (contentDocument, styleSheetRelativePath) => {
     if (contentDocument) {
-      const styleSheetLocation = this.createFileLocation(styleSheetRelativePath);
-      const cssLink = document.createElement('link');
+      const styleSheetLocation = this.createFileLocation(
+        styleSheetRelativePath,
+      );
+      const cssLink = document.createElement("link");
       cssLink.href = encodeURI(styleSheetLocation);
-      cssLink.rel = 'stylesheet';
-      cssLink.type = 'text/css';
+      cssLink.rel = "stylesheet";
+      cssLink.type = "text/css";
       contentDocument.head.appendChild(cssLink);
     }
   };
@@ -40,8 +42,9 @@ class ScriptInjectionHelper {
    * @param {String} relativePath is a path to file,
    * that will be injected to iframe.
    */
-  createFileLocation = relativePath => window.location.origin
-    + window.location.pathname.replace('index.html', relativePath);
+  createFileLocation = (relativePath) =>
+    window.location.origin +
+    window.location.pathname.replace("index.html", relativePath);
 
   /**
    * Checks if document is login page of embedded library.
@@ -49,7 +52,8 @@ class ScriptInjectionHelper {
    * @param {Document} document content document of embedded dossier iframe.
    * @returns {Boolean} True if document is login page, false otherwise.
    */
-  isLoginPage = (document) => document && document.URL.includes('embeddedLogin.jsp');
+  isLoginPage = (document) =>
+    document && document.URL.includes("embeddedLogin.jsp");
 
   /**
    * Watches container for child addition and runs callback in case an iframe was added
@@ -60,7 +64,11 @@ class ScriptInjectionHelper {
     const config = { childList: true };
     const onMutation = (mutationList) => {
       for (const mutation of mutationList) {
-        if (mutation.addedNodes && mutation.addedNodes.length && mutation.addedNodes[0].nodeName === 'IFRAME') {
+        if (
+          mutation.addedNodes &&
+          mutation.addedNodes.length &&
+          mutation.addedNodes[0].nodeName === "IFRAME"
+        ) {
           const iframe = mutation.addedNodes[0];
           iframe.tabIndex = 0;
           iframe.focusEventListenerAdded = false;
@@ -73,21 +81,24 @@ class ScriptInjectionHelper {
   };
 
   /**
-  * When focused on window switch focus to different element in this window.
-  * For prompted dossiers this element will be first Table Data tag.
-  * For non-prompted dossiers it will be the Table of Content button.
-  * Focusing on the window itself is not visible for the user therefore should be skipped.
-  *
-  * @param {FocusEvent} focusEvent
-  */
+   * When focused on window switch focus to different element in this window.
+   * For prompted dossiers this element will be first Table Data tag.
+   * For non-prompted dossiers it will be the Table of Content button.
+   * Focusing on the window itself is not visible for the user therefore should be skipped.
+   *
+   * @param {FocusEvent} focusEvent
+   */
   switchFocusToElementOnWindowFocus = (focusEvent) => {
     const iframeDocument = focusEvent.target.contentDocument;
-    const overlay = iframeDocument.getElementsByClassName('mstrd-PromptEditorContainer-overlay').length;
+    const overlay = iframeDocument.getElementsByClassName(
+      "mstrd-PromptEditorContainer-overlay",
+    ).length;
     let elementToFocusOn;
     if (overlay) {
-      [elementToFocusOn] = iframeDocument.getElementsByTagName('TD');
+      [elementToFocusOn] = iframeDocument.getElementsByTagName("TD");
     } else {
-      [elementToFocusOn] = iframeDocument.getElementsByClassName('icon-tb_toc_n');
+      [elementToFocusOn] =
+        iframeDocument.getElementsByClassName("icon-tb_toc_n");
     }
     if (elementToFocusOn) {
       elementToFocusOn.focus();

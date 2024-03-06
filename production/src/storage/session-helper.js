@@ -1,15 +1,15 @@
-import throttle from 'lodash.throttle';
+import throttle from "lodash.throttle";
 
-import { authenticationService } from '../authentication/auth-rest-service';
-import { homeHelper } from '../home/home-helper';
-import { userRestService } from '../home/user-rest-service';
+import { authenticationService } from "../authentication/auth-rest-service";
+import { homeHelper } from "../home/home-helper";
+import { userRestService } from "../home/user-rest-service";
 
-import { errorService } from '../error/error-handler';
-import { importRequested } from '../redux-reducer/operation-reducer/operation-actions';
-import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
-import { httpStatusCodes, incomingErrorStrings } from '../error/constants';
+import { errorService } from "../error/error-handler";
+import { importRequested } from "../redux-reducer/operation-reducer/operation-actions";
+import { sessionActions } from "../redux-reducer/session-reducer/session-actions";
+import { httpStatusCodes, incomingErrorStrings } from "../error/constants";
 
-export const EXTEND_SESSION = 'EXTEND_SESSION';
+export const EXTEND_SESSION = "EXTEND_SESSION";
 const DEFAULT_SESSION_REFRESH_TIME = 60000;
 class SessionHelper {
   init = (reduxStore) => {
@@ -36,12 +36,12 @@ class SessionHelper {
    */
   handleLogoutForPrivilegeMissing = async () => {
     try {
-      await sessionHelper.logOutRest();
+      await this.logOutRest();
       sessionActions.logOut();
     } catch (error) {
       errorService.handleError(error);
     } finally {
-      sessionHelper.logOutRedirect(true);
+      this.logOutRedirect(true);
     }
   };
 
@@ -56,9 +56,11 @@ class SessionHelper {
     const isDevelopment = this.isDevelopment();
     if (!isDevelopment) {
       const currentPath = window.location.pathname;
-      const pathBeginning = currentPath.split('/apps/')[0];
-      const loginParams = 'source=addin-mstr-office';
-      const url = encodeURI(`${pathBeginning}/static/loader-mstr-office/index.html?${loginParams}`);
+      const pathBeginning = currentPath.split("/apps/")[0];
+      const loginParams = "source=addin-mstr-office";
+      const url = encodeURI(
+        `${pathBeginning}/static/loader-mstr-office/index.html?${loginParams}`,
+      );
       window.location.replace(url);
     } else {
       sessionActions.disableLoading();
@@ -106,7 +108,10 @@ class SessionHelper {
       if (onSessionExpire && error.response && error.response.statusCode) {
         const { UNAUTHORIZED_ERROR, FORBIDDEN_ERROR } = httpStatusCodes;
         const { statusCode } = error.response;
-        if (statusCode === UNAUTHORIZED_ERROR || statusCode === FORBIDDEN_ERROR) {
+        if (
+          statusCode === UNAUTHORIZED_ERROR ||
+          statusCode === FORBIDDEN_ERROR
+        ) {
           onSessionExpire();
         }
       }
@@ -119,15 +124,20 @@ class SessionHelper {
   };
 
   /**
-  * Installs throttle on keepSessionAlive method.
-  *
-  * invokes keepSessionAlive method at most once per every DEFAULT_SESSION_REFRESH_TIME
-  *
-  * @param {func} onSessionExpire is callback function e.g closePopup() default value is [null].
-  */
-  installSessionProlongingHandler = (onSessionExpire = null) => throttle(() => {
-    this.keepSessionAlive(onSessionExpire);
-  }, DEFAULT_SESSION_REFRESH_TIME, { trailing: false });
+   * Installs throttle on keepSessionAlive method.
+   *
+   * invokes keepSessionAlive method at most once per every DEFAULT_SESSION_REFRESH_TIME
+   *
+   * @param {func} onSessionExpire is callback function e.g closePopup() default value is [null].
+   */
+  installSessionProlongingHandler = (onSessionExpire = null) =>
+    throttle(
+      () => {
+        this.keepSessionAlive(onSessionExpire);
+      },
+      DEFAULT_SESSION_REFRESH_TIME,
+      { trailing: false },
+    );
 
   /**
    * Get userData about currently logged user from Api and stores the information in redux store
@@ -137,8 +147,12 @@ class SessionHelper {
     let userData = {};
     const isDevelopment = this.isDevelopment();
     const { getState } = this.reduxStore;
-    const envUrl = isDevelopment ? getState().sessionReducer.envUrl : homeHelper.saveLoginValues();
-    const authToken = isDevelopment ? getState().sessionReducer.authToken : homeHelper.getTokenFromStorage();
+    const envUrl = isDevelopment
+      ? getState().sessionReducer.envUrl
+      : homeHelper.saveLoginValues();
+    const authToken = isDevelopment
+      ? getState().sessionReducer.authToken
+      : homeHelper.getTokenFromStorage();
     try {
       userData = await userRestService.getUserInfo(authToken, envUrl);
       !userData.userInitials && sessionActions.saveUserInfo(userData);
@@ -155,12 +169,17 @@ class SessionHelper {
     let canChooseAttrForm = false;
     const isDevelopment = this.isDevelopment();
     const { reduxStore } = this;
-    const envUrl = isDevelopment ? reduxStore.getState().sessionReducer.envUrl : homeHelper.saveLoginValues();
+    const envUrl = isDevelopment
+      ? reduxStore.getState().sessionReducer.envUrl
+      : homeHelper.saveLoginValues();
     const authToken = isDevelopment
       ? reduxStore.getState().sessionReducer.authToken
       : homeHelper.getTokenFromStorage();
     try {
-      canChooseAttrForm = await authenticationService.getAttributeFormPrivilege(envUrl, authToken);
+      canChooseAttrForm = await authenticationService.getAttributeFormPrivilege(
+        envUrl,
+        authToken,
+      );
       sessionActions.setAttrFormPrivilege(canChooseAttrForm);
     } catch (error) {
       console.error(error);
@@ -175,17 +194,20 @@ class SessionHelper {
     const authToken = isDevelopment
       ? reduxStore.getState().sessionReducer.authToken
       : homeHelper.getTokenFromStorage();
-    const canUseOffice = await authenticationService.getOfficePrivilege(envUrl, authToken);
+    const canUseOffice = await authenticationService.getOfficePrivilege(
+      envUrl,
+      authToken,
+    );
 
     return canUseOffice;
   };
 
   /**
-  * Return Url of the current page
-  *
-  * @param {String} propertyName Key used by Office Api to determine value from settings
-  * @return {String} Page Url
-  */
+   * Return Url of the current page
+   *
+   * @param {String} propertyName Key used by Office Api to determine value from settings
+   * @return {String} Page Url
+   */
   getUrl = () => window.location.href;
 
   /**
@@ -195,7 +217,9 @@ class SessionHelper {
    */
   isDevelopment = () => {
     try {
-      const isDevelopment = ['development', 'test'].includes(process.env.NODE_ENV);
+      const isDevelopment = ["development", "test"].includes(
+        process.env.NODE_ENV,
+      );
       return isDevelopment;
     } catch (error) {
       return false;

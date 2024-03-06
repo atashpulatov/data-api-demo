@@ -1,12 +1,12 @@
-import request from 'superagent';
+import request from "superagent";
 
-import officeConverterServiceV2 from '../office/office-converter-service-v2';
-import mstrAttributeFormHelper from './helper/mstr-attribute-form-helper';
-import mstrAttributeMetricHelper from './helper/mstr-attribute-metric-helper';
+import officeConverterServiceV2 from "../office/office-converter-service-v2";
+import mstrAttributeFormHelper from "./helper/mstr-attribute-form-helper";
+import mstrAttributeMetricHelper from "./helper/mstr-attribute-metric-helper";
 
-import { OutsideOfRangeError } from '../error/outside-of-range-error';
-import mstrObjectEnum from './mstr-object-type-enum';
-import { errorMessages } from '../error/constants';
+import { OutsideOfRangeError } from "../error/outside-of-range-error";
+import mstrObjectEnum from "./mstr-object-type-enum";
+import { errorMessages } from "../error/constants";
 
 const reportObjectType = mstrObjectEnum.mstrObjectType.report;
 
@@ -33,7 +33,9 @@ function parseInstanceDefinition(res, attrforms) {
   }
   const { instanceId, data, internal } = body;
   body.attrforms = attrforms;
-  if (data.paging.total === 0) { throw new Error(errorMessages.NO_DATA_RETURNED); }
+  if (data.paging.total === 0) {
+    throw new Error(errorMessages.NO_DATA_RETURNED);
+  }
   const mstrTable = officeConverterServiceV2.createTable(body);
   const { rows, columns } = checkTableDimensions(mstrTable.tableSize);
 
@@ -47,33 +49,27 @@ function parseInstanceDefinition(res, attrforms) {
 }
 
 function getFullPath({
-  envUrl, limit, mstrObjectType, objectId, instanceId, version = 1, visualizationInfo = false,
+  envUrl,
+  limit,
+  mstrObjectType,
+  objectId,
+  instanceId,
+  version = 1,
+  visualizationInfo = false,
 }) {
   let path;
-  if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+  if (
+    mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name
+  ) {
     const { chapterKey, visualizationKey } = visualizationInfo;
     path = `${envUrl}/v2/dossiers/${objectId}/instances/${instanceId}/chapters/${chapterKey}/visualizations/${visualizationKey}`;
   } else {
-    const api = version > 1 ? `v${version}/` : '';
+    const api = version > 1 ? `v${version}/` : "";
     path = `${envUrl}/${api}${mstrObjectType.request}/${objectId}/instances`;
-    path += instanceId ? `/${instanceId}` : '';
-    path += limit ? `?limit=${limit}` : '';
+    path += instanceId ? `/${instanceId}` : "";
+    path += limit ? `?limit=${limit}` : "";
   }
   return path;
-}
-
-function fetchObjectContent(fullPath, authToken, projectId, visualizationType, offset = 0, limit = -1) {
-  if (limit > IMPORT_ROW_LIMIT || offset > EXCEL_ROW_LIMIT) {
-    throw new Error(errorMessages.PROBLEM_WITH_REQUEST);
-  }
-  const contentFields = getFetchObjectContentFields(visualizationType);
-  const validPath = encodeURI(`${fullPath}?offset=${offset}&limit=${limit}&fields=${contentFields}`);
-
-  return request
-    .get(validPath)
-    .set('x-mstr-authtoken', authToken)
-    .set('x-mstr-projectid', projectId)
-    .withCredentials();
 }
 
 /**
@@ -90,6 +86,29 @@ function getFetchObjectContentFields(visualizationType) {
     default:
       return `-data.metricValues.extras,-data.metricValues.formatted`;
   }
+}
+
+function fetchObjectContent(
+  fullPath,
+  authToken,
+  projectId,
+  visualizationType,
+  offset = 0,
+  limit = -1,
+) {
+  if (limit > IMPORT_ROW_LIMIT || offset > EXCEL_ROW_LIMIT) {
+    throw new Error(errorMessages.PROBLEM_WITH_REQUEST);
+  }
+  const contentFields = getFetchObjectContentFields(visualizationType);
+  const validPath = encodeURI(
+    `${fullPath}?offset=${offset}&limit=${limit}&fields=${contentFields}`,
+  );
+
+  return request
+    .get(validPath)
+    .set("x-mstr-authtoken", authToken)
+    .set("x-mstr-projectid", projectId)
+    .withCredentials();
 }
 
 /**
@@ -109,7 +128,7 @@ async function fetchContentPart(
   projectId,
   offset,
   limit,
-  visualizationType
+  visualizationType,
 ) {
   const { body: fetchedBody } = await fetchObjectContent(
     fullPath,
@@ -117,7 +136,7 @@ async function fetchContentPart(
     projectId,
     visualizationType,
     offset,
-    limit
+    limit,
   );
   if (!fetchedBody.data || !fetchedBody.data.paging) {
     throw new Error(errorMessages.NO_DATA_RETURNED);
@@ -142,7 +161,7 @@ function offsetRowSubtotal(e, offset) {
  * @param {*} offset
  */
 function offsetCrosstabSubtotal(e, offset) {
-  if (e && e.axis === 'rows') {
+  if (e && e.axis === "rows") {
     e.colIndex += offset;
   }
 }
@@ -157,7 +176,7 @@ class MstrObjectRestService {
   };
 
   // eslint-disable-next-line class-methods-use-this
-  async* fetchContentGenerator({
+  async *fetchContentGenerator({
     instanceDefinition,
     objectId,
     projectId,
@@ -165,12 +184,12 @@ class MstrObjectRestService {
     dossierData,
     limit = IMPORT_ROW_LIMIT,
     visualizationInfo,
-    displayAttrFormNames
+    displayAttrFormNames,
   }) {
     const {
       rows: totalRows,
       instanceId,
-      mstrTable: { isCrosstab, visualizationType }
+      mstrTable: { isCrosstab, visualizationType },
     } = instanceDefinition;
 
     const { envUrl, authToken } = this.reduxStore.getState().sessionReducer;
@@ -187,7 +206,7 @@ class MstrObjectRestService {
       objectId,
       instanceId,
       version: API_VERSION,
-      visualizationInfo
+      visualizationInfo,
     });
 
     // Declaring these functions outside of the loop to avoid creating them on each iteration
@@ -202,15 +221,18 @@ class MstrObjectRestService {
         projectId,
         offset,
         limit,
-        visualizationType
+        visualizationType,
       );
 
-      const body = officeConverterServiceV2.convertCellValuesToExcelStandard(fetchedBody);
+      const body =
+        officeConverterServiceV2.convertCellValuesToExcelStandard(fetchedBody);
 
       const { current } = body.data.paging;
 
       const metricsInRowsInfo = mstrAttributeMetricHelper.getMetricsInRowsInfo(
-        body, metricsInRows, fetchedBody
+        body,
+        metricsInRows,
+        fetchedBody,
       );
 
       metricsInRows.push(...metricsInRowsInfo.metricsInRows);
@@ -219,7 +241,7 @@ class MstrObjectRestService {
       body.attrforms = attrforms;
       const { row, rowTotals } = officeConverterServiceV2.getRows(
         body,
-        isCrosstab
+        isCrosstab,
       );
 
       let header;
@@ -241,7 +263,10 @@ class MstrObjectRestService {
         header,
         subtotalAddress: isCrosstab ? crosstabSubtotal : rowTotals,
         metricsInRows,
-        rowsInformation: mstrAttributeFormHelper.splitAttributeForms(metricsInRowsInfo.metricsRows, attrforms)
+        rowsInformation: mstrAttributeFormHelper.splitAttributeForms(
+          metricsInRowsInfo.metricsRows,
+          attrforms,
+        ),
       };
     }
   }
@@ -255,11 +280,11 @@ class MstrObjectRestService {
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/promptsAnswers${ignoreValidateRequiredCheck ? '?ignoreValidateRequiredCheck=true' : ''}`;
+    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/promptsAnswers${ignoreValidateRequiredCheck ? "?ignoreValidateRequiredCheck=true" : ""}`;
     return request
       .post(fullPath)
-      .set('X-MSTR-AuthToken', authToken)
-      .set('X-MSTR-ProjectID', projectId)
+      .set("X-MSTR-AuthToken", authToken)
+      .set("X-MSTR-ProjectID", projectId)
       .send(promptsAnswers)
       .withCredentials()
       .then((res) => res.status);
@@ -274,11 +299,11 @@ class MstrObjectRestService {
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/promptsAnswers${ignoreValidateRequiredCheck ? '?ignoreValidateRequiredCheck=true' : ''}`;
+    const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/promptsAnswers${ignoreValidateRequiredCheck ? "?ignoreValidateRequiredCheck=true" : ""}`;
     return request
       .post(fullPath)
-      .set('X-MSTR-AuthToken', authToken)
-      .set('X-MSTR-ProjectID', projectId)
+      .set("X-MSTR-AuthToken", authToken)
+      .set("X-MSTR-ProjectID", projectId)
       .send(promptsAnswers)
       .withCredentials()
       .then((res) => res.status);
@@ -294,19 +319,19 @@ class MstrObjectRestService {
         {
           type: 3,
           id: chosenObjectId,
-          newName: 'Temp Dossier',
+          newName: "Temp Dossier",
         },
       ],
       linkingInfo: {
         sourceInstanceId: instanceId,
-        selectorMode: 'NONE',
+        selectorMode: "NONE",
       },
     };
 
     return request
       .post(fullPath)
-      .set('x-mstr-authtoken', authToken)
-      .set('x-mstr-projectid', projectId)
+      .set("x-mstr-authtoken", authToken)
+      .set("x-mstr-projectid", projectId)
       .send(body)
       .withCredentials()
       .then((res) => res.body);
@@ -331,13 +356,13 @@ class MstrObjectRestService {
       limit,
       mstrObjectType,
       objectId,
-      version: API_VERSION
+      version: API_VERSION,
     });
 
     return request
       .post(fullPath)
-      .set('x-mstr-authtoken', authToken)
-      .set('x-mstr-projectid', projectId)
+      .set("x-mstr-authtoken", authToken)
+      .set("x-mstr-projectid", projectId)
       .send(body)
       .withCredentials()
       .then((res) => parseInstanceDefinition(res, attrforms));
@@ -349,7 +374,7 @@ class MstrObjectRestService {
     instanceId,
     visualizationInfo,
     body,
-    displayAttrFormNames
+    displayAttrFormNames,
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
@@ -359,9 +384,9 @@ class MstrObjectRestService {
     const fullPath = `${envUrl}/v2/dossiers/${objectId}/instances/${instanceId}/chapters/${chapterKey}/visualizations/${visualizationKey}?limit=1&contentFlags=768`;
     return request
       .get(fullPath)
-      .set('x-mstr-authtoken', authToken)
-      .set('x-mstr-projectid', projectId)
-      .send(body || '')
+      .set("x-mstr-authtoken", authToken)
+      .set("x-mstr-projectid", projectId)
+      .send(body || "")
       .withCredentials()
       .then((res) => parseInstanceDefinition(res, attrforms));
   };
@@ -372,8 +397,8 @@ class MstrObjectRestService {
     const fullPath = `${envUrl}/dossiers/${objectId}/instances`;
     return request
       .post(fullPath)
-      .set('x-mstr-authtoken', authToken)
-      .set('x-mstr-projectid', projectId)
+      .set("x-mstr-authtoken", authToken)
+      .set("x-mstr-projectid", projectId)
       .send(body)
       .withCredentials()
       .then((res) => res.body);
@@ -385,8 +410,8 @@ class MstrObjectRestService {
     const fullPath = `${envUrl}/v2/dossiers/${objectId}/instances/${dossierInstanceId}/definition`;
     return request
       .get(fullPath)
-      .set('x-mstr-authtoken', authToken)
-      .set('x-mstr-projectid', projectId)
+      .set("x-mstr-authtoken", authToken)
+      .set("x-mstr-projectid", projectId)
       .withCredentials()
       .then((res) => res.body);
   };
@@ -397,8 +422,8 @@ class MstrObjectRestService {
     const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}`;
     return request
       .delete(fullPath)
-      .set('x-mstr-authtoken', authToken)
-      .set('x-mstr-projectid', projectId)
+      .set("x-mstr-authtoken", authToken)
+      .set("x-mstr-projectid", projectId)
       .withCredentials()
       .then((res) => res.body);
   };
@@ -410,8 +435,8 @@ class MstrObjectRestService {
 
     return request
       .get(fullPath)
-      .set('x-mstr-authtoken', authToken)
-      .set('x-mstr-projectid', projectId)
+      .set("x-mstr-authtoken", authToken)
+      .set("x-mstr-projectid", projectId)
       .withCredentials()
       .then((res) => res);
   };
@@ -423,7 +448,7 @@ class MstrObjectRestService {
     dossierData,
     body = {},
     instanceId,
-    displayAttrFormNames
+    displayAttrFormNames,
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
@@ -440,8 +465,8 @@ class MstrObjectRestService {
     });
     return request
       .get(fullPath)
-      .set('x-mstr-authtoken', authToken)
-      .set('x-mstr-projectid', projectId)
+      .set("x-mstr-authtoken", authToken)
+      .set("x-mstr-projectid", projectId)
       .send(body)
       .withCredentials()
       .then((res) => parseInstanceDefinition(res, attrforms));
@@ -454,7 +479,7 @@ class MstrObjectRestService {
     dossierData,
     body = {},
     instanceId,
-    displayAttrFormNames
+    displayAttrFormNames,
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
@@ -471,8 +496,8 @@ class MstrObjectRestService {
     });
     return request
       .put(fullPath)
-      .set('x-mstr-authtoken', authToken)
-      .set('x-mstr-projectid', projectId)
+      .set("x-mstr-authtoken", authToken)
+      .set("x-mstr-projectid", projectId)
       .send(body)
       .withCredentials()
       .then((res) => parseInstanceDefinition(res, attrforms));
@@ -481,17 +506,17 @@ class MstrObjectRestService {
   getObjectDefinition = (
     objectId,
     projectId,
-    mstrObjectType = reportObjectType
+    mstrObjectType = reportObjectType,
   ) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const api = API_VERSION > 1 ? 'v2/' : '';
+    const api = API_VERSION > 1 ? "v2/" : "";
     const fullPath = `${envUrl}/${api}${mstrObjectType.request}/${objectId}`;
 
     return request
       .get(fullPath)
-      .set('x-mstr-authtoken', authToken)
-      .set('x-mstr-projectid', projectId)
+      .set("x-mstr-authtoken", authToken)
+      .set("x-mstr-projectid", projectId)
       .withCredentials()
       .then((res) => res.body);
   };
@@ -500,7 +525,7 @@ class MstrObjectRestService {
     const storeState = this.reduxStore.getState();
     // visualisation does not have object type, all other objects has type represented by number
     // If we pass not a number we know its visualisation and we set type as 55 (document)
-    if (typeof mstrObjectType.type !== 'number') {
+    if (typeof mstrObjectType.type !== "number") {
       mstrObjectType.type = 55;
     }
     const { envUrl, authToken } = storeState.sessionReducer;
@@ -508,8 +533,8 @@ class MstrObjectRestService {
 
     return request
       .get(fullPath)
-      .set('x-mstr-authtoken', authToken)
-      .set('x-mstr-projectid', projectId)
+      .set("x-mstr-authtoken", authToken)
+      .set("x-mstr-projectid", projectId)
       .withCredentials()
       .then((res) => res.body);
   };
@@ -522,15 +547,20 @@ class MstrObjectRestService {
    * @param {String} instanceId Id of an instance
    * @param {Boolean} bIncludeClosedPrompts Whether to request to include closed prompts
    */
-  getObjectPrompts = (objectId, projectId, instanceId, bIncludeClosedPrompts = false) => {
+  getObjectPrompts = (
+    objectId,
+    projectId,
+    instanceId,
+    bIncludeClosedPrompts = false,
+  ) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts${bIncludeClosedPrompts ? '?closed=true' : ''}`;
+    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts${bIncludeClosedPrompts ? "?closed=true" : ""}`;
 
     return request
       .get(fullPath)
-      .set('x-mstr-authtoken', authToken)
-      .set('x-mstr-projectid', projectId)
+      .set("x-mstr-authtoken", authToken)
+      .set("x-mstr-projectid", projectId)
       .withCredentials()
       .then((res) => res.body);
   };
@@ -541,15 +571,15 @@ class MstrObjectRestService {
 
     let typePath;
     if (objectTypeName === mstrObjectEnum.mstrObjectType.report.name) {
-      typePath = 'reports';
+      typePath = "reports";
     } else if (objectTypeName === mstrObjectEnum.mstrObjectType.dossier.name) {
-      typePath = 'documents';
+      typePath = "documents";
     }
     const fullPath = `${envUrl}/${typePath}/${objectId}/prompts`;
     return request
       .get(fullPath)
-      .set('x-mstr-authtoken', authToken)
-      .set('X-MSTR-ProjectID', projectId)
+      .set("x-mstr-authtoken", authToken)
+      .set("X-MSTR-ProjectID", projectId)
       .withCredentials()
       .then((res) => ({
         // Create JSON object with promptObjects and isPrompted properties, and return it.
@@ -568,18 +598,20 @@ class MstrObjectRestService {
    * @param {string} projectId
    * @returns {Object} Contains info for cube that match objectId and projectId
    */
-  getCubeInfo = (objectId, projectId) => new Promise((resolve, reject) => {
-    const storeState = this.reduxStore.getState();
-    const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/cubes?id=${objectId}`;
-    return request
-      .get(fullPath)
-      .set('x-mstr-authtoken', authToken)
-      .set('X-MSTR-ProjectID', projectId)
-      .withCredentials()
-      .then((res) => resolve(res.body.cubesInfos[0]))
-      .catch((error) => reject(error));
-  });
+  getCubeInfo = (objectId, projectId) =>
+    new Promise((resolve, reject) => {
+      const storeState = this.reduxStore.getState();
+      const { envUrl, authToken } = storeState.sessionReducer;
+      const fullPath = `${envUrl}/cubes?id=${objectId}`;
+      // eslint-disable-next-line no-promise-executor-return
+      return request
+        .get(fullPath)
+        .set("x-mstr-authtoken", authToken)
+        .set("X-MSTR-ProjectID", projectId)
+        .withCredentials()
+        .then((res) => resolve(res.body.cubesInfos[0]))
+        .catch((error) => reject(error));
+    });
 
   rePromptDossier = (dossierId, instanceId, projectId) => {
     const storeState = this.reduxStore.getState();
@@ -588,8 +620,8 @@ class MstrObjectRestService {
 
     return request
       .post(fullPath)
-      .set('X-MSTR-AuthToken', authToken)
-      .set('X-MSTR-ProjectID', projectId)
+      .set("X-MSTR-AuthToken", authToken)
+      .set("X-MSTR-ProjectID", projectId)
       .withCredentials()
       .then((res) => res.body);
   };
@@ -609,11 +641,11 @@ class MstrObjectRestService {
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts/answers${ignoreValidateRequiredCheck ? '?ignoreValidateRequiredCheck=true' : ''}`;
+    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts/answers${ignoreValidateRequiredCheck ? "?ignoreValidateRequiredCheck=true" : ""}`;
     return request
       .put(fullPath)
-      .set('X-MSTR-AuthToken', authToken)
-      .set('X-MSTR-ProjectID', projectId)
+      .set("X-MSTR-AuthToken", authToken)
+      .set("X-MSTR-ProjectID", projectId)
       .send({ prompts: promptsAnswers.answers })
       .withCredentials()
       .then((res) => res.status);
@@ -628,11 +660,11 @@ class MstrObjectRestService {
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/prompts/answers${ignoreValidateRequiredCheck ? '?ignoreValidateRequiredCheck=true' : ''}`;
+    const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/prompts/answers${ignoreValidateRequiredCheck ? "?ignoreValidateRequiredCheck=true" : ""}`;
     return request
       .put(fullPath)
-      .set('X-MSTR-AuthToken', authToken)
-      .set('X-MSTR-ProjectID', projectId)
+      .set("X-MSTR-AuthToken", authToken)
+      .set("X-MSTR-ProjectID", projectId)
       .send({ prompts: promptsAnswers })
       .withCredentials()
       .then((res) => res.status);
@@ -647,11 +679,11 @@ class MstrObjectRestService {
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/dossiers/${objectId}/instances/${instanceId}/answerPrompts${ignoreValidateRequiredCheck ? '?ignoreValidateRequiredCheck=true' : ''}`;
+    const fullPath = `${envUrl}/dossiers/${objectId}/instances/${instanceId}/answerPrompts${ignoreValidateRequiredCheck ? "?ignoreValidateRequiredCheck=true" : ""}`;
     return request
       .post(fullPath)
-      .set('X-MSTR-AuthToken', authToken)
-      .set('X-MSTR-ProjectID', projectId)
+      .set("X-MSTR-AuthToken", authToken)
+      .set("X-MSTR-ProjectID", projectId)
       .send(promptsAnswers)
       .withCredentials()
       .then((res) => res.status);
@@ -673,8 +705,8 @@ class MstrObjectRestService {
 
     return request
       .get(fullPath)
-      .set('x-mstr-authtoken', authToken)
-      .set('x-mstr-projectid', projectId)
+      .set("x-mstr-authtoken", authToken)
+      .set("x-mstr-projectid", projectId)
       .withCredentials()
       .then((res) => res.body);
   };
@@ -695,8 +727,8 @@ class MstrObjectRestService {
 
     return request
       .get(fullPath)
-      .set('x-mstr-authtoken', authToken)
-      .set('x-mstr-projectid', projectId)
+      .set("x-mstr-authtoken", authToken)
+      .set("x-mstr-projectid", projectId)
       .withCredentials()
       .then((res) => res.body);
   };
@@ -713,18 +745,24 @@ class MstrObjectRestService {
    *
    * @returns array of objects elements
    */
-  getVisualizationImage = async (objectId, projectId, instanceId, visualizationKey, dimensions) => {
+  getVisualizationImage = async (
+    objectId,
+    projectId,
+    instanceId,
+    visualizationKey,
+    dimensions,
+  ) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/visualizations/${visualizationKey}/image`;
     const { width, height } = dimensions;
     const options = {
-      method: 'POST',
-      credentials: 'include',
+      method: "POST",
+      credentials: "include",
       headers: {
-        'Content-Type': 'application/json',
-        ...(projectId && { 'x-mstr-projectId': projectId }),
-        ...(authToken && { 'X-MSTR-AuthToken': authToken }),
+        "Content-Type": "application/json",
+        ...(projectId && { "x-mstr-projectId": projectId }),
+        ...(authToken && { "X-MSTR-AuthToken": authToken }),
       },
       body: JSON.stringify({ width, height }),
     };

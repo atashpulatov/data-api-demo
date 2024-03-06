@@ -64,7 +64,9 @@ class OfficeApiDataLoader {
    */
   validateExcelContext = (excelContext) => {
     if (!excelContext) {
-      throw new Error(`Cannot load data from Excel, excel context is [${excelContext}]`);
+      throw new Error(
+        `Cannot load data from Excel, excel context is [${excelContext}]`,
+      );
     }
   };
 
@@ -81,7 +83,9 @@ class OfficeApiDataLoader {
     }
 
     if (!item.object) {
-      throw new Error(`Cannot load data from Excel, item.object is [${item.object}]`);
+      throw new Error(
+        `Cannot load data from Excel, item.object is [${item.object}]`,
+      );
     }
 
     if (!item.key) {

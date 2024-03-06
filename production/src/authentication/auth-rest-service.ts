@@ -1,57 +1,73 @@
-import { moduleProxy } from '../module-proxy';
+import { moduleProxy } from "../module-proxy";
 
-import { PrivilegeIds } from '../office-constants';
+import { PrivilegeIds } from "../office-constants";
 
 class AuthenticationService {
   moduleProxy: {
-      request: any;
-      moduleProxy: any;
-};
+    request: any;
+    moduleProxy: any;
+  };
 
   constructor(proxy: any) {
     this.moduleProxy = proxy;
   }
 
-  authenticate(username: string, password: string, envUrl: string, loginMode = 1) {
+  authenticate(
+    username: string,
+    password: string,
+    envUrl: string,
+    loginMode = 1,
+  ): void {
     return this.moduleProxy.request
       .post(`${envUrl}/auth/login`)
       .send({ username, password, loginMode })
       .withCredentials()
-      .then((res: any) => res.headers['x-mstr-authtoken']);
+      .then((res: any) => res.headers["x-mstr-authtoken"]);
   }
 
-  logout(envUrl: string, authToken: string) {
+  logout(envUrl: string, authToken: string): void {
     return this.moduleProxy.request
       .post(`${envUrl}/auth/logout`)
-      .set('x-mstr-authtoken', authToken)
+      .set("x-mstr-authtoken", authToken)
       .withCredentials()
       .then(() => true);
   }
 
-  getSessions(envUrl: string, authToken: string) {
+  getSessions(envUrl: string, authToken: string): any {
     return this.moduleProxy.request
       .get(`${envUrl}/sessions/userInfo`)
-      .set('x-mstr-authtoken', authToken)
+      .set("x-mstr-authtoken", authToken)
       .withCredentials()
       .then((res: any) => res);
   }
 
-  putSessions(envUrl: string, authToken: string) {
+  putSessions(envUrl: string, authToken: string): any {
     return this.moduleProxy.request
       .put(`${envUrl}/sessions`)
-      .set('x-mstr-authtoken', authToken)
+      .set("x-mstr-authtoken", authToken)
       .withCredentials()
       .then((res: any) => res);
   }
 
-  async getOfficePrivilege(envUrl: string, authToken: string) {
+  async getOfficePrivilege(
+    envUrl: string,
+    authToken: string,
+  ): Promise<boolean> {
     try {
-      const response = await this.fetchPrivilegeById(PrivilegeIds.OFFICE_PRIVILEGE_ID, envUrl, authToken);
+      const response = await this.fetchPrivilegeById(
+        PrivilegeIds.OFFICE_PRIVILEGE_ID,
+        envUrl,
+        authToken,
+      );
 
-      if (!response) { return false; }
+      if (!response) {
+        return false;
+      }
       const { isUserLevelAllowed, projects } = response;
       if (isUserLevelAllowed === false) {
-        if (projects.find((project: any) => project.isAllowed === true)) { return true; }
+        if (projects.find((project: any) => project.isAllowed === true)) {
+          return true;
+        }
       }
       return isUserLevelAllowed === true;
     } catch (error) {
@@ -61,16 +77,25 @@ class AuthenticationService {
     }
   }
 
-  async getAttributeFormPrivilege(envUrl: string, iSession: any) {
+  async getAttributeFormPrivilege(
+    envUrl: string,
+    iSession: any,
+  ): Promise<boolean> {
     try {
-      const response = await this.fetchPrivilegeById(PrivilegeIds.ATTRIBUTE_FORM_PRIVILEGE_ID, envUrl, iSession);
+      const response = await this.fetchPrivilegeById(
+        PrivilegeIds.ATTRIBUTE_FORM_PRIVILEGE_ID,
+        envUrl,
+        iSession,
+      );
       // Only return false if isUserLevelAllowed exists and is false
       if (!response) {
         return false;
       }
       const { isUserLevelAllowed, projects } = response;
       if (isUserLevelAllowed === false) {
-        if (projects.find((project: any) => project.isAllowed === true)) { return true; }
+        if (projects.find((project: any) => project.isAllowed === true)) {
+          return true;
+        }
       }
       return isUserLevelAllowed === true;
     } catch (error) {
@@ -80,10 +105,10 @@ class AuthenticationService {
     }
   }
 
-  fetchPrivilegeById(id: string, envUrl: string, authToken: string) {
+  fetchPrivilegeById(id: string, envUrl: string, authToken: string): any {
     return this.moduleProxy.request
       .get(`${envUrl}/sessions/privileges/${id}`)
-      .set('x-mstr-authtoken', authToken)
+      .set("x-mstr-authtoken", authToken)
       .withCredentials()
       .then((res: any) => res.body);
   }

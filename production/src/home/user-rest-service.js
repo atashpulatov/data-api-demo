@@ -1,15 +1,16 @@
-import request from 'superagent';
+import request from "superagent";
 
 class UserRestService {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
   };
 
-  getUserInfo = (authToken, envUrl) => request
-    .get(`${envUrl}/sessions/userInfo`)
-    .set('x-mstr-authToken', authToken)
-    .withCredentials()
-    .then((res) => res.body);
+  getUserInfo = (authToken, envUrl) =>
+    request
+      .get(`${envUrl}/sessions/userInfo`)
+      .set("x-mstr-authToken", authToken)
+      .withCredentials()
+      .then((res) => res.body);
 
   getUserPreference = (preferenceName) => {
     const storeState = this.reduxStore.getState();
@@ -18,7 +19,7 @@ class UserRestService {
 
     return request
       .get(fullPath)
-      .set('x-mstr-authtoken', authToken)
+      .set("x-mstr-authtoken", authToken)
       .withCredentials()
       .then((res) => res.body);
   };
@@ -30,7 +31,7 @@ class UserRestService {
 
     return request
       .put(fullPath)
-      .set('x-mstr-authtoken', authToken)
+      .set("x-mstr-authtoken", authToken)
       .withCredentials()
       .then((res) => res.body);
   };

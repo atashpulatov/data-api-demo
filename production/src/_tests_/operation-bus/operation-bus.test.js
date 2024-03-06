@@ -1,7 +1,8 @@
-import { operationBus } from '../../operation/operation-bus';
-import { fakeStore } from './fake-store';
+import { fakeStore } from "./fake-store";
 
-describe('OperationBus', () => {
+import { operationBus } from "../../operation/operation-bus";
+
+describe("OperationBus", () => {
   beforeAll(() => {
     operationBus.init(fakeStore);
   });
@@ -10,12 +11,12 @@ describe('OperationBus', () => {
     fakeStore.resetState();
   });
 
-  it('does not call subscriber when current step empty', () => {
+  it("does not call subscriber when current step empty", () => {
     // given
-    fakeStore.addStep('justSomeStep');
+    fakeStore.addStep("justSomeStep");
     operationBus.init(fakeStore);
     const subscriber = jest.fn();
-    const subscribedStep = 'subscribed';
+    const subscribedStep = "subscribed";
     operationBus.subscribe(subscribedStep, subscriber);
 
     // when
@@ -25,12 +26,12 @@ describe('OperationBus', () => {
     expect(subscriber).not.toBeCalled();
   });
 
-  it('does not call subscriber when steps do not match', () => {
+  it("does not call subscriber when steps do not match", () => {
     // given
     operationBus.init(fakeStore);
     const subscriber = jest.fn();
-    const subscribedStep = 'subscribed';
-    const postedStep = 'posted';
+    const subscribedStep = "subscribed";
+    const postedStep = "posted";
     operationBus.subscribe(subscribedStep, subscriber);
 
     // when
@@ -40,11 +41,11 @@ describe('OperationBus', () => {
     expect(subscriber).not.toBeCalled();
   });
 
-  it('calls subscriber when matching step added', () => {
+  it("calls subscriber when matching step added", () => {
     // given
     operationBus.init(fakeStore);
     const subscriber = jest.fn();
-    const subscribedStep = 'subscribed';
+    const subscribedStep = "subscribed";
     operationBus.subscribe(subscribedStep, subscriber);
 
     // when
@@ -54,12 +55,12 @@ describe('OperationBus', () => {
     expect(subscriber).toBeCalled();
   });
 
-  it('calls subscriber when matching step is next', () => {
+  it("calls subscriber when matching step is next", () => {
     // given
-    fakeStore.addStep('justSomeStep');
+    fakeStore.addStep("justSomeStep");
     operationBus.init(fakeStore);
     const subscriber = jest.fn();
-    const subscribedStep = 'subscribed';
+    const subscribedStep = "subscribed";
     operationBus.subscribe(subscribedStep, subscriber);
     fakeStore.addStep(subscribedStep);
 

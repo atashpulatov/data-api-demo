@@ -10,8 +10,7 @@
   .object-name {
     width: 100%;
     text-overflow: ellipsis;
-  }  
-
+  }
 }
 
 .import-data {
@@ -20,12 +19,12 @@
   padding: 40px 40px 0;
 
   .mstr-rc-3-tooltip-source {
-    display: block
+    display: block;
   }
 }
 
 .import-data::after {
-  content: '';
+  content: "";
   display: block;
   padding-bottom: 15px;
 }

@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 
-import * as RepromptQueueReducer from '../../../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer';
+import * as RepromptQueueReducer from "../../../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer";
 
-describe('reprompt-queue-reducer', () => {
-  it('should return the initial state', () => {
+describe("reprompt-queue-reducer", () => {
+  it("should return the initial state", () => {
     expect(RepromptQueueReducer.repromptsQueueReducer(undefined, {})).toEqual({
       index: 0,
       repromptsQueue: [],
@@ -15,18 +15,20 @@ describe('reprompt-queue-reducer', () => {
     isPrompted
     ${true}
     ${false}
-  `('should call the add reprom[t task callback', (isPrompted) => {
+  `("should call the add reprom[t task callback", (isPrompted) => {
     const repromptCallback = jest.fn();
     const action = {
       payload: {
         callback: repromptCallback,
         isPrompted: isPrompted.isPrompted,
       },
-      type: 'ADD_REPROMPT_TASK',
+      type: "ADD_REPROMPT_TASK",
     };
 
     if (isPrompted.isPrompted) {
-      expect(RepromptQueueReducer.repromptsQueueReducer(undefined, action)).toEqual({
+      expect(
+        RepromptQueueReducer.repromptsQueueReducer(undefined, action),
+      ).toEqual({
         index: 0,
         repromptsQueue: [
           {
@@ -37,7 +39,9 @@ describe('reprompt-queue-reducer', () => {
         total: 1,
       });
     } else {
-      expect(RepromptQueueReducer.repromptsQueueReducer(undefined, action)).toEqual({
+      expect(
+        RepromptQueueReducer.repromptsQueueReducer(undefined, action),
+      ).toEqual({
         index: 0,
         repromptsQueue: [
           {
@@ -50,30 +54,41 @@ describe('reprompt-queue-reducer', () => {
     }
   });
 
-  it('should call the execute next reprompt callback', () => {
+  it("should call the execute next reprompt callback", () => {
     const repromptCallback = jest.fn();
     const action = {
-      type: 'EXECUTE_NEXT_REPROMPT_TASK',
+      type: "EXECUTE_NEXT_REPROMPT_TASK",
     };
 
-    expect(RepromptQueueReducer.repromptsQueueReducer({ repromptsQueue: [
-      {
-        callback: repromptCallback,
-        isPrompted: true,
-      }
-    ], index: 0, total: 1 }, action)).toEqual({
+    expect(
+      RepromptQueueReducer.repromptsQueueReducer(
+        {
+          repromptsQueue: [
+            {
+              callback: repromptCallback,
+              isPrompted: true,
+            },
+          ],
+          index: 0,
+          total: 1,
+        },
+        action,
+      ),
+    ).toEqual({
       index: 1,
       repromptsQueue: [],
       total: 1,
     });
   });
 
-  it('should call the clear reprompt callback', () => {
+  it("should call the clear reprompt callback", () => {
     const action = {
-      type: 'CLEAR_REPROMPT_TASKS',
+      type: "CLEAR_REPROMPT_TASKS",
     };
 
-    expect(RepromptQueueReducer.repromptsQueueReducer(undefined, action)).toEqual({
+    expect(
+      RepromptQueueReducer.repromptsQueueReducer(undefined, action),
+    ).toEqual({
       index: 0,
       repromptsQueue: [],
       total: 0,

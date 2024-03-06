@@ -1,6 +1,6 @@
-import operationErrorHandler from '../../operation/operation-error-handler';
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
-import officeTableCreate from './office-table-create';
+import operationErrorHandler from "../../operation/operation-error-handler";
+import operationStepDispatcher from "../../operation/operation-step-dispatcher";
+import officeTableCreate from "./office-table-create";
 
 class StepGetOfficeTableImport {
   /**
@@ -18,18 +18,22 @@ class StepGetOfficeTableImport {
    */
   getOfficeTableImport = async (objectData, operationData) => {
     try {
-      console.time('Create or get table - import');
+      console.time("Create or get table - import");
       const {
-        objectWorkingId, excelContext, instanceDefinition, startCell, insertNewWorksheet
+        objectWorkingId,
+        excelContext,
+        instanceDefinition,
+        startCell,
+        insertNewWorksheet,
       } = operationData;
 
-      const {
-        officeTable, bindId, tableName, worksheet
-      } = await officeTableCreate.createOfficeTable(
-        {
-          excelContext, instanceDefinition, startCell, insertNewWorksheet
-        }
-      );
+      const { officeTable, bindId, tableName, worksheet } =
+        await officeTableCreate.createOfficeTable({
+          excelContext,
+          instanceDefinition,
+          startCell,
+          insertNewWorksheet,
+        });
 
       const updatedOperation = {
         objectWorkingId,
@@ -45,7 +49,7 @@ class StepGetOfficeTableImport {
         tableName,
         bindId,
         worksheet,
-        startCell
+        startCell,
       };
 
       operationStepDispatcher.updateOperation(updatedOperation);
@@ -53,9 +57,13 @@ class StepGetOfficeTableImport {
       operationStepDispatcher.completeGetOfficeTableImport(objectWorkingId);
     } catch (error) {
       console.error(error);
-      operationErrorHandler.handleOperationError(objectData, operationData, error);
+      operationErrorHandler.handleOperationError(
+        objectData,
+        operationData,
+        error,
+      );
     } finally {
-      console.timeEnd('Create or get table - import');
+      console.timeEnd("Create or get table - import");
     }
   };
 }

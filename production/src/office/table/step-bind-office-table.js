@@ -1,9 +1,12 @@
-import { officeApiHelper } from '../api/office-api-helper';
+import { officeApiHelper } from "../api/office-api-helper";
 
-import operationErrorHandler from '../../operation/operation-error-handler';
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
-import { DUPLICATE_OPERATION, IMPORT_OPERATION } from '../../operation/operation-type-names';
-import officeApiDataLoader from '../api/office-api-data-loader';
+import operationErrorHandler from "../../operation/operation-error-handler";
+import operationStepDispatcher from "../../operation/operation-step-dispatcher";
+import {
+  DUPLICATE_OPERATION,
+  IMPORT_OPERATION,
+} from "../../operation/operation-type-names";
+import officeApiDataLoader from "../api/office-api-data-loader";
 
 class StepBindOfficeTable {
   /**
@@ -25,11 +28,23 @@ class StepBindOfficeTable {
     try {
       const { bindId, objectWorkingId, isCrosstab } = objectData;
       const {
-        excelContext, officeTable, operationType, tableChanged, isTotalsRowVisible = false
+        excelContext,
+        officeTable,
+        operationType,
+        tableChanged,
+        isTotalsRowVisible = false,
       } = operationData;
 
-      if (tableChanged || operationType === DUPLICATE_OPERATION || operationType === IMPORT_OPERATION) {
-        const tableName = await officeApiDataLoader.loadSingleExcelData(excelContext, officeTable, 'name');
+      if (
+        tableChanged ||
+        operationType === DUPLICATE_OPERATION ||
+        operationType === IMPORT_OPERATION
+      ) {
+        const tableName = await officeApiDataLoader.loadSingleExcelData(
+          excelContext,
+          officeTable,
+          "name",
+        );
 
         await officeApiHelper.bindNamedItem(tableName, bindId);
       }
@@ -43,7 +58,11 @@ class StepBindOfficeTable {
       operationStepDispatcher.completeBindOfficeTable(objectWorkingId);
     } catch (error) {
       console.error(error);
-      operationErrorHandler.handleOperationError(objectData, operationData, error);
+      operationErrorHandler.handleOperationError(
+        objectData,
+        operationData,
+        error,
+      );
     }
   };
 }

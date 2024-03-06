@@ -1,7 +1,8 @@
-import { SessionError } from '../../error/session-error';
-import { sessionProperties } from './session-properties';
+/* eslint-disable @typescript-eslint/no-use-before-define */
+import { SessionError } from "../../error/session-error";
+import { sessionProperties } from "./session-properties";
 
-export const sessionReducer = (state = {}, action) => {
+export const sessionReducer = (state = {}, action = {}) => {
   switch (action.type) {
     case sessionProperties.actions.logIn:
       return onLogIn(action, state);
@@ -26,7 +27,7 @@ export const sessionReducer = (state = {}, action) => {
 function onLogIn(action, state) {
   const { values } = action;
   if (!values || !values.envUrl) {
-    throw new SessionError('Missing EnvUrl.');
+    throw new SessionError("Missing EnvUrl.");
   }
   return {
     ...state,
@@ -34,10 +35,11 @@ function onLogIn(action, state) {
   };
 }
 
-const removeStorageItem = (key = 'iSession') => window.localStorage.removeItem(key);
+const removeStorageItem = (key = "iSession") =>
+  window.localStorage.removeItem(key);
 
 function onLogOut(action, state) {
-  removeStorageItem('iSession');
+  removeStorageItem("iSession");
   if (state.isRememberMeOn) {
     return {
       ...state,
@@ -45,7 +47,7 @@ function onLogOut(action, state) {
       userID: null,
       userFullName: null,
       userInitials: null,
-      canUseOffice: false
+      canUseOffice: false,
     };
   }
   return {};
@@ -53,7 +55,7 @@ function onLogOut(action, state) {
 
 function onLoggedIn(action, state) {
   if (!action.authToken) {
-    throw new SessionError('Missing AuthToken.');
+    throw new SessionError("Missing AuthToken.");
   }
   return {
     ...state,
@@ -62,8 +64,8 @@ function onLoggedIn(action, state) {
 }
 
 function onSetLoading(action, state) {
-  if (typeof action.loading === 'undefined') {
-    throw new SessionError('Missing loading');
+  if (typeof action.loading === "undefined") {
+    throw new SessionError("Missing loading");
   }
   return {
     ...state,

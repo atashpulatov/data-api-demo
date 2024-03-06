@@ -1,15 +1,15 @@
 import {
-  RESET_STATE,
-  SET_REPORT_N_FILTERS,
-  SET_PREPARED_REPORT,
-  SWITCH_IMPORT_SUBTOTALS_ON_EDIT,
   CLEAR_EDITED_OBJECT,
-  UPDATE_DISPLAY_ATTR_FORM_ON_EDIT
-} from './popup-actions';
+  RESET_STATE,
+  SET_PREPARED_REPORT,
+  SET_REPORT_N_FILTERS,
+  SWITCH_IMPORT_SUBTOTALS_ON_EDIT,
+  UPDATE_DISPLAY_ATTR_FORM_ON_EDIT,
+} from "./popup-actions";
 
 export const initialState = {};
 
-export const popupReducer = (state = initialState, action) => {
+export const popupReducer = (state = initialState, action = {}) => {
   const { type, data } = action;
   switch (type) {
     case SET_REPORT_N_FILTERS: {
@@ -43,7 +43,7 @@ export const popupReducer = (state = initialState, action) => {
       }
       return {
         ...state,
-        editedObject: !state.editedObject ? state.editedObject : editedObject
+        editedObject: !state.editedObject ? state.editedObject : editedObject,
       };
     }
     case UPDATE_DISPLAY_ATTR_FORM_ON_EDIT: {
@@ -54,13 +54,13 @@ export const popupReducer = (state = initialState, action) => {
         }
         return {
           ...state,
-          editedObject
+          editedObject,
         };
       }
       return state;
     }
     case RESET_STATE: {
-      return { ...initialState, };
+      return { ...initialState };
     }
     default:
       return state;

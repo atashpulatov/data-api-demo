@@ -5,10 +5,10 @@ export default {
     console.log(config);
     console.log(options);
 
-    return 'export default {};';
+    return "export default {};";
   },
   getCacheKey() {
     // The output is always the same.
-    return 'resourceTransform';
+    return "resourceTransform";
   },
 };

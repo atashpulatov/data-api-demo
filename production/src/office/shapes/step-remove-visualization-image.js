@@ -1,11 +1,11 @@
-import { officeApiHelper } from '../api/office-api-helper';
-import { officeShapeApiHelper } from './office-shape-api-helper';
+import { officeApiHelper } from "../api/office-api-helper";
+import { officeShapeApiHelper } from "./office-shape-api-helper";
 
-import officeStoreObject from '../store/office-store-object';
+import officeStoreObject from "../store/office-store-object";
 
-import operationErrorHandler from '../../operation/operation-error-handler';
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
-import { CLEAR_DATA_OPERATION } from '../../operation/operation-type-names';
+import operationErrorHandler from "../../operation/operation-error-handler";
+import operationStepDispatcher from "../../operation/operation-step-dispatcher";
+import { CLEAR_DATA_OPERATION } from "../../operation/operation-type-names";
 
 class StepRemoveVisualizationImage {
   /**
@@ -19,7 +19,7 @@ class StepRemoveVisualizationImage {
    * @param {Object} operationData Reference to the operation data required for error handling
    */
   removeVisualizationImage = async (objectData, operationData) => {
-    console.time('Remove Visualization Image');
+    console.time("Remove Visualization Image");
     try {
       const { objectWorkingId, bindId } = objectData;
       const { operationType } = operationData;
@@ -33,14 +33,21 @@ class StepRemoveVisualizationImage {
       // We preserve the objects in the store for CLEAR_OPERATION to be restored to the workbook
       // in the event of a VIEW_DATA operation
       if (operationType !== CLEAR_DATA_OPERATION) {
-        operationStepDispatcher.updateObject({ objectWorkingId, doNotPersist: true });
+        operationStepDispatcher.updateObject({
+          objectWorkingId,
+          doNotPersist: true,
+        });
         officeStoreObject.removeObjectInExcelStore(objectWorkingId);
       }
     } catch (error) {
       console.error(error);
-      operationErrorHandler.handleOperationError(objectData, operationData, error);
+      operationErrorHandler.handleOperationError(
+        objectData,
+        operationData,
+        error,
+      );
     } finally {
-      console.timeEnd('Remove Visualization Image');
+      console.timeEnd("Remove Visualization Image");
     }
   };
 }

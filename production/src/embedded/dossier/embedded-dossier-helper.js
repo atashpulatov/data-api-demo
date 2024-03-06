@@ -8,10 +8,10 @@ class EmbeddedDossierHelper {
    */
   combineArraysByObjectKey = (A, B) => {
     // Create a Map to store objects from array A with keys as the map keys
-    const combinedMap = new Map(A.map(obj => [obj.key, obj]));
+    const combinedMap = new Map(A.map((obj) => [obj.key, obj]));
 
     // Iterate through array B
-    B?.forEach(objB => {
+    B?.forEach((objB) => {
       // If the object with the same key exists in A, replace it with the object from B
       // and if the object doesn't exist in A, add it to the Map
       combinedMap.set(objB.key, objB);

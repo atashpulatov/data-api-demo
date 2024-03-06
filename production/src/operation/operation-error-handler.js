@@ -1,17 +1,24 @@
-import { officeRemoveHelper } from '../office/remove/office-remove-helper';
-import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
-import officeReducerHelper from '../office/store/office-reducer-helper';
+import { officeRemoveHelper } from "../office/remove/office-remove-helper";
+import { officeShapeApiHelper } from "../office/shapes/office-shape-api-helper";
+import officeReducerHelper from "../office/store/office-reducer-helper";
 
-import { errorService } from '../error/error-handler';
-import { deleteObjectNotification } from '../redux-reducer/notification-reducer/notification-action-creators';
-import { removeObject, restoreObjectBackup } from '../redux-reducer/object-reducer/object-actions';
-import { officeActions } from '../redux-reducer/office-reducer/office-actions';
-import { cancelOperation } from '../redux-reducer/operation-reducer/operation-actions';
-import { executeNextRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
+import { errorService } from "../error/error-handler";
+import { deleteObjectNotification } from "../redux-reducer/notification-reducer/notification-action-creators";
 import {
-CLEAR_DATA_OPERATION,
-DUPLICATE_OPERATION, EDIT_OPERATION,   IMPORT_OPERATION, REFRESH_OPERATION, } from './operation-type-names';
-import { objectImportType } from '../mstr-object/constants';
+  removeObject,
+  restoreObjectBackup,
+} from "../redux-reducer/object-reducer/object-actions";
+import { officeActions } from "../redux-reducer/office-reducer/office-actions";
+import { cancelOperation } from "../redux-reducer/operation-reducer/operation-actions";
+import { executeNextRepromptTask } from "../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions";
+import {
+  CLEAR_DATA_OPERATION,
+  DUPLICATE_OPERATION,
+  EDIT_OPERATION,
+  IMPORT_OPERATION,
+  REFRESH_OPERATION,
+} from "./operation-type-names";
+import { objectImportType } from "../mstr-object/constants";
 
 class OperationErrorHandler {
   init = (reduxStore) => {
@@ -29,7 +36,12 @@ class OperationErrorHandler {
   handleOperationError = async (objectData, operationData, error) => {
     const callback = this.getCallback(objectData, operationData);
     if (callback) {
-      await errorService.handleObjectBasedError(objectData.objectWorkingId, error, callback, operationData);
+      await errorService.handleObjectBasedError(
+        objectData.objectWorkingId,
+        error,
+        callback,
+        operationData,
+      );
     }
   };
 
@@ -47,7 +59,7 @@ class OperationErrorHandler {
       isCrosstab,
       crosstabHeaderDimensions,
       bindId,
-      importType
+      importType,
     } = objectData;
     const { officeTable, excelContext } = operationData;
 
@@ -58,7 +70,7 @@ class OperationErrorHandler {
         excelContext,
         isCrosstab,
         crosstabHeaderDimensions,
-        false
+        false,
       );
     }
 
@@ -97,14 +109,20 @@ class OperationErrorHandler {
    */
   handleRefreshOperationError = async (objectData, operationData) => {
     const { objectWorkingId, isCrosstab } = objectData;
-    const { officeTable, backupObjectData, isTotalsRowVisible = false } = operationData;
+    const {
+      officeTable,
+      backupObjectData,
+      isTotalsRowVisible = false,
+    } = operationData;
     if (officeTable) {
       if (isCrosstab) {
         officeTable.showHeaders = false; // hides table headers for crosstab if we fail on refresh
       }
       officeTable.showTotals = isTotalsRowVisible; // display totals rows if we fail on refresh
     }
-    if (backupObjectData) { this.reduxStore.dispatch(restoreObjectBackup(backupObjectData)); }
+    if (backupObjectData) {
+      this.reduxStore.dispatch(restoreObjectBackup(backupObjectData));
+    }
 
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
 
@@ -118,13 +136,18 @@ class OperationErrorHandler {
    * the isClearDataFailed flag will be changed to false.
    */
   handleClearDataOperationError = async () => {
-    const operationsList = officeReducerHelper.getOperationsListFromOperationReducer();
-    const clearDataOperations = operationsList.filter((operation) => operation.operationType === CLEAR_DATA_OPERATION);
+    const operationsList =
+      officeReducerHelper.getOperationsListFromOperationReducer();
+    const clearDataOperations = operationsList.filter(
+      (operation) => operation.operationType === CLEAR_DATA_OPERATION,
+    );
 
     for (let index = clearDataOperations.length - 1; index >= 0; index--) {
       const operation = clearDataOperations[index];
       this.reduxStore.dispatch(cancelOperation(operation.objectWorkingId));
-      this.reduxStore.dispatch(deleteObjectNotification(operation.objectWorkingId));
+      this.reduxStore.dispatch(
+        deleteObjectNotification(operation.objectWorkingId),
+      );
     }
 
     officeActions.toggleIsClearDataFailedFlag(true)(this.reduxStore.dispatch);
@@ -158,11 +181,13 @@ class OperationErrorHandler {
     switch (operationType) {
       case IMPORT_OPERATION:
       case DUPLICATE_OPERATION:
-        callback = () => this.handleImportOperationError(objectData, operationData);
+        callback = () =>
+          this.handleImportOperationError(objectData, operationData);
         break;
       case REFRESH_OPERATION:
       case EDIT_OPERATION:
-        callback = () => this.handleRefreshOperationError(objectData, operationData);
+        callback = () =>
+          this.handleRefreshOperationError(objectData, operationData);
         break;
       case CLEAR_DATA_OPERATION:
         callback = () => this.handleClearDataOperationError();

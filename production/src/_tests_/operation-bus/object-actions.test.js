@@ -1,9 +1,14 @@
 import {
-  UPDATE_OBJECT, updateObject, REMOVE_OBJECT, removeObject, RESTORE_ALL_OBJECTS, restoreAllObjects
-} from '../../redux-reducer/object-reducer/object-actions';
+  REMOVE_OBJECT,
+  removeObject,
+  RESTORE_ALL_OBJECTS,
+  restoreAllObjects,
+  UPDATE_OBJECT,
+  updateObject,
+} from "../../redux-reducer/object-reducer/object-actions";
 
-describe('updateObject', () => {
-  it('should populate action with proper fields', () => {
+describe("updateObject", () => {
+  it("should populate action with proper fields", () => {
     // given
     const exampleObject = {};
     const expectedAction = {
@@ -19,10 +24,10 @@ describe('updateObject', () => {
   });
 });
 
-describe('removeObject', () => {
-  it('should populate action with proper fields', () => {
+describe("removeObject", () => {
+  it("should populate action with proper fields", () => {
     // given
-    const exampleObjectWorkingId = 'someId';
+    const exampleObjectWorkingId = "someId";
     const expectedAction = {
       type: REMOVE_OBJECT,
       payload: exampleObjectWorkingId,
@@ -36,10 +41,10 @@ describe('removeObject', () => {
   });
 });
 
-describe('restoreAllObjects', () => {
-  it('populates action with proper fields', () => {
+describe("restoreAllObjects", () => {
+  it("populates action with proper fields", () => {
     // given
-    const objects = ['test'];
+    const objects = ["test"];
     const expectedAction = {
       type: RESTORE_ALL_OBJECTS,
       payload: objects,

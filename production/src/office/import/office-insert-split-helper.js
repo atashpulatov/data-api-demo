@@ -8,7 +8,9 @@ class OfficeInsertSplitHelper {
    */
   getExcelRows(excelRows, isOverLimit) {
     let splitExcelRows = [excelRows];
-    if (isOverLimit) { splitExcelRows = this.splitExcelRows(excelRows); }
+    if (isOverLimit) {
+      splitExcelRows = this.splitExcelRows(excelRows);
+    }
     return splitExcelRows;
   }
 
@@ -21,7 +23,7 @@ class OfficeInsertSplitHelper {
   splitExcelRows = (excelRows) => {
     let splitRows = [excelRows];
     let isFitSize = false;
-    console.time('Split Rows');
+    console.time("Split Rows");
     do {
       const tempSplit = [];
       let changed = false;
@@ -37,9 +39,11 @@ class OfficeInsertSplitHelper {
         }
       }
       splitRows = [...tempSplit];
-      if (!changed) { isFitSize = true; }
+      if (!changed) {
+        isFitSize = true;
+      }
     } while (!isFitSize);
-    console.timeEnd('Split Rows');
+    console.timeEnd("Split Rows");
     return splitRows;
   };
 
@@ -53,14 +57,16 @@ class OfficeInsertSplitHelper {
     let bytes = 0;
     for (let i = 0; i < chunk.length; i++) {
       for (let j = 0; j < chunk[0].length; j++) {
-        if (typeof chunk[i][j] === 'string') {
+        if (typeof chunk[i][j] === "string") {
           bytes += chunk[i][j].length * 2;
-        } else if (typeof chunk[i][j] === 'number') {
+        } else if (typeof chunk[i][j] === "number") {
           bytes += 8;
         } else {
           bytes += 2;
         }
-        if (bytes / 1000000 > 5) { return true; } // we return true when the size is bigger than 5MB
+        if (bytes / 1000000 > 5) {
+          return true;
+        } // we return true when the size is bigger than 5MB
       }
     }
     return false;

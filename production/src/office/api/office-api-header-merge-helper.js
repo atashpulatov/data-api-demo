@@ -43,7 +43,8 @@ class OfficeApiHeaderMergeHelper {
    * @returns {boolean} true when non-empty array, false otherwise
    *
    */
-  validateAttributes = (attributes) => attributes && Array.isArray(attributes) && attributes.length > 0;
+  validateAttributes = (attributes) =>
+    attributes && Array.isArray(attributes) && attributes.length > 0;
 
   /**
    * Merges header items, using specified handleMergeFunc (handleMergeRowsFunc for rows or handleMergeColumnsFunc
@@ -66,7 +67,10 @@ class OfficeApiHeaderMergeHelper {
     }
 
     const intervalStarts = this.calculateIntervalStarts(attributes);
-    const intervals = this.calculateIntervals(intervalStarts, attributes.length);
+    const intervals = this.calculateIntervals(
+      intervalStarts,
+      attributes.length,
+    );
 
     for (const interval of intervals) {
       handleMergeFunc(titlesRange, interval, attributes.length);
@@ -88,7 +92,9 @@ class OfficeApiHeaderMergeHelper {
    * @param {number} attributesLength - number of elements in attributes array.
    */
   handleMergeRowsFunc = (titlesRange, interval, attributesLength) => {
-    const range = titlesRange.getResizedRange(0, interval.len - attributesLength).getOffsetRange(0, interval.start);
+    const range = titlesRange
+      .getResizedRange(0, interval.len - attributesLength)
+      .getOffsetRange(0, interval.start);
     range.merge();
     range.format.horizontalAlignment = window.Excel.HorizontalAlignment.center;
   };
@@ -108,7 +114,9 @@ class OfficeApiHeaderMergeHelper {
    * @param {number} attributesLength - number of elements in attributes array.
    */
   handleMergeColumnsFunc = (titlesRange, interval, attributesLength) => {
-    const range = titlesRange.getResizedRange(interval.len - attributesLength, 0).getOffsetRange(interval.start, 0);
+    const range = titlesRange
+      .getResizedRange(interval.len - attributesLength, 0)
+      .getOffsetRange(interval.start, 0);
     range.merge();
     range.format.verticalAlignment = window.Excel.VerticalAlignment.center;
   };
@@ -166,7 +174,7 @@ class OfficeApiHeaderMergeHelper {
       if (intervalStarts[i + 1] > intervalStarts[i] + 1) {
         intervals.push({
           start: intervalStarts[i],
-          len: intervalStarts[i + 1] - intervalStarts[i]
+          len: intervalStarts[i + 1] - intervalStarts[i],
         });
       }
     }
@@ -175,7 +183,7 @@ class OfficeApiHeaderMergeHelper {
     if (attributesNo > intervalStarts[intervalStarts.length - 1] + 1) {
       intervals.push({
         start: intervalStarts[intervalStarts.length - 1],
-        len: attributesNo - intervalStarts[intervalStarts.length - 1]
+        len: attributesNo - intervalStarts[intervalStarts.length - 1],
       });
     }
 
@@ -183,5 +191,6 @@ class OfficeApiHeaderMergeHelper {
   };
 }
 
-const { mergeHeaderRows, mergeHeaderColumns } = new OfficeApiHeaderMergeHelper();
+const { mergeHeaderRows, mergeHeaderColumns } =
+  new OfficeApiHeaderMergeHelper();
 export { mergeHeaderRows, mergeHeaderColumns };

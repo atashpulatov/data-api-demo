@@ -1,9 +1,9 @@
 // issue with proptype import
 // eslint-disable-next-line simple-import-sort/imports
-import React from 'react';
+import React from "react";
 
-import PropTypes from 'prop-types';
-import { sessionHelper } from '../storage/session-helper';
+import PropTypes from "prop-types";
+import { sessionHelper } from "../storage/session-helper";
 
 export const SessionExtendingWrapper = ({ children, id, onSessionExpire }) => {
   const { installSessionProlongingHandler } = sessionHelper;

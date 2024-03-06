@@ -13,8 +13,13 @@ class OfficeContext {
     let isSupported = true;
     let api = 0;
     while (isSupported && !!Office) {
-      isSupported = Office.context.requirements.isSetSupported('ExcelAPI', `1.${api}`);
-      if (isSupported) { api += 1; }
+      isSupported = Office.context.requirements.isSetSupported(
+        "ExcelAPI",
+        `1.${api}`,
+      );
+      if (isSupported) {
+        api += 1;
+      }
     }
     return `1.${api - 1}`;
   };
@@ -28,7 +33,10 @@ class OfficeContext {
   isSetSupported = (version) => {
     const { Office } = window;
     if (Office) {
-      return Office.context.requirements.isSetSupported('ExcelAPI', `${version}`);
+      return Office.context.requirements.isSetSupported(
+        "ExcelAPI",
+        `${version}`,
+      );
     }
     return false;
   };

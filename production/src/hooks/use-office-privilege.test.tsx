@@ -1,26 +1,28 @@
-import { act,renderHook } from '@testing-library/react';
+import { act, renderHook } from "@testing-library/react";
 
-import useOfficePrivilege from './use-office-privilege';
+import useOfficePrivilege from "./use-office-privilege";
 
-import { sessionHelper } from '../storage/session-helper';
+import { sessionHelper } from "../storage/session-helper";
 
-jest.mock('../storage/session-helper');
+jest.mock("../storage/session-helper");
 
-describe('useOfficePrivilege', () => {
+describe("useOfficePrivilege", () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });
 
-  const authToken = 'abc-123-cba';
+  const authToken = "abc-123-cba";
 
   // By default jest will mock timers, but we need to use the real implementation here to empty callback queue
   function flushPromises(): Promise<void> {
-    return new Promise(jest.requireActual('timers').setImmediate);
+    return new Promise(jest.requireActual("timers").setImmediate);
   }
 
-  it('should return true if user has office privilege', async () => {
+  it("should return true if user has office privilege", async () => {
     // Given
-    const getCanUseOfficePrivilegeMock = jest.spyOn(sessionHelper, 'getCanUseOfficePrivilege').mockResolvedValue(true);
+    const getCanUseOfficePrivilegeMock = jest
+      .spyOn(sessionHelper, "getCanUseOfficePrivilege")
+      .mockResolvedValue(true);
 
     // When
     let result = { current: false };
@@ -35,9 +37,11 @@ describe('useOfficePrivilege', () => {
     expect(result.current).toBe(true);
   });
 
-  it('should return false if user does not have office privilege', async () => {
+  it("should return false if user does not have office privilege", async () => {
     // Given
-    const getCanUseOfficePrivilegeMock = jest.spyOn(sessionHelper, 'getCanUseOfficePrivilege').mockResolvedValue(false);
+    const getCanUseOfficePrivilegeMock = jest
+      .spyOn(sessionHelper, "getCanUseOfficePrivilege")
+      .mockResolvedValue(false);
 
     // When
     const { result } = renderHook(() => useOfficePrivilege(authToken));
@@ -48,9 +52,11 @@ describe('useOfficePrivilege', () => {
     expect(result.current).toBe(false);
   });
 
-  it('should return false if auth token is not provided and not call getCanUseOfficePrivilege', async () => {
+  it("should return false if auth token is not provided and not call getCanUseOfficePrivilege", async () => {
     // Given
-    const getCanUseOfficePrivilegeMock = jest.spyOn(sessionHelper, 'getCanUseOfficePrivilege').mockResolvedValue(false);
+    const getCanUseOfficePrivilegeMock = jest
+      .spyOn(sessionHelper, "getCanUseOfficePrivilege")
+      .mockResolvedValue(false);
 
     // When
     const { result } = renderHook(() => useOfficePrivilege(undefined));

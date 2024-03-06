@@ -1,5 +1,5 @@
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
-import officeApiDataLoader from '../api/office-api-data-loader';
+import operationStepDispatcher from "../../operation/operation-step-dispatcher";
+import officeApiDataLoader from "../api/office-api-data-loader";
 
 const AUTOFIT_COLUMN_LIMIT = 50;
 
@@ -20,33 +20,47 @@ class StepFormatTable {
    * @param {Boolean} operationData.shouldFormat Determines if the table should be format
    */
   formatTable = async (objectData, operationData) => {
-    console.time('Column auto size');
+    console.time("Column auto size");
     const {
-      objectWorkingId, excelContext, instanceDefinition, officeTable, shouldFormat,
+      objectWorkingId,
+      excelContext,
+      instanceDefinition,
+      officeTable,
+      shouldFormat,
     } = operationData;
-    const { crosstabHeaderDimensions, isCrosstab } = instanceDefinition.mstrTable;
+    const { crosstabHeaderDimensions, isCrosstab } =
+      instanceDefinition.mstrTable;
     const { columns } = instanceDefinition;
 
     if (shouldFormat) {
       if (columns < AUTOFIT_COLUMN_LIMIT) {
         try {
-          this.formatCrosstabHeaders(officeTable, isCrosstab, crosstabHeaderDimensions.rowsX);
+          this.formatCrosstabHeaders(
+            officeTable,
+            isCrosstab,
+            crosstabHeaderDimensions.rowsX,
+          );
 
           await this.formatColumns(excelContext, officeTable.columns);
 
           await excelContext.sync();
         } catch (error) {
           console.error(error);
-          console.log('Error when formatting - no columns autofit applied', error);
+          console.log(
+            "Error when formatting - no columns autofit applied",
+            error,
+          );
         }
       } else {
-        console.log('The column count is more than columns autofit limit or should not format - no columns autofit applied.');
+        console.log(
+          "The column count is more than columns autofit limit or should not format - no columns autofit applied.",
+        );
       }
     }
 
     operationStepDispatcher.completeFormatOfficeTable(objectWorkingId);
 
-    console.timeEnd('Column auto size');
+    console.timeEnd("Column auto size");
   };
 
   /**
@@ -59,10 +73,10 @@ class StepFormatTable {
    */
   formatCrosstabHeaders = (officeTable, isCrosstab, rowsX) => {
     if (isCrosstab) {
-      officeTable.getDataBodyRange()
+      officeTable
+        .getDataBodyRange()
         .getColumnsBefore(rowsX)
-        .format
-        .autofitColumns();
+        .format.autofitColumns();
 
       officeTable.showHeaders = false;
     }
@@ -75,7 +89,11 @@ class StepFormatTable {
    * @param {Office} columns Reference to Excel columns collection
    */
   formatColumns = async (excelContext, columns) => {
-    const columnsCount = await officeApiDataLoader.loadSingleExcelData(excelContext, columns, 'count');
+    const columnsCount = await officeApiDataLoader.loadSingleExcelData(
+      excelContext,
+      columns,
+      "count",
+    );
 
     for (let i = 0; i < columnsCount; i++) {
       await this.formatSingleColumn(excelContext, columns.getItemAt(i));
@@ -89,9 +107,7 @@ class StepFormatTable {
    * @param {Office} column Reference to Excel column
    */
   formatSingleColumn = async (excelContext, column) => {
-    column.getRange()
-      .format
-      .autofitColumns();
+    column.getRange().format.autofitColumns();
 
     await excelContext.sync();
   };

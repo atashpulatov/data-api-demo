@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import {
   CANCEL_OPERATION,
   CLEAR_DATA_OPERATION,
@@ -9,11 +10,11 @@ import {
   REFRESH_OPERATION,
   REMOVE_OPERATION,
   UPDATE_OPERATION,
-} from '../../operation/operation-type-names';
+} from "../../operation/operation-type-names";
 
 const initialState = { operations: [] };
 
-export const operationReducer = (state = initialState, action) => {
+export const operationReducer = (state = initialState, action = {}) => {
   switch (action.type) {
     case IMPORT_OPERATION:
     case REFRESH_OPERATION:
@@ -40,15 +41,15 @@ export const operationReducer = (state = initialState, action) => {
 
 function operationRequested(state, payload) {
   return {
-    operations: [
-      ...state.operations,
-      payload.operation,
-    ]
+    operations: [...state.operations, payload.operation],
   };
 }
 
 function markStepCompleted(state, { objectWorkingId, completedStep }) {
-  const processedOperationIndex = getProcessedOperationIndex(state.operations, objectWorkingId);
+  const processedOperationIndex = getProcessedOperationIndex(
+    state.operations,
+    objectWorkingId,
+  );
   const processedOperation = state.operations[processedOperationIndex];
   const { stepsQueue } = processedOperation;
 
@@ -64,22 +65,34 @@ function markStepCompleted(state, { objectWorkingId, completedStep }) {
 }
 
 function updateOperation(state, updatedOperationProps) {
-  const processedOperationIndex = getProcessedOperationIndex(state.operations, updatedOperationProps.objectWorkingId);
+  const processedOperationIndex = getProcessedOperationIndex(
+    state.operations,
+    updatedOperationProps.objectWorkingId,
+  );
   const newOperations = [...state.operations];
-  const updatedOperation = { ...state.operations[processedOperationIndex], ...updatedOperationProps };
+  const updatedOperation = {
+    ...state.operations[processedOperationIndex],
+    ...updatedOperationProps,
+  };
   newOperations.splice(processedOperationIndex, 1, updatedOperation);
   return { operations: newOperations };
 }
 
 function cancelOperation(state, { objectWorkingId }) {
-  const processedOperationIndex = getProcessedOperationIndex(state.operations, objectWorkingId);
+  const processedOperationIndex = getProcessedOperationIndex(
+    state.operations,
+    objectWorkingId,
+  );
   state.operations.splice(processedOperationIndex, 1);
   return { ...state };
 }
 
 function getProcessedOperationIndex(operations, objectWorkingId) {
-  const processedOperationIndex = operations
-    .findIndex((operation) => operation.objectWorkingId === objectWorkingId);
-  if (processedOperationIndex === -1) { throw new Error(); }
+  const processedOperationIndex = operations.findIndex(
+    (operation) => operation.objectWorkingId === objectWorkingId,
+  );
+  if (processedOperationIndex === -1) {
+    throw new Error();
+  }
   return processedOperationIndex;
 }

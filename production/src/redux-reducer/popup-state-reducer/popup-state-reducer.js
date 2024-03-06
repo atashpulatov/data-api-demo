@@ -1,11 +1,16 @@
-import { PopupTypeEnum } from '../../home/popup-type-enum';
+import { PopupTypeEnum } from "../../home/popup-type-enum";
 import {
-CLEAR_POPUP_STATE, ON_POPUP_BACK, SET_IS_DATA_OVERVIEW_OPEN,
-SET_MSTR_DATA, SET_OBJECT_DATA,   SET_POPUP_TYPE} from './popup-state-actions';
+  CLEAR_POPUP_STATE,
+  ON_POPUP_BACK,
+  SET_IS_DATA_OVERVIEW_OPEN,
+  SET_MSTR_DATA,
+  SET_OBJECT_DATA,
+  SET_POPUP_TYPE,
+} from "./popup-state-actions";
 
 export const initialState = {};
 
-export const popupStateReducer = (state = initialState, action) => {
+export const popupStateReducer = (state = initialState, action = {}) => {
   const { type } = action;
   switch (type) {
     case SET_POPUP_TYPE: {

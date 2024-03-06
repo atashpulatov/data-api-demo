@@ -1,4 +1,4 @@
-import { sessionProperties } from './session-properties';
+import { sessionProperties } from "./session-properties";
 
 class SessionActions {
   init = (reduxStore) => {
@@ -34,7 +34,7 @@ class SessionActions {
   };
 
   logOut = () => {
-    this.reduxStore.dispatch({ type: sessionProperties.actions.logOut, });
+    this.reduxStore.dispatch({ type: sessionProperties.actions.logOut });
   };
 
   saveUserInfo = (values) => {

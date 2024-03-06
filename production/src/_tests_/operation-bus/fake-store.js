@@ -11,8 +11,8 @@ class FakeStore {
 
   resetState = () => {
     this.state = {
-      operationReducer: { operations: [{ stepsQueue: [], }], },
-      objectReducer: { objects: [] }
+      operationReducer: { operations: [{ stepsQueue: [] }] },
+      objectReducer: { objects: [] },
     };
     this.listener && this.listener();
   };

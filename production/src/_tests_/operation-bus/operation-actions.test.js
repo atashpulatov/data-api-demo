@@ -1,21 +1,21 @@
+import { operationsMap } from "../../operation/operation-steps";
 import {
-  importRequested,
-  markStepCompleted,
-  cancelOperation,
-  duplicateRequested,
-  clearDataRequested,
-} from '../../redux-reducer/operation-reducer/operation-actions';
-import {
+  CANCEL_OPERATION,
+  CLEAR_DATA_OPERATION,
+  DUPLICATE_OPERATION,
   IMPORT_OPERATION,
   MARK_STEP_COMPLETED,
-  CANCEL_OPERATION,
-  DUPLICATE_OPERATION,
-  CLEAR_DATA_OPERATION,
-} from '../../operation/operation-type-names';
-import { operationsMap } from '../../operation/operation-steps';
+} from "../../operation/operation-type-names";
+import {
+  cancelOperation,
+  clearDataRequested,
+  duplicateRequested,
+  importRequested,
+  markStepCompleted,
+} from "../../redux-reducer/operation-reducer/operation-actions";
 
-describe('OperationActions', () => {
-  it('returns IMPORT_OPERATION action on importRequested call', () => {
+describe("OperationActions", () => {
+  it("returns IMPORT_OPERATION action on importRequested call", () => {
     // given
     const exampleObject = {};
 
@@ -25,13 +25,17 @@ describe('OperationActions', () => {
     // then
     expect(importAction.type).toEqual(IMPORT_OPERATION);
     expect(importAction.payload.object).toBe(exampleObject);
-    expect(importAction.payload.operation.objectWorkingId).toEqual(exampleObject.objectWorkingId);
-    expect(importAction.payload.operation.operationType).toEqual('IMPORT_OPERATION');
+    expect(importAction.payload.operation.objectWorkingId).toEqual(
+      exampleObject.objectWorkingId
+    );
+    expect(importAction.payload.operation.operationType).toEqual(
+      "IMPORT_OPERATION"
+    );
   });
 
-  it('returns CLEAR_DATA_OPERATION action on clearDataRequested call', () => {
+  it("returns CLEAR_DATA_OPERATION action on clearDataRequested call", () => {
     // given
-    const objectWorkingId = 'testId';
+    const objectWorkingId = "testId";
 
     // when
     const importAction = clearDataRequested(objectWorkingId);
@@ -39,15 +43,21 @@ describe('OperationActions', () => {
     // then
     expect(importAction.type).toEqual(CLEAR_DATA_OPERATION);
     expect(importAction.payload.objectWorkingId).toBe(objectWorkingId);
-    expect(importAction.payload.operation.objectWorkingId).toEqual(objectWorkingId);
-    expect(importAction.payload.operation.operationType).toEqual(CLEAR_DATA_OPERATION);
-    expect(importAction.payload.operation.stepsQueue).toEqual(operationsMap.table[CLEAR_DATA_OPERATION]);
+    expect(importAction.payload.operation.objectWorkingId).toEqual(
+      objectWorkingId
+    );
+    expect(importAction.payload.operation.operationType).toEqual(
+      CLEAR_DATA_OPERATION
+    );
+    expect(importAction.payload.operation.stepsQueue).toEqual(
+      operationsMap.table[CLEAR_DATA_OPERATION]
+    );
   });
 
-  it('returns MARK_STEP_COMPLETED action on markStepCompleted call', () => {
+  it("returns MARK_STEP_COMPLETED action on markStepCompleted call", () => {
     // given
-    const exampleId = 'exampleId';
-    const exampleStep = 'completedStep';
+    const exampleId = "exampleId";
+    const exampleStep = "completedStep";
 
     // when
     const completedAction = markStepCompleted(exampleId, exampleStep);
@@ -57,9 +67,9 @@ describe('OperationActions', () => {
     expect(completedAction.payload.completedStep).toBe(exampleStep);
   });
 
-  it('returns CANCEL_OPERATION action on cancelOperation call', () => {
+  it("returns CANCEL_OPERATION action on cancelOperation call", () => {
     // given
-    const exampleId = 'exampleId';
+    const exampleId = "exampleId";
 
     // when
     const cancelAction = cancelOperation(exampleId);
@@ -68,17 +78,21 @@ describe('OperationActions', () => {
     expect(cancelAction.payload.objectWorkingId).toBe(exampleId);
   });
 
-  it('returns DUPLICATE_OPERATION action on duplicateRequested call', () => {
+  it("returns DUPLICATE_OPERATION action on duplicateRequested call", () => {
     // given
     const exampleObject = {
       objectWorkingId: 123,
-      otherProperty: 'someValue'
+      otherProperty: "someValue",
     };
     // when
     const duplicateAction = duplicateRequested(exampleObject);
     // then
     expect(duplicateAction.type).toEqual(DUPLICATE_OPERATION);
-    expect(duplicateAction.payload.operation.objectWorkingId).toEqual(exampleObject.objectWorkingId);
-    expect(duplicateAction.payload.operation.operationType).toEqual('DUPLICATE_OPERATION');
+    expect(duplicateAction.payload.operation.objectWorkingId).toEqual(
+      exampleObject.objectWorkingId
+    );
+    expect(duplicateAction.payload.operation.operationType).toEqual(
+      "DUPLICATE_OPERATION"
+    );
   });
 });

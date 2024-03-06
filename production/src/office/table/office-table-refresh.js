@@ -1,5 +1,5 @@
-import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
-import { officeApiHelper } from '../api/office-api-helper';
+import { officeApiCrosstabHelper } from "../api/office-api-crosstab-helper";
+import { officeApiHelper } from "../api/office-api-helper";
 
 const ROWS_NUMBER_CHANGE_LIMIT = 10000;
 const CELLS_NUMBER_CHANGE_LIMIT = 100000;
@@ -18,8 +18,16 @@ class OfficeTableRefresh {
    * - tableChanged - true if columns number changed, false otherwise
    * - startCell - starting cell address
    */
-  getExistingOfficeTableData = async (excelContext, instanceDefinition, prevOfficeTable, previousTableDimensions) => {
-    let startCell = await this.getStartCellOnRefresh(prevOfficeTable, excelContext);
+  getExistingOfficeTableData = async (
+    excelContext,
+    instanceDefinition,
+    prevOfficeTable,
+    previousTableDimensions,
+  ) => {
+    let startCell = await this.getStartCellOnRefresh(
+      prevOfficeTable,
+      excelContext,
+    );
 
     let tableChanged = false;
     ({ tableChanged, startCell } = await this.handleColumnChange(
@@ -60,7 +68,7 @@ class OfficeTableRefresh {
       prevOfficeTable,
       excelContext,
       instanceDefinition,
-      previousTableDimensions
+      previousTableDimensions,
     );
 
     ({ tableChanged, startCell } = await this.clearIfCrosstabHeadersChanged(
@@ -68,7 +76,7 @@ class OfficeTableRefresh {
       excelContext,
       tableChanged,
       startCell,
-      mstrTable
+      mstrTable,
     ));
 
     return { tableChanged, startCell };
@@ -86,15 +94,19 @@ class OfficeTableRefresh {
     const { isCrosstab, toCrosstabChange, prevCrosstabDimensions } = mstrTable;
 
     if (isCrosstab && !toCrosstabChange) {
-      const crosstabEmptyRowExist = await officeApiCrosstabHelper.getValidOffset(
-        prevOfficeTable,
-        prevCrosstabDimensions.columnsY,
-        'getRowsAbove',
-        excelContext
-      );
+      const crosstabEmptyRowExist =
+        await officeApiCrosstabHelper.getValidOffset(
+          prevOfficeTable,
+          prevCrosstabDimensions.columnsY,
+          "getRowsAbove",
+          excelContext,
+        );
 
       if (crosstabEmptyRowExist) {
-        await officeApiCrosstabHelper.clearEmptyCrosstabRow(prevOfficeTable, excelContext);
+        await officeApiCrosstabHelper.clearEmptyCrosstabRow(
+          prevOfficeTable,
+          excelContext,
+        );
       }
     }
   };
@@ -109,19 +121,39 @@ class OfficeTableRefresh {
    *
    * @return {Boolean} Specify table structure changed
    */
-  checkTableChange = async (prevOfficeTable, excelContext, instanceDefinition, previousTableDimensions) => {
-    const { columns, rows, mstrTable: { toCrosstabChange, fromCrosstabChange } } = instanceDefinition;
+  checkTableChange = async (
+    prevOfficeTable,
+    excelContext,
+    instanceDefinition,
+    previousTableDimensions,
+  ) => {
+    const {
+      columns,
+      rows,
+      mstrTable: { toCrosstabChange, fromCrosstabChange },
+    } = instanceDefinition;
 
     if (toCrosstabChange || fromCrosstabChange) {
       return true;
     }
 
-    const tableChanged = await this.checkColumnsChange(prevOfficeTable, excelContext, columns, previousTableDimensions);
+    const tableChanged = await this.checkColumnsChange(
+      prevOfficeTable,
+      excelContext,
+      columns,
+      previousTableDimensions,
+    );
 
-    const rowsNumberChange = await this.checkRowsNumberChange(prevOfficeTable, excelContext, rows);
-    return tableChanged
-        || rowsNumberChange > ROWS_NUMBER_CHANGE_LIMIT
-        || rowsNumberChange * columns > CELLS_NUMBER_CHANGE_LIMIT;
+    const rowsNumberChange = await this.checkRowsNumberChange(
+      prevOfficeTable,
+      excelContext,
+      rows,
+    );
+    return (
+      tableChanged ||
+      rowsNumberChange > ROWS_NUMBER_CHANGE_LIMIT ||
+      rowsNumberChange * columns > CELLS_NUMBER_CHANGE_LIMIT
+    );
   };
 
   /**
@@ -134,12 +166,19 @@ class OfficeTableRefresh {
    *
    * @return {Boolean} Specify if number of columns in table changed
    */
-  checkColumnsChange = async (prevOfficeTable, excelContext, columns, previousTableDimensions) => {
+  checkColumnsChange = async (
+    prevOfficeTable,
+    excelContext,
+    columns,
+    previousTableDimensions,
+  ) => {
     const tableColumns = prevOfficeTable.columns;
     // for backward compatibility we assume that if no previousTableDimensions were stored columns didn not changed
-    const prevTableColumns = previousTableDimensions ? previousTableDimensions.columns : columns;
+    const prevTableColumns = previousTableDimensions
+      ? previousTableDimensions.columns
+      : columns;
 
-    tableColumns.load('count');
+    tableColumns.load("count");
     await excelContext.sync();
 
     const tableColumnsCount = tableColumns.count;
@@ -159,7 +198,7 @@ class OfficeTableRefresh {
   checkRowsNumberChange = async (prevOfficeTable, excelContext, rows) => {
     const tableRows = prevOfficeTable.rows;
 
-    tableRows.load('count');
+    tableRows.load("count");
     await excelContext.sync();
 
     return Math.abs(rows - tableRows.count);
@@ -174,9 +213,11 @@ class OfficeTableRefresh {
    */
   getStartCellOnRefresh = async (prevOfficeTable, excelContext) => {
     const headerCell = prevOfficeTable.getDataBodyRange().getCell(0, 0);
-    headerCell.load('address');
+    headerCell.load("address");
     await excelContext.sync();
-    const startCellOfRange = officeApiHelper.getStartCellOfRange(headerCell.address);
+    const startCellOfRange = officeApiHelper.getStartCellOfRange(
+      headerCell.address,
+    );
     return officeApiHelper.offsetCellBy(startCellOfRange, -1, 0);
   };
 
@@ -190,17 +231,27 @@ class OfficeTableRefresh {
    * @param {Object} mstrTable Contains information about mstr object
    *
    */
-  clearIfCrosstabHeadersChanged = async (prevOfficeTable, excelContext, tableChanged, startCell, mstrTable) => {
-    const { prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab } = mstrTable;
-    const { validColumnsY, validRowsX } = await officeApiCrosstabHelper.getCrosstabHeadersSafely(
-      prevCrosstabDimensions,
-      prevOfficeTable,
-      excelContext,
-    );
+  clearIfCrosstabHeadersChanged = async (
+    prevOfficeTable,
+    excelContext,
+    tableChanged,
+    startCell,
+    mstrTable,
+  ) => {
+    const { prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab } =
+      mstrTable;
+    const { validColumnsY, validRowsX } =
+      await officeApiCrosstabHelper.getCrosstabHeadersSafely(
+        prevCrosstabDimensions,
+        prevOfficeTable,
+        excelContext,
+      );
 
     if (isCrosstab && crosstabHeaderDimensions && prevCrosstabDimensions) {
-      if (validRowsX !== crosstabHeaderDimensions.rowsX
-      || validColumnsY - 1 !== crosstabHeaderDimensions.columnsY) {
+      if (
+        validRowsX !== crosstabHeaderDimensions.rowsX ||
+        validColumnsY - 1 !== crosstabHeaderDimensions.columnsY
+      ) {
         tableChanged = true;
         prevCrosstabDimensions.rowsX = validRowsX;
         prevCrosstabDimensions.columnsY = validColumnsY - 1;
@@ -209,13 +260,17 @@ class OfficeTableRefresh {
         startCell = officeApiHelper.offsetCellBy(
           startCell,
           -prevCrosstabDimensions.columnsY,
-          -prevCrosstabDimensions.rowsX
+          -prevCrosstabDimensions.rowsX,
         );
       }
     }
 
     if (prevCrosstabDimensions) {
-      officeApiCrosstabHelper.clearCrosstabRange(prevOfficeTable, mstrTable, excelContext);
+      officeApiCrosstabHelper.clearCrosstabRange(
+        prevOfficeTable,
+        mstrTable,
+        excelContext,
+      );
     }
 
     await excelContext.sync();
@@ -231,8 +286,11 @@ class OfficeTableRefresh {
    *
    */
   getPreviousOfficeTable = async (excelContext, bindId) => {
-    const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindId);
-    prevOfficeTable.load('showTotals');
+    const prevOfficeTable = await officeApiHelper.getTable(
+      excelContext,
+      bindId,
+    );
+    prevOfficeTable.load("showTotals");
     // We can set showTotals value here, since the loaded value will not change until we load it again
     prevOfficeTable.showTotals = false;
     await excelContext.sync();
@@ -251,11 +309,15 @@ class OfficeTableRefresh {
   getCrosstabStartCell = (startCell, instanceDefinition, tableChanged) => {
     const {
       mstrTable: {
-        isCrosstab, fromCrosstabChange, crosstabHeaderDimensions, prevCrosstabDimensions
-      }
+        isCrosstab,
+        fromCrosstabChange,
+        crosstabHeaderDimensions,
+        prevCrosstabDimensions,
+      },
     } = instanceDefinition;
 
-    const { rowsX, columnsY } = crosstabHeaderDimensions || prevCrosstabDimensions;
+    const { rowsX, columnsY } =
+      crosstabHeaderDimensions || prevCrosstabDimensions;
 
     if ((isCrosstab && !tableChanged) || fromCrosstabChange) {
       return officeApiHelper.offsetCellBy(startCell, -columnsY, -rowsX);

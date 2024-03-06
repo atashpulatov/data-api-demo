@@ -1,21 +1,24 @@
-export const SELECT_OBJECT = 'NAV_TREE_SELECT_OBJECT';
-export const REQUEST_IMPORT = 'NAV_TREE_REQUEST_IMPORT';
-export const PROMPTS_ANSWERED = 'NAV_TREE_PROMPTS_ANSWERED';
-export const CANCEL_REQUEST_IMPORT = 'NAV_TREE_CANCEL_REQUEST_IMPORT';
-export const START_IMPORT = 'NAV_TREE_START_IMPORT';
-export const REQUEST_DOSSIER_OPEN = 'NAV_TREE_REQUEST_DOSSIER_OPEN';
-export const CANCEL_DOSSIER_OPEN = 'NAV_TREE_CANCEL_DOSSIER_OPEN';
-export const SWITCH_IMPORT_SUBTOTALS_ON_IMPORT = 'NAV_TREE_SWITCH_IMPORT_SUBTOTALS_ON_IMPORT';
-export const CLEAR_PROMPTS_ANSWERS = 'NAV_TREE_CLEAR_PROMPTS_ANSWERS';
-export const UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT = 'NAV_TREE_UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT';
-export const SET_PROMPT_OBJECTS = 'SET_PROMPT_OBJECTS';
-export const UPDATE_SELECTED_MENU = 'UPDATE_SELECTED_MENU';
+export const SELECT_OBJECT = "NAV_TREE_SELECT_OBJECT";
+export const REQUEST_IMPORT = "NAV_TREE_REQUEST_IMPORT";
+export const PROMPTS_ANSWERED = "NAV_TREE_PROMPTS_ANSWERED";
+export const CANCEL_REQUEST_IMPORT = "NAV_TREE_CANCEL_REQUEST_IMPORT";
+export const START_IMPORT = "NAV_TREE_START_IMPORT";
+export const REQUEST_DOSSIER_OPEN = "NAV_TREE_REQUEST_DOSSIER_OPEN";
+export const CANCEL_DOSSIER_OPEN = "NAV_TREE_CANCEL_DOSSIER_OPEN";
+export const SWITCH_IMPORT_SUBTOTALS_ON_IMPORT =
+  "NAV_TREE_SWITCH_IMPORT_SUBTOTALS_ON_IMPORT";
+export const CLEAR_PROMPTS_ANSWERS = "NAV_TREE_CLEAR_PROMPTS_ANSWERS";
+export const UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT =
+  "NAV_TREE_UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT";
+export const SET_PROMPT_OBJECTS = "SET_PROMPT_OBJECTS";
+export const UPDATE_SELECTED_MENU = "UPDATE_SELECTED_MENU";
 
 function selectObject(data) {
-  return (dispatch) => dispatch({
-    type: SELECT_OBJECT,
-    data,
-  });
+  return (dispatch) =>
+    dispatch({
+      type: SELECT_OBJECT,
+      data,
+    });
 }
 
 function setPromptObjects(data) {
@@ -47,7 +50,8 @@ function cancelDossierOpen(data) {
 }
 
 function switchImportSubtotalsOnImport(data) {
-  return (dispatch) => dispatch({ type: SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, data });
+  return (dispatch) =>
+    dispatch({ type: SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, data });
 }
 
 function clearPromptAnswers() {
@@ -55,7 +59,8 @@ function clearPromptAnswers() {
 }
 
 function updateDisplayAttrFormOnImport(data) {
-  return (dispatch) => dispatch({ type: UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT, data });
+  return (dispatch) =>
+    dispatch({ type: UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT, data });
 }
 
 function updateSelectedMenu(data) {
@@ -74,5 +79,5 @@ export const navigationTreeActions = {
   clearPromptAnswers,
   updateDisplayAttrFormOnImport,
   setPromptObjects,
-  updateSelectedMenu
+  updateSelectedMenu,
 };

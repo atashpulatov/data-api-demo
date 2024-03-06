@@ -20,7 +20,7 @@
     "validate": "office-addin-manifest validate manifest.xml"
   },
   "dependencies": {
-    "@mstr/connector-components": "^5.2.0",
+    "@mstr/connector-components": "^5.2.2",
     "@mstr/mstr-icons": "^2.41.10",
     "@mstr/mstr-react-library": "2.0.0",
     "@mstr/rc": "3.9.0",
@@ -66,6 +66,7 @@
     "office-addin-debugging": "^5.0.14",
     "office-addin-dev-certs": "^1.12.0",
     "office-addin-manifest": "^1.12.8",
+    "prettier": "^3.2.5",
     "redux-mock-store": "^1.5.4",
     "regenerator-runtime": "^0.13.9",
     "ts-jest": "^29.1.2",

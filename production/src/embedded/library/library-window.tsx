@@ -1,37 +1,46 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { connect } from 'react-redux';
-import { ObjectWindowTitle } from '@mstr/connector-components';
-import { Spinner } from '@mstr/rc';
+import React, { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { connect } from "react-redux";
+import { ObjectWindowTitle } from "@mstr/connector-components";
+import { Spinner } from "@mstr/rc";
 
-import PropTypes from 'prop-types';
-import { authenticationHelper } from '../../authentication/authentication-helper';
-import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
-import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
-import { popupHelper } from '../../popup/popup-helper';
-import { EXTEND_SESSION,sessionHelper } from '../../storage/session-helper';
+import { authenticationHelper } from "../../authentication/authentication-helper";
+import { ObjectExecutionStatus } from "../../helpers/prompts-handling-helper";
+import { mstrObjectRestService } from "../../mstr-object/mstr-object-rest-service";
+import { popupHelper } from "../../popup/popup-helper";
+import { EXTEND_SESSION, sessionHelper } from "../../storage/session-helper";
 
-import { ItemType, LibraryWindowProps } from './library-window-types';
+import { ItemType, LibraryWindowProps } from "./library-window-types";
 
-import { selectorProperties } from '../../attribute-selector/selector-properties';
-import i18n from '../../i18n';
-import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
-import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
-import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
-import { EmbeddedLibrary } from './embedded-library';
-import { objectImportType } from '../../mstr-object/constants';
-import { importActionTypes, importButtonIds } from '../../popup/popup-buttons/import-btn-constants';
+import { selectorProperties } from "../../attribute-selector/selector-properties";
+import i18n from "../../i18n";
+import mstrObjectEnum from "../../mstr-object/mstr-object-type-enum";
+import { PopupButtons } from "../../popup/popup-buttons/popup-buttons";
+import { navigationTreeActions } from "../../redux-reducer/navigation-tree-reducer/navigation-tree-actions";
+import { popupStateActions } from "../../redux-reducer/popup-state-reducer/popup-state-actions";
+import { EmbeddedLibrary } from "./embedded-library";
+import { objectImportType } from "../../mstr-object/constants";
+import {
+  importActionTypes,
+  importButtonIds,
+} from "../../popup/popup-buttons/import-btn-constants";
 
-import './library.css';
+import "./library.css";
 
 const {
-  isPrompted, getCubeInfo, getObjectInfo, createDossierInstance, deleteDossierInstance, getObjectPrompts,
+  isPrompted,
+  getCubeInfo,
+  getObjectInfo,
+  createDossierInstance,
+  deleteDossierInstance,
+  getObjectPrompts,
 } = mstrObjectRestService;
 
-export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
+export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = (
+  props,
+) => {
   const [isPublished, setIsPublished] = useState(true);
-  const [t] = useTranslation('common', { i18n });
+  const [t] = useTranslation("common", { i18n });
 
   const {
     chosenObjectId,
@@ -54,81 +63,92 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
    *
    * @param {{Array<ItemType>}} itemsInfo - Array of selected items
    */
-  const handleSelection = useCallback(async (itemsInfo: ItemType[]): Promise<any> => {
-    if (!itemsInfo || itemsInfo.length === 0) {
-      selectObject({});
-      return;
-    }
-
-    const {
-      projectId,
-      type,
-      name,
-      docId,
-    } = itemsInfo[0];
-
-    let { id, subtype } = itemsInfo[0];
-
-    if (!subtype || typeof subtype !== 'number') {
-      try {
-        const objectType = type === 55 ? mstrObjectEnum.mstrObjectType.dossier : mstrObjectEnum.mstrObjectType.report;
-        const objectInfo = await getObjectInfo(docId, projectId, objectType);
-        subtype = objectInfo.subtype;
-        // if subtype is not defined then the object is selected from a library page other
-        // than content discovery and search page. In this case we set use docId as the id
-        id = docId;
-      } catch (error) {
-        popupHelper.handlePopupErrors(error);
+  const handleSelection = useCallback(
+    async (itemsInfo: ItemType[]): Promise<any> => {
+      if (!itemsInfo || itemsInfo.length === 0) {
+        selectObject({});
+        return;
       }
-    }
 
-    const chosenMstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(subtype);
+      const { projectId, type, name, docId } = itemsInfo[0];
 
-    let isCubePublished = true;
+      let { id, subtype } = itemsInfo[0];
 
-    if (chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dataset) {
-      try {
-        const cubeInfo: any = await getCubeInfo(id, projectId);
-        isCubePublished = cubeInfo.status !== 0 || cubeInfo.serverMode === 2;
-      } catch (error) {
-        popupHelper.handlePopupErrors(error);
+      if (!subtype || typeof subtype !== "number") {
+        try {
+          const objectType =
+            type === 55
+              ? mstrObjectEnum.mstrObjectType.dossier
+              : mstrObjectEnum.mstrObjectType.report;
+          const objectInfo = await getObjectInfo(docId, projectId, objectType);
+          subtype = objectInfo.subtype;
+          // if subtype is not defined then the object is selected from a library page other
+          // than content discovery and search page. In this case we set use docId as the id
+          id = docId;
+        } catch (error) {
+          popupHelper.handlePopupErrors(error);
+        }
       }
-    }
 
-    setIsPublished(isCubePublished);
+      const chosenMstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(subtype);
 
-    selectObject({
-      chosenObjectId: id,
-      chosenObjectName: name,
-      chosenProjectId: projectId,
-      chosenSubtype: subtype,
-      mstrObjectType: chosenMstrObjectType,
-    });
-  }, [selectObject]);
+      let isCubePublished = true;
+
+      if (chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dataset) {
+        try {
+          const cubeInfo: any = await getCubeInfo(id, projectId);
+          isCubePublished = cubeInfo.status !== 0 || cubeInfo.serverMode === 2;
+        } catch (error) {
+          popupHelper.handlePopupErrors(error);
+        }
+      }
+
+      setIsPublished(isCubePublished);
+
+      selectObject({
+        chosenObjectId: id,
+        chosenObjectName: name,
+        chosenProjectId: projectId,
+        chosenSubtype: subtype,
+        mstrObjectType: chosenMstrObjectType,
+      });
+    },
+    [selectObject],
+  );
 
   /**
    * Imports the object selected by the user
    */
-  const handleOk = async () => {
+  const handleOk = async (): Promise<void> => {
     let promptedResponse = {};
     try {
-      const chosenMstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
+      const chosenMstrObjectType =
+        mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
       if (chosenMstrObjectType === mstrObjectEnum.mstrObjectType.report) {
         promptedResponse = await isPrompted(
           chosenObjectId,
           chosenProjectId,
-          chosenMstrObjectType.name
+          chosenMstrObjectType.name,
         );
-      } else if (chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dossier) {
+      } else if (
+        chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dossier
+      ) {
         // Creating instance without shortcut information to pull prompts definition.
-        const instance = await createDossierInstance(chosenProjectId, chosenObjectId, {});
+        const instance = await createDossierInstance(
+          chosenProjectId,
+          chosenObjectId,
+          {},
+        );
 
         // If instance is prompted, then pull prompts definition.
-        const prompts = instance.status !== ObjectExecutionStatus.PROMPTED ? [] : await getObjectPrompts(
-          chosenObjectId,
-          chosenProjectId,
-          instance.mid,
-        );
+        const prompts =
+          instance.status !== ObjectExecutionStatus.PROMPTED
+            ? []
+            : await getObjectPrompts(
+                chosenObjectId,
+                chosenProjectId,
+                instance.mid,
+              );
 
         // Updated state with prompts definition, if any.
         promptedResponse = {
@@ -137,7 +157,11 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
         };
 
         // Delete instance that was created.
-        await deleteDossierInstance(chosenProjectId, chosenObjectId, instance.mid);
+        await deleteDossierInstance(
+          chosenProjectId,
+          chosenObjectId,
+          instance.mid,
+        );
       }
       if (
         chosenMstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name
@@ -155,18 +179,19 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
    * Checks if the selected object is prompted and invokes popup
    * to render the 'Prepare data' UI
    */
-  const handleSecondary = async () => {
+  const handleSecondary = async (): Promise<void> => {
     try {
-      const chosenMstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
+      const chosenMstrObjectType =
+        mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
 
       if (
-        chosenMstrObjectType === mstrObjectEnum.mstrObjectType.report
-        || chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dossier
+        chosenMstrObjectType === mstrObjectEnum.mstrObjectType.report ||
+        chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dossier
       ) {
         const isPromptedResponse = await isPrompted(
           chosenObjectId,
           chosenProjectId,
-          chosenMstrObjectType.name
+          chosenMstrObjectType.name,
         );
         setObjectData({ isPrompted: isPromptedResponse });
       }
@@ -197,16 +222,16 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
         prolongSession();
       }
     },
-    [prolongSession]
+    [prolongSession],
   );
 
   useEffect(() => {
-    window.addEventListener('message', extendSession);
+    window.addEventListener("message", extendSession);
 
-    return () => window.removeEventListener('message', extendSession);
+    return () => window.removeEventListener("message", extendSession);
   }, [extendSession]);
 
-  const validateSession = () => {
+  const validateSession = (): void => {
     authenticationHelper.validateAuthToken().catch((error: object) => {
       popupHelper.handlePopupErrors(error);
     });
@@ -222,7 +247,9 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
         index={0}
         total={0}
       />
-      <Spinner className="loading-spinner" type="large">{t('Loading...')}</Spinner>
+      <Spinner className="loading-spinner" type="large">
+        {t("Loading...")}
+      </Spinner>
       <EmbeddedLibrary
         handleSelection={handleSelection}
         handleIframeLoadEvent={validateSession}
@@ -234,32 +261,19 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
         handleCancel={handleCancel}
         primaryImportType={objectImportType.TABLE}
         disableSecondary={
-          !!mstrObjectType && mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name
+          !!mstrObjectType &&
+          mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name
         }
         primaryImportBtnString={importActionTypes.IMPORT}
         primaryImportBtnId={importButtonIds.IMPORT}
         isPublished={isPublished}
-        isImportReport={mstrObjectEnum
-          .getMstrTypeBySubtype(chosenSubtype)
-          ?.type === mstrObjectEnum.mstrObjectType.report.type} // Includes entire type 3 objects(reports and cubes)
+        isImportReport={
+          mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype)?.type ===
+          mstrObjectEnum.mstrObjectType.report.type
+        } // Includes entire type 3 objects(reports and cubes)
       />
     </div>
   );
-};
-
-LibraryWindowNotConnected.propTypes = {
-  chosenSubtype: PropTypes.number,
-  selectObject: PropTypes.func,
-  chosenObjectId: PropTypes.string,
-  chosenProjectId: PropTypes.string,
-  requestImport: PropTypes.func,
-  requestDossierOpen: PropTypes.func,
-  handlePrepare: PropTypes.func,
-  setObjectData: PropTypes.func,
-  mstrObjectType: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.string),
-    PropTypes.shape({}),
-  ]),
 };
 
 function mapStateToProps(state: {
@@ -269,14 +283,15 @@ function mapStateToProps(state: {
     chosenProjectId: string;
     chosenSubtype: number;
     mstrObjectType: object;
-}}) {
+  };
+}): LibraryWindowProps {
   const { navigationTree } = state;
   const {
     chosenObjectName,
     chosenObjectId,
     chosenProjectId,
     chosenSubtype,
-    mstrObjectType
+    mstrObjectType,
   } = navigationTree;
   return {
     chosenObjectName,
@@ -298,5 +313,5 @@ const mapActionsToProps = {
 
 export const LibraryWindow = connect(
   mapStateToProps,
-  mapActionsToProps
+  mapActionsToProps,
 )(LibraryWindowNotConnected);

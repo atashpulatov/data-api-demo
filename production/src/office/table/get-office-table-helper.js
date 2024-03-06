@@ -27,9 +27,11 @@ class GetOfficeTableHelper {
     if (tableName) {
       return tableName;
     }
-    const excelCompatibleTableName = mstrTable.name.replace(/(\.|•|‼| |!|#|\$|%|&|'|\(|\)|\*|\+|,|-|\/|:|;|<|=|>|@|\^|`|\{|\||\}|~|¢|£|¥|¬|«|»)/g, '_');
-    return `_${excelCompatibleTableName.slice(0, 239)}_${Date.now()
-      .toString()}`;
+    const excelCompatibleTableName = mstrTable.name.replace(
+      /(\.|•|‼| |!|#|\$|%|&|'|\(|\)|\*|\+|,|-|\/|:|;|<|=|>|@|\^|`|\{|\||\}|~|¢|£|¥|¬|«|»)/g,
+      "_",
+    );
+    return `_${excelCompatibleTableName.slice(0, 239)}_${Date.now().toString()}`;
   };
 }
 

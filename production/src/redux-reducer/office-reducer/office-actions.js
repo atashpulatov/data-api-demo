@@ -1,15 +1,18 @@
-import officeStoreHelper from '../../office/store/office-store-helper';
+import officeStoreHelper from "../../office/store/office-store-helper";
 
-import { officeProperties } from './office-properties';
+import { officeProperties } from "./office-properties";
 
 const showDialog = () => ({ type: officeProperties.actions.showDialog });
+
+const setIsDialogLoaded = (isDialogLoaded) => ({
+  type: officeProperties.actions.setIsDialogLoaded,
+  isDialogLoaded,
+});
 
 const hideDialog = () => (dispatch) => {
   dispatch(setIsDialogLoaded(false));
   dispatch({ type: officeProperties.actions.hideDialog });
 };
-
-const setIsDialogLoaded = (isDialogLoaded) => ({ type: officeProperties.actions.setIsDialogLoaded, isDialogLoaded });
 
 const toggleSecuredFlag = (isSecured) => (dispatch) => {
   officeStoreHelper.setFileSecuredFlag(isSecured);
@@ -53,12 +56,12 @@ const toggleReusePromptAnswersFlag = (reusePromptAnswers) => (dispatch) => {
 };
 
 const toggleRenderSettingsFlag = () => (dispatch) => {
-  dispatch({ type: officeProperties.actions.toggleRenderSettingsFlag, });
+  dispatch({ type: officeProperties.actions.toggleRenderSettingsFlag });
 };
 
 const setActiveCellAddress = (activeCellAddress) => ({
   type: officeProperties.actions.setActiveCellAddress,
-  activeCellAddress
+  activeCellAddress,
 });
 
 const updateActiveCellAddress = (activeCellAddress) => (dispatch) => {
@@ -72,7 +75,10 @@ const setPopupData = (popupData) => ({
 
 const clearPopupData = () => ({ type: officeProperties.actions.setPopupData });
 
-const setIsShapeAPISupported = (data) => ({ type: officeProperties.actions.setShapeAPISupported, data });
+const setIsShapeAPISupported = (data) => ({
+  type: officeProperties.actions.setShapeAPISupported,
+  data,
+});
 
 export const officeActions = {
   showDialog,
@@ -89,5 +95,5 @@ export const officeActions = {
   updateActiveCellAddress,
   setPopupData,
   clearPopupData,
-  setIsShapeAPISupported
+  setIsShapeAPISupported,
 };

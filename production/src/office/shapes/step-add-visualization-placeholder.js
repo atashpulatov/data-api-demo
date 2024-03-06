@@ -1,7 +1,7 @@
-import { officeApiHelper } from '../api/office-api-helper';
+import { officeApiHelper } from "../api/office-api-helper";
 
-import operationErrorHandler from '../../operation/operation-error-handler';
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import operationErrorHandler from "../../operation/operation-error-handler";
+import operationStepDispatcher from "../../operation/operation-step-dispatcher";
 
 class StepAddVisualizationPlaceholder {
   /**
@@ -24,19 +24,29 @@ class StepAddVisualizationPlaceholder {
       } = objectData;
       const excelContext = await officeApiHelper.getExcelContext();
 
-      const shape = await officeApiHelper.addGeometricShape(excelContext, shapeProps, visualizationName);
+      const shape = await officeApiHelper.addGeometricShape(
+        excelContext,
+        shapeProps,
+        visualizationName,
+      );
 
       const updatedObject = {
         objectWorkingId,
         bindId: shape.id,
       };
       operationStepDispatcher.updateObject(updatedObject);
-      operationStepDispatcher.completeAddVisualizationPlaceholder(objectWorkingId);
+      operationStepDispatcher.completeAddVisualizationPlaceholder(
+        objectWorkingId,
+      );
     } catch (error) {
       console.error(error);
-      operationErrorHandler.handleOperationError(objectData, operationData, error);
+      operationErrorHandler.handleOperationError(
+        objectData,
+        operationData,
+        error,
+      );
     } finally {
-      console.timeEnd('Add Visualization Placeholder');
+      console.timeEnd("Add Visualization Placeholder");
     }
   };
 }

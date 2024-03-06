@@ -16,13 +16,9 @@
     "typescript",
     "typescriptreact"
   ],
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
-    "source.fixAll": "explicit"
-},
-  "editor.formatOnSave": false,
-  "editor.detectIndentation": false,
-  "editor.insertSpaces": true,
-  "editor.autoIndent": "full",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "prettier.ignorePath": "production/.prettierignore",
+
   "terminal.integrated.cwd": "./production"
 }

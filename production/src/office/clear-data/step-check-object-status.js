@@ -1,8 +1,8 @@
-import { officeApiHelper } from '../api/office-api-helper';
-import { officeRemoveHelper } from '../remove/office-remove-helper';
+import { officeApiHelper } from "../api/office-api-helper";
+import { officeRemoveHelper } from "../remove/office-remove-helper";
 
-import operationErrorHandler from '../../operation/operation-error-handler';
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import operationErrorHandler from "../../operation/operation-error-handler";
+import operationStepDispatcher from "../../operation/operation-step-dispatcher";
 
 class StepCheckObjectStatus {
   /**
@@ -20,7 +20,10 @@ class StepCheckObjectStatus {
     try {
       const excelContext = await officeApiHelper.getExcelContext();
 
-      const objectExist = await officeRemoveHelper.checkIfObjectExist(objectData, excelContext);
+      const objectExist = await officeRemoveHelper.checkIfObjectExist(
+        objectData,
+        excelContext,
+      );
 
       const updatedOperation = { objectWorkingId, excelContext, objectExist };
 
@@ -28,7 +31,11 @@ class StepCheckObjectStatus {
       operationStepDispatcher.completeCheckObjectStatus(objectWorkingId);
     } catch (error) {
       console.error(error);
-      operationErrorHandler.handleOperationError(objectData, operationData, error);
+      operationErrorHandler.handleOperationError(
+        objectData,
+        operationData,
+        error,
+      );
     }
   };
 }

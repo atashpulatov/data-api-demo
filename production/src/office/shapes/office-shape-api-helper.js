@@ -1,4 +1,4 @@
-import { shapeProps, sheetCollectionProps } from './shape-properties';
+import { shapeProps, sheetCollectionProps } from "./shape-properties";
 
 class OfficeShapeApiHelper {
   /**
@@ -17,13 +17,7 @@ class OfficeShapeApiHelper {
     for (const sheet of worksheetCollection.items) {
       const shape = sheet.shapes.getItemOrNullObject(shapeId);
       // load shape properties
-      const {
-        IS_NULL_OBJECT,
-        TOP,
-        LEFT,
-        WIDTH,
-        HEIGHT
-      } = shapeProps;
+      const { IS_NULL_OBJECT, TOP, LEFT, WIDTH, HEIGHT } = shapeProps;
       await shape.load([IS_NULL_OBJECT, TOP, LEFT, WIDTH, HEIGHT]);
       await excelContext.sync();
 
@@ -47,7 +41,14 @@ class OfficeShapeApiHelper {
    *
    * @return {object} Office Id of the shape which is added to the worksheet
    */
-  addImage = async (excelContext, base64PngImage, name, position, dimension, sheet) => {
+  addImage = async (
+    excelContext,
+    base64PngImage,
+    name,
+    position,
+    dimension,
+    sheet,
+  ) => {
     const shape = sheet.shapes.addImage(base64PngImage);
     const { top, left } = position;
     const { width, height } = dimension;
@@ -56,7 +57,7 @@ class OfficeShapeApiHelper {
       top,
       left,
       width,
-      height
+      height,
     });
     await excelContext.sync();
     return shape.id;

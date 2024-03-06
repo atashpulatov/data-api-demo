@@ -1,9 +1,9 @@
-import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
-import { officeApiHelper } from '../api/office-api-helper';
-import { officeRemoveHelper } from './office-remove-helper';
+import { officeApiCrosstabHelper } from "../api/office-api-crosstab-helper";
+import { officeApiHelper } from "../api/office-api-helper";
+import { officeRemoveHelper } from "./office-remove-helper";
 
-import operationErrorHandler from '../../operation/operation-error-handler';
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import operationErrorHandler from "../../operation/operation-error-handler";
+import operationStepDispatcher from "../../operation/operation-step-dispatcher";
 
 class StepRemoveObjectTable {
   /**
@@ -33,33 +33,46 @@ class StepRemoveObjectTable {
 
     try {
       excelContext = await officeApiHelper.getExcelContext();
-      objectExist = await officeRemoveHelper.checkIfObjectExist(objectData, excelContext);
+      objectExist = await officeRemoveHelper.checkIfObjectExist(
+        objectData,
+        excelContext,
+      );
 
       if (!objectExist) {
         operationStepDispatcher.completeRemoveObjectTable(objectWorkingId);
       } else {
         const officeTable = excelContext.workbook.tables.getItem(bindId);
 
-        const { validColumnsY, validRowsX } = await officeApiCrosstabHelper.getCrosstabHeadersSafely(
-          crosstabHeaderDimensions,
-          officeTable,
-          excelContext
-        );
+        const { validColumnsY, validRowsX } =
+          await officeApiCrosstabHelper.getCrosstabHeadersSafely(
+            crosstabHeaderDimensions,
+            officeTable,
+            excelContext,
+          );
 
         const validCrosstabHeaderDimnesions = {
           ...crosstabHeaderDimensions,
           columnsY: validColumnsY - 1,
-          rowsX: validRowsX
+          rowsX: validRowsX,
         };
 
-        await officeRemoveHelper.removeExcelTable(officeTable, excelContext, isCrosstab, validCrosstabHeaderDimnesions);
+        await officeRemoveHelper.removeExcelTable(
+          officeTable,
+          excelContext,
+          isCrosstab,
+          validCrosstabHeaderDimnesions,
+        );
 
         operationStepDispatcher.completeRemoveObjectTable(objectWorkingId);
       }
     } catch (error) {
       const errorToHandle = clearEmptyCrosstabRowError || error;
       if (objectExist) {
-        operationErrorHandler.handleOperationError(objectData, operationData, errorToHandle);
+        operationErrorHandler.handleOperationError(
+          objectData,
+          operationData,
+          errorToHandle,
+        );
       } else {
         console.error(errorToHandle);
         operationStepDispatcher.completeRemoveObjectTable(objectWorkingId);

@@ -1,7 +1,5 @@
-import { RunOutsideOfficeError } from '../../error/run-outside-office-error';
-import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
-
-/* global Office */
+import { RunOutsideOfficeError } from "../../error/run-outside-office-error";
+import { officeProperties } from "../../redux-reducer/office-reducer/office-properties";
 
 class OfficeStoreHelper {
   init = (errorService) => {
@@ -9,13 +7,17 @@ class OfficeStoreHelper {
   };
 
   /**
-  * Return reference to Office settings that is required in order to use Office Api
-  *
-  * @return {Office} reference to Office settings
-  * @throws Error when cannot reach Office Api
-  */
+   * Return reference to Office settings that is required in order to use Office Api
+   *
+   * @return {Office} reference to Office settings
+   * @throws Error when cannot reach Office Api
+   */
   getOfficeSettings = () => {
-    if (Office === undefined || Office.context === undefined || Office.context.document === undefined) {
+    if (
+      Office === undefined ||
+      Office.context === undefined ||
+      Office.context.document === undefined
+    ) {
       throw new RunOutsideOfficeError();
     }
 
@@ -23,39 +25,42 @@ class OfficeStoreHelper {
   };
 
   /**
-  * Set value of isFileSecured flag in Office settings
-  *
-  * @param {String} value Key used by Office Api to determine value from settings
-  */
-  setFileSecuredFlag = (value) => this.setPropertyValue(officeProperties.isSecured, value);
+   * Set value of isFileSecured flag in Office settings
+   *
+   * @param {String} value Key used by Office Api to determine value from settings
+   */
+  setFileSecuredFlag = (value) =>
+    this.setPropertyValue(officeProperties.isSecured, value);
 
   /**
-  * Set value of isClearDataFailed flag in Office settings
-  *
-  * @param {String} propertyName Key used by Office Api to determine value from settings
-  */
-  setIsClearDataFailed = (value) => this.setPropertyValue(officeProperties.isClearDataFailed, value);
+   * Set value of isClearDataFailed flag in Office settings
+   *
+   * @param {String} propertyName Key used by Office Api to determine value from settings
+   */
+  setIsClearDataFailed = (value) =>
+    this.setPropertyValue(officeProperties.isClearDataFailed, value);
 
   /**
-  * Return value from Office settings specifying value of isFileSecured flag
-  *
-  * @return {Boolean} isFileSecured flag
-  */
+   * Return value from Office settings specifying value of isFileSecured flag
+   *
+   * @return {Boolean} isFileSecured flag
+   */
   isFileSecured = () => this.getPropertyValue(officeProperties.isSecured);
 
   /**
-  * Return value from Office settings specifying value of isClearDataFailed flag
-  *
-  * @return {Boolean} isClearDataFailed flag
-  */
-  isClearDataFailed = () => this.getPropertyValue(officeProperties.isClearDataFailed);
+   * Return value from Office settings specifying value of isClearDataFailed flag
+   *
+   * @return {Boolean} isClearDataFailed flag
+   */
+  isClearDataFailed = () =>
+    this.getPropertyValue(officeProperties.isClearDataFailed);
 
   /**
-  * Set value in Office settings corresponding to passed key
-  *
-  * @param {String} propertyName Key used by Office Api to determine value from settings
-  * @param {*} value Value to be saved in Office settings
-  */
+   * Set value in Office settings corresponding to passed key
+   *
+   * @param {String} propertyName Key used by Office Api to determine value from settings
+   * @param {*} value Value to be saved in Office settings
+   */
   setPropertyValue = (propertyName, value) => {
     try {
       const settings = this.getOfficeSettings();
@@ -67,11 +72,11 @@ class OfficeStoreHelper {
   };
 
   /**
-  * Return value from Office settings corresponding to passed key
-  *
-  * @param {String} propertyName Key used by Office Api to determine value from settings
-  * @return {*} value from Office
-  */
+   * Return value from Office settings corresponding to passed key
+   *
+   * @param {String} propertyName Key used by Office Api to determine value from settings
+   * @return {*} value from Office
+   */
   getPropertyValue = (propertyName) => {
     try {
       const settings = this.getOfficeSettings();

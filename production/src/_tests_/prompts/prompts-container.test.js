@@ -1,9 +1,10 @@
-import React from 'react';
-import { render } from '@testing-library/react';
-import { PromptsContainer } from '../../prompts/prompts-container';
+import React from "react";
+import { render } from "@testing-library/react";
 
-describe('PromptsContainer', () => {
-  it('should render with props', () => {
+import { PromptsContainer } from "../../prompts/prompts-container";
+
+describe("PromptsContainer", () => {
+  it("should render with props", () => {
     // given
     const postMount = jest.fn();
 
@@ -11,6 +12,6 @@ describe('PromptsContainer', () => {
     const { container } = render(<PromptsContainer postMount={postMount} />);
     // then
     expect(postMount).toBeCalled();
-    expect(container.querySelector('.promptsContainer')).toBeInTheDocument();
+    expect(container.querySelector(".promptsContainer")).toBeInTheDocument();
   });
 });
