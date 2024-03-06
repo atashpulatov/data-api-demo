@@ -100,7 +100,8 @@ export const errorMessages = {
   NOT_AVAILABLE_FOR_DOSSIER: 'This option is not available for dossier',
   CHECKING_SELECTION: 'Checking selection...',
   MISSING_ELEMENT_OBJECT_MESSAGE: 'This action cannot be performed. It appears that part of the data has been removed from the data source. Please click Edit to see the changes.',
-  WRONG_RANGE: 'Please select only one range before import.'
+  WRONG_RANGE: 'Please select only one range before import.',
+  MICROSTRATEGY_API_MISSING: 'Cannot find microstrategy.dossier, please check if embeddinglib.js is present in your environment.',
 };
 
 // temporarily we map all those codes to one message; may be changed in the future

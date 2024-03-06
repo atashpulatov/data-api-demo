@@ -17,6 +17,7 @@ import {
   preparePromptedDossier,
   ObjectExecutionStatus
 } from '../../helpers/prompts-handling-helper';
+import { errorMessages } from '../../error/constants';
 
 const { microstrategy, Office } = window;
 
@@ -46,6 +47,13 @@ export default class EmbeddedDossierNotConnected extends React.Component {
 
   componentDidMount() {
     scriptInjectionHelper.watchForIframeAddition(this.container.current, this.onIframeLoad);
+
+    // Do not embed the dossier if the Microstrategy API is not available
+    if (!microstrategy?.dossier) {
+      console.warn(errorMessages.MICROSTRATEGY_API_MISSING);
+      return;
+    }
+
     this.loadEmbeddedDossier(this.container.current);
   }
 
@@ -78,11 +86,11 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   };
 
   /**
- * Handles the event throwed after new vizualization selection.
+ * Handles the event thrown after new vizualization selection.
  * Retrives the selected vizualizationKey and chapterKey.
  * Passes new data to parent component by handleSelection function.
  *
- * @param {Object} payload - payload throwed by embedded.api after the visualization was selected
+ * @param {Object} payload - payload thrown by embedded.api after the visualization was selected
  */
   onVizSelectionHandler(payload) {
     const { handleSelection } = this.props;
@@ -116,21 +124,19 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   }
 
   /**
-   * Handles the event throwed after new error in embedded dossier.
+   * Handles the event thrown after new error in embedded dossier.
    * Retrives the error type (based on title).
    * If error type is not a notification - handles it by closing the window
    *
-   * @param {Object} error - payload throwed by embedded.api after the error occured
+   * @param {Object} error - payload thrown by embedded.api after the error occured
    */
-  // eslint-disable-next-line class-methods-use-this
-  onEmbeddedError(error) {
-    const { title } = error;
-    if (title !== 'Notification') {
+  onEmbeddedError = (error) => {
+    if (error.title !== 'Notification') {
       // TODO: improve this, so it doesn't depend on i18n
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
       popupHelper.handlePopupErrors(error);
     }
-  }
+  };
 
   /**
    * This function handles the instance creation of the Dossier.
@@ -218,6 +224,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       envUrl, authToken, dossierId, projectId, promptsAnswers,
       instanceId, selectedViz, visualizationInfo
     } = mstrData;
+
     let instance = {};
     try {
       // Create instance and handle it different if it is prompted or multiple reprompt is triggered.
@@ -244,6 +251,11 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     } catch (error) {
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
       popupHelper.handlePopupErrors(error);
+    }
+
+    // Do not proceeed with the embedded dossier creation if the instance is not ready.
+    if (!instance?.mid) {
+      return;
     }
 
     this.dossierData = {
@@ -340,7 +352,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       }
     };
 
-    if (microstrategy && microstrategy.dossier) {
+    if (microstrategy?.dossier) {
       const embeddedDossier = await microstrategy.dossier.create(props);
       this.embeddedDossier = embeddedDossier;
 
@@ -364,7 +376,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
 
       handleEmbeddedDossierLoad();
     } else {
-      console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
+      console.warn(errorMessages.MICROSTRATEGY_API_MISSING);
     }
   };
 

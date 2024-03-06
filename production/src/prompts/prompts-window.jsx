@@ -24,6 +24,7 @@ import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-st
 import { prepareGivenPromptAnswers, preparePromptedReport } from '../helpers/prompts-handling-helper';
 import { objectImportType } from '../mstr-object/constants';
 import i18n from '../i18n';
+import { errorMessages } from '../error/constants';
 
 const { microstrategy } = window;
 const { deleteDossierInstance } = mstrObjectRestService;
@@ -99,6 +100,21 @@ export const PromptsWindowNotConnected = (props) => {
 
   const promptLoadedHandler = () => {
     setIsPromptLoading(false);
+  };
+
+  /**
+   * Handles the event thrown after new error in embedded dossier.
+   * Retrives the error type (based on title).
+   * If error type is not a notification - handles it by closing the window
+   *
+   * @param {Object} error - payload thrown by embedded.api after the error occured
+   */
+  const onEmbeddedError = (error) => {
+    if (error.title !== 'Notification') {
+      // TODO: improve this, so it doesn't depend on i18n
+      error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
+      popupHelper.handlePopupErrors(error);
+    }
   };
 
   /**
@@ -197,7 +213,7 @@ export const PromptsWindowNotConnected = (props) => {
           msgRouter = MsgRouter;
           msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, promptAnsweredHandler);
           msgRouter.registerEventHandler(EventType.ON_PROMPT_LOADED, promptLoadedHandler);
-
+          msgRouter.registerEventHandler(EventType.ON_ERROR, onEmbeddedError);
           // TODO: We should remember to unregister this handler once the page loads
         },
       };
@@ -242,6 +258,7 @@ export const PromptsWindowNotConnected = (props) => {
           // Remove event handlers first.
           msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptAnsweredHandler);
           msgRouter.removeEventhandler(EventType.ON_PROMPT_LOADED, promptLoadedHandler);
+          msgRouter.removeEventhandler(EventType.ON_ERROR, onEmbeddedError);
 
           // Get the new answers from the prompts dialog.
           const currentAnswers = [...newPromptsAnswers.current];
@@ -304,7 +321,7 @@ export const PromptsWindowNotConnected = (props) => {
     scriptInjectionHelper.watchForIframeAddition(localContainer, onIframeLoad);
 
     if (!microstrategy?.dossier) {
-      console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment.');
+      console.warn(errorMessages.MICROSTRATEGY_API_MISSING);
       return;
     }
 
