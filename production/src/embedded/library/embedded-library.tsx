@@ -14,7 +14,7 @@ import "./library.css";
 const { microstrategy, Office } = window;
 
 export const EmbeddedLibraryNotConnected: React.FC<EmbeddedLibraryTypes> = (
-  props,
+  props
 ) => {
   const {
     handleSelection,
@@ -69,7 +69,7 @@ export const EmbeddedLibraryNotConnected: React.FC<EmbeddedLibraryTypes> = (
    * @param {HTMLElement} containerElement
    */
   const loadEmbeddedLibrary = async (
-    containerElement: HTMLElement,
+    containerElement: HTMLElement
   ): Promise<any> => {
     const { envUrl, authToken } = mstrData;
 
@@ -93,15 +93,15 @@ export const EmbeddedLibraryNotConnected: React.FC<EmbeddedLibraryTypes> = (
           setMsgRouter(MsgRouter);
           MsgRouter.registerEventHandler(
             EventType.ON_LIBRARY_ITEM_SELECTED,
-            handleSelection,
+            handleSelection
           );
           MsgRouter.registerEventHandler(
             EventType.ON_LIBRARY_MENU_SELECTED,
-            updateSelectedMenu,
+            updateSelectedMenu
           );
           MsgRouter.registerEventHandler(
             EventType.ON_LIBRARY_ITEM_SELECTION_CLEARED,
-            clearSelection,
+            clearSelection
           );
           MsgRouter.registerEventHandler(EventType.ON_ERROR, onEmbeddedError);
         },
@@ -112,7 +112,7 @@ export const EmbeddedLibraryNotConnected: React.FC<EmbeddedLibraryTypes> = (
         await microstrategy.embeddingContexts.embedLibraryPage(embedProps);
       } else {
         console.warn(
-          "Cannot find microstrategy.embeddingContexts, please check embeddinglib.js is present in your environment",
+          "Cannot find microstrategy.embeddingContexts, please check embeddinglib.js is present in your environment"
         );
       }
     } catch (error) {
@@ -131,7 +131,7 @@ export const EmbeddedLibraryNotConnected: React.FC<EmbeddedLibraryTypes> = (
     });
     scriptInjectionHelper.watchForIframeAddition(
       container.current,
-      onIframeLoad,
+      onIframeLoad
     );
     loadEmbeddedLibrary(container.current);
 
@@ -140,15 +140,15 @@ export const EmbeddedLibraryNotConnected: React.FC<EmbeddedLibraryTypes> = (
         const { EventType } = microstrategy.dossier;
         msgRouter.removeEventhandler(
           EventType.ON_LIBRARY_ITEM_SELECTED,
-          handleSelection,
+          handleSelection
         );
         msgRouter.removeEventhandler(
           EventType.ON_LIBRARY_MENU_SELECTED,
-          updateSelectedMenu,
+          updateSelectedMenu
         );
         msgRouter.removeEventhandler(
           EventType.ON_LIBRARY_ITEM_SELECTION_CLEARED,
-          clearSelection,
+          clearSelection
         );
         msgRouter.removeEventhandler(EventType.ON_ERROR, onEmbeddedError);
       }
@@ -188,5 +188,5 @@ const mapActionsToProps = {
 
 export const EmbeddedLibrary = connect(
   mapStateToProps,
-  mapActionsToProps,
+  mapActionsToProps
 )(EmbeddedLibraryNotConnected);

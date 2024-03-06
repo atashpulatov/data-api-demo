@@ -15,7 +15,7 @@ class AuthenticationHelper {
     reduxStore: any,
     sessionActions: any,
     authenticationService: any,
-    errorService: any,
+    errorService: any
   ): void => {
     this.reduxStore = reduxStore;
     this.sessionActions = sessionActions;
@@ -35,7 +35,7 @@ class AuthenticationHelper {
         values.username,
         values.password,
         values.envUrl,
-        values.loginMode || 1,
+        values.loginMode || 1
       );
       this.sessionActions.logIn(authToken);
     } catch (error) {
@@ -46,7 +46,7 @@ class AuthenticationHelper {
     }
   };
 
-  validateAuthToken = (): void => {
+  validateAuthToken = (): Promise<void> => {
     const reduxStoreState = this.reduxStore.getState();
     const { authToken } = reduxStoreState.sessionReducer;
     const { envUrl } = reduxStoreState.sessionReducer;

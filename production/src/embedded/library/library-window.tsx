@@ -37,7 +37,7 @@ const {
 } = mstrObjectRestService;
 
 export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = (
-  props,
+  props
 ) => {
   const [isPublished, setIsPublished] = useState(true);
   const [t] = useTranslation("common", { i18n });
@@ -113,7 +113,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = (
         mstrObjectType: chosenMstrObjectType,
       });
     },
-    [selectObject],
+    [selectObject]
   );
 
   /**
@@ -128,7 +128,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = (
         promptedResponse = await isPrompted(
           chosenObjectId,
           chosenProjectId,
-          chosenMstrObjectType.name,
+          chosenMstrObjectType.name
         );
       } else if (
         chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dossier
@@ -137,7 +137,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = (
         const instance = await createDossierInstance(
           chosenProjectId,
           chosenObjectId,
-          {},
+          {}
         );
 
         // If instance is prompted, then pull prompts definition.
@@ -147,7 +147,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = (
             : await getObjectPrompts(
                 chosenObjectId,
                 chosenProjectId,
-                instance.mid,
+                instance.mid
               );
 
         // Updated state with prompts definition, if any.
@@ -160,7 +160,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = (
         await deleteDossierInstance(
           chosenProjectId,
           chosenObjectId,
-          instance.mid,
+          instance.mid
         );
       }
       if (
@@ -191,7 +191,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = (
         const isPromptedResponse = await isPrompted(
           chosenObjectId,
           chosenProjectId,
-          chosenMstrObjectType.name,
+          chosenMstrObjectType.name
         );
         setObjectData({ isPrompted: isPromptedResponse });
       }
@@ -222,7 +222,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = (
         prolongSession();
       }
     },
-    [prolongSession],
+    [prolongSession]
   );
 
   useEffect(() => {
@@ -250,6 +250,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = (
       <Spinner className="loading-spinner" type="large">
         {t("Loading...")}
       </Spinner>
+      {/* @ts-expect-error fix types after removing connect HOC */}
       <EmbeddedLibrary
         handleSelection={handleSelection}
         handleIframeLoadEvent={validateSession}
@@ -284,7 +285,7 @@ function mapStateToProps(state: {
     chosenSubtype: number;
     mstrObjectType: object;
   };
-}): LibraryWindowProps {
+}): any {
   const { navigationTree } = state;
   const {
     chosenObjectName,
@@ -313,5 +314,5 @@ const mapActionsToProps = {
 
 export const LibraryWindow = connect(
   mapStateToProps,
-  mapActionsToProps,
+  mapActionsToProps
 )(LibraryWindowNotConnected);

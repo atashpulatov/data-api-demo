@@ -1,4 +1,4 @@
-import { GlobalNotificationTypes } from "@mstr/connector-components/lib/loaded-objects/object-tile/notification/global-notification/global-notification";
+import { GlobalNotificationTypes } from "@mstr/connector-components";
 
 import { customT } from "../customTranslation";
 
