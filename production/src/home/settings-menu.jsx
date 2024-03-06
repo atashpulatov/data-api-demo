@@ -149,7 +149,7 @@ export const SettingsMenuNotConnected = ({
           containerClassName='user-name-tooltip'
           sourceClassName='user-name'
         >
-          <div>{userNameDisplay}</div>
+          <div className='user-name'>{userNameDisplay}</div>
         </OverflowTooltip>
       </li>
       <li

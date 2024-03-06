@@ -21,7 +21,7 @@ export const ImportButton: React.FC<ImportButtonProps> = ({
   const isDisabled = !!disableReason;
 
   return (
-    <Tooltip content={t(`${disableReason}`)} placement='top-end'>
+    <Tooltip disabled={!isDisabled} content={t(`${disableReason}`)} placement='top-end'>
       <Button
         id={id}
         variant={isPrimaryBtn ? 'primary' : 'secondary'}

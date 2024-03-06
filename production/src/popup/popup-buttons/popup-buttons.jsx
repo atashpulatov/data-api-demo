@@ -74,7 +74,7 @@ export const PopupButtonsNotConnected = ({
     <div className='popup-buttons popup-footer'>
       {handleBack && <BackButton handleBack={handleBack} t={t} />}
       {!hideSecondary && !handleSecondary && (
-        <DataPreviewButton onPreviewClick={onPreviewClick} disableReason={disableReason} t={t} />
+        <DataPreviewButton onPreviewClick={onPreviewClick} disableReason={disableReason} />
       )}
       {!hideOk &&
         (primaryImportType === objectImportType.TABLE ? (
@@ -107,11 +107,7 @@ export const PopupButtonsNotConnected = ({
             actionType={importActionTypes.IMPORT_IMAGE}
           />
         ) : (
-          <PrepareDataButton
-            handleSecondary={handleSecondary}
-            disableReason={disableReason}
-            t={t}
-          />
+          <PrepareDataButton handleSecondary={handleSecondary} disableReason={disableReason} />
         ))}
       <CancelButton handleCancel={handleCancel} t={t} />
     </div>

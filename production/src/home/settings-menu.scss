@@ -61,12 +61,17 @@ $text-color: #3f4042;
     margin-top: 8px;
   }
   .user-data {
-    padding-bottom: 14px;
     font-weight: 500;
     @include bottom-line;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+
+    .user-name {
+      display: inline-flex;
+      align-items: center;
+      height: 100%;
+    }
   }
   .separate-line {
     @include bottom-line;
