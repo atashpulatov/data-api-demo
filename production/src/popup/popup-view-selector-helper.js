@@ -1,10 +1,11 @@
+import { ObjectExecutionStatus } from '../helpers/prompts-handling-helper';
+import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
+import { popupHelper } from './popup-helper';
+
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
-import { popupHelper } from './popup-helper';
 import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
-import { ObjectExecutionStatus } from '../helpers/prompts-handling-helper';
 
 const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 

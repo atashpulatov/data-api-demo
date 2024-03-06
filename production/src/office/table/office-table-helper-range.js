@@ -1,5 +1,5 @@
-import { errorMessages } from '../../error/constants';
 import { OverlappingTablesError } from '../../error/overlapping-tables-error';
+import { errorMessages } from '../../error/constants';
 
 class OfficeTableHelperRange {
   /**

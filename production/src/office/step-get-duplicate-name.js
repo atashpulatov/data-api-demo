@@ -1,5 +1,5 @@
-import operationStepDispatcher from '../operation/operation-step-dispatcher';
 import operationErrorHandler from '../operation/operation-error-handler';
+import operationStepDispatcher from '../operation/operation-step-dispatcher';
 
 class StepGetDuplicateName {
   init = (reduxStore) => {

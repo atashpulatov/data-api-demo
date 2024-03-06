@@ -1,6 +1,6 @@
+import { PopupTypeEnum } from '../../home/popup-type-enum';
 import { navigationTreeActions } from '../navigation-tree-reducer/navigation-tree-actions';
 import { popupActions } from '../popup-reducer/popup-actions';
-import { PopupTypeEnum } from '../../home/popup-type-enum';
 
 export const SET_POPUP_TYPE = 'POPUP_STATE_SET_POPUP_TYPE';
 export const SET_MSTR_DATA = 'POPUP_STATE_SET_MSTR_DATA';

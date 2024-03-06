@@ -1,11 +1,17 @@
-import React, { useState, useRef, useLayoutEffect } from 'react';
+// issue with proptype import
+// eslint-disable-next-line simple-import-sort/imports
+import React, { useLayoutEffect,useRef, useState } from 'react';
 import { connect } from 'react-redux';
+
 import PropTypes from 'prop-types';
 import { popupHelper } from '../../popup/popup-helper';
-import scriptInjectionHelper from '../utils/script-injection-helper';
-import { EmbeddedLibraryTypes } from './embedded-library-types';
 import { handleLoginExcelDesktopInWindows } from '../utils/embedded-helper';
+import scriptInjectionHelper from '../utils/script-injection-helper';
+
+import { EmbeddedLibraryTypes } from './embedded-library-types';
+
 import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+
 import './library.css';
 
 const { microstrategy, Office } = window;

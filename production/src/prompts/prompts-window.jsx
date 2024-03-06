@@ -1,29 +1,33 @@
 import React, {
   useCallback, useEffect, useRef, useState
 } from 'react';
-import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { ObjectWindowTitle } from '@mstr/connector-components';
 import { Spinner } from '@mstr/rc';
-import { useTranslation } from 'react-i18next';
-import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+
+import PropTypes from 'prop-types';
+import { authenticationHelper } from '../authentication/authentication-helper';
 import scriptInjectionHelper from '../embedded/utils/script-injection-helper';
+import { prepareGivenPromptAnswers, preparePromptedReport } from '../helpers/prompts-handling-helper';
+import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
+import { popupHelper } from '../popup/popup-helper';
+import { popupViewSelectorHelper } from '../popup/popup-view-selector-helper';
+import { EXTEND_SESSION,sessionHelper } from '../storage/session-helper';
+
+
 import { selectorProperties } from '../attribute-selector/selector-properties';
+import i18n from '../i18n';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
+import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
+import { PromptsContainer } from './prompts-container';
+import { objectImportType } from '../mstr-object/constants';
+
 import '../home/home.css';
 import '../index.css';
 import './prompts-window.scss';
-import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
-import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
-import { PromptsContainer } from './prompts-container';
-import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
-import { authenticationHelper } from '../authentication/authentication-helper';
-import { popupHelper } from '../popup/popup-helper';
-import { popupViewSelectorHelper } from '../popup/popup-view-selector-helper';
-import { sessionHelper, EXTEND_SESSION } from '../storage/session-helper';
-import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
-import { prepareGivenPromptAnswers, preparePromptedReport } from '../helpers/prompts-handling-helper';
-import { objectImportType } from '../mstr-object/constants';
-import i18n from '../i18n';
 
 const { microstrategy } = window;
 const { deleteDossierInstance } = mstrObjectRestService;

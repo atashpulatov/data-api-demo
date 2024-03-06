@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import './internet-connection.scss';
+import React, { useEffect,useState } from 'react';
 import { ConnectionError } from '@mstr/connector-components';
+
+import './internet-connection.scss';
 
 const InternetConnectionError = () => {
   const [status, setStatus] = useState(window.navigator.onLine);

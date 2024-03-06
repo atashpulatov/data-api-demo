@@ -1,7 +1,7 @@
-import { officeApiHelper } from '../../office/api/office-api-helper';
-import { sidePanelEventHelper } from '../../right-side-panel/side-panel-event-helper';
-import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { notificationService } from '../../notification-v2/notification-service';
+import { officeApiHelper } from '../../office/api/office-api-helper';
+import officeReducerHelper from '../../office/store/office-reducer-helper';
+import { sidePanelEventHelper } from '../../right-side-panel/side-panel-event-helper';
 import { sidePanelService } from '../../right-side-panel/side-panel-service';
 
 describe('SidePanelService', () => {

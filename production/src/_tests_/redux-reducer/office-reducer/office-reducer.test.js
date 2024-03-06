@@ -1,6 +1,7 @@
 import { createStore } from 'redux';
-import { officeReducer } from '../../../redux-reducer/office-reducer/office-reducer';
+
 import { officeProperties } from '../../../redux-reducer/office-reducer/office-properties';
+import { officeReducer } from '../../../redux-reducer/office-reducer/office-reducer';
 
 describe('officeReducer', () => {
   const officeStore = createStore(officeReducer);

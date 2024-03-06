@@ -1,8 +1,9 @@
 import { officeApiHelper } from '../api/office-api-helper';
-import officeApiDataLoader from '../api/office-api-data-loader';
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { DUPLICATE_OPERATION, IMPORT_OPERATION } from '../../operation/operation-type-names';
+import officeApiDataLoader from '../api/office-api-data-loader';
 
 class StepBindOfficeTable {
   /**

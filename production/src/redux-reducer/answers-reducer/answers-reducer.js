@@ -1,6 +1,6 @@
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-import { IMPORT_OPERATION, EDIT_OPERATION } from '../../operation/operation-type-names';
-import { RESTORE_ALL_ANSWERS, CLEAR_ANSWERS } from './answers-actions';
+import { EDIT_OPERATION,IMPORT_OPERATION } from '../../operation/operation-type-names';
+import { CLEAR_ANSWERS,RESTORE_ALL_ANSWERS } from './answers-actions';
 
 const initialState = { answers: [] };
 export const answersReducer = (state = initialState, action = {}) => {

@@ -1,8 +1,9 @@
+import { notificationService } from '../notification-v2/notification-service';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
-import { officeContext } from '../office/office-context';
-import { notificationService } from '../notification-v2/notification-service';
 import { sidePanelService } from './side-panel-service';
+
+import { officeContext } from '../office/office-context';
 
 class SidePanelEventHelper {
   /**

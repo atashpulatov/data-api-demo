@@ -1,5 +1,6 @@
-import mstrNormalizedJsonHandler from '../../mstr-object/handler/mstr-normalized-json-handler';
 import { mergeHeaderColumns, mergeHeaderRows } from './office-api-header-merge-helper';
+
+import mstrNormalizedJsonHandler from '../../mstr-object/handler/mstr-normalized-json-handler';
 
 const EXCEL_XTABS_BORDER_COLOR = '#a5a5a5';
 

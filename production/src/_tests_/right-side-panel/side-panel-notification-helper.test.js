@@ -1,11 +1,13 @@
-import { reduxStore } from '../../store';
-import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-notification-helper';
-import { sidePanelService } from '../../right-side-panel/side-panel-service';
-import { officeApiHelper } from '../../office/api/office-api-helper';
-import * as toggleFlag from '../../redux-reducer/office-reducer/office-actions';
-import { errorService } from '../../error/error-handler';
 import { homeHelper } from '../../home/home-helper';
 import { notificationService } from '../../notification-v2/notification-service';
+import { officeApiHelper } from '../../office/api/office-api-helper';
+import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-notification-helper';
+import { sidePanelService } from '../../right-side-panel/side-panel-service';
+
+import { reduxStore } from '../../store';
+
+import { errorService } from '../../error/error-handler';
+import * as toggleFlag from '../../redux-reducer/office-reducer/office-actions';
 
 describe('SidePanelService', () => {
   beforeEach(() => {

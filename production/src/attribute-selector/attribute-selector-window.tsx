@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
-import '../home/home.css';
 import { connect } from 'react-redux';
-import { selectorProperties } from './selector-properties';
-import { AttributeSelector } from './attribute-selector';
-import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
-import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
+
 import { popupHelper } from '../popup/popup-helper';
-import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
+
 import { AttributeSelectorWindowNotConnectedProps } from './attribute-selector-types';
+
+import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
+import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
+import { AttributeSelector } from './attribute-selector';
+import { selectorProperties } from './selector-properties';
 import { objectImportType } from '../mstr-object/constants';
+
+import '../home/home.css';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
 

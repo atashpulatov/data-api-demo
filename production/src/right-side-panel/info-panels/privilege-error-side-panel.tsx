@@ -1,8 +1,10 @@
 import React from 'react';
-import { SideInfoPanel } from '@mstr/connector-components';
 import { useTranslation } from 'react-i18next';
-import i18n from '../../i18n';
+import { SideInfoPanel } from '@mstr/connector-components';
+
 import { sessionHelper } from '../../storage/session-helper';
+
+import i18n from '../../i18n';
 import { ApplicationTypeEnum } from '../../office-constants';
 
 const PrivilegeErrorSidePanel: React.FC = () => {

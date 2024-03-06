@@ -1,14 +1,18 @@
-/* eslint-disable react/no-danger */
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import { useTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
-import i18n from '../i18n';
-import warningIcon from './assets/icon_conflict.svg';
-import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 
-import { homeHelper } from './home-helper';
+// issue with proptype import
+// eslint-disable-next-line simple-import-sort/imports
+import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { connect } from 'react-redux';
+
+import PropTypes from 'prop-types';
 import { notificationService } from '../notification-v2/notification-service';
+import { homeHelper } from './home-helper';
+
+
+import i18n from '../i18n';
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
+import warningIcon from './assets/icon_conflict.svg';
 
 export const ConfirmationNotConnected = ({
   objects,

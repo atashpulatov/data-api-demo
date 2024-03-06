@@ -1,8 +1,9 @@
 import React from 'react';
-
-import { render } from '@testing-library/react';
 import { objectNotificationTypes } from '@mstr/connector-components';
+import { render } from '@testing-library/react';
+
 import { OverviewWindowNotConnected } from './overview-window';
+
 import { mockedObjectsFromStore } from '../../_tests_/mockDataV2';
 
 describe('OverviewWindowNotConnected', () => {

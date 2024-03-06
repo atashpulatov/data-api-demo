@@ -1,9 +1,10 @@
-import mstrObjectEnum from '../mstr-object-type-enum';
 import { mstrObjectRestService } from '../mstr-object-rest-service';
-import { IMPORT_OPERATION } from '../../operation/operation-type-names';
-import { errorService } from '../../error/error-handler';
-import { errorTypes, incomingErrorStrings, errorMessages } from '../../error/constants';
 import { visualizationInfoService } from '../visualization-info-service';
+
+import { errorService } from '../../error/error-handler';
+import { IMPORT_OPERATION } from '../../operation/operation-type-names';
+import mstrObjectEnum from '../mstr-object-type-enum';
+import { errorMessages,errorTypes, incomingErrorStrings } from '../../error/constants';
 
 class DossierInstanceDefinition {
   async getDossierInstanceDefinition(

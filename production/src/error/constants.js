@@ -1,4 +1,5 @@
 import { globalNotificationTypes } from '@mstr/connector-components/lib/loaded-objects/object-tile/notification/global-notification/global-notification';
+
 import { customT } from '../customTranslation';
 
 const withDefaultValue = (obj, defaultValue) => (value) => {

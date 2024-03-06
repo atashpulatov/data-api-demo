@@ -1,10 +1,11 @@
+import { officeApiHelper } from '../api/office-api-helper';
+
 import {
   DUPLICATE_OPERATION,
   EDIT_OPERATION,
   IMPORT_OPERATION,
   REFRESH_OPERATION,
 } from '../../operation/operation-type-names';
-import { officeApiHelper } from '../api/office-api-helper';
 
 /**
  * IMPORT_OPERATION & DEFAULT

@@ -1,13 +1,15 @@
-import { sidePanelService } from '../../right-side-panel/side-panel-service';
 import { userRestService } from '../../home/user-rest-service';
-import { popupActions } from '../../redux-reducer/popup-reducer/popup-actions';
-import * as operationActions from '../../redux-reducer/operation-reducer/operation-actions';
-import { reduxStore } from '../../store';
-import officeReducerHelper from '../../office/store/office-reducer-helper';
-import { popupController } from '../../popup/popup-controller';
-import officeStoreObject from '../../office/store/office-store-object';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
+import officeReducerHelper from '../../office/store/office-reducer-helper';
+import { sidePanelService } from '../../right-side-panel/side-panel-service';
+
+import officeStoreObject from '../../office/store/office-store-object';
+import { reduxStore } from '../../store';
+
+import { popupController } from '../../popup/popup-controller';
+import * as operationActions from '../../redux-reducer/operation-reducer/operation-actions';
+import { popupActions } from '../../redux-reducer/popup-reducer/popup-actions';
 
 describe('SidePanelService', () => {
   jest.useFakeTimers();

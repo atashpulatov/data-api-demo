@@ -1,19 +1,23 @@
 import React from 'react';
-// @ts-ignore
-import { AttributeMetricFilter, ErrorBoundary } from '@mstr/mstr-react-library';
 import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
+// @ts-ignore
+import { AttributeMetricFilter, ErrorBoundary } from '@mstr/mstr-react-library';
+
 import { popupHelper } from '../popup/popup-helper';
-import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
-import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
-import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { errorMessages, errorCodes } from '../error/constants';
-import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
-import './attribute-selector.css';
+
 import {
   AttributeSelectorNotConnectedProps, EditedObjectProps, MstrDataProps, MstrError, SessionProps
 } from './attribute-selector-types';
+
 import i18n from '../i18n';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
+import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
+import { errorCodes,errorMessages } from '../error/constants';
+
+import './attribute-selector.css';
 
 export const AttributeSelectorNotConnected = (props: AttributeSelectorNotConnectedProps) => {
   const [t] = useTranslation('common', { i18n });

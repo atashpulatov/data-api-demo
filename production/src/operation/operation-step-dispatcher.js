@@ -1,36 +1,35 @@
+import { updateObject } from '../redux-reducer/object-reducer/object-actions';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { markStepCompleted, updateOperation } from '../redux-reducer/operation-reducer/operation-actions';
-import { CLEAR_DATA_OPERATION } from './operation-type-names';
 import {
+  ADD_VISUALIZATION_PLACEHOLDER,
+  BACKUP_OBJECT_DATA,
   BIND_OFFICE_TABLE,
+  CHECK_OBJECT_STATUS,
+  CLEAR_CROSSTAB_HEADERS,
+  CLEAR_TABLE_DATA,
+  COMPLETE_CLEAR_DATA,
+  DISPLAY_NOTIFICATION_COMPLETED,
   FETCH_INSERT_DATA,
   FORMAT_DATA,
   FORMAT_OFFICE_TABLE,
   FORMAT_SUBTOTALS,
+  GET_DUPLICATE_NAME,
   GET_INSTANCE_DEFINITION,
   GET_OBJECT_DETAILS,
   GET_OFFICE_TABLE_EDIT_REFRESH,
   GET_OFFICE_TABLE_IMPORT,
-  MODIFY_OBJECT,
-  SAVE_OBJECT_IN_EXCEL,
-  GET_DUPLICATE_NAME,
-  REMOVE_OBJECT_TABLE,
-  REMOVE_OBJECT_BINDING,
-  CHECK_OBJECT_STATUS,
-  CLEAR_CROSSTAB_HEADERS,
-  CLEAR_TABLE_DATA,
-  MOVE_NOTIFICATION_TO_IN_PROGRESS,
-  DISPLAY_NOTIFICATION_COMPLETED,
-  BACKUP_OBJECT_DATA,
-  COMPLETE_CLEAR_DATA,
   HIGHLIGHT_OBJECT,
-  RENAME_EXCEL_WORKSHEET,
   MANIPULATE_VISUALIZATION_IMAGE,
+  MODIFY_OBJECT,
+  MOVE_NOTIFICATION_TO_IN_PROGRESS,
+  REMOVE_OBJECT_BINDING,
+  REMOVE_OBJECT_TABLE,
   REMOVE_VISUALIZATION_IMAGE,
-  ADD_VISUALIZATION_PLACEHOLDER,
-  SAVE_IMAGE_DETAILS
-} from './operation-steps';
-import { updateObject } from '../redux-reducer/object-reducer/object-actions';
+  RENAME_EXCEL_WORKSHEET,
+  SAVE_IMAGE_DETAILS,
+  SAVE_OBJECT_IN_EXCEL} from './operation-steps';
+import { CLEAR_DATA_OPERATION } from './operation-type-names';
 
 class OperationStepDispatcher {
   init = (reduxStore) => {

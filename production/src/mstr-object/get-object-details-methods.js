@@ -1,5 +1,6 @@
-import { mstrObjectRestService } from './mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
+import { mstrObjectRestService } from './mstr-object-rest-service';
+
 import mstrObjectEnum from './mstr-object-type-enum';
 
 export const getObjectPrompts = async (objectData, objectId, projectId, operationData) => {

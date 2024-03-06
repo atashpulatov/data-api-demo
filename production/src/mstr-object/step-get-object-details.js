@@ -1,7 +1,8 @@
 import { mstrObjectRestService } from './mstr-object-rest-service';
-import operationStepDispatcher from '../operation/operation-step-dispatcher';
+
 import operationErrorHandler from '../operation/operation-error-handler';
-import { getObjectPrompts, populateDetails, populateDefinition } from './get-object-details-methods';
+import operationStepDispatcher from '../operation/operation-step-dispatcher';
+import { getObjectPrompts, populateDefinition,populateDetails } from './get-object-details-methods';
 
 class StepGetObjectDetails {
   /**

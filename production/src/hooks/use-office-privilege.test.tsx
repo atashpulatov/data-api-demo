@@ -1,6 +1,8 @@
-import { renderHook, act } from '@testing-library/react';
-import { sessionHelper } from '../storage/session-helper';
+import { act,renderHook } from '@testing-library/react';
+
 import useOfficePrivilege from './use-office-privilege';
+
+import { sessionHelper } from '../storage/session-helper';
 
 jest.mock('../storage/session-helper');
 

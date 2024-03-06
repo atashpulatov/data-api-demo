@@ -1,8 +1,10 @@
-import { officeShapeApiHelper } from './office-shape-api-helper';
 import { officeApiHelper } from '../api/office-api-helper';
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
-import operationErrorHandler from '../../operation/operation-error-handler';
+import { officeShapeApiHelper } from './office-shape-api-helper';
+
 import officeStoreObject from '../store/office-store-object';
+
+import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { CLEAR_DATA_OPERATION } from '../../operation/operation-type-names';
 
 class StepRemoveVisualizationImage {

@@ -1,7 +1,8 @@
-import mstrObjectType from '../mstr-object/mstr-object-type-enum';
+import mstrCompoundGridFlatten from '../mstr-object/helper/mstr-compound-grid-flatten';
+
 import mstrCompoundGridHandler from '../mstr-object/handler/mstr-compound-grid-handler';
 import mstrGridHandler from '../mstr-object/handler/mstr-grid-handler';
-import mstrCompoundGridFlatten from '../mstr-object/helper/mstr-compound-grid-flatten';
+import mstrObjectType from '../mstr-object/mstr-object-type-enum';
 
 /**
  * Service to parse JSON response from REST API v2

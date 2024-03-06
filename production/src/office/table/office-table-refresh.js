@@ -1,5 +1,5 @@
-import { officeApiHelper } from '../api/office-api-helper';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
+import { officeApiHelper } from '../api/office-api-helper';
 
 const ROWS_NUMBER_CHANGE_LIMIT = 10000;
 const CELLS_NUMBER_CHANGE_LIMIT = 100000;

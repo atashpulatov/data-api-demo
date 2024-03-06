@@ -1,5 +1,5 @@
-import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 import { RunOutsideOfficeError } from '../../error/run-outside-office-error';
+import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 
 /* global Office */
 

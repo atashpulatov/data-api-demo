@@ -1,14 +1,15 @@
+import officeReducerHelper from '../office/store/office-reducer-helper';
+
 import {
+  clearGlobalNotification,
   createConnectionLostNotification,
   createSessionExpiredNotification,
-  clearGlobalNotification,
-  displayGlobalNotification,
   deleteObjectNotification,
+  displayGlobalNotification,
   displayObjectWarning,
 } from '../redux-reducer/notification-reducer/notification-action-creators';
 import { removeObject } from '../redux-reducer/object-reducer/object-actions';
 import { cancelOperation } from '../redux-reducer/operation-reducer/operation-actions';
-import officeReducerHelper from '../office/store/office-reducer-helper';
 
 class NotificationService {
   init = (reduxStore) => {

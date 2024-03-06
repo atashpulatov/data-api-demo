@@ -1,6 +1,8 @@
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { officeApiHelper } from '../api/office-api-helper';
+
 import officeStoreObject from '../store/office-store-object';
+
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepRemoveObjectBinding {
   /**

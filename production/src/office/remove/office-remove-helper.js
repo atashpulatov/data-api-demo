@@ -1,8 +1,10 @@
-import officeStoreObject from '../store/office-store-object';
+import { homeHelper } from '../../home/home-helper';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import { officeApiHelper } from '../api/office-api-helper';
+
+import officeStoreObject from '../store/office-store-object';
+
 import officeApiDataLoader from '../api/office-api-data-loader';
-import { homeHelper } from '../../home/home-helper';
 
 class OfficeRemoveHelper {
   /**

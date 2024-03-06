@@ -1,22 +1,21 @@
 import officeReducerHelper from '../office/store/office-reducer-helper';
-import { getNotificationButtons } from '../notification-v2/notification-buttons';
+
 import { customT } from '../customTranslation';
+import { PopupTypeEnum } from '../home/popup-type-enum';
+import { getNotificationButtons } from '../notification-v2/notification-buttons';
+import {
+  DUPLICATE_OPERATION,
+  EDIT_OPERATION,
+  IMPORT_OPERATION,
+  REFRESH_OPERATION} from '../operation/operation-type-names';
 import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import {
+  errorMessageFactory,
+  errorMessages,
   errorTypes,
   httpStatusToErrorType,
-  stringMessageToErrorType,
-  errorMessageFactory,
   incomingErrorStrings,
-  errorMessages
-} from './constants';
-import {
-  IMPORT_OPERATION,
-  DUPLICATE_OPERATION,
-  REFRESH_OPERATION,
-  EDIT_OPERATION
-} from '../operation/operation-type-names';
-import { PopupTypeEnum } from '../home/popup-type-enum';
+  stringMessageToErrorType} from './constants';
 
 const COLUMN_EXCEL_API_LIMIT = 5000;
 const TIMEOUT = 3000;
@@ -146,7 +145,6 @@ class ErrorService {
    * @param {Object} operationData Contains informatons about current operation
    * @param {Error} error Error thrown during the operation execution
    */
-  // eslint-disable-next-line class-methods-use-this
   getExcelError(error, operationData) {
     const { name, code, debugInfo } = error;
     const isExcelApiError = name === 'RichApi.Error' && code === 'GeneralException'

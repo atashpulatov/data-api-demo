@@ -1,18 +1,22 @@
-import { objectNotificationTypes, globalNotificationTypes } from '@mstr/connector-components';
+import { globalNotificationTypes,objectNotificationTypes } from '@mstr/connector-components';
+
 import { notificationService } from '../../notification-v2/notification-service';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
-import operationErrorHandler from '../../operation/operation-error-handler';
 import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-notification-helper';
 import { sidePanelService } from '../../right-side-panel/side-panel-service';
 import { popupHelper } from '../popup-helper';
 import overviewHelper, { OverviewActionCommands } from './overview-helper';
+
+import { reduxStore } from '../../store';
+
+import operationErrorHandler from '../../operation/operation-error-handler';
 import {
   DUPLICATE_OPERATION, EDIT_OPERATION, IMPORT_OPERATION, REFRESH_OPERATION, REMOVE_OPERATION
 } from '../../operation/operation-type-names';
+
 import {
   mockedGlobalWarningNotification, mockedNotificationsFromStore, mockedObjectsFromStore, mockedWarningImportNotification
 } from '../../_tests_/mockDataV2';
-import { reduxStore } from '../../store';
 
 describe('overview-helper', () => {
   const objectWorkingIds = [1, 2];

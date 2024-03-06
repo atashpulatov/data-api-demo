@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import officeApiDataLoader from '../../office/api/office-api-data-loader';
 
 describe('OfficeApiDataLoader', () => {

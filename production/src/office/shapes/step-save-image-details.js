@@ -1,7 +1,8 @@
-import { officeShapeApiHelper } from './office-shape-api-helper';
 import { officeApiHelper } from '../api/office-api-helper';
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import { officeShapeApiHelper } from './office-shape-api-helper';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { errorMessages } from '../../error/constants';
 
 class StepSaveImageDetails {

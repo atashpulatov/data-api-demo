@@ -1,5 +1,5 @@
-import { sessionProperties } from './session-properties';
 import { SessionError } from '../../error/session-error';
+import { sessionProperties } from './session-properties';
 
 export const sessionReducer = (state = {}, action) => {
   switch (action.type) {

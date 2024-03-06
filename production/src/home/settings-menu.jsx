@@ -1,22 +1,26 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import { connect } from 'react-redux';
 import { OverflowTooltip } from '@mstr/rc';
-import i18n from '../i18n';
-import { officeActions } from '../redux-reducer/office-reducer/office-actions';
-import logo from './assets/mstr_logo.png';
-import { sessionHelper } from '../storage/session-helper';
-import { errorService } from '../error/error-handler';
-import { officeContext } from '../office/office-context';
-import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
-import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
-import './settings-menu.scss';
-import { notificationService } from '../notification-v2/notification-service';
-import { popupController } from '../popup/popup-controller';
-import packageJson from '../../package.json';
+
+import PropTypes from 'prop-types';
 import getDocumentationLocale from '../helpers/get-documentation-locale';
+import { notificationService } from '../notification-v2/notification-service';
 import officeReducerHelper from '../office/store/office-reducer-helper';
+import { sessionHelper } from '../storage/session-helper';
+
+
+import packageJson from '../../package.json';
+import { errorService } from '../error/error-handler';
+import i18n from '../i18n';
+import { officeContext } from '../office/office-context';
+import { popupController } from '../popup/popup-controller';
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
+import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
+import logo from './assets/mstr_logo.png';
+
+import './settings-menu.scss';
 
 const APP_VERSION = packageJson.build;
 

@@ -1,6 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Button, Tooltip } from '@mstr/rc';
+
+import PropTypes from 'prop-types';
 
 export const DataPreviewButton = ({ disableReason, onPreviewClick, t }) => (
   <Tooltip adjustOverflow mouseEnterDelay={1} disabled={!disableReason} content={t(`${disableReason}`)} theme="dark" placement="topRight">

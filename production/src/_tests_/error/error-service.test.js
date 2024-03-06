@@ -1,4 +1,3 @@
-/* eslint-disable jest/no-disabled-tests */
 import { errorService } from '../../error/error-handler';
 import { reduxStore } from '../../store';
 import { notificationService } from '../../notification-v2/notification-service';

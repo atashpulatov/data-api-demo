@@ -1,16 +1,18 @@
 import { popupTypes } from '@mstr/connector-components';
-import officeReducerHelper from '../office/store/office-reducer-helper';
-import { officeApiHelper } from '../office/api/office-api-helper';
-import { updateOperation } from '../redux-reducer/operation-reducer/operation-actions';
-import { officeActions } from '../redux-reducer/office-reducer/office-actions';
-import { calculateLoadingProgress } from '../operation/operation-loading-progress';
-import { REMOVE_OPERATION, CLEAR_DATA_OPERATION, HIGHLIGHT_OPERATION } from '../operation/operation-type-names';
-import { errorService } from '../error/error-handler';
-import { notificationService } from '../notification-v2/notification-service';
+
 import { authenticationHelper } from '../authentication/authentication-helper';
-import { incomingErrorStrings } from '../error/constants';
 import { homeHelper } from '../home/home-helper';
+import { notificationService } from '../notification-v2/notification-service';
+import { officeApiHelper } from '../office/api/office-api-helper';
+import officeReducerHelper from '../office/store/office-reducer-helper';
 import { sidePanelService } from './side-panel-service';
+
+import { errorService } from '../error/error-handler';
+import { calculateLoadingProgress } from '../operation/operation-loading-progress';
+import { CLEAR_DATA_OPERATION, HIGHLIGHT_OPERATION,REMOVE_OPERATION } from '../operation/operation-type-names';
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
+import { updateOperation } from '../redux-reducer/operation-reducer/operation-actions';
+import { incomingErrorStrings } from '../error/constants';
 import { objectImportType } from '../mstr-object/constants';
 
 const CONNECTION_CHECK_TIMEOUT = 3000;

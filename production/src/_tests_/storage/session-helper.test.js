@@ -1,14 +1,17 @@
-import { createStore } from 'redux';
 import { waitFor } from '@testing-library/react';
-import { sessionReducer } from '../../redux-reducer/session-reducer/session-reducer';
-import { sessionProperties } from '../../redux-reducer/session-reducer/session-properties';
-import { sessionHelper } from '../../storage/session-helper';
-import { errorService } from '../../error/error-handler';
+import { createStore } from 'redux';
+
 import { authenticationService } from '../../authentication/auth-rest-service';
 import { homeHelper } from '../../home/home-helper';
+import { sessionHelper } from '../../storage/session-helper';
+
 import { reduxStore } from '../../store';
-import { errorMessages } from '../../error/constants';
+
+import { errorService } from '../../error/error-handler';
 import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
+import { sessionProperties } from '../../redux-reducer/session-reducer/session-properties';
+import { sessionReducer } from '../../redux-reducer/session-reducer/session-reducer';
+import { errorMessages } from '../../error/constants';
 
 describe('sessionHelper', () => {
   const sessionStore = createStore(sessionReducer);

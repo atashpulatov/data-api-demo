@@ -1,27 +1,30 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { SidePanel, popupTypes } from '@mstr/connector-components';
-import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
-import { SettingsMenu } from '../home/settings-menu';
-import { Confirmation } from '../home/confirmation';
-import { officeActions } from '../redux-reducer/office-reducer/office-actions';
-import officeStoreHelper from '../office/store/office-store-helper';
-import { sidePanelService } from './side-panel-service';
-import './right-side-panel.scss';
+import { popupTypes,SidePanel } from '@mstr/connector-components';
+
+import PropTypes from 'prop-types';
+import { notificationService } from '../notification-v2/notification-service';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
-import { notificationService } from '../notification-v2/notification-service';
+import officeStoreHelper from '../office/store/office-store-helper';
 import { sidePanelEventHelper } from './side-panel-event-helper';
 import { sidePanelNotificationHelper } from './side-panel-notification-helper';
+import { sidePanelService } from './side-panel-service';
+
+
+import { Confirmation } from '../home/confirmation';
 import { PopupTypeEnum } from '../home/popup-type-enum';
+import { SettingsMenu } from '../home/settings-menu';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { popupController } from '../popup/popup-controller';
 import {
-  IMPORT_OPERATION, REFRESH_OPERATION, EDIT_OPERATION,
-  DUPLICATE_OPERATION, CLEAR_DATA_OPERATION, REMOVE_OPERATION,
-  HIGHLIGHT_OPERATION
-} from '../operation/operation-type-names';
+CLEAR_DATA_OPERATION,   DUPLICATE_OPERATION, EDIT_OPERATION,
+  HIGHLIGHT_OPERATION,
+  IMPORT_OPERATION, REFRESH_OPERATION, REMOVE_OPERATION} from '../operation/operation-type-names';
+import { popupController } from '../popup/popup-controller';
+import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
+
+import './right-side-panel.scss';
 
 export const RightSidePanelNotConnected = ({
   loadedObjects,

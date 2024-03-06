@@ -1,20 +1,23 @@
 import React, { useEffect, useMemo } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { DataOverview, objectNotificationTypes } from '@mstr/connector-components';
-
-import { Button } from '@mstr/rc';
 import { useTranslation } from 'react-i18next';
-import { ApplicationTypeEnum } from '../../office-constants';
-import overviewHelper from './overview-helper';
-import { popupHelper } from '../popup-helper';
+import { connect } from 'react-redux';
+import { DataOverview, objectNotificationTypes } from '@mstr/connector-components';
+import { Button } from '@mstr/rc';
+
+import PropTypes from 'prop-types';
 import useStateSyncOnDialogMessage from './use-state-sync-on-dialog-message';
-import { refreshRequested, removeRequested } from '../../redux-reducer/operation-reducer/operation-actions';
-import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
-import { restoreAllNotifications } from '../../redux-reducer/notification-reducer/notification-action-creators';
-import { REMOVE_OPERATION } from '../../operation/operation-type-names';
+
+import { popupHelper } from '../popup-helper';
+import overviewHelper from './overview-helper';
+
+
 import { selectorProperties } from '../../attribute-selector/selector-properties';
 import i18n from '../../i18n';
+import { REMOVE_OPERATION } from '../../operation/operation-type-names';
+import { restoreAllNotifications } from '../../redux-reducer/notification-reducer/notification-action-creators';
+import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
+import { refreshRequested, removeRequested } from '../../redux-reducer/operation-reducer/operation-actions';
+import { ApplicationTypeEnum } from '../../office-constants';
 
 import './overview-window.scss';
 

@@ -1,13 +1,15 @@
 import { officeApiHelper } from '../office/api/office-api-helper';
-import { errorService } from '../error/error-handler';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
-import { clearDataRequested } from '../redux-reducer/operation-reducer/operation-actions';
-import { officeActions } from '../redux-reducer/office-reducer/office-actions';
-import { configActions } from '../redux-reducer/config-reducer/config-actions';
-import { officeContext } from '../office/office-context';
-import officeStoreRestoreObject from '../office/store/office-store-restore-object';
-import { objectImportType } from '../mstr-object/constants';
 import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
+
+import officeStoreRestoreObject from '../office/store/office-store-restore-object';
+
+import { errorService } from '../error/error-handler';
+import { officeContext } from '../office/office-context';
+import { configActions } from '../redux-reducer/config-reducer/config-actions';
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
+import { clearDataRequested } from '../redux-reducer/operation-reducer/operation-actions';
+import { objectImportType } from '../mstr-object/constants';
 
 const SHOW_HIDDEN_KEY = 'showHidden';
 const EXCEL_SHAPE_API_VERSION = 1.9;

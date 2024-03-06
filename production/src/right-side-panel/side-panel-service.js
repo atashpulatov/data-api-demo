@@ -1,26 +1,28 @@
-import officeStoreObject from '../office/store/office-store-object';
-import officeReducerHelper from '../office/store/office-reducer-helper';
-import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { userRestService } from '../home/user-rest-service';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
+import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
+import officeReducerHelper from '../office/store/office-reducer-helper';
+
+import officeStoreObject from '../office/store/office-store-object';
+
+import { PopupTypeEnum } from '../home/popup-type-enum';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupController } from '../popup/popup-controller';
-import { updateObject } from '../redux-reducer/object-reducer/object-actions';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
-import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
-import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
+import { updateObject } from '../redux-reducer/object-reducer/object-actions';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import {
-  refreshRequested, removeRequested, duplicateRequested, highlightRequested,
-} from '../redux-reducer/operation-reducer/operation-actions';
-import { userRestService } from '../home/user-rest-service';
+duplicateRequested, highlightRequested,
+  refreshRequested, removeRequested, } from '../redux-reducer/operation-reducer/operation-actions';
+import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import {
   addRepromptTask,
-  executeNextRepromptTask,
   clearRepromptTask,
+  executeNextRepromptTask,
 } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import { objectImportType } from '../mstr-object/constants';
-import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
-import { PopupTypeEnum } from '../home/popup-type-enum';
 
 const EXCEL_REUSE_PROMPT_ANSWERS = 'excelReusePromptAnswers';
 class SidePanelService {

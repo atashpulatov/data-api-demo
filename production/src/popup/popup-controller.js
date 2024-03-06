@@ -1,13 +1,14 @@
-import { selectorProperties } from '../attribute-selector/selector-properties';
-import { PopupTypeEnum } from '../home/popup-type-enum';
-import { errorService } from '../error/error-handler';
 import { authenticationHelper } from '../authentication/authentication-helper';
-import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
-import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { officeApiHelper } from '../office/api/office-api-helper';
+
+import { selectorProperties } from '../attribute-selector/selector-properties';
+import { errorService } from '../error/error-handler';
+import { PopupTypeEnum } from '../home/popup-type-enum';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
+import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
+import { duplicateRequested,editRequested, importRequested } from '../redux-reducer/operation-reducer/operation-actions';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
-import { importRequested, editRequested, duplicateRequested } from '../redux-reducer/operation-reducer/operation-actions';
 import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 
 const URL = `${window.location.href}`;

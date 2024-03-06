@@ -1,7 +1,8 @@
-import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
+import officeStoreHelper from './office-store-helper';
+
 import { errorService } from '../../error/error-handler';
 import { removeObject } from '../../redux-reducer/object-reducer/object-actions';
-import officeStoreHelper from './office-store-helper';
+import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 
 class OfficeStoreObject {
   init = (reduxStore) => {

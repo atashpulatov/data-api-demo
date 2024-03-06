@@ -1,5 +1,5 @@
-import officeFormatSubtotals from './office-format-subtotals';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import officeFormatSubtotals from './office-format-subtotals';
 
 class StepApplySubtotalFormatting {
   /**

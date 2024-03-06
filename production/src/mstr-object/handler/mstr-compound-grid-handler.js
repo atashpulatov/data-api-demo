@@ -1,7 +1,7 @@
-/* eslint-disable class-methods-use-this */
-import mstrNormalizedJsonHandler from './mstr-normalized-json-handler';
 import mstrAttributeFormHelper from '../helper/mstr-attribute-form-helper';
 import mstrAttributeMetricHelper from '../helper/mstr-attribute-metric-helper';
+
+import mstrNormalizedJsonHandler from './mstr-normalized-json-handler';
 
 /**
  * Handler to parse compound grid

@@ -1,6 +1,6 @@
 import {
-  IMPORT_OPERATION, REFRESH_OPERATION, EDIT_OPERATION, DUPLICATE_OPERATION
-} from './operation-type-names';
+DUPLICATE_OPERATION,
+EDIT_OPERATION,   IMPORT_OPERATION, REFRESH_OPERATION} from './operation-type-names';
 import { objectImportType } from '../mstr-object/constants';
 
 const loadingStateEnumWeights = {

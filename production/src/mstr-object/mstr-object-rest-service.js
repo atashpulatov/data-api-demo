@@ -1,10 +1,12 @@
 import request from 'superagent';
-import { errorMessages } from '../error/constants';
-import { OutsideOfRangeError } from '../error/outside-of-range-error';
+
 import officeConverterServiceV2 from '../office/office-converter-service-v2';
-import mstrObjectEnum from './mstr-object-type-enum';
 import mstrAttributeFormHelper from './helper/mstr-attribute-form-helper';
 import mstrAttributeMetricHelper from './helper/mstr-attribute-metric-helper';
+
+import { OutsideOfRangeError } from '../error/outside-of-range-error';
+import mstrObjectEnum from './mstr-object-type-enum';
+import { errorMessages } from '../error/constants';
 
 const reportObjectType = mstrObjectEnum.mstrObjectType.report;
 

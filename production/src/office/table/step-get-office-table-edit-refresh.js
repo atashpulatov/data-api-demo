@@ -1,9 +1,10 @@
-import officeTableRefresh from './office-table-refresh';
 import getOfficeTableHelper from './get-office-table-helper';
-import officeTableCreate from './office-table-create';
-import officeTableUpdate from './office-table-update';
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import officeTableCreate from './office-table-create';
+import officeTableRefresh from './office-table-refresh';
+import officeTableUpdate from './office-table-update';
 
 class StepGetOfficeTableEditRefresh {
   /**

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, Tooltip } from '@mstr/rc';
 import { useTranslation } from 'react-i18next';
+import { Button, Tooltip } from '@mstr/rc';
 
 interface ImportButtonProps {
   handleOk: () => void;

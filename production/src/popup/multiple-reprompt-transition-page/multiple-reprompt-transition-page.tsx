@@ -1,13 +1,17 @@
 import React, { FC, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { Spinner } from '@mstr/rc';
-import { ObjectWindowTitle, Popup } from '@mstr/connector-components';
 import { useTranslation } from 'react-i18next';
-import { MultipleRepromptTransitionPageTypes } from './multiple-reprompt-transition-page-types';
-import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
+import { connect } from 'react-redux';
+import { ObjectWindowTitle, Popup } from '@mstr/connector-components';
+import { Spinner } from '@mstr/rc';
+
 import officeReducerHelper from '../../office/store/office-reducer-helper';
-import i18n from '../../i18n';
 import overviewHelper from '../overview/overview-helper';
+
+import { MultipleRepromptTransitionPageTypes } from './multiple-reprompt-transition-page-types';
+
+import i18n from '../../i18n';
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
+
 import './multiple-reprompt-transition-page.scss';
 
 /**

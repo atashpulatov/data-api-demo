@@ -1,16 +1,20 @@
-import 'core-js/stable';
-import 'focus-visible/dist/focus-visible';
-import './index.css';
 import React, { lazy, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Spinner } from '@mstr/rc';
-import i18next from './i18n';
-import * as serviceWorker from './serviceWorker';
-import { diContainer } from './dependency-container';
+
 import { HomeHelper } from './home/home-helper';
-import { reduxStore } from './store';
 import officeReducerHelper from './office/store/office-reducer-helper';
+import * as serviceWorker from './serviceWorker';
 import { sessionHelper } from './storage/session-helper';
+
+import { reduxStore } from './store';
+
+import 'core-js/stable';
+import 'focus-visible/dist/focus-visible';
+import { diContainer } from './dependency-container';
+import i18next from './i18n';
+
+import './index.css';
 
 // Code splitting https://reactjs.org/docs/code-splitting.html
 const LazySidebar = lazy(() => import('./entry-point/sidebar-entry-point'));

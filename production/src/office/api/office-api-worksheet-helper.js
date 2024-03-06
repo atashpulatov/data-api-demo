@@ -1,5 +1,6 @@
-import { ProtectedSheetError } from '../../error/protected-sheets-error';
 import { officeApiHelper } from './office-api-helper';
+
+import { ProtectedSheetError } from '../../error/protected-sheets-error';
 
 class OfficeApiWorksheetHelper {
   /**

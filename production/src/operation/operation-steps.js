@@ -1,11 +1,11 @@
 import {
-  IMPORT_OPERATION,
-  EDIT_OPERATION,
-  REFRESH_OPERATION,
-  REMOVE_OPERATION,
   CLEAR_DATA_OPERATION,
   DUPLICATE_OPERATION,
+  EDIT_OPERATION,
   HIGHLIGHT_OPERATION,
+  IMPORT_OPERATION,
+  REFRESH_OPERATION,
+  REMOVE_OPERATION,
 } from './operation-type-names';
 import { objectImportType } from '../mstr-object/constants';
 

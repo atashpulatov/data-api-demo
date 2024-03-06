@@ -1,16 +1,17 @@
-import officeReducerHelper from '../office/store/office-reducer-helper';
 import { officeRemoveHelper } from '../office/remove/office-remove-helper';
-import { officeActions } from '../redux-reducer/office-reducer/office-actions';
-import { cancelOperation } from '../redux-reducer/operation-reducer/operation-actions';
-import { removeObject, restoreObjectBackup } from '../redux-reducer/object-reducer/object-actions';
+import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
+import officeReducerHelper from '../office/store/office-reducer-helper';
+
 import { errorService } from '../error/error-handler';
 import { deleteObjectNotification } from '../redux-reducer/notification-reducer/notification-action-creators';
-import {
-  IMPORT_OPERATION, DUPLICATE_OPERATION, REFRESH_OPERATION, EDIT_OPERATION, CLEAR_DATA_OPERATION,
-} from './operation-type-names';
-import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
-import { objectImportType } from '../mstr-object/constants';
+import { removeObject, restoreObjectBackup } from '../redux-reducer/object-reducer/object-actions';
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
+import { cancelOperation } from '../redux-reducer/operation-reducer/operation-actions';
 import { executeNextRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
+import {
+CLEAR_DATA_OPERATION,
+DUPLICATE_OPERATION, EDIT_OPERATION,   IMPORT_OPERATION, REFRESH_OPERATION, } from './operation-type-names';
+import { objectImportType } from '../mstr-object/constants';
 
 class OperationErrorHandler {
   init = (reduxStore) => {

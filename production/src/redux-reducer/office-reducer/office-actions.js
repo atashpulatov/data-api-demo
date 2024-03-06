@@ -1,5 +1,6 @@
-import { officeProperties } from './office-properties';
 import officeStoreHelper from '../../office/store/office-store-helper';
+
+import { officeProperties } from './office-properties';
 
 const showDialog = () => ({ type: officeProperties.actions.showDialog });
 

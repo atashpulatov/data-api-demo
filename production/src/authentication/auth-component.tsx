@@ -1,13 +1,13 @@
-/* eslint-disable react/no-multi-comp */
 import React, { FC, useCallback } from 'react';
 import { connect } from 'react-redux';
 
 import { authenticationHelper } from './authentication-helper';
-import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 
-import defaultLoginProps from './default-login-props';
-import { LoginProps, InputProps, SelectInputProps } from './basic-login-types';
 import { AuthenticateComponent } from './auth-component-types';
+import { InputProps, LoginProps, SelectInputProps } from './basic-login-types';
+
+import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
+import defaultLoginProps from './default-login-props';
 
 import './basic-login.scss';
 import './auth-component.css';
@@ -16,7 +16,6 @@ const Input = (props: InputProps): React.ReactElement => {
   const { label } = props;
   return (
     <div className="input-container">
-      {/* eslint-disable-next-line react/destructuring-assignment, jsx-a11y/label-has-associated-control */}
       <label>
         {label}
         <input {...props} />
@@ -29,7 +28,6 @@ const SelectInput = (props: SelectInputProps): React.ReactElement => {
   const { label, children } = props;
   return (
     <div className="input-container">
-      {/* eslint-disable-next-line react/destructuring-assignment, jsx-a11y/label-has-associated-control */}
       <label>
         {label}
         <select {...props}>{children}</select>

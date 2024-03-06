@@ -1,18 +1,21 @@
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
-import './popup-buttons.css';
 import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
+
 import PropTypes from 'prop-types';
+
 import i18n from '../../i18n';
-import { errorMessages } from '../../error/constants';
-import { DataPreviewButton } from './data-preview-button';
 import { BackButton } from './back-button';
-import { PrepareDataButton } from './prepare-data-button';
-import { ImportButton } from './import-button';
 import { CancelButton } from './cancel-button';
-import { importActionTypes, importButtonIds } from './import-btn-constants';
+import { DataPreviewButton } from './data-preview-button';
+import { ImportButton } from './import-button';
+import { PrepareDataButton } from './prepare-data-button';
+import { errorMessages } from '../../error/constants';
 import { objectImportType } from '../../mstr-object/constants';
+import { importActionTypes, importButtonIds } from './import-btn-constants';
+
+import './popup-buttons.css';
 
 const getDisableReason = (isPublished, disableSecondary, disableActiveActions) => {
   const disableReasonForImport = getDisableReasonImport(isPublished, disableActiveActions);

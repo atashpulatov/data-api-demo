@@ -1,12 +1,13 @@
-import { officeShapeApiHelper } from './office-shape-api-helper';
-import { officeApiHelper } from '../api/office-api-helper';
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
-import operationErrorHandler from '../../operation/operation-error-handler';
-import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { convertImageToBase64, convertPointsToPixels } from '../../helpers/visualization-image-utils';
+import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
+import { officeApiHelper } from '../api/office-api-helper';
+import { officeShapeApiHelper } from './office-shape-api-helper';
 import { determineImagePropsToBeAddedToBook } from './shape-helper-util';
+
+import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import { DUPLICATE_OPERATION, EDIT_OPERATION,REFRESH_OPERATION } from '../../operation/operation-type-names';
 import { errorMessages } from '../../error/constants';
-import { DUPLICATE_OPERATION, REFRESH_OPERATION, EDIT_OPERATION } from '../../operation/operation-type-names';
 
 class StepManipulateVisualizationImage {
   /**

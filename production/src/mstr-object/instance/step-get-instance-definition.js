@@ -1,16 +1,17 @@
-import { mstrObjectRestService } from '../mstr-object-rest-service';
-import { GET_OFFICE_TABLE_IMPORT } from '../../operation/operation-steps';
+import { authenticationHelper } from '../../authentication/authentication-helper';
+import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
+import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-helper';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
-import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-helper';
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
-import dossierInstanceDefinition from './dossier-instance-definition';
-import mstrObjectEnum from '../mstr-object-type-enum';
-import { authenticationHelper } from '../../authentication/authentication-helper';
+import { mstrObjectRestService } from '../mstr-object-rest-service';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import { GET_OFFICE_TABLE_IMPORT } from '../../operation/operation-steps';
+import mstrObjectEnum from '../mstr-object-type-enum';
+import dossierInstanceDefinition from './dossier-instance-definition';
 import { errorMessages } from '../../error/constants';
-import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
-import { objectImportType, importOperationStepDict } from '../constants';
+import { importOperationStepDict,objectImportType } from '../constants';
 
 class StepGetInstanceDefinition {
   /**

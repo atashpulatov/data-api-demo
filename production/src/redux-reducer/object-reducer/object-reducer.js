@@ -1,8 +1,8 @@
-import { objectImportType } from '../../mstr-object/constants';
-import { IMPORT_OPERATION, EDIT_OPERATION, DUPLICATE_OPERATION } from '../../operation/operation-type-names';
+import { DUPLICATE_OPERATION,EDIT_OPERATION, IMPORT_OPERATION } from '../../operation/operation-type-names';
 import {
-  UPDATE_OBJECT, REMOVE_OBJECT, RESTORE_ALL_OBJECTS, RESTORE_OBJECT_BACKUP
-} from './object-actions';
+REMOVE_OBJECT, RESTORE_ALL_OBJECTS, RESTORE_OBJECT_BACKUP,
+  UPDATE_OBJECT} from './object-actions';
+import { objectImportType } from '../../mstr-object/constants';
 
 const initialState = { objects: [] };
 export const objectReducer = (state = initialState, action) => {

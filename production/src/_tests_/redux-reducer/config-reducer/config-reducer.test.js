@@ -1,6 +1,7 @@
 import { createStore } from 'redux';
-import { configReducer } from '../../../redux-reducer/config-reducer/config-reducer';
+
 import { configActions } from '../../../redux-reducer/config-reducer/config-actions';
+import { configReducer } from '../../../redux-reducer/config-reducer/config-reducer';
 
 describe('officeReducer', () => {
   const configStore = createStore(configReducer);

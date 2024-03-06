@@ -1,8 +1,10 @@
 import throttle from 'lodash.throttle';
+
 import { authenticationService } from '../authentication/auth-rest-service';
-import { userRestService } from '../home/user-rest-service';
-import { errorService } from '../error/error-handler';
 import { homeHelper } from '../home/home-helper';
+import { userRestService } from '../home/user-rest-service';
+
+import { errorService } from '../error/error-handler';
 import { importRequested } from '../redux-reducer/operation-reducer/operation-actions';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import { httpStatusCodes, incomingErrorStrings } from '../error/constants';

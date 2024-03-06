@@ -1,6 +1,7 @@
 import { createStore } from 'redux';
-import { RESTORE_ALL_ANSWERS, CLEAR_ANSWERS } from '../../../redux-reducer/answers-reducer/answers-actions';
-import { IMPORT_OPERATION, EDIT_OPERATION } from '../../../operation/operation-type-names';
+
+import { EDIT_OPERATION,IMPORT_OPERATION } from '../../../operation/operation-type-names';
+import { CLEAR_ANSWERS,RESTORE_ALL_ANSWERS } from '../../../redux-reducer/answers-reducer/answers-actions';
 import { answersReducer } from '../../../redux-reducer/answers-reducer/answers-reducer';
 
 describe('answersReducer', () => {

@@ -1,24 +1,25 @@
 /* eslint-disable camelcase */
-import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
 import { changeConnectorLanguage } from '@mstr/connector-components';
 import { RC } from '@mstr/rc';
-import { initReactI18next } from 'react-i18next';
+import i18n from 'i18next';
 import moment from 'moment';
-import enUSCommon from './locales/en-US.json';
-import enGBCommon from './locales/en-GB.json';
+
+import daCommon from './locales/da-DK.json';
 import deCommon from './locales/de-DE.json';
-import zhCNCommon from './locales/zh-CN.json';
+import enGBCommon from './locales/en-GB.json';
+import enUSCommon from './locales/en-US.json';
+import esCommon from './locales/es-ES.json';
 import frCommon from './locales/fr-FR.json';
 import itCommon from './locales/it-IT.json';
-import esCommon from './locales/es-ES.json';
-import zhTWCommon from './locales/zh-TW.json';
+import jaCommon from './locales/ja-JP.json';
 import koCommon from './locales/ko-KR.json';
+import nlCommon from './locales/nl-NL.json';
 import plCommon from './locales/pl-PL.json';
 import ptCommon from './locales/pt-BR.json';
-import nlCommon from './locales/nl-NL.json';
 import svCommon from './locales/sv-SE.json';
-import jaCommon from './locales/ja-JP.json';
-import daCommon from './locales/da-DK.json';
+import zhCNCommon from './locales/zh-CN.json';
+import zhTWCommon from './locales/zh-TW.json';
 
 enUSCommon.refreshed_date = '{{date, YYYY-MM-DD H:mm}}';
 enGBCommon.refreshed_date = '{{date, YYYY-MM-DD H:mm}}';

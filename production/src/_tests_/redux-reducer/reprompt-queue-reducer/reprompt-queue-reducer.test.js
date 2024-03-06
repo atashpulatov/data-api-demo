@@ -1,4 +1,5 @@
 import React from 'react';
+
 import * as RepromptQueueReducer from '../../../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer';
 
 describe('reprompt-queue-reducer', () => {

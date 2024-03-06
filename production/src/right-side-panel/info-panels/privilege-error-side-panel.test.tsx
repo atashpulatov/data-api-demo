@@ -1,8 +1,10 @@
 import React from 'react';
-import '@testing-library/jest-dom'; // TODO check why tests are not passing without it
-import { render, fireEvent } from '@testing-library/react';
-import PrivilegeErrorSidePanel from './privilege-error-side-panel';
+import { fireEvent,render } from '@testing-library/react';
+
 import { sessionHelper } from '../../storage/session-helper';
+
+import '@testing-library/jest-dom'; // TODO check why tests are not passing without it
+import PrivilegeErrorSidePanel from './privilege-error-side-panel';
 
 describe('PrivilegeErrorSidePanel', () => {
   it('should render PrivilegeErrorSidePanel', () => {

@@ -1,27 +1,29 @@
 import { objectNotificationTypes } from '@mstr/connector-components';
-import { MOVE_NOTIFICATION_TO_IN_PROGRESS, DISPLAY_NOTIFICATION_COMPLETED, FETCH_INSERT_DATA } from '../../operation/operation-steps';
+
 import { notificationService } from '../../notification-v2/notification-service';
-import { officeProperties } from '../office-reducer/office-properties';
+
+import { customT } from '../../customTranslation';
 import { getNotificationButtons } from '../../notification-v2/notification-buttons';
+import { DISPLAY_NOTIFICATION_COMPLETED, FETCH_INSERT_DATA,MOVE_NOTIFICATION_TO_IN_PROGRESS } from '../../operation/operation-steps';
 import {
-  IMPORT_OPERATION,
-  EDIT_OPERATION,
-  REFRESH_OPERATION,
-  REMOVE_OPERATION,
   CLEAR_DATA_OPERATION,
   DUPLICATE_OPERATION,
+  EDIT_OPERATION,
+  IMPORT_OPERATION,
   MARK_STEP_COMPLETED,
+  REFRESH_OPERATION,
+  REMOVE_OPERATION,
 } from '../../operation/operation-type-names';
+import { officeProperties } from '../office-reducer/office-properties';
 import {
-  DELETE_NOTIFICATION,
-  CREATE_GLOBAL_NOTIFICATION,
-  REMOVE_GLOBAL_NOTIFICATION,
-  DISPLAY_NOTIFICATION_WARNING,
   CLEAR_NOTIFICATIONS,
+  CREATE_GLOBAL_NOTIFICATION,
+  DELETE_NOTIFICATION,
+  DISPLAY_NOTIFICATION_WARNING,
+  REMOVE_GLOBAL_NOTIFICATION,
   RESTORE_ALL_NOTIFICATIONS,
 } from './notification-actions';
 import { titleOperationCompletedMap, titleOperationFailedMap, titleOperationInProgressMap } from './notification-title-maps';
-import { customT } from '../../customTranslation';
 import { errorMessages } from '../../error/constants';
 
 const initialState = { notifications: [], globalNotification: { type: '' } };

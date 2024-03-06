@@ -1,7 +1,7 @@
 import {
   ADD_REPROMPT_TASK,
-  EXECUTE_NEXT_REPROMPT_TASK,
   CLEAR_REPROMPT_TASKS,
+  EXECUTE_NEXT_REPROMPT_TASK,
 } from './reprompt-queue-actions';
 
 const initialState = { repromptsQueue: [], index: 0, total: 0 };

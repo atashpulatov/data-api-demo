@@ -1,9 +1,10 @@
 import { CONTEXT_LIMIT } from '../../mstr-object/mstr-object-rest-service';
-import officeTableHelperRange from './office-table-helper-range';
-import officeFormatSubtotals from '../format/office-format-subtotals';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
-import officeApiDataLoader from '../api/office-api-data-loader';
 import { officeRemoveHelper } from '../remove/office-remove-helper';
+import officeTableHelperRange from './office-table-helper-range';
+
+import officeApiDataLoader from '../api/office-api-data-loader';
+import officeFormatSubtotals from '../format/office-format-subtotals';
 
 class OfficeTableUpdate {
   /**

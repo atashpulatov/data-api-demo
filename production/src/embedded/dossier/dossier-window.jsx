@@ -1,27 +1,33 @@
+// issue with proptype import
+// eslint-disable-next-line simple-import-sort/imports
 import React, {
-  useEffect, useCallback, useState, useMemo, useRef
-} from 'react';
-import { connect } from 'react-redux';
+useCallback,   useEffect, useMemo, useRef,
+useState} from 'react';
 import { useTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { ObjectWindowTitle, Popup } from '@mstr/connector-components';
 import { MSTRIcon } from '@mstr/mstr-react-library';
 import { Spinner } from '@mstr/rc';
-import { ObjectWindowTitle, Popup } from '@mstr/connector-components';
-import i18n from '../../i18n';
-import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
-import { selectorProperties } from '../../attribute-selector/selector-properties';
-import { EmbeddedDossier } from './embedded-dossier';
-import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-import './dossier.css';
-import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
-import { popupHelper } from '../../popup/popup-helper';
-import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
-import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
+
+import PropTypes from 'prop-types';
 import { authenticationHelper } from '../../authentication/authentication-helper';
-import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
+import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
+import overviewHelper from '../../popup/overview/overview-helper';
+import { popupHelper } from '../../popup/popup-helper';
+import { EXTEND_SESSION,sessionHelper } from '../../storage/session-helper';
+
+
+import { selectorProperties } from '../../attribute-selector/selector-properties';
+import i18n from '../../i18n';
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
+import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
+import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
+import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
+import { EmbeddedDossier } from './embedded-dossier';
 import { errorCodes } from '../../error/constants';
 import { objectImportType } from '../../mstr-object/constants';
-import overviewHelper from '../../popup/overview/overview-helper';
+
+import './dossier.css';
 
 export const DossierWindowNotConnected = (props) => {
   const [t] = useTranslation('common', { i18n });

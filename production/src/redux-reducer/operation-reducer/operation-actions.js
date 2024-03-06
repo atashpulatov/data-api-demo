@@ -1,17 +1,17 @@
-import { objectImportType } from '../../mstr-object/constants';
 import { operationsMap } from '../../operation/operation-steps';
 import {
-  IMPORT_OPERATION,
-  EDIT_OPERATION,
-  REFRESH_OPERATION,
-  REMOVE_OPERATION,
-  HIGHLIGHT_OPERATION,
+  CANCEL_OPERATION,
   CLEAR_DATA_OPERATION,
   DUPLICATE_OPERATION,
+  EDIT_OPERATION,
+  HIGHLIGHT_OPERATION,
+  IMPORT_OPERATION,
   MARK_STEP_COMPLETED,
+  REFRESH_OPERATION,
+  REMOVE_OPERATION,
   UPDATE_OPERATION,
-  CANCEL_OPERATION,
 } from '../../operation/operation-type-names';
+import { objectImportType } from '../../mstr-object/constants';
 
 export const importRequested = (object) => {
   const objectWorkingId = Date.now();

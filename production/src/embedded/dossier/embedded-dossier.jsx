@@ -1,22 +1,25 @@
-/* eslint-disable max-len */
+// issue with proptype import
+// eslint-disable-next-line simple-import-sort/imports
 import React from 'react';
 import { connect } from 'react-redux';
+
 import PropTypes from 'prop-types';
+import {
+  ObjectExecutionStatus,
+  prepareGivenPromptAnswers,
+  preparePromptedDossier} from '../../helpers/prompts-handling-helper';
+import { convertPixelsToPoints } from '../../helpers/visualization-image-utils';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { popupHelper } from '../../popup/popup-helper';
-import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
-import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-import scriptInjectionHelper from '../utils/script-injection-helper';
 import { handleLoginExcelDesktopInWindows } from '../utils/embedded-helper';
-import './dossier.css';
+import scriptInjectionHelper from '../utils/script-injection-helper';
 import { embeddedDossierHelper } from './embedded-dossier-helper';
-import { convertPixelsToPoints } from '../../helpers/visualization-image-utils';
 
-import {
-  prepareGivenPromptAnswers,
-  preparePromptedDossier,
-  ObjectExecutionStatus
-} from '../../helpers/prompts-handling-helper';
+
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
+import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
+
+import './dossier.css';
 
 const { microstrategy, Office } = window;
 

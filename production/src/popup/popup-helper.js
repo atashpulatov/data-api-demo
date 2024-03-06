@@ -1,5 +1,5 @@
-import { officeContext } from '../office/office-context';
 import { selectorProperties } from '../attribute-selector/selector-properties';
+import { officeContext } from '../office/office-context';
 
 class PopupHelper {
   handlePopupErrors = (error) => {

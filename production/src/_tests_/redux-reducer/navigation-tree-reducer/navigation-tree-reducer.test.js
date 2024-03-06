@@ -1,9 +1,9 @@
 import {
-  SELECT_OBJECT, SET_PROMPT_OBJECTS, START_IMPORT, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED,
-  REQUEST_DOSSIER_OPEN, CLEAR_PROMPTS_ANSWERS, CANCEL_DOSSIER_OPEN, SWITCH_IMPORT_SUBTOTALS_ON_IMPORT,
+CANCEL_DOSSIER_OPEN, CANCEL_REQUEST_IMPORT, CLEAR_PROMPTS_ANSWERS, PROMPTS_ANSWERED,
+  REQUEST_DOSSIER_OPEN, REQUEST_IMPORT,   SELECT_OBJECT, SET_PROMPT_OBJECTS, START_IMPORT, SWITCH_IMPORT_SUBTOTALS_ON_IMPORT,
   UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT, UPDATE_SELECTED_MENU
 } from '../../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
-import { navigationTree, initialState } from '../../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
+import { navigationTree } from '../../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 
 describe('NavigationTree Reducer', () => {
   it('should return new proper state in case of SELECT_OBJECT action without proper data', () => {

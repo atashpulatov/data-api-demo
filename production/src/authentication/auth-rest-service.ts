@@ -1,4 +1,5 @@
 import { moduleProxy } from '../module-proxy';
+
 import { PrivilegeIds } from '../office-constants';
 
 class AuthenticationService {
