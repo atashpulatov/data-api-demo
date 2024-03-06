@@ -1,6 +1,6 @@
 import {
-  globalNotificationTypes,
-  objectNotificationTypes,
+  GlobalNotificationTypes,
+  ObjectNotificationTypes,
 } from "@mstr/connector-components";
 
 import { IMPORT_OPERATION } from "../operation/operation-type-names";
@@ -816,14 +816,14 @@ export const mockedNotificationsFromStore = [
 
 export const mockedWarningImportNotification = {
   objectWorkingId: 1708520901973,
-  type: objectNotificationTypes.WARNING,
+  type: ObjectNotificationTypes.WARNING,
   title: "The table you try to import exceeds the worksheet limits.",
   details: "Failure details",
   operationType: IMPORT_OPERATION,
 };
 
 export const mockedGlobalWarningNotification = {
-  type: globalNotificationTypes.GLOBAL_WARNING,
+  type: GlobalNotificationTypes.GLOBAL_WARNING,
   title: "You cannot import an unpublished cube.",
   details: "Failure details",
 };

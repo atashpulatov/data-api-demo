@@ -1,4 +1,4 @@
-import { globalNotificationTypes } from "@mstr/connector-components";
+import { GlobalNotificationTypes } from "@mstr/connector-components";
 
 import {
   CLEAR_NOTIFICATIONS,
@@ -11,18 +11,18 @@ import {
 
 export const createConnectionLostNotification = () => ({
   type: CREATE_GLOBAL_NOTIFICATION,
-  payload: { type: globalNotificationTypes.CONNECTION_ERROR },
+  payload: { type: GlobalNotificationTypes.CONNECTION_ERROR },
 });
 
 export const createSessionExpiredNotification = () => ({
   type: CREATE_GLOBAL_NOTIFICATION,
-  payload: { type: globalNotificationTypes.MSTR_SESSION_EXPIRED },
+  payload: { type: GlobalNotificationTypes.MSTR_SESSION_EXPIRED },
 });
 
 export const displayGlobalNotification = (payload) => ({
   type: CREATE_GLOBAL_NOTIFICATION,
   payload: {
-    type: globalNotificationTypes.GLOBAL_WARNING,
+    type: GlobalNotificationTypes.GLOBAL_WARNING,
     ...payload,
   },
 });

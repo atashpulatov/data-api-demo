@@ -11,15 +11,6 @@ import { errorService } from "../../error/error-handler";
 import * as toggleFlag from "../../redux-reducer/office-reducer/office-actions";
 
 describe("SidePanelService", () => {
-  beforeEach(() => {
-    sidePanelNotificationHelper.popupTypes = {
-      DUPLICATE: "duplicate",
-      RANGE_TAKEN: "range_taken",
-      DATA_CLEARED: "data_cleared",
-      DATA_CLEARED_FAILED: "data_cleared_failed",
-    };
-  });
-
   afterEach(() => {
     jest.restoreAllMocks();
   });

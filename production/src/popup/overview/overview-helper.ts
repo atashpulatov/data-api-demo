@@ -1,7 +1,7 @@
 import {
-  globalNotificationTypes,
-  objectNotificationTypes,
-  popupTypes,
+  GlobalNotificationTypes,
+  ObjectNotificationTypes,
+  PopupTypes,
 } from "@mstr/connector-components";
 
 import { officeApiHelper } from "../../office/api/office-api-helper";
@@ -45,7 +45,7 @@ class OverviewHelper {
   init = (
     reduxStore: any,
     sidePanelService: any,
-    notificationService: any,
+    notificationService: any
   ): void => {
     this.store = reduxStore;
     this.sidePanelService = sidePanelService;
@@ -114,7 +114,7 @@ class OverviewHelper {
    * @param objectWorkingIds Unique Ids of the objects allowing to reference specific objects
    */
   async sendDismissNotificationRequest(
-    objectWorkingIds: number[],
+    objectWorkingIds: number[]
   ): Promise<void> {
     popupHelper.officeMessageParent({
       command: OverviewActionCommands.DISMISS_NOTIFICATION,
@@ -142,7 +142,7 @@ class OverviewHelper {
   async sendDuplicateRequest(
     objectWorkingIds: number[],
     insertNewWorksheet: boolean,
-    withEdit: boolean,
+    withEdit: boolean
   ): Promise<void> {
     popupHelper.officeMessageParent({
       command: OverviewActionCommands.DUPLICATE,
@@ -184,7 +184,7 @@ class OverviewHelper {
    */
   async sendRenameRequest(
     objectWorkingId: number,
-    newName: string,
+    newName: string
   ): Promise<void> {
     popupHelper.officeMessageParent({
       command: OverviewActionCommands.RENAME,
@@ -245,7 +245,7 @@ class OverviewHelper {
         break;
       case OverviewActionCommands.EDIT:
         this.notificationService.removeExistingNotification(
-          response.objectWorkingId,
+          response.objectWorkingId
         );
         await this.sidePanelService.edit(response.objectWorkingId);
         break;
@@ -263,7 +263,7 @@ class OverviewHelper {
           this.sidePanelService.duplicate(
             objectWorkingId,
             response.insertNewWorksheet,
-            response.withEdit,
+            response.withEdit
           );
         });
         break;
@@ -271,7 +271,7 @@ class OverviewHelper {
         sidePanelNotificationHelper.importInNewRange(
           response.objectWorkingId,
           null,
-          true,
+          true
         );
         officeReducerHelper.clearPopupData();
         break;
@@ -287,7 +287,7 @@ class OverviewHelper {
       case OverviewActionCommands.RENAME:
         this.sidePanelService.rename(
           response.objectWorkingId,
-          response.newName,
+          response.newName
         );
         break;
       case OverviewActionCommands.GO_TO_WORKSHEET:
@@ -328,7 +328,7 @@ class OverviewHelper {
       } = object;
 
       const objectNotification = notifications.find(
-        (notification) => notification.objectWorkingId === objectWorkingId,
+        (notification) => notification.objectWorkingId === objectWorkingId
       );
       let isPrompted = false;
 
@@ -385,7 +385,7 @@ class OverviewHelper {
     setDialogPopup,
   }: DialogPopup): void {
     setDialogPopup({
-      type: popupTypes.DUPLICATE,
+      type: PopupTypes.DUPLICATE,
       activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
       onImport: (isActiveCellOptionSelected) => {
         onDuplicate(objectWorkingId, !isActiveCellOptionSelected, false);
@@ -407,7 +407,7 @@ class OverviewHelper {
    */
   setRangeTakenPopup({ objectWorkingId, setDialogPopup }: DialogPopup): void {
     setDialogPopup({
-      type: popupTypes.RANGE_TAKEN_OVERVIEW,
+      type: PopupTypes.RANGE_TAKEN_OVERVIEW,
       onOk: () => {
         this.handleRangeTakenOk(objectWorkingId);
         officeReducerHelper.clearPopupData();
@@ -435,7 +435,7 @@ class OverviewHelper {
     globalNotification?: any;
   }): any => {
     const warningNotifications = notifications?.filter(
-      (notification) => notification.type === objectNotificationTypes.WARNING,
+      (notification) => notification.type === ObjectNotificationTypes.WARNING
     );
 
     const modifiedWarnings = warningNotifications?.map((warning) => {
@@ -455,7 +455,7 @@ class OverviewHelper {
     });
 
     const isGlobalWarning =
-      globalNotification?.type === globalNotificationTypes.GLOBAL_WARNING;
+      globalNotification?.type === GlobalNotificationTypes.GLOBAL_WARNING;
     const globalNotificationButtons = {
       buttons: [
         {

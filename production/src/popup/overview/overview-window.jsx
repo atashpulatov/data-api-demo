@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import {
   DataOverview,
   OfficeApplicationType,
-  objectNotificationTypes,
+  ObjectNotificationTypes,
 } from "@mstr/connector-components";
 import { Button } from "@mstr/rc";
 
@@ -54,15 +54,14 @@ export const OverviewWindowNotConnected = (props) => {
   const shouldDisableActions = useMemo(
     () =>
       notifications.some(
-        (notification) =>
-          notification.type === objectNotificationTypes.PROGRESS,
+        (notification) => notification.type === ObjectNotificationTypes.PROGRESS
       ),
-    [notifications],
+    [notifications]
   );
 
   const objectsToRender = useMemo(
     () => overviewHelper.transformExcelObjects(objects, notifications),
-    [objects, notifications],
+    [objects, notifications]
   );
 
   const notificationsToDisplay = useMemo(
@@ -71,7 +70,7 @@ export const OverviewWindowNotConnected = (props) => {
         notifications,
         globalNotification,
       }),
-    [notifications, globalNotification],
+    [notifications, globalNotification]
   );
 
   const handleCloseDialog = () => {
@@ -104,7 +103,7 @@ export const OverviewWindowNotConnected = (props) => {
     notifications.forEach((notification) => {
       setTimeout(() => {
         if (
-          notification.type === objectNotificationTypes.SUCCESS &&
+          notification.type === ObjectNotificationTypes.SUCCESS &&
           notification.operationType === REMOVE_OPERATION
         ) {
           onDismissNotification([notification.objectWorkingId]);
@@ -180,5 +179,5 @@ export const mapActionsToProps = {
 };
 export const OverviewWindow = connect(
   mapStateToProps,
-  mapActionsToProps,
+  mapActionsToProps
 )(OverviewWindowNotConnected);

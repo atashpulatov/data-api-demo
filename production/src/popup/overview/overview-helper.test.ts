@@ -1,6 +1,6 @@
 import {
-  globalNotificationTypes,
-  objectNotificationTypes,
+  GlobalNotificationTypes,
+  ObjectNotificationTypes,
 } from "@mstr/connector-components";
 
 import { notificationService } from "../../notification-v2/notification-service";
@@ -310,12 +310,12 @@ describe("overview-helper", () => {
     expect(duplicateMock).toHaveBeenCalledWith(
       objectWorkingIds[0],
       true,
-      false,
+      false
     );
     expect(duplicateMock).toHaveBeenCalledWith(
       objectWorkingIds[1],
       true,
-      false,
+      false
     );
   });
 
@@ -340,7 +340,7 @@ describe("overview-helper", () => {
     expect(importInNewRangeMock).toHaveBeenCalledWith(
       objectWorkingIds[0],
       null,
-      true,
+      true
     );
     expect(clearPopupDataMock).toHaveBeenCalled();
   });
@@ -419,7 +419,7 @@ describe("overview-helper", () => {
     // When
     const result = overviewHelper.transformExcelObjects(
       mockedObjectsFromStore,
-      mockedNotificationsFromStore,
+      mockedNotificationsFromStore
     );
 
     // Then
@@ -451,7 +451,7 @@ describe("overview-helper", () => {
   it("getWarningsToDisplay should work correctly for global notifications", async () => {
     // Given
     const expectedResult = {
-      type: globalNotificationTypes.GLOBAL_WARNING,
+      type: GlobalNotificationTypes.GLOBAL_WARNING,
       title: "You cannot import an unpublished cube.",
       details: "Failure details",
     };
@@ -471,12 +471,12 @@ describe("overview-helper", () => {
 
   it.each`
     operationType          | notificationType                    | expectedResultLength
-    ${IMPORT_OPERATION}    | ${objectNotificationTypes.WARNING}  | ${1}
-    ${IMPORT_OPERATION}    | ${objectNotificationTypes.PROGRESS} | ${0}
-    ${REMOVE_OPERATION}    | ${objectNotificationTypes.WARNING}  | ${1}
-    ${DUPLICATE_OPERATION} | ${objectNotificationTypes.WARNING}  | ${1}
-    ${REFRESH_OPERATION}   | ${objectNotificationTypes.WARNING}  | ${1}
-    ${EDIT_OPERATION}      | ${objectNotificationTypes.WARNING}  | ${1}
+    ${IMPORT_OPERATION}    | ${ObjectNotificationTypes.WARNING}  | ${1}
+    ${IMPORT_OPERATION}    | ${ObjectNotificationTypes.PROGRESS} | ${0}
+    ${REMOVE_OPERATION}    | ${ObjectNotificationTypes.WARNING}  | ${1}
+    ${DUPLICATE_OPERATION} | ${ObjectNotificationTypes.WARNING}  | ${1}
+    ${REFRESH_OPERATION}   | ${ObjectNotificationTypes.WARNING}  | ${1}
+    ${EDIT_OPERATION}      | ${ObjectNotificationTypes.WARNING}  | ${1}
   `(
     "getWarningsToDisplay should correctly determine whether to display notification as global notification in overview",
     ({ operationType, notificationType, expectedResultLength }) => {
@@ -495,7 +495,7 @@ describe("overview-helper", () => {
       // Then
       expect(result).toBeInstanceOf(Array);
       expect(result).toHaveLength(expectedResultLength);
-    },
+    }
   );
 
   it("should transform objects and notifications correctly", () => {
@@ -553,7 +553,7 @@ describe("overview-helper", () => {
     // When
     const transformedObjects = overviewHelper.transformExcelObjects(
       objects,
-      notifications,
+      notifications
     );
 
     // Then

@@ -1,5 +1,5 @@
 import React from "react";
-import { objectNotificationTypes } from "@mstr/connector-components";
+import { ObjectNotificationTypes } from "@mstr/connector-components";
 import { render } from "@testing-library/react";
 
 import { OverviewWindowNotConnected } from "./overview-window";
@@ -42,7 +42,7 @@ describe("OverviewWindowNotConnected", () => {
       {
         objectWorkingId: 1707383886748,
         title: "Duplicating",
-        type: objectNotificationTypes.PROGRESS,
+        type: ObjectNotificationTypes.PROGRESS,
         operationType: "DUPLICATE_OPERATION",
         isIndeterminate: false,
       },
@@ -58,11 +58,11 @@ describe("OverviewWindowNotConnected", () => {
 
     // When
     const { getByText, container } = render(
-      <OverviewWindowNotConnected {...props} />,
+      <OverviewWindowNotConnected {...props} />
     );
 
     const rowCheckbox = container.querySelector(
-      ".ag-checkbox-input-wrapper.ag-disabled",
+      ".ag-checkbox-input-wrapper.ag-disabled"
     );
 
     // Then
@@ -77,7 +77,7 @@ describe("OverviewWindowNotConnected", () => {
       {
         objectWorkingId: 1707383886748,
         title: "Duplicating",
-        type: objectNotificationTypes.SUCCESS,
+        type: ObjectNotificationTypes.SUCCESS,
         operationType: "DUPLICATE_OPERATION",
         isIndeterminate: false,
       },
@@ -93,11 +93,11 @@ describe("OverviewWindowNotConnected", () => {
 
     // When
     const { getByText, container } = render(
-      <OverviewWindowNotConnected {...props} />,
+      <OverviewWindowNotConnected {...props} />
     );
 
     const rowCheckbox = container.querySelector(
-      ".ag-checkbox-input-wrapper.ag-disabled",
+      ".ag-checkbox-input-wrapper.ag-disabled"
     );
 
     // Then

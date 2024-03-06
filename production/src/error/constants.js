@@ -1,4 +1,4 @@
-import { globalNotificationTypes } from "@mstr/connector-components/lib/loaded-objects/object-tile/notification/global-notification/global-notification";
+import { GlobalNotificationTypes } from "@mstr/connector-components/lib/loaded-objects/object-tile/notification/global-notification/global-notification";
 
 import { customT } from "../customTranslation";
 
@@ -56,7 +56,7 @@ export const stringMessageToErrorType = withDefaultValue(
     [incomingErrorStrings.SHEET_HIDDEN]: errorTypes.SHEET_HIDDEN_ERR,
     [incomingErrorStrings.CONNECTION_BROKEN]: errorTypes.CONNECTION_BROKEN_ERR,
   },
-  errorTypes.GENERIC_OFFICE_ERR,
+  errorTypes.GENERIC_OFFICE_ERR
 );
 
 export const httpStatusToErrorType = withDefaultValue(
@@ -71,7 +71,7 @@ export const httpStatusToErrorType = withDefaultValue(
     503: errorTypes.CONNECTION_BROKEN_ERR,
     504: errorTypes.CONNECTION_BROKEN_ERR,
   },
-  errorTypes.UNKNOWN_ERR,
+  errorTypes.UNKNOWN_ERR
 );
 
 export const errorMessages = {
@@ -150,7 +150,7 @@ const iServerErrorMessages = withDefaultValue(
     "-2147213377": errorMessages.DOSSIER_HAS_CHANGED,
     "-2147472508": errorMessages.INVALID_VIZ_KEY_MESSAGE,
   },
-  errorMessages.GENERIC_SERVER_ERR,
+  errorMessages.GENERIC_SERVER_ERR
 );
 
 export const httpStatusCodes = {
@@ -234,7 +234,7 @@ export const errorMessageFactory = withDefaultValue(
         (error.response &&
           error.response.body &&
           error.response.body.iServerCode) ||
-          "-1",
+          "-1"
       ),
     [errorTypes.PROMPTED_REPORT_ERR]: () =>
       errorMessages.NOT_SUPPORTED_PROMPTS_REFRESH,
@@ -254,11 +254,11 @@ export const errorMessageFactory = withDefaultValue(
     [errorTypes.EXCEEDS_EXCEL_API_LIMITS]: () =>
       errorMessages.EXCEEDS_EXCEL_API_LIMITS,
   },
-  ({ error }) => error.message || errorMessages.UNKNOWN_ERROR,
+  ({ error }) => error.message || errorMessages.UNKNOWN_ERROR
 );
 
 // Stores an array containing all the global notification types (all warnings and errors)
 // that we read from connector-components
 export const globalNotificationWarningAndErrorStrings = Object.values(
-  globalNotificationTypes || {},
+  GlobalNotificationTypes || {}
 );

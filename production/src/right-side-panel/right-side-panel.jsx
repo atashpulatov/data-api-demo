@@ -2,7 +2,7 @@
 // eslint-disable-next-line simple-import-sort/imports
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { popupTypes, SidePanel } from "@mstr/connector-components";
+import { PopupTypes, SidePanel } from "@mstr/connector-components";
 
 import PropTypes from "prop-types";
 import { notificationService } from "../notification-v2/notification-service";
@@ -71,7 +71,7 @@ export const RightSidePanelNotConnected = ({
       try {
         await sidePanelEventHelper.addRemoveObjectListener();
         await sidePanelEventHelper.initializeActiveCellChangedListener(
-          updateActiveCellAddress,
+          updateActiveCellAddress
         );
         await sidePanelService.initReusePromptAnswers();
       } catch (error) {
@@ -95,7 +95,7 @@ export const RightSidePanelNotConnected = ({
   React.useEffect(() => {
     if (
       sidePanelPopup !== null &&
-      sidePanelPopup.type === popupTypes.DUPLICATE &&
+      sidePanelPopup.type === PopupTypes.DUPLICATE &&
       duplicatedObjectId !== null
     ) {
       sidePanelNotificationHelper.setDuplicatePopup({
@@ -117,7 +117,7 @@ export const RightSidePanelNotConnected = ({
       const { objectWorkingId } = popupData;
       const objectData =
         officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(
-          objectWorkingId,
+          objectWorkingId
         );
       const isDossier =
         objectData.mstrObjectType.name ===
@@ -128,7 +128,7 @@ export const RightSidePanelNotConnected = ({
       if ((isDossier || isReport) && toggleCurtain && !isDataOverviewOpen) {
         popupController.sendMessageToDialog(JSON.stringify({ popupData }));
       }
-    } else if (sidePanelPopup?.type === popupTypes.RANGE_TAKEN) {
+    } else if (sidePanelPopup?.type === PopupTypes.RANGE_TAKEN) {
       setSidePanelPopup(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -139,8 +139,8 @@ export const RightSidePanelNotConnected = ({
       sidePanelNotificationHelper.injectNotificationsToObjects(
         loadedObjects,
         notifications,
-        operations,
-      ),
+        operations
+      )
     );
   }, [loadedObjects, notifications, operations]);
 
@@ -200,7 +200,7 @@ export const RightSidePanelNotConnected = ({
   const handleReusePromptAnswers = async () => {
     await wrapper(
       sidePanelService.toggleReusePromptAnswers,
-      reusePromptAnswers,
+      reusePromptAnswers
     );
   };
 
@@ -218,7 +218,7 @@ export const RightSidePanelNotConnected = ({
           globalNotification,
           activeCellAddress,
           popupData,
-        }),
+        })
       );
     }
   }, [
@@ -315,7 +315,7 @@ const mapDispatchToProps = {
 
 export const RightSidePanel = connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(RightSidePanelNotConnected);
 
 RightSidePanelNotConnected.propTypes = {
@@ -351,7 +351,7 @@ RightSidePanelNotConnected.propTypes = {
         }),
       ]),
       isSelected: PropTypes.bool,
-    }),
+    })
   ).isRequired,
   notifications: PropTypes.arrayOf(
     PropTypes.shape({
@@ -360,7 +360,7 @@ RightSidePanelNotConnected.propTypes = {
       details: PropTypes.string,
       percentage: PropTypes.number,
       dismissNotification: PropTypes.func,
-    }),
+    })
   ),
   operations: PropTypes.arrayOf(
     PropTypes.shape({
@@ -385,7 +385,7 @@ RightSidePanelNotConnected.propTypes = {
       totalRows: PropTypes.number,
       loadedRows: PropTypes.number,
       shouldFormat: PropTypes.bool,
-    }),
+    })
   ),
   isConfirm: PropTypes.bool,
   isSettings: PropTypes.bool,

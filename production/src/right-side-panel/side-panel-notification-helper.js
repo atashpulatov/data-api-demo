@@ -1,4 +1,4 @@
-import { popupTypes } from "@mstr/connector-components";
+import { PopupTypes } from "@mstr/connector-components";
 
 import { authenticationHelper } from "../authentication/authentication-helper";
 import { homeHelper } from "../home/home-helper";
@@ -24,7 +24,6 @@ const CONNECTION_CHECK_TIMEOUT = 3000;
 class SidePanelNotificationHelper {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
-    this.popupTypes = popupTypes;
   };
 
   /**
@@ -50,13 +49,13 @@ class SidePanelNotificationHelper {
     };
     setDuplicatedObjectId(objectWorkingId);
     setSidePanelPopup({
-      type: this.popupTypes.DUPLICATE,
+      type: PopupTypes.DUPLICATE,
       activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
       onImport: (isActiveCellOptionSelected) => {
         sidePanelService.duplicate(
           objectWorkingId,
           !isActiveCellOptionSelected,
-          false,
+          false
         );
         closePopup();
       },
@@ -64,7 +63,7 @@ class SidePanelNotificationHelper {
         sidePanelService.duplicate(
           objectWorkingId,
           !isActiveCellOptionSelected,
-          true,
+          true
         );
         closePopup();
       },
@@ -94,13 +93,13 @@ class SidePanelNotificationHelper {
     };
 
     setSidePanelPopup({
-      type: this.popupTypes.RANGE_TAKEN,
+      type: PopupTypes.RANGE_TAKEN,
       activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
       onOk: (isActiveCellOptionSelected) => {
         this.importInNewRange(
           objectWorkingId,
           activeCellAddress,
-          !isActiveCellOptionSelected,
+          !isActiveCellOptionSelected
         );
         officeReducerHelper.clearPopupData();
       },
@@ -119,7 +118,7 @@ class SidePanelNotificationHelper {
   importInNewRange = (
     objectWorkingId,
     activeCellAddress,
-    insertNewWorksheet,
+    insertNewWorksheet
   ) => {
     this.reduxStore.dispatch(
       updateOperation({
@@ -128,7 +127,7 @@ class SidePanelNotificationHelper {
         repeatStep: true,
         tableChanged: true,
         insertNewWorksheet,
-      }),
+      })
     );
   };
 
@@ -144,12 +143,12 @@ class SidePanelNotificationHelper {
       this.reduxStore.getState().officeReducer;
     isSecured &&
       (popup = {
-        type: this.popupTypes.DATA_CLEARED,
+        type: PopupTypes.DATA_CLEARED,
         onViewData: this.handleViewData,
       });
     isClearDataFailed &&
       (popup = {
-        type: this.popupTypes.DATA_CLEARED_FAILED,
+        type: PopupTypes.DATA_CLEARED_FAILED,
         onViewData: this.handleViewData,
       });
     return popup;
@@ -163,12 +162,12 @@ class SidePanelNotificationHelper {
       await officeApiHelper.checkStatusOfSessions();
       this.reduxStore.dispatch(officeActions.toggleSecuredFlag(false));
       this.reduxStore.dispatch(
-        officeActions.toggleIsClearDataFailedFlag(false),
+        officeActions.toggleIsClearDataFailedFlag(false)
       );
       sidePanelService.refresh(
         officeReducerHelper
           .getObjectsListFromObjectReducer()
-          .map(({ objectWorkingId }) => objectWorkingId),
+          .map(({ objectWorkingId }) => objectWorkingId)
       );
     } catch (error) {
       errorService.handleError(error);
@@ -185,11 +184,11 @@ class SidePanelNotificationHelper {
   injectNotificationsToObjects = (loadedObjects, notifications, operations) =>
     loadedObjects.map((object) => {
       const objectOperation = operations.find(
-        (operation) => operation.objectWorkingId === object.objectWorkingId,
+        (operation) => operation.objectWorkingId === object.objectWorkingId
       );
       const objectNotificationData = notifications.find(
         (notification) =>
-          notification.objectWorkingId === object.objectWorkingId,
+          notification.objectWorkingId === object.objectWorkingId
       );
       // Validate that isFetchingComplete is not undefined
       const operationBasedNotificationData =

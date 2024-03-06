@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { objectNotificationTypes } from "@mstr/connector-components";
+import { ObjectNotificationTypes } from "@mstr/connector-components";
 
 import { notificationService } from "../../notification-v2/notification-service";
 
@@ -88,13 +88,13 @@ const createProgressNotification = (state, payload) => {
   let notificationButtons;
   if (operationType !== CLEAR_DATA_OPERATION) {
     notificationButtons = getNotificationButtons(
-      getCancelButton(objectWorkingId, operationType),
+      getCancelButton(objectWorkingId, operationType)
     );
   }
   const newNotification = {
     objectWorkingId,
     title: customT(titleOperationInProgressMap.PENDING_OPERATION),
-    type: objectNotificationTypes.PROGRESS,
+    type: ObjectNotificationTypes.PROGRESS,
     operationType,
     children: notificationButtons,
   };
@@ -107,7 +107,7 @@ const moveNotificationToInProgress = (state, payload) => {
   const updatedNotification = {
     ...notificationToUpdate,
     title: customT(
-      titleOperationInProgressMap[notificationToUpdate.operationType],
+      titleOperationInProgressMap[notificationToUpdate.operationType]
     ),
     isIndeterminate: getIsIndeterminate(notificationToUpdate),
   };
@@ -120,19 +120,19 @@ const displayNotificationCompleted = (state, payload) => {
     getNotificationToUpdate(state, payload);
   const updatedNotification = {
     ...notificationToUpdate,
-    type: objectNotificationTypes.SUCCESS,
+    type: ObjectNotificationTypes.SUCCESS,
     title: customT(
-      titleOperationCompletedMap[notificationToUpdate.operationType],
+      titleOperationCompletedMap[notificationToUpdate.operationType]
     ),
     dismissNotification:
       notificationToUpdate.operationType === REMOVE_OPERATION
         ? () =>
             notificationService.dismissSuccessfulRemoveNotification(
-              notificationToUpdate.objectWorkingId,
+              notificationToUpdate.objectWorkingId
             )
         : () =>
             notificationService.dismissNotification(
-              notificationToUpdate.objectWorkingId,
+              notificationToUpdate.objectWorkingId
             ),
   };
   return createNewState(state, notificationToUpdateIndex, updatedNotification);
@@ -144,7 +144,7 @@ const deleteNotification = (state, payload) => {
     globalNotification: state.globalNotification,
   };
   newState.notifications = newState.notifications.filter(
-    (notification) => notification.objectWorkingId !== payload.objectWorkingId,
+    (notification) => notification.objectWorkingId !== payload.objectWorkingId
   );
   return newState;
 };
@@ -158,7 +158,7 @@ const displayNotificationWarning = (state, payload) => {
 
   const updatedNotification = {
     objectWorkingId: payload.objectWorkingId,
-    type: objectNotificationTypes.WARNING,
+    type: ObjectNotificationTypes.WARNING,
     title: customT(title),
     details: customT(payload.notification.message),
     children: getNotificationButtons(buttons),
@@ -180,7 +180,7 @@ const markFetchingComplete = (state, payload) => {
     return createNewState(
       state,
       notificationToUpdateIndex,
-      updatedNotification,
+      updatedNotification
     );
   }
   return state;
@@ -253,7 +253,7 @@ function createNewState(state, notificationToUpdateIndex, updatedNotification) {
   newState.notifications.splice(
     notificationToUpdateIndex,
     1,
-    updatedNotification,
+    updatedNotification
   );
   return newState;
 }
@@ -285,7 +285,7 @@ function getIsIndeterminate(notificationToUpdate) {
 
 function getNotificationIndex(state, payload) {
   const notificationToUpdateIndex = state.notifications.findIndex(
-    (notification) => notification.objectWorkingId === payload.objectWorkingId,
+    (notification) => notification.objectWorkingId === payload.objectWorkingId
   );
   if (notificationToUpdateIndex === -1) {
     throw new Error();
