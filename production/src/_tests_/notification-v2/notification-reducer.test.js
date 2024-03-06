@@ -1,7 +1,5 @@
 import { notificationService } from '../../notification-v2/notification-service';
 
-import * as customTranslations from '../../customTranslation';
-import * as notificationButtonsModule from '../../notification-v2/notification-buttons';
 import {
   DISPLAY_NOTIFICATION_COMPLETED,
   MOVE_NOTIFICATION_TO_IN_PROGRESS,
@@ -396,86 +394,87 @@ describe('Notification reducer', () => {
         );
       });
 
-    describe('deleteNotification', () => {
-      it('should delete one action on single array', () => {
-        // given
-        const action = {
-          type: DELETE_NOTIFICATION,
-          payload: { objectWorkingId: 'someId1' },
-        };
+      describe('deleteNotification', () => {
+        it('should delete one action on single array', () => {
+          // given
+          const action = {
+            type: DELETE_NOTIFICATION,
+            payload: { objectWorkingId: 'someId1' },
+          };
 
-        // when
-        const resultState = notificationReducer(initialState.singleImport, action);
+          // when
+          const resultState = notificationReducer(initialState.singleImport, action);
 
-        // then
-        expect(resultState).toEqual({ notifications: [] });
-      });
+          // then
+          expect(resultState).toEqual({ notifications: [] });
+        });
 
-      it('should delete one action on multiple array', () => {
-        // given
-        const action = {
-          type: DELETE_NOTIFICATION,
-          payload: { objectWorkingId: 'someId2' },
-        };
+        it('should delete one action on multiple array', () => {
+          // given
+          const action = {
+            type: DELETE_NOTIFICATION,
+            payload: { objectWorkingId: 'someId2' },
+          };
 
-        // when
-        const resultState = notificationReducer(initialState.multiple, action);
+          // when
+          const resultState = notificationReducer(initialState.multiple, action);
 
-        // then
-        expect(resultState).toEqual({
-          notifications: [
-            initialState.multiple.notifications[0],
-            initialState.multiple.notifications[2],
-          ],
+          // then
+          expect(resultState).toEqual({
+            notifications: [
+              initialState.multiple.notifications[0],
+              initialState.multiple.notifications[2],
+            ],
+          });
         });
       });
-    });
-    describe('deleteAllNotifications', () => {
-      it('should delete all notifications if isSecured is true', () => {
-        // given
-        const action = {
-          type: officeProperties.actions.toggleSecuredFlag,
-          isSecured: true,
-        };
+      describe('deleteAllNotifications', () => {
+        it('should delete all notifications if isSecured is true', () => {
+          // given
+          const action = {
+            type: officeProperties.actions.toggleSecuredFlag,
+            isSecured: true,
+          };
 
-        // when
-        const resultState = notificationReducer(initialStateProgress, action);
+          // when
+          const resultState = notificationReducer(initialStateProgress, action);
 
-        // then
-        expect(resultState.notifications).toHaveLength(0);
-        expect(resultState.globalNotification).toEqual(initialStateProgress.globalNotification);
+          // then
+          expect(resultState.notifications).toHaveLength(0);
+          expect(resultState.globalNotification).toEqual(initialStateProgress.globalNotification);
+        });
+
+        it('should return state if isSecured is false', () => {
+          // given
+          const action = {
+            type: officeProperties.actions.toggleSecuredFlag,
+            isSecured: false,
+          };
+
+          // when
+          const resultState = notificationReducer(initialStateProgress, action);
+
+          // then
+          expect(resultState.notifications).toHaveLength(3);
+          expect(resultState.globalNotification).toEqual(initialStateProgress.globalNotification);
+        });
       });
 
-      it('should return state if isSecured is false', () => {
-        // given
-        const action = {
-          type: officeProperties.actions.toggleSecuredFlag,
-          isSecured: false,
-        };
+      describe('restoreAllNotifications', () => {
+        it('should restore all notifications', () => {
+          // given
+          const action = {
+            type: 'RESTORE_ALL_NOTIFICATIONS',
+            payload: updatedStateProgress.notifications,
+          };
 
-        // when
-        const resultState = notificationReducer(initialStateProgress, action);
+          // when
+          const resultState = notificationReducer(initialStateProgress, action);
 
-        // then
-        expect(resultState.notifications).toHaveLength(3);
-        expect(resultState.globalNotification).toEqual(initialStateProgress.globalNotification);
-      });
-    });
-
-    describe('restoreAllNotifications', () => {
-      it('should restore all notifications', () => {
-        // given
-        const action = {
-          type: 'RESTORE_ALL_NOTIFICATIONS',
-          payload: updatedStateProgress.notifications,
-        };
-
-        // when
-        const resultState = notificationReducer(initialStateProgress, action);
-
-        // then
-        expect(resultState.notifications).toEqual(updatedStateProgress.notifications);
-        expect(resultState.globalNotification).toEqual(initialStateProgress.globalNotification);
+          // then
+          expect(resultState.notifications).toEqual(updatedStateProgress.notifications);
+          expect(resultState.globalNotification).toEqual(initialStateProgress.globalNotification);
+        });
       });
     });
   });
