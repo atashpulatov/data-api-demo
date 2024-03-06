@@ -1,24 +1,24 @@
-import React, { useState } from "react";
-import { connect } from "react-redux";
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
 
-import { popupHelper } from "../popup/popup-helper";
+import { popupHelper } from '../popup/popup-helper';
 
-import { AttributeSelectorWindowNotConnectedProps } from "./attribute-selector-types";
+import { AttributeSelectorWindowNotConnectedProps } from './attribute-selector-types';
 
-import { PopupButtons } from "../popup/popup-buttons/popup-buttons";
-import { officeProperties } from "../redux-reducer/office-reducer/office-properties";
-import { popupStateActions } from "../redux-reducer/popup-state-reducer/popup-state-actions";
-import { AttributeSelector } from "./attribute-selector";
-import { selectorProperties } from "./selector-properties";
-import { objectImportType } from "../mstr-object/constants";
+import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
+import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
+import { AttributeSelector } from './attribute-selector';
+import { selectorProperties } from './selector-properties';
+import { objectImportType } from '../mstr-object/constants';
 
-import "../home/home.css";
+import '../home/home.css';
 
-export const DEFAULT_PROJECT_NAME = "Prepare Data";
+export const DEFAULT_PROJECT_NAME = 'Prepare Data';
 
 export const AttributeSelectorWindowNotConnected: React.FC<
   AttributeSelectorWindowNotConnectedProps
-> = (props) => {
+> = props => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [attributesSelected, setAttributesSelected] = useState(false);
@@ -40,15 +40,14 @@ export const AttributeSelectorWindowNotConnected: React.FC<
     chosenObjectSubtype: string,
     body: any,
     chosenObjectName: string,
-    filterDetails: any,
+    filterDetails: any
   ): void => {
     const {
       chosenObject: { chosenObjectName: objectName },
     } = props;
     chosenObjectName = chosenObjectName || objectName;
 
-    const { chosenObject, editedObject, importSubtotal, displayAttrFormNames } =
-      props;
+    const { chosenObject, editedObject, importSubtotal, displayAttrFormNames } = props;
 
     const subtotalsInfo = {
       importSubtotal:
@@ -86,18 +85,17 @@ export const AttributeSelectorWindowNotConnected: React.FC<
     setTriggerUpdate(false);
   };
 
-  const { handleBack, chosenObject, mstrData, objectName, editedObject } =
-    props;
+  const { handleBack, chosenObject, mstrData, objectName, editedObject } = props;
   const { isPrompted } = mstrData;
   const { chosenObjectName } = chosenObject;
   const typeOfObject = editedObject || chosenObject;
   const typeName = typeOfObject.mstrObjectType
     ? typeOfObject.mstrObjectType.name.charAt(0).toUpperCase() +
       typeOfObject.mstrObjectType.name.substring(1)
-    : "Data";
+    : 'Data';
   const isEdit = chosenObjectName === DEFAULT_PROJECT_NAME;
   return (
-    <div className="attribute-selector-window">
+    <div className='attribute-selector-window'>
       {/* @ts-expect-error */}
       <AttributeSelector
         title={`Import ${typeName} > ${objectName}`}
@@ -134,16 +132,13 @@ const mapStateToProps = (state: {
   popupReducer: { editedObject: any };
   popupStateReducer: any;
 }): any => {
-  const { importSubtotal, displayAttrFormNames, ...chosenObject } =
-    state.navigationTree;
+  const { importSubtotal, displayAttrFormNames, ...chosenObject } = state.navigationTree;
   const { editedObject } = state.popupReducer;
 
   return {
     mstrData: { ...state.popupStateReducer },
     chosenObject,
-    objectName: editedObject
-      ? editedObject.name
-      : chosenObject.chosenObjectName,
+    objectName: editedObject ? editedObject.name : chosenObject.chosenObjectName,
     importSubtotal,
     displayAttrFormNames,
     editedObject: state.popupReducer.editedObject,
@@ -157,5 +152,5 @@ const mapDispatchToProps = {
 
 export const AttributeSelectorWindow = connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(AttributeSelectorWindowNotConnected);

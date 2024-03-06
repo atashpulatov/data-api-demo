@@ -1,9 +1,9 @@
-import { officeApiCrosstabHelper } from "../api/office-api-crosstab-helper";
-import { officeApiHelper } from "../api/office-api-helper";
-import { officeRemoveHelper } from "./office-remove-helper";
+import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
+import { officeApiHelper } from '../api/office-api-helper';
+import { officeRemoveHelper } from './office-remove-helper';
 
-import operationErrorHandler from "../../operation/operation-error-handler";
-import operationStepDispatcher from "../../operation/operation-step-dispatcher";
+import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepRemoveObjectTable {
   /**
@@ -33,10 +33,7 @@ class StepRemoveObjectTable {
 
     try {
       excelContext = await officeApiHelper.getExcelContext();
-      objectExist = await officeRemoveHelper.checkIfObjectExist(
-        objectData,
-        excelContext,
-      );
+      objectExist = await officeRemoveHelper.checkIfObjectExist(objectData, excelContext);
 
       if (!objectExist) {
         operationStepDispatcher.completeRemoveObjectTable(objectWorkingId);
@@ -47,7 +44,7 @@ class StepRemoveObjectTable {
           await officeApiCrosstabHelper.getCrosstabHeadersSafely(
             crosstabHeaderDimensions,
             officeTable,
-            excelContext,
+            excelContext
           );
 
         const validCrosstabHeaderDimnesions = {
@@ -60,7 +57,7 @@ class StepRemoveObjectTable {
           officeTable,
           excelContext,
           isCrosstab,
-          validCrosstabHeaderDimnesions,
+          validCrosstabHeaderDimnesions
         );
 
         operationStepDispatcher.completeRemoveObjectTable(objectWorkingId);
@@ -68,11 +65,7 @@ class StepRemoveObjectTable {
     } catch (error) {
       const errorToHandle = clearEmptyCrosstabRowError || error;
       if (objectExist) {
-        operationErrorHandler.handleOperationError(
-          objectData,
-          operationData,
-          errorToHandle,
-        );
+        operationErrorHandler.handleOperationError(objectData, operationData, errorToHandle);
       } else {
         console.error(errorToHandle);
         operationStepDispatcher.completeRemoveObjectTable(objectWorkingId);

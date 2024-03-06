@@ -1,4 +1,4 @@
-import MstrObjectType from "../mstr-object-type-enum";
+import MstrObjectType from '../mstr-object-type-enum';
 
 class MstrAttributeMetricHelper {
   /**
@@ -12,7 +12,7 @@ class MstrAttributeMetricHelper {
     // equivalent to grid.columnSets.flatMap(columnSet => columnSet.columns);
     const columns = grid.columnSets.reduce(
       (allColumns, currColumnSet) => allColumns.concat(currColumnSet.columns),
-      [],
+      []
     );
     const { rows } = grid;
     const attributes = this.extractAttributes(rows, columns);
@@ -46,8 +46,8 @@ class MstrAttributeMetricHelper {
    */
   extractAttributes = (rows, columns) =>
     columns
-      .filter(({ type }) => type === "attribute")
-      .concat(rows.filter(({ type }) => type === "attribute"))
+      .filter(({ type }) => type === 'attribute')
+      .concat(rows.filter(({ type }) => type === 'attribute'))
       .map(({ id, name }) => ({ id, name }));
 
   /**
@@ -60,14 +60,10 @@ class MstrAttributeMetricHelper {
    */
   extractMetrics = (rows, columns) =>
     columns
-      .filter(({ type }) => type === "templateMetrics")
-      .concat(rows.filter(({ type }) => type === "templateMetrics"))
+      .filter(({ type }) => type === 'templateMetrics')
+      .concat(rows.filter(({ type }) => type === 'templateMetrics'))
       // equivalent to flatMap(({ elements }) => elements)
-      .reduce(
-        (allElements, { elements: currElements }) =>
-          allElements.concat(currElements),
-        [],
-      )
+      .reduce((allElements, { elements: currElements }) => allElements.concat(currElements), [])
       .map(({ id, name }) => ({ id, name }));
 
   /**
@@ -77,13 +73,12 @@ class MstrAttributeMetricHelper {
    *
    * @returns {Object[]} Array of metric objects with id and name properties
    */
-  extractMetricsInRows = (body) => {
+  extractMetricsInRows = body => {
     const columns =
       body.visualizationType === MstrObjectType.visualizationType.COMPOUND_GRID
         ? body.definition.grid.columnSets.reduce(
-            (allColumns, currColumnSet) =>
-              allColumns.concat(currColumnSet.columns),
-            [],
+            (allColumns, currColumnSet) => allColumns.concat(currColumnSet.columns),
+            []
           )
         : body.definition.grid.columns;
     const { rows } = body.definition.grid;
@@ -102,10 +97,7 @@ class MstrAttributeMetricHelper {
    */
   getMetricsDifference = (fetchedMetrics, currentMetrics) =>
     fetchedMetrics.filter(
-      (fetchedMetric) =>
-        !currentMetrics.some(
-          (currentMetric) => currentMetric.id === fetchedMetric.id,
-        ),
+      fetchedMetric => !currentMetrics.some(currentMetric => currentMetric.id === fetchedMetric.id)
     );
 
   /**
@@ -129,9 +121,9 @@ class MstrAttributeMetricHelper {
    *
    * @returns {boolean} true if metrics are in rows false otherwise
    */
-  isMetricInRows = (body) =>
+  isMetricInRows = body =>
     body.definition.grid.metricsPosition
-      ? body.definition.grid.metricsPosition.axis === "rows"
+      ? body.definition.grid.metricsPosition.axis === 'rows'
       : false;
 
   /**
@@ -156,10 +148,8 @@ class MstrAttributeMetricHelper {
         const { index: metricsIndex } = grid.metricsPosition;
         const { rows } = fetchedBody.data.headers;
 
-        rows.forEach((fetchedBodyRow) => {
-          metricsRows.push(
-            grid.rows[metricsIndex].elements[fetchedBodyRow[metricsIndex]],
-          );
+        rows.forEach(fetchedBodyRow => {
+          metricsRows.push(grid.rows[metricsIndex].elements[fetchedBodyRow[metricsIndex]]);
         });
       }
     }

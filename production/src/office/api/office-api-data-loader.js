@@ -62,11 +62,9 @@ class OfficeApiDataLoader {
    *
    * @throws Error when excelContext is empty.
    */
-  validateExcelContext = (excelContext) => {
+  validateExcelContext = excelContext => {
     if (!excelContext) {
-      throw new Error(
-        `Cannot load data from Excel, excel context is [${excelContext}]`,
-      );
+      throw new Error(`Cannot load data from Excel, excel context is [${excelContext}]`);
     }
   };
 
@@ -77,15 +75,13 @@ class OfficeApiDataLoader {
    *
    * @throws Error when item, item.object or item.key is empty.
    */
-  validateItem = (item) => {
+  validateItem = item => {
     if (!item) {
       throw new Error(`Cannot load data from Excel, item is [${item}]`);
     }
 
     if (!item.object) {
-      throw new Error(
-        `Cannot load data from Excel, item.object is [${item.object}]`,
-      );
+      throw new Error(`Cannot load data from Excel, item.object is [${item.object}]`);
     }
 
     if (!item.key) {

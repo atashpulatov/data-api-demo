@@ -1,20 +1,20 @@
-import React from "react";
-import { Provider } from "react-redux";
-import { cleanup, fireEvent, render, waitFor } from "@testing-library/react";
+import React from 'react';
+import { Provider } from 'react-redux';
+import { cleanup, fireEvent, render, waitFor } from '@testing-library/react';
 
-import { popupHelper } from "../../popup/popup-helper";
-import { EXTEND_SESSION, sessionHelper } from "../../storage/session-helper";
+import { popupHelper } from '../../popup/popup-helper';
+import { EXTEND_SESSION, sessionHelper } from '../../storage/session-helper';
 
-import { reduxStore } from "../../store";
+import { reduxStore } from '../../store';
 
-import { PromptsWindowNotConnected } from "../../prompts/prompts-window";
+import { PromptsWindowNotConnected } from '../../prompts/prompts-window';
 
-jest.mock("../../popup/popup-helper");
+jest.mock('../../popup/popup-helper');
 
-describe("PromptsWindowNotConnected", () => {
+describe('PromptsWindowNotConnected', () => {
   const mstrData = {
-    chosenProjectId: "projectId",
-    chosenObjectId: "chosenObjectId",
+    chosenProjectId: 'projectId',
+    chosenObjectId: 'chosenObjectId',
     promptsAnswers: [{}],
   };
 
@@ -24,12 +24,12 @@ describe("PromptsWindowNotConnected", () => {
   };
 
   const editedObject = {
-    promptsAnswers: ["promptsAnswers"],
+    promptsAnswers: ['promptsAnswers'],
   };
 
   const session = {
-    envUrl: "url/test",
-    authToken: "d3d3d3",
+    envUrl: 'url/test',
+    authToken: 'd3d3d3',
   };
 
   const repromptsQueue = {
@@ -41,7 +41,7 @@ describe("PromptsWindowNotConnected", () => {
     jest.restoreAllMocks();
   });
 
-  it("should render with props given", () => {
+  it('should render with props given', () => {
     // given
     // when
     const wrappedComponent = render(
@@ -53,15 +53,14 @@ describe("PromptsWindowNotConnected", () => {
           session={session}
           repromptsQueue={repromptsQueue}
         />
-      </Provider>,
+      </Provider>
     );
     // then
-    const promptsContainer =
-      wrappedComponent.container.getElementsByClassName("promptsContainer");
+    const promptsContainer = wrappedComponent.container.getElementsByClassName('promptsContainer');
     expect(promptsContainer).toBeDefined();
   });
 
-  it("should render with props given for Reprompt workflow", () => {
+  it('should render with props given for Reprompt workflow', () => {
     const repromptPopupState = {
       isReprompt: true,
       isEdit: false,
@@ -77,17 +76,16 @@ describe("PromptsWindowNotConnected", () => {
           session={session}
           repromptsQueue={repromptsQueue}
         />
-      </Provider>,
+      </Provider>
     );
     // then
-    const promptsContainer =
-      wrappedComponent.container.getElementsByClassName("promptsContainer");
+    const promptsContainer = wrappedComponent.container.getElementsByClassName('promptsContainer');
     expect(promptsContainer).toBeDefined();
   });
 
-  it("addEventListener should be called on render", async () => {
+  it('addEventListener should be called on render', async () => {
     // given
-    const addEventListener = jest.spyOn(window, "addEventListener");
+    const addEventListener = jest.spyOn(window, 'addEventListener');
     // when
     render(
       <Provider store={reduxStore}>
@@ -98,7 +96,7 @@ describe("PromptsWindowNotConnected", () => {
           session={session}
           repromptsQueue={repromptsQueue}
         />
-      </Provider>,
+      </Provider>
     );
     // then
     await waitFor(() => {
@@ -106,9 +104,9 @@ describe("PromptsWindowNotConnected", () => {
     });
   });
 
-  it("removeEventListener should be called on unrender", async () => {
+  it('removeEventListener should be called on unrender', async () => {
     // given
-    const removeEventListener = jest.spyOn(window, "removeEventListener");
+    const removeEventListener = jest.spyOn(window, 'removeEventListener');
     // when
     render(
       <Provider store={reduxStore}>
@@ -119,7 +117,7 @@ describe("PromptsWindowNotConnected", () => {
           session={session}
           repromptsQueue={repromptsQueue}
         />
-      </Provider>,
+      </Provider>
     );
     cleanup();
     // then
@@ -128,12 +126,12 @@ describe("PromptsWindowNotConnected", () => {
     });
   });
 
-  it("handlePopupErrors should be called on proper messageReceived", () => {
+  it('handlePopupErrors should be called on proper messageReceived', () => {
     // given
     popupHelper.handlePopupErrors = jest.fn();
     const givenMessage = {
       data: {
-        value: { statusCode: 201, iServerErrorCode: 1234, message: "test" },
+        value: { statusCode: 201, iServerErrorCode: 1234, message: 'test' },
       },
     };
 
@@ -163,18 +161,18 @@ describe("PromptsWindowNotConnected", () => {
           session={session}
           repromptsQueue={repromptsQueue}
         />
-      </Provider>,
+      </Provider>
     );
 
-    fireEvent(window, new MessageEvent("message", givenMessage));
+    fireEvent(window, new MessageEvent('message', givenMessage));
     // then
     expect(popupHelper.handlePopupErrors).toBeCalledWith(expectedObject);
   });
 
-  it("handlePopupErrors should not be called on different messageReceived", () => {
+  it('handlePopupErrors should not be called on different messageReceived', () => {
     // given
     popupHelper.handlePopupErrors = jest.fn();
-    const givenMessage = { data: "test" };
+    const givenMessage = { data: 'test' };
 
     // when
     render(
@@ -186,22 +184,22 @@ describe("PromptsWindowNotConnected", () => {
           session={session}
           repromptsQueue={repromptsQueue}
         />
-      </Provider>,
+      </Provider>
     );
 
-    fireEvent(window, new MessageEvent("message", givenMessage));
+    fireEvent(window, new MessageEvent('message', givenMessage));
     // then
     expect(popupHelper.handlePopupErrors).not.toBeCalled();
   });
 
-  it("keepSessionAlive should be called on EXTEND_SESSION message", () => {
+  it('keepSessionAlive should be called on EXTEND_SESSION message', () => {
     // given
     // usually origin is added by the browser which is executing the code, but in test we need to add it manualy
-    const message = { data: EXTEND_SESSION, origin: "http://localhost" };
+    const message = { data: EXTEND_SESSION, origin: 'http://localhost' };
     global.Office = {
       context: {
         ui: { messageParent: () => {} },
-        diagnostics: { host: "host", platform: "platform", version: "version" },
+        diagnostics: { host: 'host', platform: 'platform', version: 'version' },
         requirements: { isSetSupported: jest.fn() },
       },
     };
@@ -216,19 +214,19 @@ describe("PromptsWindowNotConnected", () => {
           session={session}
           repromptsQueue={repromptsQueue}
         />
-      </Provider>,
+      </Provider>
     );
 
     const keepSessionAlive = jest
-      .spyOn(sessionHelper, "keepSessionAlive")
+      .spyOn(sessionHelper, 'keepSessionAlive')
       .mockImplementation(() => {});
-    fireEvent(window, new MessageEvent("message", message));
+    fireEvent(window, new MessageEvent('message', message));
 
     // then
     expect(keepSessionAlive).toHaveBeenCalled();
   });
 
-  it("keepSessionAlive should not be called on different messages", () => {
+  it('keepSessionAlive should not be called on different messages', () => {
     // given
     const message = {};
 
@@ -242,21 +240,21 @@ describe("PromptsWindowNotConnected", () => {
           session={session}
           repromptsQueue={repromptsQueue}
         />
-      </Provider>,
+      </Provider>
     );
 
     const keepSessionAlive = jest
-      .spyOn(sessionHelper, "keepSessionAlive")
+      .spyOn(sessionHelper, 'keepSessionAlive')
       .mockImplementation(() => {});
-    fireEvent(window, new MessageEvent("message", message));
+    fireEvent(window, new MessageEvent('message', message));
 
     // then
     expect(keepSessionAlive).not.toBeCalled();
   });
 
-  it("should call installSessionProlongingHandler on render", () => {
+  it('should call installSessionProlongingHandler on render', () => {
     // given
-    jest.spyOn(sessionHelper, "installSessionProlongingHandler");
+    jest.spyOn(sessionHelper, 'installSessionProlongingHandler');
 
     // when
     render(
@@ -268,7 +266,7 @@ describe("PromptsWindowNotConnected", () => {
           session={session}
           repromptsQueue={repromptsQueue}
         />
-      </Provider>,
+      </Provider>
     );
     // then
     expect(sessionHelper.installSessionProlongingHandler).toHaveBeenCalled();

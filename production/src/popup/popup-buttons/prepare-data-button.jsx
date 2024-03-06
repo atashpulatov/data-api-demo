@@ -1,12 +1,12 @@
-import React from "react";
-import { Button, Tooltip } from "@mstr/rc";
+import React from 'react';
+import { Button, Tooltip } from '@mstr/rc';
 
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 export const PrepareDataButton = ({ disableReason, handleSecondary, t }) => (
-  <Tooltip content={t(`${disableReason}`)} placement="top-end">
-    <Button id="prepare" onClick={handleSecondary} disabled={!!disableReason}>
-      {t("Prepare Data")}
+  <Tooltip content={t(`${disableReason}`)} placement='top-end'>
+    <Button id='prepare' onClick={handleSecondary} disabled={!!disableReason}>
+      {t('Prepare Data')}
     </Button>
   </Tooltip>
 );

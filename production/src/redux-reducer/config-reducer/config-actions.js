@@ -1,6 +1,6 @@
-import { configProperties } from "./config-properties";
+import { configProperties } from './config-properties';
 
-const setShowHidden = (showHidden) => ({
+const setShowHidden = showHidden => ({
   type: configProperties.actions.setShowHidden,
   showHidden,
 });

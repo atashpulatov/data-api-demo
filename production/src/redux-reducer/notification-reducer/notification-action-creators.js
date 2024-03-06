@@ -1,4 +1,4 @@
-import { GlobalNotificationTypes } from "@mstr/connector-components";
+import { GlobalNotificationTypes } from '@mstr/connector-components';
 
 import {
   CLEAR_NOTIFICATIONS,
@@ -7,7 +7,7 @@ import {
   DISPLAY_NOTIFICATION_WARNING,
   REMOVE_GLOBAL_NOTIFICATION,
   RESTORE_ALL_NOTIFICATIONS,
-} from "./notification-actions";
+} from './notification-actions';
 
 export const createConnectionLostNotification = () => ({
   type: CREATE_GLOBAL_NOTIFICATION,
@@ -19,7 +19,7 @@ export const createSessionExpiredNotification = () => ({
   payload: { type: GlobalNotificationTypes.MSTR_SESSION_EXPIRED },
 });
 
-export const displayGlobalNotification = (payload) => ({
+export const displayGlobalNotification = payload => ({
   type: CREATE_GLOBAL_NOTIFICATION,
   payload: {
     type: GlobalNotificationTypes.GLOBAL_WARNING,
@@ -27,7 +27,7 @@ export const displayGlobalNotification = (payload) => ({
   },
 });
 
-export const deleteObjectNotification = (objectWorkingId) => ({
+export const deleteObjectNotification = objectWorkingId => ({
   type: DELETE_NOTIFICATION,
   payload: { objectWorkingId },
 });
@@ -43,12 +43,12 @@ export const clearGlobalNotification = () => ({
   type: REMOVE_GLOBAL_NOTIFICATION,
 });
 
-export const restoreAllNotifications = (notifications) => ({
+export const restoreAllNotifications = notifications => ({
   type: RESTORE_ALL_NOTIFICATIONS,
   payload: notifications,
 });
 
-export const createGlobalNotification = (globalNotification) => ({
+export const createGlobalNotification = globalNotification => ({
   type: CREATE_GLOBAL_NOTIFICATION,
   payload: globalNotification,
 });

@@ -1,11 +1,11 @@
-import { officeApiHelper } from "../api/office-api-helper";
+import { officeApiHelper } from '../api/office-api-helper';
 
 import {
   DUPLICATE_OPERATION,
   EDIT_OPERATION,
   IMPORT_OPERATION,
   REFRESH_OPERATION,
-} from "../../operation/operation-type-names";
+} from '../../operation/operation-type-names';
 
 /**
  * IMPORT_OPERATION & DEFAULT
@@ -68,9 +68,7 @@ export const determineImagePropsToBeAddedToBook = ({
     height: shapeInWorksheet.height,
     top: shapeInWorksheet.top,
     left: shapeInWorksheet.left,
-    sheet: excelContext.workbook.worksheets.getItem(
-      shapeInWorksheet?.worksheetId,
-    ),
+    sheet: excelContext.workbook.worksheets.getItem(shapeInWorksheet?.worksheetId),
   };
   const cachedImageProps = shapeProps && {
     width: shapeProps.width,

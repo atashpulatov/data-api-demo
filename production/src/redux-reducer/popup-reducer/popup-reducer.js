@@ -5,7 +5,7 @@ import {
   SET_REPORT_N_FILTERS,
   SWITCH_IMPORT_SUBTOTALS_ON_EDIT,
   UPDATE_DISPLAY_ATTR_FORM_ON_EDIT,
-} from "./popup-actions";
+} from './popup-actions';
 
 export const initialState = {};
 

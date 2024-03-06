@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import mstrObjectEnum from "../../mstr-object/mstr-object-type-enum";
-import {
-  EDIT_OPERATION,
-  IMPORT_OPERATION,
-} from "../../operation/operation-type-names";
-import { CLEAR_ANSWERS, RESTORE_ALL_ANSWERS } from "./answers-actions";
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
+import { EDIT_OPERATION, IMPORT_OPERATION } from '../../operation/operation-type-names';
+import { CLEAR_ANSWERS, RESTORE_ALL_ANSWERS } from './answers-actions';
 
 const initialState = { answers: [] };
 export const answersReducer = (state = initialState, action = {}) => {
@@ -42,9 +39,7 @@ function importRequested(state, payload = {}) {
     mstrObjectEnum.mstrObjectType.visualization.name;
   // for dossiers, check promptsAnswers directly. for reports, check isPrompted flag directly
   if ((isDossier && payloadObject.promptsAnswers) || payloadObject.isPrompted) {
-    const { answers } = isDossier
-      ? payloadObject.promptsAnswers
-      : payloadObject.promptsAnswers[0];
+    const { answers } = isDossier ? payloadObject.promptsAnswers : payloadObject.promptsAnswers[0];
     newAnswers = getMergedAnswers(state.answers, answers);
   }
 
@@ -69,17 +64,11 @@ function restoreAllAnswers(payload = []) {
  * @returns
  */
 function updateAnswers(state, payload = {}) {
-  const { objectEditedData: payloadEditedObject = {} } =
-    (payload && payload.operation) || {};
+  const { objectEditedData: payloadEditedObject = {} } = (payload && payload.operation) || {};
   let newAnswers = [...state.answers];
-  const isDossier = !!(
-    payloadEditedObject && payloadEditedObject.visualizationInfo
-  );
+  const isDossier = !!(payloadEditedObject && payloadEditedObject.visualizationInfo);
   // for dossiers, check promptsAnswers directly. for reports, check isPrompted flag directly
-  if (
-    (isDossier && payloadEditedObject.promptsAnswers) ||
-    payloadEditedObject.isPrompted
-  ) {
+  if ((isDossier && payloadEditedObject.promptsAnswers) || payloadEditedObject.isPrompted) {
     const { answers } = isDossier
       ? payloadEditedObject.promptsAnswers
       : payloadEditedObject.promptsAnswers[0];
@@ -97,9 +86,7 @@ function updateAnswers(state, payload = {}) {
  * @returns
  */
 function getAnswerIndex(answers, keyId) {
-  const answerToUpdateIndex = answers.findIndex(
-    (answer) => answer && answer.key === keyId,
-  );
+  const answerToUpdateIndex = answers.findIndex(answer => answer && answer.key === keyId);
   return answerToUpdateIndex;
 }
 
@@ -114,7 +101,7 @@ function getAnswerIndex(answers, keyId) {
 function getMergedAnswers(originalAnswers, newAnswers) {
   const updatedAnswers = [...originalAnswers];
   newAnswers &&
-    newAnswers.forEach((answer) => {
+    newAnswers.forEach(answer => {
       const answerIdx = getAnswerIndex(originalAnswers, answer.key);
 
       if (answerIdx === -1) {

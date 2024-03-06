@@ -1,13 +1,11 @@
-import mstrObjectEnum from "../../mstr-object/mstr-object-type-enum";
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 
-export const RESET_STATE = "POPUP_RESET_STATE";
-export const SET_REPORT_N_FILTERS = "POPUP_SET_REPORT_N_FILTERS";
-export const SET_PREPARED_REPORT = "POPUP_SET_PREPARED_REPORT";
-export const SWITCH_IMPORT_SUBTOTALS_ON_EDIT =
-  "POPUP_SWITCH_IMPORT_SUBTOTALS_ON_EDIT";
-export const CLEAR_EDITED_OBJECT = "POPUP_CLEAR_EDITED_OBEJECT";
-export const UPDATE_DISPLAY_ATTR_FORM_ON_EDIT =
-  "POPUP_UPDATE_DISPLAY_ATTR_FORM_ON_EDIT";
+export const RESET_STATE = 'POPUP_RESET_STATE';
+export const SET_REPORT_N_FILTERS = 'POPUP_SET_REPORT_N_FILTERS';
+export const SET_PREPARED_REPORT = 'POPUP_SET_PREPARED_REPORT';
+export const SWITCH_IMPORT_SUBTOTALS_ON_EDIT = 'POPUP_SWITCH_IMPORT_SUBTOTALS_ON_EDIT';
+export const CLEAR_EDITED_OBJECT = 'POPUP_CLEAR_EDITED_OBEJECT';
+export const UPDATE_DISPLAY_ATTR_FORM_ON_EDIT = 'POPUP_UPDATE_DISPLAY_ATTR_FORM_ON_EDIT';
 
 class PopupActions {
   init = (
@@ -17,7 +15,7 @@ class PopupActions {
     popupHelper,
     mstrObjectRestService,
     popupController,
-    visualizationInfoService,
+    visualizationInfoService
   ) => {
     this.errorService = errorService;
     this.officeApiHelper = officeApiHelper;
@@ -28,13 +26,12 @@ class PopupActions {
     this.visualizationInfoService = visualizationInfoService;
   };
 
-  callForReprompt = (reportParams) => async (dispatch) => {
+  callForReprompt = reportParams => async dispatch => {
     try {
       await this.officeApiHelper.checkStatusOfSessions();
-      const editedObject =
-        this.officeReducerHelper.getObjectFromObjectReducerByBindId(
-          reportParams.bindId,
-        );
+      const editedObject = this.officeReducerHelper.getObjectFromObjectReducerByBindId(
+        reportParams.bindId
+      );
       editedObject.objectType = editedObject.mstrObjectType;
 
       dispatch({
@@ -47,13 +44,12 @@ class PopupActions {
     }
   };
 
-  callForEdit = (reportParams) => async (dispatch) => {
+  callForEdit = reportParams => async dispatch => {
     try {
       await this.officeApiHelper.checkStatusOfSessions();
-      const editedObject =
-        this.officeReducerHelper.getObjectFromObjectReducerByBindId(
-          reportParams.bindId,
-        );
+      const editedObject = this.officeReducerHelper.getObjectFromObjectReducerByBindId(
+        reportParams.bindId
+      );
       editedObject.objectType = editedObject.mstrObjectType;
 
       dispatch({
@@ -70,20 +66,19 @@ class PopupActions {
     }
   };
 
-  preparePromptedReport = (instanceId, chosenObjectData) => (dispatch) =>
+  preparePromptedReport = (instanceId, chosenObjectData) => dispatch =>
     dispatch({
       type: SET_PREPARED_REPORT,
       instanceId,
       chosenObjectData,
     });
 
-  callForRepromptDossier = (reportParams) => async (dispatch) => {
+  callForRepromptDossier = reportParams => async dispatch => {
     try {
       await this.officeApiHelper.checkStatusOfSessions();
-      const repromptedDossier =
-        this.officeReducerHelper.getObjectFromObjectReducerByBindId(
-          reportParams.bindId,
-        );
+      const repromptedDossier = this.officeReducerHelper.getObjectFromObjectReducerByBindId(
+        reportParams.bindId
+      );
 
       await this.prepareDossierForReprompt(repromptedDossier);
 
@@ -98,13 +93,12 @@ class PopupActions {
     }
   };
 
-  callForEditDossier = (reportParams) => async (dispatch) => {
+  callForEditDossier = reportParams => async dispatch => {
     try {
       await this.officeApiHelper.checkStatusOfSessions();
-      const editedDossier =
-        this.officeReducerHelper.getObjectFromObjectReducerByBindId(
-          reportParams.bindId,
-        );
+      const editedDossier = this.officeReducerHelper.getObjectFromObjectReducerByBindId(
+        reportParams.bindId
+      );
 
       await this.prepareDossierForEdit(editedDossier);
 
@@ -119,7 +113,7 @@ class PopupActions {
     }
   };
 
-  resetState = () => (dispatch) => dispatch({ type: RESET_STATE });
+  resetState = () => dispatch => dispatch({ type: RESET_STATE });
 
   /**
    * Prepares object and passes it to excel popup in duplicate edit workflow and
@@ -127,10 +121,9 @@ class PopupActions {
    *
    * @param {Object} object - Data of duplicated object.
    */
-  callForDuplicate = (object) => async (dispatch) => {
+  callForDuplicate = object => async dispatch => {
     const isDossier =
-      object.mstrObjectType.name ===
-      mstrObjectEnum.mstrObjectType.visualization.name;
+      object.mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
     try {
       await this.officeApiHelper.checkStatusOfSessions();
       object.objectType = object.mstrObjectType;
@@ -169,29 +162,23 @@ class PopupActions {
    *
    * @param {Object} editedDossier - Contains data of edited dossier.
    */
-  prepareDossierForEdit = async (editedDossier) => {
-    const { projectId, objectId, manipulationsXML, visualizationInfo } =
-      editedDossier;
+  prepareDossierForEdit = async editedDossier => {
+    const { projectId, objectId, manipulationsXML, visualizationInfo } = editedDossier;
 
-    const instance = await this.mstrObjectRestService.createDossierInstance(
-      projectId,
-      objectId,
-      {
-        ...manipulationsXML,
-        disableManipulationsAutoSaving: true,
-        persistViewState: true,
-      },
-    );
+    const instance = await this.mstrObjectRestService.createDossierInstance(projectId, objectId, {
+      ...manipulationsXML,
+      disableManipulationsAutoSaving: true,
+      persistViewState: true,
+    });
 
     let updatedVisualizationInfo;
     try {
-      updatedVisualizationInfo =
-        await this.visualizationInfoService.getVisualizationInfo(
-          projectId,
-          objectId,
-          visualizationInfo.visualizationKey,
-          instance.mid,
-        );
+      updatedVisualizationInfo = await this.visualizationInfoService.getVisualizationInfo(
+        projectId,
+        objectId,
+        visualizationInfo.visualizationKey,
+        instance.mid
+      );
     } catch (ignoreError) {
       // Ignored
     }
@@ -213,29 +200,23 @@ class PopupActions {
    * Creates instance of dossier which is used during reprompt workflow.
    * @param {*} repromptedDossier
    */
-  prepareDossierForReprompt = async (repromptedDossier) => {
-    const { projectId, objectId, manipulationsXML, visualizationInfo } =
-      repromptedDossier;
+  prepareDossierForReprompt = async repromptedDossier => {
+    const { projectId, objectId, manipulationsXML, visualizationInfo } = repromptedDossier;
 
-    const instance = await this.mstrObjectRestService.createDossierInstance(
-      projectId,
-      objectId,
-      {
-        ...manipulationsXML,
-        disableManipulationsAutoSaving: true,
-        persistViewState: true,
-      },
-    );
+    const instance = await this.mstrObjectRestService.createDossierInstance(projectId, objectId, {
+      ...manipulationsXML,
+      disableManipulationsAutoSaving: true,
+      persistViewState: true,
+    });
 
     let updatedVisualizationInfo;
     try {
-      updatedVisualizationInfo =
-        await this.visualizationInfoService.getVisualizationInfo(
-          projectId,
-          objectId,
-          visualizationInfo.visualizationKey,
-          instance.mid,
-        );
+      updatedVisualizationInfo = await this.visualizationInfoService.getVisualizationInfo(
+        projectId,
+        objectId,
+        visualizationInfo.visualizationKey,
+        instance.mid
+      );
     } catch (ignoreError) {
       // Ignored
     }
@@ -244,7 +225,7 @@ class PopupActions {
     const resp = await this.mstrObjectRestService.rePromptDossier(
       objectId,
       instance.mid,
-      projectId,
+      projectId
     );
 
     // Update dossier's instanceId with the new one
@@ -261,14 +242,14 @@ class PopupActions {
     repromptedDossier.objectType = repromptedDossier.mstrObjectType;
   };
 
-  switchImportSubtotalsOnEdit = (data) => (dispatch) =>
+  switchImportSubtotalsOnEdit = data => dispatch =>
     dispatch({ type: SWITCH_IMPORT_SUBTOTALS_ON_EDIT, data });
 
-  clearEditedObject = () => (dispatch) => {
+  clearEditedObject = () => dispatch => {
     dispatch({ type: CLEAR_EDITED_OBJECT });
   };
 
-  updateDisplayAttrFormOnEdit = (data) => (dispatch) => {
+  updateDisplayAttrFormOnEdit = data => dispatch => {
     dispatch({ type: UPDATE_DISPLAY_ATTR_FORM_ON_EDIT, data });
   };
 }

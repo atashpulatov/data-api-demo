@@ -1,4 +1,4 @@
-import request from "superagent";
+import request from 'superagent';
 
 class ModuleProxy {
   constructor() {

@@ -1,31 +1,28 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { connect } from "react-redux";
-import { ObjectWindowTitle } from "@mstr/connector-components";
-import { Spinner } from "@mstr/rc";
+import React, { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { connect } from 'react-redux';
+import { ObjectWindowTitle } from '@mstr/connector-components';
+import { Spinner } from '@mstr/rc';
 
-import { authenticationHelper } from "../../authentication/authentication-helper";
-import { ObjectExecutionStatus } from "../../helpers/prompts-handling-helper";
-import { mstrObjectRestService } from "../../mstr-object/mstr-object-rest-service";
-import { popupHelper } from "../../popup/popup-helper";
-import { EXTEND_SESSION, sessionHelper } from "../../storage/session-helper";
+import { authenticationHelper } from '../../authentication/authentication-helper';
+import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
+import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
+import { popupHelper } from '../../popup/popup-helper';
+import { EXTEND_SESSION, sessionHelper } from '../../storage/session-helper';
 
-import { ItemType, LibraryWindowProps } from "./library-window-types";
+import { ItemType, LibraryWindowProps } from './library-window-types';
 
-import { selectorProperties } from "../../attribute-selector/selector-properties";
-import i18n from "../../i18n";
-import mstrObjectEnum from "../../mstr-object/mstr-object-type-enum";
-import { PopupButtons } from "../../popup/popup-buttons/popup-buttons";
-import { navigationTreeActions } from "../../redux-reducer/navigation-tree-reducer/navigation-tree-actions";
-import { popupStateActions } from "../../redux-reducer/popup-state-reducer/popup-state-actions";
-import { EmbeddedLibrary } from "./embedded-library";
-import { objectImportType } from "../../mstr-object/constants";
-import {
-  importActionTypes,
-  importButtonIds,
-} from "../../popup/popup-buttons/import-btn-constants";
+import { selectorProperties } from '../../attribute-selector/selector-properties';
+import i18n from '../../i18n';
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
+import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
+import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
+import { EmbeddedLibrary } from './embedded-library';
+import { objectImportType } from '../../mstr-object/constants';
+import { importActionTypes, importButtonIds } from '../../popup/popup-buttons/import-btn-constants';
 
-import "./library.css";
+import './library.css';
 
 const {
   isPrompted,
@@ -36,11 +33,9 @@ const {
   getObjectPrompts,
 } = mstrObjectRestService;
 
-export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = (
-  props
-) => {
+export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => {
   const [isPublished, setIsPublished] = useState(true);
-  const [t] = useTranslation("common", { i18n });
+  const [t] = useTranslation('common', { i18n });
 
   const {
     chosenObjectId,
@@ -74,7 +69,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = (
 
       let { id, subtype } = itemsInfo[0];
 
-      if (!subtype || typeof subtype !== "number") {
+      if (!subtype || typeof subtype !== 'number') {
         try {
           const objectType =
             type === 55
@@ -122,33 +117,22 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = (
   const handleOk = async (): Promise<void> => {
     let promptedResponse = {};
     try {
-      const chosenMstrObjectType =
-        mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
+      const chosenMstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
       if (chosenMstrObjectType === mstrObjectEnum.mstrObjectType.report) {
         promptedResponse = await isPrompted(
           chosenObjectId,
           chosenProjectId,
           chosenMstrObjectType.name
         );
-      } else if (
-        chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dossier
-      ) {
+      } else if (chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dossier) {
         // Creating instance without shortcut information to pull prompts definition.
-        const instance = await createDossierInstance(
-          chosenProjectId,
-          chosenObjectId,
-          {}
-        );
+        const instance = await createDossierInstance(chosenProjectId, chosenObjectId, {});
 
         // If instance is prompted, then pull prompts definition.
         const prompts =
           instance.status !== ObjectExecutionStatus.PROMPTED
             ? []
-            : await getObjectPrompts(
-                chosenObjectId,
-                chosenProjectId,
-                instance.mid
-              );
+            : await getObjectPrompts(chosenObjectId, chosenProjectId, instance.mid);
 
         // Updated state with prompts definition, if any.
         promptedResponse = {
@@ -157,15 +141,9 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = (
         };
 
         // Delete instance that was created.
-        await deleteDossierInstance(
-          chosenProjectId,
-          chosenObjectId,
-          instance.mid
-        );
+        await deleteDossierInstance(chosenProjectId, chosenObjectId, instance.mid);
       }
-      if (
-        chosenMstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name
-      ) {
+      if (chosenMstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name) {
         requestDossierOpen(promptedResponse);
       } else {
         requestImport(promptedResponse);
@@ -181,8 +159,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = (
    */
   const handleSecondary = async (): Promise<void> => {
     try {
-      const chosenMstrObjectType =
-        mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
+      const chosenMstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
 
       if (
         chosenMstrObjectType === mstrObjectEnum.mstrObjectType.report ||
@@ -226,9 +203,9 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = (
   );
 
   useEffect(() => {
-    window.addEventListener("message", extendSession);
+    window.addEventListener('message', extendSession);
 
-    return () => window.removeEventListener("message", extendSession);
+    return () => window.removeEventListener('message', extendSession);
   }, [extendSession]);
 
   const validateSession = (): void => {
@@ -238,23 +215,20 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = (
   };
 
   return (
-    <div className="library-window">
+    <div className='library-window'>
       <ObjectWindowTitle
-        objectType="" // not needed for import, falls back to 'Data'
-        objectName="" // not needed for import
+        objectType='' // not needed for import, falls back to 'Data'
+        objectName='' // not needed for import
         isReprompt={false}
         isEdit={false}
         index={0}
         total={0}
       />
-      <Spinner className="loading-spinner" type="large">
-        {t("Loading...")}
+      <Spinner className='loading-spinner' type='large'>
+        {t('Loading...')}
       </Spinner>
       {/* @ts-expect-error fix types after removing connect HOC */}
-      <EmbeddedLibrary
-        handleSelection={handleSelection}
-        handleIframeLoadEvent={validateSession}
-      />
+      <EmbeddedLibrary handleSelection={handleSelection} handleIframeLoadEvent={validateSession} />
       <PopupButtons
         disableActiveActions={!chosenObjectId || disableActiveActions}
         handleOk={handleOk}
@@ -262,8 +236,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = (
         handleCancel={handleCancel}
         primaryImportType={objectImportType.TABLE}
         disableSecondary={
-          !!mstrObjectType &&
-          mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name
+          !!mstrObjectType && mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name
         }
         primaryImportBtnString={importActionTypes.IMPORT}
         primaryImportBtnId={importButtonIds.IMPORT}
@@ -287,13 +260,8 @@ function mapStateToProps(state: {
   };
 }): any {
   const { navigationTree } = state;
-  const {
-    chosenObjectName,
-    chosenObjectId,
-    chosenProjectId,
-    chosenSubtype,
-    mstrObjectType,
-  } = navigationTree;
+  const { chosenObjectName, chosenObjectId, chosenProjectId, chosenSubtype, mstrObjectType } =
+    navigationTree;
   return {
     chosenObjectName,
     chosenObjectId,
@@ -312,7 +280,4 @@ const mapActionsToProps = {
   setObjectData: popupStateActions.setObjectData,
 };
 
-export const LibraryWindow = connect(
-  mapStateToProps,
-  mapActionsToProps
-)(LibraryWindowNotConnected);
+export const LibraryWindow = connect(mapStateToProps, mapActionsToProps)(LibraryWindowNotConnected);

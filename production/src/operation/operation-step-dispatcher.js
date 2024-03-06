@@ -1,9 +1,9 @@
-import { updateObject } from "../redux-reducer/object-reducer/object-actions";
-import { officeActions } from "../redux-reducer/office-reducer/office-actions";
+import { updateObject } from '../redux-reducer/object-reducer/object-actions';
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import {
   markStepCompleted,
   updateOperation,
-} from "../redux-reducer/operation-reducer/operation-actions";
+} from '../redux-reducer/operation-reducer/operation-actions';
 import {
   ADD_VISUALIZATION_PLACEHOLDER,
   BACKUP_OBJECT_DATA,
@@ -32,202 +32,150 @@ import {
   RENAME_EXCEL_WORKSHEET,
   SAVE_IMAGE_DETAILS,
   SAVE_OBJECT_IN_EXCEL,
-} from "./operation-steps";
-import { CLEAR_DATA_OPERATION } from "./operation-type-names";
+} from './operation-steps';
+import { CLEAR_DATA_OPERATION } from './operation-type-names';
 
 class OperationStepDispatcher {
-  init = (reduxStore) => {
+  init = reduxStore => {
     this.reduxStore = reduxStore;
   };
 
-  completeBindOfficeTable = (objectWorkingId) => {
-    this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, BIND_OFFICE_TABLE),
-    );
+  completeBindOfficeTable = objectWorkingId => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, BIND_OFFICE_TABLE));
   };
 
-  completeFormatData = (objectWorkingId) => {
+  completeFormatData = objectWorkingId => {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, FORMAT_DATA));
   };
 
-  completeBackupObjectData = (objectWorkingId) => {
-    this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, BACKUP_OBJECT_DATA),
-    );
+  completeBackupObjectData = objectWorkingId => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, BACKUP_OBJECT_DATA));
   };
 
-  completeGetInstanceDefinition = (objectWorkingId) => {
-    this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, GET_INSTANCE_DEFINITION),
-    );
+  completeGetInstanceDefinition = objectWorkingId => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, GET_INSTANCE_DEFINITION));
   };
 
-  completeGetObjectDetails = (objectWorkingId) => {
-    this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, GET_OBJECT_DETAILS),
-    );
+  completeGetObjectDetails = objectWorkingId => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, GET_OBJECT_DETAILS));
   };
 
-  completeFormatOfficeTable = (objectWorkingId) => {
-    this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, FORMAT_OFFICE_TABLE),
-    );
+  completeFormatOfficeTable = objectWorkingId => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, FORMAT_OFFICE_TABLE));
   };
 
-  completeFetchInsertData = (objectWorkingId) => {
-    this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, FETCH_INSERT_DATA),
-    );
+  completeFetchInsertData = objectWorkingId => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, FETCH_INSERT_DATA));
   };
 
-  completeGetOfficeTableEditRefresh = (objectWorkingId) => {
-    this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, GET_OFFICE_TABLE_EDIT_REFRESH),
-    );
+  completeGetOfficeTableEditRefresh = objectWorkingId => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, GET_OFFICE_TABLE_EDIT_REFRESH));
   };
 
-  completeGetOfficeTableImport = (objectWorkingId) => {
-    this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, GET_OFFICE_TABLE_IMPORT),
-    );
+  completeGetOfficeTableImport = objectWorkingId => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, GET_OFFICE_TABLE_IMPORT));
   };
 
-  completeFormatSubtotals = (objectWorkingId) => {
-    this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, FORMAT_SUBTOTALS),
-    );
+  completeFormatSubtotals = objectWorkingId => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, FORMAT_SUBTOTALS));
   };
 
-  completeSaveObjectInExcel = (objectWorkingId) => {
+  completeSaveObjectInExcel = objectWorkingId => {
     // for success
-    this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, SAVE_OBJECT_IN_EXCEL),
-    );
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, SAVE_OBJECT_IN_EXCEL));
   };
 
-  completeModifyObject = (objectWorkingId) => {
+  completeModifyObject = objectWorkingId => {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, MODIFY_OBJECT));
   };
 
-  completeGetDuplicateName = (objectWorkingId) => {
-    this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, GET_DUPLICATE_NAME),
-    );
+  completeGetDuplicateName = objectWorkingId => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, GET_DUPLICATE_NAME));
   };
 
-  completeRemoveObjectBinding = (objectWorkingId) => {
-    this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, REMOVE_OBJECT_BINDING),
-    );
+  completeRemoveObjectBinding = objectWorkingId => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, REMOVE_OBJECT_BINDING));
   };
 
-  completeRemoveObjectTable = (objectWorkingId) => {
-    this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, REMOVE_OBJECT_TABLE),
-    );
+  completeRemoveObjectTable = objectWorkingId => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, REMOVE_OBJECT_TABLE));
   };
 
-  completeCheckObjectStatus = (objectWorkingId) => {
-    this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, CHECK_OBJECT_STATUS),
-    );
+  completeCheckObjectStatus = objectWorkingId => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, CHECK_OBJECT_STATUS));
   };
 
-  completeClearCrosstabHeaders = (objectWorkingId) => {
-    this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, CLEAR_CROSSTAB_HEADERS),
-    );
+  completeClearCrosstabHeaders = objectWorkingId => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, CLEAR_CROSSTAB_HEADERS));
   };
 
-  completeClearTableData = (objectWorkingId) => {
-    this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, CLEAR_TABLE_DATA),
-    );
+  completeClearTableData = objectWorkingId => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, CLEAR_TABLE_DATA));
   };
 
   completeClearData = (objectWorkingId, nextOperation, objectList) => {
     if (
-      !(
-        nextOperation && nextOperation.operationType === CLEAR_DATA_OPERATION
-      ) &&
+      !(nextOperation && nextOperation.operationType === CLEAR_DATA_OPERATION) &&
       objectList.length !== 0
     ) {
       const { dispatch } = this.reduxStore;
       officeActions.toggleSecuredFlag(true)(dispatch);
     }
-    this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, COMPLETE_CLEAR_DATA),
-    );
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, COMPLETE_CLEAR_DATA));
   };
 
-  completeHighlightObject = (objectWorkingId) => {
-    this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, HIGHLIGHT_OBJECT),
-    );
+  completeHighlightObject = objectWorkingId => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, HIGHLIGHT_OBJECT));
   };
 
-  updateOperation = (updatedOperationProps) => {
+  updateOperation = updatedOperationProps => {
     this.reduxStore.dispatch(updateOperation(updatedOperationProps));
   };
 
-  updateObject = (updatedObject) => {
+  updateObject = updatedObject => {
     this.reduxStore.dispatch(updateObject(updatedObject));
   };
 
-  moveNotificationToInProgress = (objectWorkingId) => {
+  moveNotificationToInProgress = objectWorkingId => {
     this.reduxStore.dispatch({
       type: MOVE_NOTIFICATION_TO_IN_PROGRESS,
       payload: { objectWorkingId },
     });
   };
 
-  completeMoveNotificationToInProgress = (objectWorkingId) => {
-    this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, MOVE_NOTIFICATION_TO_IN_PROGRESS),
-    );
+  completeMoveNotificationToInProgress = objectWorkingId => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, MOVE_NOTIFICATION_TO_IN_PROGRESS));
   };
 
-  displaySuccessNotification = (objectWorkingId) => {
+  displaySuccessNotification = objectWorkingId => {
     this.reduxStore.dispatch({
       type: DISPLAY_NOTIFICATION_COMPLETED,
       payload: { objectWorkingId },
     });
   };
 
-  completeDisplaySuccessNotification = (objectWorkingId) => {
-    this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, DISPLAY_NOTIFICATION_COMPLETED),
-    );
+  completeDisplaySuccessNotification = objectWorkingId => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, DISPLAY_NOTIFICATION_COMPLETED));
   };
 
-  completeRenameExcelWorksheet = (objectWorkingId) => {
-    this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, RENAME_EXCEL_WORKSHEET),
-    );
+  completeRenameExcelWorksheet = objectWorkingId => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, RENAME_EXCEL_WORKSHEET));
   };
 
-  completeManipulateVisualizationImage = (objectWorkingId) => {
-    this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, MANIPULATE_VISUALIZATION_IMAGE),
-    );
+  completeManipulateVisualizationImage = objectWorkingId => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, MANIPULATE_VISUALIZATION_IMAGE));
   };
 
-  completeRemoveVisualizationImage = (objectWorkingId) => {
-    this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, REMOVE_VISUALIZATION_IMAGE),
-    );
+  completeRemoveVisualizationImage = objectWorkingId => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, REMOVE_VISUALIZATION_IMAGE));
   };
 
-  completeAddVisualizationPlaceholder = (objectWorkingId) => {
-    this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, ADD_VISUALIZATION_PLACEHOLDER),
-    );
+  completeAddVisualizationPlaceholder = objectWorkingId => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, ADD_VISUALIZATION_PLACEHOLDER));
   };
 
-  completeSaveImageDetails = (objectWorkingId) => {
-    this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, SAVE_IMAGE_DETAILS),
-    );
+  completeSaveImageDetails = objectWorkingId => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, SAVE_IMAGE_DETAILS));
   };
 }
 

@@ -1,10 +1,10 @@
-import getOfficeTableHelper from "./get-office-table-helper";
+import getOfficeTableHelper from './get-office-table-helper';
 
-import operationErrorHandler from "../../operation/operation-error-handler";
-import operationStepDispatcher from "../../operation/operation-step-dispatcher";
-import officeTableCreate from "./office-table-create";
-import officeTableRefresh from "./office-table-refresh";
-import officeTableUpdate from "./office-table-update";
+import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import officeTableCreate from './office-table-create';
+import officeTableRefresh from './office-table-refresh';
+import officeTableUpdate from './office-table-update';
 
 class StepGetOfficeTableEditRefresh {
   /**
@@ -28,16 +28,10 @@ class StepGetOfficeTableEditRefresh {
    */
   getOfficeTableEditRefresh = async (objectData, operationData) => {
     try {
-      console.time("Create or get table - edit or refresh");
-      const { tableName, previousTableDimensions, objectWorkingId } =
-        objectData;
-      const {
-        excelContext,
-        instanceDefinition,
-        oldBindId,
-        objectEditedData,
-        insertNewWorksheet,
-      } = operationData;
+      console.time('Create or get table - edit or refresh');
+      const { tableName, previousTableDimensions, objectWorkingId } = objectData;
+      const { excelContext, instanceDefinition, oldBindId, objectEditedData, insertNewWorksheet } =
+        operationData;
       let { tableChanged, startCell } = operationData;
 
       const { mstrTable } = instanceDefinition;
@@ -50,21 +44,20 @@ class StepGetOfficeTableEditRefresh {
       getOfficeTableHelper.checkReportTypeChange(mstrTable);
       const prevOfficeTable = await officeTableRefresh.getPreviousOfficeTable(
         excelContext,
-        oldBindId,
+        oldBindId
       );
 
       if (!isRepeatStep) {
-        ({ tableChanged, startCell } =
-          await officeTableRefresh.getExistingOfficeTableData(
-            excelContext,
-            instanceDefinition,
-            prevOfficeTable,
-            previousTableDimensions,
-          ));
+        ({ tableChanged, startCell } = await officeTableRefresh.getExistingOfficeTableData(
+          excelContext,
+          instanceDefinition,
+          prevOfficeTable,
+          previousTableDimensions
+        ));
       }
 
       if (tableChanged) {
-        console.log("Instance definition changed, creating new table");
+        console.log('Instance definition changed, creating new table');
 
         ({ officeTable, bindId } = await officeTableCreate.createOfficeTable({
           instanceDefinition,
@@ -87,7 +80,7 @@ class StepGetOfficeTableEditRefresh {
           instanceDefinition,
           excelContext,
           startCell,
-          prevOfficeTable,
+          prevOfficeTable
         );
       }
 
@@ -104,10 +97,10 @@ class StepGetOfficeTableEditRefresh {
       startCell = officeTableRefresh.getCrosstabStartCell(
         startCell,
         instanceDefinition,
-        tableChanged,
+        tableChanged
       );
 
-      officeTable.worksheet.load(["id", "name"]);
+      officeTable.worksheet.load(['id', 'name']);
       await excelContext.sync();
 
       const { id, name } = officeTable.worksheet;
@@ -121,18 +114,12 @@ class StepGetOfficeTableEditRefresh {
 
       operationStepDispatcher.updateOperation(updatedOperation);
       operationStepDispatcher.updateObject(updatedObject);
-      operationStepDispatcher.completeGetOfficeTableEditRefresh(
-        objectWorkingId,
-      );
+      operationStepDispatcher.completeGetOfficeTableEditRefresh(objectWorkingId);
     } catch (error) {
       console.error(error);
-      operationErrorHandler.handleOperationError(
-        objectData,
-        operationData,
-        error,
-      );
+      operationErrorHandler.handleOperationError(objectData, operationData, error);
     } finally {
-      console.timeEnd("Create or get table - edit or refresh");
+      console.timeEnd('Create or get table - edit or refresh');
     }
   };
 }

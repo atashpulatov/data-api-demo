@@ -1,8 +1,8 @@
-import { RunOutsideOfficeError } from "../../error/run-outside-office-error";
-import { officeProperties } from "../../redux-reducer/office-reducer/office-properties";
+import { RunOutsideOfficeError } from '../../error/run-outside-office-error';
+import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 
 class OfficeStoreHelper {
-  init = (errorService) => {
+  init = errorService => {
     this.errorService = errorService;
   };
 
@@ -29,16 +29,14 @@ class OfficeStoreHelper {
    *
    * @param {String} value Key used by Office Api to determine value from settings
    */
-  setFileSecuredFlag = (value) =>
-    this.setPropertyValue(officeProperties.isSecured, value);
+  setFileSecuredFlag = value => this.setPropertyValue(officeProperties.isSecured, value);
 
   /**
    * Set value of isClearDataFailed flag in Office settings
    *
    * @param {String} propertyName Key used by Office Api to determine value from settings
    */
-  setIsClearDataFailed = (value) =>
-    this.setPropertyValue(officeProperties.isClearDataFailed, value);
+  setIsClearDataFailed = value => this.setPropertyValue(officeProperties.isClearDataFailed, value);
 
   /**
    * Return value from Office settings specifying value of isFileSecured flag
@@ -52,8 +50,7 @@ class OfficeStoreHelper {
    *
    * @return {Boolean} isClearDataFailed flag
    */
-  isClearDataFailed = () =>
-    this.getPropertyValue(officeProperties.isClearDataFailed);
+  isClearDataFailed = () => this.getPropertyValue(officeProperties.isClearDataFailed);
 
   /**
    * Set value in Office settings corresponding to passed key
@@ -77,7 +74,7 @@ class OfficeStoreHelper {
    * @param {String} propertyName Key used by Office Api to determine value from settings
    * @return {*} value from Office
    */
-  getPropertyValue = (propertyName) => {
+  getPropertyValue = propertyName => {
     try {
       const settings = this.getOfficeSettings();
       return settings.get(propertyName);

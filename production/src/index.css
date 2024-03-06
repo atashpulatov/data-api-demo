@@ -1,8 +1,7 @@
-@import "~antd/dist/antd.css";
+@import '~antd/dist/antd.css';
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 .ant-popover .ant-popover-inner-content {
@@ -18,9 +17,7 @@ code {
 }
 
 .ant-popover-placement-bottom > .ant-popover-content > div.ant-popover-arrow,
-.ant-popover-placement-bottomRight
-  > .ant-popover-content
-  > div.ant-popover-arrow,
+.ant-popover-placement-bottomRight > .ant-popover-content > div.ant-popover-arrow,
 .ant-popover-placement-topRight > .ant-popover-content > div.ant-popover-arrow,
 .ant-popover-placement-topLeft > .ant-popover-content > div.ant-popover-arrow,
 .ant-popover-placement-top > .ant-popover-content > div.ant-popover-arrow {
@@ -187,7 +184,5 @@ button.floating-button[disabled]:hover {
   left: 0;
   top: 57px;
   width: 100%;
-  height: calc(
-    100% - 125px
-  ); /* 125px = 57px (top distance) + 68px (button row height) */
+  height: calc(100% - 125px); /* 125px = 57px (top distance) + 68px (button row height) */
 }

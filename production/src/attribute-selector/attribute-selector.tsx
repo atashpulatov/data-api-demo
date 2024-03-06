@@ -1,10 +1,10 @@
-import React from "react";
-import { useTranslation } from "react-i18next";
-import { connect } from "react-redux";
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { connect } from 'react-redux';
 // @ts-ignore
-import { AttributeMetricFilter, ErrorBoundary } from "@mstr/mstr-react-library";
+import { AttributeMetricFilter, ErrorBoundary } from '@mstr/mstr-react-library';
 
-import { popupHelper } from "../popup/popup-helper";
+import { popupHelper } from '../popup/popup-helper';
 
 import {
   AttributeSelectorNotConnectedProps,
@@ -12,28 +12,27 @@ import {
   MstrDataProps,
   MstrError,
   SessionProps,
-} from "./attribute-selector-types";
+} from './attribute-selector-types';
 
-import i18n from "../i18n";
-import mstrObjectEnum from "../mstr-object/mstr-object-type-enum";
-import { navigationTreeActions } from "../redux-reducer/navigation-tree-reducer/navigation-tree-actions";
-import { officeProperties } from "../redux-reducer/office-reducer/office-properties";
-import { popupActions } from "../redux-reducer/popup-reducer/popup-actions";
-import { errorCodes, errorMessages } from "../error/constants";
+import i18n from '../i18n';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
+import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
+import { errorCodes, errorMessages } from '../error/constants';
 
-import "./attribute-selector.css";
+import './attribute-selector.css';
 
 const mapToLegacyMstrData = (
   chosenObject: MstrDataProps,
   session: SessionProps,
-  editedObject: EditedObjectProps,
+  editedObject: EditedObjectProps
 ): any => {
   const legacyObject = {
     reportId: chosenObject.chosenObjectId || editedObject.chosenObjectId,
     envUrl: session.envUrl,
     projectId: chosenObject.chosenProjectId || editedObject.projectId,
-    reportSubtype:
-      chosenObject.chosenSubtype || editedObject.chosenObjectSubtype,
+    reportSubtype: chosenObject.chosenSubtype || editedObject.chosenObjectSubtype,
     reportType: chosenObject.chosenObjectId
       ? chosenObject.mstrObjectType.name
       : editedObject.chosenObjectType,
@@ -55,7 +54,7 @@ const mapToLegacyMstrData = (
 const mapToLegacySession = (
   mstrData: MstrDataProps,
   session: SessionProps,
-  editedObject: EditedObjectProps,
+  editedObject: EditedObjectProps
 ): any => ({
   url: session.envUrl,
   USE_PROXY: false,
@@ -66,8 +65,8 @@ const mapToLegacySession = (
 
 export const AttributeSelectorNotConnected: React.FC<
   AttributeSelectorNotConnectedProps
-> = (props) => {
-  const [t] = useTranslation("common", { i18n });
+> = props => {
+  const [t] = useTranslation('common', { i18n });
 
   /**
    * Handles unathorized error from library - rearrange
@@ -115,9 +114,7 @@ export const AttributeSelectorNotConnected: React.FC<
 
   const defaultAttrFormNames = officeProperties.displayAttrFormNames.automatic;
   const displayAttrFormSet =
-    editedObject.displayAttrFormNames ||
-    displayAttrFormNames ||
-    defaultAttrFormNames;
+    editedObject.displayAttrFormNames || displayAttrFormNames || defaultAttrFormNames;
 
   return (
     <ErrorBoundary>
@@ -139,22 +136,16 @@ export const AttributeSelectorNotConnected: React.FC<
         withFolderTree={false}
         openModal={openModal}
         closeModal={closeModal}
-        toggleSubtotal={
-          isEdit ? switchImportSubtotalsOnEdit : switchImportSubtotalsOnImport
-        }
+        toggleSubtotal={isEdit ? switchImportSubtotalsOnEdit : switchImportSubtotalsOnImport}
         importSubtotal={
-          editedObject.subtotalsInfo
-            ? editedObject.subtotalsInfo.importSubtotal
-            : importSubtotal
+          editedObject.subtotalsInfo ? editedObject.subtotalsInfo.importSubtotal : importSubtotal
         }
         handleUnauthorized={handleUnauthorized}
         onDisplayAttrFormNamesUpdate={
           isEdit ? updateDisplayAttrFormOnEdit : updateDisplayAttrFormOnImport
         }
         displayAttrFormNames={displayAttrFormSet}
-        displayAttrFormNamesOptions={
-          officeProperties.displayAttrFormNamesOptions
-        }
+        displayAttrFormNamesOptions={officeProperties.displayAttrFormNamesOptions}
       />
     </ErrorBoundary>
   );
@@ -174,12 +165,7 @@ const mapStateToProps = (state: {
   officeReducer: any;
 }): any => {
   const {
-    navigationTree: {
-      promptsAnswers,
-      importSubtotal,
-      displayAttrFormNames,
-      ...chosenObject
-    },
+    navigationTree: { promptsAnswers, importSubtotal, displayAttrFormNames, ...chosenObject },
     popupStateReducer,
     popupReducer,
     sessionReducer,
@@ -189,19 +175,13 @@ const mapStateToProps = (state: {
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
   const isReport =
-    editedObject &&
-    editedObject.mstrObjectType.name ===
-      mstrObjectEnum.mstrObjectType.report.name;
+    editedObject && editedObject.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   return {
     chosenObject,
     supportForms,
     editedObject: {
-      ...popupHelper.parsePopupState(
-        editedObject,
-        promptsAnswers,
-        formsPrivilege,
-      ),
+      ...popupHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege),
     },
     popupState: { ...popupStateReducer },
     session: { ...sessionReducer },
@@ -211,15 +191,13 @@ const mapStateToProps = (state: {
 };
 
 const mapDispatchToProps = {
-  switchImportSubtotalsOnImport:
-    navigationTreeActions.switchImportSubtotalsOnImport,
+  switchImportSubtotalsOnImport: navigationTreeActions.switchImportSubtotalsOnImport,
   switchImportSubtotalsOnEdit: popupActions.switchImportSubtotalsOnEdit,
-  updateDisplayAttrFormOnImport:
-    navigationTreeActions.updateDisplayAttrFormOnImport,
+  updateDisplayAttrFormOnImport: navigationTreeActions.updateDisplayAttrFormOnImport,
   updateDisplayAttrFormOnEdit: popupActions.updateDisplayAttrFormOnEdit,
 };
 
 export const AttributeSelector = connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(AttributeSelectorNotConnected);

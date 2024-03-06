@@ -1,6 +1,6 @@
-import React from "react";
-import { useTranslation } from "react-i18next";
-import { Button, Tooltip } from "@mstr/rc";
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { Button, Tooltip } from '@mstr/rc';
 
 interface ImportButtonProps {
   handleOk: () => void;
@@ -21,10 +21,10 @@ export const ImportButton: React.FC<ImportButtonProps> = ({
   const isDisabled = !!disableReason;
 
   return (
-    <Tooltip content={t(`${disableReason}`)} placement="top-end">
+    <Tooltip content={t(`${disableReason}`)} placement='top-end'>
       <Button
         id={id}
-        variant={isPrimaryBtn ? "primary" : "secondary"}
+        variant={isPrimaryBtn ? 'primary' : 'secondary'}
         onClick={handleOk}
         disabled={isDisabled}
       >

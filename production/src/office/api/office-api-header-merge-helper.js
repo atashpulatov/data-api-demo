@@ -43,7 +43,7 @@ class OfficeApiHeaderMergeHelper {
    * @returns {boolean} true when non-empty array, false otherwise
    *
    */
-  validateAttributes = (attributes) =>
+  validateAttributes = attributes =>
     attributes && Array.isArray(attributes) && attributes.length > 0;
 
   /**
@@ -67,10 +67,7 @@ class OfficeApiHeaderMergeHelper {
     }
 
     const intervalStarts = this.calculateIntervalStarts(attributes);
-    const intervals = this.calculateIntervals(
-      intervalStarts,
-      attributes.length,
-    );
+    const intervals = this.calculateIntervals(intervalStarts, attributes.length);
 
     for (const interval of intervals) {
       handleMergeFunc(titlesRange, interval, attributes.length);
@@ -134,7 +131,7 @@ class OfficeApiHeaderMergeHelper {
    * @returns {number[]} Indices of starts of all intervals.
    *
    */
-  calculateIntervalStarts = (attributes) => {
+  calculateIntervalStarts = attributes => {
     const intervalStarts = [0];
 
     for (let i = 1; i < attributes.length; i++) {
@@ -191,6 +188,5 @@ class OfficeApiHeaderMergeHelper {
   };
 }
 
-const { mergeHeaderRows, mergeHeaderColumns } =
-  new OfficeApiHeaderMergeHelper();
+const { mergeHeaderRows, mergeHeaderColumns } = new OfficeApiHeaderMergeHelper();
 export { mergeHeaderRows, mergeHeaderColumns };

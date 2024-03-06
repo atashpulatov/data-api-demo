@@ -1,13 +1,13 @@
-import React from "react";
-import { connect } from "react-redux";
-import { Spinner } from "@mstr/rc";
+import React from 'react';
+import { connect } from 'react-redux';
+import { Spinner } from '@mstr/rc';
 
-import { popupHelper } from "./popup-helper";
-import { popupViewSelectorHelper } from "./popup-view-selector-helper";
+import { popupHelper } from './popup-helper';
+import { popupViewSelectorHelper } from './popup-view-selector-helper';
 
-import i18n from "../i18n";
-import mstrObjectEnum from "../mstr-object/mstr-object-type-enum";
-import { popupActions } from "../redux-reducer/popup-reducer/popup-actions";
+import i18n from '../i18n';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 
 class ObtainInstanceHelperNotConnected extends React.Component {
   componentDidMount() {
@@ -16,9 +16,9 @@ class ObtainInstanceHelperNotConnected extends React.Component {
 
   render() {
     return (
-      <div className="obtain-instance-helper">
-        <Spinner className="loading-spinner" type="large">
-          {i18n.t("Loading...")}
+      <div className='obtain-instance-helper'>
+        <Spinner className='loading-spinner' type='large'>
+          {i18n.t('Loading...')}
         </Spinner>
       </div>
     );
@@ -35,18 +35,12 @@ function mapStateToProps(state) {
   const { promptsAnswers } = navigationTree;
   const { supportForms } = officeReducer;
   const isReport =
-    editedObject &&
-    editedObject.mstrObjectType.name ===
-      mstrObjectEnum.mstrObjectType.report.name;
+    editedObject && editedObject.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   return {
     ...navigationTree,
     editedObject: {
-      ...popupHelper.parsePopupState(
-        editedObject,
-        promptsAnswers,
-        formsPrivilege,
-      ),
+      ...popupHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege),
     },
   };
 }
@@ -57,5 +51,5 @@ const mapDispatchToProps = {
 
 export const ObtainInstanceHelper = connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(ObtainInstanceHelperNotConnected);

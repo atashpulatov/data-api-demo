@@ -1,23 +1,23 @@
-import { officeApiHelper } from "../../../office/api/office-api-helper";
+import { officeApiHelper } from '../../../office/api/office-api-helper';
 
-import stepHighlightObject from "../../../office/highlight/step-highlight-object";
-import operationErrorHandler from "../../../operation/operation-error-handler";
-import operationStepDispatcher from "../../../operation/operation-step-dispatcher";
+import stepHighlightObject from '../../../office/highlight/step-highlight-object';
+import operationErrorHandler from '../../../operation/operation-error-handler';
+import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
 
-describe("StepHighlightObject", () => {
+describe('StepHighlightObject', () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
 
-  it("StepHighlightObject should highligh object", async () => {
+  it('StepHighlightObject should highligh object', async () => {
     // given
     const objectData = { objectWorkingId: 1 };
 
     const mockedOnObjectClick = jest
-      .spyOn(officeApiHelper, "onBindingObjectClick")
+      .spyOn(officeApiHelper, 'onBindingObjectClick')
       .mockImplementation();
     const mockedCompleteStep = jest
-      .spyOn(operationStepDispatcher, "completeHighlightObject")
+      .spyOn(operationStepDispatcher, 'completeHighlightObject')
       .mockImplementation();
 
     // when
@@ -30,20 +30,20 @@ describe("StepHighlightObject", () => {
     expect(mockedCompleteStep).toBeCalledWith(objectData.objectWorkingId);
   });
 
-  it("should handle error on highligh object", async () => {
+  it('should handle error on highligh object', async () => {
     // given
     const objectData = { objectWorkingId: 1 };
     const operationData = {};
-    const error = new Error("error");
+    const error = new Error('error');
 
-    jest.spyOn(console, "error").mockImplementation();
+    jest.spyOn(console, 'error').mockImplementation();
     const mockedOnObjectClick = jest
-      .spyOn(officeApiHelper, "onBindingObjectClick")
+      .spyOn(officeApiHelper, 'onBindingObjectClick')
       .mockImplementation(() => {
         throw error;
       });
     const mockedHandleError = jest
-      .spyOn(operationErrorHandler, "handleOperationError")
+      .spyOn(operationErrorHandler, 'handleOperationError')
       .mockImplementation();
 
     // when

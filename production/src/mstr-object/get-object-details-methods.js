@@ -1,22 +1,17 @@
-import { authenticationHelper } from "../authentication/authentication-helper";
-import { mstrObjectRestService } from "./mstr-object-rest-service";
+import { authenticationHelper } from '../authentication/authentication-helper';
+import { mstrObjectRestService } from './mstr-object-rest-service';
 
-import mstrObjectEnum from "./mstr-object-type-enum";
+import mstrObjectEnum from './mstr-object-type-enum';
 
 const promptAnswerFunctionsMap = {
-  OBJECTS: (prompt) => prompt.answers.map((answer) => answer.name),
-  LEVEL: (prompt) => prompt.answers.units.map((unit) => unit.name),
-  EXPRESSION: (prompt) => prompt.answers.content,
-  ELEMENTS: (prompt) => prompt.answers.map((answer) => answer.name),
-  VALUE: (prompt) => prompt.answers,
+  OBJECTS: prompt => prompt.answers.map(answer => answer.name),
+  LEVEL: prompt => prompt.answers.units.map(unit => unit.name),
+  EXPRESSION: prompt => prompt.answers.content,
+  ELEMENTS: prompt => prompt.answers.map(answer => answer.name),
+  VALUE: prompt => prompt.answers,
 };
 
-export const getObjectPrompts = async (
-  objectData,
-  objectId,
-  projectId,
-  operationData,
-) => {
+export const getObjectPrompts = async (objectData, objectId, projectId, operationData) => {
   const { mstrObjectType, manipulationsXML, promptsAnswers } = objectData;
   if (
     mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name
@@ -28,11 +23,9 @@ export const getObjectPrompts = async (
   const unfilteredPrompts = await mstrObjectRestService.getObjectPrompts(
     objectId,
     projectId,
-    operationData.instanceDefinition.instanceId,
+    operationData.instanceDefinition.instanceId
   );
-  return unfilteredPrompts.map((prompt) =>
-    promptAnswerFunctionsMap[prompt.type](prompt),
-  );
+  return unfilteredPrompts.map(prompt => promptAnswerFunctionsMap[prompt.type](prompt));
 };
 
 export const populateDefinition = (objectData, prompts, name) => ({
@@ -41,12 +34,7 @@ export const populateDefinition = (objectData, prompts, name) => ({
   ...(prompts ? { prompts } : {}),
 });
 
-export const populateDetails = (
-  ancestors,
-  certifiedInfo,
-  dateModified,
-  owner,
-) => ({
+export const populateDetails = (ancestors, certifiedInfo, dateModified, owner) => ({
   ancestors,
   certified: certifiedInfo,
   modifiedDate: dateModified,

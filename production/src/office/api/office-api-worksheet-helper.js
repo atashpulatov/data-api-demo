@@ -1,6 +1,6 @@
-import { officeApiHelper } from "./office-api-helper";
+import { officeApiHelper } from './office-api-helper';
 
-import { ProtectedSheetError } from "../../error/protected-sheets-error";
+import { ProtectedSheetError } from '../../error/protected-sheets-error';
 
 class OfficeApiWorksheetHelper {
   /**
@@ -10,7 +10,7 @@ class OfficeApiWorksheetHelper {
    * @param {Office} sheet Excel Sheet
    */
   isSheetProtected = async (excelContext, sheet) => {
-    sheet.load("protection/protected");
+    sheet.load('protection/protected');
     await excelContext.sync();
     return sheet.protection.protected;
   };
@@ -23,16 +23,9 @@ class OfficeApiWorksheetHelper {
    */
   checkIfAnySheetProtected = async (excelContext, reportArray) => {
     for (const report of reportArray) {
-      const sheet = await officeApiHelper.getExcelSheetFromTable(
-        excelContext,
-        report.bindId,
-      );
+      const sheet = await officeApiHelper.getExcelSheetFromTable(excelContext, report.bindId);
       if (sheet) {
-        await this.isCurrentReportSheetProtected(
-          excelContext,
-          undefined,
-          sheet,
-        );
+        await this.isCurrentReportSheetProtected(excelContext, undefined, sheet);
       } else {
         return false;
       }
@@ -49,23 +42,16 @@ class OfficeApiWorksheetHelper {
   isCurrentReportSheetProtected = async (excelContext, bindId, sheet) => {
     let isProtected = false;
     if (bindId) {
-      const currentExcelSheet = await officeApiHelper.getExcelSheetFromTable(
-        excelContext,
-        bindId,
-      );
+      const currentExcelSheet = await officeApiHelper.getExcelSheetFromTable(excelContext, bindId);
       if (currentExcelSheet) {
-        isProtected = await this.isSheetProtected(
-          excelContext,
-          currentExcelSheet,
-        );
+        isProtected = await this.isSheetProtected(excelContext, currentExcelSheet);
       } else {
         isProtected = false;
       }
     } else if (sheet && excelContext) {
       isProtected = await this.isSheetProtected(excelContext, sheet);
     } else {
-      const currentSheet =
-        await officeApiHelper.getCurrentExcelSheet(excelContext);
+      const currentSheet = await officeApiHelper.getCurrentExcelSheet(excelContext);
       isProtected = await this.isSheetProtected(excelContext, currentSheet);
     }
     if (isProtected) {
@@ -81,10 +67,7 @@ class OfficeApiWorksheetHelper {
    *
    */
   createAndActivateNewWorksheet = async (excelContext, objectName) => {
-    const newSheetName = await this.prepareWorksheetName(
-      excelContext,
-      objectName,
-    );
+    const newSheetName = await this.prepareWorksheetName(excelContext, objectName);
 
     const sheets = excelContext.workbook.worksheets;
     await excelContext.sync();
@@ -105,12 +88,7 @@ class OfficeApiWorksheetHelper {
    * @param {String} objectName Name of the object added to the new worksheet
    * @return {String} address of Excel cell
    */
-  getStartCell = async (
-    importType,
-    insertNewWorksheet,
-    excelContext,
-    objectName,
-  ) => {
+  getStartCell = async (importType, insertNewWorksheet, excelContext, objectName) => {
     if (insertNewWorksheet) {
       await this.createAndActivateNewWorksheet(excelContext, objectName);
     }
@@ -132,15 +110,15 @@ class OfficeApiWorksheetHelper {
 
     const sheets = excelContext.workbook.worksheets;
 
-    sheets.load("items/name");
+    sheets.load('items/name');
     await excelContext.sync();
-    const sheetsNames = sheets.items.map((item) => item.name);
+    const sheetsNames = sheets.items.map(item => item.name);
 
-    let newSheetName = objectName.replace(/[:?*\\/\][]/g, "_");
+    let newSheetName = objectName.replace(/[:?*\\/\][]/g, '_');
 
     // if objectName only contains whitespaces replace it with _
-    if (!newSheetName.replace(/\s/g, "").length) {
-      newSheetName = "_";
+    if (!newSheetName.replace(/\s/g, '').length) {
+      newSheetName = '_';
     }
 
     if (newSheetName.length > EXCEL_WORKSHEET_CHAR_LIMIT) {
@@ -152,18 +130,18 @@ class OfficeApiWorksheetHelper {
     while (sheetsNames.includes(newSheetName)) {
       const counterLength = counter.toString().length + 3;
 
-      const lastWord = newSheetName.split(" ").pop();
+      const lastWord = newSheetName.split(' ').pop();
       const lastWordLength = lastWord.length;
       const lastWordCounter = Number(lastWord.substring(1, lastWordLength - 1));
 
       const isLastWordACounter =
         lastWordLength > 2 &&
-        lastWord[0] === "(" &&
-        lastWord[lastWordLength - 1] === ")" &&
+        lastWord[0] === '(' &&
+        lastWord[lastWordLength - 1] === ')' &&
         !Number.isNaN(lastWordCounter);
 
       if (isLastWordACounter) {
-        const counterIndex = newSheetName.lastIndexOf(" ");
+        const counterIndex = newSheetName.lastIndexOf(' ');
         newSheetName = newSheetName.substring(0, counterIndex);
       }
 
@@ -190,10 +168,7 @@ class OfficeApiWorksheetHelper {
 
   renameExistingWorksheet = async (excelContext, objectName) => {
     const currentSheet = excelContext.workbook.worksheets.getActiveWorksheet();
-    const newSheetName = await this.prepareWorksheetName(
-      excelContext,
-      objectName,
-    );
+    const newSheetName = await this.prepareWorksheetName(excelContext, objectName);
 
     currentSheet.name = newSheetName;
     await excelContext.sync();
@@ -207,7 +182,7 @@ class OfficeApiWorksheetHelper {
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @returns Flag indicating whether active worksheet is empty
    */
-  isActiveWorksheetEmpty = async (excelContext) => {
+  isActiveWorksheetEmpty = async excelContext => {
     const activeSheet = excelContext.workbook.worksheets.getActiveWorksheet();
     const rangeOrNullObject = activeSheet.getUsedRangeOrNullObject();
     await excelContext.sync();

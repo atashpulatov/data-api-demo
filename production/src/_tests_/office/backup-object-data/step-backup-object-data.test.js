@@ -1,20 +1,20 @@
-import stepBackupObjectData from "../../../office/backup-object-data/step-backup-object-data";
-import operationStepDispatcher from "../../../operation/operation-step-dispatcher";
+import stepBackupObjectData from '../../../office/backup-object-data/step-backup-object-data';
+import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
 
-describe("StepBackupObjectData", () => {
+describe('StepBackupObjectData', () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
 
-  it("BackupObjectData should works correctly", async () => {
+  it('BackupObjectData should works correctly', async () => {
     // given
     const objectData = { objectWorkingId: 1 };
 
     const mockedUpdateOperation = jest
-      .spyOn(operationStepDispatcher, "updateOperation")
+      .spyOn(operationStepDispatcher, 'updateOperation')
       .mockImplementation();
     const mockedCompleteStep = jest
-      .spyOn(operationStepDispatcher, "completeBackupObjectData")
+      .spyOn(operationStepDispatcher, 'completeBackupObjectData')
       .mockImplementation();
 
     // when

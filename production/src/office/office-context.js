@@ -13,10 +13,7 @@ class OfficeContext {
     let isSupported = true;
     let api = 0;
     while (isSupported && !!Office) {
-      isSupported = Office.context.requirements.isSetSupported(
-        "ExcelAPI",
-        `1.${api}`,
-      );
+      isSupported = Office.context.requirements.isSetSupported('ExcelAPI', `1.${api}`);
       if (isSupported) {
         api += 1;
       }
@@ -30,13 +27,10 @@ class OfficeContext {
    * @param {Number} version ExcelAPI version
    * @returns {Boolean} Requirement set supported
    */
-  isSetSupported = (version) => {
+  isSetSupported = version => {
     const { Office } = window;
     if (Office) {
-      return Office.context.requirements.isSetSupported(
-        "ExcelAPI",
-        `${version}`,
-      );
+      return Office.context.requirements.isSetSupported('ExcelAPI', `${version}`);
     }
     return false;
   };

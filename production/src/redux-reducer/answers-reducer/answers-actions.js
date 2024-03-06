@@ -1,6 +1,6 @@
-export const RESTORE_ALL_ANSWERS = "RESTORE_ALL_ANSWERS";
-export const CLEAR_ANSWERS = "CLEAR_ANSWERS";
-export const UPDATE_ANSWERS = "UPDATE_ANSWERS";
+export const RESTORE_ALL_ANSWERS = 'RESTORE_ALL_ANSWERS';
+export const CLEAR_ANSWERS = 'CLEAR_ANSWERS';
+export const UPDATE_ANSWERS = 'UPDATE_ANSWERS';
 
 /**
  * Function to restore all answers.
@@ -8,7 +8,7 @@ export const UPDATE_ANSWERS = "UPDATE_ANSWERS";
  * @param {*} answers
  * @returns
  */
-export const restoreAllAnswers = (answers) => ({
+export const restoreAllAnswers = answers => ({
   type: RESTORE_ALL_ANSWERS,
   payload: answers,
 });
@@ -19,7 +19,7 @@ export const restoreAllAnswers = (answers) => ({
  * @param {*} updatedAnswers
  * @returns
  */
-export const updateAnswers = (updatedAnswers) => ({
+export const updateAnswers = updatedAnswers => ({
   type: UPDATE_ANSWERS,
   payload: updatedAnswers,
 });

@@ -1,24 +1,24 @@
-import { mstrObjectRestService } from "../../mstr-object/mstr-object-rest-service";
-import { visualizationInfoService } from "../../mstr-object/visualization-info-service";
+import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
+import { visualizationInfoService } from '../../mstr-object/visualization-info-service';
 
-describe("VisualizationInfoService", () => {
+describe('VisualizationInfoService', () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
 
-  const dossierName = "dossierName";
-  const chapterName = "chapterName";
-  const chapterKey = "chapterKey";
-  const pageName = "pageName";
-  const pageKey = "pageKey";
-  const visualizationKey = "visualizationKey";
-  const panelStackKey = "panelStackKey";
-  const panelKey = "panelKey";
-  const nestedPanelStackKey = "nestedPanelStackKey";
-  const nestedPanelKey = "nestedPanelKey";
-  const projectId = "projectId";
-  const objectId = "objectId";
-  const dossierInstance = "dossierInstanceId";
+  const dossierName = 'dossierName';
+  const chapterName = 'chapterName';
+  const chapterKey = 'chapterKey';
+  const pageName = 'pageName';
+  const pageKey = 'pageKey';
+  const visualizationKey = 'visualizationKey';
+  const panelStackKey = 'panelStackKey';
+  const panelKey = 'panelKey';
+  const nestedPanelStackKey = 'nestedPanelStackKey';
+  const nestedPanelKey = 'nestedPanelKey';
+  const projectId = 'projectId';
+  const objectId = 'objectId';
+  const dossierInstance = 'dossierInstanceId';
 
   const expectedVisualizationInfoWithoutPanelStacks = {
     chapterKey,
@@ -307,116 +307,114 @@ describe("VisualizationInfoService", () => {
     ],
   };
 
-  const dossierDefinitionWithNestedPanelStacksAndWithoutExpectedVisualization =
-    {
-      name: dossierName,
-      chapters: [
-        {
-          key: `${chapterKey}_1`,
-          name: `${chapterName}_1`,
-          pages: [
-            {
-              key: `${pageKey}_1`,
-              name: `${pageName}_1`,
-              visualizations: [
-                {
-                  key: `${visualizationKey}_1`,
-                },
-              ],
-              panelStacks: [
-                {
-                  key: `${panelStackKey}_1`,
-                  panels: [
-                    {
-                      key: `${panelKey}_1`,
-                      visualizations: [
-                        {
-                          key: `${visualizationKey}_2`,
-                        },
-                      ],
-                      panelStacks: [
-                        {
-                          key: `${nestedPanelStackKey}_1`,
-                          panels: [
-                            {
-                              key: `${nestedPanelKey}_1`,
-                              visualizations: [
-                                {
-                                  key: `${visualizationKey}_3`,
-                                },
-                              ],
-                            },
-                          ],
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-        {
-          key: chapterKey,
-          name: chapterName,
-          pages: [
-            {
-              key: pageKey,
-              name: pageName,
-              visualizations: [],
-              panelStacks: [
-                {
-                  key: panelStackKey,
-                  panels: [
-                    {
-                      key: panelKey,
-                      visualizations: [],
-                      panelStacks: [
-                        {
-                          key: nestedPanelStackKey,
-                          panels: [
-                            {
-                              key: nestedPanelKey,
-                              visualizations: [],
-                            },
-                          ],
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    };
+  const dossierDefinitionWithNestedPanelStacksAndWithoutExpectedVisualization = {
+    name: dossierName,
+    chapters: [
+      {
+        key: `${chapterKey}_1`,
+        name: `${chapterName}_1`,
+        pages: [
+          {
+            key: `${pageKey}_1`,
+            name: `${pageName}_1`,
+            visualizations: [
+              {
+                key: `${visualizationKey}_1`,
+              },
+            ],
+            panelStacks: [
+              {
+                key: `${panelStackKey}_1`,
+                panels: [
+                  {
+                    key: `${panelKey}_1`,
+                    visualizations: [
+                      {
+                        key: `${visualizationKey}_2`,
+                      },
+                    ],
+                    panelStacks: [
+                      {
+                        key: `${nestedPanelStackKey}_1`,
+                        panels: [
+                          {
+                            key: `${nestedPanelKey}_1`,
+                            visualizations: [
+                              {
+                                key: `${visualizationKey}_3`,
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        key: chapterKey,
+        name: chapterName,
+        pages: [
+          {
+            key: pageKey,
+            name: pageName,
+            visualizations: [],
+            panelStacks: [
+              {
+                key: panelStackKey,
+                panels: [
+                  {
+                    key: panelKey,
+                    visualizations: [],
+                    panelStacks: [
+                      {
+                        key: nestedPanelStackKey,
+                        panels: [
+                          {
+                            key: nestedPanelKey,
+                            visualizations: [],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  };
 
   it.each`
     dossierDefinition                                                        | expectedVisualizationInfo                      | testName
-    ${dossierDefinitionWithoutPanelStacks}                                   | ${expectedVisualizationInfoWithoutPanelStacks} | ${"no panel stacks"}
-    ${dossierDefinitionWithoutPanelStacksAndExpectedVisualization}           | ${null}                                        | ${"no panel stacks and no expected visualization"}
-    ${dossierDefinitionWithPanelStacks}                                      | ${expectedVisualizationInfoWithoutPanelStacks} | ${"panel stack"}
-    ${dossierDefinitionWithPanelStacksAndWithoutExpectedVisualization}       | ${null}                                        | ${"panel stack and no expected visualization"}
-    ${dossierDefinitionWithNestedPanelStacks}                                | ${expectedVisualizationInfoWithoutPanelStacks} | ${"nested panel stack"}
-    ${dossierDefinitionWithNestedPanelStacksAndWithoutExpectedVisualization} | ${null}                                        | ${"nested panel stack and no expected visualization"}
+    ${dossierDefinitionWithoutPanelStacks}                                   | ${expectedVisualizationInfoWithoutPanelStacks} | ${'no panel stacks'}
+    ${dossierDefinitionWithoutPanelStacksAndExpectedVisualization}           | ${null}                                        | ${'no panel stacks and no expected visualization'}
+    ${dossierDefinitionWithPanelStacks}                                      | ${expectedVisualizationInfoWithoutPanelStacks} | ${'panel stack'}
+    ${dossierDefinitionWithPanelStacksAndWithoutExpectedVisualization}       | ${null}                                        | ${'panel stack and no expected visualization'}
+    ${dossierDefinitionWithNestedPanelStacks}                                | ${expectedVisualizationInfoWithoutPanelStacks} | ${'nested panel stack'}
+    ${dossierDefinitionWithNestedPanelStacksAndWithoutExpectedVisualization} | ${null}                                        | ${'nested panel stack and no expected visualization'}
   `(
     'should call getVisualizationInfo and get expectedVisualizationInfo for "$testName" dossier definition',
     async ({ dossierDefinition, expectedVisualizationInfo }) => {
       // given
       jest
-        .spyOn(mstrObjectRestService, "getDossierInstanceDefinition")
+        .spyOn(mstrObjectRestService, 'getDossierInstanceDefinition')
         .mockResolvedValue(dossierDefinition);
       // when
-      const newVisualizationInfo =
-        await visualizationInfoService.getVisualizationInfo(
-          projectId,
-          objectId,
-          visualizationKey,
-          dossierInstance,
-        );
+      const newVisualizationInfo = await visualizationInfoService.getVisualizationInfo(
+        projectId,
+        objectId,
+        visualizationKey,
+        dossierInstance
+      );
       // then
       expect(newVisualizationInfo).toStrictEqual(expectedVisualizationInfo);
-    },
+    }
   );
 });

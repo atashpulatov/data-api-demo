@@ -10,7 +10,7 @@ import {
   REFRESH_OPERATION,
   REMOVE_OPERATION,
   UPDATE_OPERATION,
-} from "../../operation/operation-type-names";
+} from '../../operation/operation-type-names';
 
 const initialState = { operations: [] };
 
@@ -46,10 +46,7 @@ function operationRequested(state, payload) {
 }
 
 function markStepCompleted(state, { objectWorkingId, completedStep }) {
-  const processedOperationIndex = getProcessedOperationIndex(
-    state.operations,
-    objectWorkingId,
-  );
+  const processedOperationIndex = getProcessedOperationIndex(state.operations, objectWorkingId);
   const processedOperation = state.operations[processedOperationIndex];
   const { stepsQueue } = processedOperation;
 
@@ -67,7 +64,7 @@ function markStepCompleted(state, { objectWorkingId, completedStep }) {
 function updateOperation(state, updatedOperationProps) {
   const processedOperationIndex = getProcessedOperationIndex(
     state.operations,
-    updatedOperationProps.objectWorkingId,
+    updatedOperationProps.objectWorkingId
   );
   const newOperations = [...state.operations];
   const updatedOperation = {
@@ -79,17 +76,14 @@ function updateOperation(state, updatedOperationProps) {
 }
 
 function cancelOperation(state, { objectWorkingId }) {
-  const processedOperationIndex = getProcessedOperationIndex(
-    state.operations,
-    objectWorkingId,
-  );
+  const processedOperationIndex = getProcessedOperationIndex(state.operations, objectWorkingId);
   state.operations.splice(processedOperationIndex, 1);
   return { ...state };
 }
 
 function getProcessedOperationIndex(operations, objectWorkingId) {
   const processedOperationIndex = operations.findIndex(
-    (operation) => operation.objectWorkingId === objectWorkingId,
+    operation => operation.objectWorkingId === objectWorkingId
   );
   if (processedOperationIndex === -1) {
     throw new Error();

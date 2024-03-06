@@ -1,4 +1,4 @@
-import { PopupTypeEnum } from "../../home/popup-type-enum";
+import { PopupTypeEnum } from '../../home/popup-type-enum';
 import {
   CLEAR_POPUP_STATE,
   ON_POPUP_BACK,
@@ -6,7 +6,7 @@ import {
   SET_MSTR_DATA,
   SET_OBJECT_DATA,
   SET_POPUP_TYPE,
-} from "./popup-state-actions";
+} from './popup-state-actions';
 
 export const initialState = {};
 

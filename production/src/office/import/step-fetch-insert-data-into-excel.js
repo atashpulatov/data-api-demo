@@ -2,11 +2,11 @@ import {
   DATA_LIMIT,
   IMPORT_ROW_LIMIT,
   mstrObjectRestService,
-} from "../../mstr-object/mstr-object-rest-service";
-import officeInsertService from "./office-insert-service";
+} from '../../mstr-object/mstr-object-rest-service';
+import officeInsertService from './office-insert-service';
 
-import operationErrorHandler from "../../operation/operation-error-handler";
-import operationStepDispatcher from "../../operation/operation-step-dispatcher";
+import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepFetchInsertDataIntoExcel {
   /**
@@ -33,8 +33,8 @@ class StepFetchInsertDataIntoExcel {
    * @param {String} operationData.instanceDefinition Object containing information about MSTR object
    */
   fetchInsertDataIntoExcel = async (objectData, operationData) => {
-    console.group("Fetch and insert data into Excel");
-    console.time("Total");
+    console.group('Fetch and insert data into Excel');
+    console.time('Total');
     try {
       const {
         objectWorkingId,
@@ -45,10 +45,7 @@ class StepFetchInsertDataIntoExcel {
       const { excelContext, officeTable, instanceDefinition } = operationData;
 
       const { columns, rows, mstrTable } = instanceDefinition;
-      const limit = Math.min(
-        Math.floor(DATA_LIMIT / columns),
-        IMPORT_ROW_LIMIT,
-      );
+      const limit = Math.min(Math.floor(DATA_LIMIT / columns), IMPORT_ROW_LIMIT);
 
       const rowGenerator = mstrObjectRestService.fetchContentGenerator({
         ...objectData,
@@ -62,7 +59,7 @@ class StepFetchInsertDataIntoExcel {
       let newDefinition = null;
       let newInstance = null;
 
-      console.time("Fetch and insert into excel");
+      console.time('Fetch and insert into excel');
       for await (const {
         row,
         header,
@@ -71,7 +68,7 @@ class StepFetchInsertDataIntoExcel {
         rowsInformation,
       } of rowGenerator) {
         console.groupCollapsed(
-          `Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`,
+          `Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`
         );
 
         excelContext.workbook.application.suspendApiCalculationUntilNextSync();
@@ -91,8 +88,7 @@ class StepFetchInsertDataIntoExcel {
         }
 
         if (metricsInRows.length) {
-          const columnInformation =
-            newInstance?.mstrTable?.columnInformation || [];
+          const columnInformation = newInstance?.mstrTable?.columnInformation || [];
           newDefinition = {
             ...definition,
             metrics: metricsInRows,
@@ -117,7 +113,7 @@ class StepFetchInsertDataIntoExcel {
         });
         console.groupEnd();
       }
-      console.timeEnd("Fetch and insert into excel");
+      console.timeEnd('Fetch and insert into excel');
 
       await officeInsertService.syncChangesToExcel(contextPromises, true);
 
@@ -139,13 +135,9 @@ class StepFetchInsertDataIntoExcel {
       operationStepDispatcher.completeFetchInsertData(objectWorkingId);
     } catch (error) {
       console.error(error);
-      operationErrorHandler.handleOperationError(
-        objectData,
-        operationData,
-        error,
-      );
+      operationErrorHandler.handleOperationError(objectData, operationData, error);
     } finally {
-      console.timeEnd("Total");
+      console.timeEnd('Total');
       console.groupEnd();
     }
   };
@@ -157,14 +149,14 @@ class StepFetchInsertDataIntoExcel {
    * @param {Array} subtotalsAddresses Array containing object with coordinates of subtotals of object.
    */
   getSubtotalCoordinates = (subtotalAddress, subtotalsAddresses) => {
-    console.time("Get subtotals coordinates");
+    console.time('Get subtotals coordinates');
     for (const address of subtotalAddress) {
       // eslint removed Boolean(address)
       if (address) {
         subtotalsAddresses.push(address);
       }
     }
-    console.timeEnd("Get subtotals coordinates");
+    console.timeEnd('Get subtotals coordinates');
   };
 }
 

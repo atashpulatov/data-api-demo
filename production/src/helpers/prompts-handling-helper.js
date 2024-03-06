@@ -1,7 +1,7 @@
-import { mstrObjectRestService } from "../mstr-object/mstr-object-rest-service";
+import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 
-const sleep = (milliseconds) =>
-  new Promise((resolve) => {
+const sleep = milliseconds =>
+  new Promise(resolve => {
     setTimeout(resolve, milliseconds);
   });
 
@@ -18,18 +18,15 @@ export const ObjectExecutionStatus = {
  * @param {*} previousPromptsAnswers
  * @returns
  */
-export function prepareGivenPromptAnswers(
-  promptObjects,
-  previousPromptsAnswers,
-) {
-  const givenPromptsAnswers = [{ messageName: "New Dossier", answers: [] }];
+export function prepareGivenPromptAnswers(promptObjects, previousPromptsAnswers) {
+  const givenPromptsAnswers = [{ messageName: 'New Dossier', answers: [] }];
 
   // Loop through the prompts objects and find the corresponding answer from the persisted answers.
   // and assign the 'type' property to the answer. Also, mark the answer as 'useDefault'
   // if it is not required and has no values.
-  promptObjects?.forEach((promptObject) => {
+  promptObjects?.forEach(promptObject => {
     const previousPromptIndex = previousPromptsAnswers.findIndex(
-      (answerPrmpt) => answerPrmpt && answerPrmpt.key === promptObject.key,
+      answerPrmpt => answerPrmpt && answerPrmpt.key === promptObject.key
     );
     if (previousPromptIndex >= 0) {
       const tempAnswer = {
@@ -59,7 +56,7 @@ export async function answerDossierPromptsHelper(
   instanceDefinition,
   objectId,
   projectId,
-  promptsAnswers,
+  promptsAnswers
 ) {
   const currentInstanceDefinition = { ...instanceDefinition };
   let count = 0;
@@ -70,9 +67,7 @@ export async function answerDossierPromptsHelper(
       objectId,
       projectId,
       instanceId: currentInstanceDefinition.mid,
-      promptsAnswers: promptsAnswers[count]
-        ? promptsAnswers[count]
-        : { answers: [] },
+      promptsAnswers: promptsAnswers[count] ? promptsAnswers[count] : { answers: [] },
       ignoreValidateRequiredCheck: true,
     };
 
@@ -86,7 +81,7 @@ export async function answerDossierPromptsHelper(
     let dossierStatusResponse = await mstrObjectRestService.getDossierStatus(
       objectId,
       currentInstanceDefinition.mid,
-      projectId,
+      projectId
     );
 
     // Keep fetching the status of the Dossier's instance until request is no longer
@@ -97,7 +92,7 @@ export async function answerDossierPromptsHelper(
       dossierStatusResponse = await mstrObjectRestService.getDossierStatus(
         objectId,
         currentInstanceDefinition.mid,
-        projectId,
+        projectId
       );
     }
     currentInstanceDefinition.status = dossierStatusResponse.body.status;
@@ -118,19 +113,14 @@ export async function answerDossierPromptsHelper(
  * @param {*} promptsAnswers
  * @returns
  */
-export async function preparePromptedDossier(
-  instanceDef,
-  objectId,
-  projectId,
-  promptsAnswers,
-) {
+export async function preparePromptedDossier(instanceDef, objectId, projectId, promptsAnswers) {
   let dossierInstanceDefinition = { ...instanceDef };
   if (dossierInstanceDefinition?.status === ObjectExecutionStatus.PROMPTED) {
     // Re-prompt the Dossier's instance to apply previous answers. Get new instance definition.
     const rePromptResponse = await mstrObjectRestService.rePromptDossier(
       objectId,
       instanceDef.mid,
-      projectId,
+      projectId
     );
     dossierInstanceDefinition.mid = rePromptResponse.mid;
 
@@ -139,7 +129,7 @@ export async function preparePromptedDossier(
       dossierInstanceDefinition,
       objectId,
       projectId,
-      promptsAnswers,
+      promptsAnswers
     );
   }
 
@@ -155,22 +145,17 @@ export async function preparePromptedDossier(
  * @param {*} promptsAnswers
  * @returns
  */
-export async function preparePromptedReport(
-  chosenObjectIdLocal,
-  projectId,
-  promptsAnswers,
-) {
+export async function preparePromptedReport(chosenObjectIdLocal, projectId, promptsAnswers) {
   const config = { objectId: chosenObjectIdLocal, projectId };
   const instanceDefinition = await mstrObjectRestService.createInstance(config);
   const { instanceId } = instanceDefinition;
 
   // execute and create an instance so we can get the prompts answers applied to it.
-  let dossierInstanceDefinition =
-    await mstrObjectRestService.createDossierBasedOnReport(
-      chosenObjectIdLocal,
-      instanceId,
-      projectId,
-    );
+  let dossierInstanceDefinition = await mstrObjectRestService.createDossierBasedOnReport(
+    chosenObjectIdLocal,
+    instanceId,
+    projectId
+  );
 
   // Do not try answering prompts if collection is empty.
   if (
@@ -183,7 +168,7 @@ export async function preparePromptedReport(
       dossierInstanceDefinition,
       chosenObjectIdLocal,
       projectId,
-      promptsAnswers,
+      promptsAnswers
     );
   }
 
@@ -191,7 +176,7 @@ export async function preparePromptedReport(
   const repromptResponse = await mstrObjectRestService.rePromptDossier(
     chosenObjectIdLocal,
     dossierInstanceDefinition.mid,
-    projectId,
+    projectId
   );
   dossierInstanceDefinition.mid = repromptResponse.mid;
   dossierInstanceDefinition.id = chosenObjectIdLocal;

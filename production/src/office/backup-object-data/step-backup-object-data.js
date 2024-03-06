@@ -1,7 +1,7 @@
-import operationStepDispatcher from "../../operation/operation-step-dispatcher";
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepBackupObjectData {
-  backupObjectData = (objectData) => {
+  backupObjectData = objectData => {
     const { objectWorkingId } = objectData;
     const backupObjectData = JSON.parse(JSON.stringify(objectData));
     operationStepDispatcher.updateOperation({

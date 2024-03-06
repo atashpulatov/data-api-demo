@@ -3,10 +3,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="theme-color" content="#ffffff" />
     <!--
       manifest.json provides metadata used when your web app is added to the
@@ -25,15 +22,15 @@
     -->
     <title>MicroStrategy for Office</title>
     <style>
-      @import url("https://fonts.googleapis.com/css?family=Noto+Sans|Noto+Sans+JP|Noto+Sans+KR|Noto+Sans+SC|Noto+Sans+TC|Roboto:300,400,500&display=swap");
+      @import url('https://fonts.googleapis.com/css?family=Noto+Sans|Noto+Sans+JP|Noto+Sans+KR|Noto+Sans+SC|Noto+Sans+TC|Roboto:300,400,500&display=swap');
 
       #root {
         background-color: #fff;
       }
 
       #loading {
-        font-family: "Roboto", "Noto Sans", "Noto Sans JP", "Noto Sans KR",
-          "Noto Sans SC", "Noto Sans TC", "Helvetica Neue", sans-serif;
+        font-family: 'Roboto', 'Noto Sans', 'Noto Sans JP', 'Noto Sans KR', 'Noto Sans SC',
+          'Noto Sans TC', 'Helvetica Neue', sans-serif;
         position: fixed;
         font-size: 14px;
         top: 50%;
@@ -50,9 +47,7 @@
   </head>
 
   <body>
-    <noscript>
-      You need to enable JavaScript to run this Office Add-in.
-    </noscript>
+    <noscript> You need to enable JavaScript to run this Office Add-in. </noscript>
     <div id="popup"></div>
     <div id="loading">
       <img
@@ -63,19 +58,19 @@
     </div>
     <script>
       var loadingTranslations = {
-        "en-US": "Loading...",
-        "de-DE": "Ladevorgang läuft...",
-        "fr-FR": "Chargement...",
-        "it-IT": "Caricamento in corso...",
-        "es-ES": "Cargando...",
-        "zh-CN": "正在加载...",
-        "zh-TW": "載入中...",
-        "ko-KR": "로딩 중...",
-        "pt-BR": "Carregando...",
-        "nl-NL": "Laden...",
-        "sv-SE": "Läser in ...",
-        "ja-JP": "ロード中...",
-        "da-DK": "Indlæser...",
+        'en-US': 'Loading...',
+        'de-DE': 'Ladevorgang läuft...',
+        'fr-FR': 'Chargement...',
+        'it-IT': 'Caricamento in corso...',
+        'es-ES': 'Cargando...',
+        'zh-CN': '正在加载...',
+        'zh-TW': '載入中...',
+        'ko-KR': '로딩 중...',
+        'pt-BR': 'Carregando...',
+        'nl-NL': 'Laden...',
+        'sv-SE': 'Läser in ...',
+        'ja-JP': 'ロード中...',
+        'da-DK': 'Indlæser...',
       };
 
       try {

@@ -1,8 +1,8 @@
-import operationErrorHandler from "../operation/operation-error-handler";
-import operationStepDispatcher from "../operation/operation-step-dispatcher";
+import operationErrorHandler from '../operation/operation-error-handler';
+import operationStepDispatcher from '../operation/operation-step-dispatcher';
 
 class StepGetDuplicateName {
-  init = (reduxStore) => {
+  init = reduxStore => {
     this.reduxStore = reduxStore;
   };
 
@@ -55,31 +55,27 @@ class StepGetDuplicateName {
    * @param {String} originalObjectName Name of the original object.
    * @returns {String} Proposed name for new duplicated object.
    */
-  prepareNewNameForDuplicatedObject = (originalObjectName) => {
-    const splitedName = String(originalObjectName).split(" ");
+  prepareNewNameForDuplicatedObject = originalObjectName => {
+    const splitedName = String(originalObjectName).split(' ');
     const nrOfWords = splitedName.length;
 
     const lastWordIndex = nrOfWords - 1;
     const lastWord = splitedName[lastWordIndex];
     const lastWordLength = lastWord.length;
 
-    if (
-      lastWord.length > 2 &&
-      lastWord[0] === "(" &&
-      lastWord[lastWordLength - 1] === ")"
-    ) {
+    if (lastWord.length > 2 && lastWord[0] === '(' && lastWord[lastWordLength - 1] === ')') {
       const counterNumber = Number(lastWord.substring(1, lastWordLength - 1));
       if (!Number.isNaN(counterNumber)) {
         splitedName.pop();
         splitedName.push(`(${counterNumber + 1})`);
       } else {
-        splitedName.push("(2)");
+        splitedName.push('(2)');
       }
     } else {
-      splitedName.push("(2)");
+      splitedName.push('(2)');
     }
 
-    const nameCandidate = splitedName.join(" ");
+    const nameCandidate = splitedName.join(' ');
 
     return nameCandidate;
   };
@@ -94,7 +90,7 @@ class StepGetDuplicateName {
    * @param {String} nameCandidate Prepared name for duplicated object
    * @returns {String} Final name for new duplicated object
    */
-  checkAndSolveNameConflicts = (nameCandidate) => {
+  checkAndSolveNameConflicts = nameCandidate => {
     let finalNameCandidate = nameCandidate;
 
     const { objects } = this.reduxStore.getState().objectReducer;
@@ -102,8 +98,7 @@ class StepGetDuplicateName {
     const objectsNames = objects.map(({ name }) => name);
 
     while (objectsNames.includes(finalNameCandidate)) {
-      finalNameCandidate =
-        this.prepareNewNameForDuplicatedObject(finalNameCandidate);
+      finalNameCandidate = this.prepareNewNameForDuplicatedObject(finalNameCandidate);
     }
     return finalNameCandidate;
   };

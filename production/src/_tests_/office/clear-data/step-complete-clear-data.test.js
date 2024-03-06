@@ -1,27 +1,27 @@
-import officeReducerHelper from "../../../office/store/office-reducer-helper";
+import officeReducerHelper from '../../../office/store/office-reducer-helper';
 
-import stepCompleteClearData from "../../../office/clear-data/step-complete-clear-data";
-import operationErrorHandler from "../../../operation/operation-error-handler";
-import operationStepDispatcher from "../../../operation/operation-step-dispatcher";
+import stepCompleteClearData from '../../../office/clear-data/step-complete-clear-data';
+import operationErrorHandler from '../../../operation/operation-error-handler';
+import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
 
-describe("StepClearCrosstabHeaders", () => {
+describe('StepClearCrosstabHeaders', () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
 
-  it("StepHighlightObject should highligh object", async () => {
+  it('StepHighlightObject should highligh object', async () => {
     // given
     const objectData = {};
     const operationData = { objectWorkingId: 1 };
 
     const mockedGetOperations = jest
-      .spyOn(officeReducerHelper, "getOperationsListFromOperationReducer")
+      .spyOn(officeReducerHelper, 'getOperationsListFromOperationReducer')
       .mockReturnValue([{}, {}]);
     const mockedGetObjects = jest
-      .spyOn(officeReducerHelper, "getObjectsListFromObjectReducer")
+      .spyOn(officeReducerHelper, 'getObjectsListFromObjectReducer')
       .mockImplementation();
     const mockedCompleteStep = jest
-      .spyOn(operationStepDispatcher, "completeClearData")
+      .spyOn(operationStepDispatcher, 'completeClearData')
       .mockImplementation();
 
     // when
@@ -33,20 +33,20 @@ describe("StepClearCrosstabHeaders", () => {
     expect(mockedCompleteStep).toBeCalledTimes(1);
   });
 
-  it("should handle error on clearCrosstabHeaders", async () => {
+  it('should handle error on clearCrosstabHeaders', async () => {
     // given
     const objectData = {};
     const operationData = { objectWorkingId: 1 };
-    const error = new Error("error");
+    const error = new Error('error');
 
-    jest.spyOn(console, "error").mockImplementation();
+    jest.spyOn(console, 'error').mockImplementation();
     const mockedGetOperations = jest
-      .spyOn(officeReducerHelper, "getOperationsListFromOperationReducer")
+      .spyOn(officeReducerHelper, 'getOperationsListFromOperationReducer')
       .mockImplementation(() => {
         throw error;
       });
     const mockedHandleError = jest
-      .spyOn(operationErrorHandler, "handleOperationError")
+      .spyOn(operationErrorHandler, 'handleOperationError')
       .mockImplementation();
 
     // when

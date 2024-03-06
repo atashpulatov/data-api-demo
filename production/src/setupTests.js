@@ -1,14 +1,14 @@
 // setup file
-import React from "react";
-import "regenerator-runtime";
+import React from 'react';
+import 'regenerator-runtime';
 
-import "@testing-library/jest-dom";
-import { diContainer } from "./dependency-container";
+import '@testing-library/jest-dom';
+import { diContainer } from './dependency-container';
 
-import "jest-localstorage-mock";
+import 'jest-localstorage-mock';
 
-jest.mock("@mstr/connector-components", () => {
-  const originalModule = jest.requireActual("@mstr/connector-components");
+jest.mock('@mstr/connector-components', () => {
+  const originalModule = jest.requireActual('@mstr/connector-components');
 
   return {
     ...originalModule,
@@ -23,6 +23,6 @@ jest.mock("@mstr/connector-components", () => {
   };
 });
 
-global.ResizeObserver = require("resize-observer-polyfill");
+global.ResizeObserver = require('resize-observer-polyfill');
 
 diContainer.initializeAll();

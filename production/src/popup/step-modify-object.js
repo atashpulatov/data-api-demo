@@ -1,4 +1,4 @@
-import operationStepDispatcher from "../operation/operation-step-dispatcher";
+import operationStepDispatcher from '../operation/operation-step-dispatcher';
 
 class StepModifyObject {
   /**
@@ -24,21 +24,15 @@ class StepModifyObject {
 
       if (
         !objectEditedData.visualizationInfo &&
-        subtotalsInfo.importSubtotal !==
-          objectEditedData.subtotalsInfo.importSubtotal
+        subtotalsInfo.importSubtotal !== objectEditedData.subtotalsInfo.importSubtotal
       ) {
         const subtotalsInformation = { ...subtotalsInfo };
-        subtotalsInformation.importSubtotal =
-          objectEditedData.subtotalsInfo.importSubtotal;
+        subtotalsInformation.importSubtotal = objectEditedData.subtotalsInfo.importSubtotal;
         updatedObject.subtotalsInfo = subtotalsInformation;
       }
 
-      if (
-        objectData.displayAttrFormNames !==
-        objectEditedData.displayAttrFormNames
-      ) {
-        updatedObject.displayAttrFormNames =
-          objectEditedData.displayAttrFormNames;
+      if (objectData.displayAttrFormNames !== objectEditedData.displayAttrFormNames) {
+        updatedObject.displayAttrFormNames = objectEditedData.displayAttrFormNames;
       }
 
       if (objectEditedData.promptsAnswers) {
@@ -52,8 +46,7 @@ class StepModifyObject {
         ) {
           objectEditedData.visualizationInfo.nameAndFormatShouldUpdate = true;
           updatedObject.visualizationInfo = objectEditedData.visualizationInfo;
-          updatedObject.displayAttrFormNames =
-            objectEditedData.displayAttrFormNames;
+          updatedObject.displayAttrFormNames = objectEditedData.displayAttrFormNames;
         }
 
         updatedObject.preparedInstanceId = objectEditedData.preparedInstanceId;

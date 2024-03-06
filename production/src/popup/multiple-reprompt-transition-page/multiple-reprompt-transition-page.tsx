@@ -1,18 +1,18 @@
-import React, { FC, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { connect } from "react-redux";
-import { ObjectWindowTitle, Popup } from "@mstr/connector-components";
-import { Spinner } from "@mstr/rc";
+import React, { FC, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { connect } from 'react-redux';
+import { ObjectWindowTitle, Popup } from '@mstr/connector-components';
+import { Spinner } from '@mstr/rc';
 
-import officeReducerHelper from "../../office/store/office-reducer-helper";
-import overviewHelper from "../overview/overview-helper";
+import officeReducerHelper from '../../office/store/office-reducer-helper';
+import overviewHelper from '../overview/overview-helper';
 
-import { MultipleRepromptTransitionPageTypes } from "./multiple-reprompt-transition-page-types";
+import { MultipleRepromptTransitionPageTypes } from './multiple-reprompt-transition-page-types';
 
-import i18n from "../../i18n";
-import mstrObjectEnum from "../../mstr-object/mstr-object-type-enum";
+import i18n from '../../i18n';
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 
-import "./multiple-reprompt-transition-page.scss";
+import './multiple-reprompt-transition-page.scss';
 
 /**
  * This component is used as a transition page for the Multiple Reprompt workflow.
@@ -26,16 +26,14 @@ export const MultipleRepromptTransitionPageNotConnected: FC<
   MultipleRepromptTransitionPageTypes
 > = ({ nextObjectBindId, nextObjectIndex, total, popupData }) => {
   const nextObject: any =
-    officeReducerHelper.getObjectFromObjectReducerByBindId(nextObjectBindId) ||
-    {};
+    officeReducerHelper.getObjectFromObjectReducerByBindId(nextObjectBindId) || {};
   // retrieve object name based on next object type. reports vs dossiers have different name properties
   const nextObjectName =
-    nextObject.objectType?.name ===
-    mstrObjectEnum.mstrObjectType.visualization.name
+    nextObject.objectType?.name === mstrObjectEnum.mstrObjectType.visualization.name
       ? nextObject.definition?.sourceName
       : nextObject.name;
 
-  const [t] = useTranslation("common", { i18n });
+  const [t] = useTranslation('common', { i18n });
   const [dialogPopup, setDialogPopup] = React.useState(null);
   useEffect(() => {
     if (popupData) {
@@ -49,22 +47,22 @@ export const MultipleRepromptTransitionPageNotConnected: FC<
   }, [popupData]);
 
   return (
-    <div className="multiple-reprompt-transition-page">
+    <div className='multiple-reprompt-transition-page'>
       <ObjectWindowTitle
-        objectType="" // not needed since multiple reprompt title doesn't show type
+        objectType='' // not needed since multiple reprompt title doesn't show type
         objectName={nextObjectName}
         isReprompt
         isEdit={false}
         index={nextObjectIndex}
         total={total}
       />
-      <div className="loading-section">
-        <Spinner className="loading-spinner" type="large">
-          {t("Loading...")}
+      <div className='loading-section'>
+        <Spinner className='loading-spinner' type='large'>
+          {t('Loading...')}
         </Spinner>
       </div>
       {!!dialogPopup && (
-        <div className="standalone-popup">
+        <div className='standalone-popup'>
           <Popup {...dialogPopup} />
         </div>
       )}
@@ -83,7 +81,7 @@ const mapStateToProps = (state: {
   const { repromptsQueueReducer, officeReducer } = state;
 
   return {
-    nextObjectBindId: repromptsQueueReducer.repromptsQueue[0]?.bindId || "",
+    nextObjectBindId: repromptsQueueReducer.repromptsQueue[0]?.bindId || '',
     // + 1 since the next obj has not been processed yet, so index is behind 1
     nextObjectIndex: repromptsQueueReducer.index + 1,
     total: repromptsQueueReducer.total,
@@ -92,5 +90,5 @@ const mapStateToProps = (state: {
 };
 
 export const MultipleRepromptTransitionPage = connect(mapStateToProps)(
-  MultipleRepromptTransitionPageNotConnected,
+  MultipleRepromptTransitionPageNotConnected
 );

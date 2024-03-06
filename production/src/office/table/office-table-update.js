@@ -1,10 +1,10 @@
-import { CONTEXT_LIMIT } from "../../mstr-object/mstr-object-rest-service";
-import { officeApiCrosstabHelper } from "../api/office-api-crosstab-helper";
-import { officeRemoveHelper } from "../remove/office-remove-helper";
-import officeTableHelperRange from "./office-table-helper-range";
+import { CONTEXT_LIMIT } from '../../mstr-object/mstr-object-rest-service';
+import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
+import { officeRemoveHelper } from '../remove/office-remove-helper';
+import officeTableHelperRange from './office-table-helper-range';
 
-import officeApiDataLoader from "../api/office-api-data-loader";
-import officeFormatSubtotals from "../format/office-format-subtotals";
+import officeApiDataLoader from '../api/office-api-data-loader';
+import officeFormatSubtotals from '../format/office-format-subtotals';
 
 class OfficeTableUpdate {
   /**
@@ -16,13 +16,8 @@ class OfficeTableUpdate {
    * @param {Object} prevOfficeTable Previous office table to refresh
    *
    */
-  updateOfficeTable = async (
-    instanceDefinition,
-    excelContext,
-    startCell,
-    prevOfficeTable,
-  ) => {
-    console.time("Validate existing table");
+  updateOfficeTable = async (instanceDefinition, excelContext, startCell, prevOfficeTable) => {
+    console.time('Validate existing table');
 
     const {
       rows,
@@ -38,23 +33,15 @@ class OfficeTableUpdate {
         excelContext,
         prevOfficeTable,
         mstrTable,
-        subtotalsAddresses,
+        subtotalsAddresses
       );
 
       await this.validateAddedRowsRange(excelContext, rows, prevOfficeTable);
 
       if (isCrosstab) {
-        this.createHeadersForCrosstab(
-          prevOfficeTable.worksheet,
-          instanceDefinition,
-          startCell,
-        );
+        this.createHeadersForCrosstab(prevOfficeTable.worksheet, instanceDefinition, startCell);
       } else {
-        this.setHeaderValuesNoCrosstab(
-          excelContext,
-          prevOfficeTable,
-          mstrTable.headers.columns,
-        );
+        this.setHeaderValuesNoCrosstab(excelContext, prevOfficeTable, mstrTable.headers.columns);
       }
 
       await excelContext.sync();
@@ -63,7 +50,7 @@ class OfficeTableUpdate {
         excelContext,
         prevOfficeTable,
         CONTEXT_LIMIT,
-        rows,
+        rows
       );
 
       return prevOfficeTable;
@@ -71,7 +58,7 @@ class OfficeTableUpdate {
       await excelContext.sync();
       throw error;
     } finally {
-      console.timeEnd("Validate existing table");
+      console.timeEnd('Validate existing table');
     }
   };
 
@@ -79,50 +66,37 @@ class OfficeTableUpdate {
     excelContext,
     prevOfficeTable,
     mstrTable,
-    subtotalsAddresses,
+    subtotalsAddresses
   ) => {
     if (subtotalsAddresses && subtotalsAddresses.length) {
       await officeFormatSubtotals.applySubtotalFormatting(
         prevOfficeTable,
         excelContext,
         mstrTable,
-        false,
+        false
       );
     }
   };
 
-  validateAddedRowsRange = async (
-    excelContext,
-    newRowsCount,
-    prevOfficeTable,
-  ) => {
+  validateAddedRowsRange = async (excelContext, newRowsCount, prevOfficeTable) => {
     const addedRowsCount = await this.getAddedRowsCount(
       excelContext,
       newRowsCount,
-      prevOfficeTable.rows,
+      prevOfficeTable.rows
     );
 
     // If the new table has more rows during update check validity
     if (addedRowsCount) {
-      const bottomRange = prevOfficeTable
-        .getRange()
-        .getRowsBelow(addedRowsCount);
-      await officeTableHelperRange.checkRangeValidity(
-        excelContext,
-        bottomRange,
-      );
+      const bottomRange = prevOfficeTable.getRange().getRowsBelow(addedRowsCount);
+      await officeTableHelperRange.checkRangeValidity(excelContext, bottomRange);
     }
   };
 
-  getAddedRowsCount = async (
-    excelContext,
-    newRowsCount,
-    prevOfficeTableRows,
-  ) => {
+  getAddedRowsCount = async (excelContext, newRowsCount, prevOfficeTableRows) => {
     const prevRowsCount = await officeApiDataLoader.loadSingleExcelData(
       excelContext,
       prevOfficeTableRows,
-      "count",
+      'count'
     );
 
     return Math.max(0, newRowsCount - prevRowsCount);
@@ -137,20 +111,14 @@ class OfficeTableUpdate {
       startCell,
       mstrTable,
       sheet,
-      crosstabHeaderDimensions,
+      crosstabHeaderDimensions
     );
   };
 
-  setHeaderValuesNoCrosstab = (
-    excelContext,
-    prevOfficeTable,
-    headerColumns,
-  ) => {
+  setHeaderValuesNoCrosstab = (excelContext, prevOfficeTable, headerColumns) => {
     excelContext.workbook.application.suspendApiCalculationUntilNextSync();
 
-    prevOfficeTable.getHeaderRowRange().values = [
-      headerColumns[headerColumns.length - 1],
-    ];
+    prevOfficeTable.getHeaderRowRange().values = [headerColumns[headerColumns.length - 1]];
   };
 }
 

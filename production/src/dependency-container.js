@@ -1,33 +1,33 @@
-import { authenticationService } from "./authentication/auth-rest-service";
-import { authenticationHelper } from "./authentication/authentication-helper";
-import { homeHelper } from "./home/home-helper";
-import { userRestService } from "./home/user-rest-service";
-import { mstrObjectRestService } from "./mstr-object/mstr-object-rest-service";
-import { visualizationInfoService } from "./mstr-object/visualization-info-service";
-import { notificationService } from "./notification-v2/notification-service";
-import { officeApiHelper } from "./office/api/office-api-helper";
-import officeReducerHelper from "./office/store/office-reducer-helper";
-import officeStoreHelper from "./office/store/office-store-helper";
-import overviewHelper from "./popup/overview/overview-helper";
-import { popupHelper } from "./popup/popup-helper";
-import { sidePanelNotificationHelper } from "./right-side-panel/side-panel-notification-helper";
-import { sidePanelService } from "./right-side-panel/side-panel-service";
-import { sessionHelper } from "./storage/session-helper";
+import { authenticationService } from './authentication/auth-rest-service';
+import { authenticationHelper } from './authentication/authentication-helper';
+import { homeHelper } from './home/home-helper';
+import { userRestService } from './home/user-rest-service';
+import { mstrObjectRestService } from './mstr-object/mstr-object-rest-service';
+import { visualizationInfoService } from './mstr-object/visualization-info-service';
+import { notificationService } from './notification-v2/notification-service';
+import { officeApiHelper } from './office/api/office-api-helper';
+import officeReducerHelper from './office/store/office-reducer-helper';
+import officeStoreHelper from './office/store/office-store-helper';
+import overviewHelper from './popup/overview/overview-helper';
+import { popupHelper } from './popup/popup-helper';
+import { sidePanelNotificationHelper } from './right-side-panel/side-panel-notification-helper';
+import { sidePanelService } from './right-side-panel/side-panel-service';
+import { sessionHelper } from './storage/session-helper';
 
-import officeStoreObject from "./office/store/office-store-object";
-import officeStoreRestoreObject from "./office/store/office-store-restore-object";
-import stepSaveObjectInExcel from "./office/store/step-save-object-in-excel";
-import { reduxStore } from "./store";
+import officeStoreObject from './office/store/office-store-object';
+import officeStoreRestoreObject from './office/store/office-store-restore-object';
+import stepSaveObjectInExcel from './office/store/step-save-object-in-excel';
+import { reduxStore } from './store';
 
-import { errorService } from "./error/error-handler";
-import stepGetDuplicateName from "./office/step-get-duplicate-name";
-import { operationBus } from "./operation/operation-bus";
-import operationErrorHandler from "./operation/operation-error-handler";
-import operationStepDispatcher from "./operation/operation-step-dispatcher";
-import subscribeSteps from "./operation/operation-subscribe-steps";
-import { popupController } from "./popup/popup-controller";
-import { popupActions } from "./redux-reducer/popup-reducer/popup-actions";
-import { sessionActions } from "./redux-reducer/session-reducer/session-actions";
+import { errorService } from './error/error-handler';
+import stepGetDuplicateName from './office/step-get-duplicate-name';
+import { operationBus } from './operation/operation-bus';
+import operationErrorHandler from './operation/operation-error-handler';
+import operationStepDispatcher from './operation/operation-step-dispatcher';
+import subscribeSteps from './operation/operation-subscribe-steps';
+import { popupController } from './popup/popup-controller';
+import { popupActions } from './redux-reducer/popup-reducer/popup-actions';
+import { sessionActions } from './redux-reducer/session-reducer/session-actions';
 
 class DIContainer {
   constructor(autoInitialize) {
@@ -70,16 +70,11 @@ class DIContainer {
       sessionHelper,
       notificationService,
       popupController,
-      reduxStore,
+      reduxStore
     );
 
     this.authenticationHelper = authenticationHelper;
-    this.authenticationHelper.init(
-      reduxStore,
-      sessionActions,
-      authenticationService,
-      errorService,
-    );
+    this.authenticationHelper.init(reduxStore, sessionActions, authenticationService, errorService);
 
     this.homeHelper = homeHelper;
     this.homeHelper.init(reduxStore, sessionActions, sessionHelper);
@@ -97,12 +92,7 @@ class DIContainer {
     this.sidePanelService.init(reduxStore);
 
     this.popupController = popupController;
-    this.popupController.init(
-      reduxStore,
-      sessionActions,
-      popupActions,
-      overviewHelper,
-    );
+    this.popupController.init(reduxStore, sessionActions, popupActions, overviewHelper);
 
     this.overviewHelper = overviewHelper;
     this.overviewHelper.init(reduxStore, sidePanelService, notificationService);
@@ -120,7 +110,7 @@ class DIContainer {
       popupHelper,
       mstrObjectRestService,
       popupController,
-      visualizationInfoService,
+      visualizationInfoService
     );
 
     this.initialized = true;
@@ -132,7 +122,7 @@ class DIContainer {
     return this[ClassToInitialize.constructor.name];
   };
 
-  get = (dependency) => this[dependency];
+  get = dependency => this[dependency];
 
   initializeOperationSteps() {
     this.subscribeSteps = subscribeSteps;

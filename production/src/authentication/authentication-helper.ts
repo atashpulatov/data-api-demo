@@ -1,6 +1,6 @@
-import request from "superagent";
+import request from 'superagent';
 
-import { notificationService } from "../notification-v2/notification-service";
+import { notificationService } from '../notification-v2/notification-service';
 
 class AuthenticationHelper {
   reduxStore: any;
@@ -72,7 +72,7 @@ class AuthenticationHelper {
         notificationService.connectionRestored();
         clearInterval(checkInterval);
       })
-      .catch((error) => {
+      .catch(error => {
         // if we get any response status it means that we are connected
         if (error.status) {
           notificationService.connectionRestored();

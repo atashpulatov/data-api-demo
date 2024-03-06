@@ -1,13 +1,13 @@
-import officeStoreHelper from "./office-store-helper";
+import officeStoreHelper from './office-store-helper';
 
-import { errorService } from "../../error/error-handler";
-import { restoreAllAnswers } from "../../redux-reducer/answers-reducer/answers-actions";
-import { restoreAllObjects } from "../../redux-reducer/object-reducer/object-actions";
-import { officeProperties } from "../../redux-reducer/office-reducer/office-properties";
-import { objectImportType } from "../../mstr-object/constants";
+import { errorService } from '../../error/error-handler';
+import { restoreAllAnswers } from '../../redux-reducer/answers-reducer/answers-actions';
+import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
+import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
+import { objectImportType } from '../../mstr-object/constants';
 
 class OfficeStoreRestoreObject {
-  init = (reduxStore) => {
+  init = reduxStore => {
     this.reduxStore = reduxStore;
   };
 
@@ -21,7 +21,7 @@ class OfficeStoreRestoreObject {
     let objects = settings.get(officeProperties.storedObjects) || [];
     objects = this.restoreLegacyObjectsFromExcelStore(settings, objects);
     if (objects?.filter) {
-      objects = objects.filter((object) => !object.doNotPersist);
+      objects = objects.filter(object => !object.doNotPersist);
     }
 
     this.resetIsPromptedForDossiersWithAnswers(objects);
@@ -37,8 +37,8 @@ class OfficeStoreRestoreObject {
    *
    * @param {*} objects restored object definitions from excel document.
    */
-  restoreLegacyObjectsWithImportType = (objects) => {
-    objects?.forEach((object) => {
+  restoreLegacyObjectsWithImportType = objects => {
+    objects?.forEach(object => {
       if (object && !object.importType) {
         object.importType = objectImportType.TABLE;
       }
@@ -54,13 +54,12 @@ class OfficeStoreRestoreObject {
    *
    * @param {*} objects restored object definitions from excel document.
    */
-  resetIsPromptedForDossiersWithAnswers = (objects) => {
+  resetIsPromptedForDossiersWithAnswers = objects => {
     objects
-      ?.filter((object) => object.mstrObjectType.type === 55)
-      .forEach((object) => {
+      ?.filter(object => object.mstrObjectType.type === 55)
+      .forEach(object => {
         if (!object.isPrompted) {
-          object.isPrompted =
-            object.manipulationsXML?.promptAnswers !== undefined;
+          object.isPrompted = object.manipulationsXML?.promptAnswers !== undefined;
         }
       });
   };
@@ -91,36 +90,20 @@ class OfficeStoreRestoreObject {
     if (reportArray && reportArray.length > 0) {
       for (let index = 0; index < reportArray.length; index++) {
         const currentObject = JSON.parse(JSON.stringify(reportArray[index]));
-        if (
-          !objects ||
-          !objects.find((object) => object.bindId === currentObject.bindId)
-        ) {
-          this.mapLegacyObjectValue(currentObject, "objectId", "id");
-          this.mapLegacyObjectValue(
-            currentObject,
-            "mstrObjectType",
-            "objectType",
-          );
-          this.mapLegacyObjectValue(
-            currentObject,
-            "previousTableDimensions",
-            "tableDimensions",
-          );
-          this.mapLegacyObjectValue(
-            currentObject,
-            "subtotalsInfo",
-            "subtotalInfo",
-          );
+        if (!objects || !objects.find(object => object.bindId === currentObject.bindId)) {
+          this.mapLegacyObjectValue(currentObject, 'objectId', 'id');
+          this.mapLegacyObjectValue(currentObject, 'mstrObjectType', 'objectType');
+          this.mapLegacyObjectValue(currentObject, 'previousTableDimensions', 'tableDimensions');
+          this.mapLegacyObjectValue(currentObject, 'subtotalsInfo', 'subtotalInfo');
 
           // TODO find better way for unique Id
-          currentObject.objectWorkingId =
-            Date.now() + index * reportArray.length;
+          currentObject.objectWorkingId = Date.now() + index * reportArray.length;
           objectsToBeAdded.push(currentObject);
         }
       }
       settings.set(officeProperties.loadedReportProperties, []);
-      settings.saveAsync((saveAsync) =>
-        console.log(`Clearing report Array in settings ${saveAsync.status}`),
+      settings.saveAsync(saveAsync =>
+        console.log(`Clearing report Array in settings ${saveAsync.status}`)
       );
     }
     return [...objects, ...objectsToBeAdded];
@@ -165,7 +148,7 @@ class OfficeStoreRestoreObject {
    * @return {Any} Contains settings value
    * @throws Error on failed execution of Office api function
    */
-  getExcelSettingValue = (key) => {
+  getExcelSettingValue = key => {
     const settings = officeStoreHelper.getOfficeSettings();
     return settings.get(key);
   };

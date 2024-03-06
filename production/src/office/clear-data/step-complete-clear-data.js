@@ -1,7 +1,7 @@
-import officeReducerHelper from "../store/office-reducer-helper";
+import officeReducerHelper from '../store/office-reducer-helper';
 
-import operationErrorHandler from "../../operation/operation-error-handler";
-import operationStepDispatcher from "../../operation/operation-step-dispatcher";
+import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepCompleteClearData {
   /**
@@ -17,16 +17,11 @@ class StepCompleteClearData {
   completeClearData = async (objectData, operationData) => {
     const { objectWorkingId } = operationData;
     try {
-      const operationsList =
-        officeReducerHelper.getOperationsListFromOperationReducer();
+      const operationsList = officeReducerHelper.getOperationsListFromOperationReducer();
       const objectList = officeReducerHelper.getObjectsListFromObjectReducer();
       const nextOperation = operationsList[1];
 
-      operationStepDispatcher.completeClearData(
-        objectWorkingId,
-        nextOperation,
-        objectList,
-      );
+      operationStepDispatcher.completeClearData(objectWorkingId, nextOperation, objectList);
     } catch (error) {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData);

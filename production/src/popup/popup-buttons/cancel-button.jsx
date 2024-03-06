@@ -1,11 +1,11 @@
-import React from "react";
-import { Button } from "@mstr/rc";
+import React from 'react';
+import { Button } from '@mstr/rc';
 
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 export const CancelButton = ({ handleCancel, t }) => (
-  <Button id="cancel" onClick={handleCancel} variant="secondary">
-    {t("Cancel")}
+  <Button id='cancel' onClick={handleCancel} variant='secondary'>
+    {t('Cancel')}
   </Button>
 );
 

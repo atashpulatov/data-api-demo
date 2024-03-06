@@ -1,6 +1,6 @@
-import { moduleProxy } from "../module-proxy";
+import { moduleProxy } from '../module-proxy';
 
-import { PrivilegeIds } from "../office-constants";
+import { PrivilegeIds } from '../office-constants';
 
 class AuthenticationService {
   moduleProxy: {
@@ -12,23 +12,18 @@ class AuthenticationService {
     this.moduleProxy = proxy;
   }
 
-  authenticate(
-    username: string,
-    password: string,
-    envUrl: string,
-    loginMode = 1,
-  ): void {
+  authenticate(username: string, password: string, envUrl: string, loginMode = 1): void {
     return this.moduleProxy.request
       .post(`${envUrl}/auth/login`)
       .send({ username, password, loginMode })
       .withCredentials()
-      .then((res: any) => res.headers["x-mstr-authtoken"]);
+      .then((res: any) => res.headers['x-mstr-authtoken']);
   }
 
   logout(envUrl: string, authToken: string): void {
     return this.moduleProxy.request
       .post(`${envUrl}/auth/logout`)
-      .set("x-mstr-authtoken", authToken)
+      .set('x-mstr-authtoken', authToken)
       .withCredentials()
       .then(() => true);
   }
@@ -36,7 +31,7 @@ class AuthenticationService {
   getSessions(envUrl: string, authToken: string): any {
     return this.moduleProxy.request
       .get(`${envUrl}/sessions/userInfo`)
-      .set("x-mstr-authtoken", authToken)
+      .set('x-mstr-authtoken', authToken)
       .withCredentials()
       .then((res: any) => res);
   }
@@ -44,20 +39,17 @@ class AuthenticationService {
   putSessions(envUrl: string, authToken: string): any {
     return this.moduleProxy.request
       .put(`${envUrl}/sessions`)
-      .set("x-mstr-authtoken", authToken)
+      .set('x-mstr-authtoken', authToken)
       .withCredentials()
       .then((res: any) => res);
   }
 
-  async getOfficePrivilege(
-    envUrl: string,
-    authToken: string,
-  ): Promise<boolean> {
+  async getOfficePrivilege(envUrl: string, authToken: string): Promise<boolean> {
     try {
       const response = await this.fetchPrivilegeById(
         PrivilegeIds.OFFICE_PRIVILEGE_ID,
         envUrl,
-        authToken,
+        authToken
       );
 
       if (!response) {
@@ -77,15 +69,12 @@ class AuthenticationService {
     }
   }
 
-  async getAttributeFormPrivilege(
-    envUrl: string,
-    iSession: any,
-  ): Promise<boolean> {
+  async getAttributeFormPrivilege(envUrl: string, iSession: any): Promise<boolean> {
     try {
       const response = await this.fetchPrivilegeById(
         PrivilegeIds.ATTRIBUTE_FORM_PRIVILEGE_ID,
         envUrl,
-        iSession,
+        iSession
       );
       // Only return false if isUserLevelAllowed exists and is false
       if (!response) {
@@ -108,7 +97,7 @@ class AuthenticationService {
   fetchPrivilegeById(id: string, envUrl: string, authToken: string): any {
     return this.moduleProxy.request
       .get(`${envUrl}/sessions/privileges/${id}`)
-      .set("x-mstr-authtoken", authToken)
+      .set('x-mstr-authtoken', authToken)
       .withCredentials()
       .then((res: any) => res.body);
   }

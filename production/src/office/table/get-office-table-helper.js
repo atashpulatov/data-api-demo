@@ -5,7 +5,7 @@ class GetOfficeTableHelper {
    * @param {Object} mstrTable contains information about mstr object
    *
    */
-  checkReportTypeChange = (mstrTable) => {
+  checkReportTypeChange = mstrTable => {
     const { prevCrosstabDimensions, isCrosstab } = mstrTable;
     mstrTable.toCrosstabChange = !prevCrosstabDimensions && isCrosstab;
     mstrTable.fromCrosstabChange = prevCrosstabDimensions && !isCrosstab;
@@ -29,7 +29,7 @@ class GetOfficeTableHelper {
     }
     const excelCompatibleTableName = mstrTable.name.replace(
       /(\.|•|‼| |!|#|\$|%|&|'|\(|\)|\*|\+|,|-|\/|:|;|<|=|>|@|\^|`|\{|\||\}|~|¢|£|¥|¬|«|»)/g,
-      "_",
+      '_'
     );
     return `_${excelCompatibleTableName.slice(0, 239)}_${Date.now().toString()}`;
   };

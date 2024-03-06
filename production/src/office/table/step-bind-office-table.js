@@ -1,12 +1,9 @@
-import { officeApiHelper } from "../api/office-api-helper";
+import { officeApiHelper } from '../api/office-api-helper';
 
-import operationErrorHandler from "../../operation/operation-error-handler";
-import operationStepDispatcher from "../../operation/operation-step-dispatcher";
-import {
-  DUPLICATE_OPERATION,
-  IMPORT_OPERATION,
-} from "../../operation/operation-type-names";
-import officeApiDataLoader from "../api/office-api-data-loader";
+import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import { DUPLICATE_OPERATION, IMPORT_OPERATION } from '../../operation/operation-type-names';
+import officeApiDataLoader from '../api/office-api-data-loader';
 
 class StepBindOfficeTable {
   /**
@@ -43,7 +40,7 @@ class StepBindOfficeTable {
         const tableName = await officeApiDataLoader.loadSingleExcelData(
           excelContext,
           officeTable,
-          "name",
+          'name'
         );
 
         await officeApiHelper.bindNamedItem(tableName, bindId);
@@ -58,11 +55,7 @@ class StepBindOfficeTable {
       operationStepDispatcher.completeBindOfficeTable(objectWorkingId);
     } catch (error) {
       console.error(error);
-      operationErrorHandler.handleOperationError(
-        objectData,
-        operationData,
-        error,
-      );
+      operationErrorHandler.handleOperationError(objectData, operationData, error);
     }
   };
 }

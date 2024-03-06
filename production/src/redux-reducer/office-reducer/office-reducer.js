@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { officeProperties } from "./office-properties";
+import { officeProperties } from './office-properties';
 
 const initialState = {
   shouldRenderSettings: false,

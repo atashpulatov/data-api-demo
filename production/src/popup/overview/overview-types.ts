@@ -1,4 +1,4 @@
-import { PopupTypes } from "@mstr/connector-components";
+import { PopupTypes } from '@mstr/connector-components';
 
 export interface DuplicatePopup {
   type: PopupTypes;
@@ -18,9 +18,5 @@ export interface DialogPopup {
   objectWorkingId: number;
   setDialogPopup: (dialogPopup: DuplicatePopup | RangeTakenPopup) => void;
   activeCellAddress?: string;
-  onDuplicate?: (
-    objectWorkingId: number,
-    insertNewWorksheet: boolean,
-    withEdit: boolean
-  ) => void;
+  onDuplicate?: (objectWorkingId: number, insertNewWorksheet: boolean, withEdit: boolean) => void;
 }

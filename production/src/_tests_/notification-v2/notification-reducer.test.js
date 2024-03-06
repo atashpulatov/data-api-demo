@@ -1,27 +1,27 @@
-import { notificationService } from "../../notification-v2/notification-service";
+import { notificationService } from '../../notification-v2/notification-service';
 
-import * as customTranslations from "../../customTranslation";
-import * as notificationButtonsModule from "../../notification-v2/notification-buttons";
+import * as customTranslations from '../../customTranslation';
+import * as notificationButtonsModule from '../../notification-v2/notification-buttons';
 import {
   DISPLAY_NOTIFICATION_COMPLETED,
   MOVE_NOTIFICATION_TO_IN_PROGRESS,
-} from "../../operation/operation-steps";
+} from '../../operation/operation-steps';
 import {
   CLEAR_DATA_OPERATION,
   IMPORT_OPERATION,
   REMOVE_OPERATION,
-} from "../../operation/operation-type-names";
+} from '../../operation/operation-type-names';
 import {
   CREATE_GLOBAL_NOTIFICATION,
   DELETE_NOTIFICATION,
   DISPLAY_NOTIFICATION_WARNING,
   REMOVE_GLOBAL_NOTIFICATION,
-} from "../../redux-reducer/notification-reducer/notification-actions";
-import { notificationReducer } from "../../redux-reducer/notification-reducer/notification-reducer";
-import { officeProperties } from "../../redux-reducer/office-reducer/office-properties";
+} from '../../redux-reducer/notification-reducer/notification-actions';
+import { notificationReducer } from '../../redux-reducer/notification-reducer/notification-reducer';
+import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 
-describe("Notification reducer", () => {
-  it("should get default state if one is not provided", () => {
+describe('Notification reducer', () => {
+  it('should get default state if one is not provided', () => {
     // given
     const action = {};
 
@@ -31,21 +31,21 @@ describe("Notification reducer", () => {
     // then
     expect(resultState).toEqual({
       notifications: [],
-      globalNotification: { type: "" },
+      globalNotification: { type: '' },
     });
   });
 
-  describe("global notification", () => {
+  describe('global notification', () => {
     const initialState = {
       notifications: [],
-      globalNotification: { type: "" },
+      globalNotification: { type: '' },
     };
-    describe("createGlobalNotification", () => {
-      it("should create global notification if there is none", () => {
+    describe('createGlobalNotification', () => {
+      it('should create global notification if there is none', () => {
         // given
         const expectedNotification = {
-          type: "some type",
-          someProp: "some value",
+          type: 'some type',
+          someProp: 'some value',
         };
         const action = {
           type: CREATE_GLOBAL_NOTIFICATION,
@@ -56,83 +56,77 @@ describe("Notification reducer", () => {
         // then
         expect(resultState.globalNotification).toEqual(expectedNotification);
       });
-      it("should overwrite existing global notification if there is one", () => {
+      it('should overwrite existing global notification if there is one', () => {
         // given
         const initialStateExistingGlobal = {
           notifications: [],
-          globalNotification: { type: "some notification" },
+          globalNotification: { type: 'some notification' },
         };
         const expectedNotification = {
-          type: "some type",
-          someProp: "some value",
+          type: 'some type',
+          someProp: 'some value',
         };
         const action = {
           type: CREATE_GLOBAL_NOTIFICATION,
           payload: expectedNotification,
         };
         // when
-        const resultState = notificationReducer(
-          initialStateExistingGlobal,
-          action
-        );
+        const resultState = notificationReducer(initialStateExistingGlobal, action);
         // then
         expect(resultState.globalNotification).toEqual(expectedNotification);
       });
     });
 
-    describe("removeGlobalNotification", () => {
-      it("should clear existing notification", () => {
+    describe('removeGlobalNotification', () => {
+      it('should clear existing notification', () => {
         // given
         const initialStateExistingGlobal = {
           notifications: [],
-          globalNotification: { type: "some type", someProp: "some value" },
+          globalNotification: { type: 'some type', someProp: 'some value' },
         };
         const action = { type: REMOVE_GLOBAL_NOTIFICATION };
         // when
-        const resultState = notificationReducer(
-          initialStateExistingGlobal,
-          action
-        );
+        const resultState = notificationReducer(initialStateExistingGlobal, action);
         // then
-        expect(resultState.globalNotification).toEqual({ type: "" });
+        expect(resultState.globalNotification).toEqual({ type: '' });
       });
     });
   });
 
-  describe("object based notifications", () => {
+  describe('object based notifications', () => {
     const initialState = {
-      empty: { notifications: [], globalNotification: { type: "" } },
+      empty: { notifications: [], globalNotification: { type: '' } },
       singleWarning: {
         notifications: [
           {
-            objectWorkingId: "someId1",
-            type: "warning",
-            details: "some details",
+            objectWorkingId: 'someId1',
+            type: 'warning',
+            details: 'some details',
           },
         ],
       },
       singleImport: {
         notifications: [
           {
-            objectWorkingId: "someId1",
-            type: "import",
+            objectWorkingId: 'someId1',
+            type: 'import',
           },
         ],
       },
       multiple: {
         notifications: [
           {
-            objectWorkingId: "someId1",
-            type: "cleared",
+            objectWorkingId: 'someId1',
+            type: 'cleared',
           },
           {
-            objectWorkingId: "someId2",
-            type: "import",
-            details: "some details",
+            objectWorkingId: 'someId2',
+            type: 'import',
+            details: 'some details',
           },
           {
-            objectWorkingId: "someId3",
-            type: "import",
+            objectWorkingId: 'someId3',
+            type: 'import',
           },
         ],
       },
@@ -143,23 +137,23 @@ describe("Notification reducer", () => {
         {
           objectWorkingId: 12,
           operationType: IMPORT_OPERATION,
-          title: "Pending",
-          type: "PROGRESS",
+          title: 'Pending',
+          type: 'PROGRESS',
         },
         {
           objectWorkingId: 123,
           operationType: REMOVE_OPERATION,
-          title: "Pending",
-          type: "PROGRESS",
+          title: 'Pending',
+          type: 'PROGRESS',
         },
         {
           objectWorkingId: 1234,
           operationType: CLEAR_DATA_OPERATION,
-          title: "Pending",
-          type: "PROGRESS",
+          title: 'Pending',
+          type: 'PROGRESS',
         },
       ],
-      globalNotification: { type: "some type" },
+      globalNotification: { type: 'some type' },
     };
 
     const updatedStateProgress = {
@@ -167,21 +161,21 @@ describe("Notification reducer", () => {
         {
           objectWorkingId: 101,
           operationType: IMPORT_OPERATION,
-          title: "Completed",
-          type: "PROGRESS",
+          title: 'Completed',
+          type: 'PROGRESS',
         },
         {
           objectWorkingId: 102,
           operationType: REMOVE_OPERATION,
-          title: "Pending",
-          type: "PROGRESS",
+          title: 'Pending',
+          type: 'PROGRESS',
         },
       ],
-      globalNotification: { type: "some other type" },
+      globalNotification: { type: 'some other type' },
     };
 
-    describe("createProgressNotification", () => {
-      it("should add new pending notification to empty array", () => {
+    describe('createProgressNotification', () => {
+      it('should add new pending notification to empty array', () => {
         // given
         const action = {
           type: IMPORT_OPERATION,
@@ -202,12 +196,12 @@ describe("Notification reducer", () => {
         expect(resultChunk).toEqual({
           objectWorkingId: 123,
           operationType: IMPORT_OPERATION,
-          title: "Pending",
-          type: "PROGRESS",
+          title: 'Pending',
+          type: 'PROGRESS',
         });
       });
 
-      it("should add new pending notification to existing ones", () => {
+      it('should add new pending notification to existing ones', () => {
         // given
         const action = {
           type: IMPORT_OPERATION,
@@ -220,22 +214,19 @@ describe("Notification reducer", () => {
         };
 
         // when
-        const resultState = notificationReducer(
-          initialState.singleImport,
-          action
-        );
+        const resultState = notificationReducer(initialState.singleImport, action);
 
         // then
         const { children: _, ...resultChunk } = resultState.notifications[1];
         expect(resultChunk).toEqual({
           objectWorkingId: 123,
           operationType: IMPORT_OPERATION,
-          title: "Pending",
-          type: "PROGRESS",
+          title: 'Pending',
+          type: 'PROGRESS',
         });
       });
 
-      it("should have cancel button on Pending", () => {
+      it('should have cancel button on Pending', () => {
         // given
         const action = {
           type: IMPORT_OPERATION,
@@ -248,17 +239,14 @@ describe("Notification reducer", () => {
         };
 
         // when
-        const resultState = notificationReducer(
-          initialState.singleImport,
-          action
-        );
+        const resultState = notificationReducer(initialState.singleImport, action);
 
         // then
         const { children } = resultState.notifications[1];
         expect(children).toBeDefined();
       });
 
-      it("should not have cancel button on Pending for Clear data", () => {
+      it('should not have cancel button on Pending for Clear data', () => {
         // given
         const action = {
           type: IMPORT_OPERATION,
@@ -271,10 +259,7 @@ describe("Notification reducer", () => {
         };
 
         // when
-        const resultState = notificationReducer(
-          initialState.singleImport,
-          action
-        );
+        const resultState = notificationReducer(initialState.singleImport, action);
 
         // then
         const { children } = resultState.notifications[1];
@@ -282,8 +267,8 @@ describe("Notification reducer", () => {
       });
     });
 
-    describe("moveNotificationToInProgress", () => {
-      it("should update notification to in progress for single import notification", () => {
+    describe('moveNotificationToInProgress', () => {
+      it('should update notification to in progress for single import notification', () => {
         // given
         const action = {
           type: MOVE_NOTIFICATION_TO_IN_PROGRESS,
@@ -294,11 +279,11 @@ describe("Notification reducer", () => {
         const resultState = notificationReducer(initialStateProgress, action);
 
         // then
-        expect(resultState.notifications[0].title).toEqual("Importing");
+        expect(resultState.notifications[0].title).toEqual('Importing');
         expect(resultState.notifications[0].isIndeterminate).toEqual(false);
       });
 
-      it("should update notification to in progress and set indeterminate for remove and clear operation", () => {
+      it('should update notification to in progress and set indeterminate for remove and clear operation', () => {
         // given
         const actionForRemove = {
           type: MOVE_NOTIFICATION_TO_IN_PROGRESS,
@@ -310,39 +295,31 @@ describe("Notification reducer", () => {
         };
 
         // when
-        const resultStateTemp = notificationReducer(
-          initialStateProgress,
-          actionForRemove
-        );
-        const resultState = notificationReducer(
-          resultStateTemp,
-          actionForClear
-        );
+        const resultStateTemp = notificationReducer(initialStateProgress, actionForRemove);
+        const resultState = notificationReducer(resultStateTemp, actionForClear);
 
         // then
-        expect(resultState.notifications[1].title).toEqual("Removing");
+        expect(resultState.notifications[1].title).toEqual('Removing');
         expect(resultState.notifications[1].isIndeterminate).toEqual(true);
-        expect(resultState.notifications[2].title).toEqual("Clearing");
+        expect(resultState.notifications[2].title).toEqual('Clearing');
         expect(resultState.notifications[2].isIndeterminate).toEqual(true);
       });
     });
 
-    describe("displayNotificationCompleted", () => {
+    describe('displayNotificationCompleted', () => {
       const mockedDismissNotification = jest.fn();
       const mockedDismissSuccessfulRemoveNotification = jest.fn();
 
       beforeAll(() => {
         jest
-          .spyOn(notificationService, "dismissNotification")
+          .spyOn(notificationService, 'dismissNotification')
           .mockImplementationOnce(() => mockedDismissNotification());
         jest
-          .spyOn(notificationService, "dismissSuccessfulRemoveNotification")
-          .mockImplementationOnce(() =>
-            mockedDismissSuccessfulRemoveNotification()
-          );
+          .spyOn(notificationService, 'dismissSuccessfulRemoveNotification')
+          .mockImplementationOnce(() => mockedDismissSuccessfulRemoveNotification());
       });
 
-      it("should update notification to type SUCCESS", () => {
+      it('should update notification to type SUCCESS', () => {
         // given
         const actionForImport = {
           type: DISPLAY_NOTIFICATION_COMPLETED,
@@ -350,27 +327,21 @@ describe("Notification reducer", () => {
         };
 
         // when
-        const resultState = notificationReducer(
-          initialStateProgress,
-          actionForImport
-        );
+        const resultState = notificationReducer(initialStateProgress, actionForImport);
 
         // then
-        expect(resultState.notifications[0].type).toEqual("SUCCESS");
-        expect(resultState.notifications[0].title).toEqual("Import successful");
+        expect(resultState.notifications[0].type).toEqual('SUCCESS');
+        expect(resultState.notifications[0].title).toEqual('Import successful');
         expect(resultState.notifications[0].dismissNotification).toBeDefined();
       });
 
-      it("should assign proper method for operation other than remove", () => {
+      it('should assign proper method for operation other than remove', () => {
         // given
         const actionForImport = {
           type: DISPLAY_NOTIFICATION_COMPLETED,
           payload: { objectWorkingId: 12 },
         };
-        const resultState = notificationReducer(
-          initialStateProgress,
-          actionForImport
-        );
+        const resultState = notificationReducer(initialStateProgress, actionForImport);
 
         // when
         resultState.notifications[0].dismissNotification();
@@ -379,16 +350,13 @@ describe("Notification reducer", () => {
         expect(mockedDismissNotification).toBeCalled();
       });
 
-      it("should assign proper method for remove operation", () => {
+      it('should assign proper method for remove operation', () => {
         // given
         const actionForRemove = {
           type: DISPLAY_NOTIFICATION_COMPLETED,
           payload: { objectWorkingId: 123 },
         };
-        const resultState = notificationReducer(
-          initialStateProgress,
-          actionForRemove
-        );
+        const resultState = notificationReducer(initialStateProgress, actionForRemove);
 
         // when
         resultState.notifications[1].dismissNotification();
@@ -398,12 +366,12 @@ describe("Notification reducer", () => {
       });
     });
 
-    describe("displayNotificationWarning", () => {
-      it("should update notification to show warning for import", () => {
+    describe('displayNotificationWarning', () => {
+      it('should update notification to show warning for import', () => {
         // given
         const mockedCallback = jest.fn();
-        const expectedDetails = "some message";
-        const someTitle = "some title";
+        const expectedDetails = 'some message';
+        const someTitle = 'some title';
         const actionForImport = {
           type: DISPLAY_NOTIFICATION_WARNING,
           payload: {
@@ -417,13 +385,10 @@ describe("Notification reducer", () => {
         };
 
         // when
-        const resultState = notificationReducer(
-          initialStateProgress,
-          actionForImport
-        );
+        const resultState = notificationReducer(initialStateProgress, actionForImport);
 
         // then
-        expect(resultState.notifications[0].type).toEqual("WARNING");
+        expect(resultState.notifications[0].type).toEqual('WARNING');
         expect(resultState.notifications[0].title).toEqual(someTitle);
         expect(resultState.notifications[0].details).toEqual(expectedDetails);
         expect(resultState.notifications[0].operationType).toEqual(
@@ -431,35 +396,33 @@ describe("Notification reducer", () => {
         );
       });
 
-      it("should attach button as child", () => {
+      it('should attach button as child', () => {
         // given
         const mockedCallback = jest.fn();
         const mockedGetNotificationButtons = jest.fn();
         jest
-          .spyOn(notificationButtonsModule, "getNotificationButtons")
-          .mockImplementationOnce((params) =>
-            mockedGetNotificationButtons(params)
-          );
+          .spyOn(notificationButtonsModule, 'getNotificationButtons')
+          .mockImplementationOnce(params => mockedGetNotificationButtons(params));
 
         // then
         expect(mockedGetNotificationButtons).toBeCalled();
         expect(mockedGetNotificationButtons).toBeCalledWith([
           {
-            label: "OK",
+            label: 'OK',
             onClick: mockedCallback,
-            type: "basic",
+            type: 'basic',
           },
         ]);
       });
 
-      it("should call custom translation method", () => {
+      it('should call custom translation method', () => {
         // given
         const mockedCustomT = jest.fn();
         jest
-          .spyOn(customTranslations, "customT")
-          .mockImplementation((params) => mockedCustomT(params));
+          .spyOn(customTranslations, 'customT')
+          .mockImplementation(params => mockedCustomT(params));
 
-        const someTitle = "some title";
+        const someTitle = 'some title';
 
         // then
         expect(mockedCustomT).toBeCalled();
@@ -467,29 +430,26 @@ describe("Notification reducer", () => {
       });
     });
 
-    describe("deleteNotification", () => {
-      it("should delete one action on single array", () => {
+    describe('deleteNotification', () => {
+      it('should delete one action on single array', () => {
         // given
         const action = {
           type: DELETE_NOTIFICATION,
-          payload: { objectWorkingId: "someId1" },
+          payload: { objectWorkingId: 'someId1' },
         };
 
         // when
-        const resultState = notificationReducer(
-          initialState.singleImport,
-          action
-        );
+        const resultState = notificationReducer(initialState.singleImport, action);
 
         // then
         expect(resultState).toEqual({ notifications: [] });
       });
 
-      it("should delete one action on multiple array", () => {
+      it('should delete one action on multiple array', () => {
         // given
         const action = {
           type: DELETE_NOTIFICATION,
-          payload: { objectWorkingId: "someId2" },
+          payload: { objectWorkingId: 'someId2' },
         };
 
         // when
@@ -504,8 +464,8 @@ describe("Notification reducer", () => {
         });
       });
     });
-    describe("deleteAllNotifications", () => {
-      it("should delete all notifications if isSecured is true", () => {
+    describe('deleteAllNotifications', () => {
+      it('should delete all notifications if isSecured is true', () => {
         // given
         const action = {
           type: officeProperties.actions.toggleSecuredFlag,
@@ -517,12 +477,10 @@ describe("Notification reducer", () => {
 
         // then
         expect(resultState.notifications).toHaveLength(0);
-        expect(resultState.globalNotification).toEqual(
-          initialStateProgress.globalNotification
-        );
+        expect(resultState.globalNotification).toEqual(initialStateProgress.globalNotification);
       });
 
-      it("should return state if isSecured is false", () => {
+      it('should return state if isSecured is false', () => {
         // given
         const action = {
           type: officeProperties.actions.toggleSecuredFlag,
@@ -534,17 +492,15 @@ describe("Notification reducer", () => {
 
         // then
         expect(resultState.notifications).toHaveLength(3);
-        expect(resultState.globalNotification).toEqual(
-          initialStateProgress.globalNotification
-        );
+        expect(resultState.globalNotification).toEqual(initialStateProgress.globalNotification);
       });
     });
 
-    describe("restoreAllNotifications", () => {
-      it("should restore all notifications", () => {
+    describe('restoreAllNotifications', () => {
+      it('should restore all notifications', () => {
         // given
         const action = {
-          type: "RESTORE_ALL_NOTIFICATIONS",
+          type: 'RESTORE_ALL_NOTIFICATIONS',
           payload: updatedStateProgress.notifications,
         };
 
@@ -552,12 +508,8 @@ describe("Notification reducer", () => {
         const resultState = notificationReducer(initialStateProgress, action);
 
         // then
-        expect(resultState.notifications).toEqual(
-          updatedStateProgress.notifications
-        );
-        expect(resultState.globalNotification).toEqual(
-          initialStateProgress.globalNotification
-        );
+        expect(resultState.notifications).toEqual(updatedStateProgress.notifications);
+        expect(resultState.globalNotification).toEqual(initialStateProgress.globalNotification);
       });
     });
   });

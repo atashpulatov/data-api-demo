@@ -1,9 +1,9 @@
-import { officeApiHelper } from "../api/office-api-helper";
-import { officeShapeApiHelper } from "./office-shape-api-helper";
+import { officeApiHelper } from '../api/office-api-helper';
+import { officeShapeApiHelper } from './office-shape-api-helper';
 
-import operationErrorHandler from "../../operation/operation-error-handler";
-import operationStepDispatcher from "../../operation/operation-step-dispatcher";
-import { errorMessages } from "../../error/constants";
+import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import { errorMessages } from '../../error/constants';
 
 class StepSaveImageDetails {
   /**
@@ -15,7 +15,7 @@ class StepSaveImageDetails {
    * @param {Object} operationData Reference to the operation data required for error handling
    */
   saveImageDetails = async (objectData, operationData) => {
-    console.time("Save Image Details");
+    console.time('Save Image Details');
     try {
       const { objectWorkingId, bindId } = objectData;
       const excelContext = await officeApiHelper.getExcelContext();
@@ -44,13 +44,9 @@ class StepSaveImageDetails {
       operationStepDispatcher.completeSaveImageDetails(objectWorkingId);
     } catch (error) {
       console.error(error);
-      operationErrorHandler.handleOperationError(
-        objectData,
-        operationData,
-        error,
-      );
+      operationErrorHandler.handleOperationError(objectData, operationData, error);
     } finally {
-      console.timeEnd("Save Image Details");
+      console.timeEnd('Save Image Details');
     }
   };
 }

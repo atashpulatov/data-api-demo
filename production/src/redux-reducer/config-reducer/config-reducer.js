@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { configProperties } from "./config-properties";
+import { configProperties } from './config-properties';
 
 const initialState = { showHidden: false };
 

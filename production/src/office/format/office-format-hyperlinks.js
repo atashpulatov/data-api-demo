@@ -1,7 +1,7 @@
-import { officeContext } from "../office-context";
+import { officeContext } from '../office-context';
 
-const FORM_TYPE_HTML = "HTMLTag";
-const FORM_TYPE_URL = "url";
+const FORM_TYPE_HTML = 'HTMLTag';
+const FORM_TYPE_URL = 'url';
 
 class OfficeFormatHyperlinks {
   /**
@@ -10,7 +10,7 @@ class OfficeFormatHyperlinks {
    * @param {String} str a url string
    * @returns {Boolean} is valid url
    */
-  isValidUrl = (str) => {
+  isValidUrl = str => {
     const urlRegExp =
       /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
     return urlRegExp.test(str);
@@ -49,17 +49,17 @@ class OfficeFormatHyperlinks {
       let textMatch = string.match(textRegExp);
 
       // If there is no href or is not valid url we cannot make a hyperlink
-      if (!hrefMatch || hrefMatch[0] === "" || !this.isValidUrl(hrefMatch[1])) {
+      if (!hrefMatch || hrefMatch[0] === '' || !this.isValidUrl(hrefMatch[1])) {
         return null;
       }
 
       // If there is no data use text
-      if (!dataMatch || dataMatch[0] === "" || dataMatch[1] === "") {
+      if (!dataMatch || dataMatch[0] === '' || dataMatch[1] === '') {
         dataMatch = textMatch;
       }
 
       // If there is no text use hyperlink
-      if (!textMatch || textMatch[0] === "" || textMatch[1] === "") {
+      if (!textMatch || textMatch[0] === '' || textMatch[1] === '') {
         textMatch = hrefMatch;
       }
 
@@ -80,10 +80,10 @@ class OfficeFormatHyperlinks {
    */
   convertToHyperlink = async (baseFormType, range, excelContext) => {
     try {
-      range.load("values");
+      range.load('values');
       await excelContext.sync();
     } catch (error) {
-      console.log("Excel API cannot load hyperlink values, skipping column");
+      console.log('Excel API cannot load hyperlink values, skipping column');
       throw error;
     }
 
@@ -121,22 +121,18 @@ class OfficeFormatHyperlinks {
       try {
         excelContext.trackedObjects.add(columnRange);
         const { attributeName, forms } = object;
-        const hyperlinkIndex = forms.findIndex((e) =>
-          [FORM_TYPE_HTML, FORM_TYPE_URL].includes(e.baseFormType),
+        const hyperlinkIndex = forms.findIndex(e =>
+          [FORM_TYPE_HTML, FORM_TYPE_URL].includes(e.baseFormType)
         );
         if (hyperlinkIndex !== -1) {
           const { baseFormType } = forms[hyperlinkIndex];
           console.time(`Creating hyperlinks for ${attributeName}`);
-          await this.convertToHyperlink(
-            baseFormType,
-            columnRange,
-            excelContext,
-          );
+          await this.convertToHyperlink(baseFormType, columnRange, excelContext);
           console.timeEnd(`Creating hyperlinks for ${attributeName}`);
         }
         excelContext.trackedObjects.remove(columnRange);
       } catch (error) {
-        console.warn("Error while creating hyperlinks, skipping...");
+        console.warn('Error while creating hyperlinks, skipping...');
       }
     }
   };

@@ -1,18 +1,18 @@
-import throttle from "lodash.throttle";
+import throttle from 'lodash.throttle';
 
-import { authenticationService } from "../authentication/auth-rest-service";
-import { homeHelper } from "../home/home-helper";
-import { userRestService } from "../home/user-rest-service";
+import { authenticationService } from '../authentication/auth-rest-service';
+import { homeHelper } from '../home/home-helper';
+import { userRestService } from '../home/user-rest-service';
 
-import { errorService } from "../error/error-handler";
-import { importRequested } from "../redux-reducer/operation-reducer/operation-actions";
-import { sessionActions } from "../redux-reducer/session-reducer/session-actions";
-import { httpStatusCodes, incomingErrorStrings } from "../error/constants";
+import { errorService } from '../error/error-handler';
+import { importRequested } from '../redux-reducer/operation-reducer/operation-actions';
+import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
+import { httpStatusCodes, incomingErrorStrings } from '../error/constants';
 
-export const EXTEND_SESSION = "EXTEND_SESSION";
+export const EXTEND_SESSION = 'EXTEND_SESSION';
 const DEFAULT_SESSION_REFRESH_TIME = 60000;
 class SessionHelper {
-  init = (reduxStore) => {
+  init = reduxStore => {
     this.reduxStore = reduxStore;
   };
 
@@ -56,11 +56,9 @@ class SessionHelper {
     const isDevelopment = this.isDevelopment();
     if (!isDevelopment) {
       const currentPath = window.location.pathname;
-      const pathBeginning = currentPath.split("/apps/")[0];
-      const loginParams = "source=addin-mstr-office";
-      const url = encodeURI(
-        `${pathBeginning}/static/loader-mstr-office/index.html?${loginParams}`,
-      );
+      const pathBeginning = currentPath.split('/apps/')[0];
+      const loginParams = 'source=addin-mstr-office';
+      const url = encodeURI(`${pathBeginning}/static/loader-mstr-office/index.html?${loginParams}`);
       window.location.replace(url);
     } else {
       sessionActions.disableLoading();
@@ -108,10 +106,7 @@ class SessionHelper {
       if (onSessionExpire && error.response && error.response.statusCode) {
         const { UNAUTHORIZED_ERROR, FORBIDDEN_ERROR } = httpStatusCodes;
         const { statusCode } = error.response;
-        if (
-          statusCode === UNAUTHORIZED_ERROR ||
-          statusCode === FORBIDDEN_ERROR
-        ) {
+        if (statusCode === UNAUTHORIZED_ERROR || statusCode === FORBIDDEN_ERROR) {
           onSessionExpire();
         }
       }
@@ -136,7 +131,7 @@ class SessionHelper {
         this.keepSessionAlive(onSessionExpire);
       },
       DEFAULT_SESSION_REFRESH_TIME,
-      { trailing: false },
+      { trailing: false }
     );
 
   /**
@@ -147,9 +142,7 @@ class SessionHelper {
     let userData = {};
     const isDevelopment = this.isDevelopment();
     const { getState } = this.reduxStore;
-    const envUrl = isDevelopment
-      ? getState().sessionReducer.envUrl
-      : homeHelper.saveLoginValues();
+    const envUrl = isDevelopment ? getState().sessionReducer.envUrl : homeHelper.saveLoginValues();
     const authToken = isDevelopment
       ? getState().sessionReducer.authToken
       : homeHelper.getTokenFromStorage();
@@ -176,10 +169,7 @@ class SessionHelper {
       ? reduxStore.getState().sessionReducer.authToken
       : homeHelper.getTokenFromStorage();
     try {
-      canChooseAttrForm = await authenticationService.getAttributeFormPrivilege(
-        envUrl,
-        authToken,
-      );
+      canChooseAttrForm = await authenticationService.getAttributeFormPrivilege(envUrl, authToken);
       sessionActions.setAttrFormPrivilege(canChooseAttrForm);
     } catch (error) {
       console.error(error);
@@ -194,10 +184,7 @@ class SessionHelper {
     const authToken = isDevelopment
       ? reduxStore.getState().sessionReducer.authToken
       : homeHelper.getTokenFromStorage();
-    const canUseOffice = await authenticationService.getOfficePrivilege(
-      envUrl,
-      authToken,
-    );
+    const canUseOffice = await authenticationService.getOfficePrivilege(envUrl, authToken);
 
     return canUseOffice;
   };
@@ -217,9 +204,7 @@ class SessionHelper {
    */
   isDevelopment = () => {
     try {
-      const isDevelopment = ["development", "test"].includes(
-        process.env.NODE_ENV,
-      );
+      const isDevelopment = ['development', 'test'].includes(process.env.NODE_ENV);
       return isDevelopment;
     } catch (error) {
       return false;
@@ -232,7 +217,7 @@ class SessionHelper {
    *
    * @param {Objects} object ObjectData needed for import
    */
-  importObjectWithouPopup = async (object) => {
+  importObjectWithouPopup = async object => {
     this.reduxStore.dispatch(importRequested(object));
   };
 }

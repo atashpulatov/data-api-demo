@@ -1,9 +1,9 @@
-import { notificationService } from "../notification-v2/notification-service";
-import { officeApiHelper } from "../office/api/office-api-helper";
-import officeReducerHelper from "../office/store/office-reducer-helper";
-import { sidePanelService } from "./side-panel-service";
+import { notificationService } from '../notification-v2/notification-service';
+import { officeApiHelper } from '../office/api/office-api-helper';
+import officeReducerHelper from '../office/store/office-reducer-helper';
+import { sidePanelService } from './side-panel-service';
 
-import { officeContext } from "../office/office-context";
+import { officeContext } from '../office/office-context';
 
 class SidePanelEventHelper {
   /**
@@ -16,17 +16,15 @@ class SidePanelEventHelper {
       const excelContext = await officeApiHelper.getExcelContext();
 
       if (officeContext.isSetSupported(1.9)) {
-        this.eventRemove = excelContext.workbook.tables.onDeleted.add(
-          this.setOnDeletedTablesEvent,
-        );
+        this.eventRemove = excelContext.workbook.tables.onDeleted.add(this.setOnDeletedTablesEvent);
       } else if (officeContext.isSetSupported(1.7)) {
         this.eventRemove = excelContext.workbook.worksheets.onDeleted.add(
-          this.setOnDeletedWorksheetEvent(excelContext),
+          this.setOnDeletedWorksheetEvent(excelContext)
         );
       }
       await excelContext.sync();
     } catch (error) {
-      console.log("Cannot add onDeleted event listener");
+      console.log('Cannot add onDeleted event listener');
     }
   };
 
@@ -36,15 +34,11 @@ class SidePanelEventHelper {
    *
    * @param {Function} setActiveCellAddress Callback to modify the activeCellAddress in state of RightSidePanel
    */
-  initializeActiveCellChangedListener = async (setActiveCellAddress) => {
+  initializeActiveCellChangedListener = async setActiveCellAddress => {
     const excelContext = await officeApiHelper.getExcelContext();
-    const initialCellAddress =
-      await officeApiHelper.getSelectedCell(excelContext);
+    const initialCellAddress = await officeApiHelper.getSelectedCell(excelContext);
     setActiveCellAddress(initialCellAddress);
-    await officeApiHelper.addOnSelectionChangedListener(
-      excelContext,
-      setActiveCellAddress,
-    );
+    await officeApiHelper.addOnSelectionChangedListener(excelContext, setActiveCellAddress);
   };
 
   /**
@@ -52,12 +46,9 @@ class SidePanelEventHelper {
    *
    * @param {Object} e Contains information about deleted object
    */
-  setOnDeletedTablesEvent = async (e) => {
-    const ObjectToDelete =
-      officeReducerHelper.getObjectFromObjectReducerByBindId(e.tableId);
-    notificationService.removeExistingNotification(
-      ObjectToDelete.objectWorkingId,
-    );
+  setOnDeletedTablesEvent = async e => {
+    const ObjectToDelete = officeReducerHelper.getObjectFromObjectReducerByBindId(e.tableId);
+    notificationService.removeExistingNotification(ObjectToDelete.objectWorkingId);
     await officeApiHelper.checkStatusOfSessions();
     sidePanelService.remove([ObjectToDelete.objectWorkingId]);
   };
@@ -67,27 +58,22 @@ class SidePanelEventHelper {
    *
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    */
-  setOnDeletedWorksheetEvent = async (excelContext) => {
+  setOnDeletedWorksheetEvent = async excelContext => {
     await officeApiHelper.checkStatusOfSessions();
-    excelContext.workbook.tables.load("items");
+    excelContext.workbook.tables.load('items');
     await excelContext.sync();
 
     const objectsOfSheets = excelContext.workbook.tables.items;
     const objectsList = officeReducerHelper.getObjectsListFromObjectReducer();
     const objectsToDelete = objectsList.filter(
-      (object) =>
-        !objectsOfSheets.find(
-          (officeTable) => officeTable.id === object.bindId,
-        ),
+      object => !objectsOfSheets.find(officeTable => officeTable.id === object.bindId)
     );
 
-    objectsToDelete.forEach((object) => {
+    objectsToDelete.forEach(object => {
       notificationService.removeExistingNotification(object.objectWorkingId);
     });
 
-    const objectWorkingIds = objectsToDelete.map(
-      (object) => object.objectWorkingId,
-    );
+    const objectWorkingIds = objectsToDelete.map(object => object.objectWorkingId);
     sidePanelService.remove(objectWorkingIds);
   };
 }

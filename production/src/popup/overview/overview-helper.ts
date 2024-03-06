@@ -2,36 +2,36 @@ import {
   GlobalNotificationTypes,
   ObjectNotificationTypes,
   PopupTypes,
-} from "@mstr/connector-components";
+} from '@mstr/connector-components';
 
-import { officeApiHelper } from "../../office/api/office-api-helper";
-import officeReducerHelper from "../../office/store/office-reducer-helper";
-import { sidePanelNotificationHelper } from "../../right-side-panel/side-panel-notification-helper";
-import { popupHelper } from "../popup-helper";
+import { officeApiHelper } from '../../office/api/office-api-helper';
+import officeReducerHelper from '../../office/store/office-reducer-helper';
+import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-notification-helper';
+import { popupHelper } from '../popup-helper';
 
-import { DialogPopup } from "./overview-types";
+import { DialogPopup } from './overview-types';
 
-import { customT } from "../../customTranslation";
-import mstrObjectEnum from "../../mstr-object/mstr-object-type-enum";
-import { executeNextRepromptTask } from "../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions";
+import { customT } from '../../customTranslation';
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
+import { executeNextRepromptTask } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import {
   NotificationButtonsProps,
   OverviewGlobalNotificationButtons,
-} from "./overview-global-notification-buttons";
+} from './overview-global-notification-buttons';
 
 export enum OverviewActionCommands {
-  IMPORT = "overview-import",
-  EDIT = "overview-edit",
-  REFRESH = "overview-refresh",
-  REMOVE = "overview-remove",
-  DUPLICATE = "overview-duplicate",
-  REPROMPT = "overview-reprompt",
-  RANGE_TAKEN_OK = "overview-range-taken-ok",
-  RANGE_TAKEN_CLOSE = "overview-range-taken-close",
-  RENAME = "overview-rename",
-  GO_TO_WORKSHEET = "overview-go-to-worksheet",
-  DISMISS_NOTIFICATION = "overview-dismiss-notification",
-  DISMISS_GLOBAL_NOTIFICATION = "overview-dismiss-global-notification",
+  IMPORT = 'overview-import',
+  EDIT = 'overview-edit',
+  REFRESH = 'overview-refresh',
+  REMOVE = 'overview-remove',
+  DUPLICATE = 'overview-duplicate',
+  REPROMPT = 'overview-reprompt',
+  RANGE_TAKEN_OK = 'overview-range-taken-ok',
+  RANGE_TAKEN_CLOSE = 'overview-range-taken-close',
+  RENAME = 'overview-rename',
+  GO_TO_WORKSHEET = 'overview-go-to-worksheet',
+  DISMISS_NOTIFICATION = 'overview-dismiss-notification',
+  DISMISS_GLOBAL_NOTIFICATION = 'overview-dismiss-global-notification',
 }
 
 // rewrite everything
@@ -42,11 +42,7 @@ class OverviewHelper {
 
   notificationService: any;
 
-  init = (
-    reduxStore: any,
-    sidePanelService: any,
-    notificationService: any
-  ): void => {
+  init = (reduxStore: any, sidePanelService: any, notificationService: any): void => {
     this.store = reduxStore;
     this.sidePanelService = sidePanelService;
     this.notificationService = notificationService;
@@ -113,9 +109,7 @@ class OverviewHelper {
    *
    * @param objectWorkingIds Unique Ids of the objects allowing to reference specific objects
    */
-  async sendDismissNotificationRequest(
-    objectWorkingIds: number[]
-  ): Promise<void> {
+  async sendDismissNotificationRequest(objectWorkingIds: number[]): Promise<void> {
     popupHelper.officeMessageParent({
       command: OverviewActionCommands.DISMISS_NOTIFICATION,
       objectWorkingIds,
@@ -182,10 +176,7 @@ class OverviewHelper {
    * @param objectWorkingId Unique Id of the object allowing to reference specific object
    * @param newName Updated name of the renamed object
    */
-  async sendRenameRequest(
-    objectWorkingId: number,
-    newName: string
-  ): Promise<void> {
+  async sendRenameRequest(objectWorkingId: number, newName: string): Promise<void> {
     popupHelper.officeMessageParent({
       command: OverviewActionCommands.RENAME,
       objectWorkingId,
@@ -211,7 +202,7 @@ class OverviewHelper {
    * @param objectWorkingIds Unique Ids of the objects allowing to reference specific objects
    */
   handleDismissNotifications = (objectWorkingIds: number[]): void => {
-    objectWorkingIds?.forEach((objectWorkingId) => {
+    objectWorkingIds?.forEach(objectWorkingId => {
       this.notificationService.removeExistingNotification(objectWorkingId);
     });
   };
@@ -244,9 +235,7 @@ class OverviewHelper {
         await this.sidePanelService.addData();
         break;
       case OverviewActionCommands.EDIT:
-        this.notificationService.removeExistingNotification(
-          response.objectWorkingId
-        );
+        this.notificationService.removeExistingNotification(response.objectWorkingId);
         await this.sidePanelService.edit(response.objectWorkingId);
         break;
       case OverviewActionCommands.REPROMPT:
@@ -259,7 +248,7 @@ class OverviewHelper {
         await this.sidePanelService.remove(response.objectWorkingIds);
         break;
       case OverviewActionCommands.DUPLICATE:
-        response.objectWorkingIds.forEach((objectWorkingId) => {
+        response.objectWorkingIds.forEach(objectWorkingId => {
           this.sidePanelService.duplicate(
             objectWorkingId,
             response.insertNewWorksheet,
@@ -268,27 +257,19 @@ class OverviewHelper {
         });
         break;
       case OverviewActionCommands.RANGE_TAKEN_OK:
-        sidePanelNotificationHelper.importInNewRange(
-          response.objectWorkingId,
-          null,
-          true
-        );
+        sidePanelNotificationHelper.importInNewRange(response.objectWorkingId, null, true);
         officeReducerHelper.clearPopupData();
         break;
       case OverviewActionCommands.RANGE_TAKEN_CLOSE:
         // eslint-disable-next-line no-case-declarations
-        const { callback } =
-          this.store.getState().officeReducer?.popupData || {};
+        const { callback } = this.store.getState().officeReducer?.popupData || {};
         await callback();
 
         this.store.dispatch(executeNextRepromptTask());
         officeReducerHelper.clearPopupData();
         break;
       case OverviewActionCommands.RENAME:
-        this.sidePanelService.rename(
-          response.objectWorkingId,
-          response.newName
-        );
+        this.sidePanelService.rename(response.objectWorkingId, response.newName);
         break;
       case OverviewActionCommands.GO_TO_WORKSHEET:
         this.sidePanelService.highlightObject(response.objectWorkingId);
@@ -300,7 +281,7 @@ class OverviewHelper {
         this.handleDismissGlobalNotification();
         break;
       default:
-        console.log("Unhandled dialog command: ", response.command);
+        console.log('Unhandled dialog command: ', response.command);
         break;
     }
   }
@@ -315,7 +296,7 @@ class OverviewHelper {
    */
   // TODO add types once redux state is typed
   transformExcelObjects(objects: any[], notifications: any[]): any[] {
-    return objects.map((object) => {
+    return objects.map(object => {
       const {
         objectWorkingId,
         mstrObjectType,
@@ -328,20 +309,17 @@ class OverviewHelper {
       } = object;
 
       const objectNotification = notifications.find(
-        (notification) => notification.objectWorkingId === objectWorkingId
+        notification => notification.objectWorkingId === objectWorkingId
       );
       let isPrompted = false;
 
       // Determine if object is prompted if it is a dossier/visualization or a report
       if (
-        mstrObjectType.name ===
-          mstrObjectEnum.mstrObjectType.visualization.name ||
+        mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name ||
         mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name
       ) {
         isPrompted = !!object.manipulationsXML?.promptAnswers;
-      } else if (
-        mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name
-      ) {
+      } else if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name) {
         isPrompted = object.isPrompted;
       }
 
@@ -387,11 +365,11 @@ class OverviewHelper {
     setDialogPopup({
       type: PopupTypes.DUPLICATE,
       activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
-      onImport: (isActiveCellOptionSelected) => {
+      onImport: isActiveCellOptionSelected => {
         onDuplicate(objectWorkingId, !isActiveCellOptionSelected, false);
         setDialogPopup(null);
       },
-      onEdit: (isActiveCellOptionSelected) => {
+      onEdit: isActiveCellOptionSelected => {
         onDuplicate(objectWorkingId, !isActiveCellOptionSelected, true);
         setDialogPopup(null);
       },
@@ -435,16 +413,15 @@ class OverviewHelper {
     globalNotification?: any;
   }): any => {
     const warningNotifications = notifications?.filter(
-      (notification) => notification.type === ObjectNotificationTypes.WARNING
+      notification => notification.type === ObjectNotificationTypes.WARNING
     );
 
-    const modifiedWarnings = warningNotifications?.map((warning) => {
+    const modifiedWarnings = warningNotifications?.map(warning => {
       const buttonProps = {
         buttons: [
           {
-            label: customT("OK"),
-            onClick: () =>
-              this.sendDismissNotificationRequest([warning.objectWorkingId]),
+            label: customT('OK'),
+            onClick: () => this.sendDismissNotificationRequest([warning.objectWorkingId]),
           },
         ],
       } as NotificationButtonsProps;
@@ -454,12 +431,11 @@ class OverviewHelper {
       };
     });
 
-    const isGlobalWarning =
-      globalNotification?.type === GlobalNotificationTypes.GLOBAL_WARNING;
+    const isGlobalWarning = globalNotification?.type === GlobalNotificationTypes.GLOBAL_WARNING;
     const globalNotificationButtons = {
       buttons: [
         {
-          label: customT("OK"),
+          label: customT('OK'),
           onClick: () => this.sendDismissGlobalNotificationRequest(),
         },
       ],

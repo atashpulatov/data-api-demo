@@ -8,10 +8,10 @@ import {
   MARK_STEP_COMPLETED,
   REFRESH_OPERATION,
   REMOVE_OPERATION,
-} from "../../operation/operation-type-names";
-import { operationReducer } from "../../redux-reducer/operation-reducer/operation-reducer";
+} from '../../operation/operation-type-names';
+import { operationReducer } from '../../redux-reducer/operation-reducer/operation-reducer';
 
-describe("operation reducer", () => {
+describe('operation reducer', () => {
   let initialState;
   // eslint-disable-next-line no-underscore-dangle
   const _initialState = {
@@ -19,9 +19,9 @@ describe("operation reducer", () => {
     singleOperation: {
       operations: [
         {
-          objectWorkingId: "someOtherString234",
-          operationType: "someType24",
-          stepsQueue: ["step1", "step2", "step3"],
+          objectWorkingId: 'someOtherString234',
+          operationType: 'someType24',
+          stepsQueue: ['step1', 'step2', 'step3'],
           totalRows: 100000,
           loadedRows: 0,
         },
@@ -30,23 +30,23 @@ describe("operation reducer", () => {
     multipleOperations: {
       operations: [
         {
-          objectWorkingId: "someOtherString2",
-          operationType: "someType",
-          stepsQueue: ["step1", "step2", "step3"],
+          objectWorkingId: 'someOtherString2',
+          operationType: 'someType',
+          stepsQueue: ['step1', 'step2', 'step3'],
           totalRows: 100000,
           loadedRows: 0,
         },
         {
-          objectWorkingId: "someOtherString23",
-          operationType: "someOtherType",
-          stepsQueue: ["step2a", "step3a", "step4"],
+          objectWorkingId: 'someOtherString23',
+          operationType: 'someOtherType',
+          stepsQueue: ['step2a', 'step3a', 'step4'],
           totalRows: 100000,
           loadedRows: 2000,
         },
         {
-          objectWorkingId: "someOtherString234",
-          operationType: "someNextType",
-          stepsQueue: ["step1", "step2", "step3"],
+          objectWorkingId: 'someOtherString234',
+          operationType: 'someNextType',
+          stepsQueue: ['step1', 'step2', 'step3'],
           totalRows: 100000,
           loadedRows: 1000,
         },
@@ -58,9 +58,9 @@ describe("operation reducer", () => {
     initialState = JSON.parse(JSON.stringify(_initialState));
   });
 
-  it("should have default state", () => {
+  it('should have default state', () => {
     // given
-    const unhandledAction = { type: "someType" };
+    const unhandledAction = { type: 'someType' };
 
     // when
     const resultState = operationReducer(undefined, unhandledAction);
@@ -69,21 +69,18 @@ describe("operation reducer", () => {
     expect(resultState).toEqual({ operations: [] });
   });
 
-  it("should return state if no action is matched", () => {
+  it('should return state if no action is matched', () => {
     // given
-    const unhandledAction = { type: "someType" };
+    const unhandledAction = { type: 'someType' };
 
     // when
-    const resultState = operationReducer(
-      initialState.multipleOperations,
-      unhandledAction
-    );
+    const resultState = operationReducer(initialState.multipleOperations, unhandledAction);
 
     // then
     expect(resultState).toBe(initialState.multipleOperations);
   });
 
-  describe("importRequested and other types of actions", () => {
+  describe('importRequested and other types of actions', () => {
     it.each`
       actionType
       ${IMPORT_OPERATION}
@@ -92,7 +89,7 @@ describe("operation reducer", () => {
       ${DUPLICATE_OPERATION}
       ${REMOVE_OPERATION}
       ${CLEAR_DATA_OPERATION}
-    `("should add operation when operations are empty", ({ actionType }) => {
+    `('should add operation when operations are empty', ({ actionType }) => {
       // given
       const someOperation = {};
       const action = {
@@ -116,7 +113,7 @@ describe("operation reducer", () => {
       ${DUPLICATE_OPERATION}
       ${REMOVE_OPERATION}
       ${CLEAR_DATA_OPERATION}
-    `("should add operation to existing operations", ({ actionType }) => {
+    `('should add operation to existing operations', ({ actionType }) => {
       // given
       const someOperation = {};
       const action = {
@@ -128,63 +125,58 @@ describe("operation reducer", () => {
       };
 
       // when
-      const resultState = operationReducer(
-        initialState.singleOperation,
-        action
-      );
+      const resultState = operationReducer(initialState.singleOperation, action);
 
       // then
       expect(resultState).toEqual(expectedState);
     });
   });
 
-  describe("markStepCompleted", () => {
-    it("should throw error if the current operation is not the completed step", () => {
+  describe('markStepCompleted', () => {
+    it('should throw error if the current operation is not the completed step', () => {
       // given
-      const stepCompleted = "step2";
+      const stepCompleted = 'step2';
       const action = {
         type: MARK_STEP_COMPLETED,
         payload: {
-          objectWorkingId: "someOtherString2",
+          objectWorkingId: 'someOtherString2',
           completedStep: stepCompleted,
         },
       };
 
       // when
-      const throwingCall = () =>
-        operationReducer(initialState.multipleOperations, action);
+      const throwingCall = () => operationReducer(initialState.multipleOperations, action);
 
       // then
       expect(throwingCall).toThrow();
     });
 
-    it("should throw error if the operation object does not exist", () => {
+    it('should throw error if the operation object does not exist', () => {
       // given
-      const stepCompleted = "step2";
+      const stepCompleted = 'step2';
       const action = {
         type: MARK_STEP_COMPLETED,
         payload: {
-          objectWorkingId: "someNotExistingOperation",
+          objectWorkingId: 'someNotExistingOperation',
           completedStep: stepCompleted,
         },
       };
 
       // when
-      const throwingCall = () =>
-        operationReducer(initialState.multipleOperations, action);
+      const throwingCall = () => operationReducer(initialState.multipleOperations, action);
 
       // then
       expect(throwingCall).toThrow();
     });
 
-    it("should remove operation if the last step was completed", () => {
+    it('should remove operation if the last step was completed', () => {
       // given
       const initialStateLastStep = {
         operations: [
           {
-            objectWorkingId: "someOtherString234",
-            operationType: "someType24",
-            stepsQueue: ["step3"],
+            objectWorkingId: 'someOtherString234',
+            operationType: 'someType24',
+            stepsQueue: ['step3'],
             totalRows: 100000,
             loadedRows: 0,
           },
@@ -193,8 +185,8 @@ describe("operation reducer", () => {
       const action = {
         type: MARK_STEP_COMPLETED,
         payload: {
-          objectWorkingId: "someOtherString234",
-          completedStep: "step3",
+          objectWorkingId: 'someOtherString234',
+          completedStep: 'step3',
         },
       };
 
@@ -204,76 +196,66 @@ describe("operation reducer", () => {
       // then
       expect(resultState).toEqual({ operations: [] });
     });
-    it("should remove completed step on single operation queue", () => {
+    it('should remove completed step on single operation queue', () => {
       // given
       const action = {
         type: MARK_STEP_COMPLETED,
         payload: {
-          objectWorkingId: "someOtherString234",
-          completedStep: "step1",
+          objectWorkingId: 'someOtherString234',
+          completedStep: 'step1',
         },
       };
 
       // when
-      const resultState = operationReducer(
-        initialState.singleOperation,
-        action
-      );
+      const resultState = operationReducer(initialState.singleOperation, action);
 
       // then
       expect(resultState.operations[0].stepsQueue).toHaveLength(2);
-      expect(resultState.operations[0].stepsQueue).toEqual(["step2", "step3"]);
+      expect(resultState.operations[0].stepsQueue).toEqual(['step2', 'step3']);
     });
-    it("should remove completed step on multi operation queue", () => {
+    it('should remove completed step on multi operation queue', () => {
       // given
       const action = {
         type: MARK_STEP_COMPLETED,
         payload: {
-          objectWorkingId: "someOtherString23",
-          completedStep: "step2a",
+          objectWorkingId: 'someOtherString23',
+          completedStep: 'step2a',
         },
       };
 
       // when
-      const resultState = operationReducer(
-        initialState.multipleOperations,
-        action
-      );
+      const resultState = operationReducer(initialState.multipleOperations, action);
 
       // then
       expect(resultState.operations[1].stepsQueue).toHaveLength(2);
-      expect(resultState.operations[1].stepsQueue).toEqual(["step3a", "step4"]);
+      expect(resultState.operations[1].stepsQueue).toEqual(['step3a', 'step4']);
     });
   });
 
-  describe("cancelOperation", () => {
-    it("throws error if there is no operation with given ID", () => {
+  describe('cancelOperation', () => {
+    it('throws error if there is no operation with given ID', () => {
       // given
       const action = {
         type: CANCEL_OPERATION,
-        payload: { objectWorkingId: "wrongId" },
+        payload: { objectWorkingId: 'wrongId' },
       };
 
       // when
-      const throwingCall = () =>
-        operationReducer(initialState.multipleOperations, action);
+      const throwingCall = () => operationReducer(initialState.multipleOperations, action);
 
       // then
       expect(throwingCall).toThrow();
     });
 
-    it("deletes operation when CANCEL_OPERATION called", () => {
+    it('deletes operation when CANCEL_OPERATION called', () => {
       // given
       const action = {
         type: CANCEL_OPERATION,
-        payload: { objectWorkingId: "someOtherString23" },
+        payload: { objectWorkingId: 'someOtherString23' },
       };
 
       // when
-      const resultState = operationReducer(
-        initialState.multipleOperations,
-        action
-      );
+      const resultState = operationReducer(initialState.multipleOperations, action);
 
       // then
       expect(resultState.operations).toHaveLength(2);

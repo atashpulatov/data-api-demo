@@ -1,5 +1,5 @@
-import { PopupTypeEnum } from "../../home/popup-type-enum";
-import { SET_POPUP_TYPE } from "../popup-state-reducer/popup-state-actions";
+import { PopupTypeEnum } from '../../home/popup-type-enum';
+import { SET_POPUP_TYPE } from '../popup-state-reducer/popup-state-actions';
 import {
   CANCEL_DOSSIER_OPEN,
   CANCEL_REQUEST_IMPORT,
@@ -13,9 +13,9 @@ import {
   SWITCH_IMPORT_SUBTOTALS_ON_IMPORT,
   UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT,
   UPDATE_SELECTED_MENU,
-} from "./navigation-tree-actions";
+} from './navigation-tree-actions';
 
-export const DEFAULT_PROJECT_NAME = "Prepare Data";
+export const DEFAULT_PROJECT_NAME = 'Prepare Data';
 
 export const initialState = {
   chosenObjectId: null,
@@ -34,7 +34,7 @@ export const initialState = {
   chosenLibraryDossier: null,
   chosenLibraryElement: {},
   chosenEnvElement: {},
-  selectedMenu: { pageKey: "all", groupId: null },
+  selectedMenu: { pageKey: 'all', groupId: null },
 };
 
 function makeSelection(newState, data) {
@@ -152,8 +152,7 @@ export const navigationTree = (state = initialState, action = {}) => {
     // which dispataches SET_POPUP_TYPE action.
     case SET_POPUP_TYPE: {
       const newState = { ...state };
-      newState.isPreparedDataRequested =
-        !!popupType && popupType === PopupTypeEnum.dataPreparation;
+      newState.isPreparedDataRequested = !!popupType && popupType === PopupTypeEnum.dataPreparation;
       return newState;
     }
 

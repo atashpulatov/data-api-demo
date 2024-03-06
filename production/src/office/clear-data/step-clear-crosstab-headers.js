@@ -1,8 +1,8 @@
-import { officeApiCrosstabHelper } from "../api/office-api-crosstab-helper";
-import { officeApiHelper } from "../api/office-api-helper";
+import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
+import { officeApiHelper } from '../api/office-api-helper';
 
-import operationErrorHandler from "../../operation/operation-error-handler";
-import operationStepDispatcher from "../../operation/operation-step-dispatcher";
+import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepClearCrosstabHeaders {
   /**
@@ -25,19 +25,13 @@ class StepClearCrosstabHeaders {
       if (objectExist) {
         const { isCrosstab, bindId } = objectData;
         if (isCrosstab) {
-          const officeTable = await officeApiHelper.getTable(
-            excelContext,
-            bindId,
-          );
-          await officeApiCrosstabHelper.clearEmptyCrosstabRow(
-            officeTable,
-            excelContext,
-          );
+          const officeTable = await officeApiHelper.getTable(excelContext, bindId);
+          await officeApiCrosstabHelper.clearEmptyCrosstabRow(officeTable, excelContext);
           officeTable.showHeaders = true;
           officeTable.showFilterButton = false;
 
           const headers = officeTable.getHeaderRowRange();
-          headers.format.font.color = "white";
+          headers.format.font.color = 'white';
           await excelContext.sync();
         }
       }
@@ -45,11 +39,7 @@ class StepClearCrosstabHeaders {
       operationStepDispatcher.completeClearCrosstabHeaders(objectWorkingId);
     } catch (error) {
       console.error(error);
-      operationErrorHandler.handleOperationError(
-        objectData,
-        operationData,
-        error,
-      );
+      operationErrorHandler.handleOperationError(objectData, operationData, error);
     }
   };
 }

@@ -1,19 +1,19 @@
-import { authenticationHelper } from "../authentication/authentication-helper";
-import { officeApiHelper } from "../office/api/office-api-helper";
+import { authenticationHelper } from '../authentication/authentication-helper';
+import { officeApiHelper } from '../office/api/office-api-helper';
 
-import { selectorProperties } from "../attribute-selector/selector-properties";
-import { errorService } from "../error/error-handler";
-import { PopupTypeEnum } from "../home/popup-type-enum";
-import mstrObjectEnum from "../mstr-object/mstr-object-type-enum";
-import { officeActions } from "../redux-reducer/office-reducer/office-actions";
-import { officeProperties } from "../redux-reducer/office-reducer/office-properties";
+import { selectorProperties } from '../attribute-selector/selector-properties';
+import { errorService } from '../error/error-handler';
+import { PopupTypeEnum } from '../home/popup-type-enum';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
+import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 import {
   duplicateRequested,
   editRequested,
   importRequested,
-} from "../redux-reducer/operation-reducer/operation-actions";
-import { popupStateActions } from "../redux-reducer/popup-state-reducer/popup-state-actions";
-import { clearRepromptTask } from "../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions";
+} from '../redux-reducer/operation-reducer/operation-actions';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
+import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 
 const URL = `${window.location.href}`;
 
@@ -45,7 +45,7 @@ class PopupController {
         popupStateActions.setMstrData({
           isReprompt: undefined,
           isEdit: undefined,
-        }),
+        })
       );
     }
     // DE287911: Below line should always run, to ensure `editedObject` is not persisted.
@@ -59,7 +59,7 @@ class PopupController {
     await this.runPopup(PopupTypeEnum.libraryWindow, 80, 80);
   };
 
-  runEditFiltersPopup = async (reportParams) => {
+  runEditFiltersPopup = async reportParams => {
     await this.runPopup(PopupTypeEnum.editFilters, 80, 80, reportParams);
   };
 
@@ -73,16 +73,13 @@ class PopupController {
    */
   runRepromptPopup = async (reportParams, isEdit = true) => {
     const { popupType } = this.reduxStore.getState().popupStateReducer;
-    const isOverviewReprompt =
-      popupType && popupType === PopupTypeEnum.repromptReportDataOverview;
-    this.reduxStore.dispatch(
-      popupStateActions.setMstrData({ isReprompt: true, isEdit }),
-    );
+    const isOverviewReprompt = popupType && popupType === PopupTypeEnum.repromptReportDataOverview;
+    this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: true, isEdit }));
     await this.runPopup(
       isOverviewReprompt ? popupType : PopupTypeEnum.repromptingWindow,
       80,
       80,
-      reportParams,
+      reportParams
     );
   };
 
@@ -90,22 +87,19 @@ class PopupController {
    * This method is used to run the Dossier's re-prompt popup from the Excel add-in
    * @param {*} reportParams
    */
-  runRepromptDossierPopup = async (reportParams) => {
+  runRepromptDossierPopup = async reportParams => {
     const { popupType } = this.reduxStore.getState().popupStateReducer;
-    const isOverviewReprompt =
-      popupType && popupType === PopupTypeEnum.repromptDossierDataOverview;
-    this.reduxStore.dispatch(
-      popupStateActions.setMstrData({ isReprompt: true }),
-    );
+    const isOverviewReprompt = popupType && popupType === PopupTypeEnum.repromptDossierDataOverview;
+    this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: true }));
     await this.runPopup(
       isOverviewReprompt ? popupType : PopupTypeEnum.dossierWindow,
       80,
       80,
-      reportParams,
+      reportParams
     );
   };
 
-  runEditDossierPopup = async (reportParams) => {
+  runEditDossierPopup = async reportParams => {
     await this.runPopup(PopupTypeEnum.dossierWindow, 80, 80, reportParams);
   };
 
@@ -115,11 +109,9 @@ class PopupController {
   };
 
   runPopup = async (popupType, height, width, reportParams = null) => {
-    const isDialogForMultipleRepromptOpen =
-      this.getIsDialogAlreadyOpenForMultipleReprompt();
+    const isDialogForMultipleRepromptOpen = this.getIsDialogAlreadyOpenForMultipleReprompt();
     const { isDataOverviewOpen } = this.reduxStore.getState().popupStateReducer;
-    const isRepromptOrOvieviewPopupOpen =
-      isDialogForMultipleRepromptOpen || isDataOverviewOpen;
+    const isRepromptOrOvieviewPopupOpen = isDialogForMultipleRepromptOpen || isDataOverviewOpen;
 
     this.reduxStore.dispatch(popupStateActions.setMstrData({ popupType }));
     this.reportParams = reportParams;
@@ -133,7 +125,7 @@ class PopupController {
     }
 
     const url = URL;
-    const splittedUrl = url.split("?"); // we need to get rid of any query params
+    const splittedUrl = url.split('?'); // we need to get rid of any query params
 
     try {
       await officeApiHelper.getExcelSessionStatus();
@@ -145,26 +137,25 @@ class PopupController {
             splittedUrl,
             popupType,
             isRepromptOrOvieviewPopupOpen,
-          }),
+          })
         );
       } else {
         // Otherwise, open new dialog and assign event handlers
-        console.time("Popup load time");
+        console.time('Popup load time');
         await Office.context.ui.displayDialogAsync(
           `${splittedUrl[0]}?popupType=${popupType}&source=addin-mstr-excel`,
           { height, width, displayInIframe: true },
-          (asyncResult) => {
+          asyncResult => {
             const { value: dialog } = asyncResult;
             if (dialog) {
               this.dialog = dialog;
-              console.timeEnd("Popup load time");
+              console.timeEnd('Popup load time');
 
               dialog.addEventHandler(
                 // Event received on message from parent (sidebar)
                 Office.EventType.DialogMessageReceived,
                 // Trigger onMessageFromPopup callback with most current reportParams object
-                (arg) =>
-                  this.onMessageFromPopup(dialog, this.reportParams, arg),
+                arg => this.onMessageFromPopup(dialog, this.reportParams, arg)
               );
 
               dialog.addEventHandler(
@@ -172,20 +163,18 @@ class PopupController {
                 Office.EventType.DialogEventReceived,
                 () => {
                   this.reduxStore.dispatch(this.popupActions.resetState());
-                  this.reduxStore.dispatch(
-                    popupStateActions.onClearPopupState(),
-                  );
+                  this.reduxStore.dispatch(popupStateActions.onClearPopupState());
                   this.reduxStore.dispatch(officeActions.hideDialog());
 
                   // Clear the reprompt task queue if the user closes the popup,
                   // as the user is no longer interested in continuing the multiple re-prompting task.
                   this.reduxStore.dispatch(clearRepromptTask());
-                },
+                }
               );
 
               this.reduxStore.dispatch(officeActions.showDialog());
             }
-          },
+          }
         );
       }
     } catch (error) {
@@ -193,7 +182,7 @@ class PopupController {
     }
   };
 
-  sendMessageToDialog = (message) => {
+  sendMessageToDialog = message => {
     this.dialog?.messageChild && this.dialog?.messageChild(message);
   };
 
@@ -251,30 +240,20 @@ class PopupController {
           if (!reportParams) {
             await this.handleOkCommand(response, reportParams);
           } else if (reportParams.duplicateMode) {
-            this.reduxStore.dispatch(
-              duplicateRequested(reportParams.object, response),
-            );
+            this.reduxStore.dispatch(duplicateRequested(reportParams.object, response));
           } else {
-            const reportPreviousState =
-              this.getObjectPreviousState(reportParams);
-            this.reduxStore.dispatch(
-              editRequested(reportPreviousState, response),
-            );
+            const reportPreviousState = this.getObjectPreviousState(reportParams);
+            this.reduxStore.dispatch(editRequested(reportPreviousState, response));
           }
           break;
         case commandOnUpdate:
           if (!reportParams) {
             await this.handleUpdateCommand(response);
           } else if (reportParams.duplicateMode) {
-            this.reduxStore.dispatch(
-              duplicateRequested(reportParams.object, response),
-            );
+            this.reduxStore.dispatch(duplicateRequested(reportParams.object, response));
           } else {
-            const reportPreviousState =
-              this.getObjectPreviousState(reportParams);
-            this.reduxStore.dispatch(
-              editRequested(reportPreviousState, response),
-            );
+            const reportPreviousState = this.getObjectPreviousState(reportParams);
+            this.reduxStore.dispatch(editRequested(reportPreviousState, response));
           }
           break;
         case commandCancel:
@@ -321,20 +300,17 @@ class PopupController {
     }
   };
 
-  handleUpdateCommand = async (response) => {
+  handleUpdateCommand = async response => {
     const objectData = {
       name: response.chosenObjectName,
       objectId: response.chosenObjectId,
       projectId: response.projectId,
-      mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(
-        response.chosenObjectSubtype,
-      ),
+      mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(response.chosenObjectSubtype),
       body: response.body,
       dossierData: response.dossierData,
       promptsAnswers: response.promptsAnswers,
       isPrompted:
-        response.promptsAnswers?.length > 0 &&
-        response.promptsAnswers[0].answers?.length > 0,
+        response.promptsAnswers?.length > 0 && response.promptsAnswers[0].answers?.length > 0,
       instanceId: response.instanceId,
       subtotalsInfo: response.subtotalsInfo,
       displayAttrFormNames: response.displayAttrFormNames,
@@ -350,13 +326,10 @@ class PopupController {
         dossierData: response.dossierData,
         objectId: response.chosenObject,
         projectId: response.chosenProject,
-        mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(
-          response.chosenSubtype,
-        ),
+        mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(response.chosenSubtype),
         bindId,
         importType: response.importType,
-        isPrompted:
-          response.isPrompted || response.promptsAnswers?.answers?.length > 0,
+        isPrompted: response.isPrompted || response.promptsAnswers?.answers?.length > 0,
         promptsAnswers: response.promptsAnswers,
         visualizationInfo: response.visualizationInfo,
         preparedInstanceId: response.preparedInstanceId,
@@ -368,17 +341,17 @@ class PopupController {
   };
 
   loadPending =
-    (wrapped) =>
+    wrapped =>
     async (...args) => {
       this.runPopup(PopupTypeEnum.loadingPage, 30, 40);
       return wrapped(...args);
     };
 
-  closeDialog = (dialog) => {
+  closeDialog = dialog => {
     try {
       return dialog.close();
     } catch (e) {
-      console.log("Attempted to close an already closed dialog");
+      console.log('Attempted to close an already closed dialog');
     }
   };
 
@@ -391,11 +364,10 @@ class PopupController {
     this.dialog = {};
   };
 
-  getReportsPreviousState = (reportParams) => {
-    const currentReportArray =
-      this.reduxStore.getState().officeReducer.reportArray;
+  getReportsPreviousState = reportParams => {
+    const currentReportArray = this.reduxStore.getState().officeReducer.reportArray;
     const indexOfOriginalValues = currentReportArray.findIndex(
-      (report) => report.bindId === reportParams.bindId,
+      report => report.bindId === reportParams.bindId
     );
     const originalValues = currentReportArray[indexOfOriginalValues];
     const { displayAttrFormNames } = officeProperties;
@@ -408,10 +380,10 @@ class PopupController {
     };
   };
 
-  getObjectPreviousState = (reportParams) => {
+  getObjectPreviousState = reportParams => {
     const { objects } = this.reduxStore.getState().objectReducer;
     const indexOfOriginalValues = objects.findIndex(
-      (report) => report.bindId === reportParams.bindId,
+      report => report.bindId === reportParams.bindId
     );
     const originalValues = objects[indexOfOriginalValues];
     const { displayAttrFormNames } = officeProperties;
@@ -425,14 +397,12 @@ class PopupController {
   };
 
   getIsMultipleRepromptQueueEmpty = () => {
-    const { index = 0, total = 0 } =
-      this.reduxStore.getState().repromptsQueueReducer;
+    const { index = 0, total = 0 } = this.reduxStore.getState().repromptsQueueReducer;
     return total === 0 || (total >= 1 && index === total);
   };
 
   getIsDialogAlreadyOpenForMultipleReprompt = () => {
-    const { index = 0, total = 0 } =
-      this.reduxStore.getState().repromptsQueueReducer;
+    const { index = 0, total = 0 } = this.reduxStore.getState().repromptsQueueReducer;
     return total > 1 && index > 1;
   };
 }

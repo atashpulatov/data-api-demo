@@ -1,15 +1,15 @@
-import React from "react";
-import { createRoot } from "react-dom";
+import React from 'react';
+import { createRoot } from 'react-dom';
 
-import { EmbeddedDossier } from "../../../embedded/dossier/embedded-dossier";
+import { EmbeddedDossier } from '../../../embedded/dossier/embedded-dossier';
 
-describe("EmbeddedDossierNotConnected", () => {
+describe('EmbeddedDossierNotConnected', () => {
   let container = null;
   let root = null;
 
   beforeEach(() => {
     // Set up a DOM element as a render target
-    container = document.createElement("div");
+    container = document.createElement('div');
     root = createRoot(container);
   });
 
@@ -18,7 +18,7 @@ describe("EmbeddedDossierNotConnected", () => {
     container.remove();
   });
 
-  it("renders without crashing", () => {
+  it('renders without crashing', () => {
     root.render(<EmbeddedDossier />, container);
   });
 

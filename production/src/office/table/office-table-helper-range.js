@@ -1,5 +1,5 @@
-import { OverlappingTablesError } from "../../error/overlapping-tables-error";
-import { errorMessages } from "../../error/constants";
+import { OverlappingTablesError } from '../../error/overlapping-tables-error';
+import { errorMessages } from '../../error/constants';
 
 class OfficeTableHelperRange {
   /**
@@ -18,7 +18,7 @@ class OfficeTableHelperRange {
     excelContext,
     range,
     instanceDefinition,
-    isRepeatStep,
+    isRepeatStep
   ) {
     if (prevOfficeTable) {
       if (isRepeatStep) {
@@ -28,7 +28,7 @@ class OfficeTableHelperRange {
         await this.checkObjectRangeValidityOnRefresh(
           prevOfficeTable,
           excelContext,
-          instanceDefinition,
+          instanceDefinition
         );
       }
     } else {
@@ -45,11 +45,7 @@ class OfficeTableHelperRange {
    *
    * @throws {OverlappingTablesError} when range is not empty.
    */
-  async checkObjectRangeValidityOnRefresh(
-    prevOfficeTable,
-    excelContext,
-    instanceDefinition,
-  ) {
+  async checkObjectRangeValidityOnRefresh(prevOfficeTable, excelContext, instanceDefinition) {
     const { rows, columns, mstrTable } = instanceDefinition;
 
     const { addedRows, addedColumns } = await this.calculateRowsAndColumnsSize(
@@ -57,7 +53,7 @@ class OfficeTableHelperRange {
       mstrTable,
       prevOfficeTable,
       rows,
-      columns,
+      columns
     );
 
     await this.checkExtendedRangeRows(
@@ -65,15 +61,10 @@ class OfficeTableHelperRange {
       prevOfficeTable,
       mstrTable,
       excelContext,
-      addedRows,
+      addedRows
     );
 
-    await this.checkExtendedRangeColumns(
-      addedColumns,
-      prevOfficeTable,
-      mstrTable,
-      excelContext,
-    );
+    await this.checkExtendedRangeColumns(addedColumns, prevOfficeTable, mstrTable, excelContext);
 
     await this.deletePrevOfficeTable(excelContext, prevOfficeTable);
   }
@@ -87,25 +78,15 @@ class OfficeTableHelperRange {
    * @param columns
    * @returns {Promise<{addedRows, addedColumns}>}
    */
-  async calculateRowsAndColumnsSize(
-    excelContext,
-    mstrTable,
-    prevOfficeTable,
-    rows,
-    columns,
-  ) {
-    prevOfficeTable.columns.load("count");
-    prevOfficeTable.rows.load("count");
+  async calculateRowsAndColumnsSize(excelContext, mstrTable, prevOfficeTable, rows, columns) {
+    prevOfficeTable.columns.load('count');
+    prevOfficeTable.rows.load('count');
     await excelContext.sync();
 
     const addedColumns = Math.max(0, columns - prevOfficeTable.columns.count);
     const addedRows = Math.max(0, rows - prevOfficeTable.rows.count);
 
-    return this.checkCrosstabAddedRowsAndColumns(
-      mstrTable,
-      addedRows,
-      addedColumns,
-    );
+    return this.checkCrosstabAddedRowsAndColumns(mstrTable, addedRows, addedColumns);
   }
 
   /**
@@ -134,22 +115,16 @@ class OfficeTableHelperRange {
    * @throws {OverlappingTablesError} when range is not empty.
    */
   checkCrosstabAddedRowsAndColumns = (mstrTable, addedRows, addedColumns) => {
-    const { isCrosstab, crosstabHeaderDimensions, prevCrosstabDimensions } =
-      mstrTable;
+    const { isCrosstab, crosstabHeaderDimensions, prevCrosstabDimensions } = mstrTable;
 
     if (isCrosstab) {
-      const { columnsY: prevColumnsY, rowsX: prevRowsX } =
-        prevCrosstabDimensions;
-      const { columnsY: crosstabColumnsY, rowsX: crosstabRowsX } =
-        crosstabHeaderDimensions;
+      const { columnsY: prevColumnsY, rowsX: prevRowsX } = prevCrosstabDimensions;
+      const { columnsY: crosstabColumnsY, rowsX: crosstabRowsX } = crosstabHeaderDimensions;
 
       if (!prevCrosstabDimensions) {
         addedRows += crosstabColumnsY;
         addedColumns += crosstabRowsX;
-      } else if (
-        prevColumnsY === crosstabColumnsY &&
-        prevRowsX === crosstabRowsX
-      ) {
+      } else if (prevColumnsY === crosstabColumnsY && prevRowsX === crosstabRowsX) {
         addedRows += crosstabColumnsY - prevColumnsY;
         addedColumns += crosstabRowsX - prevRowsX;
       }
@@ -171,12 +146,7 @@ class OfficeTableHelperRange {
    *
    * @throws {OverlappingTablesError} when range is not empty.
    */
-  async checkExtendedRangeColumns(
-    addedColumns,
-    prevOfficeTable,
-    mstrTable,
-    excelContext,
-  ) {
+  async checkExtendedRangeColumns(addedColumns, prevOfficeTable, mstrTable, excelContext) {
     const { isCrosstab, prevCrosstabDimensions } = mstrTable;
 
     if (addedColumns) {
@@ -184,7 +154,7 @@ class OfficeTableHelperRange {
       const rangeCrosstab = this.prepareRangeColumnsCrosstab(
         range,
         prevCrosstabDimensions.columnsY,
-        isCrosstab,
+        isCrosstab
       );
 
       await this.checkRangeValidity(excelContext, rangeCrosstab);
@@ -232,25 +202,15 @@ class OfficeTableHelperRange {
    *
    * @throws {OverlappingTablesError} when range is not empty.
    */
-  async checkExtendedRangeRows(
-    addedColumns,
-    prevOfficeTable,
-    mstrTable,
-    excelContext,
-    addedRows,
-  ) {
+  async checkExtendedRangeRows(addedColumns, prevOfficeTable, mstrTable, excelContext, addedRows) {
     const { isCrosstab, prevCrosstabDimensions } = mstrTable;
 
     if (addedRows) {
-      const range = this.prepareRangeRows(
-        prevOfficeTable,
-        addedColumns,
-        addedRows,
-      );
+      const range = this.prepareRangeRows(prevOfficeTable, addedColumns, addedRows);
       const rangeCrosstab = this.prepareRangeRowsCrosstab(
         range,
         prevCrosstabDimensions.rowsX,
-        isCrosstab,
+        isCrosstab
       );
 
       await this.checkRangeValidity(excelContext, rangeCrosstab);
@@ -267,10 +227,7 @@ class OfficeTableHelperRange {
    * @returns {Office} Reference to Excel range object
    */
   prepareRangeRows = (prevOfficeTable, addedColumns, addedRows) =>
-    prevOfficeTable
-      .getRange()
-      .getRowsBelow(addedRows)
-      .getResizedRange(0, addedColumns);
+    prevOfficeTable.getRange().getRowsBelow(addedRows).getResizedRange(0, addedColumns);
 
   /**
    * Extends the Excel range by crosstab header row dimension.

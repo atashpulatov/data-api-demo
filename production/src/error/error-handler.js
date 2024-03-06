@@ -1,15 +1,15 @@
-import officeReducerHelper from "../office/store/office-reducer-helper";
+import officeReducerHelper from '../office/store/office-reducer-helper';
 
-import { customT } from "../customTranslation";
-import { PopupTypeEnum } from "../home/popup-type-enum";
-import { getNotificationButtons } from "../notification-v2/notification-buttons";
+import { customT } from '../customTranslation';
+import { PopupTypeEnum } from '../home/popup-type-enum';
+import { getNotificationButtons } from '../notification-v2/notification-buttons';
 import {
   DUPLICATE_OPERATION,
   EDIT_OPERATION,
   IMPORT_OPERATION,
   REFRESH_OPERATION,
-} from "../operation/operation-type-names";
-import { clearRepromptTask } from "../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions";
+} from '../operation/operation-type-names';
+import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import {
   errorMessageFactory,
   errorMessages,
@@ -17,19 +17,13 @@ import {
   httpStatusToErrorType,
   incomingErrorStrings,
   stringMessageToErrorType,
-} from "./constants";
+} from './constants';
 
 const COLUMN_EXCEL_API_LIMIT = 5000;
 const TIMEOUT = 3000;
 
 class ErrorService {
-  init = (
-    sessionActions,
-    sessionHelper,
-    notificationService,
-    popupController,
-    reduxStore,
-  ) => {
+  init = (sessionActions, sessionHelper, notificationService, popupController, reduxStore) => {
     this.sessionActions = sessionActions;
     this.sessionHelper = sessionHelper;
     this.notificationService = notificationService;
@@ -37,12 +31,7 @@ class ErrorService {
     this.reduxStore = reduxStore;
   };
 
-  handleObjectBasedError = async (
-    objectWorkingId,
-    error,
-    callback,
-    operationData,
-  ) => {
+  handleObjectBasedError = async (objectWorkingId, error, callback, operationData) => {
     const errorType = this.getErrorType(error, operationData);
     if (error.Code === 5012) {
       this.handleError(error);
@@ -61,8 +50,7 @@ class ErrorService {
 
       officeReducerHelper.displayPopup(popupData);
     } else {
-      const { isDataOverviewOpen } =
-        this.reduxStore?.getState()?.popupStateReducer || {};
+      const { isDataOverviewOpen } = this.reduxStore?.getState()?.popupStateReducer || {};
 
       // Mainly for Reprompt All workflow but covers others, close dialog if somehow remained open
       await this.closePopupIfOpen(!isDataOverviewOpen);
@@ -79,11 +67,11 @@ class ErrorService {
   handleError = async (
     error,
     options = {
-      chosenObjectName: "Report",
+      chosenObjectName: 'Report',
       onConfirm: null,
       isLogout: false,
       dialogType: null,
-    },
+    }
   ) => {
     const { onConfirm, isLogout, dialogType, ...parameters } = options;
     const errorType = this.getErrorType(error);
@@ -94,9 +82,7 @@ class ErrorService {
 
     const shouldClosePopup =
       dialogType === PopupTypeEnum.importedDataOverview &&
-      [errorTypes.UNAUTHORIZED_ERR, errorTypes.CONNECTION_BROKEN_ERR].includes(
-        errorType,
-      );
+      [errorTypes.UNAUTHORIZED_ERR, errorTypes.CONNECTION_BROKEN_ERR].includes(errorType);
 
     await this.closePopupIfOpen(shouldClosePopup);
 
@@ -107,15 +93,12 @@ class ErrorService {
   getErrorType = (error, operationData) => {
     const updateError = this.getExcelError(error, operationData);
     return (
-      updateError.type ||
-      this.getOfficeErrorType(updateError) ||
-      this.getRestErrorType(updateError)
+      updateError.type || this.getOfficeErrorType(updateError) || this.getRestErrorType(updateError)
     );
   };
 
   getErrorDetails = (error, errorMessage) => {
-    const errorDetails =
-      (error.response && error.response.text) || error.message || "";
+    const errorDetails = (error.response && error.response.text) || error.message || '';
     let details;
     const {
       EXCEEDS_EXCEL_API_LIMITS,
@@ -132,19 +115,18 @@ class ErrorService {
       case INVALID_VIZ_KEY_MESSAGE:
       case NOT_IN_METADATA:
       case EMPTY_REPORT:
-        details = "";
+        details = '';
         break;
       default:
-        details = errorMessage !== errorDetails ? errorDetails : "";
+        details = errorMessage !== errorDetails ? errorDetails : '';
         break;
     }
     return details;
   };
 
-  displayErrorNotification = (error, type, message = "") => {
-    const errorDetails =
-      (error.response && error.response.text) || error.message || "";
-    const details = message !== errorDetails ? errorDetails : "";
+  displayErrorNotification = (error, type, message = '') => {
+    const errorDetails = (error.response && error.response.text) || error.message || '';
+    const details = message !== errorDetails ? errorDetails : '';
     if (type === errorTypes.UNAUTHORIZED_ERR) {
       this.notificationService.sessionExpired();
       return;
@@ -157,8 +139,8 @@ class ErrorService {
   getChildrenButtons = () =>
     getNotificationButtons([
       {
-        type: "basic",
-        label: customT("OK"),
+        type: 'basic',
+        label: customT('OK'),
         onClick: () => this.notificationService.globalNotificationDissapear(),
       },
     ]);
@@ -171,11 +153,11 @@ class ErrorService {
     }
   };
 
-  getOfficeErrorType = (error) => {
+  getOfficeErrorType = error => {
     console.warn({ error });
     console.warn(error.message);
 
-    if (error.name === "RichApi.Error") {
+    if (error.name === 'RichApi.Error') {
       return stringMessageToErrorType(error.message);
     }
     return null;
@@ -191,9 +173,9 @@ class ErrorService {
   getExcelError(error, operationData) {
     const { name, code, debugInfo } = error;
     const isExcelApiError =
-      name === "RichApi.Error" &&
-      code === "GeneralException" &&
-      debugInfo.message === "An internal error has occurred.";
+      name === 'RichApi.Error' &&
+      code === 'GeneralException' &&
+      debugInfo.message === 'An internal error has occurred.';
     const exceedLimit =
       operationData &&
       operationData.instanceDefinition &&
@@ -205,7 +187,7 @@ class ErrorService {
       case REFRESH_OPERATION:
       case EDIT_OPERATION:
         if (isExcelApiError && exceedLimit) {
-          updateError = { ...error, type: "exceedExcelApiLimit", message: "" };
+          updateError = { ...error, type: 'exceedExcelApiLimit', message: '' };
         } else {
           updateError = error;
         }
@@ -217,22 +199,18 @@ class ErrorService {
     return updateError;
   }
 
-  getRestErrorType = (error) => {
+  getRestErrorType = error => {
     if (!error.status && !error.response) {
-      if (
-        error.message &&
-        error.message.includes(incomingErrorStrings.CONNECTION_BROKEN)
-      ) {
+      if (error.message && error.message.includes(incomingErrorStrings.CONNECTION_BROKEN)) {
         return errorTypes.CONNECTION_BROKEN_ERR;
       }
       return null;
     }
-    const status =
-      error.status || (error.response ? error.response.status : null);
+    const status = error.status || (error.response ? error.response.status : null);
     return httpStatusToErrorType(status);
   };
 
-  getErrorMessage = (error, options = { chosenObjectName: "Report" }) => {
+  getErrorMessage = (error, options = { chosenObjectName: 'Report' }) => {
     const errorType = this.getErrorType(error);
     return errorMessageFactory(errorType)({ error, ...options });
   };
@@ -247,9 +225,9 @@ class ErrorService {
   createNotificationPayload(message, details) {
     const buttons = [
       {
-        title: "Ok",
-        type: "basic",
-        label: "Ok",
+        title: 'Ok',
+        type: 'basic',
+        label: 'Ok',
         onClick: () => {
           this.notificationService.globalNotificationDissapear();
         },
@@ -268,14 +246,13 @@ class ErrorService {
    * Also clearing Reprompt task queue if dialog was open for Reprompt workflow.
    * * @param {Boolean} shouldClose flag indicated whether to close the dialog or not
    */
-  closePopupIfOpen = async (shouldClose) => {
+  closePopupIfOpen = async shouldClose => {
     const storeState = this.reduxStore.getState();
 
     const { isDialogOpen } = storeState.officeReducer;
 
     if (isDialogOpen && shouldClose) {
-      const isDialogOpenForReprompt =
-        storeState.repromptsQueueReducer?.total > 0;
+      const isDialogOpenForReprompt = storeState.repromptsQueueReducer?.total > 0;
 
       await this.popupController.closeDialog(this.popupController.dialog);
       this.popupController.resetDialogStates();

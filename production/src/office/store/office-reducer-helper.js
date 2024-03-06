@@ -1,9 +1,9 @@
-import { HIGHLIGHT_OPERATION } from "../../operation/operation-type-names";
-import { officeActions } from "../../redux-reducer/office-reducer/office-actions";
-import { objectImportType } from "../../mstr-object/constants";
+import { HIGHLIGHT_OPERATION } from '../../operation/operation-type-names';
+import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
+import { objectImportType } from '../../mstr-object/constants';
 
 class OfficeReducerHelper {
-  init = (reduxStore) => {
+  init = reduxStore => {
     this.reduxStore = reduxStore;
   };
 
@@ -22,9 +22,7 @@ class OfficeReducerHelper {
     // Filter out the image objects if the shape api is not supported
     // in current version in order to maintain the backward compatibility.
     if (!isShapeAPISupported) {
-      loadedObjects = loadedObjects.filter(
-        (object) => object?.importType !== objectImportType.IMAGE,
-      );
+      loadedObjects = loadedObjects.filter(object => object?.importType !== objectImportType.IMAGE);
     }
 
     return loadedObjects;
@@ -39,7 +37,7 @@ class OfficeReducerHelper {
     this.reduxStore
       .getState()
       .operationReducer.operations.filter(
-        (operation) => operation.operationType !== HIGHLIGHT_OPERATION,
+        operation => operation.operationType !== HIGHLIGHT_OPERATION
       );
 
   /**
@@ -49,8 +47,7 @@ class OfficeReducerHelper {
    *
    * @return {Boolean} Specify if there is no operation in the operation reducer
    */
-  noOperationInProgress = () =>
-    this.getOperationsListFromOperationReducer().length === 0;
+  noOperationInProgress = () => this.getOperationsListFromOperationReducer().length === 0;
 
   /**
    * Return object from object Reducer correspongin to passed bindId
@@ -58,9 +55,9 @@ class OfficeReducerHelper {
    * @param {String} bindId Id of the Office table created on import used for referencing the Excel table
    * @return {Object}
    */
-  getObjectFromObjectReducerByBindId = (bindId) => {
+  getObjectFromObjectReducerByBindId = bindId => {
     const { objects } = this.reduxStore.getState().objectReducer;
-    return objects.find((object) => object.bindId === bindId);
+    return objects.find(object => object.bindId === bindId);
   };
 
   /**
@@ -69,9 +66,9 @@ class OfficeReducerHelper {
    * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
    * @return {Object}
    */
-  getObjectFromObjectReducerByObjectWorkingId = (objectWorkingId) => {
+  getObjectFromObjectReducerByObjectWorkingId = objectWorkingId => {
     const { objects } = this.reduxStore.getState().objectReducer;
-    return objects.find((object) => object.objectWorkingId === objectWorkingId);
+    return objects.find(object => object.objectWorkingId === objectWorkingId);
   };
 
   /**
@@ -80,11 +77,9 @@ class OfficeReducerHelper {
    * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
    * @return {Object}
    */
-  getNotificationFromNotificationReducer = (objectWorkingId) => {
+  getNotificationFromNotificationReducer = objectWorkingId => {
     const { notifications } = this.reduxStore.getState().notificationReducer;
-    return notifications.find(
-      (notification) => notification.objectWorkingId === objectWorkingId,
-    );
+    return notifications.find(notification => notification.objectWorkingId === objectWorkingId);
   };
 
   /**
@@ -92,7 +87,7 @@ class OfficeReducerHelper {
    *
    * @param {Object} popupData Contains data about popup to be displayed
    */
-  displayPopup = (popupData) => {
+  displayPopup = popupData => {
     this.reduxStore.dispatch(officeActions.setPopupData(popupData));
   };
 

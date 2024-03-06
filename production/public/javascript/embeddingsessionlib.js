@@ -9,12 +9,12 @@
  * so it should be done manually, that's the
  * reason of disabling 'func-names' as well as 'prefer-arrow-callback'
  */
-["click", "keydown"].forEach(function (event) {
+['click', 'keydown'].forEach(function (event) {
   document.addEventListener(
     event,
     function () {
-      return window.parent.postMessage("EXTEND_SESSION", window.origin);
+      return window.parent.postMessage('EXTEND_SESSION', window.origin);
     },
-    false,
+    false
   );
 });

@@ -1,13 +1,13 @@
-import React from "react";
-import { fireEvent, render } from "@testing-library/react";
+import React from 'react';
+import { fireEvent, render } from '@testing-library/react';
 
-import { homeHelper } from "../../home/home-helper";
-import { notificationService } from "../../notification-v2/notification-service";
-import { officeApiHelper } from "../../office/api/office-api-helper";
-import { officeRemoveHelper } from "../../office/remove/office-remove-helper";
+import { homeHelper } from '../../home/home-helper';
+import { notificationService } from '../../notification-v2/notification-service';
+import { officeApiHelper } from '../../office/api/office-api-helper';
+import { officeRemoveHelper } from '../../office/remove/office-remove-helper';
 
-import { errorService } from "../../error/error-handler";
-import { ConfirmationNotConnected } from "../../home/confirmation";
+import { errorService } from '../../error/error-handler';
+import { ConfirmationNotConnected } from '../../home/confirmation';
 
 const createMockFilesArray = () => {
   const mockArray = [];
@@ -23,18 +23,16 @@ const createMockFilesArray = () => {
   return mockArray;
 };
 
-describe("Confirmation", () => {
+describe('Confirmation', () => {
   afterEach(() => {
     jest.resetAllMocks();
   });
 
-  it("should call proper methods from secureData when Ok button is clicked", () => {
+  it('should call proper methods from secureData when Ok button is clicked', () => {
     // given
-    const mockSecureData = jest
-      .spyOn(homeHelper, "secureData")
-      .mockImplementation(() => jest.fn);
+    const mockSecureData = jest.spyOn(homeHelper, 'secureData').mockImplementation(() => jest.fn);
     const mockDismissAll = jest
-      .spyOn(notificationService, "dismissNotifications")
+      .spyOn(notificationService, 'dismissNotifications')
       .mockImplementation(() => jest.fn);
     const mockToggleIsConfirmFlag = jest.fn();
     const mockReportArray = createMockFilesArray();
@@ -46,28 +44,26 @@ describe("Confirmation", () => {
       />
     );
     // when
-    fireEvent.click(getByText("OK"));
+    fireEvent.click(getByText('OK'));
     // then
     expect(mockSecureData).toBeCalled();
     expect(mockDismissAll).toBeCalled();
   });
 
-  it("should fill clearErrors when secureData fails in ok button click", () => {
+  it('should fill clearErrors when secureData fails in ok button click', () => {
     // given
     const mockSync = jest.fn();
-    const error = new Error("test error");
+    const error = new Error('test error');
     jest
-      .spyOn(officeApiHelper, "getExcelContext")
+      .spyOn(officeApiHelper, 'getExcelContext')
       .mockImplementationOnce(() => ({ sync: mockSync }));
-    jest
-      .spyOn(officeRemoveHelper, "checkIfObjectExist")
-      .mockImplementationOnce(() => true);
-    jest.spyOn(officeApiHelper, "getTable").mockImplementationOnce(() => {
+    jest.spyOn(officeRemoveHelper, 'checkIfObjectExist').mockImplementationOnce(() => true);
+    jest.spyOn(officeApiHelper, 'getTable').mockImplementationOnce(() => {
       throw error;
     });
-    jest.spyOn(errorService, "handleError").mockImplementationOnce(() => {});
+    jest.spyOn(errorService, 'handleError').mockImplementationOnce(() => {});
     const clearErrors = [];
-    const chosenObjectName = "Test";
+    const chosenObjectName = 'Test';
     const returnValue = {};
     errorService.handleError.mockReturnValueOnce(() => returnValue);
     clearErrors.push({ chosenObjectName, returnValue });
@@ -86,103 +82,81 @@ describe("Confirmation", () => {
       />
     );
     // when
-    fireEvent.click(getByText("OK"));
+    fireEvent.click(getByText('OK'));
     // then
     expect(clearErrors).not.toBe(null);
   });
 
-  it("should set isConfirm flag to false when Cancel is clicked", async () => {
+  it('should set isConfirm flag to false when Cancel is clicked', async () => {
     // given
     const mockToggleIsConfirmFlag = jest.fn();
     const { getByText } = render(
-      <ConfirmationNotConnected
-        isSecured={false}
-        toggleIsConfirmFlag={mockToggleIsConfirmFlag}
-      />
+      <ConfirmationNotConnected isSecured={false} toggleIsConfirmFlag={mockToggleIsConfirmFlag} />
     );
     // when
-    fireEvent.click(getByText("Cancel"));
+    fireEvent.click(getByText('Cancel'));
     // then
     await expect(mockToggleIsConfirmFlag).toBeCalledWith(false);
   });
-  it("should attach event listeners for outside of confirmation popup click and esc button", () => {
+  it('should attach event listeners for outside of confirmation popup click and esc button', () => {
     // given
-    const addEventListenerSpy = jest.spyOn(document, "addEventListener");
+    const addEventListenerSpy = jest.spyOn(document, 'addEventListener');
     // when
     render(<ConfirmationNotConnected isConfirm />);
     // then
     const spyCalls = addEventListenerSpy.mock.calls;
-    expect(spyCalls[spyCalls.length - 1][0]).toEqual("click");
-    expect(spyCalls[spyCalls.length - 1][1].name).toEqual(
-      "closeSettingsOnClick"
-    );
-    expect(spyCalls[spyCalls.length - 2][0]).toEqual("keyup");
-    expect(spyCalls[spyCalls.length - 2][1].name).toEqual("closeSettingsOnEsc");
+    expect(spyCalls[spyCalls.length - 1][0]).toEqual('click');
+    expect(spyCalls[spyCalls.length - 1][1].name).toEqual('closeSettingsOnClick');
+    expect(spyCalls[spyCalls.length - 2][0]).toEqual('keyup');
+    expect(spyCalls[spyCalls.length - 2][1].name).toEqual('closeSettingsOnEsc');
   });
-  it("should remove event listeners for outside of confirmation popup click and esc button", () => {
+  it('should remove event listeners for outside of confirmation popup click and esc button', () => {
     // given
-    const removeEventListenerSpy = jest.spyOn(document, "removeEventListener");
+    const removeEventListenerSpy = jest.spyOn(document, 'removeEventListener');
     const { rerender } = render(<ConfirmationNotConnected isConfirm />);
     // when
     rerender(<ConfirmationNotConnected isConfirm={false} />);
     // then
     const spyCalls = removeEventListenerSpy.mock.calls;
-    expect(spyCalls[spyCalls.length - 1][0]).toEqual("click");
-    expect(spyCalls[spyCalls.length - 1][1].name).toEqual(
-      "closeSettingsOnClick"
-    );
-    expect(spyCalls[spyCalls.length - 2][0]).toEqual("keyup");
-    expect(spyCalls[spyCalls.length - 2][1].name).toEqual("closeSettingsOnEsc");
+    expect(spyCalls[spyCalls.length - 1][0]).toEqual('click');
+    expect(spyCalls[spyCalls.length - 1][1].name).toEqual('closeSettingsOnClick');
+    expect(spyCalls[spyCalls.length - 2][0]).toEqual('keyup');
+    expect(spyCalls[spyCalls.length - 2][1].name).toEqual('closeSettingsOnEsc');
   });
-  it("should hide confirmation popup when clicking outside of it", () => {
+  it('should hide confirmation popup when clicking outside of it', () => {
     // given
     const toggleIsConfirmFlagMock = jest.fn();
     const map = {};
     document.addEventListener = jest.fn((event, cb) => {
       map[event] = cb;
     });
-    render(
-      <ConfirmationNotConnected
-        isConfirm
-        toggleIsConfirmFlag={toggleIsConfirmFlagMock}
-      />
-    );
+    render(<ConfirmationNotConnected isConfirm toggleIsConfirmFlag={toggleIsConfirmFlagMock} />);
     // when
     map.click({ target: null });
     // then
     expect(toggleIsConfirmFlagMock).toHaveBeenCalled();
   });
-  it("should hide confirmation popup when pressing ESC", () => {
+  it('should hide confirmation popup when pressing ESC', () => {
     // given
     const toggleIsConfirmFlagMock = jest.fn();
     const map = {};
     document.addEventListener = jest.fn((event, cb) => {
       map[event] = cb;
     });
-    render(
-      <ConfirmationNotConnected
-        isConfirm
-        toggleIsConfirmFlag={toggleIsConfirmFlagMock}
-      />
-    );
+    render(<ConfirmationNotConnected isConfirm toggleIsConfirmFlag={toggleIsConfirmFlagMock} />);
     // when
     map.keyup({ keyCode: 27 });
     // then
     expect(toggleIsConfirmFlagMock).toHaveBeenCalled();
   });
-  it("should not hide confirmation popup when pressing key other than ESC", () => {
+  it('should not hide confirmation popup when pressing key other than ESC', () => {
     // given
     const toggleIsConfirmFlagMock = jest.fn();
     const map = {};
     document.addEventListener = jest.fn((event, cb) => {
       map[event] = cb;
     });
-    render(
-      <ConfirmationNotConnected
-        isConfirm
-        toggleIsConfirmFlag={toggleIsConfirmFlagMock}
-      />
-    );
+    render(<ConfirmationNotConnected isConfirm toggleIsConfirmFlag={toggleIsConfirmFlagMock} />);
     // when
     map.keyup({ keyCode: 26 });
     // then

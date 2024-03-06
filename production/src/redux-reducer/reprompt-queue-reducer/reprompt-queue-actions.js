@@ -1,6 +1,6 @@
-export const ADD_REPROMPT_TASK = "ADD_REPROMPT_TASK";
-export const EXECUTE_NEXT_REPROMPT_TASK = "EXECUTE_NEXT_REPROMPT_TASK";
-export const CLEAR_REPROMPT_TASKS = "CLEAR_REPROMPT_TASKS";
+export const ADD_REPROMPT_TASK = 'ADD_REPROMPT_TASK';
+export const EXECUTE_NEXT_REPROMPT_TASK = 'EXECUTE_NEXT_REPROMPT_TASK';
+export const CLEAR_REPROMPT_TASKS = 'CLEAR_REPROMPT_TASKS';
 
 /**
  * Adds a task to the reprompt queue to be executed later.

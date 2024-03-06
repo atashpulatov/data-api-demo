@@ -1,65 +1,58 @@
-import { notificationService } from "../../notification-v2/notification-service";
-import { officeApiHelper } from "../../office/api/office-api-helper";
-import officeReducerHelper from "../../office/store/office-reducer-helper";
-import { sidePanelEventHelper } from "../../right-side-panel/side-panel-event-helper";
-import { sidePanelService } from "../../right-side-panel/side-panel-service";
+import { notificationService } from '../../notification-v2/notification-service';
+import { officeApiHelper } from '../../office/api/office-api-helper';
+import officeReducerHelper from '../../office/store/office-reducer-helper';
+import { sidePanelEventHelper } from '../../right-side-panel/side-panel-event-helper';
+import { sidePanelService } from '../../right-side-panel/side-panel-service';
 
-describe("SidePanelService", () => {
+describe('SidePanelService', () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
 
-  it("should call excel contex methods form initializeActiveCellChangedListener", async () => {
+  it('should call excel contex methods form initializeActiveCellChangedListener', async () => {
     // given
     const mockSync = jest.fn();
     const mockContext = { sync: mockSync };
-    const mockActiveCell = "Sheet123!ABC123";
+    const mockActiveCell = 'Sheet123!ABC123';
 
     const spyGetExcelContext = jest
-      .spyOn(officeApiHelper, "getExcelContext")
+      .spyOn(officeApiHelper, 'getExcelContext')
       .mockImplementationOnce(() => mockContext);
 
     const spyGetSelectedCell = jest
-      .spyOn(officeApiHelper, "getSelectedCell")
+      .spyOn(officeApiHelper, 'getSelectedCell')
       .mockImplementationOnce(() => mockActiveCell);
 
     const stateSetterCallback = jest.fn();
 
     const spyAddOnSelectionChangedListener = jest
-      .spyOn(officeApiHelper, "addOnSelectionChangedListener")
+      .spyOn(officeApiHelper, 'addOnSelectionChangedListener')
       .mockImplementationOnce(() => {});
 
     // when
-    await sidePanelEventHelper.initializeActiveCellChangedListener(
-      stateSetterCallback,
-    );
+    await sidePanelEventHelper.initializeActiveCellChangedListener(stateSetterCallback);
     // then
     expect(spyGetExcelContext).toBeCalled();
     expect(spyGetSelectedCell).toBeCalledWith(mockContext);
     expect(stateSetterCallback).toBeCalledWith(mockActiveCell);
-    expect(spyAddOnSelectionChangedListener).toBeCalledWith(
-      mockContext,
-      stateSetterCallback,
-    );
+    expect(spyAddOnSelectionChangedListener).toBeCalledWith(mockContext, stateSetterCallback);
   });
 
-  it("should remove objects in setOnDeletedTablesEvent", async () => {
+  it('should remove objects in setOnDeletedTablesEvent', async () => {
     // given
     const object = { objectWorkingId: 1, bindId: 1 };
     const eventObject = { tableId: 1 };
 
     const mockedExcelContext = jest
-      .spyOn(officeApiHelper, "checkStatusOfSessions")
+      .spyOn(officeApiHelper, 'checkStatusOfSessions')
       .mockImplementation();
     const mockedGetObjects = jest
-      .spyOn(officeReducerHelper, "getObjectFromObjectReducerByBindId")
+      .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByBindId')
       .mockReturnValueOnce(object);
     const mockedRemoveNotification = jest
-      .spyOn(notificationService, "removeExistingNotification")
+      .spyOn(notificationService, 'removeExistingNotification')
       .mockImplementation();
-    const mockedRemove = jest
-      .spyOn(sidePanelService, "remove")
-      .mockImplementation();
+    const mockedRemove = jest.spyOn(sidePanelService, 'remove').mockImplementation();
 
     // when
     await sidePanelEventHelper.setOnDeletedTablesEvent(eventObject);
@@ -71,7 +64,7 @@ describe("SidePanelService", () => {
     expect(mockedRemove).toBeCalledWith([1]);
   });
 
-  it("should remove objects in setOnDeletedWorksheetEvent", async () => {
+  it('should remove objects in setOnDeletedWorksheetEvent', async () => {
     // given
     const mockSync = jest.fn();
     const mockedLoad = jest.fn();
@@ -82,17 +75,15 @@ describe("SidePanelService", () => {
     const objectsOfSheets = [{ objectWorkingId: 1, id: 1 }];
 
     const mockedExcelContext = jest
-      .spyOn(officeApiHelper, "checkStatusOfSessions")
+      .spyOn(officeApiHelper, 'checkStatusOfSessions')
       .mockImplementation();
     const mockedGetObjects = jest
-      .spyOn(officeReducerHelper, "getObjectsListFromObjectReducer")
+      .spyOn(officeReducerHelper, 'getObjectsListFromObjectReducer')
       .mockReturnValueOnce(objectsList);
     const mockedRemoveNotification = jest
-      .spyOn(notificationService, "removeExistingNotification")
+      .spyOn(notificationService, 'removeExistingNotification')
       .mockImplementation();
-    const mockedRemove = jest
-      .spyOn(sidePanelService, "remove")
-      .mockImplementation();
+    const mockedRemove = jest.spyOn(sidePanelService, 'remove').mockImplementation();
 
     const excelContext = {
       sync: mockSync,
@@ -120,7 +111,7 @@ describe("SidePanelService", () => {
     ${false}  | ${true}    | ${1}
     ${false}  | ${false}   | ${0}
   `(
-    "should set up event listeners in addRemoveObjectListener",
+    'should set up event listeners in addRemoveObjectListener',
     async ({ firstCall, secondCall, eventAddedTimes }) => {
       // given
       const mockSync = jest.fn();
@@ -143,11 +134,9 @@ describe("SidePanelService", () => {
         },
       };
 
-      jest
-        .spyOn(sidePanelEventHelper, "setOnDeletedWorksheetEvent")
-        .mockImplementation();
+      jest.spyOn(sidePanelEventHelper, 'setOnDeletedWorksheetEvent').mockImplementation();
       const mockedExcelContext = jest
-        .spyOn(officeApiHelper, "getExcelContext")
+        .spyOn(officeApiHelper, 'getExcelContext')
         .mockReturnValue(exceContext);
       // when
       await sidePanelEventHelper.addRemoveObjectListener();
@@ -155,6 +144,6 @@ describe("SidePanelService", () => {
 
       expect(mockedExcelContext).toBeCalled();
       expect(mockedAddEvent).toBeCalledTimes(eventAddedTimes);
-    },
+    }
   );
 });

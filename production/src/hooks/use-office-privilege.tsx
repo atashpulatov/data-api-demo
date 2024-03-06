@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import { sessionHelper } from "../storage/session-helper";
+import { sessionHelper } from '../storage/session-helper';
 
 const useOfficePrivilege = (authToken: string): boolean => {
   const [canUseOffice, setCanUseOffice] = useState(false);
@@ -8,8 +8,7 @@ const useOfficePrivilege = (authToken: string): boolean => {
   useEffect(() => {
     async function checkCanUseOffice(): Promise<void> {
       if (authToken) {
-        const isUseOfficePrivilege =
-          await sessionHelper.getCanUseOfficePrivilege();
+        const isUseOfficePrivilege = await sessionHelper.getCanUseOfficePrivilege();
         setCanUseOffice(isUseOfficePrivilege);
       }
     }

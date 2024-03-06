@@ -1,7 +1,7 @@
-import mstrAttributeFormHelper from "../helper/mstr-attribute-form-helper";
-import mstrAttributeMetricHelper from "../helper/mstr-attribute-metric-helper";
+import mstrAttributeFormHelper from '../helper/mstr-attribute-form-helper';
+import mstrAttributeMetricHelper from '../helper/mstr-attribute-metric-helper';
 
-import mstrNormalizedJsonHandler from "./mstr-normalized-json-handler";
+import mstrNormalizedJsonHandler from './mstr-normalized-json-handler';
 
 /**
  * Handler to parse compound grid
@@ -19,11 +19,7 @@ class CompoundGridHandler {
     const { definition, data, attrforms } = response;
     // Crosstabular is a Crosstab report with metrics in Rows and nothing in columns, so we display it as tabular
     const isCrosstabular = false;
-    const columnInformation = this.getColumnInformation(
-      definition,
-      data,
-      attrforms,
-    );
+    const columnInformation = this.getColumnInformation(definition, data, attrforms);
     const isCrosstab = true;
     const { grid } = definition;
     const { attributes, metrics } =
@@ -54,24 +50,21 @@ class CompoundGridHandler {
    */
   getColumnInformation(definition, data, attrforms) {
     const { headers } = data;
-    const onElement = (element) => [element];
+    const onElement = element => [element];
     const supportForms = attrforms ? attrforms.supportForms : false;
 
     const commonColumns = this.renderCompoundGridRowTitles(
       headers,
       definition,
       supportForms,
-      onElement,
+      onElement
     );
     const params = [data, definition, onElement, onElement];
     const columnSetColumns = this.renderCompoundGridColumnHeaders(...params);
 
     const parsedColumnSetColumns =
       mstrNormalizedJsonHandler.getMetricsColumnsInformation(columnSetColumns);
-    const columns = [
-      ...commonColumns[commonColumns.length - 1],
-      ...parsedColumnSetColumns,
-    ];
+    const columns = [...commonColumns[commonColumns.length - 1], ...parsedColumnSetColumns];
 
     return mstrAttributeFormHelper.splitAttributeForms(columns, supportForms);
   }
@@ -106,7 +99,7 @@ class CompoundGridHandler {
   getAttributesName(definition, attrforms) {
     const rowsAttributes = mstrAttributeFormHelper.getAttributeWithForms(
       definition.grid.rows,
-      attrforms,
+      attrforms
     );
     return { rowsAttributes };
   }
@@ -120,7 +113,7 @@ class CompoundGridHandler {
    */
   calculateColumnHeaderHeight(columnSetsHeaders) {
     let boundingHeight = 0;
-    columnSetsHeaders.forEach((columnSet) => {
+    columnSetsHeaders.forEach(columnSet => {
       if (columnSet.length !== 0) {
         const { length } = columnSet[0];
         if (length > boundingHeight) {
@@ -137,7 +130,7 @@ class CompoundGridHandler {
    * @param {JSON} response
    * @return {Object} object with rows property
    */
-  getRows = (response) => ({ row: this.renderRows(response.data) });
+  getRows = response => ({ row: this.renderRows(response.data) });
 
   /**
    * Gets subtotals defined or visible information from the response.
@@ -145,7 +138,7 @@ class CompoundGridHandler {
    * @param {JSON} response
    * @return {Object}
    */
-  getSubtotalsInformation = (_response) => []; // Not supported at this moment
+  getSubtotalsInformation = _response => []; // Not supported at this moment
 
   /**
    * Creates an array with metric values per columnSet
@@ -156,7 +149,7 @@ class CompoundGridHandler {
    *
    * @return {Array}
    */
-  renderRows(data, valueMatrix = "raw") {
+  renderRows(data, valueMatrix = 'raw') {
     const {
       metricValues: { columnSets },
       paging,
@@ -168,10 +161,7 @@ class CompoundGridHandler {
       for (let colSet = 0; colSet < columnSets.length; colSet++) {
         const headersColumnSetLength = headers.columnSets[colSet].length;
 
-        if (
-          columnSets[colSet][valueMatrix][row] &&
-          columnSets[colSet][valueMatrix][row].length
-        ) {
+        if (columnSets[colSet][valueMatrix][row] && columnSets[colSet][valueMatrix][row].length) {
           rowValues.push(...columnSets[colSet][valueMatrix][row]);
         } else if (headersColumnSetLength) {
           // if we have no metric values, but we still have headers thats mean we have attributes only in column set,
@@ -195,46 +185,38 @@ class CompoundGridHandler {
     const { headers } = data;
     const supportForms = attrforms ? attrforms.supportForms : false;
 
-    const onElement = (array) => (e) => {
+    const onElement = array => e => {
       if (array) {
         array.push(e.subtotalAddress);
       }
       // attribute as row with forms
-      const forms = mstrAttributeFormHelper.getAttributesTitleWithForms(
-        e,
-        attrforms,
-      );
+      const forms = mstrAttributeFormHelper.getAttributesTitleWithForms(e, attrforms);
       if (forms) {
         return forms;
       }
       // attribute as column with forms
       return supportForms && e.value.length > 1
-        ? e.value.map((form) => `${form}`)
-        : `${e.value.join(" ")}`;
+        ? e.value.map(form => `${form}`)
+        : `${e.value.join(' ')}`;
     };
 
-    const onAttribute =
-      (array) => (e, numberOfForms, attributeIndex, colIndex) => {
-        if (array && e.subtotal) {
-          array.push({ attributeIndex, colIndex, axis: "columns" });
-        } else {
-          array.push(false);
+    const onAttribute = array => (e, numberOfForms, attributeIndex, colIndex) => {
+      if (array && e.subtotal) {
+        array.push({ attributeIndex, colIndex, axis: 'columns' });
+      } else {
+        array.push(false);
+      }
+
+      if (e.formValues) {
+        for (let index = e.formValues.length; index < numberOfForms; index++) {
+          e.formValues.unshift("'");
         }
+      }
 
-        if (e.formValues) {
-          for (
-            let index = e.formValues.length;
-            index < numberOfForms;
-            index++
-          ) {
-            e.formValues.unshift("'");
-          }
-        }
+      return supportForms ? e.formValues : [e.formValues[0]];
+    };
 
-        return supportForms ? e.formValues : [e.formValues[0]];
-      };
-
-    const onMetric = (e) => [e.name];
+    const onMetric = e => [e.name];
 
     const rowTotals = [];
     const columnTotals = [];
@@ -243,13 +225,13 @@ class CompoundGridHandler {
       headers,
       definition,
       supportForms,
-      onElement(rowTotals),
+      onElement(rowTotals)
     );
     const columns = this.renderCompoundGridColumnHeaders(
       data,
       definition,
       onAttribute(columnTotals),
-      onMetric,
+      onMetric
     );
     const subtotalAddress = [...rowTotals, ...columnTotals];
 
@@ -266,18 +248,13 @@ class CompoundGridHandler {
    *
    * @return {Array}
    */
-  renderCompoundGridRowTitles(
-    headers,
-    definition,
-    supportForms,
-    onElement = (e) => e,
-  ) {
+  renderCompoundGridRowTitles(headers, definition, supportForms, onElement = e => e) {
     return mstrNormalizedJsonHandler.renderTitles(
       definition,
-      "rows",
+      'rows',
       headers,
       onElement,
-      supportForms,
+      supportForms
     );
   }
 
@@ -291,18 +268,13 @@ class CompoundGridHandler {
    *
    * @return {Array}
    */
-  renderCompoundGridRowHeaders(
-    headers,
-    definition,
-    supportForms,
-    onElement = (e) => e,
-  ) {
+  renderCompoundGridRowHeaders(headers, definition, supportForms, onElement = e => e) {
     return mstrNormalizedJsonHandler.renderHeaders(
       definition,
-      "rows",
+      'rows',
       headers,
       onElement,
-      supportForms,
+      supportForms
     );
   }
 
@@ -332,7 +304,7 @@ class CompoundGridHandler {
     this.populateEmptyColumnSetsHeaders(
       columnSetsHeaders,
       columnSetsMetricValues,
-      columnSetsDefinition,
+      columnSetsDefinition
     );
     const boundingHeight = this.calculateColumnHeaderHeight(columnSetsHeaders);
 
@@ -368,16 +340,14 @@ class CompoundGridHandler {
             const formsLength = forms ? forms.length : 1;
 
             switch (type) {
-              case "attribute":
-              case "consolidation":
-                parsedHeaders[colIndex].push(
-                  ...onAttribute(element, formsLength, j, colIndex),
-                );
+              case 'attribute':
+              case 'consolidation':
+                parsedHeaders[colIndex].push(...onAttribute(element, formsLength, j, colIndex));
                 break;
-              case "templateMetrics":
+              case 'templateMetrics':
                 parsedHeaders[colIndex].push(...onMetric(element));
                 break;
-              case "customgroup":
+              case 'customgroup':
                 parsedHeaders[colIndex].push(...element.formValues);
                 break;
               default:
@@ -385,20 +355,13 @@ class CompoundGridHandler {
             }
           }
         }
-        attrFormsBoundingHeight = Math.max(
-          parsedHeaders[colIndex].length,
-          attrFormsBoundingHeight,
-        );
+        attrFormsBoundingHeight = Math.max(parsedHeaders[colIndex].length, attrFormsBoundingHeight);
       }
       // startColIndex is number of columns in previous columnsets
       startColIndex += header.length;
     }
 
-    this.handleAttributeForms(
-      boundingHeight,
-      attrFormsBoundingHeight,
-      parsedHeaders,
-    );
+    this.handleAttributeForms(boundingHeight, attrFormsBoundingHeight, parsedHeaders);
 
     return mstrNormalizedJsonHandler.transposeMatrix(parsedHeaders);
   }
@@ -427,11 +390,7 @@ class CompoundGridHandler {
    * @param {Array} columnSetsMetricValues  contains metric values for each columnset
    * @param {Array} columnSetsDefinition  Contains headers values for each columnset
    */
-  populateEmptyColumnSetsHeaders(
-    columnSetsHeaders,
-    columnSetsMetricValues,
-    columnSetsDefinition,
-  ) {
+  populateEmptyColumnSetsHeaders(columnSetsHeaders, columnSetsMetricValues, columnSetsDefinition) {
     for (let i = 0; i < columnSetsHeaders.length; i++) {
       const rawMetricValues = columnSetsMetricValues[i].raw;
 

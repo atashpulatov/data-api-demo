@@ -1,12 +1,12 @@
-import { mstrObjectRestService } from "./mstr-object-rest-service";
+import { mstrObjectRestService } from './mstr-object-rest-service';
 
-import operationErrorHandler from "../operation/operation-error-handler";
-import operationStepDispatcher from "../operation/operation-step-dispatcher";
+import operationErrorHandler from '../operation/operation-error-handler';
+import operationStepDispatcher from '../operation/operation-step-dispatcher';
 import {
   getObjectPrompts,
   populateDefinition,
   populateDetails,
-} from "./get-object-details-methods";
+} from './get-object-details-methods';
 
 class StepGetObjectDetails {
   /**
@@ -27,33 +27,18 @@ class StepGetObjectDetails {
    * @param {Array} operationData.stepsQueue Queue of steps in current operation
    */
   getObjectDetails = async (objectData, operationData) => {
-    console.group("Get object details");
-    console.time("Total");
+    console.group('Get object details');
+    console.time('Total');
 
     try {
-      const { objectWorkingId, objectId, projectId, mstrObjectType } =
-        objectData;
+      const { objectWorkingId, objectId, projectId, mstrObjectType } = objectData;
 
       const { ancestors, certifiedInfo, dateModified, owner, name } =
-        await mstrObjectRestService.getObjectInfo(
-          objectId,
-          projectId,
-          mstrObjectType,
-        );
+        await mstrObjectRestService.getObjectInfo(objectId, projectId, mstrObjectType);
 
-      const prompts = await getObjectPrompts(
-        objectData,
-        objectId,
-        projectId,
-        operationData,
-      );
+      const prompts = await getObjectPrompts(objectData, objectId, projectId, operationData);
 
-      const details = populateDetails(
-        ancestors,
-        certifiedInfo,
-        dateModified,
-        owner,
-      );
+      const details = populateDetails(ancestors, certifiedInfo, dateModified, owner);
       const definition = populateDefinition(objectData, prompts, name);
 
       const updatedObject = {
@@ -65,15 +50,11 @@ class StepGetObjectDetails {
       operationStepDispatcher.updateObject(updatedObject);
       operationStepDispatcher.completeGetObjectDetails(objectWorkingId);
     } catch (error) {
-      console.trace("getObjectDetails: ", error);
+      console.trace('getObjectDetails: ', error);
       console.error(error);
-      operationErrorHandler.handleOperationError(
-        objectData,
-        operationData,
-        error,
-      );
+      operationErrorHandler.handleOperationError(objectData, operationData, error);
     } finally {
-      console.timeEnd("Total");
+      console.timeEnd('Total');
       console.groupEnd();
     }
   };

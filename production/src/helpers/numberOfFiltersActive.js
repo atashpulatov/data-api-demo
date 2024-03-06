@@ -1,6 +1,6 @@
 export function calculateNumberOfFiltersActive(
   { projects, types, dateSetByUser, certified, owners },
-  myLibrary,
+  myLibrary
 ) {
   let result = 0;
   if (!myLibrary) {

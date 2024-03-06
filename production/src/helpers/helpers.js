@@ -1,11 +1,11 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 class OverflowHelperNotConnected {
   isOverflown = (text, containerWidth) => {
     try {
-      const measureReportName = document.createElement("SPAN");
+      const measureReportName = document.createElement('SPAN');
       measureReportName.textContent = text;
-      measureReportName.id = "measure-text";
+      measureReportName.id = 'measure-text';
       document.body.appendChild(measureReportName);
       // we compare report name length with all popup width - 90px of paddings and icon container
       const result = measureReportName.scrollWidth > containerWidth;

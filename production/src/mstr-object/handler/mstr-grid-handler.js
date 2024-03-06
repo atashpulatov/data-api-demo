@@ -1,8 +1,8 @@
 /* eslint-disable class-methods-use-this */
-import mstrAttributeFormHelper from "../helper/mstr-attribute-form-helper";
-import mstrAttributeMetricHelper from "../helper/mstr-attribute-metric-helper";
+import mstrAttributeFormHelper from '../helper/mstr-attribute-form-helper';
+import mstrAttributeMetricHelper from '../helper/mstr-attribute-metric-helper';
 
-import jsonHandler from "./mstr-normalized-json-handler";
+import jsonHandler from './mstr-normalized-json-handler';
 /**
  * Handler to parse grids
  *
@@ -13,16 +13,10 @@ class GridHandler {
     const { grid } = response.definition;
     // Crosstabular is a Crosstab report with metrics in Rows and nothing in columns, so we display it as tabular
     const isCrosstabular =
-      grid.metricsPosition &&
-      grid.metricsPosition.axis === "rows" &&
-      grid.columns.length === 0;
-    const columnInformation = this.getColumnInformation(
-      response,
-      isCrosstabular,
-    );
+      grid.metricsPosition && grid.metricsPosition.axis === 'rows' && grid.columns.length === 0;
+    const columnInformation = this.getColumnInformation(response, isCrosstabular);
     const isCrosstab = !isCrosstabular && this.isCrosstab(response);
-    const { attributes, metrics } =
-      mstrAttributeMetricHelper.extractAttributesMetrics(grid);
+    const { attributes, metrics } = mstrAttributeMetricHelper.extractAttributesMetrics(grid);
     return {
       tableSize: this.getTableSize(response, columnInformation, isCrosstab),
       columnInformation,
@@ -33,10 +27,7 @@ class GridHandler {
       name: response.n || response.name,
       rows: this.getRows(response, isCrosstab),
       visualizationType: response.visualizationType,
-      attributesNames: this.getAttributesName(
-        response.definition,
-        response.attrforms,
-      ),
+      attributesNames: this.getAttributesName(response.definition, response.attrforms),
       attributes,
       metrics,
     };
@@ -51,11 +42,11 @@ class GridHandler {
   getAttributesName = (definition, attrforms) => {
     const columnsAttributes = mstrAttributeFormHelper.getAttributeWithForms(
       definition.grid.columns,
-      attrforms,
+      attrforms
     );
     const rowsAttributes = mstrAttributeFormHelper.getAttributeWithForms(
       definition.grid.rows,
-      attrforms,
+      attrforms
     );
     return { rowsAttributes, columnsAttributes };
   };
@@ -70,11 +61,11 @@ class GridHandler {
   getRows = (response, isCrosstab) => {
     const rowTotals = [];
     const { attrforms } = response;
-    const onAttribute = (array) => (e) => {
+    const onAttribute = array => e => {
       if (array) {
         array.push(e.subtotalAddress);
       }
-      return `${e.value.join(" ")}`;
+      return `${e.value.join(' ')}`;
     };
     if (isCrosstab) {
       return { row: jsonHandler.renderRows(response.data) };
@@ -85,7 +76,7 @@ class GridHandler {
     const row = jsonHandler.renderTabular(
       response.definition,
       response.data,
-      onAttribute(rowTotals),
+      onAttribute(rowTotals)
     );
     return { row, rowTotals };
   };
@@ -104,54 +95,51 @@ class GridHandler {
     const columnTotals = [];
     const { attrforms } = response;
     const supportForms = attrforms ? attrforms.supportForms : false;
-    const onElement = (array) => (e) => {
+    const onElement = array => e => {
       if (array) {
         array.push(e.subtotalAddress);
       }
       // attribute as row with forms
-      const forms = mstrAttributeFormHelper.getAttributesTitleWithForms(
-        e,
-        attrforms,
-      );
+      const forms = mstrAttributeFormHelper.getAttributesTitleWithForms(e, attrforms);
       if (forms) {
         return forms;
       }
       // attribute as column with forms
       return supportForms && e.value.length > 1
-        ? e.value.map((form) => `${form}`)
-        : `${e.value.join(" ")}`;
+        ? e.value.map(form => `${form}`)
+        : `${e.value.join(' ')}`;
     };
     if (isCrosstab) {
       const rows = jsonHandler.renderHeaders(
         response.definition,
-        "rows",
+        'rows',
         response.data.headers,
         onElement(rowTotals),
-        supportForms,
+        supportForms
       );
       const columns = jsonHandler.renderHeaders(
         response.definition,
-        "columns",
+        'columns',
         response.data.headers,
         onElement(columnTotals),
-        supportForms,
+        supportForms
       );
       const subtotalAddress = [...rowTotals, ...columnTotals];
       return { rows, columns, subtotalAddress };
     }
     const attributeTitles = jsonHandler.renderTitles(
       response.definition,
-      "rows",
+      'rows',
       response.data.headers,
       onElement(),
-      supportForms,
+      supportForms
     );
     const metricHeaders = jsonHandler.renderHeaders(
       response.definition,
-      "columns",
+      'columns',
       response.data.headers,
       onElement(),
-      supportForms,
+      supportForms
     );
     return isCrosstabular
       ? { columns: [[...attributeTitles[0], ...metricHeaders[0], "' "]] }
@@ -189,7 +177,7 @@ class GridHandler {
    * @param {JSON} response
    * @return {Boolean}
    */
-  isCrosstab = (response) => {
+  isCrosstab = response => {
     try {
       const { grid } = response.definition;
       return !!grid.crossTab && grid.columns.length !== 0;
@@ -211,36 +199,28 @@ class GridHandler {
     const supportForms = attrforms ? attrforms.supportForms : false;
     let columns;
 
-    const onElement = (element) => element;
+    const onElement = element => element;
     const metricColumns = jsonHandler.renderHeaders(
       response.definition,
-      "columns",
+      'columns',
       response.data.headers,
-      onElement,
+      onElement
     );
-    const parsedMetricColumns =
-      jsonHandler.getMetricsColumnsInformation(metricColumns);
+    const parsedMetricColumns = jsonHandler.getMetricsColumnsInformation(metricColumns);
 
     const attributeColumns = jsonHandler.renderTitles(
       response.definition,
-      "rows",
+      'rows',
       response.data.headers,
-      onElement,
+      onElement
     );
 
     if (!attributeColumns.length) {
       columns = parsedMetricColumns;
     } else if (isCrosstabular) {
-      columns = [
-        ...attributeColumns[attributeColumns.length - 1],
-        ...parsedMetricColumns,
-        [],
-      ];
+      columns = [...attributeColumns[attributeColumns.length - 1], ...parsedMetricColumns, []];
     } else {
-      columns = [
-        ...attributeColumns[attributeColumns.length - 1],
-        ...parsedMetricColumns,
-      ];
+      columns = [...attributeColumns[attributeColumns.length - 1], ...parsedMetricColumns];
     }
 
     return mstrAttributeFormHelper.splitAttributeForms(columns, supportForms);
@@ -252,7 +232,7 @@ class GridHandler {
    * @param {JSON} response
    * @return {Object}
    */
-  getSubtotalsInformation = (response) => {
+  getSubtotalsInformation = response => {
     try {
       const { subtotals } = response.definition.grid;
       return subtotals;

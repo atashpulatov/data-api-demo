@@ -4,20 +4,14 @@ class MstrCompoundGridFlatten {
    *
    * @param {JSON} response response containing information about object
    */
-  filterEmptyColumnSets = (response) => {
+  filterEmptyColumnSets = response => {
     const { data, definition } = response;
     const { headers, metricValues } = data;
     const { grid } = definition;
 
-    grid.columnSets = grid.columnSets.filter(
-      ({ columns }) => columns.length > 0,
-    );
-    headers.columnSets = headers.columnSets.filter(
-      (columnHeaders) => columnHeaders.length > 0,
-    );
-    metricValues.columnSets = metricValues.columnSets.filter(
-      ({ raw }) => raw.length > 0,
-    );
+    grid.columnSets = grid.columnSets.filter(({ columns }) => columns.length > 0);
+    headers.columnSets = headers.columnSets.filter(columnHeaders => columnHeaders.length > 0);
+    metricValues.columnSets = metricValues.columnSets.filter(({ raw }) => raw.length > 0);
   };
 
   /**
@@ -50,7 +44,7 @@ class MstrCompoundGridFlatten {
    * @param {Object} data contains infromation about object table body
    * @returns {Array} flattened metric values
    */
-  flattenMetricValues = (data) => {
+  flattenMetricValues = data => {
     const columSetsNumber = data.metricValues.columnSets.length;
     const metricValues = { raw: [], formatted: [], extras: [] };
     let rawValues;
@@ -77,7 +71,7 @@ class MstrCompoundGridFlatten {
    * @param {Object} headers contains infromation about headers values indexes
    * @returns {Array} flattened metric values
    */
-  flattenColumnSetsHeaders = (headers) => {
+  flattenColumnSetsHeaders = headers => {
     const columSetsNumber = headers.columnSets.length;
     let headerIndexOffset = 0;
     const headerColumns = [];
@@ -97,13 +91,13 @@ class MstrCompoundGridFlatten {
    * @param {Object} grid contains infromation about metric elemets
    * @returns {Array} flattened metric elemets
    */
-  flattenColumnSetsMetricElemets = (grid) => {
+  flattenColumnSetsMetricElemets = grid => {
     const columSetsNumber = grid.columnSets.length;
     const gridColumns = [
       {
-        name: "Metrics",
-        id: "00000000000000000000000000000000",
-        type: "templateMetrics",
+        name: 'Metrics',
+        id: '00000000000000000000000000000000',
+        type: 'templateMetrics',
         elements: [],
       },
     ];

@@ -1,18 +1,18 @@
-import { sessionProperties } from "./session-properties";
+import { sessionProperties } from './session-properties';
 
 class SessionActions {
-  init = (reduxStore) => {
+  init = reduxStore => {
     this.reduxStore = reduxStore;
   };
 
-  saveLoginValues = (values) => {
+  saveLoginValues = values => {
     this.reduxStore.dispatch({
       type: sessionProperties.actions.logIn,
       values,
     });
   };
 
-  logIn = (authToken) => {
+  logIn = authToken => {
     this.reduxStore.dispatch({
       type: sessionProperties.actions.loggedIn,
       authToken,
@@ -37,7 +37,7 @@ class SessionActions {
     this.reduxStore.dispatch({ type: sessionProperties.actions.logOut });
   };
 
-  saveUserInfo = (values) => {
+  saveUserInfo = values => {
     this.reduxStore.dispatch({
       type: sessionProperties.actions.getUserInfo,
       userFullName: values.fullName,
@@ -46,14 +46,14 @@ class SessionActions {
     });
   };
 
-  setAttrFormPrivilege = (value) => {
+  setAttrFormPrivilege = value => {
     this.reduxStore.dispatch({
       type: sessionProperties.actions.setAttrFormPrivilege,
       attrFormPrivilege: value,
     });
   };
 
-  setDialog = (dialog) => {
+  setDialog = dialog => {
     this.reduxStore.dispatch({
       type: sessionProperties.actions.setDialog,
       dialog,

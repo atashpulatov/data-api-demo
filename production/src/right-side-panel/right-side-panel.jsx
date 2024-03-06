@@ -1,22 +1,22 @@
 // issue with proptype import
 // eslint-disable-next-line simple-import-sort/imports
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
-import { PopupTypes, SidePanel } from "@mstr/connector-components";
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { PopupTypes, SidePanel } from '@mstr/connector-components';
 
-import PropTypes from "prop-types";
-import { notificationService } from "../notification-v2/notification-service";
-import { officeApiHelper } from "../office/api/office-api-helper";
-import officeReducerHelper from "../office/store/office-reducer-helper";
-import officeStoreHelper from "../office/store/office-store-helper";
-import { sidePanelEventHelper } from "./side-panel-event-helper";
-import { sidePanelNotificationHelper } from "./side-panel-notification-helper";
-import { sidePanelService } from "./side-panel-service";
+import PropTypes from 'prop-types';
+import { notificationService } from '../notification-v2/notification-service';
+import { officeApiHelper } from '../office/api/office-api-helper';
+import officeReducerHelper from '../office/store/office-reducer-helper';
+import officeStoreHelper from '../office/store/office-store-helper';
+import { sidePanelEventHelper } from './side-panel-event-helper';
+import { sidePanelNotificationHelper } from './side-panel-notification-helper';
+import { sidePanelService } from './side-panel-service';
 
-import { Confirmation } from "../home/confirmation";
-import { PopupTypeEnum } from "../home/popup-type-enum";
-import { SettingsMenu } from "../home/settings-menu";
-import mstrObjectEnum from "../mstr-object/mstr-object-type-enum";
+import { Confirmation } from '../home/confirmation';
+import { PopupTypeEnum } from '../home/popup-type-enum';
+import { SettingsMenu } from '../home/settings-menu';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import {
   CLEAR_DATA_OPERATION,
   DUPLICATE_OPERATION,
@@ -25,12 +25,12 @@ import {
   IMPORT_OPERATION,
   REFRESH_OPERATION,
   REMOVE_OPERATION,
-} from "../operation/operation-type-names";
-import { popupController } from "../popup/popup-controller";
-import { navigationTreeActions } from "../redux-reducer/navigation-tree-reducer/navigation-tree-actions";
-import { officeActions } from "../redux-reducer/office-reducer/office-actions";
+} from '../operation/operation-type-names';
+import { popupController } from '../popup/popup-controller';
+import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 
-import "./right-side-panel.scss";
+import './right-side-panel.scss';
 
 export const RightSidePanelNotConnected = ({
   loadedObjects,
@@ -57,8 +57,7 @@ export const RightSidePanelNotConnected = ({
 }) => {
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
   const [duplicatedObjectId, setDuplicatedObjectId] = React.useState(null);
-  const [loadedObjectsWrapped, setLoadedObjectsWrapped] =
-    React.useState(loadedObjects);
+  const [loadedObjectsWrapped, setLoadedObjectsWrapped] = React.useState(loadedObjects);
 
   const duplicatePopupParams = {
     activeCellAddress,
@@ -70,9 +69,7 @@ export const RightSidePanelNotConnected = ({
     async function initializeSidePanel() {
       try {
         await sidePanelEventHelper.addRemoveObjectListener();
-        await sidePanelEventHelper.initializeActiveCellChangedListener(
-          updateActiveCellAddress
-        );
+        await sidePanelEventHelper.initializeActiveCellChangedListener(updateActiveCellAddress);
         await sidePanelService.initReusePromptAnswers();
       } catch (error) {
         console.error(error);
@@ -116,15 +113,10 @@ export const RightSidePanelNotConnected = ({
       // For the mulitiple reprompt workflow from the side panel, pass the popupData to the native dialog
       const { objectWorkingId } = popupData;
       const objectData =
-        officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(
-          objectWorkingId
-        );
+        officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
       const isDossier =
-        objectData.mstrObjectType.name ===
-        mstrObjectEnum.mstrObjectType.visualization.name;
-      const isReport =
-        objectData.mstrObjectType.name ===
-        mstrObjectEnum.mstrObjectType.report.name;
+        objectData.mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
+      const isReport = objectData.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
       if ((isDossier || isReport) && toggleCurtain && !isDataOverviewOpen) {
         popupController.sendMessageToDialog(JSON.stringify({ popupData }));
       }
@@ -170,19 +162,19 @@ export const RightSidePanelNotConnected = ({
     }
   };
 
-  const addDataWrapper = async (params) => {
+  const addDataWrapper = async params => {
     await wrapper(sidePanelService.addData, params);
   };
-  const highlightObjectWrapper = async (params) => {
+  const highlightObjectWrapper = async params => {
     await wrapper(sidePanelService.highlightObject, params);
   };
-  const duplicateWrapper = async (objectWorkingId) => {
+  const duplicateWrapper = async objectWorkingId => {
     await wrapper(sidePanelNotificationHelper.setDuplicatePopup, {
       objectWorkingId,
       ...duplicatePopupParams,
     });
   };
-  const editWrapper = async (params) => {
+  const editWrapper = async params => {
     await wrapper(sidePanelService.edit, params);
   };
   const repromptWrapper = async (...params) => {
@@ -198,10 +190,7 @@ export const RightSidePanelNotConnected = ({
     await wrapper(sidePanelService.rename, params, name);
   };
   const handleReusePromptAnswers = async () => {
-    await wrapper(
-      sidePanelService.toggleReusePromptAnswers,
-      reusePromptAnswers
-    );
+    await wrapper(sidePanelService.toggleReusePromptAnswers, reusePromptAnswers);
   };
 
   const handleToggleSettingsPanel = () => {
@@ -233,7 +222,7 @@ export const RightSidePanelNotConnected = ({
 
   return (
     <>
-      {toggleCurtain && <div className="block-side-panel-ui" />}
+      {toggleCurtain && <div className='block-side-panel-ui' />}
       <SidePanel
         loadedObjects={loadedObjectsWrapped}
         onAddData={addDataWrapper}
@@ -261,7 +250,7 @@ export const RightSidePanelNotConnected = ({
   );
 };
 
-export const mapStateToProps = (state) => {
+export const mapStateToProps = state => {
   const { importRequested, dossierOpenRequested } = state.navigationTree;
   const { operations } = state.operationReducer;
   const { globalNotification, notifications } = state.notificationReducer;
@@ -331,10 +320,7 @@ RightSidePanelNotConnected.propTypes = {
       mstrObjectType: PropTypes.shape({
         name: PropTypes.string,
         request: PropTypes.string,
-        subtypes: PropTypes.oneOfType([
-          PropTypes.string,
-          PropTypes.arrayOf(PropTypes.number),
-        ]),
+        subtypes: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.number)]),
         type: PropTypes.number || PropTypes.string,
       }),
       refreshDate: PropTypes.number,

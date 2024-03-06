@@ -1,17 +1,17 @@
-import { authenticationHelper } from "../../authentication/authentication-helper";
-import { ObjectExecutionStatus } from "../../helpers/prompts-handling-helper";
-import { officeApiCrosstabHelper } from "../../office/api/office-api-crosstab-helper";
-import { officeApiHelper } from "../../office/api/office-api-helper";
-import { officeApiWorksheetHelper } from "../../office/api/office-api-worksheet-helper";
-import { mstrObjectRestService } from "../mstr-object-rest-service";
+import { authenticationHelper } from '../../authentication/authentication-helper';
+import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
+import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-helper';
+import { officeApiHelper } from '../../office/api/office-api-helper';
+import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
+import { mstrObjectRestService } from '../mstr-object-rest-service';
 
-import operationErrorHandler from "../../operation/operation-error-handler";
-import operationStepDispatcher from "../../operation/operation-step-dispatcher";
-import { GET_OFFICE_TABLE_IMPORT } from "../../operation/operation-steps";
-import mstrObjectEnum from "../mstr-object-type-enum";
-import dossierInstanceDefinition from "./dossier-instance-definition";
-import { errorMessages } from "../../error/constants";
-import { importOperationStepDict, objectImportType } from "../constants";
+import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import { GET_OFFICE_TABLE_IMPORT } from '../../operation/operation-steps';
+import mstrObjectEnum from '../mstr-object-type-enum';
+import dossierInstanceDefinition from './dossier-instance-definition';
+import { errorMessages } from '../../error/constants';
+import { importOperationStepDict, objectImportType } from '../constants';
 
 class StepGetInstanceDefinition {
   /**
@@ -32,8 +32,8 @@ class StepGetInstanceDefinition {
    * @param {Array} operationData.stepsQueue Queue of steps in current operation
    */
   getInstanceDefinition = async (objectData, operationData) => {
-    console.group("Getting Instance definition");
-    console.time("Total");
+    console.group('Getting Instance definition');
+    console.time('Total');
 
     try {
       const futureStep = operationData.stepsQueue[2];
@@ -59,9 +59,7 @@ class StepGetInstanceDefinition {
       let instanceDefinition;
       let shouldRenameExcelWorksheet = false;
 
-      if (
-        mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name
-      ) {
+      if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
         ({ body, visualizationInfo, instanceDefinition } =
           await dossierInstanceDefinition.getDossierInstanceDefinition({
             ...objectData,
@@ -71,11 +69,10 @@ class StepGetInstanceDefinition {
         name = dossierInstanceDefinition.getVisualizationName(
           operationData,
           name,
-          instanceDefinition,
+          instanceDefinition
         );
       } else {
-        instanceDefinition =
-          await mstrObjectRestService.createInstance(objectData);
+        instanceDefinition = await mstrObjectRestService.createInstance(objectData);
       }
 
       // TODO check if dossierData is still needed
@@ -89,7 +86,7 @@ class StepGetInstanceDefinition {
         crosstabHeaderDimensions,
         subtotalsInfo.subtotalsAddresses,
         futureStep,
-        importType,
+        importType
       );
 
       // FIXME: below flow should not be part of this step
@@ -98,7 +95,7 @@ class StepGetInstanceDefinition {
           importType,
           insertNewWorksheet,
           excelContext,
-          name,
+          name
         );
       }
       if (insertNewWorksheet) {
@@ -132,8 +129,7 @@ class StepGetInstanceDefinition {
 
       if (importType === objectImportType.TABLE) {
         // update table specific props
-        updatedObject.crosstabHeaderDimensions =
-          mstrTable.crosstabHeaderDimensions;
+        updatedObject.crosstabHeaderDimensions = mstrTable.crosstabHeaderDimensions;
         updatedObject.isCrosstab = mstrTable.isCrosstab;
         updatedObject.subtotalsInfo = subtotalsInfo;
         updatedOperation.startCell = startCell;
@@ -143,9 +139,7 @@ class StepGetInstanceDefinition {
 
       if (mstrTable.rows.length === 0) {
         throw new Error(
-          isPrompted
-            ? errorMessages.ALL_DATA_FILTERED_OUT
-            : errorMessages.NO_DATA_RETURNED,
+          isPrompted ? errorMessages.ALL_DATA_FILTERED_OUT : errorMessages.NO_DATA_RETURNED
         );
       }
 
@@ -154,13 +148,9 @@ class StepGetInstanceDefinition {
       operationStepDispatcher.completeGetInstanceDefinition(objectWorkingId);
     } catch (error) {
       console.error(error);
-      operationErrorHandler.handleOperationError(
-        objectData,
-        operationData,
-        error,
-      );
+      operationErrorHandler.handleOperationError(objectData, operationData, error);
     } finally {
-      console.timeEnd("Total");
+      console.timeEnd('Total');
       console.groupEnd();
     }
   };
@@ -172,7 +162,7 @@ class StepGetInstanceDefinition {
    *
    * @param {Object} body to modify template and requestedObject
    */
-  setupBodyTemplate = (body) => {
+  setupBodyTemplate = body => {
     if (body && body.requestedObjects) {
       if (
         body.requestedObjects.attributes.length === 0 &&
@@ -232,8 +222,7 @@ class StepGetInstanceDefinition {
         };
 
         if (count === promptsAnswers.length - 1) {
-          instanceDefinition =
-            await mstrObjectRestService.modifyInstance(configInstance);
+          instanceDefinition = await mstrObjectRestService.modifyInstance(configInstance);
         }
 
         count += 1;
@@ -259,7 +248,7 @@ class StepGetInstanceDefinition {
     crosstabHeaderDimensions,
     subtotalsAddresses,
     futureStep,
-    importType = objectImportType.TABLE,
+    importType = objectImportType.TABLE
   ) => {
     // We do not need to set prevCrosstabDimensions, crosstabHeaderDimensions and subtotalsInfo for images
     if (importType === objectImportType.IMAGE) {

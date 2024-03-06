@@ -1,11 +1,11 @@
-import officeStoreHelper from "./office-store-helper";
+import officeStoreHelper from './office-store-helper';
 
-import { errorService } from "../../error/error-handler";
-import { removeObject } from "../../redux-reducer/object-reducer/object-actions";
-import { officeProperties } from "../../redux-reducer/office-reducer/office-properties";
+import { errorService } from '../../error/error-handler';
+import { removeObject } from '../../redux-reducer/object-reducer/object-actions';
+import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 
 class OfficeStoreObject {
-  init = (reduxStore) => {
+  init = reduxStore => {
     this.reduxStore = reduxStore;
   };
 
@@ -13,13 +13,13 @@ class OfficeStoreObject {
    * Removes object from office settings based on passed objectWorkingId
    *
    */
-  removeObjectInExcelStore = (objectWorkingId) => {
+  removeObjectInExcelStore = objectWorkingId => {
     try {
       const settings = officeStoreHelper.getOfficeSettings();
       if (objectWorkingId) {
         const storedObjects = settings.get(officeProperties.storedObjects);
         const indexOfReport = storedObjects.findIndex(
-          (report) => report.objectWorkingId === objectWorkingId,
+          report => report.objectWorkingId === objectWorkingId
         );
         if (indexOfReport !== -1) {
           storedObjects.splice(indexOfReport, 1);
@@ -37,7 +37,7 @@ class OfficeStoreObject {
    * Removes object from redux and office settings based on passed objectWorkingId
    *
    */
-  removeObjectFromStore = (objectWorkingId) => {
+  removeObjectFromStore = objectWorkingId => {
     this.reduxStore.dispatch(removeObject(objectWorkingId));
     this.removeObjectInExcelStore(objectWorkingId);
   };

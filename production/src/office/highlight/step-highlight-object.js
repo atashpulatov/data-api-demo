@@ -1,9 +1,9 @@
-import { sidePanelService } from "../../right-side-panel/side-panel-service";
-import { officeApiHelper } from "../api/office-api-helper";
+import { sidePanelService } from '../../right-side-panel/side-panel-service';
+import { officeApiHelper } from '../api/office-api-helper';
 
-import operationErrorHandler from "../../operation/operation-error-handler";
-import operationStepDispatcher from "../../operation/operation-step-dispatcher";
-import { objectImportType } from "../../mstr-object/constants";
+import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import { objectImportType } from '../../mstr-object/constants';
 
 class StepHighlightObject {
   /**
@@ -23,16 +23,10 @@ class StepHighlightObject {
         await officeApiHelper.onBindingObjectClick(objectData);
       }
 
-      operationStepDispatcher.completeHighlightObject(
-        objectData.objectWorkingId,
-      );
+      operationStepDispatcher.completeHighlightObject(objectData.objectWorkingId);
     } catch (error) {
       console.error(error);
-      operationErrorHandler.handleOperationError(
-        objectData,
-        operationData,
-        error,
-      );
+      operationErrorHandler.handleOperationError(objectData, operationData, error);
     }
   };
 }

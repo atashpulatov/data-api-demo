@@ -1,13 +1,11 @@
-import React, { ReactChild } from "react";
+import React, { ReactChild } from 'react';
 
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string;
   label: string;
 }
 
-export interface SelectInputProps
-  extends React.SelectHTMLAttributes<HTMLSelectElement> {
+export interface SelectInputProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   name: string;
   label: string;
   children: ReactChild | ReactChild[];

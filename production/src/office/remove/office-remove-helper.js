@@ -1,10 +1,10 @@
-import { homeHelper } from "../../home/home-helper";
-import { officeApiCrosstabHelper } from "../api/office-api-crosstab-helper";
-import { officeApiHelper } from "../api/office-api-helper";
+import { homeHelper } from '../../home/home-helper';
+import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
+import { officeApiHelper } from '../api/office-api-helper';
 
-import officeStoreObject from "../store/office-store-object";
+import officeStoreObject from '../store/office-store-object';
 
-import officeApiDataLoader from "../api/office-api-data-loader";
+import officeApiDataLoader from '../api/office-api-data-loader';
 
 class OfficeRemoveHelper {
   /**
@@ -22,7 +22,7 @@ class OfficeRemoveHelper {
       excelContext,
       isCrosstab,
       crosstabHeaderDimensions,
-      isClear,
+      isClear
     );
   };
 
@@ -40,7 +40,7 @@ class OfficeRemoveHelper {
     excelContext,
     isCrosstab,
     crosstabHeaderDimensions = {},
-    isClear = false,
+    isClear = false
   ) => {
     const tableRange = officeTable.getDataBodyRange();
     excelContext.trackedObjects.add(tableRange);
@@ -54,7 +54,7 @@ class OfficeRemoveHelper {
           prevCrosstabDimensions: crosstabHeaderDimensions,
         },
         excelContext,
-        isClear,
+        isClear
       );
       await excelContext.sync();
     }
@@ -70,7 +70,7 @@ class OfficeRemoveHelper {
 
       excelContext.runtime.enableEvents = true;
     } else {
-      tableRange.clear("contents");
+      tableRange.clear('contents');
     }
 
     excelContext.trackedObjects.remove(tableRange);
@@ -79,12 +79,7 @@ class OfficeRemoveHelper {
 
   deleteTableInChunks = async (excelContext, officeTable) => {
     const deleteChunkSize = 10000;
-    this.deleteRowsInChunks(
-      excelContext,
-      officeTable,
-      deleteChunkSize,
-      deleteChunkSize,
-    );
+    this.deleteRowsInChunks(excelContext, officeTable, deleteChunkSize, deleteChunkSize);
 
     officeTable.delete();
     await excelContext.sync();
@@ -99,33 +94,26 @@ class OfficeRemoveHelper {
    * @param {number} rowsToPreserveCount Number of rows to preserve
    *
    */
-  deleteRowsInChunks = async (
-    excelContext,
-    officeTable,
-    chunkSize,
-    rowsToPreserveCount,
-  ) => {
+  deleteRowsInChunks = async (excelContext, officeTable, chunkSize, rowsToPreserveCount) => {
     const tableRows = officeTable.rows;
 
     let tableRowCount = await officeApiDataLoader.loadSingleExcelData(
       excelContext,
       tableRows,
-      "count",
+      'count'
     );
     excelContext.workbook.application.suspendApiCalculationUntilNextSync();
 
     while (tableRowCount > rowsToPreserveCount) {
       const sumOfRowsToDeleteInNextStep = tableRowCount - rowsToPreserveCount;
       const rowsToDeleteCount =
-        sumOfRowsToDeleteInNextStep > chunkSize
-          ? chunkSize
-          : sumOfRowsToDeleteInNextStep;
+        sumOfRowsToDeleteInNextStep > chunkSize ? chunkSize : sumOfRowsToDeleteInNextStep;
 
       officeTable
         .getRange()
         .getLastRow()
         .getResizedRange(-(rowsToDeleteCount - 1), 0)
-        .delete("Up");
+        .delete('Up');
 
       await excelContext.sync();
 
@@ -133,7 +121,7 @@ class OfficeRemoveHelper {
       tableRowCount = await officeApiDataLoader.loadSingleExcelData(
         excelContext,
         tableRows,
-        "count",
+        'count'
       );
       excelContext.workbook.application.suspendApiCalculationUntilNextSync();
     }
@@ -165,12 +153,9 @@ class OfficeRemoveHelper {
    */
   removeObjectNotExistingInExcel = async (object, officeContext) => {
     officeStoreObject.removeObjectFromStore(object.objectWorkingId);
-    await officeContext.document.bindings.releaseByIdAsync(
-      object.bindId,
-      () => {
-        console.log("released binding");
-      },
-    );
+    await officeContext.document.bindings.releaseByIdAsync(object.bindId, () => {
+      console.log('released binding');
+    });
   };
 }
 

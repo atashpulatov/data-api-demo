@@ -1,8 +1,8 @@
-import mstrCompoundGridFlatten from "../mstr-object/helper/mstr-compound-grid-flatten";
+import mstrCompoundGridFlatten from '../mstr-object/helper/mstr-compound-grid-flatten';
 
-import mstrCompoundGridHandler from "../mstr-object/handler/mstr-compound-grid-handler";
-import mstrGridHandler from "../mstr-object/handler/mstr-grid-handler";
-import mstrObjectType from "../mstr-object/mstr-object-type-enum";
+import mstrCompoundGridHandler from '../mstr-object/handler/mstr-compound-grid-handler';
+import mstrGridHandler from '../mstr-object/handler/mstr-grid-handler';
+import mstrObjectType from '../mstr-object/mstr-object-type-enum';
 
 /**
  * Service to parse JSON response from REST API v2
@@ -64,7 +64,7 @@ class OfficeConverterServiceV2 {
    * @param {JSON} response
    * @return {Object}
    */
-  getSubtotalsInformation = (response) => {
+  getSubtotalsInformation = response => {
     const handler = this.getHandler(response);
     return handler.getSubtotalsInformation(response);
   };
@@ -75,7 +75,7 @@ class OfficeConverterServiceV2 {
    * @param {JSON} response
    * @return {Boolean}
    */
-  isCrosstab = (response) => {
+  isCrosstab = response => {
     try {
       const { grid } = response.definition;
       return !!grid.crossTab && grid.columns.length !== 0;
@@ -91,7 +91,7 @@ class OfficeConverterServiceV2 {
    * @param {JSON} response
    * @return {Class}
    */
-  getHandler = (response) => {
+  getHandler = response => {
     switch (response.visualizationType) {
       case mstrObjectType.visualizationType.COMPOUND_GRID:
       case mstrObjectType.visualizationType.MICROCHARTS:
@@ -107,14 +107,12 @@ class OfficeConverterServiceV2 {
    * @param {JSON} response
    * @return {Class}
    */
-  getHandlerForCompoundGrid = (response) => {
+  getHandlerForCompoundGrid = response => {
     const {
       definition: { grid },
     } = response;
     const isCrosstab = grid.crossTab;
-    const notEmptyColumnSet = grid.columnSets.find(
-      ({ columns }) => columns.length > 0,
-    );
+    const notEmptyColumnSet = grid.columnSets.find(({ columns }) => columns.length > 0);
 
     // We are removing empty column sets only for non crosstab visualizatoins and
     // only when they have at least 1 non empty columnset
@@ -123,11 +121,9 @@ class OfficeConverterServiceV2 {
     }
 
     const { metricsPosition, columnSets } = grid;
-    const isMetricsInRows = metricsPosition && metricsPosition.axis === "rows";
+    const isMetricsInRows = metricsPosition && metricsPosition.axis === 'rows';
     const columnSetsCondition =
-      columnSets.length <= 1 &&
-      !columnSets[0].length &&
-      !columnSets[0].columns.length;
+      columnSets.length <= 1 && !columnSets[0].length && !columnSets[0].columns.length;
 
     if (isCrosstab && !(isMetricsInRows && columnSetsCondition)) {
       return mstrCompoundGridHandler;
@@ -144,14 +140,14 @@ class OfficeConverterServiceV2 {
    * @param {body} response body
    * @return {body}
    */
-  convertCellValuesToExcelStandard = (body) => {
-    const replaceNullValues = (value) => (value === null ? "" : value);
+  convertCellValuesToExcelStandard = body => {
+    const replaceNullValues = value => (value === null ? '' : value);
 
-    const replaceNullsInNestedRawValues = (metricValues) => {
-      Object.keys(metricValues).forEach((key) => {
-        if (key === "raw") {
-          metricValues[key] = metricValues[key].map((singleRawArray) =>
-            singleRawArray.map(replaceNullValues),
+    const replaceNullsInNestedRawValues = metricValues => {
+      Object.keys(metricValues).forEach(key => {
+        if (key === 'raw') {
+          metricValues[key] = metricValues[key].map(singleRawArray =>
+            singleRawArray.map(replaceNullValues)
           );
         } else {
           replaceNullsInNestedRawValues(metricValues[key]);

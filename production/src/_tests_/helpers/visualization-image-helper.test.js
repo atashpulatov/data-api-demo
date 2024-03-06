@@ -2,23 +2,21 @@ import {
   convertImageToBase64,
   convertPixelsToPoints,
   convertPointsToPixels,
-} from "../../helpers/visualization-image-utils";
+} from '../../helpers/visualization-image-utils';
 
-describe("VisualizationImageUtils", () => {
-  describe("convertImageToBase64", () => {
-    it("should convert image to base64", async () => {
+describe('VisualizationImageUtils', () => {
+  describe('convertImageToBase64', () => {
+    it('should convert image to base64', async () => {
       const mockImage = {
-        arrayBuffer: jest
-          .fn()
-          .mockImplementation(() => Promise.resolve(new ArrayBuffer(8))),
+        arrayBuffer: jest.fn().mockImplementation(() => Promise.resolve(new ArrayBuffer(8))),
       };
       const result = await convertImageToBase64(mockImage);
-      expect(result).toEqual("AAAAAAAAAAA=");
+      expect(result).toEqual('AAAAAAAAAAA=');
     });
   });
 
-  describe("convertPointsToPixels", () => {
-    it("should convert points to pixels", () => {
+  describe('convertPointsToPixels', () => {
+    it('should convert points to pixels', () => {
       const result1 = convertPointsToPixels(123);
       expect(result1).toEqual(163.959);
 
@@ -28,8 +26,8 @@ describe("VisualizationImageUtils", () => {
   });
 });
 
-describe("convertPixelsToPoints", () => {
-  it("should convert pixels to points", () => {
+describe('convertPixelsToPoints', () => {
+  it('should convert pixels to points', () => {
     const result1 = convertPixelsToPoints(123);
     expect(result1).toEqual(92.25);
 

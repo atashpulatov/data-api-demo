@@ -1,21 +1,19 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
-import { connect } from "react-redux";
+import React, { useLayoutEffect, useRef, useState } from 'react';
+import { connect } from 'react-redux';
 
-import { popupHelper } from "../../popup/popup-helper";
-import { handleLoginExcelDesktopInWindows } from "../utils/embedded-helper";
-import scriptInjectionHelper from "../utils/script-injection-helper";
+import { popupHelper } from '../../popup/popup-helper';
+import { handleLoginExcelDesktopInWindows } from '../utils/embedded-helper';
+import scriptInjectionHelper from '../utils/script-injection-helper';
 
-import { EmbeddedLibraryTypes } from "./embedded-library-types";
+import { EmbeddedLibraryTypes } from './embedded-library-types';
 
-import { navigationTreeActions } from "../../redux-reducer/navigation-tree-reducer/navigation-tree-actions";
+import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 
-import "./library.css";
+import './library.css';
 
 const { microstrategy, Office } = window;
 
-export const EmbeddedLibraryNotConnected: React.FC<EmbeddedLibraryTypes> = (
-  props
-) => {
+export const EmbeddedLibraryNotConnected: React.FC<EmbeddedLibraryTypes> = props => {
   const {
     handleSelection,
     handleIframeLoadEvent,
@@ -34,7 +32,7 @@ export const EmbeddedLibraryNotConnected: React.FC<EmbeddedLibraryTypes> = (
    * @param {HTMLIFrameElement} iframe
    */
   const onIframeLoad = (iframe: HTMLIFrameElement): void => {
-    iframe.addEventListener("load", () => {
+    iframe.addEventListener('load', () => {
       const { contentDocument } = iframe;
       // DE160793 - Throw session expired error when library redirects to login (iframe 'load' event)
       handleIframeLoadEvent();
@@ -51,7 +49,7 @@ export const EmbeddedLibraryNotConnected: React.FC<EmbeddedLibraryTypes> = (
    */
   const onEmbeddedError = (error: any): void => {
     const { title } = error;
-    if (title !== "Notification") {
+    if (title !== 'Notification') {
       popupHelper.handlePopupErrors(error);
     }
   };
@@ -68,13 +66,11 @@ export const EmbeddedLibraryNotConnected: React.FC<EmbeddedLibraryTypes> = (
    *
    * @param {HTMLElement} containerElement
    */
-  const loadEmbeddedLibrary = async (
-    containerElement: HTMLElement
-  ): Promise<any> => {
+  const loadEmbeddedLibrary = async (containerElement: HTMLElement): Promise<any> => {
     const { envUrl, authToken } = mstrData;
 
     // delete last occurence of '/api' from the enviroment url
-    const serverUrl = envUrl.slice(0, envUrl.lastIndexOf("/api"));
+    const serverUrl = envUrl.slice(0, envUrl.lastIndexOf('/api'));
 
     const { CustomAuthenticationType, EventType } = microstrategy.dossier;
 
@@ -84,21 +80,15 @@ export const EmbeddedLibraryNotConnected: React.FC<EmbeddedLibraryTypes> = (
         enableCustomAuthentication: true,
         customAuthenticationType: CustomAuthenticationType.AUTH_TOKEN,
         enableResponsive: true,
-        libraryItemSelectMode: "single",
+        libraryItemSelectMode: 'single',
         getLoginToken() {
           return Promise.resolve(authToken);
         },
         placeholder: containerElement,
         onMsgRouterReadyHandler: ({ MsgRouter }: any) => {
           setMsgRouter(MsgRouter);
-          MsgRouter.registerEventHandler(
-            EventType.ON_LIBRARY_ITEM_SELECTED,
-            handleSelection
-          );
-          MsgRouter.registerEventHandler(
-            EventType.ON_LIBRARY_MENU_SELECTED,
-            updateSelectedMenu
-          );
+          MsgRouter.registerEventHandler(EventType.ON_LIBRARY_ITEM_SELECTED, handleSelection);
+          MsgRouter.registerEventHandler(EventType.ON_LIBRARY_MENU_SELECTED, updateSelectedMenu);
           MsgRouter.registerEventHandler(
             EventType.ON_LIBRARY_ITEM_SELECTION_CLEARED,
             clearSelection
@@ -112,7 +102,7 @@ export const EmbeddedLibraryNotConnected: React.FC<EmbeddedLibraryTypes> = (
         await microstrategy.embeddingContexts.embedLibraryPage(embedProps);
       } else {
         console.warn(
-          "Cannot find microstrategy.embeddingContexts, please check embeddinglib.js is present in your environment"
+          'Cannot find microstrategy.embeddingContexts, please check embeddinglib.js is present in your environment'
         );
       }
     } catch (error) {
@@ -123,40 +113,28 @@ export const EmbeddedLibraryNotConnected: React.FC<EmbeddedLibraryTypes> = (
   useLayoutEffect(() => {
     // set user agent so that the embedded library can identify source
     const origUserAgent = window.navigator.userAgent;
-    Object.defineProperty(window.navigator, "userAgent", {
+    Object.defineProperty(window.navigator, 'userAgent', {
       get() {
         return `${origUserAgent} MSTRExcel/1.0`;
       },
       configurable: true,
     });
-    scriptInjectionHelper.watchForIframeAddition(
-      container.current,
-      onIframeLoad
-    );
+    scriptInjectionHelper.watchForIframeAddition(container.current, onIframeLoad);
     loadEmbeddedLibrary(container.current);
 
     return () => {
       if (msgRouter) {
         const { EventType } = microstrategy.dossier;
-        msgRouter.removeEventhandler(
-          EventType.ON_LIBRARY_ITEM_SELECTED,
-          handleSelection
-        );
-        msgRouter.removeEventhandler(
-          EventType.ON_LIBRARY_MENU_SELECTED,
-          updateSelectedMenu
-        );
-        msgRouter.removeEventhandler(
-          EventType.ON_LIBRARY_ITEM_SELECTION_CLEARED,
-          clearSelection
-        );
+        msgRouter.removeEventhandler(EventType.ON_LIBRARY_ITEM_SELECTED, handleSelection);
+        msgRouter.removeEventhandler(EventType.ON_LIBRARY_MENU_SELECTED, updateSelectedMenu);
+        msgRouter.removeEventhandler(EventType.ON_LIBRARY_ITEM_SELECTION_CLEARED, clearSelection);
         msgRouter.removeEventhandler(EventType.ON_ERROR, onEmbeddedError);
       }
     };
     /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, []);
 
-  return <div ref={container} className="library-iframe" />;
+  return <div ref={container} className='library-iframe' />;
 };
 
 const mapStateToProps = (state: {

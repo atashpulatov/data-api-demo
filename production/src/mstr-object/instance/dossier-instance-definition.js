@@ -1,14 +1,10 @@
-import { mstrObjectRestService } from "../mstr-object-rest-service";
-import { visualizationInfoService } from "../visualization-info-service";
+import { mstrObjectRestService } from '../mstr-object-rest-service';
+import { visualizationInfoService } from '../visualization-info-service';
 
-import { errorService } from "../../error/error-handler";
-import { IMPORT_OPERATION } from "../../operation/operation-type-names";
-import mstrObjectEnum from "../mstr-object-type-enum";
-import {
-  errorMessages,
-  errorTypes,
-  incomingErrorStrings,
-} from "../../error/constants";
+import { errorService } from '../../error/error-handler';
+import { IMPORT_OPERATION } from '../../operation/operation-type-names';
+import mstrObjectEnum from '../mstr-object-type-enum';
+import { errorMessages, errorTypes, incomingErrorStrings } from '../../error/constants';
 
 class DossierInstanceDefinition {
   async getDossierInstanceDefinition({
@@ -37,7 +33,7 @@ class DossierInstanceDefinition {
         const instance = await mstrObjectRestService.createDossierInstance(
           projectId,
           objectId,
-          body,
+          body
         );
         instanceId = instance.mid;
       }
@@ -50,7 +46,7 @@ class DossierInstanceDefinition {
       projectId,
       objectId,
       visualizationInfo.visualizationKey,
-      instanceId,
+      instanceId
     );
 
     const config = {
@@ -102,29 +98,20 @@ class DossierInstanceDefinition {
    * @throws {Error} errorMessages.DOSSIER_HAS_CHANGED when dossier has changed.
    * @throws {Error} errorMessages.INVALID_VIZ_KEY_MESSAGE when dossier is not supported.
    */
-  getUpdatedVisualizationInfo = async (
-    projectId,
-    objectId,
-    visualizationKey,
-    instanceId,
-  ) => {
+  getUpdatedVisualizationInfo = async (projectId, objectId, visualizationKey, instanceId) => {
     try {
-      const visualizationInfo =
-        await visualizationInfoService.getVisualizationInfo(
-          projectId,
-          objectId,
-          visualizationKey,
-          instanceId,
-        );
+      const visualizationInfo = await visualizationInfoService.getVisualizationInfo(
+        projectId,
+        objectId,
+        visualizationKey,
+        instanceId
+      );
       if (visualizationInfo) {
         return visualizationInfo;
       }
       throw new Error(errorMessages.DOSSIER_HAS_CHANGED);
     } catch (error) {
-      if (
-        errorService.getErrorMessage(error) ===
-        errorMessages.DOSSIER_HAS_CHANGED
-      ) {
+      if (errorService.getErrorMessage(error) === errorMessages.DOSSIER_HAS_CHANGED) {
         throw new Error(errorMessages.DOSSIER_HAS_CHANGED);
       }
       throw new Error(errorMessages.INVALID_VIZ_KEY_MESSAGE);
@@ -151,21 +138,18 @@ class DossierInstanceDefinition {
    * @param {Object} error
    * @return {String || undefined} errorType
    */
-  getVisualizationErrorType = (error) => {
+  getVisualizationErrorType = error => {
     if (!error) {
       return;
     }
 
     let errorType = error.type;
     if (
-      (error.message &&
-        error.message.includes(incomingErrorStrings.INVALID_VIZ_KEY)) ||
+      (error.message && error.message.includes(incomingErrorStrings.INVALID_VIZ_KEY)) ||
       (error.response &&
         error.response.body &&
         error.response.body.message &&
-        error.response.body.message.includes(
-          incomingErrorStrings.INVALID_VIZ_KEY,
-        ))
+        error.response.body.message.includes(incomingErrorStrings.INVALID_VIZ_KEY))
     ) {
       errorType = errorTypes.INVALID_VIZ_KEY;
     }

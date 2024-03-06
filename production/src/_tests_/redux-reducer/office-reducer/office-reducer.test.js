@@ -1,9 +1,9 @@
-import { createStore } from "redux";
+import { createStore } from 'redux';
 
-import { officeProperties } from "../../../redux-reducer/office-reducer/office-properties";
-import { officeReducer } from "../../../redux-reducer/office-reducer/office-reducer";
+import { officeProperties } from '../../../redux-reducer/office-reducer/office-properties';
+import { officeReducer } from '../../../redux-reducer/office-reducer/office-reducer';
 
-describe("officeReducer", () => {
+describe('officeReducer', () => {
   const officeStore = createStore(officeReducer);
 
   beforeEach(() => {
@@ -23,20 +23,20 @@ describe("officeReducer", () => {
     });
   });
 
-  it("should set address of active cell on setActiveCellAddress", () => {
+  it('should set address of active cell on setActiveCellAddress', () => {
     // given
     const prevState = { activeCellAddress: null };
     const action = {
       type: officeProperties.actions.setActiveCellAddress,
-      activeCellAddress: "A1",
+      activeCellAddress: 'A1',
     };
     // when
     const newState = officeReducer(prevState, action);
     // then
-    expect(newState.activeCellAddress).toBe("A1");
+    expect(newState.activeCellAddress).toBe('A1');
   });
 
-  it("should set isDialogOpen to true on showDialog", () => {
+  it('should set isDialogOpen to true on showDialog', () => {
     // given
     const prevState = { isDialogOpen: false };
     const action = { type: officeProperties.actions.showDialog };
@@ -46,7 +46,7 @@ describe("officeReducer", () => {
     expect(newState.isDialogOpen).toBe(true);
   });
 
-  it("should set isDialogOpen to false on hideDialog", () => {
+  it('should set isDialogOpen to false on hideDialog', () => {
     // given
     const prevState = { isDialogOpen: true };
     const action = { type: officeProperties.actions.hideDialog };
@@ -56,7 +56,7 @@ describe("officeReducer", () => {
     expect(newState.isDialogOpen).toBe(false);
   });
 
-  it("should set given value to isDialogLoaded on setIsDialogLoaded", () => {
+  it('should set given value to isDialogLoaded on setIsDialogLoaded', () => {
     // given
     const prevState = { isDialogLoaded: false };
     const action = {
@@ -69,7 +69,7 @@ describe("officeReducer", () => {
     expect(newState.isDialogLoaded).toBe(true);
   });
 
-  it("should return new proper state in case of toggleSecuredFlag action", () => {
+  it('should return new proper state in case of toggleSecuredFlag action', () => {
     // given
     const oldState = { isSecured: false };
     const action = {
@@ -82,7 +82,7 @@ describe("officeReducer", () => {
     expect(newState).toEqual({ isSecured: true });
   });
 
-  it("should return new proper state in case of toggleIsSettingsFlag action", () => {
+  it('should return new proper state in case of toggleIsSettingsFlag action', () => {
     // given
     const oldState = { isSettings: false };
     const action = {
@@ -95,7 +95,7 @@ describe("officeReducer", () => {
     expect(newState).toEqual({ isSettings: true });
   });
 
-  it("should return new proper state in case of toggleIsConfirmFlag action", () => {
+  it('should return new proper state in case of toggleIsConfirmFlag action', () => {
     // given
     const oldState = { isConfirm: false, isSettings: false };
     const action = {
@@ -109,7 +109,7 @@ describe("officeReducer", () => {
     expect(newState).toEqual({ isConfirm: true, isSettings: false });
   });
 
-  it("should return new proper state in case of toggleRenderSettingsFlag action", () => {
+  it('should return new proper state in case of toggleRenderSettingsFlag action', () => {
     // given
     const oldState = { isSettings: false, shouldRenderSettings: false };
     const action = {
@@ -123,7 +123,7 @@ describe("officeReducer", () => {
     expect(newState).toEqual({ isSettings: false, shouldRenderSettings: true });
   });
 
-  it("should set IsClearDataFailed to given value on toggleIsClearDataFailedFlag", () => {
+  it('should set IsClearDataFailed to given value on toggleIsClearDataFailedFlag', () => {
     // given
     const oldState = { isClearDataFailed: false };
     const action = {
@@ -136,7 +136,7 @@ describe("officeReducer", () => {
     expect(newState.isClearDataFailed).toBe(true);
   });
 
-  it("should set settingsPanelLoaded to given value on toggleSettingsPanelLoadedFlag", () => {
+  it('should set settingsPanelLoaded to given value on toggleSettingsPanelLoadedFlag', () => {
     // given
     const oldState = { settingsPanelLoaded: false };
     const action = {
@@ -149,7 +149,7 @@ describe("officeReducer", () => {
     expect(newState.settingsPanelLoaded).toBe(true);
   });
 
-  it("should set settingsPanelLoaded to given value on toggleReusePromptAnswersFlag", () => {
+  it('should set settingsPanelLoaded to given value on toggleReusePromptAnswersFlag', () => {
     // given
     const oldState = { reusePromptAnswers: false };
     const action = {

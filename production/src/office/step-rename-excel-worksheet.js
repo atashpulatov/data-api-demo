@@ -1,7 +1,7 @@
-import { officeApiWorksheetHelper } from "./api/office-api-worksheet-helper";
+import { officeApiWorksheetHelper } from './api/office-api-worksheet-helper';
 
-import operationErrorHandler from "../operation/operation-error-handler";
-import operationStepDispatcher from "../operation/operation-step-dispatcher";
+import operationErrorHandler from '../operation/operation-error-handler';
+import operationStepDispatcher from '../operation/operation-step-dispatcher';
 
 class StepRenameExcelWorksheet {
   /**
@@ -21,10 +21,7 @@ class StepRenameExcelWorksheet {
       const { excelContext, shouldRenameExcelWorksheet } = operationData;
 
       if (shouldRenameExcelWorksheet) {
-        const newName = await officeApiWorksheetHelper.renameExistingWorksheet(
-          excelContext,
-          name,
-        );
+        const newName = await officeApiWorksheetHelper.renameExistingWorksheet(excelContext, name);
 
         operationStepDispatcher.updateObject({
           ...objectData,
@@ -38,11 +35,7 @@ class StepRenameExcelWorksheet {
       operationStepDispatcher.completeRenameExcelWorksheet(objectWorkingId);
     } catch (error) {
       console.error(error);
-      operationErrorHandler.handleOperationError(
-        objectData,
-        operationData,
-        error,
-      );
+      operationErrorHandler.handleOperationError(objectData, operationData, error);
     }
   };
 }

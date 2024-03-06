@@ -1,9 +1,9 @@
-import { createStore } from "redux";
+import { createStore } from 'redux';
 
-import { sessionProperties } from "../../redux-reducer/session-reducer/session-properties";
-import { sessionReducer } from "../../redux-reducer/session-reducer/session-reducer";
+import { sessionProperties } from '../../redux-reducer/session-reducer/session-properties';
+import { sessionReducer } from '../../redux-reducer/session-reducer/session-reducer';
 
-describe("sessionReducer", () => {
+describe('sessionReducer', () => {
   const sessionStore = createStore(sessionReducer);
 
   beforeEach(() => {
@@ -12,7 +12,7 @@ describe("sessionReducer", () => {
   });
 
   afterEach(() => {
-    const givenEnvUrl = "someEnvUrl";
+    const givenEnvUrl = 'someEnvUrl';
     sessionStore.dispatch({
       type: sessionProperties.actions.logIn,
       values: {
@@ -23,7 +23,7 @@ describe("sessionReducer", () => {
     sessionStore.dispatch({ type: sessionProperties.actions.logOut });
   });
 
-  it("should throw error due to missing loading property", () => {
+  it('should throw error due to missing loading property', () => {
     // given
     // when
     const wrongActionCall = () => {
@@ -31,9 +31,9 @@ describe("sessionReducer", () => {
     };
     // then
     expect(wrongActionCall).toThrowError(Error);
-    expect(wrongActionCall).toThrowError("Missing loading");
+    expect(wrongActionCall).toThrowError('Missing loading');
   });
-  it("should set loading to enabled", () => {
+  it('should set loading to enabled', () => {
     // given
     const loading = true;
     // when
@@ -46,7 +46,7 @@ describe("sessionReducer", () => {
     expect(sessionStoreState.loading).toEqual(true);
   });
 
-  it("should set loading to disabled", () => {
+  it('should set loading to disabled', () => {
     // given
     const loading = false;
     // when
@@ -59,9 +59,9 @@ describe("sessionReducer", () => {
     expect(sessionStoreState.loading).toEqual(false);
   });
 
-  it("should save envUrl on login", () => {
+  it('should save envUrl on login', () => {
     // given
-    const givenEnvUrl = "someEnvUrl";
+    const givenEnvUrl = 'someEnvUrl';
     // when
     sessionStore.dispatch({
       type: sessionProperties.actions.logIn,
@@ -73,12 +73,12 @@ describe("sessionReducer", () => {
     expect(envUrl).toBe(givenEnvUrl);
   });
 
-  it("should remove data on logout", () => {
+  it('should remove data on logout', () => {
     // given
     const rememberMe = true;
-    const givenToken = "token";
-    const givenFullName = "Name";
-    const givenInitials = "Initials";
+    const givenToken = 'token';
+    const givenFullName = 'Name';
+    const givenInitials = 'Initials';
     const state = {
       isRememberMeOn: rememberMe,
       authToken: givenToken,
@@ -95,8 +95,8 @@ describe("sessionReducer", () => {
     expect(newState.authToken).toBe(false);
   });
 
-  it("should throw an error due to missing envUrl", () => {
-    const givenUsername = "someUsername";
+  it('should throw an error due to missing envUrl', () => {
+    const givenUsername = 'someUsername';
     const givenRememberMeFlag = true;
     // then
     const wrongActionCall = () => {
@@ -110,13 +110,13 @@ describe("sessionReducer", () => {
     };
     // then
     expect(wrongActionCall).toThrowError(Error);
-    expect(wrongActionCall).toThrowError("Missing EnvUrl.");
+    expect(wrongActionCall).toThrowError('Missing EnvUrl.');
     expect(sessionStore.getState().username).toBeFalsy();
   });
 
-  it("should save authToken on logged in action", () => {
+  it('should save authToken on logged in action', () => {
     // given
-    const firstToken = "firstTokenTest1";
+    const firstToken = 'firstTokenTest1';
     // when
     sessionStore.dispatch({
       type: sessionProperties.actions.loggedIn,
@@ -126,7 +126,7 @@ describe("sessionReducer", () => {
     expect(sessionStore.getState().authToken).toBe(firstToken);
   });
 
-  it("should throw an error due to missing authToken", () => {
+  it('should throw an error due to missing authToken', () => {
     // given
     // when
     const wrongActionCall = () => {
@@ -134,13 +134,13 @@ describe("sessionReducer", () => {
     };
     // then
     expect(wrongActionCall).toThrowError(Error);
-    expect(wrongActionCall).toThrowError("Missing AuthToken.");
+    expect(wrongActionCall).toThrowError('Missing AuthToken.');
   });
 
-  it("should save userInfo on getUserInfo action", () => {
+  it('should save userInfo on getUserInfo action', () => {
     // given
-    const givenFullName = "Full Name";
-    const givenInitials = "IN";
+    const givenFullName = 'Full Name';
+    const givenInitials = 'IN';
     // when
     sessionStore.dispatch({
       type: sessionProperties.actions.getUserInfo,
@@ -152,7 +152,7 @@ describe("sessionReducer", () => {
     expect(sessionStore.getState().userInitials).toEqual(givenInitials);
   });
 
-  it("should save givenDialog on setDialog action", () => {
+  it('should save givenDialog on setDialog action', () => {
     // given
     const mockDialog = { close: () => {} };
     // when

@@ -1,40 +1,40 @@
 // issue with proptype import
 // eslint-disable-next-line simple-import-sort/imports
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { connect } from "react-redux";
-import { ObjectWindowTitle } from "@mstr/connector-components";
-import { Spinner } from "@mstr/rc";
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { connect } from 'react-redux';
+import { ObjectWindowTitle } from '@mstr/connector-components';
+import { Spinner } from '@mstr/rc';
 
-import PropTypes from "prop-types";
-import { authenticationHelper } from "../authentication/authentication-helper";
-import scriptInjectionHelper from "../embedded/utils/script-injection-helper";
+import PropTypes from 'prop-types';
+import { authenticationHelper } from '../authentication/authentication-helper';
+import scriptInjectionHelper from '../embedded/utils/script-injection-helper';
 import {
   prepareGivenPromptAnswers,
   preparePromptedReport,
-} from "../helpers/prompts-handling-helper";
-import { mstrObjectRestService } from "../mstr-object/mstr-object-rest-service";
-import { popupHelper } from "../popup/popup-helper";
-import { popupViewSelectorHelper } from "../popup/popup-view-selector-helper";
-import { EXTEND_SESSION, sessionHelper } from "../storage/session-helper";
+} from '../helpers/prompts-handling-helper';
+import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
+import { popupHelper } from '../popup/popup-helper';
+import { popupViewSelectorHelper } from '../popup/popup-view-selector-helper';
+import { EXTEND_SESSION, sessionHelper } from '../storage/session-helper';
 
-import { selectorProperties } from "../attribute-selector/selector-properties";
-import i18n from "../i18n";
-import mstrObjectEnum from "../mstr-object/mstr-object-type-enum";
-import { PopupButtons } from "../popup/popup-buttons/popup-buttons";
-import { navigationTreeActions } from "../redux-reducer/navigation-tree-reducer/navigation-tree-actions";
-import { popupStateActions } from "../redux-reducer/popup-state-reducer/popup-state-actions";
-import { PromptsContainer } from "./prompts-container";
-import { objectImportType } from "../mstr-object/constants";
+import { selectorProperties } from '../attribute-selector/selector-properties';
+import i18n from '../i18n';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
+import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
+import { PromptsContainer } from './prompts-container';
+import { objectImportType } from '../mstr-object/constants';
 
-import "../home/home.css";
-import "../index.css";
-import "./prompts-window.scss";
+import '../home/home.css';
+import '../index.css';
+import './prompts-window.scss';
 
 const { microstrategy } = window;
 const { deleteDossierInstance } = mstrObjectRestService;
 
-export const PromptsWindowNotConnected = (props) => {
+export const PromptsWindowNotConnected = props => {
   const {
     mstrData,
     popupState,
@@ -62,7 +62,7 @@ export const PromptsWindowNotConnected = (props) => {
   const [isPromptLoading, setIsPromptLoading] = useState(true);
   const [embeddedDocument, setEmbeddedDocument] = useState(null);
 
-  const [t] = useTranslation("common", { i18n });
+  const [t] = useTranslation('common', { i18n });
 
   const closePopup = () => {
     const { commandCancel } = selectorProperties;
@@ -74,11 +74,7 @@ export const PromptsWindowNotConnected = (props) => {
 
   const messageReceived = useCallback(
     (message = {}) => {
-      if (
-        message.data &&
-        message.data.value &&
-        message.data.value.iServerErrorCode
-      ) {
+      if (message.data && message.data.value && message.data.value.iServerErrorCode) {
         const newErrorObject = {
           status: message.data.value.statusCode,
           response: {
@@ -102,16 +98,16 @@ export const PromptsWindowNotConnected = (props) => {
         prolongSession();
       }
     },
-    [prolongSession],
+    [prolongSession]
   );
 
   useEffect(() => {
-    window.addEventListener("message", messageReceived);
+    window.addEventListener('message', messageReceived);
 
-    return () => window.removeEventListener("message", messageReceived);
+    return () => window.removeEventListener('message', messageReceived);
   }, [messageReceived]);
 
-  const promptAnsweredHandler = (newAnswer) => {
+  const promptAnsweredHandler = newAnswer => {
     setIsPromptLoading(true);
     if (newPromptsAnswers.current.length > 0) {
       const newArray = [...newPromptsAnswers.current, newAnswer];
@@ -150,7 +146,7 @@ export const PromptsWindowNotConnected = (props) => {
           editedObject.selectedAttributes,
           editedObject.selectedMetrics,
           editedObject.selectedFilters,
-          editedObject.instanceId,
+          editedObject.instanceId
         ),
         chosenObjectName: editedObject.chosenObjectName,
         instanceId: editedObject.instanceId,
@@ -171,7 +167,7 @@ export const PromptsWindowNotConnected = (props) => {
       editedObject.displayAttrFormNames,
       isEdit,
       isReprompt,
-    ],
+    ]
   );
 
   /**
@@ -189,27 +185,23 @@ export const PromptsWindowNotConnected = (props) => {
 
       return mstrData.promptsAnswers || editedObject.promptsAnswers;
     },
-    [mstrData.promptsAnswers, editedObject.promptsAnswers],
+    [mstrData.promptsAnswers, editedObject.promptsAnswers]
   );
 
   const loadEmbeddedDossier = useCallback(
-    async (localContainer) => {
+    async localContainer => {
       const chosenObjectIdLocal = chosenObjectId || editedObject.chosenObjectId;
       const projectId = mstrData.chosenProjectId || editedObject.projectId; // FIXME: potential problem with projectId
       const { envUrl, authToken } = session;
 
       // Declared variables to determine whether importing a report/dossier is taking place and
       // whether there are previous prompt answers to handle
-      const hasPreviousPromptAnswers =
-        previousPromptsAnswers && previousPromptsAnswers.length > 0;
+      const hasPreviousPromptAnswers = previousPromptsAnswers && previousPromptsAnswers.length > 0;
       const hasPromptObjects = promptObjects && promptObjects.length > 0;
-      const hasImportOrPrepareDataRequest =
-        importRequested || isPreparedDataRequested;
+      const hasImportOrPrepareDataRequest = importRequested || isPreparedDataRequested;
 
       const isImportOrPrepateWithPrevAnswers =
-        hasImportOrPrepareDataRequest &&
-        hasPreviousPromptAnswers &&
-        hasPromptObjects;
+        hasImportOrPrepareDataRequest && hasPreviousPromptAnswers && hasPromptObjects;
 
       // Determine whether importing a report/dossier or preparing data on a report has previous answers
       // along with making sure re-use prompt answers setting is enabled and prompt objects are available
@@ -218,7 +210,7 @@ export const PromptsWindowNotConnected = (props) => {
 
       try {
         let msgRouter = null;
-        const serverURL = envUrl.slice(0, envUrl.lastIndexOf("/api"));
+        const serverURL = envUrl.slice(0, envUrl.lastIndexOf('/api'));
         // delete last occurence of '/api' from the enviroment url
         const { CustomAuthenticationType } = microstrategy.dossier;
         const { EventType } = microstrategy.dossier;
@@ -238,14 +230,8 @@ export const PromptsWindowNotConnected = (props) => {
           placeholder: localContainer,
           onMsgRouterReadyHandler: ({ MsgRouter }) => {
             msgRouter = MsgRouter;
-            msgRouter.registerEventHandler(
-              EventType.ON_PROMPT_ANSWERED,
-              promptAnsweredHandler,
-            );
-            msgRouter.registerEventHandler(
-              EventType.ON_PROMPT_LOADED,
-              promptLoadedHandler,
-            );
+            msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, promptAnsweredHandler);
+            msgRouter.registerEventHandler(EventType.ON_PROMPT_LOADED, promptLoadedHandler);
 
             // TODO: We should remember to unregister this handler once the page loads
           },
@@ -253,11 +239,7 @@ export const PromptsWindowNotConnected = (props) => {
 
         // Replace the instance with the one from the prompt answers resolved for importing prompted report/dossier
         // or preparing data on a report if re-use prompt answers setting is enabled and there are previous prompt answers
-        if (
-          isReprompt ||
-          isImportOrPrepateWithPrevAnswers ||
-          isMultipleRepromptWithReuse
-        ) {
+        if (isReprompt || isImportOrPrepateWithPrevAnswers || isMultipleRepromptWithReuse) {
           // If it is multiple re-prompt, then we need to replaced edited report's answers in definition
           // with saved prompt answers if any.
           const updatedPromptObjects = isMultipleRepromptWithReuse
@@ -270,57 +252,47 @@ export const PromptsWindowNotConnected = (props) => {
           const givenPromptsAnswers = prepareAndHandlePromptAnswers(
             updatedPromptObjects,
             previousPromptsAnswers,
-            isImportingOrPreparingDataWithPreviousPromptAnswers ||
-              isMultipleRepromptWithReuse,
+            isImportingOrPreparingDataWithPreviousPromptAnswers || isMultipleRepromptWithReuse
           );
 
           documentProps.instance = await preparePromptedReport(
             chosenObjectIdLocal,
             projectId,
-            givenPromptsAnswers,
+            givenPromptsAnswers
           );
         }
 
-        microstrategy.dossier
-          .create(documentProps)
-          .then(async (dossierPage) => {
-            const [chapter, objectId, instanceId, visualizations] =
-              await Promise.all([
-                dossierPage?.getCurrentChapter(),
-                dossierPage?.getDossierId(),
-                dossierPage?.getDossierInstanceId(),
-                dossierPage?.getCurrentPageVisualizationList(),
-              ]);
+        microstrategy.dossier.create(documentProps).then(async dossierPage => {
+          const [chapter, objectId, instanceId, visualizations] = await Promise.all([
+            dossierPage?.getCurrentChapter(),
+            dossierPage?.getDossierId(),
+            dossierPage?.getDossierInstanceId(),
+            dossierPage?.getCurrentPageVisualizationList(),
+          ]);
 
-            const dossierData = {
-              chapterKey: chapter.nodeKey,
-              dossierId: objectId,
-              instanceId,
-              visualizationKey: visualizations[0].key,
-              isReprompt,
-            };
+          const dossierData = {
+            chapterKey: chapter.nodeKey,
+            dossierId: objectId,
+            instanceId,
+            visualizationKey: visualizations[0].key,
+            isReprompt,
+          };
 
-            // Remove event handlers first.
-            msgRouter.removeEventhandler(
-              EventType.ON_PROMPT_ANSWERED,
-              promptAnsweredHandler,
-            );
-            msgRouter.removeEventhandler(
-              EventType.ON_PROMPT_LOADED,
-              promptLoadedHandler,
-            );
+          // Remove event handlers first.
+          msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptAnsweredHandler);
+          msgRouter.removeEventhandler(EventType.ON_PROMPT_LOADED, promptLoadedHandler);
 
-            // Get the new answers from the prompts dialog.
-            const currentAnswers = [...newPromptsAnswers.current];
+          // Get the new answers from the prompts dialog.
+          const currentAnswers = [...newPromptsAnswers.current];
 
-            // Since the dossier is no needed anymore after intercepting promptsAnswers, we can try removing the instanace
-            deleteDossierInstance(projectId, objectId, instanceId);
+          // Since the dossier is no needed anymore after intercepting promptsAnswers, we can try removing the instanace
+          deleteDossierInstance(projectId, objectId, instanceId);
 
-            // dossierData should eventually be removed as data should be gathered via REST from report, not dossier
-            promptsAnswered({ dossierData, promptsAnswers: currentAnswers });
+          // dossierData should eventually be removed as data should be gathered via REST from report, not dossier
+          promptsAnswered({ dossierData, promptsAnswers: currentAnswers });
 
-            finishRepromptWithoutEditFilters(chosenObjectIdLocal, projectId);
-          });
+          finishRepromptWithoutEditFilters(chosenObjectIdLocal, projectId);
+        });
       } catch (error) {
         console.error({ error });
         popupHelper.handlePopupErrors(error);
@@ -343,7 +315,7 @@ export const PromptsWindowNotConnected = (props) => {
       isPreparedDataRequested,
       isMultipleRepromptWithReuse,
       editedObject.promptsAnswers,
-    ],
+    ]
   );
 
   /**
@@ -354,9 +326,7 @@ export const PromptsWindowNotConnected = (props) => {
     try {
       await authenticationHelper.validateAuthToken();
       if (embeddedDocument) {
-        const runButton = embeddedDocument.getElementsByClassName(
-          "mstrPromptEditorButtonRun",
-        )[0];
+        const runButton = embeddedDocument.getElementsByClassName('mstrPromptEditorButtonRun')[0];
         if (runButton) {
           runButton.click();
         }
@@ -369,44 +339,35 @@ export const PromptsWindowNotConnected = (props) => {
   /**
    * This function is called after a child (iframe) is added into mbedded dossier container
    */
-  const onIframeLoad = (iframe) => {
-    iframe.addEventListener("load", () => {
+  const onIframeLoad = iframe => {
+    iframe.addEventListener('load', () => {
       const { contentDocument } = iframe;
       if (iframe.focusEventListenerAdded === false) {
         iframe.focusEventListenerAdded = true;
-        iframe.addEventListener(
-          "focus",
-          scriptInjectionHelper.switchFocusToElementOnWindowFocus,
-        );
+        iframe.addEventListener('focus', scriptInjectionHelper.switchFocusToElementOnWindowFocus);
       }
       setEmbeddedDocument(contentDocument);
       if (!scriptInjectionHelper.isLoginPage(contentDocument)) {
-        scriptInjectionHelper.applyStyle(contentDocument, "promptsWindow.css");
-        scriptInjectionHelper.applyFile(
-          contentDocument,
-          "javascript/embeddingsessionlib.js",
-        );
+        scriptInjectionHelper.applyStyle(contentDocument, 'promptsWindow.css');
+        scriptInjectionHelper.applyFile(contentDocument, 'javascript/embeddingsessionlib.js');
       }
     });
   };
 
   const onPromptsContainerMount = useCallback(
-    async (localContainer) => {
-      scriptInjectionHelper.watchForIframeAddition(
-        localContainer,
-        onIframeLoad,
-      );
+    async localContainer => {
+      scriptInjectionHelper.watchForIframeAddition(localContainer, onIframeLoad);
 
       if (!microstrategy?.dossier) {
         console.warn(
-          "Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment.",
+          'Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment.'
         );
         return;
       }
 
       await loadEmbeddedDossier(localContainer);
     },
-    [loadEmbeddedDossier],
+    [loadEmbeddedDossier]
   );
 
   const handleBack = () => {
@@ -417,7 +378,7 @@ export const PromptsWindowNotConnected = (props) => {
   const objectName = editedObject.chosenObjectName || chosenObjectName;
 
   return (
-    <div className="prompts-window">
+    <div className='prompts-window'>
       <ObjectWindowTitle
         objectType={mstrObjectEnum.mstrObjectType.report.name}
         objectName={objectName}
@@ -426,8 +387,8 @@ export const PromptsWindowNotConnected = (props) => {
         index={repromptsQueue.index}
         total={repromptsQueue.total}
       />
-      <Spinner className="loading-spinner" type="large">
-        {t("Loading...")}
+      <Spinner className='loading-spinner' type='large'>
+        {t('Loading...')}
       </Spinner>
       <PromptsContainer postMount={onPromptsContainerMount} />
       <PopupButtons
@@ -466,7 +427,7 @@ PromptsWindowNotConnected.propTypes = {
     chosenObjectId: PropTypes.string,
     projectId: PropTypes.string,
     promptsAnswers: PropTypes.arrayOf(
-      PropTypes.shape({ answers: PropTypes.arrayOf(PropTypes.shape({})) }),
+      PropTypes.shape({ answers: PropTypes.arrayOf(PropTypes.shape({})) })
     ),
     chosenObjectSubtype: PropTypes.number,
     chosenObjectName: PropTypes.string,
@@ -477,8 +438,7 @@ PromptsWindowNotConnected.propTypes = {
     displayAttrFormNames: PropTypes.string,
     selectedAttributes: PropTypes.arrayOf(PropTypes.string),
     selectedMetrics: PropTypes.arrayOf(PropTypes.string),
-    selectedFilters:
-      PropTypes.shape({}) || PropTypes.arrayOf(PropTypes.shape({})),
+    selectedFilters: PropTypes.shape({}) || PropTypes.arrayOf(PropTypes.shape({})),
   }),
   reusePromptAnswers: PropTypes.bool,
   previousPromptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
@@ -492,7 +452,7 @@ PromptsWindowNotConnected.propTypes = {
   isMultipleRepromptWithReuse: PropTypes.bool,
 };
 
-export const mapStateToProps = (state) => {
+export const mapStateToProps = state => {
   const {
     navigationTree,
     popupStateReducer,
@@ -515,35 +475,26 @@ export const mapStateToProps = (state) => {
   const { supportForms, reusePromptAnswers } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
   const isReport =
-    popupState &&
-    popupState.mstrObjectType.name ===
-      mstrObjectEnum.mstrObjectType.report.name;
+    popupState && popupState.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
 
   // Check whether prepared data is requested for import and includes prompt objects
   const hasPreparedRequestPromptObjects =
-    isPreparedDataRequested &&
-    popupStateReducer.isPrompted?.promptObjects?.length > 0;
+    isPreparedDataRequested && popupStateReducer.isPrompted?.promptObjects?.length > 0;
 
   // Resolve prompt objects to be used, if prepared data is requested for import
   // and prompt objects are not included in the navigation tree state, then return
   // the prompt objects from the popup state reducer if any or empty array if none.
   const promptObjectsResolved =
     promptObjects ||
-    (hasPreparedRequestPromptObjects
-      ? popupStateReducer.isPrompted.promptObjects
-      : []);
+    (hasPreparedRequestPromptObjects ? popupStateReducer.isPrompted.promptObjects : []);
 
   return {
     ...state.promptsPopup,
     mstrData,
     importSubtotal,
     editedObject: {
-      ...popupHelper.parsePopupState(
-        popupState,
-        promptsAnswers,
-        formsPrivilege,
-      ),
+      ...popupHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege),
     },
     popupState: { ...popupStateReducer },
     session: { ...sessionReducer },
@@ -553,8 +504,7 @@ export const mapStateToProps = (state) => {
     promptObjects: promptObjectsResolved, // Prompt objects to be used for import
     isPreparedDataRequested, // State flag indicating whether prepared data is requested for import
     repromptsQueue: { ...repromptsQueueReducer },
-    isMultipleRepromptWithReuse:
-      reusePromptAnswers && repromptsQueueReducer.total > 1,
+    isMultipleRepromptWithReuse: reusePromptAnswers && repromptsQueueReducer.total > 1,
   };
 };
 
@@ -566,5 +516,5 @@ const mapDispatchToProps = {
 
 export const PromptsWindow = connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(PromptsWindowNotConnected);

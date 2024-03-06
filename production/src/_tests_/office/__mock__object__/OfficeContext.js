@@ -6,7 +6,7 @@ class OfficeContextMock {
       tables: { load: () => {} },
       getSelectedRange: () => ({
         load: () => {},
-        address: "txt!txt",
+        address: 'txt!txt',
       }),
     };
     this.sync = () => {};

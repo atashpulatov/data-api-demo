@@ -1,30 +1,29 @@
 // issue with proptype import
 // eslint-disable-next-line simple-import-sort/imports
-import React from "react";
-import { connect } from "react-redux";
+import React from 'react';
+import { connect } from 'react-redux';
 
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 import {
   ObjectExecutionStatus,
   prepareGivenPromptAnswers,
   preparePromptedDossier,
-} from "../../helpers/prompts-handling-helper";
-import { convertPixelsToPoints } from "../../helpers/visualization-image-utils";
-import { mstrObjectRestService } from "../../mstr-object/mstr-object-rest-service";
-import { popupHelper } from "../../popup/popup-helper";
-import { handleLoginExcelDesktopInWindows } from "../utils/embedded-helper";
-import scriptInjectionHelper from "../utils/script-injection-helper";
-import { embeddedDossierHelper } from "./embedded-dossier-helper";
+} from '../../helpers/prompts-handling-helper';
+import { convertPixelsToPoints } from '../../helpers/visualization-image-utils';
+import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
+import { popupHelper } from '../../popup/popup-helper';
+import { handleLoginExcelDesktopInWindows } from '../utils/embedded-helper';
+import scriptInjectionHelper from '../utils/script-injection-helper';
+import { embeddedDossierHelper } from './embedded-dossier-helper';
 
-import mstrObjectEnum from "../../mstr-object/mstr-object-type-enum";
-import { DEFAULT_PROJECT_NAME } from "../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer";
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
+import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 
-import "./dossier.css";
+import './dossier.css';
 
 const { microstrategy, Office } = window;
 
-const { createDossierInstance, rePromptDossier, getObjectPrompts } =
-  mstrObjectRestService;
+const { createDossierInstance, rePromptDossier, getObjectPrompts } = mstrObjectRestService;
 
 const VIZ_SELECTION_RETRY_DELAY = 200; // ms
 const VIZ_SELECTION_RETRY_LIMIT = 10;
@@ -49,10 +48,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   }
 
   componentDidMount() {
-    scriptInjectionHelper.watchForIframeAddition(
-      this.container.current,
-      this.onIframeLoad,
-    );
+    scriptInjectionHelper.watchForIframeAddition(this.container.current, this.onIframeLoad);
     this.loadEmbeddedDossier(this.container.current);
   }
 
@@ -61,20 +57,14 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       const { EventType } = microstrategy.dossier;
       this.msgRouter.removeEventhandler(
         EventType.ON_VIZ_SELECTION_CHANGED,
-        this.onVizSelectionHandler,
+        this.onVizSelectionHandler
       );
-      this.msgRouter.removeEventhandler(
-        EventType.ON_PROMPT_ANSWERED,
-        this.promptsAnsweredHandler,
-      );
+      this.msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, this.promptsAnsweredHandler);
       this.msgRouter.removeEventhandler(
         EventType.ON_DOSSIER_INSTANCE_ID_CHANGE,
-        this.instanceIdChangeHandler,
+        this.instanceIdChangeHandler
       );
-      this.msgRouter.removeEventhandler(
-        EventType.ON_ERROR,
-        this.onEmbeddedError,
-      );
+      this.msgRouter.removeEventhandler(EventType.ON_ERROR, this.onEmbeddedError);
     }
   }
 
@@ -82,16 +72,13 @@ export default class EmbeddedDossierNotConnected extends React.Component {
    * This function is called after the embedded dossier iframe is added into the DOM
    * @param {*} iframe
    */
-  onIframeLoad = (iframe) => {
-    iframe.addEventListener("load", () => {
+  onIframeLoad = iframe => {
+    iframe.addEventListener('load', () => {
       const { contentDocument } = iframe;
       const { handleIframeLoadEvent } = this.props;
       if (iframe.focusEventListenerAdded === false) {
         iframe.focusEventListenerAdded = true;
-        iframe.addEventListener(
-          "focus",
-          scriptInjectionHelper.switchFocusToElementOnWindowFocus,
-        );
+        iframe.addEventListener('focus', scriptInjectionHelper.switchFocusToElementOnWindowFocus);
       }
       // DE160793 - Throw session expired error when dossier redirects to login (iframe 'load' event)
       handleIframeLoadEvent();
@@ -147,7 +134,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   // eslint-disable-next-line class-methods-use-this
   onEmbeddedError(error) {
     const { title } = error;
-    if (title !== "Notification") {
+    if (title !== 'Notification') {
       // TODO: improve this, so it doesn't depend on i18n
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
       popupHelper.handlePopupErrors(error);
@@ -170,7 +157,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     projectId,
     dossierId,
     isPrompted,
-    isMultipleRepromptWithReuse,
+    isMultipleRepromptWithReuse
   ) => {
     if (instanceId) {
       return { mid: instanceId, status: ObjectExecutionStatus.READY };
@@ -203,24 +190,11 @@ export default class EmbeddedDossierNotConnected extends React.Component {
    * @param {*} givenPromptsAnswers
    * @returns
    */
-  prepareAndHandlePromptAnswers = async (
-    instance,
-    dossierId,
-    projectId,
-    givenPromptsAnswers,
-  ) => {
+  prepareAndHandlePromptAnswers = async (instance, dossierId, projectId, givenPromptsAnswers) => {
     // Prepare the Dossier's instance to apply previous answers if necessary.
-    if (
-      givenPromptsAnswers.length > 0 &&
-      givenPromptsAnswers[0].answers.length > 0
-    ) {
+    if (givenPromptsAnswers.length > 0 && givenPromptsAnswers[0].answers.length > 0) {
       // Proceed with answering prompts if there are prompts to answer, including nested prompts.
-      instance = await preparePromptedDossier(
-        instance,
-        dossierId,
-        projectId,
-        givenPromptsAnswers,
-      );
+      instance = await preparePromptedDossier(instance, dossierId, projectId, givenPromptsAnswers);
     }
     return instance;
   };
@@ -241,12 +215,9 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     projectId,
     dossierOpenRequested,
     isImportedObjectPrompted,
-    isMultipleRepromptWithReuse,
+    isMultipleRepromptWithReuse
   ) => {
-    if (
-      (dossierOpenRequested && isImportedObjectPrompted) ||
-      isMultipleRepromptWithReuse
-    ) {
+    if ((dossierOpenRequested && isImportedObjectPrompted) || isMultipleRepromptWithReuse) {
       // Re-prompt the Dossier's instance to show the prompts dialog.
       const resp = await rePromptDossier(dossierId, instance.mid, projectId);
 
@@ -254,7 +225,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     }
   };
 
-  loadEmbeddedDossier = async (container) => {
+  loadEmbeddedDossier = async container => {
     const {
       mstrData,
       handleEmbeddedDossierLoad,
@@ -285,7 +256,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         projectId,
         dossierId,
         isPrompted,
-        isMultipleRepromptWithReuse,
+        isMultipleRepromptWithReuse
       );
 
       // Declared variables to determine whether importing a report/dossier is taking place and
@@ -314,7 +285,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         instance,
         dossierId,
         projectId,
-        givenPromptsAnswers,
+        givenPromptsAnswers
       );
 
       // Proceed with opening prompt dialog if applicable.
@@ -324,7 +295,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         projectId,
         dossierOpenRequested,
         isImportedObjectPrompted,
-        isMultipleRepromptWithReuse,
+        isMultipleRepromptWithReuse
       );
     } catch (error) {
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
@@ -336,7 +307,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       instanceId: instance.mid,
     };
 
-    const serverURL = envUrl.slice(0, envUrl.lastIndexOf("/api"));
+    const serverURL = envUrl.slice(0, envUrl.lastIndexOf('/api'));
     // delete last occurence of '/api' from the enviroment url
 
     const { CustomAuthenticationType, EventType } = microstrategy.dossier;
@@ -402,24 +373,20 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         this.msgRouter = MsgRouter;
         this.msgRouter.registerEventHandler(
           EventType.ON_VIZ_SELECTION_CHANGED,
-          this.onVizSelectionHandler,
+          this.onVizSelectionHandler
         );
         this.msgRouter.registerEventHandler(
           EventType.ON_PROMPT_ANSWERED,
-          this.promptsAnsweredHandler,
+          this.promptsAnsweredHandler
         );
         this.msgRouter.registerEventHandler(
           EventType.ON_DOSSIER_INSTANCE_ID_CHANGE,
-          (selectedInstanceId) => {
+          selectedInstanceId => {
             // Need to make sure that the instanceId is not null before calling the handler
-            selectedInstanceId &&
-              this.instanceIdChangeHandler(selectedInstanceId);
-          },
+            selectedInstanceId && this.instanceIdChangeHandler(selectedInstanceId);
+          }
         );
-        this.msgRouter.registerEventHandler(
-          EventType.ON_ERROR,
-          this.onEmbeddedError,
-        );
+        this.msgRouter.registerEventHandler(EventType.ON_ERROR, this.onEmbeddedError);
         this.msgRouter.registerEventHandler(EventType.ON_PAGE_LOADED, () => {
           // Just hide the embedded dossier when it is consumption page is loaded
           // and avoid any flickering. Only hide it when it is a reprompt.
@@ -448,11 +415,10 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         const chapterList = embeddedDossier.getChapterList();
 
         const selectedPageNodeKey = chapterList
-          .find((chapter) => chapter.nodeKey.includes(chapterKey))
-          .children.find((page) => page.nodeKey.includes(pageKey)).nodeKey;
+          .find(chapter => chapter.nodeKey.includes(chapterKey))
+          .children.find(page => page.nodeKey.includes(pageKey)).nodeKey;
 
-        const selectedPage =
-          embeddedDossier.getPageByNodeKey(selectedPageNodeKey);
+        const selectedPage = embeddedDossier.getPageByNodeKey(selectedPageNodeKey);
 
         await embeddedDossier.navigateToPage(selectedPage);
 
@@ -462,7 +428,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       handleEmbeddedDossierLoad();
     } else {
       console.warn(
-        "Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment",
+        'Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment'
       );
     }
   };
@@ -475,7 +441,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       if (this.retryCounter > VIZ_SELECTION_RETRY_LIMIT) {
         console.error(error);
       } else {
-        await new Promise((resolve) => {
+        await new Promise(resolve => {
           setTimeout(resolve, VIZ_SELECTION_RETRY_DELAY);
         });
         await this.restoreVizSelection(visualizationKey);
@@ -514,7 +480,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     // Combined the prompt answers.
     promptsAnswers.answers = embeddedDossierHelper.combineArraysByObjectKey(
       tempAnswers,
-      promptsAnswers.answers,
+      promptsAnswers.answers
     );
 
     this.dossierData.promptsAnswers = promptsAnswers;
@@ -535,7 +501,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       We need to calculate actual height, regarding the size of other elements:
       58px for header, 19px for header and title margin and 68px for buttons.
       */
-      <div ref={this.container} className="dossier-iframe" />
+      <div ref={this.container} className='dossier-iframe' />
     );
   }
 }
@@ -547,11 +513,7 @@ EmbeddedDossierNotConnected.propTypes = {
     dossierId: PropTypes.string,
     projectId: PropTypes.string,
     instanceId: PropTypes.string,
-    promptsAnswers: PropTypes.oneOfType([
-      PropTypes.array,
-      PropTypes.object,
-      PropTypes.any,
-    ]),
+    promptsAnswers: PropTypes.oneOfType([PropTypes.array, PropTypes.object, PropTypes.any]),
     selectedViz: PropTypes.string,
     visualizationInfo: PropTypes.shape({
       chapterKey: PropTypes.string,
@@ -570,7 +532,7 @@ EmbeddedDossierNotConnected.propTypes = {
       key: PropTypes.string,
       useDefault: PropTypes.bool,
       values: PropTypes.arrayOf(PropTypes.string),
-    }),
+    })
   ),
   dossierOpenRequested: PropTypes.bool,
   promptObjects: PropTypes.arrayOf(
@@ -578,7 +540,7 @@ EmbeddedDossierNotConnected.propTypes = {
       id: PropTypes.string,
       answers: PropTypes.arrayOf(PropTypes.shape({})),
       type: PropTypes.string,
-    }),
+    })
   ),
   isPrompted: PropTypes.bool,
   repromptsQueue: PropTypes.shape({
@@ -592,20 +554,20 @@ EmbeddedDossierNotConnected.propTypes = {
 
 EmbeddedDossierNotConnected.defaultProps = {
   mstrData: {
-    envUrl: "",
-    authToken: "",
-    dossierId: "default id",
-    projectId: "default id",
-    instanceId: "default id",
+    envUrl: '',
+    authToken: '',
+    dossierId: 'default id',
+    projectId: 'default id',
+    instanceId: 'default id',
     promptsAnswers: null,
-    selectedViz: "",
+    selectedViz: '',
   },
   handleSelection: () => {},
   isMultipleRepromptWithReuse: false,
   isReprompt: false,
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const {
     navigationTree,
     popupReducer,
@@ -628,17 +590,14 @@ const mapStateToProps = (state) => {
   const { supportForms, reusePromptAnswers } = officeReducer;
   const { answers } = answersReducer;
   const isReport =
-    popupState &&
-    popupState.mstrObjectType.name ===
-      mstrObjectEnum.mstrObjectType.report.name;
+    popupState && popupState.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const isEdit = chosenObjectName === DEFAULT_PROJECT_NAME;
   const editedObject = {
     ...popupHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege),
   };
   const { isReprompt } = popupStateReducer;
-  const isMultipleRepromptWithReuse =
-    reusePromptAnswers && repromptsQueueReducer.total > 1;
+  const isMultipleRepromptWithReuse = reusePromptAnswers && repromptsQueueReducer.total > 1;
 
   // Do not specify the instanceId if it is a multiple reprompt because, if it is specified,
   // the embedded dossier will not load the saved prompts and will use the default ones instead, the ones
@@ -646,14 +605,12 @@ const mapStateToProps = (state) => {
   const mstrData = {
     envUrl,
     authToken,
-    dossierId:
-      isEdit || isReprompt ? editedObject.chosenObjectId : chosenObjectId,
+    dossierId: isEdit || isReprompt ? editedObject.chosenObjectId : chosenObjectId,
     projectId: isEdit || isReprompt ? editedObject.projectId : chosenProjectId,
-    promptsAnswers:
-      isEdit || isReprompt ? editedObject.promptsAnswers : promptsAnswers,
+    promptsAnswers: isEdit || isReprompt ? editedObject.promptsAnswers : promptsAnswers,
     visualizationInfo: editedObject.visualizationInfo,
-    selectedViz: isEdit || isReprompt ? editedObject.selectedViz : "",
-    instanceId: !isMultipleRepromptWithReuse ? editedObject.instanceId : "",
+    selectedViz: isEdit || isReprompt ? editedObject.selectedViz : '',
+    instanceId: !isMultipleRepromptWithReuse ? editedObject.instanceId : '',
   };
   return {
     mstrData,
@@ -668,6 +625,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export const EmbeddedDossier = connect(mapStateToProps)(
-  EmbeddedDossierNotConnected,
-);
+export const EmbeddedDossier = connect(mapStateToProps)(EmbeddedDossierNotConnected);

@@ -1,9 +1,9 @@
-import { createStore } from "redux";
+import { createStore } from 'redux';
 
-import { configActions } from "../../../redux-reducer/config-reducer/config-actions";
-import { configReducer } from "../../../redux-reducer/config-reducer/config-reducer";
+import { configActions } from '../../../redux-reducer/config-reducer/config-actions';
+import { configReducer } from '../../../redux-reducer/config-reducer/config-reducer';
 
-describe("officeReducer", () => {
+describe('officeReducer', () => {
   const configStore = createStore(configReducer);
 
   beforeEach(() => {
@@ -13,7 +13,7 @@ describe("officeReducer", () => {
     });
   });
 
-  it("should set showHidden to false", () => {
+  it('should set showHidden to false', () => {
     // given
     const oldState = { showHidden: false };
     const action = configActions.setShowHidden(true);

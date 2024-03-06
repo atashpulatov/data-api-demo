@@ -1,14 +1,13 @@
 class VisualizationInfoService {
   constructor() {
     this.getVisualizationInfo = this.getVisualizationInfo.bind(this);
-    this.prepareVisualizationInfoObject =
-      this.prepareVisualizationInfoObject.bind(this);
+    this.prepareVisualizationInfoObject = this.prepareVisualizationInfoObject.bind(this);
     this.parseVisualizations = this.parseVisualizations.bind(this);
     this.parsePanelStacks = this.parsePanelStacks.bind(this);
     this.parseDossierPage = this.parseDossierPage.bind(this);
   }
 
-  init = (mstrObjectRestService) => {
+  init = mstrObjectRestService => {
     this.mstrObjectRestService = mstrObjectRestService;
   };
 
@@ -24,18 +23,12 @@ class VisualizationInfoService {
    * @param {Object} dossierInstance dossier instance id
    * @returns {Object} Contains info for visualization or null if visualization key is not found
    */
-  async getVisualizationInfo(
-    projectId,
-    objectId,
-    visualizationKey,
-    dossierInstance,
-  ) {
-    const dossierDefinition =
-      await this.mstrObjectRestService.getDossierInstanceDefinition(
-        projectId,
-        objectId,
-        dossierInstance,
-      );
+  async getVisualizationInfo(projectId, objectId, visualizationKey, dossierInstance) {
+    const dossierDefinition = await this.mstrObjectRestService.getDossierInstanceDefinition(
+      projectId,
+      objectId,
+      dossierInstance
+    );
 
     for (const chapter of dossierDefinition.chapters) {
       const chapterData = { name: chapter.name, key: chapter.key };
@@ -44,7 +37,7 @@ class VisualizationInfoService {
           page,
           visualizationKey,
           chapterData,
-          dossierDefinition.name,
+          dossierDefinition.name
         );
         if (vizInfo) {
           return vizInfo;
@@ -66,12 +59,7 @@ class VisualizationInfoService {
    * @returns {Object} visualization info object
    */
   // eslint-disable-next-line class-methods-use-this
-  prepareVisualizationInfoObject(
-    chapterData,
-    pageData,
-    visualizationKey,
-    dossierName,
-  ) {
+  prepareVisualizationInfoObject(chapterData, pageData, visualizationKey, dossierName) {
     return {
       chapterKey: chapterData.key,
       pageKey: pageData.key,
@@ -95,20 +83,14 @@ class VisualizationInfoService {
    * @param {String} dossierName name of parsed dossier
    * @returns {Object} Visualization info or null.
    */
-  parseVisualizations(
-    visualizations,
-    chapterData,
-    pageData,
-    visualizationKey,
-    dossierName,
-  ) {
+  parseVisualizations(visualizations, chapterData, pageData, visualizationKey, dossierName) {
     for (const visualization of visualizations) {
       if (visualization.key === visualizationKey) {
         return this.prepareVisualizationInfoObject(
           chapterData,
           pageData,
           visualizationKey,
-          dossierName,
+          dossierName
         );
       }
     }
@@ -127,13 +109,7 @@ class VisualizationInfoService {
    * @param {String} dossierName name of parsed dossier
    * @returns {Object} Visualization info or null.
    */
-  parsePanelStacks(
-    givenPanelStacks,
-    visualizationKey,
-    chapterData,
-    pageData,
-    dosierName,
-  ) {
+  parsePanelStacks(givenPanelStacks, visualizationKey, chapterData, pageData, dosierName) {
     for (const panelStack of givenPanelStacks) {
       for (const panel of panelStack.panels) {
         if (panel.visualizations) {
@@ -142,7 +118,7 @@ class VisualizationInfoService {
             chapterData,
             pageData,
             visualizationKey,
-            dosierName,
+            dosierName
           );
           if (vizInfo) {
             return vizInfo;
@@ -155,7 +131,7 @@ class VisualizationInfoService {
             visualizationKey,
             chapterData,
             pageData,
-            dosierName,
+            dosierName
           );
           if (vizInfo) {
             return vizInfo;
@@ -185,7 +161,7 @@ class VisualizationInfoService {
         chapterData,
         pageData,
         visualizationKey,
-        dossierName,
+        dossierName
       );
       if (vizInfo) {
         return vizInfo;
@@ -198,7 +174,7 @@ class VisualizationInfoService {
         visualizationKey,
         chapterData,
         pageData,
-        dossierName,
+        dossierName
       );
       if (vizInfo) {
         return vizInfo;

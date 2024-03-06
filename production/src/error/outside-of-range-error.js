@@ -1,4 +1,4 @@
-import { errorTypes } from "./constants";
+import { errorTypes } from './constants';
 
 export function OutsideOfRangeError(message) {
   this.message = message;
