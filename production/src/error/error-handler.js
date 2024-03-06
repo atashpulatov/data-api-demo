@@ -9,6 +9,7 @@ import {
   IMPORT_OPERATION,
   REFRESH_OPERATION,
 } from '../operation/operation-type-names';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import {
   errorMessageFactory,
@@ -51,6 +52,12 @@ class ErrorService {
       officeReducerHelper.displayPopup(popupData);
     } else {
       const { isDataOverviewOpen } = this.reduxStore?.getState()?.popupStateReducer || {};
+
+      // Only in Overview dialog, close reprompt dialog to show any error derived
+      // from interaction with Prompts' dialog.
+      if (isDataOverviewOpen) {
+        this.closePromptsDialogInOverview();
+      }
 
       // Mainly for Reprompt All workflow but covers others, close dialog if somehow remained open
       await this.closePopupIfOpen(!isDataOverviewOpen);
@@ -258,6 +265,37 @@ class ErrorService {
       this.popupController.resetDialogStates();
       // clear Reprompt task queue if in Reprompt All workflow
       isDialogOpenForReprompt && this.reduxStore.dispatch(clearRepromptTask());
+    }
+  };
+
+  /**
+   * Close/hide Reprompt dialog only in Overview window if an error has occured
+   * and needs to be displayed in Overview. Normally, it's triggered when reprompting dossier/report
+   * and user interacts with Prompts' dialog or cube is not published or dossier/report is not
+   * available in the environment as it was deleted at the time of reprompting.
+   */
+  closePromptsDialogInOverview = () => {
+    const { repromptsQueueReducer, popupStateReducer } = this.reduxStore.getState();
+
+    // Verify if there are any reprompts in queue to determine whether it's multiple re-prompt
+    // triggered from overview (popupType is set to repromptDossierDataOverview or
+    // repromptReportDataOverviewDataOverview).
+    if (repromptsQueueReducer?.total && popupStateReducer?.popupType) {
+      const { total } = repromptsQueueReducer;
+      const { popupType } = popupStateReducer;
+
+      // Show Overview table if there are any reprompts in queue if error occured
+      // while reprompting dossier/report in Overview window only.
+      if (
+        total > 0 &&
+        (popupType === PopupTypeEnum.repromptDossierDataOverview ||
+          popupType === PopupTypeEnum.repromptReportDataOverviewDataOverview)
+      ) {
+        this.reduxStore.dispatch(
+          popupStateActions.setPopupType(PopupTypeEnum.importedDataOverview)
+        );
+        this.popupController.runImportedDataOverviewPopup();
+      }
     }
   };
 }

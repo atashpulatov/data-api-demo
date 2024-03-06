@@ -80,7 +80,13 @@ class PopupActions {
         reportParams.bindId
       );
 
-      await this.prepareDossierForReprompt(repromptedDossier);
+      try {
+        await this.prepareDossierForReprompt(repromptedDossier);
+      } catch (error) {
+        // Report error in console and continue with reprompting and let operation handle the error
+        // so it is propagated to the user in SidePanel or/and Overview dialog if opened.
+        console.error('Error during preparing dossier for reprompt', error);
+      }
 
       dispatch({
         type: SET_REPORT_N_FILTERS,

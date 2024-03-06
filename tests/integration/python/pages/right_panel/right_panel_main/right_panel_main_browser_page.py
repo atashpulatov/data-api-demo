@@ -29,7 +29,7 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     ATTRIBUTE_NAME_CLIENT_HEIGHT = 'clientHeight'
     ATTRIBUTE_NAME_SCROLL_HEIGHT = 'scrollHeight'
 
-    REUSE_PROMPT_ANSWER_TOGGLE = '.reuse-prompt-answers-toggle button'
+    REUSE_PROMPT_ANSWER_TOGGLE = '.reuse-prompt-answers-toggle'
     REUSE_PROMPT_ANSWER_BACK = '.settings-icon span'
 
     IMPORTED_DATA_OVERVIEW = '.imported-data-overview'

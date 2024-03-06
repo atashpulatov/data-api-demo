@@ -9,6 +9,7 @@ import overviewHelper, { OverviewActionCommands } from '../../popup/overview/ove
 import { reduxStore } from '../../store';
 
 import { selectorProperties } from '../../attribute-selector/selector-properties';
+import { errorService } from '../../error/error-handler';
 import { PopupTypeEnum } from '../../home/popup-type-enum';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { popupController } from '../../popup/popup-controller';
@@ -44,7 +45,7 @@ describe('PopupController', () => {
     popupController.runPopupNavigation();
     // then
 
-    expect(runPopupSpy).toBeCalled();
+    expect(runPopupSpy).toHaveBeenCalled();
     expect(runPopupSpy).toBeCalledWith(popupType, size, size);
   });
 
@@ -57,7 +58,7 @@ describe('PopupController', () => {
     // when
     await popupController.runPopup(popupType, 80, 80);
     // then
-    expect(Office.context.ui.displayDialogAsync).toBeCalled();
+    expect(Office.context.ui.displayDialogAsync).toHaveBeenCalled();
   });
 
   it('should run edit popup with proper settings', () => {
@@ -71,7 +72,7 @@ describe('PopupController', () => {
     popupController.runEditFiltersPopup(reportParams);
 
     // then
-    expect(runPopupSpy).toBeCalled();
+    expect(runPopupSpy).toHaveBeenCalled();
     expect(runPopupSpy).toBeCalledWith(popupType, size, size, reportParams);
   });
 
@@ -86,7 +87,7 @@ describe('PopupController', () => {
     popupController.runEditDossierPopup(reportParams);
 
     // then
-    expect(runPopupSpy).toBeCalled();
+    expect(runPopupSpy).toHaveBeenCalled();
     expect(runPopupSpy).toBeCalledWith(popupType, size, size, reportParams);
   });
 
@@ -103,8 +104,8 @@ describe('PopupController', () => {
     popupController.runRepromptPopup(reportParams, false);
 
     // then
-    expect(dispatchSpy).toBeCalled();
-    expect(runPopupSpy).toBeCalled();
+    expect(dispatchSpy).toHaveBeenCalled();
+    expect(runPopupSpy).toHaveBeenCalled();
     expect(runPopupSpy).toBeCalledWith(popupType, size, size, reportParams);
   });
 
@@ -121,8 +122,8 @@ describe('PopupController', () => {
     popupController.runRepromptDossierPopup(reportParams);
 
     // then
-    expect(dispatchSpy).toBeCalled();
-    expect(runPopupSpy).toBeCalled();
+    expect(dispatchSpy).toHaveBeenCalled();
+    expect(runPopupSpy).toHaveBeenCalled();
     expect(runPopupSpy).toBeCalledWith(popupType, size, size, reportParams);
   });
 
@@ -136,7 +137,7 @@ describe('PopupController', () => {
     popupController.runImportedDataOverviewPopup();
 
     // then
-    expect(runPopupSpy).toBeCalled();
+    expect(runPopupSpy).toHaveBeenCalled();
     expect(runPopupSpy).toBeCalledWith(popupType, size, size, null, true);
   });
 
@@ -165,8 +166,8 @@ describe('PopupController', () => {
     await popupController.onMessageFromPopup(dialog, null, arg);
 
     // then
-    expect(dialog.close).toBeCalled();
-    expect(spyValidateAuthToken).toBeCalled();
+    expect(dialog.close).toHaveBeenCalled();
+    expect(spyValidateAuthToken).toHaveBeenCalled();
     expect(handleOkCommandSpy).toBeCalledTimes(1);
   });
 
@@ -200,8 +201,8 @@ describe('PopupController', () => {
     await popupController.onMessageFromPopup(dialog, null, arg);
 
     // then
-    expect(dialog.close).toBeCalled();
-    expect(spyValidateAuthToken).toBeCalled();
+    expect(dialog.close).toHaveBeenCalled();
+    expect(spyValidateAuthToken).toHaveBeenCalled();
     expect(handleOkCommandSpy).toBeCalledTimes(1);
   });
 
@@ -229,8 +230,8 @@ describe('PopupController', () => {
     await popupController.onMessageFromPopup(dialog, null, arg);
 
     // then
-    expect(dialog.close).toBeCalled();
-    expect(spyValidateAuthToken).toBeCalled();
+    expect(dialog.close).toHaveBeenCalled();
+    expect(spyValidateAuthToken).toHaveBeenCalled();
     expect(handleUpdateCommandSpy).toBeCalledTimes(1);
   });
 
@@ -258,8 +259,8 @@ describe('PopupController', () => {
     await popupController.onMessageFromPopup(dialog, null, arg);
 
     // then
-    expect(dialog.close).toBeCalled();
-    expect(spyValidateAuthToken).toBeCalled();
+    expect(dialog.close).toHaveBeenCalled();
+    expect(spyValidateAuthToken).toHaveBeenCalled();
     expect(handleUpdateCommandSpy).toBeCalledTimes(1);
   });
 
@@ -291,8 +292,8 @@ describe('PopupController', () => {
     await popupController.onMessageFromPopup(dialog, null, arg);
 
     // then
-    expect(dialog.close).toBeCalled();
-    expect(spyValidateAuthToken).toBeCalled();
+    expect(dialog.close).toHaveBeenCalled();
+    expect(spyValidateAuthToken).toHaveBeenCalled();
     expect(handleUpdateCommandSpy).toBeCalledTimes(1);
   });
 
@@ -328,10 +329,10 @@ describe('PopupController', () => {
     await popupController.onMessageFromPopup(dialog, null, arg);
 
     // then
-    expect(handleUpdateCommandSpy).toBeCalled();
-    expect(dialog.close).toBeCalled();
-    expect(spyValidateAuthToken).toBeCalled();
-    expect(dispatchSpy).toBeCalled();
+    expect(handleUpdateCommandSpy).toHaveBeenCalled();
+    expect(dialog.close).toHaveBeenCalled();
+    expect(spyValidateAuthToken).toHaveBeenCalled();
+    expect(dispatchSpy).toHaveBeenCalled();
   });
 
   it('should handle cancel command from popup for re-prompt and call overview popup', async () => {
@@ -369,11 +370,11 @@ describe('PopupController', () => {
     await popupController.onMessageFromPopup(dialog, null, arg);
 
     // then
-    expect(handleUpdateCommandSpy).toBeCalled();
-    expect(dialog.close).toBeCalled();
-    expect(spyValidateAuthToken).toBeCalled();
-    expect(dispatchSpy).toBeCalled();
-    expect(resetDialogStatesSpy).toBeCalled();
+    expect(handleUpdateCommandSpy).toHaveBeenCalled();
+    expect(dialog.close).toHaveBeenCalled();
+    expect(spyValidateAuthToken).toHaveBeenCalled();
+    expect(dispatchSpy).toHaveBeenCalled();
+    expect(resetDialogStatesSpy).toHaveBeenCalled();
   });
 
   it('should dispatch duplicateRequested for commandOnUpdate - duplication with edit for report', async () => {
@@ -406,7 +407,7 @@ describe('PopupController', () => {
     await popupController.onMessageFromPopup(dialog, reportParams, arg);
 
     // then
-    expect(spyValidateAuthToken).toBeCalled();
+    expect(spyValidateAuthToken).toHaveBeenCalled();
 
     expect(operationActions.duplicateRequested).toBeCalledTimes(1);
     expect(operationActions.duplicateRequested).toBeCalledWith(reportParams.object, actionObject);
@@ -442,7 +443,7 @@ describe('PopupController', () => {
     await popupController.onMessageFromPopup(dialog, reportParams, arg);
 
     // then
-    expect(spyValidateAuthToken).toBeCalled();
+    expect(spyValidateAuthToken).toHaveBeenCalled();
 
     expect(operationActions.duplicateRequested).toBeCalledTimes(1);
     expect(operationActions.duplicateRequested).toBeCalledWith(reportParams.object, actionObject);
@@ -507,5 +508,105 @@ describe('PopupController', () => {
       isDialogLoaded: true,
       type: 'OFFICE_SET_IS_DIALOG_LOADED',
     });
+  });
+
+  it('should dispatch duplicateRequested for commandCancel - duplication with edit for dossier visualization', async () => {
+    // given
+    const originalObject = {
+      chosenObjectName: 'name 1',
+      chosenObject: 'id 1',
+      chosenProject: 'projectId',
+    };
+    const actionObject = {
+      command: selectorProperties.commandCancel,
+      chosenObject: 'id 2',
+      chosenObjectName: 'name 2',
+      chosenProject: 'projectId',
+    };
+    const reportParams = {
+      duplicateMode: true,
+      object: originalObject,
+    };
+    const arg = { message: JSON.stringify(actionObject) };
+
+    const handleUpdateCommandSpy = jest
+      .spyOn(popupController, 'getIsMultipleRepromptQueueEmpty')
+      .mockImplementation(() => true);
+    const spyValidateAuthToken = jest
+      .spyOn(authenticationHelper, 'validateAuthToken')
+      .mockImplementation(() => {});
+    const manageDialogTypeSpy = jest
+      .spyOn(popupController, 'manageDialogType')
+      .mockImplementation(() => {});
+    const runImportedDataOverviewPopupSpy = jest
+      .spyOn(popupController, 'runImportedDataOverviewPopup')
+      .mockImplementation(() => {});
+
+    jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementationOnce(() => {});
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+    jest.spyOn(reduxStore, 'getState').mockReturnValue({
+      popupStateReducer: {
+        popupType: PopupTypeEnum.repromptDossierDataOverview,
+        isDataOverviewOpen: true,
+      },
+    });
+
+    // when
+    await popupController.onMessageFromPopup(dialog, reportParams, arg);
+
+    // then
+    expect(handleUpdateCommandSpy).toHaveBeenCalled();
+    expect(spyValidateAuthToken).toHaveBeenCalled();
+    expect(manageDialogTypeSpy).toHaveBeenCalled();
+    expect(runImportedDataOverviewPopupSpy).toHaveBeenCalled();
+  });
+
+  it('should dispatch duplicateRequested for commandError - duplication with edit for dossier visualization', async () => {
+    // given
+    const originalObject = {
+      chosenObjectName: 'name 1',
+      chosenObject: 'id 1',
+      chosenProject: 'projectId',
+    };
+    const actionObject = {
+      command: selectorProperties.commandError,
+      chosenObject: 'id 2',
+      chosenObjectName: 'name 2',
+      chosenProject: 'projectId',
+    };
+    const reportParams = {
+      duplicateMode: true,
+      object: originalObject,
+    };
+    const arg = { message: JSON.stringify(actionObject) };
+
+    const handleUpdateCommandSpy = jest
+      .spyOn(popupController, 'getIsMultipleRepromptQueueEmpty')
+      .mockImplementation(() => true);
+    const spyValidateAuthToken = jest
+      .spyOn(authenticationHelper, 'validateAuthToken')
+      .mockImplementation(() => {});
+    const handleErrorSpy = jest.spyOn(errorService, 'handleError').mockImplementation(() => {});
+    const runImportedDataOverviewPopupSpy = jest
+      .spyOn(popupController, 'runImportedDataOverviewPopup')
+      .mockImplementation(() => {});
+
+    jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementationOnce(() => {});
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+    jest.spyOn(reduxStore, 'getState').mockReturnValue({
+      popupStateReducer: {
+        popupType: PopupTypeEnum.repromptDossierDataOverview,
+        isDataOverviewOpen: true,
+      },
+    });
+
+    // when
+    await popupController.onMessageFromPopup(dialog, reportParams, arg);
+
+    // then
+    expect(handleUpdateCommandSpy).toHaveBeenCalled();
+    expect(spyValidateAuthToken).toHaveBeenCalled();
+    expect(handleErrorSpy).toHaveBeenCalled();
+    expect(runImportedDataOverviewPopupSpy).toHaveBeenCalled();
   });
 });

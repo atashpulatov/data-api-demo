@@ -45,7 +45,7 @@ export const EmbeddedLibraryNotConnected: React.FC<EmbeddedLibraryTypes> = props
    * Retrives the error type (based on title).
    * If error type is not a notification - handles it by closing the window
    *
-   * @param {Object} error - payload throwed by embedded.api after the error occured
+   * @param {Object} error - payload thrown by embedded.api after the error occured
    */
   const onEmbeddedError = (error: any): void => {
     const { title } = error;
