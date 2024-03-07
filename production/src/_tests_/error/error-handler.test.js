@@ -1,7 +1,7 @@
-import { errorService } from '../../error/error-handler';
-import { reduxStore } from '../../store';
-import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { notificationService } from '../../notification-v2/notification-service';
+import officeReducerHelper from '../../office/store/office-reducer-helper';
+
+import { errorService } from '../../error/error-handler';
 
 jest.mock('../../office/store/office-reducer-helper');
 jest.mock('../../store');
@@ -22,10 +22,12 @@ describe('ErrorService', () => {
     const errorMessageFactoryMock = jest.fn().mockReturnValue(jest.fn());
     errorService.getErrorType = jest.fn().mockReturnValue('OVERLAPPING_TABLES_ERR');
     errorService.getErrorDetails = jest.fn().mockReturnValue('error details');
-    errorService.reduxStore = { getState: jest.fn().mockReturnValue({
-      popupStateReducer: { isDataOverviewOpen: true },
-      officeReducer: { isDialogOpen: false },
-    }) };
+    errorService.reduxStore = {
+      getState: jest.fn().mockReturnValue({
+        popupStateReducer: { isDataOverviewOpen: true },
+        officeReducer: { isDialogOpen: false },
+      }),
+    };
 
     officeReducerHelper.displayPopup = jest.fn();
     jest.spyOn(errorService, 'handleError').mockReturnValue(jest.fn());
@@ -52,10 +54,12 @@ describe('ErrorService', () => {
     const errorMessageFactoryMock = jest.fn().mockReturnValue(jest.fn());
     errorService.getErrorType = jest.fn().mockReturnValue('NON_OVERLAPPING_TABLES_ERR');
     errorService.getErrorDetails = jest.fn().mockReturnValue('error details');
-    errorService.reduxStore = { getState: jest.fn().mockReturnValue({
-      popupStateReducer: { isDataOverviewOpen: false },
-      officeReducer: { isDialogOpen: false },
-    }) };
+    errorService.reduxStore = {
+      getState: jest.fn().mockReturnValue({
+        popupStateReducer: { isDataOverviewOpen: false },
+        officeReducer: { isDialogOpen: false },
+      }),
+    };
     errorService.closePromptsDialogInOverview = jest.fn();
     errorService.closePopupIfOpen = jest.fn().mockResolvedValue();
     jest.spyOn(notificationService, 'showObjectWarning').mockReturnValue(jest.fn());
