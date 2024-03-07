@@ -1,8 +1,9 @@
-import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
+import { officeApiCrosstabHelper } from '../../../office/api/office-api-crosstab-helper';
 import { officeApiHelper } from '../../../office/api/office-api-helper';
 import { officeRemoveHelper } from '../../../office/remove/office-remove-helper';
+
 import stepRemoveObjectTable from '../../../office/remove/step-remove-object-table';
-import { officeApiCrosstabHelper } from '../../../office/api/office-api-crosstab-helper';
+import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
 
 describe('StepRemoveObjectTable', () => {
   afterEach(() => {
@@ -13,7 +14,9 @@ describe('StepRemoveObjectTable', () => {
     // given
     jest.spyOn(console, 'error');
 
-    jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => { throw new Error('errorTest'); });
+    jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => {
+      throw new Error('errorTest');
+    });
 
     jest.spyOn(operationStepDispatcher, 'completeRemoveObjectTable').mockImplementation();
 
@@ -32,30 +35,24 @@ describe('StepRemoveObjectTable', () => {
   });
 
   it.each`
-  expectedIsCrosstab | isCrosstabParam | crosstabHeaderDimensionsParam
-
-  ${true}            | ${true}         | ${{}}
-  ${false}           | ${false}        | ${{}}
-  ${false}           | ${undefined}    | ${{}}
-
-  ${true}            | ${true}         | ${{ crosstabHeaderDimensionsParam: 42 }}
-  ${false}           | ${false}        | ${{ crosstabHeaderDimensionsParam: 42 }}
-  ${false}           | ${undefined}    | ${{ crosstabHeaderDimensionsParam: 42 }}
-
-  `('removeObjectTable should work as expected',
-    async ({
-      expectedIsCrosstab,
-      isCrosstabParam,
-      crosstabHeaderDimensionsParam,
-    }) => {
-    // given
+    expectedIsCrosstab | isCrosstabParam | crosstabHeaderDimensionsParam
+    ${true}            | ${true}         | ${{}}
+    ${false}           | ${false}        | ${{}}
+    ${false}           | ${undefined}    | ${{}}
+    ${true}            | ${true}         | ${{ crosstabHeaderDimensionsParam: 42 }}
+    ${false}           | ${false}        | ${{ crosstabHeaderDimensionsParam: 42 }}
+    ${false}           | ${undefined}    | ${{ crosstabHeaderDimensionsParam: 42 }}
+  `(
+    'removeObjectTable should work as expected',
+    async ({ expectedIsCrosstab, isCrosstabParam, crosstabHeaderDimensionsParam }) => {
+      // given
       const getItemMock = jest.fn().mockReturnValue({ sth: 42 });
 
       const excelContextMock = {
         workbook: {
           tables: {
             getItem: getItemMock,
-          }
+          },
         },
       };
 
@@ -63,7 +60,8 @@ describe('StepRemoveObjectTable', () => {
 
       jest.spyOn(officeRemoveHelper, 'checkIfObjectExist').mockReturnValue(true);
 
-      jest.spyOn(officeApiCrosstabHelper, 'getCrosstabHeadersSafely')
+      jest
+        .spyOn(officeApiCrosstabHelper, 'getCrosstabHeadersSafely')
         .mockReturnValue({ validColumnsY: 2, validRowsX: 'validRowsXTest' });
 
       const expectedCrosstabHeaderDimensions = {
@@ -97,7 +95,7 @@ describe('StepRemoveObjectTable', () => {
       expect(officeApiCrosstabHelper.getCrosstabHeadersSafely).toBeCalledWith(
         crosstabHeaderDimensionsParam,
         { sth: 42 },
-        excelContextMock,
+        excelContextMock
       );
 
       expect(officeRemoveHelper.removeExcelTable).toBeCalledTimes(1);
@@ -105,10 +103,13 @@ describe('StepRemoveObjectTable', () => {
         { sth: 42 },
         excelContextMock,
         expectedIsCrosstab,
-        expectedCrosstabHeaderDimensions,
+        expectedCrosstabHeaderDimensions
       );
 
       expect(operationStepDispatcher.completeRemoveObjectTable).toBeCalledTimes(1);
-      expect(operationStepDispatcher.completeRemoveObjectTable).toBeCalledWith('objectWorkingIdTest');
-    });
+      expect(operationStepDispatcher.completeRemoveObjectTable).toBeCalledWith(
+        'objectWorkingIdTest'
+      );
+    }
+  );
 });

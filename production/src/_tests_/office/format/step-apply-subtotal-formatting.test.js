@@ -1,6 +1,6 @@
-import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
 import officeFormatSubtotals from '../../../office/format/office-format-subtotals';
 import stepApplySubtotalFormatting from '../../../office/format/step-apply-subtotal-formatting';
+import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
 
 describe('StepApplySubtotalFormatting', () => {
   afterEach(() => {
@@ -8,15 +8,14 @@ describe('StepApplySubtotalFormatting', () => {
   });
 
   it.each`
-  subtotalsAddressesLength
-  
-  ${undefined}
-  ${0}
-  
-  `('applySubtotalFormattingRedux should work as expected - subtotalsAddresses.length is 0 or undefined',
+    subtotalsAddressesLength
+    ${undefined}
+    ${0}
+  `(
+    'applySubtotalFormattingRedux should work as expected - subtotalsAddresses.length is 0 or undefined',
     async ({ subtotalsAddressesLength }) => {
-    // given
-      const objectData = { };
+      // given
+      const objectData = {};
 
       const operationData = {
         objectWorkingId: 'objectWorkingIdTest',
@@ -24,10 +23,10 @@ describe('StepApplySubtotalFormatting', () => {
           mstrTable: {
             subtotalsInfo: {
               subtotalsAddresses: {
-                length: subtotalsAddressesLength
-              }
-            }
-          }
+                length: subtotalsAddressesLength,
+              },
+            },
+          },
         },
       };
 
@@ -43,11 +42,12 @@ describe('StepApplySubtotalFormatting', () => {
 
       expect(operationStepDispatcher.completeFormatSubtotals).toBeCalledTimes(1);
       expect(operationStepDispatcher.completeFormatSubtotals).toBeCalledWith('objectWorkingIdTest');
-    });
+    }
+  );
 
   it('applySubtotalFormattingRedux should work as expected - subtotalsAddresses.length is defined', async () => {
     // given
-    const objectData = { };
+    const objectData = {};
 
     const operationData = {
       objectWorkingId: 'objectWorkingIdTest',
@@ -56,10 +56,10 @@ describe('StepApplySubtotalFormatting', () => {
         mstrTable: {
           subtotalsInfo: {
             subtotalsAddresses: {
-              length: 42
-            }
-          }
-        }
+              length: 42,
+            },
+          },
+        },
       },
       officeTable: 'officeTableTest',
     };
@@ -79,9 +79,9 @@ describe('StepApplySubtotalFormatting', () => {
       {
         subtotalsInfo: {
           subtotalsAddresses: {
-            length: 42
-          }
-        }
+            length: 42,
+          },
+        },
       }
     );
 

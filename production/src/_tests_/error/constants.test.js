@@ -1,19 +1,17 @@
 import {
+  errorMessages,
+  globalNotificationWarningAndErrorStrings,
   handleBadRequestError,
   handleEnvNotFoundError,
   handleUnauthorizedError,
-  errorMessages,
   handleWrongRange,
-  globalNotificationWarningAndErrorStrings
 } from '../../error/constants';
 
 describe('Constants', () => {
   describe('handleWrongRange', () => {
     it('should return errorMessages.UNKNOWN_ERROR ', () => {
       // given
-      const error = {
-
-      };
+      const error = {};
       // when
       const result = handleWrongRange(error);
       // then
@@ -43,11 +41,14 @@ describe('Constants', () => {
   describe('handleBadRequestError', () => {
     it('should return errorMessages.MISSING_ELEMENT_OBJECT_MESSAGE ', () => {
       // given
-      const response = { status: 400,
+      const response = {
+        status: 400,
         body: {
           code: 'ERR006',
-          message: 'Failed to find the metric 36A871D6408731EA1A8B4BA8906D8EAC in the report or cube.'
-        } };
+          message:
+            'Failed to find the metric 36A871D6408731EA1A8B4BA8906D8EAC in the report or cube.',
+        },
+      };
       const error = { response };
       // when
       const result = handleBadRequestError(error);
@@ -67,7 +68,10 @@ describe('Constants', () => {
   describe('handleUnauthorizedError', () => {
     it('should return errorMessages.errorMessages.WRONG_CREDENTIALS due to error code "ERR003" and iServerCode "-2147216959"', () => {
       // given
-      const response = { status: 400, body: { code: 'ERR003', iServerCode: -2147216959 } };
+      const response = {
+        status: 400,
+        body: { code: 'ERR003', iServerCode: -2147216959 },
+      };
       const error = { response };
       // when
       const result = handleUnauthorizedError(error);
@@ -118,10 +122,12 @@ describe('Constants', () => {
       const expectedNotificationWarningsAndErrors = [
         'connection_error',
         'mstr_session_expired',
-        'global_warning'
+        'global_warning',
       ];
       // since the arrays should contain only strings, we can sort them beforehand to compare them
-      expect(globalNotificationWarningAndErrorStrings.sort()).toEqual(expectedNotificationWarningsAndErrors.sort());
+      expect(globalNotificationWarningAndErrorStrings.sort()).toEqual(
+        expectedNotificationWarningsAndErrors.sort()
+      );
     });
   });
 });

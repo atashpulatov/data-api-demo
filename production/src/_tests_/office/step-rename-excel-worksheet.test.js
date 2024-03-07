@@ -1,6 +1,7 @@
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
-import operationErrorHandler from '../../operation/operation-error-handler';
+
 import stepRenameExcelWorksheet from '../../office/step-rename-excel-worksheet';
+import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 describe('StepRenameExcelWorksheet', () => {
@@ -10,7 +11,7 @@ describe('StepRenameExcelWorksheet', () => {
 
   it('renameExcelWorksheet should handle exception', async () => {
     // given
-    const operationData = { shouldRenameExcelWorksheet: true, };
+    const operationData = { shouldRenameExcelWorksheet: true };
 
     jest.spyOn(console, 'error');
 
@@ -28,7 +29,11 @@ describe('StepRenameExcelWorksheet', () => {
     expect(console.error).toBeCalledWith(new Error('errorTest'));
 
     expect(operationErrorHandler.handleOperationError).toBeCalledTimes(1);
-    expect(operationErrorHandler.handleOperationError).toBeCalledWith({}, operationData, new Error('errorTest'));
+    expect(operationErrorHandler.handleOperationError).toBeCalledWith(
+      {},
+      operationData,
+      new Error('errorTest')
+    );
   });
 
   it('renameExcelWorksheet should execute renameExistingWorksheet', async () => {
@@ -47,11 +52,13 @@ describe('StepRenameExcelWorksheet', () => {
       ...objectData,
       worksheet: {
         id: '1',
-        name: 'test'
-      }
+        name: 'test',
+      },
     };
 
-    jest.spyOn(officeApiWorksheetHelper, 'renameExistingWorksheet').mockImplementation(() => 'test');
+    jest
+      .spyOn(officeApiWorksheetHelper, 'renameExistingWorksheet')
+      .mockImplementation(() => 'test');
     jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
 
     // when

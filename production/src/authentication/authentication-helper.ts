@@ -1,4 +1,5 @@
 import request from 'superagent';
+
 import { notificationService } from '../notification-v2/notification-service';
 
 class AuthenticationHelper {
@@ -10,14 +11,19 @@ class AuthenticationHelper {
 
   errorService: any;
 
-  init = (reduxStore: any, sessionActions: any, authenticationService: any, errorService: any) => {
+  init = (
+    reduxStore: any,
+    sessionActions: any,
+    authenticationService: any,
+    errorService: any
+  ): void => {
     this.reduxStore = reduxStore;
     this.sessionActions = sessionActions;
     this.authenticationService = authenticationService;
     this.errorService = errorService;
   };
 
-  loginUser = async (err: any, values: any) => {
+  loginUser = async (err: any, values: any): Promise<void> => {
     if (err) {
       console.log(err);
       return;
@@ -25,8 +31,12 @@ class AuthenticationHelper {
     try {
       this.sessionActions.enableLoading();
       this.sessionActions.saveLoginValues(values);
-      const authToken = await this.authenticationService
-        .authenticate(values.username, values.password, values.envUrl, values.loginMode || 1);
+      const authToken = await this.authenticationService.authenticate(
+        values.username,
+        values.password,
+        values.envUrl,
+        values.loginMode || 1
+      );
       this.sessionActions.logIn(authToken);
     } catch (error) {
       console.log(error);
@@ -36,7 +46,7 @@ class AuthenticationHelper {
     }
   };
 
-  validateAuthToken = () => {
+  validateAuthToken = (): Promise<void> => {
     const reduxStoreState = this.reduxStore.getState();
     const { authToken } = reduxStoreState.sessionReducer;
     const { envUrl } = reduxStoreState.sessionReducer;
@@ -49,7 +59,7 @@ class AuthenticationHelper {
    *
    * @param {Object} checkInterval id of setInterval required to clear it on connection restored
    */
-  doesConnectionExist = (checkInterval: any) => {
+  doesConnectionExist = (checkInterval: any): void => {
     const reduxStoreState = this.reduxStore.getState();
     const { envUrl } = reduxStoreState.sessionReducer;
     const changedUrl = envUrl.slice(0, -3);
@@ -62,7 +72,7 @@ class AuthenticationHelper {
         notificationService.connectionRestored();
         clearInterval(checkInterval);
       })
-      .catch((error) => {
+      .catch(error => {
         // if we get any response status it means that we are connected
         if (error.status) {
           notificationService.connectionRestored();
@@ -76,7 +86,7 @@ class AuthenticationHelper {
    *
    * @return {Object} Object containing username and envUrl (environment URL)
    */
-  getCurrentMstrContext = () => {
+  getCurrentMstrContext = (): { envUrl: string; username: string } => {
     const { envUrl, username } = this.reduxStore.getState().sessionReducer;
     return { envUrl, username };
   };
@@ -86,7 +96,7 @@ class AuthenticationHelper {
    *
    * @return {String} Text with mstr user fullname
    */
-  getCurrentMstrUserFullName = () => {
+  getCurrentMstrUserFullName = (): string => {
     const { userFullName } = this.reduxStore.getState().sessionReducer;
     return userFullName;
   };

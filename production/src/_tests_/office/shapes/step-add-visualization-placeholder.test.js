@@ -1,5 +1,6 @@
-import stepAddVisualizationPlaceholder from '../../../office/shapes/step-add-visualization-placeholder';
 import { officeApiHelper } from '../../../office/api/office-api-helper';
+
+import stepAddVisualizationPlaceholder from '../../../office/shapes/step-add-visualization-placeholder';
 import operationErrorHandler from '../../../operation/operation-error-handler';
 import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
 
@@ -10,7 +11,7 @@ describe('StepRemoveVisualizationImage', () => {
       top: 45,
       height: 480,
       width: 960,
-      worksheetId: 'worksheetIdTest'
+      worksheetId: 'worksheetIdTest',
     },
     objectId: 'objectIdTest',
     projectId: 'projectIdTest',
@@ -24,13 +25,13 @@ describe('StepRemoveVisualizationImage', () => {
       visualizationKey: 'visualizationKeyTest',
       vizDimensions: {
         width: 123,
-        height: 342
-      }
+        height: 342,
+      },
     },
     displayAttrFormNames: 'displayAttrFormNamesTest',
     objectWorkingId: 'objectWorkingIdTest',
     importType: 'image',
-    bindId: '{1234-5678-9012-3456}'
+    bindId: '{1234-5678-9012-3456}',
   };
 
   const mockFn = jest.fn();
@@ -40,12 +41,14 @@ describe('StepRemoveVisualizationImage', () => {
   const excelContextMock = {
     workbook: {
       worksheets: {
-        getItem: jest.fn().mockImplementation((worksheetId) => ({
+        getItem: jest.fn().mockImplementation(_worksheetId => ({
           shapes: {
-            addGeometricShape: jest.fn().mockImplementation((geometricShapeType) => { throw error; })
+            addGeometricShape: jest.fn().mockImplementation(_geometricShapeType => {
+              throw error;
+            }),
           },
         })),
-      }
+      },
     },
     sync: mockFn,
   };
@@ -80,7 +83,10 @@ describe('StepRemoveVisualizationImage', () => {
     jest.spyOn(operationStepDispatcher, 'completeRemoveVisualizationImage').mockImplementation();
 
     // when
-    await stepAddVisualizationPlaceholder.addVisualizationPlaceholder(objectDataMock, operationDataMock);
+    await stepAddVisualizationPlaceholder.addVisualizationPlaceholder(
+      objectDataMock,
+      operationDataMock
+    );
 
     // then
     expect(officeApiHelper.getExcelContext).toHaveBeenCalledTimes(1);

@@ -1,41 +1,49 @@
 /* eslint-disable object-curly-newline, indent */
-import { IMPORT_OPERATION, DUPLICATE_OPERATION } from '../../operation/operation-type-names';
+import { DUPLICATE_OPERATION, IMPORT_OPERATION } from '../../operation/operation-type-names';
+import {
+  REMOVE_OBJECT,
+  RESTORE_ALL_OBJECTS,
+  UPDATE_OBJECT,
+} from '../../redux-reducer/object-reducer/object-actions';
 import { objectReducer } from '../../redux-reducer/object-reducer/object-reducer';
-import { UPDATE_OBJECT, REMOVE_OBJECT, RESTORE_ALL_OBJECTS } from '../../redux-reducer/object-reducer/object-actions';
 
 describe('objectReducer', () => {
   const initialObject = {
     objectWorkingId: 'someStringId123',
     envUrl: 'someURL',
     objectId: 'someId',
-    importType: 'table'
+    importType: 'table',
   };
   const initialState = {
     empty: { objects: [] },
     singleObject: {
-      objects: [{
-        objectWorkingId: 'someOtherString234',
-        envUrl: 'someURL24',
-        objectId: 'someDiffId',
-      }]
+      objects: [
+        {
+          objectWorkingId: 'someOtherString234',
+          envUrl: 'someURL24',
+          objectId: 'someDiffId',
+        },
+      ],
     },
     multipleObjects: {
-      objects: [{
-        objectWorkingId: 'someOtherString2',
-        envUrl: 'someURL24',
-        objectId: 'someDiffId',
-      },
-      {
-        objectWorkingId: 'someOtherString23',
-        envUrl: 'someURL24',
-        objectId: 'someDiffId',
-      },
-      {
-        objectWorkingId: 'someOtherString234',
-        envUrl: 'someURL24',
-        objectId: 'someDiffId',
-      }]
-    }
+      objects: [
+        {
+          objectWorkingId: 'someOtherString2',
+          envUrl: 'someURL24',
+          objectId: 'someDiffId',
+        },
+        {
+          objectWorkingId: 'someOtherString23',
+          envUrl: 'someURL24',
+          objectId: 'someDiffId',
+        },
+        {
+          objectWorkingId: 'someOtherString234',
+          envUrl: 'someURL24',
+          objectId: 'someDiffId',
+        },
+      ],
+    },
   };
 
   it('should have default state if provided undefined', () => {
@@ -65,7 +73,7 @@ describe('objectReducer', () => {
       // given
       const action = {
         type: IMPORT_OPERATION,
-        payload: { object: initialObject, }
+        payload: { object: initialObject },
       };
 
       // when
@@ -83,14 +91,16 @@ describe('objectReducer', () => {
       // given
       const action = {
         type: actionType,
-        payload: { object: initialObject, }
+        payload: { object: initialObject },
       };
 
       // when
       const resultState = objectReducer(initialState.singleObject, action);
 
       // then
-      expect(resultState).toEqual({ objects: [initialObject, ...initialState.singleObject.objects] });
+      expect(resultState).toEqual({
+        objects: [initialObject, ...initialState.singleObject.objects],
+      });
     });
   });
 
@@ -122,7 +132,10 @@ describe('objectReducer', () => {
       const resultState = objectReducer(initialState.singleObject, action);
 
       // then
-      expect(resultState.objects[0]).toEqual({ ...initialState.singleObject.objects[0], objectName });
+      expect(resultState.objects[0]).toEqual({
+        ...initialState.singleObject.objects[0],
+        objectName,
+      });
     });
 
     it('should add two properties to object on single element array', () => {
@@ -131,14 +144,22 @@ describe('objectReducer', () => {
       const someProp = 'someProp';
       const action = {
         type: UPDATE_OBJECT,
-        payload: { objectWorkingId: 'someOtherString234', objectName, someProp },
+        payload: {
+          objectWorkingId: 'someOtherString234',
+          objectName,
+          someProp,
+        },
       };
 
       // when
       const resultState = objectReducer(initialState.singleObject, action);
 
       // then
-      expect(resultState.objects[0]).toEqual({ ...initialState.singleObject.objects[0], objectName, someProp });
+      expect(resultState.objects[0]).toEqual({
+        ...initialState.singleObject.objects[0],
+        objectName,
+        someProp,
+      });
     });
 
     it('should add one property to object on multi element array', () => {
@@ -153,7 +174,10 @@ describe('objectReducer', () => {
       const resultState = objectReducer(initialState.multipleObjects, action);
 
       // then
-      expect(resultState.objects[1]).toEqual({ ...initialState.multipleObjects.objects[1], objectName });
+      expect(resultState.objects[1]).toEqual({
+        ...initialState.multipleObjects.objects[1],
+        objectName,
+      });
     });
 
     it('should add two properties to object on multi element array', () => {
@@ -169,7 +193,11 @@ describe('objectReducer', () => {
       const resultState = objectReducer(initialState.multipleObjects, action);
 
       // then
-      expect(resultState.objects[1]).toEqual({ ...initialState.multipleObjects.objects[1], objectName, someProp });
+      expect(resultState.objects[1]).toEqual({
+        ...initialState.multipleObjects.objects[1],
+        objectName,
+        someProp,
+      });
     });
   });
 

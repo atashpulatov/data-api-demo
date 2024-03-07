@@ -1,15 +1,16 @@
-/* eslint-disable jest/no-disabled-tests */
-import { errorService } from '../../error/error-handler';
-import { reduxStore } from '../../store';
 import { notificationService } from '../../notification-v2/notification-service';
-import { OutsideOfRangeError } from '../../error/outside-of-range-error';
 import { sessionHelper } from '../../storage/session-helper';
-import { errorTypes } from '../../error/constants';
-import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-import * as Constants from '../../error/constants';
-import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
+
+import { reduxStore } from '../../store';
+
+import { errorService } from '../../error/error-handler';
+import { OutsideOfRangeError } from '../../error/outside-of-range-error';
 import { PopupTypeEnum } from '../../home/popup-type-enum';
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { popupController } from '../../popup/popup-controller';
+import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
+import { errorTypes } from '../../error/constants';
+import * as Constants from '../../error/constants';
 
 jest.mock('../../storage/session-helper');
 jest.useFakeTimers();
@@ -17,7 +18,13 @@ jest.useFakeTimers();
 // TODO fix after adding object notifications
 describe('ErrorService', () => {
   beforeAll(() => {
-    errorService.init(sessionActions, sessionHelper, notificationService, popupController, reduxStore);
+    errorService.init(
+      sessionActions,
+      sessionHelper,
+      notificationService,
+      popupController,
+      reduxStore
+    );
     errorService.displayErrorNotification = jest.fn();
     console.warn = jest.fn();
   });
@@ -47,7 +54,7 @@ describe('ErrorService', () => {
 
     it('should return CONNECTION_BROKEN_ERR type due to response 404 code', () => {
       // given
-      const error = { message: 'Possible causes: the network is offline,', };
+      const error = { message: 'Possible causes: the network is offline,' };
       // when
       const resultType = errorService.getRestErrorType(error);
       // then
@@ -56,7 +63,7 @@ describe('ErrorService', () => {
 
     it('should return BAD_REQUEST_ERR type due to response 400 code', () => {
       // given
-      const error = { response: { status: 400, }, };
+      const error = { response: { status: 400 } };
       // when
       const resultType = errorService.getRestErrorType(error);
       // then
@@ -181,7 +188,7 @@ describe('ErrorService', () => {
       // given
       const error = {
         status: 401,
-        response: { body: { code: '', }, },
+        response: { body: { code: '' } },
       };
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       const spyLogOut = jest.spyOn(errorService, 'fullLogOut');
@@ -226,7 +233,7 @@ describe('ErrorService', () => {
 
     it('should display notification and logout on BAD_REQUEST_ERR', async () => {
       // given
-      const error = { response: { status: 400, }, };
+      const error = { response: { status: 400 } };
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       // when
       await errorService.handleError(error);
@@ -236,7 +243,7 @@ describe('ErrorService', () => {
 
     it('should display notification on CONNECTION_BROKEN_ERR and NOR logout if flag is true', async () => {
       // given
-      const error = { message: 'Possible causes: the network is offline,', };
+      const error = { message: 'Possible causes: the network is offline,' };
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       const spyLogOut = jest.spyOn(errorService, 'fullLogOut');
       // when
@@ -248,7 +255,7 @@ describe('ErrorService', () => {
 
     it('should display notification on BadRequestError', async () => {
       // given
-      const error = { response: { status: 400, }, };
+      const error = { response: { status: 400 } };
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       // when
       await errorService.handleError(error);
@@ -344,7 +351,10 @@ describe('ErrorService', () => {
     it('should display notification on dossier removed from metadata', async () => {
       // given
       const response = { status: 404, body: { iServerCode: -2147216373 } };
-      const error = { response, mstrObjectType: mstrObjectEnum.mstrObjectType.dossier.name };
+      const error = {
+        response,
+        mstrObjectType: mstrObjectEnum.mstrObjectType.dossier.name,
+      };
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       // when
       await errorService.handleError(error);
@@ -356,7 +366,7 @@ describe('ErrorService', () => {
       // given
       const error = {
         status: 401,
-        response: { body: { code: '', }, },
+        response: { body: { code: '' } },
       };
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       global.setTimeout = jest.fn();
@@ -379,7 +389,10 @@ describe('ErrorService', () => {
 
     it('should handle OverlappingTablesError', async () => {
       // given
-      const error = { name: 'RichApi.Error', message: 'A table can\'t overlap another table. ' };
+      const error = {
+        name: 'RichApi.Error',
+        message: "A table can't overlap another table. ",
+      };
       const notificationSpy = jest.spyOn(errorService, 'displayErrorNotification');
       // when
       await errorService.handleError(error);
@@ -389,7 +402,10 @@ describe('ErrorService', () => {
 
     it('should display INVALID_VIZ_KEY_MESSAGE notification on INVALID_VIZ_KEY error', async () => {
       // given
-      const error = { response: { status: 404, }, type: errorTypes.INVALID_VIZ_KEY };
+      const error = {
+        response: { status: 404 },
+        type: errorTypes.INVALID_VIZ_KEY,
+      };
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       // when
       await errorService.handleError(error);
@@ -414,7 +430,7 @@ describe('ErrorService', () => {
       // given
       const error = {
         name: 'RichApi.Error',
-        message: 'A table can\'t overlap another table. ',
+        message: "A table can't overlap another table. ",
       };
       // when
       const returnedError = errorService.getOfficeErrorType(error);
@@ -466,7 +482,7 @@ describe('ErrorService', () => {
       // given
       const error = {
         name: 'RichApi.Error',
-        message: 'A table can\'t overlap another table. ',
+        message: "A table can't overlap another table. ",
       };
       const notificationSpy = jest.spyOn(errorService, 'displayErrorNotification');
 
@@ -501,13 +517,19 @@ describe('ErrorService', () => {
 
     it('should call closePopupIfOpen on session error', () => {
       // Given
-      const error = { message: 'error', status: 401, type: errorTypes.UNAUTHORIZED_ERR };
+      const error = {
+        message: 'error',
+        status: 401,
+        type: errorTypes.UNAUTHORIZED_ERR,
+      };
 
       const closePopupMock = jest.spyOn(errorService, 'closePopupIfOpen').mockImplementation();
       jest.spyOn(Constants, 'errorMessageFactory').mockReturnValue(() => 'error message');
 
       // When
-      errorService.handleError(error, { dialogType: PopupTypeEnum.importedDataOverview });
+      errorService.handleError(error, {
+        dialogType: PopupTypeEnum.importedDataOverview,
+      });
 
       // Then
       expect(closePopupMock).toHaveBeenCalled();

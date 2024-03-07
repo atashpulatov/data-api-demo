@@ -1,6 +1,7 @@
 import { createStore } from 'redux';
-import { officeReducer } from '../../../redux-reducer/office-reducer/office-reducer';
+
 import { officeProperties } from '../../../redux-reducer/office-reducer/office-properties';
+import { officeReducer } from '../../../redux-reducer/office-reducer/office-reducer';
 
 describe('officeReducer', () => {
   const officeStore = createStore(officeReducer);
@@ -18,14 +19,17 @@ describe('officeReducer', () => {
       isDialogLoaded: false,
       settingsPanelLoaded: false,
       isShapeAPISupported: false,
-      reusePromptAnswers: false
+      reusePromptAnswers: false,
     });
   });
 
   it('should set address of active cell on setActiveCellAddress', () => {
     // given
     const prevState = { activeCellAddress: null };
-    const action = { type: officeProperties.actions.setActiveCellAddress, activeCellAddress: 'A1' };
+    const action = {
+      type: officeProperties.actions.setActiveCellAddress,
+      activeCellAddress: 'A1',
+    };
     // when
     const newState = officeReducer(prevState, action);
     // then
@@ -55,7 +59,10 @@ describe('officeReducer', () => {
   it('should set given value to isDialogLoaded on setIsDialogLoaded', () => {
     // given
     const prevState = { isDialogLoaded: false };
-    const action = { type: officeProperties.actions.setIsDialogLoaded, isDialogLoaded: true };
+    const action = {
+      type: officeProperties.actions.setIsDialogLoaded,
+      isDialogLoaded: true,
+    };
     // when
     const newState = officeReducer(prevState, action);
     // then

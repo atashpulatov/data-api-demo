@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
+
 import PropTypes from 'prop-types';
 
-export const PromptsContainer = (props) => {
+export const PromptsContainer = props => {
   const container = React.useRef();
 
   const { postMount } = props;
@@ -11,7 +12,11 @@ export const PromptsContainer = (props) => {
   }, [postMount]);
 
   return (
-    <div ref={container} className="promptsContainer" style={{ height: '100vh', position: 'relative', overflow: 'hidden' }} />
+    <div
+      ref={container}
+      className='promptsContainer'
+      style={{ height: '100vh', position: 'relative', overflow: 'hidden' }}
+    />
   );
 };
 

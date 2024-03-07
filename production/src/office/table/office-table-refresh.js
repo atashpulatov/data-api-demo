@@ -1,5 +1,5 @@
-import { officeApiHelper } from '../api/office-api-helper';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
+import { officeApiHelper } from '../api/office-api-helper';
 
 const ROWS_NUMBER_CHANGE_LIMIT = 10000;
 const CELLS_NUMBER_CHANGE_LIMIT = 100000;
@@ -18,7 +18,12 @@ class OfficeTableRefresh {
    * - tableChanged - true if columns number changed, false otherwise
    * - startCell - starting cell address
    */
-  getExistingOfficeTableData = async (excelContext, instanceDefinition, prevOfficeTable, previousTableDimensions) => {
+  getExistingOfficeTableData = async (
+    excelContext,
+    instanceDefinition,
+    prevOfficeTable,
+    previousTableDimensions
+  ) => {
     let startCell = await this.getStartCellOnRefresh(prevOfficeTable, excelContext);
 
     let tableChanged = false;
@@ -27,7 +32,7 @@ class OfficeTableRefresh {
       excelContext,
       instanceDefinition,
       previousTableDimensions,
-      startCell,
+      startCell
     ));
 
     return { tableChanged, startCell };
@@ -52,7 +57,7 @@ class OfficeTableRefresh {
     excelContext,
     instanceDefinition,
     previousTableDimensions,
-    startCell,
+    startCell
   ) => {
     const { mstrTable } = instanceDefinition;
 
@@ -109,19 +114,35 @@ class OfficeTableRefresh {
    *
    * @return {Boolean} Specify table structure changed
    */
-  checkTableChange = async (prevOfficeTable, excelContext, instanceDefinition, previousTableDimensions) => {
-    const { columns, rows, mstrTable: { toCrosstabChange, fromCrosstabChange } } = instanceDefinition;
+  checkTableChange = async (
+    prevOfficeTable,
+    excelContext,
+    instanceDefinition,
+    previousTableDimensions
+  ) => {
+    const {
+      columns,
+      rows,
+      mstrTable: { toCrosstabChange, fromCrosstabChange },
+    } = instanceDefinition;
 
     if (toCrosstabChange || fromCrosstabChange) {
       return true;
     }
 
-    const tableChanged = await this.checkColumnsChange(prevOfficeTable, excelContext, columns, previousTableDimensions);
+    const tableChanged = await this.checkColumnsChange(
+      prevOfficeTable,
+      excelContext,
+      columns,
+      previousTableDimensions
+    );
 
     const rowsNumberChange = await this.checkRowsNumberChange(prevOfficeTable, excelContext, rows);
-    return tableChanged
-        || rowsNumberChange > ROWS_NUMBER_CHANGE_LIMIT
-        || rowsNumberChange * columns > CELLS_NUMBER_CHANGE_LIMIT;
+    return (
+      tableChanged ||
+      rowsNumberChange > ROWS_NUMBER_CHANGE_LIMIT ||
+      rowsNumberChange * columns > CELLS_NUMBER_CHANGE_LIMIT
+    );
   };
 
   /**
@@ -190,17 +211,25 @@ class OfficeTableRefresh {
    * @param {Object} mstrTable Contains information about mstr object
    *
    */
-  clearIfCrosstabHeadersChanged = async (prevOfficeTable, excelContext, tableChanged, startCell, mstrTable) => {
+  clearIfCrosstabHeadersChanged = async (
+    prevOfficeTable,
+    excelContext,
+    tableChanged,
+    startCell,
+    mstrTable
+  ) => {
     const { prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab } = mstrTable;
     const { validColumnsY, validRowsX } = await officeApiCrosstabHelper.getCrosstabHeadersSafely(
       prevCrosstabDimensions,
       prevOfficeTable,
-      excelContext,
+      excelContext
     );
 
     if (isCrosstab && crosstabHeaderDimensions && prevCrosstabDimensions) {
-      if (validRowsX !== crosstabHeaderDimensions.rowsX
-      || validColumnsY - 1 !== crosstabHeaderDimensions.columnsY) {
+      if (
+        validRowsX !== crosstabHeaderDimensions.rowsX ||
+        validColumnsY - 1 !== crosstabHeaderDimensions.columnsY
+      ) {
         tableChanged = true;
         prevCrosstabDimensions.rowsX = validRowsX;
         prevCrosstabDimensions.columnsY = validColumnsY - 1;
@@ -251,8 +280,11 @@ class OfficeTableRefresh {
   getCrosstabStartCell = (startCell, instanceDefinition, tableChanged) => {
     const {
       mstrTable: {
-        isCrosstab, fromCrosstabChange, crosstabHeaderDimensions, prevCrosstabDimensions
-      }
+        isCrosstab,
+        fromCrosstabChange,
+        crosstabHeaderDimensions,
+        prevCrosstabDimensions,
+      },
     } = instanceDefinition;
 
     const { rowsX, columnsY } = crosstabHeaderDimensions || prevCrosstabDimensions;

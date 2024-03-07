@@ -1,6 +1,11 @@
-import { populateDefinition, populateDetails, getObjectPrompts } from '../../mstr-object/get-object-details-methods';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
+
+import {
+  getObjectPrompts,
+  populateDefinition,
+  populateDetails,
+} from '../../mstr-object/get-object-details-methods';
 
 describe('Get Object Details Methods', () => {
   describe('getObjectPrompts', () => {
@@ -27,7 +32,12 @@ describe('Get Object Details Methods', () => {
       const mockedOperationData = { instanceDefinition: { instanceId: 2 } };
       jest.spyOn(mstrObjectRestService, 'getObjectPrompts').mockImplementation(() => []);
       // when
-      await getObjectPrompts(mockedObjectData, mockedObjectId, mockedProjectId, mockedOperationData);
+      await getObjectPrompts(
+        mockedObjectData,
+        mockedObjectId,
+        mockedProjectId,
+        mockedOperationData
+      );
       // then
       expect(mstrObjectRestService.getObjectPrompts).toBeCalled();
       expect(mstrObjectRestService.getObjectPrompts).toBeCalledWith(
@@ -49,83 +59,119 @@ describe('Get Object Details Methods', () => {
 
       it('should map object answers', async () => {
         // given
-        const mockedPromptAnswers = [{
-          type: 'OBJECTS',
-          answers: [
-            { name: 'some name1' },
-            { name: 'some name2', otherProp: 'some other prop' }
-          ]
-        }];
-        jest.spyOn(mstrObjectRestService, 'getObjectPrompts').mockResolvedValue(mockedPromptAnswers);
+        const mockedPromptAnswers = [
+          {
+            type: 'OBJECTS',
+            answers: [{ name: 'some name1' }, { name: 'some name2', otherProp: 'some other prop' }],
+          },
+        ];
+        jest
+          .spyOn(mstrObjectRestService, 'getObjectPrompts')
+          .mockResolvedValue(mockedPromptAnswers);
         const expectedResult = [['some name1', 'some name2']];
         // when
-        const result = await getObjectPrompts(mockedObjectData, {}, {}, { instanceDefinition: { instanceId: 2 } });
+        const result = await getObjectPrompts(
+          mockedObjectData,
+          {},
+          {},
+          { instanceDefinition: { instanceId: 2 } }
+        );
         // then
         expect(result).toEqual(expectedResult);
       });
 
       it('should map level answers', async () => {
         // given
-        const mockedPromptAnswers = [{
-          type: 'LEVEL',
-          answers: {
-            units: [
-              { name: 'some name1' },
-              { name: 'some name2', otherProp: 'some other prop' }
-            ]
-          }
-        }];
-        jest.spyOn(mstrObjectRestService, 'getObjectPrompts').mockResolvedValue(mockedPromptAnswers);
+        const mockedPromptAnswers = [
+          {
+            type: 'LEVEL',
+            answers: {
+              units: [{ name: 'some name1' }, { name: 'some name2', otherProp: 'some other prop' }],
+            },
+          },
+        ];
+        jest
+          .spyOn(mstrObjectRestService, 'getObjectPrompts')
+          .mockResolvedValue(mockedPromptAnswers);
         const expectedResult = [['some name1', 'some name2']];
         // when
-        const result = await getObjectPrompts(mockedObjectData, {}, {}, { instanceDefinition: { instanceId: 2 } });
+        const result = await getObjectPrompts(
+          mockedObjectData,
+          {},
+          {},
+          { instanceDefinition: { instanceId: 2 } }
+        );
         // then
         expect(result).toEqual(expectedResult);
       });
 
       it('should map expression answers', async () => {
         // given
-        const mockedPromptAnswers = [{
-          type: 'EXPRESSION',
-          answers: {
-            content: 'some content'
-          }
-        }];
-        jest.spyOn(mstrObjectRestService, 'getObjectPrompts').mockResolvedValue(mockedPromptAnswers);
+        const mockedPromptAnswers = [
+          {
+            type: 'EXPRESSION',
+            answers: {
+              content: 'some content',
+            },
+          },
+        ];
+        jest
+          .spyOn(mstrObjectRestService, 'getObjectPrompts')
+          .mockResolvedValue(mockedPromptAnswers);
         const expectedResult = ['some content'];
         // when
-        const result = await getObjectPrompts(mockedObjectData, {}, {}, { instanceDefinition: { instanceId: 2 } });
+        const result = await getObjectPrompts(
+          mockedObjectData,
+          {},
+          {},
+          { instanceDefinition: { instanceId: 2 } }
+        );
         // then
         expect(result).toEqual(expectedResult);
       });
 
       it('should map elements answers', async () => {
         // given
-        const mockedPromptAnswers = [{
-          type: 'ELEMENTS',
-          answers: [
-            { name: 'some name1' },
-            { name: 'some name2', otherProp: 'some other prop' }
-          ]
-        }];
-        jest.spyOn(mstrObjectRestService, 'getObjectPrompts').mockResolvedValue(mockedPromptAnswers);
+        const mockedPromptAnswers = [
+          {
+            type: 'ELEMENTS',
+            answers: [{ name: 'some name1' }, { name: 'some name2', otherProp: 'some other prop' }],
+          },
+        ];
+        jest
+          .spyOn(mstrObjectRestService, 'getObjectPrompts')
+          .mockResolvedValue(mockedPromptAnswers);
         const expectedResult = [['some name1', 'some name2']];
         // when
-        const result = await getObjectPrompts(mockedObjectData, {}, {}, { instanceDefinition: { instanceId: 2 } });
+        const result = await getObjectPrompts(
+          mockedObjectData,
+          {},
+          {},
+          { instanceDefinition: { instanceId: 2 } }
+        );
         // then
         expect(result).toEqual(expectedResult);
       });
 
       it('should map value answers', async () => {
         // given
-        const mockedPromptAnswers = [{
-          type: 'VALUE',
-          answers: 'some answer',
-        }];
-        jest.spyOn(mstrObjectRestService, 'getObjectPrompts').mockResolvedValue(mockedPromptAnswers);
+        const mockedPromptAnswers = [
+          {
+            type: 'VALUE',
+            answers: 'some answer',
+          },
+        ];
+        jest
+          .spyOn(mstrObjectRestService, 'getObjectPrompts')
+          .mockResolvedValue(mockedPromptAnswers);
         const expectedResult = ['some answer'];
         // when
-        const result = await getObjectPrompts(mockedObjectData, {}, {}, { instanceDefinition: { instanceId: 2 } });
+        const result = await getObjectPrompts(
+          mockedObjectData,
+          {},
+          {},
+          { instanceDefinition: { instanceId: 2 } }
+        );
         // then
         expect(result).toEqual(expectedResult);
       });
@@ -135,38 +181,32 @@ describe('Get Object Details Methods', () => {
         const mockedPromptAnswers = [
           {
             type: 'OBJECTS',
-            answers: [
-              { name: 'some name1' },
-              { name: 'some name2', otherProp: 'some other prop' }
-            ]
+            answers: [{ name: 'some name1' }, { name: 'some name2', otherProp: 'some other prop' }],
           },
           {
             type: 'LEVEL',
             answers: {
-              units: [
-                { name: 'some name1' },
-                { name: 'some name2', otherProp: 'some other prop' }
-              ]
-            }
+              units: [{ name: 'some name1' }, { name: 'some name2', otherProp: 'some other prop' }],
+            },
           },
           {
             type: 'ELEMENTS',
-            answers: [
-              { name: 'some name1' },
-              { name: 'some name2', otherProp: 'some other prop' }
-            ]
+            answers: [{ name: 'some name1' }, { name: 'some name2', otherProp: 'some other prop' }],
           },
           {
             type: 'EXPRESSION',
             answers: {
-              content: 'some content'
-            }
+              content: 'some content',
+            },
           },
           {
             type: 'VALUE',
             answers: 'some answer',
-          }];
-        jest.spyOn(mstrObjectRestService, 'getObjectPrompts').mockResolvedValue(mockedPromptAnswers);
+          },
+        ];
+        jest
+          .spyOn(mstrObjectRestService, 'getObjectPrompts')
+          .mockResolvedValue(mockedPromptAnswers);
         const expectedResult = [
           ['some name1', 'some name2'],
           ['some name1', 'some name2'],
@@ -175,7 +215,12 @@ describe('Get Object Details Methods', () => {
           'some answer',
         ];
         // when
-        const result = await getObjectPrompts(mockedObjectData, {}, {}, { instanceDefinition: { instanceId: 2 } });
+        const result = await getObjectPrompts(
+          mockedObjectData,
+          {},
+          {},
+          { instanceDefinition: { instanceId: 2 } }
+        );
         // then
         expect(result).toEqual(expectedResult);
       });
@@ -185,7 +230,9 @@ describe('Get Object Details Methods', () => {
   describe('populateDefinition', () => {
     it('should return only definition if prompts not provided', () => {
       // given
-      const mockedObjectData = { definition: { someProperty: 'some definition' } };
+      const mockedObjectData = {
+        definition: { someProperty: 'some definition' },
+      };
       // when
       const definition = populateDefinition(mockedObjectData);
       // then
@@ -194,9 +241,14 @@ describe('Get Object Details Methods', () => {
 
     it('should combine definition with prompt data', () => {
       // given
-      const mockedObjectData = { definition: { someProperty: 'some definition' } };
+      const mockedObjectData = {
+        definition: { someProperty: 'some definition' },
+      };
       const mockedPrompts = { someProperty: 'some data' };
-      const expectedResult = { ...mockedObjectData.definition, prompts: mockedPrompts };
+      const expectedResult = {
+        ...mockedObjectData.definition,
+        prompts: mockedPrompts,
+      };
       // when
       const definition = populateDefinition(mockedObjectData, mockedPrompts);
       // then
@@ -208,7 +260,9 @@ describe('Get Object Details Methods', () => {
     it('should call authenticationHelper to get username', () => {
       // given
       const mockedUserName = 'Some User';
-      jest.spyOn(authenticationHelper, 'getCurrentMstrUserFullName').mockImplementation(() => mockedUserName);
+      jest
+        .spyOn(authenticationHelper, 'getCurrentMstrUserFullName')
+        .mockImplementation(() => mockedUserName);
       // when
       populateDetails({}, {}, {}, {});
       // then
@@ -218,7 +272,9 @@ describe('Get Object Details Methods', () => {
     it('populate details with provided properties', () => {
       // given
       const mockedUserName = 'Some User';
-      jest.spyOn(authenticationHelper, 'getCurrentMstrUserFullName').mockImplementation(() => mockedUserName);
+      jest
+        .spyOn(authenticationHelper, 'getCurrentMstrUserFullName')
+        .mockImplementation(() => mockedUserName);
       const mockedAncestors = 'Some ancestors';
       const mockedCertifiedInfo = 'Some certified info';
       const mockedDateModified = 'Some date';
@@ -228,10 +284,15 @@ describe('Get Object Details Methods', () => {
         certified: mockedCertifiedInfo,
         modifiedDate: mockedDateModified,
         owner: mockedOwner,
-        importedBy: mockedUserName
+        importedBy: mockedUserName,
       };
       // when
-      const details = populateDetails(mockedAncestors, mockedCertifiedInfo, mockedDateModified, mockedOwner);
+      const details = populateDetails(
+        mockedAncestors,
+        mockedCertifiedInfo,
+        mockedDateModified,
+        mockedOwner
+      );
       // then
       expect(details).toEqual(expectedDetails);
     });

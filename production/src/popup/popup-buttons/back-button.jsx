@@ -1,9 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Button } from '@mstr/rc';
 
+import PropTypes from 'prop-types';
+
 export const BackButton = ({ handleBack, t }) => (
-  <Button id="back" onClick={handleBack} variant="secondary">
+  <Button id='back' onClick={handleBack} variant='secondary'>
     {t('Back')}
   </Button>
 );

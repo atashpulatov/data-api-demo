@@ -1,9 +1,10 @@
 import { CONTEXT_LIMIT } from '../../mstr-object/mstr-object-rest-service';
-import officeTableHelperRange from './office-table-helper-range';
-import officeFormatSubtotals from '../format/office-format-subtotals';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
-import officeApiDataLoader from '../api/office-api-data-loader';
 import { officeRemoveHelper } from '../remove/office-remove-helper';
+import officeTableHelperRange from './office-table-helper-range';
+
+import officeApiDataLoader from '../api/office-api-data-loader';
+import officeFormatSubtotals from '../format/office-format-subtotals';
 
 class OfficeTableUpdate {
   /**
@@ -18,10 +19,22 @@ class OfficeTableUpdate {
   updateOfficeTable = async (instanceDefinition, excelContext, startCell, prevOfficeTable) => {
     console.time('Validate existing table');
 
-    const { rows, mstrTable, mstrTable: { isCrosstab, subtotalsInfo: { subtotalsAddresses } } } = instanceDefinition;
+    const {
+      rows,
+      mstrTable,
+      mstrTable: {
+        isCrosstab,
+        subtotalsInfo: { subtotalsAddresses },
+      },
+    } = instanceDefinition;
 
     try {
-      await this.handleSubtotalsFormatting(excelContext, prevOfficeTable, mstrTable, subtotalsAddresses);
+      await this.handleSubtotalsFormatting(
+        excelContext,
+        prevOfficeTable,
+        mstrTable,
+        subtotalsAddresses
+      );
 
       await this.validateAddedRowsRange(excelContext, rows, prevOfficeTable);
 
@@ -33,7 +46,12 @@ class OfficeTableUpdate {
 
       await excelContext.sync();
 
-      await officeRemoveHelper.deleteRowsInChunks(excelContext, prevOfficeTable, CONTEXT_LIMIT, rows);
+      await officeRemoveHelper.deleteRowsInChunks(
+        excelContext,
+        prevOfficeTable,
+        CONTEXT_LIMIT,
+        rows
+      );
 
       return prevOfficeTable;
     } catch (error) {
@@ -44,14 +62,28 @@ class OfficeTableUpdate {
     }
   };
 
-  handleSubtotalsFormatting = async (excelContext, prevOfficeTable, mstrTable, subtotalsAddresses) => {
+  handleSubtotalsFormatting = async (
+    excelContext,
+    prevOfficeTable,
+    mstrTable,
+    subtotalsAddresses
+  ) => {
     if (subtotalsAddresses && subtotalsAddresses.length) {
-      await officeFormatSubtotals.applySubtotalFormatting(prevOfficeTable, excelContext, mstrTable, false);
+      await officeFormatSubtotals.applySubtotalFormatting(
+        prevOfficeTable,
+        excelContext,
+        mstrTable,
+        false
+      );
     }
   };
 
   validateAddedRowsRange = async (excelContext, newRowsCount, prevOfficeTable) => {
-    const addedRowsCount = await this.getAddedRowsCount(excelContext, newRowsCount, prevOfficeTable.rows);
+    const addedRowsCount = await this.getAddedRowsCount(
+      excelContext,
+      newRowsCount,
+      prevOfficeTable.rows
+    );
 
     // If the new table has more rows during update check validity
     if (addedRowsCount) {
@@ -61,16 +93,26 @@ class OfficeTableUpdate {
   };
 
   getAddedRowsCount = async (excelContext, newRowsCount, prevOfficeTableRows) => {
-    const prevRowsCount = await officeApiDataLoader.loadSingleExcelData(excelContext, prevOfficeTableRows, 'count');
+    const prevRowsCount = await officeApiDataLoader.loadSingleExcelData(
+      excelContext,
+      prevOfficeTableRows,
+      'count'
+    );
 
     return Math.max(0, newRowsCount - prevRowsCount);
   };
 
   createHeadersForCrosstab = (sheet, instanceDefinition, startCell) => {
-    const crosstabHeaderDimensions = officeApiCrosstabHelper.getCrosstabHeaderDimensions(instanceDefinition);
+    const crosstabHeaderDimensions =
+      officeApiCrosstabHelper.getCrosstabHeaderDimensions(instanceDefinition);
 
     const { mstrTable } = instanceDefinition;
-    officeApiCrosstabHelper.createCrosstabHeaders(startCell, mstrTable, sheet, crosstabHeaderDimensions);
+    officeApiCrosstabHelper.createCrosstabHeaders(
+      startCell,
+      mstrTable,
+      sheet,
+      crosstabHeaderDimensions
+    );
   };
 
   setHeaderValuesNoCrosstab = (excelContext, prevOfficeTable, headerColumns) => {

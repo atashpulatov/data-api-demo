@@ -1,6 +1,8 @@
 import { officeApiHelper } from '../../office/api/office-api-helper';
-import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
+
 import { reduxStore } from '../../store';
+
+import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 
 const INVALID_SELECTION = 'InvalidSelection';
 // FIXME: these were disabled anyway. Needs to be redone.
@@ -142,7 +144,9 @@ describe('OfficeApiHelper', () => {
       }));
       const mockSync = jest.fn();
       const context = {
-        workbook: { getSelectedRange: jest.fn().mockImplementation(() => ({ getCell: getCellMock, })), },
+        workbook: {
+          getSelectedRange: jest.fn().mockImplementation(() => ({ getCell: getCellMock })),
+        },
         sync: mockSync,
       };
       // when
@@ -164,7 +168,9 @@ describe('OfficeApiHelper', () => {
         address: loadMock(),
       }));
       const context = {
-        workbook: { getSelectedRange: jest.fn().mockImplementation(() => ({ getCell: getCellMock, })), },
+        workbook: {
+          getSelectedRange: jest.fn().mockImplementation(() => ({ getCell: getCellMock })),
+        },
         sync: mockSync,
       };
       // when
@@ -184,11 +190,17 @@ describe('OfficeApiHelper', () => {
       error.code = INVALID_SELECTION;
       const mockSync = jest.fn();
       const context = {
-        workbook: { getSelectedRange: jest.fn().mockImplementation(() => { throw error; }), },
+        workbook: {
+          getSelectedRange: jest.fn().mockImplementation(() => {
+            throw error;
+          }),
+        },
         sync: mockSync,
       };
 
-      jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ officeReducer: { activeCellAddress: 'CD34', }, });
+      jest
+        .spyOn(reduxStore, 'getState')
+        .mockReturnValueOnce({ officeReducer: { activeCellAddress: 'CD34' } });
 
       // when
       const result = await officeApiHelper.getSelectedCell(context);
@@ -202,11 +214,17 @@ describe('OfficeApiHelper', () => {
       error.code = INVALID_SELECTION;
       const mockSync = jest.fn();
       const context = {
-        workbook: { getSelectedRange: jest.fn().mockImplementation(() => { throw error; }), },
+        workbook: {
+          getSelectedRange: jest.fn().mockImplementation(() => {
+            throw error;
+          }),
+        },
         sync: mockSync,
       };
 
-      jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ officeReducer: { activeCellAddress: null, }, });
+      jest
+        .spyOn(reduxStore, 'getState')
+        .mockReturnValueOnce({ officeReducer: { activeCellAddress: null } });
 
       // when
       const result = await officeApiHelper.getSelectedCell(context);
@@ -249,11 +267,13 @@ describe('OfficeApiHelper', () => {
       const getCellMock = jest.fn().mockImplementation(() => ({
         load: loadMock,
         top: 244,
-        left: 345
+        left: 345,
       }));
 
       const context = {
-        workbook: { getSelectedRange: jest.fn().mockImplementation(() => ({ getCell: getCellMock, })), },
+        workbook: {
+          getSelectedRange: jest.fn().mockImplementation(() => ({ getCell: getCellMock })),
+        },
         sync: mockSync,
       };
       // when
@@ -268,12 +288,20 @@ describe('OfficeApiHelper', () => {
       error.code = INVALID_SELECTION;
       const mockSync = jest.fn();
       const context = {
-        workbook: { getSelectedRange: jest.fn().mockImplementation(() => { throw error; }), },
+        workbook: {
+          getSelectedRange: jest.fn().mockImplementation(() => {
+            throw error;
+          }),
+        },
         sync: mockSync,
       };
 
-      jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ officeReducer: { activeCellAddress: 'CD34', }, });
-      jest.spyOn(officeApiHelper, 'convertCellAddressToRangePosition').mockReturnValueOnce({ top: 244, left: 345 });
+      jest
+        .spyOn(reduxStore, 'getState')
+        .mockReturnValueOnce({ officeReducer: { activeCellAddress: 'CD34' } });
+      jest
+        .spyOn(officeApiHelper, 'convertCellAddressToRangePosition')
+        .mockReturnValueOnce({ top: 244, left: 345 });
 
       // when
       const result = await officeApiHelper.getSelectedRangePosition(context);
@@ -287,11 +315,17 @@ describe('OfficeApiHelper', () => {
       error.code = INVALID_SELECTION;
       const mockSync = jest.fn();
       const context = {
-        workbook: { getSelectedRange: jest.fn().mockImplementation(() => { throw error; }), },
+        workbook: {
+          getSelectedRange: jest.fn().mockImplementation(() => {
+            throw error;
+          }),
+        },
         sync: mockSync,
       };
 
-      jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ officeReducer: { activeCellAddress: null, }, });
+      jest
+        .spyOn(reduxStore, 'getState')
+        .mockReturnValueOnce({ officeReducer: { activeCellAddress: null } });
 
       // when
       const result = await officeApiHelper.getSelectedRangePosition(context);
@@ -309,32 +343,36 @@ describe('OfficeApiHelper', () => {
         top: 45,
         height: 480,
         width: 960,
-        worksheetId: 'worksheetIdTest'
+        worksheetId: 'worksheetIdTest',
       };
 
       window.Excel = {
         GeometricShapeType: {
-          rectangle: 'Rectangle'
-        }
+          rectangle: 'Rectangle',
+        },
       };
 
       const excelContextMock = {
         workbook: {
           worksheets: {
-            getItem: jest.fn().mockImplementation((worksheetId) => ({
+            getItem: jest.fn().mockImplementation(_worksheetId => ({
               shapes: {
-                addGeometricShape: jest.fn().mockImplementation((geometricShapeType) => ({
+                addGeometricShape: jest.fn().mockImplementation(_geometricShapeType => ({
                   fill: {},
-                  load: mock
-                }))
+                  load: mock,
+                })),
               },
             })),
-          }
+          },
         },
         sync: mock,
       };
       // when
-      const shape = await officeApiHelper.addGeometricShape(excelContextMock, shapeProps, 'visualizationName');
+      const shape = await officeApiHelper.addGeometricShape(
+        excelContextMock,
+        shapeProps,
+        'visualizationName'
+      );
       // then
 
       const expectedShape = {

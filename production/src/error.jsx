@@ -1,7 +1,7 @@
-import React from 'react'; // eslint-disable-line no-unused-vars
+import React from 'react';
 
 export const Error = () => (
-  <div id="content-header" className="padding">
+  <div id='content-header' className='padding'>
     <h1>Error</h1>
   </div>
 );

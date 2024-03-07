@@ -8,7 +8,7 @@ export const UPDATE_ANSWERS = 'UPDATE_ANSWERS';
  * @param {*} answers
  * @returns
  */
-export const restoreAllAnswers = (answers) => ({
+export const restoreAllAnswers = answers => ({
   type: RESTORE_ALL_ANSWERS,
   payload: answers,
 });
@@ -19,7 +19,7 @@ export const restoreAllAnswers = (answers) => ({
  * @param {*} updatedAnswers
  * @returns
  */
-export const updateAnswers = (updatedAnswers) => ({
+export const updateAnswers = updatedAnswers => ({
   type: UPDATE_ANSWERS,
   payload: updatedAnswers,
 });
@@ -30,4 +30,4 @@ export const updateAnswers = (updatedAnswers) => ({
  * "Re-use Prompt answers" setting or logs off.
  * @returns
  */
-export const clearAnswers = () => ({ type: CLEAR_ANSWERS, });
+export const clearAnswers = () => ({ type: CLEAR_ANSWERS });

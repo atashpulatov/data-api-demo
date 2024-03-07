@@ -1,20 +1,21 @@
-import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
-import { errorService } from '../../error/error-handler';
-import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
-import { restoreAllAnswers } from '../../redux-reducer/answers-reducer/answers-actions';
 import officeStoreHelper from './office-store-helper';
+
+import { errorService } from '../../error/error-handler';
+import { restoreAllAnswers } from '../../redux-reducer/answers-reducer/answers-actions';
+import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
+import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 import { objectImportType } from '../../mstr-object/constants';
 
 class OfficeStoreRestoreObject {
-  init = (reduxStore) => {
+  init = reduxStore => {
     this.reduxStore = reduxStore;
   };
 
   /**
-  * Retrieves information about object imported in previous versions,
-  * maps them to new format of data and stores them in Redux and Office Settings,
-  * and then remove the previously stored information from Office settings
-  */
+   * Retrieves information about object imported in previous versions,
+   * maps them to new format of data and stores them in Redux and Office Settings,
+   * and then remove the previously stored information from Office settings
+   */
   restoreObjectsFromExcelStore = () => {
     const settings = officeStoreHelper.getOfficeSettings();
     let objects = settings.get(officeProperties.storedObjects) || [];
@@ -36,7 +37,7 @@ class OfficeStoreRestoreObject {
    *
    * @param {*} objects restored object definitions from excel document.
    */
-  restoreLegacyObjectsWithImportType = (objects) => {
+  restoreLegacyObjectsWithImportType = objects => {
     objects?.forEach(object => {
       if (object && !object.importType) {
         object.importType = objectImportType.TABLE;
@@ -53,12 +54,14 @@ class OfficeStoreRestoreObject {
    *
    * @param {*} objects restored object definitions from excel document.
    */
-  resetIsPromptedForDossiersWithAnswers = (objects) => {
-    objects?.filter(object => object.mstrObjectType.type === 55).forEach(object => {
-      if (!object.isPrompted) {
-        object.isPrompted = object.manipulationsXML?.promptAnswers !== undefined;
-      }
-    });
+  resetIsPromptedForDossiersWithAnswers = objects => {
+    objects
+      ?.filter(object => object.mstrObjectType.type === 55)
+      .forEach(object => {
+        if (!object.isPrompted) {
+          object.isPrompted = object.manipulationsXML?.promptAnswers !== undefined;
+        }
+      });
   };
 
   /**
@@ -74,12 +77,12 @@ class OfficeStoreRestoreObject {
   };
 
   /**
-  * Maps previously stored objects information to new format of data
-  *
-  * @param {Array} [objects] Objects imported in previous version of plugin
-  * @param {Office} settings Office settings that is required in order to use Office Api
-  * @return {Array} New objects and old objects converted to new format of data
-  */
+   * Maps previously stored objects information to new format of data
+   *
+   * @param {Array} [objects] Objects imported in previous version of plugin
+   * @param {Office} settings Office settings that is required in order to use Office Api
+   * @return {Array} New objects and old objects converted to new format of data
+   */
   restoreLegacyObjectsFromExcelStore = (settings, objects = []) => {
     const reportArray = this.getLegacyObjectsList();
     const objectsToBeAdded = [];
@@ -94,23 +97,25 @@ class OfficeStoreRestoreObject {
           this.mapLegacyObjectValue(currentObject, 'subtotalsInfo', 'subtotalInfo');
 
           // TODO find better way for unique Id
-          currentObject.objectWorkingId = Date.now() + (index * reportArray.length);
+          currentObject.objectWorkingId = Date.now() + index * reportArray.length;
           objectsToBeAdded.push(currentObject);
         }
       }
       settings.set(officeProperties.loadedReportProperties, []);
-      settings.saveAsync((saveAsync) => console.log(`Clearing report Array in settings ${saveAsync.status}`));
+      settings.saveAsync(saveAsync =>
+        console.log(`Clearing report Array in settings ${saveAsync.status}`)
+      );
     }
     return [...objects, ...objectsToBeAdded];
   };
 
   /**
-  * Maps values from legacy object to new key used in new data format
-  *
-  * @param {Object} object Object imported in previous version of plugin
-  * @param {String} newKey New name of the field
-  * @param {String} oldKey Old name of the field
-  */
+   * Maps values from legacy object to new key used in new data format
+   *
+   * @param {Object} object Object imported in previous version of plugin
+   * @param {String} newKey New name of the field
+   * @param {String} oldKey Old name of the field
+   */
   mapLegacyObjectValue = (object, newKey, oldKey) => {
     if (object[oldKey]) {
       object[newKey] = object[oldKey];
@@ -119,15 +124,15 @@ class OfficeStoreRestoreObject {
   };
 
   /**
-  * Retrieves list of objects imported in previous versions,
-  *
-  * @return {Array} Contains legacy objects data
-  * @throws Error on failed execution of Office api function
-  */
+   * Retrieves list of objects imported in previous versions,
+   *
+   * @return {Array} Contains legacy objects data
+   * @throws Error on failed execution of Office api function
+   */
   getLegacyObjectsList = () => {
     try {
       const settings = officeStoreHelper.getOfficeSettings();
-      if (!(settings.get(officeProperties.loadedReportProperties))) {
+      if (!settings.get(officeProperties.loadedReportProperties)) {
         settings.set(officeProperties.loadedReportProperties, []);
         settings.saveAsync();
       }
@@ -138,12 +143,12 @@ class OfficeStoreRestoreObject {
   };
 
   /**
-  * Retrieves one setting from Excel,
-  * @param {String} key
-  * @return {Any} Contains settings value
-  * @throws Error on failed execution of Office api function
-  */
-  getExcelSettingValue = (key) => {
+   * Retrieves one setting from Excel,
+   * @param {String} key
+   * @return {Any} Contains settings value
+   * @throws Error on failed execution of Office api function
+   */
+  getExcelSettingValue = key => {
     const settings = officeStoreHelper.getOfficeSettings();
     return settings.get(key);
   };

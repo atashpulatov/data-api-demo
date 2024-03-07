@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { configProperties } from './config-properties';
 
 const initialState = { showHidden: false };
 
-export const configReducer = (state = initialState, action) => {
+export const configReducer = (state = initialState, action = {}) => {
   switch (action.type) {
     case configProperties.actions.setShowHidden:
       return setShowHidden(action, state);
@@ -16,6 +17,6 @@ export const configReducer = (state = initialState, action) => {
 function setShowHidden(action, state) {
   return {
     ...state,
-    showHidden: action.showHidden
+    showHidden: action.showHidden,
   };
 }

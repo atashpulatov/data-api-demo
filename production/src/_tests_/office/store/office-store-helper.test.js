@@ -1,17 +1,16 @@
-import { RunOutsideOfficeError } from '../../../error/run-outside-office-error';
 import officeStoreHelper from '../../../office/store/office-store-helper';
+
 import { errorService } from '../../../error/error-handler';
+import { RunOutsideOfficeError } from '../../../error/run-outside-office-error';
 
 describe.each`
-officeParam
-
-${undefined}
-${{}}
-${{ context: undefined }}
-${{ context: {} }}
-${{ context: { document: undefined } }}
-${{ context: { document: {} } }}
-
+  officeParam
+  ${undefined}
+  ${{}}
+  ${{ context: undefined }}
+  ${{ context: {} }}
+  ${{ context: { document: undefined } }}
+  ${{ context: { document: {} } }}
 `('OfficeStoreHelper getOfficeSettings negative path', ({ officeParam }) => {
   const globalOfficeOriginal = global.Office;
 
@@ -46,9 +45,9 @@ describe('OfficeStoreHelper getOfficeSettings positive path', () => {
     global.Office = {
       context: {
         document: {
-          settings: 'settingsTest'
-        }
-      }
+          settings: 'settingsTest',
+        },
+      },
     };
   });
 
@@ -73,7 +72,9 @@ describe('OfficeStoreHelper setters', () => {
 
   it('setPropertyValue should handle exception', () => {
     // given
-    jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockImplementation(() => { throw new Error('errorTest'); });
+    jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockImplementation(() => {
+      throw new Error('errorTest');
+    });
 
     jest.spyOn(errorService, 'handleError').mockImplementation();
 
@@ -110,7 +111,9 @@ describe('OfficeStoreHelper setters', () => {
 
   it('getPropertyValue should handle exception', () => {
     // given
-    jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockImplementation(() => { throw new Error('errorTest'); });
+    jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockImplementation(() => {
+      throw new Error('errorTest');
+    });
 
     jest.spyOn(errorService, 'handleError').mockImplementation();
 
@@ -152,42 +155,36 @@ describe('OfficeStoreHelper getters', () => {
   });
 
   it.each`
-  expectedPropertyName   | setterNameParam
-  
-  ${'isSecured'}         | ${'setFileSecuredFlag'}
-  ${'isClearDataFailed'} | ${'setIsClearDataFailed'}
-  
-  `('setters should work as expected',
-    ({ expectedPropertyName, setterNameParam }) => {
+    expectedPropertyName   | setterNameParam
+    ${'isSecured'}         | ${'setFileSecuredFlag'}
+    ${'isClearDataFailed'} | ${'setIsClearDataFailed'}
+  `('setters should work as expected', ({ expectedPropertyName, setterNameParam }) => {
     // given
-      jest.spyOn(officeStoreHelper, 'setPropertyValue').mockImplementation();
+    jest.spyOn(officeStoreHelper, 'setPropertyValue').mockImplementation();
 
-      // when
-      officeStoreHelper[setterNameParam]('valueTest');
+    // when
+    officeStoreHelper[setterNameParam]('valueTest');
 
-      // then
-      expect(officeStoreHelper.setPropertyValue).toBeCalledTimes(1);
-      expect(officeStoreHelper.setPropertyValue).toBeCalledWith(expectedPropertyName, 'valueTest');
-    });
+    // then
+    expect(officeStoreHelper.setPropertyValue).toBeCalledTimes(1);
+    expect(officeStoreHelper.setPropertyValue).toBeCalledWith(expectedPropertyName, 'valueTest');
+  });
 
   it.each`
-  propertyNameParam      | getterNameParam
-  
-  ${'isSecured'}         | ${'isFileSecured'}
-  ${'isClearDataFailed'} | ${'isClearDataFailed'}
-  
-  `('getters should work as expected',
-    ({ propertyNameParam, getterNameParam }) => {
+    propertyNameParam      | getterNameParam
+    ${'isSecured'}         | ${'isFileSecured'}
+    ${'isClearDataFailed'} | ${'isClearDataFailed'}
+  `('getters should work as expected', ({ propertyNameParam, getterNameParam }) => {
     // given
-      jest.spyOn(officeStoreHelper, 'getPropertyValue').mockReturnValue('valueTest');
+    jest.spyOn(officeStoreHelper, 'getPropertyValue').mockReturnValue('valueTest');
 
-      // when
-      const result = officeStoreHelper[getterNameParam](propertyNameParam);
+    // when
+    const result = officeStoreHelper[getterNameParam](propertyNameParam);
 
-      // then
-      expect(officeStoreHelper.getPropertyValue).toBeCalledTimes(1);
-      expect(officeStoreHelper.getPropertyValue).toBeCalledWith(propertyNameParam);
+    // then
+    expect(officeStoreHelper.getPropertyValue).toBeCalledTimes(1);
+    expect(officeStoreHelper.getPropertyValue).toBeCalledWith(propertyNameParam);
 
-      expect(result).toEqual('valueTest');
-    });
+    expect(result).toEqual('valueTest');
+  });
 });

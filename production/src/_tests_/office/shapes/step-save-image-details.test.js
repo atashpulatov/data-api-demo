@@ -1,6 +1,7 @@
-import { officeShapeApiHelper } from '../../../office/shapes/office-shape-api-helper';
-import stepSaveImageDetails from '../../../office/shapes/step-save-image-details';
 import { officeApiHelper } from '../../../office/api/office-api-helper';
+import { officeShapeApiHelper } from '../../../office/shapes/office-shape-api-helper';
+
+import stepSaveImageDetails from '../../../office/shapes/step-save-image-details';
 import operationErrorHandler from '../../../operation/operation-error-handler';
 import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
 
@@ -18,13 +19,13 @@ describe('StepSaveImageDetails', () => {
       visualizationKey: 'visualizationKeyTest',
       vizDimensions: {
         width: 123,
-        height: 342
-      }
+        height: 342,
+      },
     },
     displayAttrFormNames: 'displayAttrFormNamesTest',
     objectWorkingId: 'objectWorkingIdTest',
     importType: 'image',
-    bindId: '{1234-5678-9012-3456}'
+    bindId: '{1234-5678-9012-3456}',
   };
 
   const mockFn = jest.fn();
@@ -37,7 +38,7 @@ describe('StepSaveImageDetails', () => {
     top: 123,
     left: 234,
     width: 345,
-    height: 456
+    height: 456,
   };
 
   const excelContextMock = {
@@ -48,22 +49,24 @@ describe('StepSaveImageDetails', () => {
           items: [
             {
               shapes: {
-                getItemOrNullObject: jest.fn().mockImplementation((id) => mockShape)
-              }
-            }
+                getItemOrNullObject: jest.fn().mockImplementation(_id => mockShape),
+              },
+            },
           ],
           getActiveWorksheet: jest.fn().mockImplementation(() => ({
             shapes: {
-              addImage: jest.fn().mockImplementation((image) => Promise.resolve({
-                set: mockFn,
-                id: '{1234-5678-9012-3456}'
-              }))
-            }
-          }))
-        }
+              addImage: jest.fn().mockImplementation(_image =>
+                Promise.resolve({
+                  set: mockFn,
+                  id: '{1234-5678-9012-3456}',
+                })
+              ),
+            },
+          })),
+        },
       ],
-      sync: mockFn
-    }
+      sync: mockFn,
+    },
   };
 
   const operationDataMock = {
@@ -86,8 +89,12 @@ describe('StepSaveImageDetails', () => {
     // given
     jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
     jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
-    jest.spyOn(officeShapeApiHelper, 'getShape').mockImplementation(() => Promise.resolve(mockShape));
-    jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => Promise.resolve(excelContextMock));
+    jest
+      .spyOn(officeShapeApiHelper, 'getShape')
+      .mockImplementation(() => Promise.resolve(mockShape));
+    jest
+      .spyOn(officeApiHelper, 'getExcelContext')
+      .mockImplementation(() => Promise.resolve(excelContextMock));
     jest.spyOn(operationStepDispatcher, 'completeSaveImageDetails').mockImplementation();
 
     // when
@@ -102,8 +109,8 @@ describe('StepSaveImageDetails', () => {
         top: 123,
         left: 234,
         width: 345,
-        height: 456
-      }
+        height: 456,
+      },
     });
     expect(operationStepDispatcher.completeSaveImageDetails).toBeCalledTimes(1);
     expect(operationErrorHandler.handleOperationError).toBeCalledTimes(0);
@@ -113,8 +120,12 @@ describe('StepSaveImageDetails', () => {
     // given
     jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
     jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
-    jest.spyOn(officeShapeApiHelper, 'getShape').mockImplementation(() => { throw new Error('errorTest'); });
-    jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => Promise.resolve(excelContextMock));
+    jest.spyOn(officeShapeApiHelper, 'getShape').mockImplementation(() => {
+      throw new Error('errorTest');
+    });
+    jest
+      .spyOn(officeApiHelper, 'getExcelContext')
+      .mockImplementation(() => Promise.resolve(excelContextMock));
     jest.spyOn(operationStepDispatcher, 'completeSaveImageDetails').mockImplementation();
 
     // when
@@ -130,7 +141,9 @@ describe('StepSaveImageDetails', () => {
 
   it('saveImageDetails should throw VISUALIZATION_REMOVED_FROM_EXCEL error', async () => {
     // given
-    jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => Promise.resolve(excelContextMock));
+    jest
+      .spyOn(officeApiHelper, 'getExcelContext')
+      .mockImplementation(() => Promise.resolve(excelContextMock));
     jest.spyOn(officeShapeApiHelper, 'getShape').mockImplementation(() => undefined);
     jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 

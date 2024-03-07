@@ -1,12 +1,13 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { libraryErrorController } from '@mstr/mstr-react-library';
-import i18n from '../i18n';
-import { PopupViewSelector } from './popup-view-selector';
-import InternetConnectionError from './internet-connection-error';
+
 import { popupHelper } from './popup-helper';
+
 import { selectorProperties } from '../attribute-selector/selector-properties';
+import i18n from '../i18n';
+import InternetConnectionError from './internet-connection-error';
+import { PopupViewSelector } from './popup-view-selector';
 import { SessionExtendingWrapper } from './session-extending-wrapper';
-/* global Office */
 
 export const Popup = () => {
   useEffect(() => {
@@ -19,12 +20,12 @@ export const Popup = () => {
 
   const closePopup = useCallback(() => {
     const { commandCancel } = selectorProperties;
-    const message = { command: commandCancel, };
+    const message = { command: commandCancel };
     popupHelper.officeMessageParent(message);
   }, []);
 
   return (
-    <SessionExtendingWrapper id="popup-wrapper" onSessionExpire={closePopup}>
+    <SessionExtendingWrapper id='popup-wrapper' onSessionExpire={closePopup}>
       <InternetConnectionError />
       <PopupViewSelector />
     </SessionExtendingWrapper>

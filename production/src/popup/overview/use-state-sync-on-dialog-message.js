@@ -1,17 +1,23 @@
 import { useEffect } from 'react';
-import { reduxStore } from '../../store';
-import { PopupTypeEnum } from '../../home/popup-type-enum';
-import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
-import { restoreAllNotifications, createGlobalNotification } from '../../redux-reducer/notification-reducer/notification-action-creators';
-import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
-import { selectorProperties } from '../../attribute-selector/selector-properties';
-import { popupHelper } from '../popup-helper';
+
 import officeReducerHelper from '../../office/store/office-reducer-helper';
+import { popupHelper } from '../popup-helper';
+
+import { reduxStore } from '../../store';
+
+import { selectorProperties } from '../../attribute-selector/selector-properties';
+import { PopupTypeEnum } from '../../home/popup-type-enum';
+import {
+  createGlobalNotification,
+  restoreAllNotifications,
+} from '../../redux-reducer/notification-reducer/notification-action-creators';
+import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
+import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 
 const useStateSyncOnDialogMessage = () => {
   useEffect(() => {
     // Get Message from Right side panel
-    Office.context.ui.addHandlerAsync(Office.EventType.DialogParentMessageReceived, (msg) => {
+    Office.context.ui.addHandlerAsync(Office.EventType.DialogParentMessageReceived, msg => {
       const message = JSON.parse(msg.message);
       const { popupType } = message;
       const { setActiveCellAddress } = officeActions;
@@ -22,7 +28,7 @@ const useStateSyncOnDialogMessage = () => {
           notifications: notificationsToSync,
           globalNotification: globalNotificationToSync,
           activeCellAddress: activeCellAddressToSync,
-          popupData: popupDataToSync
+          popupData: popupDataToSync,
         } = message;
 
         reduxStore.dispatch(restoreAllObjects(objectsToSync));

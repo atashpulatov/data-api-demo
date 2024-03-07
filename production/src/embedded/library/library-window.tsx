@@ -1,31 +1,39 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { ObjectWindowTitle } from '@mstr/connector-components';
-import { useTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
 import { Spinner } from '@mstr/rc';
-import i18n from '../../i18n';
-import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
-import { selectorProperties } from '../../attribute-selector/selector-properties';
-import { EmbeddedLibrary } from './embedded-library';
-import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-import './library.css';
-import { popupHelper } from '../../popup/popup-helper';
-import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
+
 import { authenticationHelper } from '../../authentication/authentication-helper';
-import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
+import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
+import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
+import { popupHelper } from '../../popup/popup-helper';
+import { EXTEND_SESSION, sessionHelper } from '../../storage/session-helper';
+
+import { ItemType, LibraryWindowProps } from './library-window-types';
+
+import { selectorProperties } from '../../attribute-selector/selector-properties';
+import i18n from '../../i18n';
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
+import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
-import { ItemType, LibraryWindowProps } from './library-window-types';
-import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
+import { EmbeddedLibrary } from './embedded-library';
 import { objectImportType } from '../../mstr-object/constants';
 import { importActionTypes, importButtonIds } from '../../popup/popup-buttons/import-btn-constants';
 
+import './library.css';
+
 const {
-  isPrompted, getCubeInfo, getObjectInfo, createDossierInstance, deleteDossierInstance, getObjectPrompts,
+  isPrompted,
+  getCubeInfo,
+  getObjectInfo,
+  createDossierInstance,
+  deleteDossierInstance,
+  getObjectPrompts,
 } = mstrObjectRestService;
 
-export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
+export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => {
   const [isPublished, setIsPublished] = useState(true);
   const [t] = useTranslation('common', { i18n });
 
@@ -50,62 +58,63 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
    *
    * @param {{Array<ItemType>}} itemsInfo - Array of selected items
    */
-  const handleSelection = useCallback(async (itemsInfo: ItemType[]): Promise<any> => {
-    if (!itemsInfo || itemsInfo.length === 0) {
-      selectObject({});
-      return;
-    }
-
-    const {
-      projectId,
-      type,
-      name,
-      docId,
-    } = itemsInfo[0];
-
-    let { id, subtype } = itemsInfo[0];
-
-    if (!subtype || typeof subtype !== 'number') {
-      try {
-        const objectType = type === 55 ? mstrObjectEnum.mstrObjectType.dossier : mstrObjectEnum.mstrObjectType.report;
-        const objectInfo = await getObjectInfo(docId, projectId, objectType);
-        subtype = objectInfo.subtype;
-        // if subtype is not defined then the object is selected from a library page other
-        // than content discovery and search page. In this case we set use docId as the id
-        id = docId;
-      } catch (error) {
-        popupHelper.handlePopupErrors(error);
+  const handleSelection = useCallback(
+    async (itemsInfo: ItemType[]): Promise<any> => {
+      if (!itemsInfo || itemsInfo.length === 0) {
+        selectObject({});
+        return;
       }
-    }
 
-    const chosenMstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(subtype);
+      const { projectId, type, name, docId } = itemsInfo[0];
 
-    let isCubePublished = true;
+      let { id, subtype } = itemsInfo[0];
 
-    if (chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dataset) {
-      try {
-        const cubeInfo: any = await getCubeInfo(id, projectId);
-        isCubePublished = cubeInfo.status !== 0 || cubeInfo.serverMode === 2;
-      } catch (error) {
-        popupHelper.handlePopupErrors(error);
+      if (!subtype || typeof subtype !== 'number') {
+        try {
+          const objectType =
+            type === 55
+              ? mstrObjectEnum.mstrObjectType.dossier
+              : mstrObjectEnum.mstrObjectType.report;
+          const objectInfo = await getObjectInfo(docId, projectId, objectType);
+          subtype = objectInfo.subtype;
+          // if subtype is not defined then the object is selected from a library page other
+          // than content discovery and search page. In this case we set use docId as the id
+          id = docId;
+        } catch (error) {
+          popupHelper.handlePopupErrors(error);
+        }
       }
-    }
 
-    setIsPublished(isCubePublished);
+      const chosenMstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(subtype);
 
-    selectObject({
-      chosenObjectId: id,
-      chosenObjectName: name,
-      chosenProjectId: projectId,
-      chosenSubtype: subtype,
-      mstrObjectType: chosenMstrObjectType,
-    });
-  }, [selectObject]);
+      let isCubePublished = true;
+
+      if (chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dataset) {
+        try {
+          const cubeInfo: any = await getCubeInfo(id, projectId);
+          isCubePublished = cubeInfo.status !== 0 || cubeInfo.serverMode === 2;
+        } catch (error) {
+          popupHelper.handlePopupErrors(error);
+        }
+      }
+
+      setIsPublished(isCubePublished);
+
+      selectObject({
+        chosenObjectId: id,
+        chosenObjectName: name,
+        chosenProjectId: projectId,
+        chosenSubtype: subtype,
+        mstrObjectType: chosenMstrObjectType,
+      });
+    },
+    [selectObject]
+  );
 
   /**
    * Imports the object selected by the user
    */
-  const handleOk = async () => {
+  const handleOk = async (): Promise<void> => {
     let promptedResponse = {};
     try {
       const chosenMstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
@@ -120,11 +129,10 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
         const instance = await createDossierInstance(chosenProjectId, chosenObjectId, {});
 
         // If instance is prompted, then pull prompts definition.
-        const prompts = instance.status !== ObjectExecutionStatus.PROMPTED ? [] : await getObjectPrompts(
-          chosenObjectId,
-          chosenProjectId,
-          instance.mid,
-        );
+        const prompts =
+          instance.status !== ObjectExecutionStatus.PROMPTED
+            ? []
+            : await getObjectPrompts(chosenObjectId, chosenProjectId, instance.mid);
 
         // Updated state with prompts definition, if any.
         promptedResponse = {
@@ -135,9 +143,7 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
         // Delete instance that was created.
         await deleteDossierInstance(chosenProjectId, chosenObjectId, instance.mid);
       }
-      if (
-        chosenMstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name
-      ) {
+      if (chosenMstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name) {
         requestDossierOpen(promptedResponse);
       } else {
         requestImport(promptedResponse);
@@ -151,13 +157,13 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
    * Checks if the selected object is prompted and invokes popup
    * to render the 'Prepare data' UI
    */
-  const handleSecondary = async () => {
+  const handleSecondary = async (): Promise<void> => {
     try {
       const chosenMstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
 
       if (
-        chosenMstrObjectType === mstrObjectEnum.mstrObjectType.report
-        || chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dossier
+        chosenMstrObjectType === mstrObjectEnum.mstrObjectType.report ||
+        chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dossier
       ) {
         const isPromptedResponse = await isPrompted(
           chosenObjectId,
@@ -202,27 +208,27 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
     return () => window.removeEventListener('message', extendSession);
   }, [extendSession]);
 
-  const validateSession = () => {
+  const validateSession = (): void => {
     authenticationHelper.validateAuthToken().catch((error: object) => {
       popupHelper.handlePopupErrors(error);
     });
   };
 
   return (
-    <div className="library-window">
+    <div className='library-window'>
       <ObjectWindowTitle
-        objectType="" // not needed for import, falls back to 'Data'
-        objectName="" // not needed for import
+        objectType='' // not needed for import, falls back to 'Data'
+        objectName='' // not needed for import
         isReprompt={false}
         isEdit={false}
         index={0}
         total={0}
       />
-      <Spinner className="loading-spinner" type="large">{t('Loading...')}</Spinner>
-      <EmbeddedLibrary
-        handleSelection={handleSelection}
-        handleIframeLoadEvent={validateSession}
-      />
+      <Spinner className='loading-spinner' type='large'>
+        {t('Loading...')}
+      </Spinner>
+      {/* @ts-expect-error fix types after removing connect HOC */}
+      <EmbeddedLibrary handleSelection={handleSelection} handleIframeLoadEvent={validateSession} />
       <PopupButtons
         disableActiveActions={!chosenObjectId || disableActiveActions}
         handleOk={handleOk}
@@ -235,27 +241,13 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
         primaryImportBtnString={importActionTypes.IMPORT}
         primaryImportBtnId={importButtonIds.IMPORT}
         isPublished={isPublished}
-        isImportReport={mstrObjectEnum
-          .getMstrTypeBySubtype(chosenSubtype)
-          ?.type === mstrObjectEnum.mstrObjectType.report.type} // Includes entire type 3 objects(reports and cubes)
+        isImportReport={
+          mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype)?.type ===
+          mstrObjectEnum.mstrObjectType.report.type
+        } // Includes entire type 3 objects(reports and cubes)
       />
     </div>
   );
-};
-
-LibraryWindowNotConnected.propTypes = {
-  chosenSubtype: PropTypes.number,
-  selectObject: PropTypes.func,
-  chosenObjectId: PropTypes.string,
-  chosenProjectId: PropTypes.string,
-  requestImport: PropTypes.func,
-  requestDossierOpen: PropTypes.func,
-  handlePrepare: PropTypes.func,
-  setObjectData: PropTypes.func,
-  mstrObjectType: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.string),
-    PropTypes.shape({}),
-  ]),
 };
 
 function mapStateToProps(state: {
@@ -265,15 +257,11 @@ function mapStateToProps(state: {
     chosenProjectId: string;
     chosenSubtype: number;
     mstrObjectType: object;
-}}) {
+  };
+}): any {
   const { navigationTree } = state;
-  const {
-    chosenObjectName,
-    chosenObjectId,
-    chosenProjectId,
-    chosenSubtype,
-    mstrObjectType
-  } = navigationTree;
+  const { chosenObjectName, chosenObjectId, chosenProjectId, chosenSubtype, mstrObjectType } =
+    navigationTree;
   return {
     chosenObjectName,
     chosenObjectId,
@@ -292,7 +280,4 @@ const mapActionsToProps = {
   setObjectData: popupStateActions.setObjectData,
 };
 
-export const LibraryWindow = connect(
-  mapStateToProps,
-  mapActionsToProps
-)(LibraryWindowNotConnected);
+export const LibraryWindow = connect(mapStateToProps, mapActionsToProps)(LibraryWindowNotConnected);

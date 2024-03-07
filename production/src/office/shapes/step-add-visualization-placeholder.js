@@ -1,6 +1,7 @@
 import { officeApiHelper } from '../api/office-api-helper';
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepAddVisualizationPlaceholder {
   /**
@@ -16,14 +17,14 @@ class StepAddVisualizationPlaceholder {
    */
   addVisualizationPlaceholder = async (objectData, operationData) => {
     try {
-      const {
-        objectWorkingId,
-        shapeProps,
-        name: visualizationName,
-      } = objectData;
+      const { objectWorkingId, shapeProps, name: visualizationName } = objectData;
       const excelContext = await officeApiHelper.getExcelContext();
 
-      const shape = await officeApiHelper.addGeometricShape(excelContext, shapeProps, visualizationName);
+      const shape = await officeApiHelper.addGeometricShape(
+        excelContext,
+        shapeProps,
+        visualizationName
+      );
 
       const updatedObject = {
         objectWorkingId,

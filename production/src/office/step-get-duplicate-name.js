@@ -1,36 +1,41 @@
-import operationStepDispatcher from '../operation/operation-step-dispatcher';
 import operationErrorHandler from '../operation/operation-error-handler';
+import operationStepDispatcher from '../operation/operation-step-dispatcher';
 
 class StepGetDuplicateName {
-  init = (reduxStore) => {
+  init = reduxStore => {
     this.reduxStore = reduxStore;
   };
 
   /**
-  * Assigns new name to duplicated object.
-  *
-  * This function is subscribed as one of the operation steps with the key GET_DUPLICATE_NAME,
-  * therefore should be called only via operation bus.
-  *
-  * Assigning new name is skiped if vizualization key changed during duplication with edit for dossier.
-  * In that case, name of new visualization  will be taken from instance definition in next step.
-  *
-  * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
-  * @param {String} objectData.name Name of the original object.
-  * during duplication with edit.
-  */
+   * Assigns new name to duplicated object.
+   *
+   * This function is subscribed as one of the operation steps with the key GET_DUPLICATE_NAME,
+   * therefore should be called only via operation bus.
+   *
+   * Assigning new name is skiped if vizualization key changed during duplication with edit for dossier.
+   * In that case, name of new visualization  will be taken from instance definition in next step.
+   *
+   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param {String} objectData.name Name of the original object.
+   * during duplication with edit.
+   */
   getDuplicateName = (objectData, operationData) => {
     try {
       const { objectWorkingId, name } = objectData;
       const { objectEditedData } = operationData;
 
-      if (!(objectEditedData && objectEditedData.visualizationInfo
-        && objectEditedData.visualizationInfo.nameAndFormatShouldUpdate)) {
+      if (
+        !(
+          objectEditedData &&
+          objectEditedData.visualizationInfo &&
+          objectEditedData.visualizationInfo.nameAndFormatShouldUpdate
+        )
+      ) {
         const nameCandidate = this.prepareNewNameForDuplicatedObject(name);
         const newName = this.checkAndSolveNameConflicts(nameCandidate);
         const updatedObject = {
           objectWorkingId,
-          name: newName
+          name: newName,
         };
         operationStepDispatcher.updateObject(updatedObject);
       }
@@ -50,7 +55,7 @@ class StepGetDuplicateName {
    * @param {String} originalObjectName Name of the original object.
    * @returns {String} Proposed name for new duplicated object.
    */
-  prepareNewNameForDuplicatedObject = (originalObjectName) => {
+  prepareNewNameForDuplicatedObject = originalObjectName => {
     const splitedName = String(originalObjectName).split(' ');
     const nrOfWords = splitedName.length;
 
@@ -60,7 +65,7 @@ class StepGetDuplicateName {
 
     if (lastWord.length > 2 && lastWord[0] === '(' && lastWord[lastWordLength - 1] === ')') {
       const counterNumber = Number(lastWord.substring(1, lastWordLength - 1));
-      if (!(Number.isNaN(counterNumber))) {
+      if (!Number.isNaN(counterNumber)) {
         splitedName.pop();
         splitedName.push(`(${counterNumber + 1})`);
       } else {
@@ -85,7 +90,7 @@ class StepGetDuplicateName {
    * @param {String} nameCandidate Prepared name for duplicated object
    * @returns {String} Final name for new duplicated object
    */
-  checkAndSolveNameConflicts = (nameCandidate) => {
+  checkAndSolveNameConflicts = nameCandidate => {
     let finalNameCandidate = nameCandidate;
 
     const { objects } = this.reduxStore.getState().objectReducer;

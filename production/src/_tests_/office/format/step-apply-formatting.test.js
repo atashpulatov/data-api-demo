@@ -1,7 +1,6 @@
-import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
-import stepApplyFormatting from '../../../office/format/step-apply-formatting';
 import officeFormatHyperlinks from '../../../office/format/office-format-hyperlinks';
-import { officeApiHelper } from '../../../office/api/office-api-helper';
+import stepApplyFormatting from '../../../office/format/step-apply-formatting';
+import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
 
 describe('StepApplyFormatting', () => {
   afterEach(() => {
@@ -23,7 +22,10 @@ describe('StepApplyFormatting', () => {
 
     jest.spyOn(operationStepDispatcher, 'completeFormatData').mockImplementation();
 
-    const operationData = { objectWorkingId: 'objectWorkingIdTest', instanceDefinition: { mstrTable: {} }, };
+    const operationData = {
+      objectWorkingId: 'objectWorkingIdTest',
+      instanceDefinition: { mstrTable: {} },
+    };
 
     // when
     await stepApplyFormatting.applyFormatting({}, operationData);
@@ -50,15 +52,19 @@ describe('StepApplyFormatting', () => {
         mstrTable: {
           columnInformation: 'columnInformationTest',
           isCrosstab: 'isCrosstabTest',
-          metricsInRows: 'metricsInRowsTest'
-        }
+          metricsInRows: 'metricsInRowsTest',
+        },
       },
       officeTable: { columns: 'columnsTest' },
     };
 
-    jest.spyOn(stepApplyFormatting, 'filterColumnInformation').mockReturnValue('filteredColumnInformationTest');
+    jest
+      .spyOn(stepApplyFormatting, 'filterColumnInformation')
+      .mockReturnValue('filteredColumnInformationTest');
 
-    jest.spyOn(stepApplyFormatting, 'calculateMetricColumnOffset').mockReturnValue('calculateOffsetTest');
+    jest
+      .spyOn(stepApplyFormatting, 'calculateMetricColumnOffset')
+      .mockReturnValue('calculateOffsetTest');
 
     jest.spyOn(stepApplyFormatting, 'setupFormatting').mockImplementation();
 
@@ -74,7 +80,7 @@ describe('StepApplyFormatting', () => {
     expect(stepApplyFormatting.calculateMetricColumnOffset).toBeCalledTimes(1);
     expect(stepApplyFormatting.calculateMetricColumnOffset).toBeCalledWith(
       'filteredColumnInformationTest',
-      'isCrosstabTest',
+      'isCrosstabTest'
     );
 
     expect(stepApplyFormatting.setupFormatting).toBeCalledTimes(1);
@@ -95,53 +101,50 @@ describe('StepApplyFormatting', () => {
   });
 
   it.each`
-  expectedMetricColumnOffset | columnInformation | isCrosstab
-  
-  ${0} | ${[]}        | ${false}
-  ${0} | ${[{}]}      | ${false}
-  ${0} | ${[{}, {}]}  | ${false}
-  ${0} | ${[]}        | ${true}
-  ${0} | ${[{}]}      | ${true}
-  ${0} | ${[{}, {}]}  | ${true}
-
-  ${0} | ${[{ isAttribute: false }]}                          | ${true}
-  ${0} | ${[{ isAttribute: false }, {}]}                      | ${true}
-  ${0} | ${[{}, { isAttribute: false }]}                      | ${true}
-  ${0} | ${[{ isAttribute: false }, { isAttribute: false }]}  | ${true}
-  
-  ${0} | ${[{ isAttribute: true }]}       | ${true}
-  ${0} | ${[{}, { isAttribute: true }]}   | ${true}
-  ${1} | ${[{ isAttribute: true }, {}]}   | ${true}
-  ${1} | ${[{ isAttribute: true }, { isAttribute: false }]} | ${true}
-  
-  ${1} | ${[{ isAttribute: true, forms: [1] }, { isAttribute: false, forms: [1, 2] }]} | ${true}
-  ${1} | ${[{ isAttribute: true, forms: [1, 2] }, { isAttribute: false, forms: [1] }]} | ${true}
-
-  ${0} | ${[{ isAttribute: false, forms: [] }, { isAttribute: false, forms: [] }]}  | ${true}
-  ${1} | ${[{ isAttribute: true, forms: [] }, { isAttribute: false, forms: [] }]}   | ${true}
-  ${0} | ${[{ isAttribute: false, forms: [] }, { isAttribute: true, forms: [] }]}   | ${true}
-  ${0} | ${[{ isAttribute: true, forms: [] }, { isAttribute: true, forms: [] }]}    | ${true}
-
-  ${0} | ${[{ isAttribute: false, forms: [1] }, { isAttribute: false, forms: [1] }]}  | ${true}
-  ${1} | ${[{ isAttribute: true, forms: [1] }, { isAttribute: false, forms: [1] }]}   | ${true}
-  ${2} | ${[{ isAttribute: true, forms: [1] }, { isAttribute: true, forms: [1] }, { isAttribute: false, forms: [1] }]} | ${true}
-  ${3} | ${[{ isAttribute: true, forms: [1] }, { isAttribute: true, forms: [1] }, { isAttribute: true, forms: [1] }, { isAttribute: false, forms: [1] }]} | ${true}
-  ${0} | ${[{ isAttribute: true, forms: [1] }, { isAttribute: true, forms: [1] }, { isAttribute: true, forms: [1] }, { isAttribute: false, forms: [1] }]} | ${false}
-
-  ${0} | ${[{ isAttribute: false, forms: [1, 2] }, { isAttribute: false, forms: [1, 2] }, { isAttribute: false, forms: [1, 2] }]} | ${true}
-  ${1} | ${[{ isAttribute: true, forms: [1, 2] }, { isAttribute: false, forms: [1, 2] }, { isAttribute: false, forms: [1, 2] }]}  | ${true}
-  ${2} | ${[{ isAttribute: true, forms: [1, 2] }, { isAttribute: true, forms: [1, 2] }, { isAttribute: false, forms: [1, 2] }]}   | ${true}
-  ${3} | ${[{ isAttribute: true, forms: [1, 2] }, { isAttribute: true, forms: [1, 2] }, { isAttribute: true, forms: [1, 2] }, { isAttribute: false, forms: [1, 2] }]} | ${true}
-  ${0} | ${[{ isAttribute: true, forms: [1, 2] }, { isAttribute: true, forms: [1, 2] }, { isAttribute: true, forms: [1, 2] }, { isAttribute: false, forms: [1, 2] }]} | ${false}
-
-  `('calculateMetricColumnOffset should work as expected',
+    expectedMetricColumnOffset | columnInformation                                                                                                                                            | isCrosstab
+    ${0}                       | ${[]}                                                                                                                                                        | ${false}
+    ${0}                       | ${[{}]}                                                                                                                                                      | ${false}
+    ${0}                       | ${[{}, {}]}                                                                                                                                                  | ${false}
+    ${0}                       | ${[]}                                                                                                                                                        | ${true}
+    ${0}                       | ${[{}]}                                                                                                                                                      | ${true}
+    ${0}                       | ${[{}, {}]}                                                                                                                                                  | ${true}
+    ${0}                       | ${[{ isAttribute: false }]}                                                                                                                                  | ${true}
+    ${0}                       | ${[{ isAttribute: false }, {}]}                                                                                                                              | ${true}
+    ${0}                       | ${[{}, { isAttribute: false }]}                                                                                                                              | ${true}
+    ${0}                       | ${[{ isAttribute: false }, { isAttribute: false }]}                                                                                                          | ${true}
+    ${0}                       | ${[{ isAttribute: true }]}                                                                                                                                   | ${true}
+    ${0}                       | ${[{}, { isAttribute: true }]}                                                                                                                               | ${true}
+    ${1}                       | ${[{ isAttribute: true }, {}]}                                                                                                                               | ${true}
+    ${1}                       | ${[{ isAttribute: true }, { isAttribute: false }]}                                                                                                           | ${true}
+    ${1}                       | ${[{ isAttribute: true, forms: [1] }, { isAttribute: false, forms: [1, 2] }]}                                                                                | ${true}
+    ${1}                       | ${[{ isAttribute: true, forms: [1, 2] }, { isAttribute: false, forms: [1] }]}                                                                                | ${true}
+    ${0}                       | ${[{ isAttribute: false, forms: [] }, { isAttribute: false, forms: [] }]}                                                                                    | ${true}
+    ${1}                       | ${[{ isAttribute: true, forms: [] }, { isAttribute: false, forms: [] }]}                                                                                     | ${true}
+    ${0}                       | ${[{ isAttribute: false, forms: [] }, { isAttribute: true, forms: [] }]}                                                                                     | ${true}
+    ${0}                       | ${[{ isAttribute: true, forms: [] }, { isAttribute: true, forms: [] }]}                                                                                      | ${true}
+    ${0}                       | ${[{ isAttribute: false, forms: [1] }, { isAttribute: false, forms: [1] }]}                                                                                  | ${true}
+    ${1}                       | ${[{ isAttribute: true, forms: [1] }, { isAttribute: false, forms: [1] }]}                                                                                   | ${true}
+    ${2}                       | ${[{ isAttribute: true, forms: [1] }, { isAttribute: true, forms: [1] }, { isAttribute: false, forms: [1] }]}                                                | ${true}
+    ${3}                       | ${[{ isAttribute: true, forms: [1] }, { isAttribute: true, forms: [1] }, { isAttribute: true, forms: [1] }, { isAttribute: false, forms: [1] }]}             | ${true}
+    ${0}                       | ${[{ isAttribute: true, forms: [1] }, { isAttribute: true, forms: [1] }, { isAttribute: true, forms: [1] }, { isAttribute: false, forms: [1] }]}             | ${false}
+    ${0}                       | ${[{ isAttribute: false, forms: [1, 2] }, { isAttribute: false, forms: [1, 2] }, { isAttribute: false, forms: [1, 2] }]}                                     | ${true}
+    ${1}                       | ${[{ isAttribute: true, forms: [1, 2] }, { isAttribute: false, forms: [1, 2] }, { isAttribute: false, forms: [1, 2] }]}                                      | ${true}
+    ${2}                       | ${[{ isAttribute: true, forms: [1, 2] }, { isAttribute: true, forms: [1, 2] }, { isAttribute: false, forms: [1, 2] }]}                                       | ${true}
+    ${3}                       | ${[{ isAttribute: true, forms: [1, 2] }, { isAttribute: true, forms: [1, 2] }, { isAttribute: true, forms: [1, 2] }, { isAttribute: false, forms: [1, 2] }]} | ${true}
+    ${0}                       | ${[{ isAttribute: true, forms: [1, 2] }, { isAttribute: true, forms: [1, 2] }, { isAttribute: true, forms: [1, 2] }, { isAttribute: false, forms: [1, 2] }]} | ${false}
+  `(
+    'calculateMetricColumnOffset should work as expected',
     ({ expectedMetricColumnOffset, columnInformation, isCrosstab }) => {
-    // when
-      const attributeColumnNumber = stepApplyFormatting.calculateMetricColumnOffset(columnInformation, isCrosstab);
+      // when
+      const attributeColumnNumber = stepApplyFormatting.calculateMetricColumnOffset(
+        columnInformation,
+        isCrosstab
+      );
 
       // then
       expect(attributeColumnNumber).toEqual(expectedMetricColumnOffset);
-    });
+    }
+  );
 
   it('setupFormatting should do nothing when filteredColumnInformation is empty', () => {
     // given
@@ -164,7 +167,15 @@ describe('StepApplyFormatting', () => {
     const filteredColumnInformation = [{ isAttribute: true }];
 
     // when
-    stepApplyFormatting.setupFormatting(filteredColumnInformation, 'isCrosstabTest', 'offsetTest', 'officeTableTest', excelContext, 'instanceColumnsTest', 'metricsInRowsTest');
+    stepApplyFormatting.setupFormatting(
+      filteredColumnInformation,
+      'isCrosstabTest',
+      'offsetTest',
+      'officeTableTest',
+      excelContext,
+      'instanceColumnsTest',
+      'metricsInRowsTest'
+    );
 
     // then
     expect(stepApplyFormatting.getColumnRangeForFormatting).toBeCalledTimes(1);
@@ -192,7 +203,15 @@ describe('StepApplyFormatting', () => {
     const filteredColumnInformation = [{ isAttribute: false }];
 
     // when
-    stepApplyFormatting.setupFormatting(filteredColumnInformation, 'isCrosstabTest', 'offsetTest', 'officeTableTest', excelContext, 'instanceColumnsTest', 'metricsInRowsTest');
+    stepApplyFormatting.setupFormatting(
+      filteredColumnInformation,
+      'isCrosstabTest',
+      'offsetTest',
+      'officeTableTest',
+      excelContext,
+      'instanceColumnsTest',
+      'metricsInRowsTest'
+    );
 
     // then
     expect(stepApplyFormatting.getColumnRangeForFormatting).toBeCalledTimes(1);
@@ -221,26 +240,33 @@ describe('StepApplyFormatting', () => {
     const filteredColumnInformation = [{ isAttribute: true }];
 
     // when
-    stepApplyFormatting.setupFormatting(filteredColumnInformation, 'isCrosstabTest', 'offsetTest', 'officeTableTest', excelContext);
+    stepApplyFormatting.setupFormatting(
+      filteredColumnInformation,
+      'isCrosstabTest',
+      'offsetTest',
+      'officeTableTest',
+      excelContext
+    );
 
     // then
     expect(officeFormatHyperlinks.formatColumnAsHyperlinks).toBeCalledTimes(1);
   });
 
   it.each`
-  expectedNumberFormat  | getFormatCallNo | filteredColumnInformation
-  
-  ${[undefined, undefined]} | ${0} | ${[{ isAttribute: true }, { isAttribute: true }]}
-  ${['fmt 0', undefined]}   | ${1} | ${[{ isAttribute: false }, { isAttribute: true }]}
-  ${[undefined, 'fmt 1']}   | ${1} | ${[{ isAttribute: true }, { isAttribute: false }]}
-  ${['fmt 0', 'fmt 1']}     | ${2} | ${[{ isAttribute: false }, { isAttribute: false }]}
-  
-  `('setupFormatting should work as expected for 2 filteredColumnInformation elements',
+    expectedNumberFormat      | getFormatCallNo | filteredColumnInformation
+    ${[undefined, undefined]} | ${0}            | ${[{ isAttribute: true }, { isAttribute: true }]}
+    ${['fmt 0', undefined]}   | ${1}            | ${[{ isAttribute: false }, { isAttribute: true }]}
+    ${[undefined, 'fmt 1']}   | ${1}            | ${[{ isAttribute: true }, { isAttribute: false }]}
+    ${['fmt 0', 'fmt 1']}     | ${2}            | ${[{ isAttribute: false }, { isAttribute: false }]}
+  `(
+    'setupFormatting should work as expected for 2 filteredColumnInformation elements',
     async ({ expectedNumberFormat, getFormatCallNo, filteredColumnInformation }) => {
-    // given
+      // given
       const columnRangeMock = [{}, {}];
       let callNo = 0;
-      jest.spyOn(stepApplyFormatting, 'getColumnRangeForFormatting').mockImplementation(() => columnRangeMock[callNo++]);
+      jest
+        .spyOn(stepApplyFormatting, 'getColumnRangeForFormatting')
+        .mockImplementation(() => columnRangeMock[callNo++]);
 
       jest.spyOn(stepApplyFormatting, 'getFormat').mockImplementation(() => {
         if (filteredColumnInformation[callNo - 1].isAttribute === false) {
@@ -250,7 +276,15 @@ describe('StepApplyFormatting', () => {
       });
 
       // when
-      await stepApplyFormatting.setupFormatting(filteredColumnInformation, 'isCrosstabTest', 'offsetTest', 'officeTableTest', excelContext, 'instanceColumnsTest', 'metricsInRowsTest');
+      await stepApplyFormatting.setupFormatting(
+        filteredColumnInformation,
+        'isCrosstabTest',
+        'offsetTest',
+        'officeTableTest',
+        excelContext,
+        'instanceColumnsTest',
+        'metricsInRowsTest'
+      );
 
       // then
       expect(stepApplyFormatting.getColumnRangeForFormatting).toBeCalledTimes(2);
@@ -277,28 +311,23 @@ describe('StepApplyFormatting', () => {
 
       expect(columnRangeMock[0].numberFormat).toEqual(expectedNumberFormat[0]);
       expect(columnRangeMock[1].numberFormat).toEqual(expectedNumberFormat[1]);
-    });
+    }
+  );
 
   it.each`
-  expectedObjectIndex | index | isCrosstab | offset
-
-  ${9}                | ${10} | ${true}    | ${1}     
-  ${11}               | ${10} | ${false}   | ${1}     
-  
-  `('getColumnRangeForFormatting should work as expected',
-    ({
-      expectedObjectIndex,
-      index,
-      isCrosstab,
-      offset
-    }) => {
-    // given
+    expectedObjectIndex | index | isCrosstab | offset
+    ${9}                | ${10} | ${true}    | ${1}
+    ${11}               | ${10} | ${false}   | ${1}
+  `(
+    'getColumnRangeForFormatting should work as expected',
+    ({ expectedObjectIndex, index, isCrosstab, offset }) => {
+      // given
       const getItemAtMock = jest.fn().mockReturnValue({ getDataBodyRange: jest.fn() });
 
       const officeTableMock = {
         columns: {
-          getItemAt: getItemAtMock
-        }
+          getItemAt: getItemAtMock,
+        },
       };
 
       // when
@@ -307,109 +336,93 @@ describe('StepApplyFormatting', () => {
       // then
       expect(getItemAtMock).toBeCalledTimes(1);
       expect(getItemAtMock).toBeCalledWith(expectedObjectIndex);
-    });
+    }
+  );
 
   it.each`
-  expectedFilteredColumnInformation | columnInformation
-  
-  ${[]} | ${[]}
-  ${[]} | ${[{}]}
-  
-  ${[{ sth: 'sth' }]}                 | ${[{ sth: 'sth' }]}
-  ${[{ sth: 'sth' }, { sth: 'sth' }]} | ${[{ sth: 'sth' }, { sth: 'sth' }]}
-
-  ${[{ isAttribute: false }]} | ${[{ isAttribute: false }]}
-  ${[{ isAttribute: true }]}  | ${[{ isAttribute: true }]}
-  
-  ${[{ isAttribute: false, sth: 'sth' }]} | ${[{ isAttribute: false, sth: 'sth' }]}
-  ${[{ isAttribute: true, sth: 'sth' }]}  | ${[{ isAttribute: true, sth: 'sth' }]}
-  
-  ${[{ isAttribute: false }, { isAttribute: false }]} | ${[{ isAttribute: false }, { isAttribute: false }]}
-  ${[{ isAttribute: true }, { isAttribute: true }]}   | ${[{ isAttribute: true }, { isAttribute: true }]}
-  
-  ${[{ isAttribute: false, sth: 'sth' }, { isAttribute: false, sth: 'sth' }]} | ${[{ isAttribute: false, sth: 'sth' }, { isAttribute: false, sth: 'sth' }]}
-  ${[{ isAttribute: true, sth: 'sth' }, { isAttribute: true, sth: 'sth' }]}   | ${[{ isAttribute: true, sth: 'sth' }, { isAttribute: true, sth: 'sth' }]}
-  
-  ${[{ isAttribute: true }, { isAttribute: false }]} | ${[{ isAttribute: true }, { isAttribute: false }]}
-  ${[{ isAttribute: false }, { isAttribute: true }]} | ${[{ isAttribute: false }, { isAttribute: true }]}
-  
-  ${[{ isAttribute: true, sth: 'sth' }, { isAttribute: false, sth: 'sth' }]} | ${[{ isAttribute: true, sth: 'sth' }, { isAttribute: false, sth: 'sth' }]}
-  ${[{ isAttribute: false, sth: 'sth' }, { isAttribute: true, sth: 'sth' }]} | ${[{ isAttribute: false, sth: 'sth' }, { isAttribute: true, sth: 'sth' }]}
-  
-  `('filterColumnInformation should work as expected for non crosstab',
+    expectedFilteredColumnInformation                                           | columnInformation
+    ${[]}                                                                       | ${[]}
+    ${[]}                                                                       | ${[{}]}
+    ${[{ sth: 'sth' }]}                                                         | ${[{ sth: 'sth' }]}
+    ${[{ sth: 'sth' }, { sth: 'sth' }]}                                         | ${[{ sth: 'sth' }, { sth: 'sth' }]}
+    ${[{ isAttribute: false }]}                                                 | ${[{ isAttribute: false }]}
+    ${[{ isAttribute: true }]}                                                  | ${[{ isAttribute: true }]}
+    ${[{ isAttribute: false, sth: 'sth' }]}                                     | ${[{ isAttribute: false, sth: 'sth' }]}
+    ${[{ isAttribute: true, sth: 'sth' }]}                                      | ${[{ isAttribute: true, sth: 'sth' }]}
+    ${[{ isAttribute: false }, { isAttribute: false }]}                         | ${[{ isAttribute: false }, { isAttribute: false }]}
+    ${[{ isAttribute: true }, { isAttribute: true }]}                           | ${[{ isAttribute: true }, { isAttribute: true }]}
+    ${[{ isAttribute: false, sth: 'sth' }, { isAttribute: false, sth: 'sth' }]} | ${[{ isAttribute: false, sth: 'sth' }, { isAttribute: false, sth: 'sth' }]}
+    ${[{ isAttribute: true, sth: 'sth' }, { isAttribute: true, sth: 'sth' }]}   | ${[{ isAttribute: true, sth: 'sth' }, { isAttribute: true, sth: 'sth' }]}
+    ${[{ isAttribute: true }, { isAttribute: false }]}                          | ${[{ isAttribute: true }, { isAttribute: false }]}
+    ${[{ isAttribute: false }, { isAttribute: true }]}                          | ${[{ isAttribute: false }, { isAttribute: true }]}
+    ${[{ isAttribute: true, sth: 'sth' }, { isAttribute: false, sth: 'sth' }]}  | ${[{ isAttribute: true, sth: 'sth' }, { isAttribute: false, sth: 'sth' }]}
+    ${[{ isAttribute: false, sth: 'sth' }, { isAttribute: true, sth: 'sth' }]}  | ${[{ isAttribute: false, sth: 'sth' }, { isAttribute: true, sth: 'sth' }]}
+  `(
+    'filterColumnInformation should work as expected for non crosstab',
     ({ expectedFilteredColumnInformation, columnInformation }) => {
-    // when
+      // when
       const result = stepApplyFormatting.filterColumnInformation(columnInformation, false);
 
       // then
       expect(result).toEqual(expectedFilteredColumnInformation);
-    });
+    }
+  );
 });
 
 it.each`
-  expectedParsedFormat | category | formatString
-  
-  ${'General'} | ${9} | ${undefined}
-  ${'General'} | ${9} | ${''}
-  ${'General'} | ${9} | ${'formatString'}
-  
-  ${'General'} | ${undefined} | ${''}
-  ${'General'} | ${undefined} | ${'# ?/?'}
-  ${'General'} | ${undefined} | ${'# ??/?'}
-  ${'General'} | ${undefined} | ${'# ???/?'}
-  ${'General'} | ${undefined} | ${'# ?/?a'}
-  ${'General'} | ${undefined} | ${'# ??/?a'}
-  ${'General'} | ${undefined} | ${'# ???/?a'}
-  
-  ${'[-'} | ${undefined} | ${'[-'}
-  ${'[$-'} | ${undefined} | ${'[$-'}
-  ${'[$-'} | ${undefined} | ${'[$$-'}
-  ${'[$\\$-'} | ${undefined} | ${'[$$$-'}
-  ${'[$$-'} | ${undefined} | ${'[$$$$-'}
-  ${'[$$\\$-'} | ${undefined} | ${'[$$$$$-'}
-  ${'[$$$-'} | ${undefined} | ${'[$$$$$$-'}
-
-  ${'a[$-'} | ${undefined} | ${'a[$-'}
-  ${'a[$-'} | ${undefined} | ${'a[$$-'}
-  ${'a[$\\$-'} | ${undefined} | ${'a[$$$-'}
-  ${'a[$$-'} | ${undefined} | ${'a[$$$$-'}
-  ${'a[$$\\$-'} | ${undefined} | ${'a[$$$$$-'}
-  ${'a[$$$-'} | ${undefined} | ${'a[$$$$$$-'}
-
-  ${'a[$-b'} | ${undefined} | ${'a[$-b'}
-  ${'a[$-b'} | ${undefined} | ${'a[$$-b'}
-  ${'a[$\\$-b'} | ${undefined} | ${'a[$$$-b'}
-  ${'a[$$-b'} | ${undefined} | ${'a[$$$$-b'}
-  ${'a[$$\\$-b'} | ${undefined} | ${'a[$$$$$-b'}
-  ${'a[$$$-b'} | ${undefined} | ${'a[$$$$$$-b'}
-
-  ${'a[$-[$-b'} | ${undefined} | ${'a[$-[$-b'}
-  ${'a[$-[$-b'} | ${undefined} | ${'a[$$-[$$-b'}
-  ${'a[$\\$-[$\\$-b'} | ${undefined} | ${'a[$$$-[$$$-b'}
-  ${'a[$$-[$$-b'} | ${undefined} | ${'a[$$$$-[$$$$-b'}
-  ${'a[$$\\$-[$$\\$-b'} | ${undefined} | ${'a[$$$$$-[$$$$$-b'}
-  ${'a[$$$-[$$$-b'} | ${undefined} | ${'a[$$$$$$-[$$$$$$-b'}
-
-  ${'a[$-c[$-b'} | ${undefined} | ${'a[$-c[$-b'}
-  ${'a[$-c[$-b'} | ${undefined} | ${'a[$$-c[$$-b'}
-  ${'a[$\\$-c[$\\$-b'} | ${undefined} | ${'a[$$$-c[$$$-b'}
-  ${'a[$$-c[$$-b'} | ${undefined} | ${'a[$$$$-c[$$$$-b'}
+  expectedParsedFormat   | category     | formatString
+  ${'General'}           | ${9}         | ${undefined}
+  ${'General'}           | ${9}         | ${''}
+  ${'General'}           | ${9}         | ${'formatString'}
+  ${'General'}           | ${undefined} | ${''}
+  ${'General'}           | ${undefined} | ${'# ?/?'}
+  ${'General'}           | ${undefined} | ${'# ??/?'}
+  ${'General'}           | ${undefined} | ${'# ???/?'}
+  ${'General'}           | ${undefined} | ${'# ?/?a'}
+  ${'General'}           | ${undefined} | ${'# ??/?a'}
+  ${'General'}           | ${undefined} | ${'# ???/?a'}
+  ${'[-'}                | ${undefined} | ${'[-'}
+  ${'[$-'}               | ${undefined} | ${'[$-'}
+  ${'[$-'}               | ${undefined} | ${'[$$-'}
+  ${'[$\\$-'}            | ${undefined} | ${'[$$$-'}
+  ${'[$$-'}              | ${undefined} | ${'[$$$$-'}
+  ${'[$$\\$-'}           | ${undefined} | ${'[$$$$$-'}
+  ${'[$$$-'}             | ${undefined} | ${'[$$$$$$-'}
+  ${'a[$-'}              | ${undefined} | ${'a[$-'}
+  ${'a[$-'}              | ${undefined} | ${'a[$$-'}
+  ${'a[$\\$-'}           | ${undefined} | ${'a[$$$-'}
+  ${'a[$$-'}             | ${undefined} | ${'a[$$$$-'}
+  ${'a[$$\\$-'}          | ${undefined} | ${'a[$$$$$-'}
+  ${'a[$$$-'}            | ${undefined} | ${'a[$$$$$$-'}
+  ${'a[$-b'}             | ${undefined} | ${'a[$-b'}
+  ${'a[$-b'}             | ${undefined} | ${'a[$$-b'}
+  ${'a[$\\$-b'}          | ${undefined} | ${'a[$$$-b'}
+  ${'a[$$-b'}            | ${undefined} | ${'a[$$$$-b'}
+  ${'a[$$\\$-b'}         | ${undefined} | ${'a[$$$$$-b'}
+  ${'a[$$$-b'}           | ${undefined} | ${'a[$$$$$$-b'}
+  ${'a[$-[$-b'}          | ${undefined} | ${'a[$-[$-b'}
+  ${'a[$-[$-b'}          | ${undefined} | ${'a[$$-[$$-b'}
+  ${'a[$\\$-[$\\$-b'}    | ${undefined} | ${'a[$$$-[$$$-b'}
+  ${'a[$$-[$$-b'}        | ${undefined} | ${'a[$$$$-[$$$$-b'}
+  ${'a[$$\\$-[$$\\$-b'}  | ${undefined} | ${'a[$$$$$-[$$$$$-b'}
+  ${'a[$$$-[$$$-b'}      | ${undefined} | ${'a[$$$$$$-[$$$$$$-b'}
+  ${'a[$-c[$-b'}         | ${undefined} | ${'a[$-c[$-b'}
+  ${'a[$-c[$-b'}         | ${undefined} | ${'a[$$-c[$$-b'}
+  ${'a[$\\$-c[$\\$-b'}   | ${undefined} | ${'a[$$$-c[$$$-b'}
+  ${'a[$$-c[$$-b'}       | ${undefined} | ${'a[$$$$-c[$$$$-b'}
   ${'a[$$\\$-c[$$\\$-b'} | ${undefined} | ${'a[$$$$$-c[$$$$$-b'}
-  ${'a[$$$-c[$$$-b'} | ${undefined} | ${'a[$$$$$$-c[$$$$$$-b'}
-
-  ${'\\$'} | ${undefined} | ${'$'}
-  ${'\\$'} | ${undefined} | ${'$"'}
-  ${'\\$'} | ${undefined} | ${'$""'}
-  ${'\\$'} | ${undefined} | ${'"$'}
-  ${'\\$'} | ${undefined} | ${'"$"'}
-  ${'\\$'} | ${undefined} | ${'"$""'}
-  ${'\\$'} | ${undefined} | ${'""$'}
-  ${'\\$'} | ${undefined} | ${'""$"'}
-  
-  ${'"'} | ${undefined} | ${'"'}
-  ${'a'} | ${undefined} | ${'a'}
-  
-  `('getFormat should work as expected', ({ expectedParsedFormat, category, formatString }) => {
+  ${'a[$$$-c[$$$-b'}     | ${undefined} | ${'a[$$$$$$-c[$$$$$$-b'}
+  ${'\\$'}               | ${undefined} | ${'$'}
+  ${'\\$'}               | ${undefined} | ${'$"'}
+  ${'\\$'}               | ${undefined} | ${'$""'}
+  ${'\\$'}               | ${undefined} | ${'"$'}
+  ${'\\$'}               | ${undefined} | ${'"$"'}
+  ${'\\$'}               | ${undefined} | ${'"$""'}
+  ${'\\$'}               | ${undefined} | ${'""$'}
+  ${'\\$'}               | ${undefined} | ${'""$"'}
+  ${'"'}                 | ${undefined} | ${'"'}
+  ${'a'}                 | ${undefined} | ${'a'}
+`('getFormat should work as expected', ({ expectedParsedFormat, category, formatString }) => {
   // when
   const result = stepApplyFormatting.getFormat({ formatString, category });
 

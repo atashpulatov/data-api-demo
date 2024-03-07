@@ -1,7 +1,12 @@
-import { mstrObjectRestService, DATA_LIMIT, IMPORT_ROW_LIMIT, } from '../../mstr-object/mstr-object-rest-service';
+import {
+  DATA_LIMIT,
+  IMPORT_ROW_LIMIT,
+  mstrObjectRestService,
+} from '../../mstr-object/mstr-object-rest-service';
 import officeInsertService from './office-insert-service';
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepFetchInsertDataIntoExcel {
   /**
@@ -32,20 +37,21 @@ class StepFetchInsertDataIntoExcel {
     console.time('Total');
     try {
       const {
-        objectWorkingId, subtotalsInfo, subtotalsInfo: { importSubtotal = true }, definition
+        objectWorkingId,
+        subtotalsInfo,
+        subtotalsInfo: { importSubtotal = true },
+        definition,
       } = objectData;
-      const {
-        operationType,
-        tableChanged,
-        excelContext,
-        officeTable,
-        instanceDefinition,
-      } = operationData;
+      const { excelContext, officeTable, instanceDefinition } = operationData;
 
       const { columns, rows, mstrTable } = instanceDefinition;
       const limit = Math.min(Math.floor(DATA_LIMIT / columns), IMPORT_ROW_LIMIT);
 
-      const rowGenerator = mstrObjectRestService.fetchContentGenerator({ ...objectData, limit, instanceDefinition });
+      const rowGenerator = mstrObjectRestService.fetchContentGenerator({
+        ...objectData,
+        limit,
+        instanceDefinition,
+      });
 
       let rowIndex = 0;
       const contextPromises = [];
@@ -55,25 +61,27 @@ class StepFetchInsertDataIntoExcel {
 
       console.time('Fetch and insert into excel');
       for await (const {
-        row, header, subtotalAddress, metricsInRows, rowsInformation
+        row,
+        header,
+        subtotalAddress,
+        metricsInRows,
+        rowsInformation,
       } of rowGenerator) {
-        console.groupCollapsed(`Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`);
+        console.groupCollapsed(
+          `Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`
+        );
 
         excelContext.workbook.application.suspendApiCalculationUntilNextSync();
 
-        await officeInsertService.appendRows(
-          {
-            officeTable,
-            excelContext,
-            excelRows: row,
-            rowIndex,
-            operationType,
-            tableChanged,
-            contextPromises,
-            header,
-            mstrTable
-          }
-        );
+        await officeInsertService.appendRows({
+          officeTable,
+          excelContext,
+          excelRows: row,
+          rowIndex,
+          contextPromises,
+          header,
+          mstrTable,
+        });
 
         if (importSubtotal) {
           this.getSubtotalCoordinates(subtotalAddress, subtotalsAddresses);
@@ -83,14 +91,15 @@ class StepFetchInsertDataIntoExcel {
           const columnInformation = newInstance?.mstrTable?.columnInformation || [];
           newDefinition = {
             ...definition,
-            metrics: metricsInRows
+            metrics: metricsInRows,
           };
           newInstance = {
-            ...instanceDefinition, mstrTable: {
+            ...instanceDefinition,
+            mstrTable: {
               ...mstrTable,
               metricsInRows,
-              columnInformation: [...columnInformation, ...rowsInformation]
-            }
+              columnInformation: [...columnInformation, ...rowsInformation],
+            },
           };
         }
 
@@ -98,7 +107,10 @@ class StepFetchInsertDataIntoExcel {
 
         await officeInsertService.syncChangesToExcel(contextPromises, false);
 
-        operationStepDispatcher.updateOperation({ objectWorkingId, loadedRows: rowIndex, });
+        operationStepDispatcher.updateOperation({
+          objectWorkingId,
+          loadedRows: rowIndex,
+        });
         console.groupEnd();
       }
       console.timeEnd('Fetch and insert into excel');
@@ -114,8 +126,8 @@ class StepFetchInsertDataIntoExcel {
 
       const updatedObject = {
         objectWorkingId,
-        subtotalsInfo: { ...subtotalsInfo, subtotalsAddresses, },
-        ...(!!newDefinition && { definition: newDefinition })
+        subtotalsInfo: { ...subtotalsInfo, subtotalsAddresses },
+        ...(!!newDefinition && { definition: newDefinition }),
       };
 
       operationStepDispatcher.updateOperation(updatedOperation);

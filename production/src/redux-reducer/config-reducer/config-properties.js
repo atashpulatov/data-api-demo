@@ -1,1 +1,3 @@
-export const configProperties = { actions: { setShowHidden: 'SET_SHOW_HIDDEN' } };
+export const configProperties = {
+  actions: { setShowHidden: 'SET_SHOW_HIDDEN' },
+};

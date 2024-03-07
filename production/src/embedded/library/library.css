@@ -3,7 +3,7 @@
   position: fixed;
   width: 100%;
   overflow: hidden;
-  min-width: 100%;    
+  min-width: 100%;
   overflow-x: auto;
 }
 
@@ -12,17 +12,17 @@
   margin: 15px;
 }
 
-.library-window .title-bar>span {
+.library-window .title-bar > span {
   font-size: 18px;
   color: #333333;
   font-weight: 500;
 }
 
 .library-iframe {
-  border-top: 1px solid #EBEBEB;
+  border-top: 1px solid #ebebeb;
 }
 
-#popup-wrapper .library-window .empty  {
+#popup-wrapper .library-window .empty {
   position: fixed;
   left: 0;
   top: 0;

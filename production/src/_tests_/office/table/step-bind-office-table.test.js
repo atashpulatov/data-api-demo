@@ -1,8 +1,9 @@
-import stepBindOfficeTable from '../../../office/table/step-bind-office-table';
-import officeApiDataLoader from '../../../office/api/office-api-data-loader';
 import { officeApiHelper } from '../../../office/api/office-api-helper';
-import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
+
+import officeApiDataLoader from '../../../office/api/office-api-data-loader';
+import stepBindOfficeTable from '../../../office/table/step-bind-office-table';
 import operationErrorHandler from '../../../operation/operation-error-handler';
+import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
 import { EDIT_OPERATION, REFRESH_OPERATION } from '../../../operation/operation-type-names';
 
 describe('StepBindOfficeTable', () => {
@@ -12,7 +13,7 @@ describe('StepBindOfficeTable', () => {
 
   it('bindOfficeTable should handle exception', async () => {
     // given
-    const operationData = { tableChanged: true, };
+    const operationData = { tableChanged: true };
 
     jest.spyOn(console, 'error');
 
@@ -30,7 +31,11 @@ describe('StepBindOfficeTable', () => {
     expect(console.error).toBeCalledWith(new Error('errorTest'));
 
     expect(operationErrorHandler.handleOperationError).toBeCalledTimes(1);
-    expect(operationErrorHandler.handleOperationError).toBeCalledWith({}, operationData, new Error('errorTest'));
+    expect(operationErrorHandler.handleOperationError).toBeCalledWith(
+      {},
+      operationData,
+      new Error('errorTest')
+    );
   });
 
   it('bindOfficeTable should work as expected', async () => {
@@ -58,7 +63,11 @@ describe('StepBindOfficeTable', () => {
 
     // then
     expect(officeApiDataLoader.loadSingleExcelData).toBeCalledTimes(1);
-    expect(officeApiDataLoader.loadSingleExcelData).toBeCalledWith(excelContext, { showHeaders: false, showTotals: false }, 'name');
+    expect(officeApiDataLoader.loadSingleExcelData).toBeCalledWith(
+      excelContext,
+      { showHeaders: false, showTotals: false },
+      'name'
+    );
 
     expect(officeApiHelper.bindNamedItem).toBeCalledTimes(1);
     expect(officeApiHelper.bindNamedItem).toBeCalledWith('tableNameTest', 'bindIdTest');
@@ -68,12 +77,11 @@ describe('StepBindOfficeTable', () => {
   });
 
   it.each`
-  operationType
-  ${EDIT_OPERATION}      
-  ${REFRESH_OPERATION}     
-  
+    operationType
+    ${EDIT_OPERATION}
+    ${REFRESH_OPERATION}
   `('should skip bindOfficeTable if no new table created', async ({ operationType }) => {
-  // given
+    // given
     const objectData = {
       bindId: 'bindIdTest',
       objectWorkingId: 'objectWorkingIdTest',

@@ -1,7 +1,12 @@
 import { mstrObjectRestService } from './mstr-object-rest-service';
-import operationStepDispatcher from '../operation/operation-step-dispatcher';
+
 import operationErrorHandler from '../operation/operation-error-handler';
-import { getObjectPrompts, populateDetails, populateDefinition } from './get-object-details-methods';
+import operationStepDispatcher from '../operation/operation-step-dispatcher';
+import {
+  getObjectPrompts,
+  populateDefinition,
+  populateDetails,
+} from './get-object-details-methods';
 
 class StepGetObjectDetails {
   /**
@@ -26,16 +31,10 @@ class StepGetObjectDetails {
     console.time('Total');
 
     try {
-      const {
-        objectWorkingId,
-        objectId,
-        projectId,
-        mstrObjectType,
-      } = objectData;
+      const { objectWorkingId, objectId, projectId, mstrObjectType } = objectData;
 
-      const {
-        ancestors, certifiedInfo, dateModified, owner, name,
-      } = await mstrObjectRestService.getObjectInfo(objectId, projectId, mstrObjectType);
+      const { ancestors, certifiedInfo, dateModified, owner, name } =
+        await mstrObjectRestService.getObjectInfo(objectId, projectId, mstrObjectType);
 
       const prompts = await getObjectPrompts(objectData, objectId, projectId, operationData);
 

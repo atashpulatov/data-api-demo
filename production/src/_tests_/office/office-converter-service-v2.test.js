@@ -1,19 +1,42 @@
+import mstrAttributeFormHelper from '../../mstr-object/helper/mstr-attribute-form-helper';
 import officeConverter from '../../office/office-converter-service-v2';
+
+import mstrCompoundGridHandler from '../../mstr-object/handler/mstr-compound-grid-handler';
+import mstrGridHandler from '../../mstr-object/handler/mstr-grid-handler';
+import jsonHandler from '../../mstr-object/handler/mstr-normalized-json-handler';
 import response from '../../mstr-object/rest-api-v2.json';
 import regularCompoundJSON from '../mstr-object/compound-grid/Regular Compound Grid.json';
 import microchartsExamples from '../mstr-object/microcharts/MicroChart Examples.json';
-import jsonHandler from '../../mstr-object/handler/mstr-normalized-json-handler';
-import { columnInformationMock, expectedColumnSplit, expectedColumnNoSplit } from './__mock__object__/column-information-mock';
-import mstrCompoundGridHandler from '../../mstr-object/handler/mstr-compound-grid-handler';
-import mstrGridHandler from '../../mstr-object/handler/mstr-grid-handler';
-import mstrAttributeFormHelper from '../../mstr-object/helper/mstr-attribute-form-helper';
+
+import {
+  columnInformationMock,
+  expectedColumnNoSplit,
+  expectedColumnSplit,
+} from './__mock__object__/column-information-mock';
 
 describe('Office converter service v2', () => {
   it('should return create a table', () => {
     // given
-    const attrforms = { supportForms: false, displayAttrFormNames: 'Automatic' };
+    const attrforms = {
+      supportForms: false,
+      displayAttrFormNames: 'Automatic',
+    };
     const crosstabsResponse = { ...response, attrforms };
-    const expecteObjectKeys = ['tableSize', 'columnInformation', 'headers', 'id', 'isCrosstab', 'isCrosstabular', 'name', 'rows', 'visualizationType', 'attributesNames', 'attributes', 'metrics', 'subtotalsInfo'];
+    const expecteObjectKeys = [
+      'tableSize',
+      'columnInformation',
+      'headers',
+      'id',
+      'isCrosstab',
+      'isCrosstabular',
+      'name',
+      'rows',
+      'visualizationType',
+      'attributesNames',
+      'attributes',
+      'metrics',
+      'subtotalsInfo',
+    ];
     // when
     const table = officeConverter.createTable(crosstabsResponse);
     // then
@@ -47,12 +70,22 @@ describe('Office converter service v2', () => {
   });
   it('should return row and column headers of crosstab report without attribute forms', () => {
     // given
-    const attrforms = { supportForms: false, displayAttrFormNames: 'Automatic' };
+    const attrforms = {
+      supportForms: false,
+      displayAttrFormNames: 'Automatic',
+    };
     const crosstabsResponse = { ...response, attrforms };
     const expectedHeaders = {
       columns: [
         ['BWI 1', 'BWI 1', 'BWI 1', 'DCA 2', 'DCA 2', 'DCA 2'],
-        ['Flights Delayed', 'Avg Delay (min)', 'On-Time', 'Flights Delayed', 'Avg Delay (min)', 'On-Time'],
+        [
+          'Flights Delayed',
+          'Avg Delay (min)',
+          'On-Time',
+          'Flights Delayed',
+          'Avg Delay (min)',
+          'On-Time',
+        ],
       ],
       rows: [
         ['2009', 'January'],
@@ -64,7 +97,36 @@ describe('Office converter service v2', () => {
         ['2010', 'March'],
         ['2010', 'Total'],
       ],
-      subtotalAddress: [false, false, false, false, false, false, false, { attributeIndex: 1, axis: 'rows', colIndex: 3 }, false, false, false, false, false, false, false, { attributeIndex: 1, axis: 'rows', colIndex: 7 }, false, false, false, false, false, false, false, false, false, false, false, false],
+      subtotalAddress: [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        { attributeIndex: 1, axis: 'rows', colIndex: 3 },
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        { attributeIndex: 1, axis: 'rows', colIndex: 7 },
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+      ],
     };
     // when
     const headers = officeConverter.getHeaders(crosstabsResponse, true, false);
@@ -79,7 +141,14 @@ describe('Office converter service v2', () => {
       columns: [
         ['BWI', 'BWI', 'BWI', 'DCA', 'DCA', 'DCA'],
         ['1', '1', '1', '2', '2', '2'],
-        ['Flights Delayed', 'Avg Delay (min)', 'On-Time', 'Flights Delayed', 'Avg Delay (min)', 'On-Time'],
+        [
+          'Flights Delayed',
+          'Avg Delay (min)',
+          'On-Time',
+          'Flights Delayed',
+          'Avg Delay (min)',
+          'On-Time',
+        ],
       ],
       rows: [
         ['2009', 'January'],
@@ -91,7 +160,36 @@ describe('Office converter service v2', () => {
         ['2010', 'March'],
         ['2010', 'Total'],
       ],
-      subtotalAddress: [false, false, false, false, false, false, false, { attributeIndex: 1, axis: 'rows', colIndex: 3 }, false, false, false, false, false, false, false, { attributeIndex: 1, axis: 'rows', colIndex: 7 }, false, false, false, false, false, false, false, false, false, false, false, false],
+      subtotalAddress: [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        { attributeIndex: 1, axis: 'rows', colIndex: 3 },
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        { attributeIndex: 1, axis: 'rows', colIndex: 7 },
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+      ],
     };
     // when
     const headers = officeConverter.getHeaders(crosstabsResponse, true, false);
@@ -100,7 +198,10 @@ describe('Office converter service v2', () => {
   });
   it('should getTableSize', () => {
     // given
-    const attrforms = { supportForms: false, displayAttrFormNames: 'Automatic' };
+    const attrforms = {
+      supportForms: false,
+      displayAttrFormNames: 'Automatic',
+    };
     const crosstabsResponse = { ...response, attrforms };
     const isCrosstab = officeConverter.isCrosstab(crosstabsResponse);
     const gridHandler = officeConverter.getHandler(response);
@@ -117,9 +218,14 @@ describe('Office converter service v2', () => {
     const expectedFirstColumn = {
       attributeId: '9BC4691C11E97721AF570080EF55306C',
       attributeName: 'Year',
-      forms: [{
-        baseFormType: 3, dataType: 33, id: '45C11FA478E745FEA08D781CEA190FE5', name: 'ID',
-      }],
+      forms: [
+        {
+          baseFormType: 3,
+          dataType: 33,
+          id: '45C11FA478E745FEA08D781CEA190FE5',
+          name: 'ID',
+        },
+      ],
       isAttribute: true,
     };
     // when
@@ -131,10 +237,15 @@ describe('Office converter service v2', () => {
   it('should split column information per attribute form for formatting', () => {
     // given
     const columnInformation = columnInformationMock;
-    const gridHandler = jsonHandler;
     // when
-    const colInformationSplit = mstrAttributeFormHelper.splitAttributeForms(columnInformation, true);
-    const colInformationNoSplit = mstrAttributeFormHelper.splitAttributeForms(columnInformation, false);
+    const colInformationSplit = mstrAttributeFormHelper.splitAttributeForms(
+      columnInformation,
+      true
+    );
+    const colInformationNoSplit = mstrAttributeFormHelper.splitAttributeForms(
+      columnInformation,
+      false
+    );
     // then
     expect(colInformationSplit).toEqual(expectedColumnSplit);
     expect(colInformationNoSplit).toEqual(expectedColumnNoSplit);
@@ -150,7 +261,12 @@ describe('Office converter service v2', () => {
   it('should run handler for tabular data', () => {
     // given
     const renderTabularSpy = jest.spyOn(jsonHandler, 'renderTabular');
-    const mockResponse = { definition: { attrforms: { supportForms: false, displayAttrFormNames: 'Automatic' } }, data: { headers: { rows: {} } } };
+    const mockResponse = {
+      definition: {
+        attrforms: { supportForms: false, displayAttrFormNames: 'Automatic' },
+      },
+      data: { headers: { rows: {} } },
+    };
     // when
     const returnedValue = officeConverter.getRows(mockResponse);
     // then
@@ -159,26 +275,38 @@ describe('Office converter service v2', () => {
   });
   it.each`
     gridData               | expectedGridHandler
-    ${response}            | ${mstrGridHandler}     
-    ${regularCompoundJSON} | ${mstrCompoundGridHandler}     
+    ${response}            | ${mstrGridHandler}
+    ${regularCompoundJSON} | ${mstrCompoundGridHandler}
     ${microchartsExamples} | ${mstrCompoundGridHandler}
   `('should return correct gridHandler for given gridData', ({ gridData, expectedGridHandler }) => {
-  // given
-  // when
+    // given
+    // when
     const gridHandler = officeConverter.getHandler(gridData);
     // then
     expect(gridHandler).toEqual(expectedGridHandler);
   });
   it('should convert null cell values to empty strings', () => {
     // given
-    const mockedBody = { data: { metricValues: { raw: [
-      [1, null],
-      [0, -2, null, 'some string']
-    ] } } };
-    const expectedConvertedBody = { data: { metricValues: { raw: [
-      [1, ''],
-      [0, -2, '', 'some string']
-    ] } } };
+    const mockedBody = {
+      data: {
+        metricValues: {
+          raw: [
+            [1, null],
+            [0, -2, null, 'some string'],
+          ],
+        },
+      },
+    };
+    const expectedConvertedBody = {
+      data: {
+        metricValues: {
+          raw: [
+            [1, ''],
+            [0, -2, '', 'some string'],
+          ],
+        },
+      },
+    };
     // when
     const body = officeConverter.convertCellValuesToExcelStandard(mockedBody);
     // then

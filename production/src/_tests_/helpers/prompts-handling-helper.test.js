@@ -1,6 +1,6 @@
 import {
-  prepareGivenPromptAnswers,
   answerDossierPromptsHelper,
+  prepareGivenPromptAnswers,
   preparePromptedDossier,
   preparePromptedReport,
 } from '../../helpers/prompts-handling-helper';
@@ -14,11 +14,21 @@ describe('PromptsHandlingHelper', () => {
   let answerDossierPromptsSpy;
 
   beforeEach(() => {
-    rePromptDossierSpy = jest.spyOn(mstrObjectRestService, 'rePromptDossier').mockImplementation(async () => ({ mid: 'mid' }));
-    getDossierStatusSpy = jest.spyOn(mstrObjectRestService, 'getDossierStatus').mockImplementation(async () => ({ statusCode: 1, body: { status: 1 } }));
-    createInstanceSpy = jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation(async () => ({ instanceId: 'instanceId' }));
-    createDossierBasedOnReportSpy = jest.spyOn(mstrObjectRestService, 'createDossierBasedOnReport').mockImplementation(async () => ({ status: 2, mid: 'mid' }));
-    answerDossierPromptsSpy = jest.spyOn(mstrObjectRestService, 'answerDossierPrompts').mockImplementation(async () => 1);
+    rePromptDossierSpy = jest
+      .spyOn(mstrObjectRestService, 'rePromptDossier')
+      .mockImplementation(async () => ({ mid: 'mid' }));
+    getDossierStatusSpy = jest
+      .spyOn(mstrObjectRestService, 'getDossierStatus')
+      .mockImplementation(async () => ({ statusCode: 1, body: { status: 1 } }));
+    createInstanceSpy = jest
+      .spyOn(mstrObjectRestService, 'createInstance')
+      .mockImplementation(async () => ({ instanceId: 'instanceId' }));
+    createDossierBasedOnReportSpy = jest
+      .spyOn(mstrObjectRestService, 'createDossierBasedOnReport')
+      .mockImplementation(async () => ({ status: 2, mid: 'mid' }));
+    answerDossierPromptsSpy = jest
+      .spyOn(mstrObjectRestService, 'answerDossierPrompts')
+      .mockImplementation(async () => 1);
   });
 
   afterEach(() => {
@@ -29,22 +39,24 @@ describe('PromptsHandlingHelper', () => {
     // given
     const promptObjects = [
       { key: '1', type: 'type', answers: [] },
-      { key: '2', type: 'type', answers: [] }
+      { key: '2', type: 'type', answers: [] },
     ];
     const previousPromptAnswers = [
       { key: '1', type: 'type', answers: ['2'], values: ['2'] },
-      { key: '2', type: 'type', answers: [], values: [] }
+      { key: '2', type: 'type', answers: [], values: [] },
     ];
     // when
     const result = prepareGivenPromptAnswers(promptObjects, previousPromptAnswers);
     // then
-    const expectedResult = [{
-      messageName: 'New Dossier',
-      answers: [
-        { key: '1', type: 'type', answers: ['2'], values: ['2'] },
-        { key: '2', type: 'type', answers: [], values: [], useDefault: true }
-      ]
-    }];
+    const expectedResult = [
+      {
+        messageName: 'New Dossier',
+        answers: [
+          { key: '1', type: 'type', answers: ['2'], values: ['2'] },
+          { key: '2', type: 'type', answers: [], values: [], useDefault: true },
+        ],
+      },
+    ];
     expect(result).toEqual(expectedResult);
   });
 
@@ -74,7 +86,12 @@ describe('PromptsHandlingHelper', () => {
       ignoreValidateRequiredCheck: true,
     };
     // when
-    const result = await answerDossierPromptsHelper(instanceDefinition, objectId, projectId, promptsAnswers);
+    const result = await answerDossierPromptsHelper(
+      instanceDefinition,
+      objectId,
+      projectId,
+      promptsAnswers
+    );
     // then
     expect(answerDossierPromptsSpy).toHaveBeenCalledTimes(1);
     expect(answerDossierPromptsSpy).toHaveBeenCalledWith(config);
@@ -91,7 +108,12 @@ describe('PromptsHandlingHelper', () => {
     const projectId = 'projectId';
     const promptsAnswers = [{ key: '1', type: 'type', answers: ['2'], values: ['2'] }];
     // when
-    const result = await preparePromptedDossier(instanceDefinition, objectId, projectId, promptsAnswers);
+    const result = await preparePromptedDossier(
+      instanceDefinition,
+      objectId,
+      projectId,
+      promptsAnswers
+    );
     // then
     expect(result).toEqual({ status: 1, mid: 'mid' });
     expect(rePromptDossierSpy).toHaveBeenCalledTimes(1);
@@ -105,7 +127,7 @@ describe('PromptsHandlingHelper', () => {
     const promptsAnswers = [{ key: '1', type: 'type', answers: ['2'], values: ['2'] }];
     const config = {
       objectId: chosenObjectIdLocal,
-      projectId
+      projectId,
     };
     // when
     const result = await preparePromptedReport(chosenObjectIdLocal, projectId, promptsAnswers);
@@ -113,9 +135,17 @@ describe('PromptsHandlingHelper', () => {
     expect(createInstanceSpy).toHaveBeenCalledTimes(1);
     expect(createInstanceSpy).toHaveBeenCalledWith(config);
     expect(createDossierBasedOnReportSpy).toHaveBeenCalledTimes(1);
-    expect(createDossierBasedOnReportSpy).toHaveBeenCalledWith(chosenObjectIdLocal, 'instanceId', projectId);
+    expect(createDossierBasedOnReportSpy).toHaveBeenCalledWith(
+      chosenObjectIdLocal,
+      'instanceId',
+      projectId
+    );
     expect(rePromptDossierSpy).toHaveBeenCalledTimes(1);
     expect(rePromptDossierSpy).toHaveBeenCalledWith(chosenObjectIdLocal, 'mid', projectId);
-    expect(result).toEqual({ status: 1, id: 'chosenObjectIdLocal', mid: 'mid' });
+    expect(result).toEqual({
+      status: 1,
+      id: 'chosenObjectIdLocal',
+      mid: 'mid',
+    });
   });
 });

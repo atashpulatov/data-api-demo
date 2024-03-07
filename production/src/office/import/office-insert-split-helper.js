@@ -8,7 +8,9 @@ class OfficeInsertSplitHelper {
    */
   getExcelRows(excelRows, isOverLimit) {
     let splitExcelRows = [excelRows];
-    if (isOverLimit) { splitExcelRows = this.splitExcelRows(excelRows); }
+    if (isOverLimit) {
+      splitExcelRows = this.splitExcelRows(excelRows);
+    }
     return splitExcelRows;
   }
 
@@ -18,7 +20,7 @@ class OfficeInsertSplitHelper {
    * @param {Array} excelRows Array of table data
    * @returns {Array} Array with sub-arrays with size not more than 5MB
    */
-  splitExcelRows = (excelRows) => {
+  splitExcelRows = excelRows => {
     let splitRows = [excelRows];
     let isFitSize = false;
     console.time('Split Rows');
@@ -37,7 +39,9 @@ class OfficeInsertSplitHelper {
         }
       }
       splitRows = [...tempSplit];
-      if (!changed) { isFitSize = true; }
+      if (!changed) {
+        isFitSize = true;
+      }
     } while (!isFitSize);
     console.timeEnd('Split Rows');
     return splitRows;
@@ -49,7 +53,7 @@ class OfficeInsertSplitHelper {
    * @param {Object} object Item to check size of
    * @returns {Boolean} information whether the size of passed object is bigger than 5MB
    */
-  checkIfSizeOverLimit = (chunk) => {
+  checkIfSizeOverLimit = chunk => {
     let bytes = 0;
     for (let i = 0; i < chunk.length; i++) {
       for (let j = 0; j < chunk[0].length; j++) {
@@ -60,7 +64,9 @@ class OfficeInsertSplitHelper {
         } else {
           bytes += 2;
         }
-        if (bytes / 1000000 > 5) { return true; } // we return true when the size is bigger than 5MB
+        if (bytes / 1000000 > 5) {
+          return true;
+        } // we return true when the size is bigger than 5MB
       }
     }
     return false;

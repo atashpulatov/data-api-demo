@@ -1,5 +1,6 @@
-import { operationBus } from '../../operation/operation-bus';
 import { fakeStore } from './fake-store';
+
+import { operationBus } from '../../operation/operation-bus';
 
 describe('OperationBus', () => {
   beforeAll(() => {

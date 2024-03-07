@@ -55,20 +55,17 @@ class MstrObjectType {
     MICROCHARTS: 'microcharts',
   };
 
-  getMstrTypeBySubtype = (objectSubtype = null) => Object.values(this.mstrObjectType).find(
-    (type) => type.subtypes.indexOf(objectSubtype) !== -1
-  );
+  getMstrTypeBySubtype = (objectSubtype = null) =>
+    Object.values(this.mstrObjectType).find(type => type.subtypes.indexOf(objectSubtype) !== -1);
 
-  getMstrTypeByName = (typeName) => {
+  getMstrTypeByName = typeName => {
     let checkedType;
     if (typeName.name) {
       checkedType = typeName.name;
     } else {
       checkedType = typeName;
     }
-    return Object.values(this.mstrObjectType).find(
-      (type) => type.name === checkedType.toLowerCase(),
-    );
+    return Object.values(this.mstrObjectType).find(type => type.name === checkedType.toLowerCase());
   };
 }
 

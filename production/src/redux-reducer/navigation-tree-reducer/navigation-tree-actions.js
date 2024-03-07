@@ -12,54 +12,55 @@ export const SET_PROMPT_OBJECTS = 'SET_PROMPT_OBJECTS';
 export const UPDATE_SELECTED_MENU = 'UPDATE_SELECTED_MENU';
 
 function selectObject(data) {
-  return (dispatch) => dispatch({
-    type: SELECT_OBJECT,
-    data,
-  });
+  return dispatch =>
+    dispatch({
+      type: SELECT_OBJECT,
+      data,
+    });
 }
 
 function setPromptObjects(data) {
-  return (dispatch) => dispatch({ type: SET_PROMPT_OBJECTS, data });
+  return dispatch => dispatch({ type: SET_PROMPT_OBJECTS, data });
 }
 
 function requestImport(data) {
-  return (dispatch) => dispatch({ type: REQUEST_IMPORT, data });
+  return dispatch => dispatch({ type: REQUEST_IMPORT, data });
 }
 
 function promptsAnswered(data) {
-  return (dispatch) => dispatch({ type: PROMPTS_ANSWERED, data });
+  return dispatch => dispatch({ type: PROMPTS_ANSWERED, data });
 }
 
 function cancelImportRequest() {
-  return (dispatch) => dispatch({ type: CANCEL_REQUEST_IMPORT });
+  return dispatch => dispatch({ type: CANCEL_REQUEST_IMPORT });
 }
 
 function startImport() {
-  return (dispatch) => dispatch({ type: START_IMPORT });
+  return dispatch => dispatch({ type: START_IMPORT });
 }
 
 function requestDossierOpen(data) {
-  return (dispatch) => dispatch({ type: REQUEST_DOSSIER_OPEN, data });
+  return dispatch => dispatch({ type: REQUEST_DOSSIER_OPEN, data });
 }
 
 function cancelDossierOpen(data) {
-  return (dispatch) => dispatch({ type: CANCEL_DOSSIER_OPEN, data });
+  return dispatch => dispatch({ type: CANCEL_DOSSIER_OPEN, data });
 }
 
 function switchImportSubtotalsOnImport(data) {
-  return (dispatch) => dispatch({ type: SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, data });
+  return dispatch => dispatch({ type: SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, data });
 }
 
 function clearPromptAnswers() {
-  return (dispatch) => dispatch({ type: CLEAR_PROMPTS_ANSWERS });
+  return dispatch => dispatch({ type: CLEAR_PROMPTS_ANSWERS });
 }
 
 function updateDisplayAttrFormOnImport(data) {
-  return (dispatch) => dispatch({ type: UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT, data });
+  return dispatch => dispatch({ type: UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT, data });
 }
 
 function updateSelectedMenu(data) {
-  return (dispatch) => dispatch({ type: UPDATE_SELECTED_MENU, data });
+  return dispatch => dispatch({ type: UPDATE_SELECTED_MENU, data });
 }
 
 export const navigationTreeActions = {
@@ -74,5 +75,5 @@ export const navigationTreeActions = {
   clearPromptAnswers,
   updateDisplayAttrFormOnImport,
   setPromptObjects,
-  updateSelectedMenu
+  updateSelectedMenu,
 };

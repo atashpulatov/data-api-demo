@@ -1,13 +1,19 @@
 import { officeApiHelper } from '../../../office/api/office-api-helper';
 import { determineImagePropsToBeAddedToBook } from '../../../office/shapes/shape-helper-util';
-import { DUPLICATE_OPERATION, IMPORT_OPERATION, EDIT_OPERATION, REFRESH_OPERATION } from '../../../operation/operation-type-names';
+
+import {
+  DUPLICATE_OPERATION,
+  EDIT_OPERATION,
+  IMPORT_OPERATION,
+  REFRESH_OPERATION,
+} from '../../../operation/operation-type-names';
 
 describe('shape-helper-util', () => {
   const mockFn = jest.fn();
 
   const mockVizDimensions = {
     width: 123,
-    height: 342
+    height: 342,
   };
 
   const mockSelectedRangePos = {
@@ -17,7 +23,7 @@ describe('shape-helper-util', () => {
 
   const mockDuplicateShapeDimensions = {
     width: 675,
-    height: 345
+    height: 345,
   };
 
   const mockShapeInWorksheet = {
@@ -32,16 +38,18 @@ describe('shape-helper-util', () => {
     height: 356,
     top: 237,
     left: 765,
-    worksheetId: '1234-5678-9012-3456'
+    worksheetId: '1234-5678-9012-3456',
   };
 
   const mockSheet = {
     shapes: {
-      addImage: jest.fn().mockImplementation((image) => Promise.resolve({
-        set: mockFn,
-        id: '1234-5678-9012-3456'
-      }))
-    }
+      addImage: jest.fn().mockImplementation(_image =>
+        Promise.resolve({
+          set: mockFn,
+          id: '1234-5678-9012-3456',
+        })
+      ),
+    },
   };
 
   const excelContextMock = {
@@ -51,20 +59,20 @@ describe('shape-helper-util', () => {
         items: [
           {
             shapes: {
-              getItemOrNullObject: jest.fn().mockImplementation((id) => ({
+              getItemOrNullObject: jest.fn().mockImplementation(_id => ({
                 load: mockFn,
                 delete: mockFn,
                 isNullObject: false,
-                id: '1234-5678-9012-3456'
-              }))
-            }
-          }
+                id: '1234-5678-9012-3456',
+              })),
+            },
+          },
         ],
         getActiveWorksheet: jest.fn().mockImplementation(() => mockSheet),
-        getItem: jest.fn().mockImplementation((id) => mockSheet)
+        getItem: jest.fn().mockImplementation(_id => mockSheet),
       },
-      sync: mockFn
-    }
+      sync: mockFn,
+    },
   };
 
   afterEach(() => {
@@ -72,7 +80,9 @@ describe('shape-helper-util', () => {
   });
 
   it('should work as expected for import operation', () => {
-    const getCurrentExcelSheetMock = jest.spyOn(officeApiHelper, 'getCurrentExcelSheet').mockImplementation(() => mockSheet);
+    const getCurrentExcelSheetMock = jest
+      .spyOn(officeApiHelper, 'getCurrentExcelSheet')
+      .mockImplementation(() => mockSheet);
 
     const args = {
       operationType: IMPORT_OPERATION,
@@ -81,7 +91,7 @@ describe('shape-helper-util', () => {
       shapeDimensionsForDuplicateOp: undefined,
       vizDimensions: mockVizDimensions,
       selectedRangePos: mockSelectedRangePos,
-      excelContext: excelContextMock
+      excelContext: excelContextMock,
     };
 
     const imageProps = determineImagePropsToBeAddedToBook(args);
@@ -90,14 +100,16 @@ describe('shape-helper-util', () => {
       height: 342,
       top: 345,
       left: 256,
-      sheet: mockSheet
+      sheet: mockSheet,
     });
 
     expect(getCurrentExcelSheetMock).toBeCalled();
   });
 
   it('should work as expected for duplicate operation', () => {
-    const getCurrentExcelSheetMock = jest.spyOn(officeApiHelper, 'getCurrentExcelSheet').mockImplementation(() => mockSheet);
+    const getCurrentExcelSheetMock = jest
+      .spyOn(officeApiHelper, 'getCurrentExcelSheet')
+      .mockImplementation(() => mockSheet);
     const args = {
       operationType: DUPLICATE_OPERATION,
       shapeProps: undefined,
@@ -105,7 +117,7 @@ describe('shape-helper-util', () => {
       shapeDimensionsForDuplicateOp: mockDuplicateShapeDimensions,
       vizDimensions: mockVizDimensions,
       selectedRangePos: mockSelectedRangePos,
-      excelContext: excelContextMock
+      excelContext: excelContextMock,
     };
 
     const imageProps = determineImagePropsToBeAddedToBook(args);
@@ -114,7 +126,7 @@ describe('shape-helper-util', () => {
       height: 342,
       top: 345,
       left: 256,
-      sheet: mockSheet
+      sheet: mockSheet,
     });
     expect(getCurrentExcelSheetMock).toBeCalled();
 
@@ -126,7 +138,7 @@ describe('shape-helper-util', () => {
       height: 342,
       top: 345,
       left: 256,
-      sheet: mockSheet
+      sheet: mockSheet,
     });
     expect(getCurrentExcelSheetMock).toBeCalled();
 
@@ -138,13 +150,15 @@ describe('shape-helper-util', () => {
       height: 342,
       top: 0,
       left: 0,
-      sheet: mockSheet
+      sheet: mockSheet,
     });
     expect(getCurrentExcelSheetMock).toBeCalled();
   });
 
   it('should work as expected for edit operation', () => {
-    const getCurrentExcelSheetMock = jest.spyOn(officeApiHelper, 'getCurrentExcelSheet').mockImplementation(() => mockSheet);
+    const getCurrentExcelSheetMock = jest
+      .spyOn(officeApiHelper, 'getCurrentExcelSheet')
+      .mockImplementation(() => mockSheet);
     const args = {
       operationType: EDIT_OPERATION,
       shapeProps: undefined,
@@ -152,7 +166,7 @@ describe('shape-helper-util', () => {
       shapeDimensionsForDuplicateOp: undefined,
       vizDimensions: mockVizDimensions,
       selectedRangePos: mockSelectedRangePos,
-      excelContext: excelContextMock
+      excelContext: excelContextMock,
     };
 
     const imageProps = determineImagePropsToBeAddedToBook(args);
@@ -161,7 +175,7 @@ describe('shape-helper-util', () => {
       height: 643,
       top: 34,
       left: 56,
-      sheet: mockSheet
+      sheet: mockSheet,
     });
     expect(getCurrentExcelSheetMock).toBeCalled();
 
@@ -173,13 +187,15 @@ describe('shape-helper-util', () => {
       height: 342,
       top: 345,
       left: 256,
-      sheet: mockSheet
+      sheet: mockSheet,
     });
     expect(getCurrentExcelSheetMock).toBeCalled();
   });
 
   it('should work as expected for refresh operation', () => {
-    const getCurrentExcelSheetMock = jest.spyOn(officeApiHelper, 'getCurrentExcelSheet').mockImplementation(() => mockSheet);
+    const getCurrentExcelSheetMock = jest
+      .spyOn(officeApiHelper, 'getCurrentExcelSheet')
+      .mockImplementation(() => mockSheet);
 
     const args = {
       operationType: REFRESH_OPERATION,
@@ -188,7 +204,7 @@ describe('shape-helper-util', () => {
       shapeDimensionsForDuplicateOp: undefined,
       vizDimensions: mockVizDimensions,
       selectedRangePos: mockSelectedRangePos,
-      excelContext: excelContextMock
+      excelContext: excelContextMock,
     };
 
     const imageProps = determineImagePropsToBeAddedToBook(args);
@@ -197,18 +213,22 @@ describe('shape-helper-util', () => {
       height: 356,
       top: 237,
       left: 765,
-      sheet: mockSheet
+      sheet: mockSheet,
     });
     expect(getCurrentExcelSheetMock).toBeCalled();
 
-    const args1 = { ...args, shapeProps: undefined, shapeInWorksheet: mockShapeInWorksheet };
+    const args1 = {
+      ...args,
+      shapeProps: undefined,
+      shapeInWorksheet: mockShapeInWorksheet,
+    };
     const imageProps1 = determineImagePropsToBeAddedToBook(args1);
     expect(imageProps1).toEqual({
       width: 564,
       height: 643,
       top: 34,
       left: 56,
-      sheet: mockSheet
+      sheet: mockSheet,
     });
     expect(getCurrentExcelSheetMock).toBeCalled();
 
@@ -219,7 +239,7 @@ describe('shape-helper-util', () => {
       height: 342,
       top: 345,
       left: 256,
-      sheet: mockSheet
+      sheet: mockSheet,
     });
     expect(getCurrentExcelSheetMock).toBeCalled();
   });

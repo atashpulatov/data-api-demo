@@ -1,4 +1,5 @@
 import React from 'react';
+
 import * as RepromptQueueReducer from '../../../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer';
 
 describe('reprompt-queue-reducer', () => {
@@ -14,7 +15,7 @@ describe('reprompt-queue-reducer', () => {
     isPrompted
     ${true}
     ${false}
-  `('should call the add reprom[t task callback', (isPrompted) => {
+  `('should call the add reprom[t task callback', isPrompted => {
     const repromptCallback = jest.fn();
     const action = {
       payload: {
@@ -55,12 +56,21 @@ describe('reprompt-queue-reducer', () => {
       type: 'EXECUTE_NEXT_REPROMPT_TASK',
     };
 
-    expect(RepromptQueueReducer.repromptsQueueReducer({ repromptsQueue: [
-      {
-        callback: repromptCallback,
-        isPrompted: true,
-      }
-    ], index: 0, total: 1 }, action)).toEqual({
+    expect(
+      RepromptQueueReducer.repromptsQueueReducer(
+        {
+          repromptsQueue: [
+            {
+              callback: repromptCallback,
+              isPrompted: true,
+            },
+          ],
+          index: 0,
+          total: 1,
+        },
+        action
+      )
+    ).toEqual({
       index: 1,
       repromptsQueue: [],
       total: 1,

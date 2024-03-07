@@ -1,11 +1,19 @@
-import { objectImportType } from '../../mstr-object/constants';
-import { IMPORT_OPERATION, EDIT_OPERATION, DUPLICATE_OPERATION } from '../../operation/operation-type-names';
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import {
-  UPDATE_OBJECT, REMOVE_OBJECT, RESTORE_ALL_OBJECTS, RESTORE_OBJECT_BACKUP
+  DUPLICATE_OPERATION,
+  EDIT_OPERATION,
+  IMPORT_OPERATION,
+} from '../../operation/operation-type-names';
+import {
+  REMOVE_OBJECT,
+  RESTORE_ALL_OBJECTS,
+  RESTORE_OBJECT_BACKUP,
+  UPDATE_OBJECT,
 } from './object-actions';
+import { objectImportType } from '../../mstr-object/constants';
 
 const initialState = { objects: [] };
-export const objectReducer = (state = initialState, action) => {
+export const objectReducer = (state = initialState, action = {}) => {
   switch (action.type) {
     case IMPORT_OPERATION:
     case DUPLICATE_OPERATION:
@@ -35,15 +43,15 @@ function importRequested(state, payload) {
   const objectToBeImported = { ...payload.object };
   objectToBeImported.importType = payload.object.importType || objectImportType.TABLE;
   return {
-    objects: [
-      objectToBeImported,
-      ...state.objects,
-    ]
+    objects: [objectToBeImported, ...state.objects],
   };
 }
 
 function editRequested(state, payload) {
-  const props = { objectWorkingId: payload.objectWorkingId, response: payload.response };
+  const props = {
+    objectWorkingId: payload.objectWorkingId,
+    response: payload.response,
+  };
   return updateObject(state, props);
 }
 
@@ -54,13 +62,15 @@ function updateObject(state, updatedObjectProps) {
   // update visualization info explicitly to avoid losing the vizDimensions field
   const oldVisualizationInfo = state.objects[objectToUpdateIndex].visualizationInfo;
   const newVisualizationInfo = updatedObjectProps.visualizationInfo;
-  const visualizationInfo = (oldVisualizationInfo || newVisualizationInfo)
-    && { ...oldVisualizationInfo, ...newVisualizationInfo };
+  const visualizationInfo = (oldVisualizationInfo || newVisualizationInfo) && {
+    ...oldVisualizationInfo,
+    ...newVisualizationInfo,
+  };
 
   const updatedObject = {
     ...state.objects[objectToUpdateIndex],
     ...updatedObjectProps,
-    visualizationInfo
+    visualizationInfo,
   };
   newObjects.splice(objectToUpdateIndex, 1, updatedObject);
   return { objects: newObjects };
@@ -87,8 +97,9 @@ function restoreObjectBackup(state, backupObjectData) {
 }
 
 function getObjectIndex(objects, objectWorkingId) {
-  const objectToUpdateIndex = objects
-    .findIndex(object => object.objectWorkingId === objectWorkingId);
+  const objectToUpdateIndex = objects.findIndex(
+    object => object.objectWorkingId === objectWorkingId
+  );
   if (objectToUpdateIndex === -1) {
     // TODO error handling
     throw new Error();

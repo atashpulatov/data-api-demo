@@ -1,9 +1,18 @@
 import {
-  SELECT_OBJECT, SET_PROMPT_OBJECTS, START_IMPORT, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED,
-  REQUEST_DOSSIER_OPEN, CLEAR_PROMPTS_ANSWERS, CANCEL_DOSSIER_OPEN, SWITCH_IMPORT_SUBTOTALS_ON_IMPORT,
-  UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT, UPDATE_SELECTED_MENU
+  CANCEL_DOSSIER_OPEN,
+  CANCEL_REQUEST_IMPORT,
+  CLEAR_PROMPTS_ANSWERS,
+  PROMPTS_ANSWERED,
+  REQUEST_DOSSIER_OPEN,
+  REQUEST_IMPORT,
+  SELECT_OBJECT,
+  SET_PROMPT_OBJECTS,
+  START_IMPORT,
+  SWITCH_IMPORT_SUBTOTALS_ON_IMPORT,
+  UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT,
+  UPDATE_SELECTED_MENU,
 } from '../../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
-import { navigationTree, initialState } from '../../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
+import { navigationTree } from '../../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 
 describe('NavigationTree Reducer', () => {
   it('should return new proper state in case of SELECT_OBJECT action without proper data', () => {
@@ -33,7 +42,7 @@ describe('NavigationTree Reducer', () => {
     // given
     const action = {
       type: SET_PROMPT_OBJECTS,
-      data: { promptObjects: ['whatever'], },
+      data: { promptObjects: ['whatever'] },
     };
     // when
     const newState = navigationTree({}, action);
@@ -57,7 +66,7 @@ describe('NavigationTree Reducer', () => {
     // given
     const action = {
       type: REQUEST_IMPORT,
-      data: { dossierData: 'whatever', },
+      data: { dossierData: 'whatever' },
     };
     // when
     const newState = navigationTree({}, action);
@@ -70,7 +79,7 @@ describe('NavigationTree Reducer', () => {
     // given
     const action = {
       type: PROMPTS_ANSWERED,
-      data: { dossierData: 'whatever', },
+      data: { dossierData: 'whatever' },
     };
     // when
     const newState = navigationTree({}, action);
@@ -82,7 +91,7 @@ describe('NavigationTree Reducer', () => {
 
   it('should return new proper state in case of CLEAR_PROMPTS_ANSWERS action', () => {
     // given
-    const action = { type: CLEAR_PROMPTS_ANSWERS, };
+    const action = { type: CLEAR_PROMPTS_ANSWERS };
     // when
     const newState = navigationTree({ promptsAnswers: ['some', 'some'], dossierData: {} }, action);
     // then
@@ -92,7 +101,7 @@ describe('NavigationTree Reducer', () => {
 
   it('should return new proper state in case of CANCEL_REQUEST_IMPORT action', () => {
     // given
-    const action = { type: CANCEL_REQUEST_IMPORT, };
+    const action = { type: CANCEL_REQUEST_IMPORT };
     // when
     const newState = navigationTree({ importRequested: true }, action);
     // then
@@ -101,7 +110,7 @@ describe('NavigationTree Reducer', () => {
 
   it('should return new proper state in case of START_IMPORT action', () => {
     // given
-    const action = { type: START_IMPORT, };
+    const action = { type: START_IMPORT };
     // when
     const newState = navigationTree({}, action);
     // then
@@ -110,7 +119,7 @@ describe('NavigationTree Reducer', () => {
 
   it('should return new proper state in case of REQUEST_DOSSIER_OPEN action', () => {
     // given
-    const action = { type: REQUEST_DOSSIER_OPEN, };
+    const action = { type: REQUEST_DOSSIER_OPEN };
     // when
     const newState = navigationTree({}, action);
     // then
@@ -119,7 +128,7 @@ describe('NavigationTree Reducer', () => {
 
   it('should return new proper state in case of CANCEL_DOSSIER_OPEN action', () => {
     // given
-    const action = { type: CANCEL_DOSSIER_OPEN, };
+    const action = { type: CANCEL_DOSSIER_OPEN };
     // when
     const newState = navigationTree({}, action);
     // then

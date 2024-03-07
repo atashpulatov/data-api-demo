@@ -1,15 +1,19 @@
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
-import { officeApiHelper } from '../../office/api/office-api-helper';
-import stepGetInstanceDefinition from '../../mstr-object/instance/step-get-instance-definition';
-import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-import dossierInstanceDefinition from '../../mstr-object/instance/dossier-instance-definition';
+import { authenticationHelper } from '../../authentication/authentication-helper';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-helper';
+import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
-import { GET_OFFICE_TABLE_EDIT_REFRESH, GET_OFFICE_TABLE_IMPORT } from '../../operation/operation-steps';
+
+import dossierInstanceDefinition from '../../mstr-object/instance/dossier-instance-definition';
+import stepGetInstanceDefinition from '../../mstr-object/instance/step-get-instance-definition';
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import {
+  GET_OFFICE_TABLE_EDIT_REFRESH,
+  GET_OFFICE_TABLE_IMPORT,
+} from '../../operation/operation-steps';
 import { errorMessages } from '../../error/constants';
-import { authenticationHelper } from '../../authentication/authentication-helper';
 import { objectImportType } from '../../mstr-object/constants';
 
 describe('StepGetInstanceDefinition', () => {
@@ -47,30 +51,23 @@ describe('StepGetInstanceDefinition', () => {
   });
 
   it.each`
-  handleOperationErrorCallNo      | expectedErrorMsg         | rowsParam | isPromptedParam
-  
-  ${1}                            | ${errorMessages.ALL_DATA_FILTERED_OUT} | ${[]}     | ${true}
-  ${0}                            | ${errorMessages.ALL_DATA_FILTERED_OUT} | ${[42]}   | ${true}
-                                            
-  ${1}                            | ${errorMessages.NO_DATA_RETURNED}      | ${[]}     | ${false}
-  ${0}                            | ${errorMessages.NO_DATA_RETURNED}      | ${[42]}   | ${false}
-  
-  `('getInstanceDefinition works as expected when mstrTable.rows.length is 0',
-    async ({
-      handleOperationErrorCallNo,
-      expectedErrorMsg,
-      rowsParam,
-      isPromptedParam,
-    }) => {
-    // given
+    handleOperationErrorCallNo | expectedErrorMsg                       | rowsParam | isPromptedParam
+    ${1}                       | ${errorMessages.ALL_DATA_FILTERED_OUT} | ${[]}     | ${true}
+    ${0}                       | ${errorMessages.ALL_DATA_FILTERED_OUT} | ${[42]}   | ${true}
+    ${1}                       | ${errorMessages.NO_DATA_RETURNED}      | ${[]}     | ${false}
+    ${0}                       | ${errorMessages.NO_DATA_RETURNED}      | ${[42]}   | ${false}
+  `(
+    'getInstanceDefinition works as expected when mstrTable.rows.length is 0',
+    async ({ handleOperationErrorCallNo, expectedErrorMsg, rowsParam, isPromptedParam }) => {
+      // given
       jest.spyOn(console, 'error');
 
       jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation();
       jest.spyOn(officeApiWorksheetHelper, 'isActiveWorksheetEmpty').mockImplementation();
       jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation();
-      jest.spyOn(stepGetInstanceDefinition, 'modifyInstanceWithPrompt').mockReturnValue(
-        { mstrTable: { rows: rowsParam } }
-      );
+      jest
+        .spyOn(stepGetInstanceDefinition, 'modifyInstanceWithPrompt')
+        .mockReturnValue({ mstrTable: { rows: rowsParam } });
       jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
 
       jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
@@ -82,52 +79,60 @@ describe('StepGetInstanceDefinition', () => {
       const expectedDispatchCallNo = handleOperationErrorCallNo === 1 ? 0 : 1;
 
       // when
-      await stepGetInstanceDefinition.getInstanceDefinition({
-        mstrObjectType: {},
-        isPrompted: isPromptedParam,
-      }, {
-        stepsQueue: ['step_0', 'step_1', undefined],
-      });
+      await stepGetInstanceDefinition.getInstanceDefinition(
+        {
+          mstrObjectType: {},
+          isPrompted: isPromptedParam,
+        },
+        {
+          stepsQueue: ['step_0', 'step_1', undefined],
+        }
+      );
 
       // then
-      expect(operationErrorHandler.handleOperationError).toBeCalledTimes(handleOperationErrorCallNo);
+      expect(operationErrorHandler.handleOperationError).toBeCalledTimes(
+        handleOperationErrorCallNo
+      );
       if (handleOperationErrorCallNo === 1) {
         expect(console.error).toBeCalledTimes(1);
         expect(console.error).toBeCalledWith(new Error(expectedErrorMsg));
 
-        expect(operationErrorHandler.handleOperationError).toBeCalledWith({
-          mstrObjectType: {},
-          isPrompted: isPromptedParam,
-        }, {
-          stepsQueue: ['step_0', 'step_1', undefined],
-        }, new Error(expectedErrorMsg));
+        expect(operationErrorHandler.handleOperationError).toBeCalledWith(
+          {
+            mstrObjectType: {},
+            isPrompted: isPromptedParam,
+          },
+          {
+            stepsQueue: ['step_0', 'step_1', undefined],
+          },
+          new Error(expectedErrorMsg)
+        );
       }
 
       expect(operationStepDispatcher.updateOperation).toBeCalledTimes(expectedDispatchCallNo);
       expect(operationStepDispatcher.updateObject).toBeCalledTimes(expectedDispatchCallNo);
-      expect(operationStepDispatcher.completeGetInstanceDefinition).toBeCalledTimes(expectedDispatchCallNo);
-    });
+      expect(operationStepDispatcher.completeGetInstanceDefinition).toBeCalledTimes(
+        expectedDispatchCallNo
+      );
+    }
+  );
 
   it.each`
-  expectedVisualizationInfo         | expectedStartCell  | expectedGetStartCellCallsNo | visualizationInfoParam            | nextStepParam                    | manipulationsXMLParam
-
-  ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
-  ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
-  ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
-
-  ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${GET_OFFICE_TABLE_IMPORT}       | ${undefined}
-  ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${GET_OFFICE_TABLE_IMPORT}       | ${undefined}
-  ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_IMPORT}       | ${undefined}
-
-  ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
-  ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
-  ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
-
-  ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
-  ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
-  ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
-
-  `('getInstanceDefinition should work as expected for visualization',
+    expectedVisualizationInfo         | expectedStartCell  | expectedGetStartCellCallsNo | visualizationInfoParam            | nextStepParam                    | manipulationsXMLParam
+    ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
+    ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
+    ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
+    ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${GET_OFFICE_TABLE_IMPORT}       | ${undefined}
+    ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${GET_OFFICE_TABLE_IMPORT}       | ${undefined}
+    ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_IMPORT}       | ${undefined}
+    ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
+    ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
+    ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
+    ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
+    ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
+    ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
+  `(
+    'getInstanceDefinition should work as expected for visualization',
     async ({
       expectedVisualizationInfo,
       expectedStartCell,
@@ -136,7 +141,7 @@ describe('StepGetInstanceDefinition', () => {
       nextStepParam,
       manipulationsXMLParam,
     }) => {
-    // given
+      // given
       const objectData = {
         objectWorkingId: 'objectWorkingIdTest',
         insertNewWorksheet: 'insertNewWorksheetTest',
@@ -151,48 +156,47 @@ describe('StepGetInstanceDefinition', () => {
         visualizationInfo: 'visualizationInfoTest',
         body: 'bodyTest',
         name: 'nameTest',
-        importType: 'table'
+        importType: 'table',
       };
 
       jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue('excelContextTest');
 
-      jest.spyOn(authenticationHelper, 'getCurrentMstrContext')
-        .mockReturnValue({
-          envUrl: 'envUrlTest',
-          username: 'usernameTest',
-        });
+      jest.spyOn(authenticationHelper, 'getCurrentMstrContext').mockReturnValue({
+        envUrl: 'envUrlTest',
+        username: 'usernameTest',
+      });
 
       jest.spyOn(stepGetInstanceDefinition, 'setupBodyTemplate').mockImplementation();
 
-      jest.spyOn(dossierInstanceDefinition, 'getDossierInstanceDefinition')
-        .mockReturnValue({
-          body: 'bodyDossierTest',
-          visualizationInfo: visualizationInfoParam,
-          instanceDefinition: {
-            mstrTable: {
-              name: 'mstrTableNameDossierTest'
-            }
+      jest.spyOn(dossierInstanceDefinition, 'getDossierInstanceDefinition').mockReturnValue({
+        body: 'bodyDossierTest',
+        visualizationInfo: visualizationInfoParam,
+        instanceDefinition: {
+          mstrTable: {
+            name: 'mstrTableNameDossierTest',
           },
-        });
+        },
+      });
 
-      jest.spyOn(dossierInstanceDefinition, 'getVisualizationName').mockReturnValue('getVisualizationNameTest');
+      jest
+        .spyOn(dossierInstanceDefinition, 'getVisualizationName')
+        .mockReturnValue('getVisualizationNameTest');
 
       jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation();
 
-      jest.spyOn(stepGetInstanceDefinition, 'modifyInstanceWithPrompt')
-        .mockReturnValue({
-          mstrTable: {
-            name: 'nameModifyInstanceWithPromptTest',
-            rows: 'rowsModifyInstanceWithPromptTest',
-            insertNewWorksheet: 'insertNewWorksheetTest',
-            crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
-            isCrosstab: 'isCrossTabTest',
-            manipulationsXML: manipulationsXMLParam,
-            attributes: ['some attributes'],
-            metrics: ['some metrics'],
-          },
+      jest.spyOn(stepGetInstanceDefinition, 'modifyInstanceWithPrompt').mockReturnValue({
+        mstrTable: {
+          name: 'nameModifyInstanceWithPromptTest',
           rows: 'rowsModifyInstanceWithPromptTest',
-        });
+          insertNewWorksheet: 'insertNewWorksheetTest',
+          crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
+          isCrosstab: 'isCrossTabTest',
+          manipulationsXML: manipulationsXMLParam,
+          attributes: ['some attributes'],
+          metrics: ['some metrics'],
+        },
+        rows: 'rowsModifyInstanceWithPromptTest',
+      });
 
       const expectedMstrTable = {
         name: 'nameModifyInstanceWithPromptTest',
@@ -238,17 +242,20 @@ describe('StepGetInstanceDefinition', () => {
         },
         bindId: 'bindIdTest',
         mstrObjectType: {
-          name: mstrObjectEnum.mstrObjectType.visualization.name
+          name: mstrObjectEnum.mstrObjectType.visualization.name,
         },
         body: 'bodyTest',
         visualizationInfo: 'visualizationInfoTest',
         name: 'nameTest',
-        importType: 'table'
+        importType: 'table',
       });
 
       expect(dossierInstanceDefinition.getVisualizationName).toBeCalledTimes(1);
       expect(dossierInstanceDefinition.getVisualizationName).toBeCalledWith(
-        { operationType: 'operationTypeTest', stepsQueue: ['step_0', 'step_1', nextStepParam] },
+        {
+          operationType: 'operationTypeTest',
+          stepsQueue: ['step_0', 'step_1', nextStepParam],
+        },
         'nameTest',
         { mstrTable: { name: 'mstrTableNameDossierTest' } }
       );
@@ -268,14 +275,14 @@ describe('StepGetInstanceDefinition', () => {
         },
         bindId: 'bindIdTest',
         mstrObjectType: {
-          name: mstrObjectEnum.mstrObjectType.visualization.name
+          name: mstrObjectEnum.mstrObjectType.visualization.name,
         },
         visualizationInfo: 'visualizationInfoTest',
         body: 'bodyTest',
         insertNewWorksheet: 'insertNewWorksheetTest',
         crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
         name: 'nameTest',
-        importType: 'table'
+        importType: 'table',
       });
 
       expect(stepGetInstanceDefinition.savePreviousObjectData).toBeCalledTimes(1);
@@ -339,29 +346,30 @@ describe('StepGetInstanceDefinition', () => {
       });
 
       expect(operationStepDispatcher.completeGetInstanceDefinition).toBeCalledTimes(1);
-      expect(operationStepDispatcher.completeGetInstanceDefinition).toBeCalledWith('objectWorkingIdTest');
-    });
+      expect(operationStepDispatcher.completeGetInstanceDefinition).toBeCalledWith(
+        'objectWorkingIdTest'
+      );
+    }
+  );
 
   it.each`
-  expectedVisualizationInfo         | expectedStartCell  | expectedGetStartCellCallsNo | visualizationInfoParam            | nextStepParam
-
-  ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${GET_OFFICE_TABLE_EDIT_REFRESH}
-  ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${GET_OFFICE_TABLE_EDIT_REFRESH}
-  ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_EDIT_REFRESH}
-
-  ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${GET_OFFICE_TABLE_IMPORT}
-  ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${GET_OFFICE_TABLE_IMPORT}
-  ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_IMPORT}
-
-  `('getInstanceDefinition should work as expected for NO visualization',
+    expectedVisualizationInfo         | expectedStartCell  | expectedGetStartCellCallsNo | visualizationInfoParam            | nextStepParam
+    ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${GET_OFFICE_TABLE_EDIT_REFRESH}
+    ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${GET_OFFICE_TABLE_EDIT_REFRESH}
+    ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_EDIT_REFRESH}
+    ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${GET_OFFICE_TABLE_IMPORT}
+    ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${GET_OFFICE_TABLE_IMPORT}
+    ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_IMPORT}
+  `(
+    'getInstanceDefinition should work as expected for NO visualization',
     async ({
       expectedVisualizationInfo,
       expectedStartCell,
       expectedGetStartCellCallsNo,
       visualizationInfoParam,
-      nextStepParam
+      nextStepParam,
     }) => {
-    // given
+      // given
       const objectData = {
         objectWorkingId: 'objectWorkingIdTest',
         insertNewWorksheet: 'insertNewWorksheetTest',
@@ -371,21 +379,20 @@ describe('StepGetInstanceDefinition', () => {
         },
         bindId: 'bindIdTest',
         mstrObjectType: {
-          name: mstrObjectEnum.mstrObjectType.report.name
+          name: mstrObjectEnum.mstrObjectType.report.name,
         },
         visualizationInfo: visualizationInfoParam,
         body: 'bodyTest',
         name: 'nameTest',
-        importType: 'table'
+        importType: 'table',
       };
 
       jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue('excelContextTest');
 
-      jest.spyOn(authenticationHelper, 'getCurrentMstrContext')
-        .mockReturnValue({
-          envUrl: 'envUrlTest',
-          username: 'usernameTest',
-        });
+      jest.spyOn(authenticationHelper, 'getCurrentMstrContext').mockReturnValue({
+        envUrl: 'envUrlTest',
+        username: 'usernameTest',
+      });
 
       jest.spyOn(stepGetInstanceDefinition, 'setupBodyTemplate').mockImplementation();
 
@@ -396,8 +403,8 @@ describe('StepGetInstanceDefinition', () => {
         visualizationInfo: visualizationInfoParam,
         instanceDefinition: {
           mstrTable: {
-            name: 'mstrTableNameNoDossierTest'
-          }
+            name: 'mstrTableNameNoDossierTest',
+          },
         },
       });
 
@@ -542,29 +549,31 @@ describe('StepGetInstanceDefinition', () => {
       });
 
       expect(operationStepDispatcher.completeGetInstanceDefinition).toBeCalledTimes(1);
-      expect(operationStepDispatcher.completeGetInstanceDefinition).toBeCalledWith('objectWorkingIdTest');
-    });
+      expect(operationStepDispatcher.completeGetInstanceDefinition).toBeCalledWith(
+        'objectWorkingIdTest'
+      );
+    }
+  );
 
   it.each`
-  expectedBodyTemplate                 | expectedRequestedObjects             | body
-  
-  ${undefined}                         | ${undefined}                         | ${{}}
-  ${undefined}                         | ${undefined}                         | ${{ sth: 'sth' }}
-  ${undefined}                         | ${undefined}                         | ${{ requestedObjects: { attributes: [], metrics: [] } }}
-  
-  ${{ attributes: [1], metrics: [] }}  | ${{ attributes: [1], metrics: [] }}  | ${{ requestedObjects: { attributes: [1], metrics: [] } }}
-  ${{ attributes: [], metrics: [1] }}  | ${{ attributes: [], metrics: [1] }}  | ${{ requestedObjects: { attributes: [], metrics: [1] } }}
-  ${{ attributes: [1], metrics: [1] }} | ${{ attributes: [1], metrics: [1] }} | ${{ requestedObjects: { attributes: [1], metrics: [1] } }}
-  
-  `('setupBodyTemplate should work as expected',
+    expectedBodyTemplate                 | expectedRequestedObjects             | body
+    ${undefined}                         | ${undefined}                         | ${{}}
+    ${undefined}                         | ${undefined}                         | ${{ sth: 'sth' }}
+    ${undefined}                         | ${undefined}                         | ${{ requestedObjects: { attributes: [], metrics: [] } }}
+    ${{ attributes: [1], metrics: [] }}  | ${{ attributes: [1], metrics: [] }}  | ${{ requestedObjects: { attributes: [1], metrics: [] } }}
+    ${{ attributes: [], metrics: [1] }}  | ${{ attributes: [], metrics: [1] }}  | ${{ requestedObjects: { attributes: [], metrics: [1] } }}
+    ${{ attributes: [1], metrics: [1] }} | ${{ attributes: [1], metrics: [1] }} | ${{ requestedObjects: { attributes: [1], metrics: [1] } }}
+  `(
+    'setupBodyTemplate should work as expected',
     ({ expectedBodyTemplate, expectedRequestedObjects, body }) => {
-    // when
+      // when
       stepGetInstanceDefinition.setupBodyTemplate(body);
 
       // then
       expect(body.template).toEqual(expectedBodyTemplate);
       expect(body.requestedObjects).toEqual(expectedRequestedObjects);
-    });
+    }
+  );
 
   it('modifyInstanceWithPrompt should work as expected - status not 2', async () => {
     // given
@@ -573,9 +582,9 @@ describe('StepGetInstanceDefinition', () => {
     jest.spyOn(mstrObjectRestService, 'answerPrompts').mockImplementation();
 
     // when
-    const result = await stepGetInstanceDefinition.modifyInstanceWithPrompt(
-      { instanceDefinition: instanceDefinitionMock }
-    );
+    const result = await stepGetInstanceDefinition.modifyInstanceWithPrompt({
+      instanceDefinition: instanceDefinitionMock,
+    });
 
     // then
     expect(mstrObjectRestService.answerPrompts).not.toBeCalled();
@@ -711,16 +720,15 @@ describe('StepGetInstanceDefinition', () => {
   });
 
   it.each`
-  expectedPrevCrosstabDimensions    | expectedCrosstabHeaderDimensions  | callNo | isCrosstab | crosstabHeaderDimensions
-  
-  ${false}                          | ${'crosstabHeaderDimensionsTest'} | ${1}   | ${true}    | ${undefined}    
-  ${false}                          | ${'crosstabHeaderDimensionsTest'} | ${1}   | ${true}    | ${false}      
-  ${'crosstabHeaderDimensionsTest'} | ${'crosstabHeaderDimensionsTest'} | ${1}   | ${true}    | ${'crosstabHeaderDimensionsTest'}      
-  ${false}                          | ${false}                          | ${0}   | ${false}   | ${undefined}    
-  ${false}                          | ${false}                          | ${0}   | ${false}   | ${false}      
-  ${'crosstabHeaderDimensionsTest'} | ${false}                          | ${0}   | ${false}   | ${'crosstabHeaderDimensionsTest'}      
-
-  `('savePreviousObjectData should work as expected',
+    expectedPrevCrosstabDimensions    | expectedCrosstabHeaderDimensions  | callNo | isCrosstab | crosstabHeaderDimensions
+    ${false}                          | ${'crosstabHeaderDimensionsTest'} | ${1}   | ${true}    | ${undefined}
+    ${false}                          | ${'crosstabHeaderDimensionsTest'} | ${1}   | ${true}    | ${false}
+    ${'crosstabHeaderDimensionsTest'} | ${'crosstabHeaderDimensionsTest'} | ${1}   | ${true}    | ${'crosstabHeaderDimensionsTest'}
+    ${false}                          | ${false}                          | ${0}   | ${false}   | ${undefined}
+    ${false}                          | ${false}                          | ${0}   | ${false}   | ${false}
+    ${'crosstabHeaderDimensionsTest'} | ${false}                          | ${0}   | ${false}   | ${'crosstabHeaderDimensionsTest'}
+  `(
+    'savePreviousObjectData should work as expected',
     ({
       expectedPrevCrosstabDimensions,
       expectedCrosstabHeaderDimensions,
@@ -728,7 +736,7 @@ describe('StepGetInstanceDefinition', () => {
       isCrosstab,
       crosstabHeaderDimensions,
     }) => {
-    // given
+      // given
       const mstrTableMock = {
         isCrosstab,
         subtotalsInfo: {},
@@ -736,40 +744,39 @@ describe('StepGetInstanceDefinition', () => {
 
       const instanceDefinition = { mstrTable: mstrTableMock };
 
-      jest.spyOn(officeApiCrosstabHelper, 'getCrosstabHeaderDimensions')
+      jest
+        .spyOn(officeApiCrosstabHelper, 'getCrosstabHeaderDimensions')
         .mockReturnValue('crosstabHeaderDimensionsTest');
 
       // when
       stepGetInstanceDefinition.savePreviousObjectData(
         instanceDefinition,
         crosstabHeaderDimensions,
-        'subtotalsAddressesTest',
+        'subtotalsAddressesTest'
       );
 
       // then
       expect(officeApiCrosstabHelper.getCrosstabHeaderDimensions).toBeCalledTimes(callNo);
       if (callNo === 1) {
-        expect(officeApiCrosstabHelper.getCrosstabHeaderDimensions).toBeCalledWith(instanceDefinition);
+        expect(officeApiCrosstabHelper.getCrosstabHeaderDimensions).toBeCalledWith(
+          instanceDefinition
+        );
       }
 
       expect(mstrTableMock.prevCrosstabDimensions).toEqual(expectedPrevCrosstabDimensions);
       expect(mstrTableMock.crosstabHeaderDimensions).toEqual(expectedCrosstabHeaderDimensions);
       expect(mstrTableMock.subtotalsInfo.subtotalsAddresses).toEqual('subtotalsAddressesTest');
-    });
+    }
+  );
 
   it.each`
-  expectedStartCell | createAndActivateNewWorksheetCallNo | insertNewWorksheet
-  
-  ${42}             | ${0}                                | ${false}
-  ${42}             | ${1}                                | ${true}
-  
-  `('getStartCell should work as expected',
-    async ({
-      expectedStartCell,
-      createAndActivateNewWorksheetCallNo,
-      insertNewWorksheet,
-    }) => {
-    // given
+    expectedStartCell | createAndActivateNewWorksheetCallNo | insertNewWorksheet
+    ${42}             | ${0}                                | ${false}
+    ${42}             | ${1}                                | ${true}
+  `(
+    'getStartCell should work as expected',
+    async ({ expectedStartCell, createAndActivateNewWorksheetCallNo, insertNewWorksheet }) => {
+      // given
       jest.spyOn(officeApiWorksheetHelper, 'createAndActivateNewWorksheet').mockImplementation();
 
       jest.spyOn(officeApiHelper, 'getSelectedCell').mockReturnValue(42);
@@ -785,13 +792,18 @@ describe('StepGetInstanceDefinition', () => {
       // then
       expect(result).toEqual(expectedStartCell);
 
-      expect(officeApiWorksheetHelper.createAndActivateNewWorksheet)
-        .toBeCalledTimes(createAndActivateNewWorksheetCallNo);
+      expect(officeApiWorksheetHelper.createAndActivateNewWorksheet).toBeCalledTimes(
+        createAndActivateNewWorksheetCallNo
+      );
       if (createAndActivateNewWorksheetCallNo === 1) {
-        expect(officeApiWorksheetHelper.createAndActivateNewWorksheet).toBeCalledWith('excelContextTest', 'nameTest');
+        expect(officeApiWorksheetHelper.createAndActivateNewWorksheet).toBeCalledWith(
+          'excelContextTest',
+          'nameTest'
+        );
       }
 
       expect(officeApiHelper.getSelectedCell).toBeCalledTimes(1);
       expect(officeApiHelper.getSelectedCell).toBeCalledWith('excelContextTest');
-    });
+    }
+  );
 });

@@ -1,16 +1,74 @@
-export const environmentProjectList = [{
-  acg: 255, alias: '', dateCreated: '2015-06-30T21:55:35.000+0000', dateModified: '2019-02-08T15:00:55.000+0000', description: 'MicroStrategy Tutorial project and application set designed to illustrate the platform\'s rich functionality. The theme is an Electronics, Books, Movies and Music store. Employees, Inventory, Finance, Product Sales and Suppliers are analyzed.', id: 'B7CA92F04B9FAE8D941C3E9B7E0CD754', name: 'MicroStrategy Tutorial', owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' }, status: 0,
-}, {
-  acg: 255, alias: '', dateCreated: '2016-11-20T16:39:48.000+0000', dateModified: '2018-12-12T13:05:34.000+0000', description: '', id: 'CE52831411E696C8BD2F0080EFD5AF44', name: 'Consolidated Education Project', owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' }, status: 0,
-}, {
-  acg: 255, alias: '', dateCreated: '2016-11-20T16:43:45.000+0000', dateModified: '2018-12-12T13:06:02.000+0000', description: '', id: 'B3FEE61A11E696C8BD0F0080EFC58F44', name: 'Hierarchies Project', owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' }, status: 0,
-}, {
-  acg: 255, alias: '', dateCreated: '2016-11-20T16:46:11.000+0000', dateModified: '2018-12-12T13:06:29.000+0000', description: 'The Human Resources Analysis Module analyses workforce headcount, trends and profiles, employee attrition and recruitment, compensation and benefit costs and employee qualifications, performance and satisfaction.', id: '4BAE16A340B995CAD24193AA3AC15D29', name: 'Human Resources Analysis Module', owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' }, status: 0,
-}, {
-  acg: 255, alias: '', dateCreated: '2016-11-20T16:49:27.000+0000', dateModified: '2018-12-12T13:07:30.000+0000', description: '', id: '4C09350211E69712BAEE0080EFB56D41', name: 'Relationships Project', owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' }, status: 0,
-}, {
-  acg: 255, alias: '', dateCreated: '2018-12-12T13:15:41.000+0000', dateModified: '2018-12-18T15:58:31.000+0000', description: 'Platform Analytics (MicroStrategy 2019)', id: '065E7F1E11E8FE1004240080EFE55E79', name: 'Platform Analytics', owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' }, platformAnalytics: true, status: 0,
-}];
+export const environmentProjectList = [
+  {
+    acg: 255,
+    alias: '',
+    dateCreated: '2015-06-30T21:55:35.000+0000',
+    dateModified: '2019-02-08T15:00:55.000+0000',
+    description:
+      "MicroStrategy Tutorial project and application set designed to illustrate the platform's rich functionality. The theme is an Electronics, Books, Movies and Music store. Employees, Inventory, Finance, Product Sales and Suppliers are analyzed.",
+    id: 'B7CA92F04B9FAE8D941C3E9B7E0CD754',
+    name: 'MicroStrategy Tutorial',
+    owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' },
+    status: 0,
+  },
+  {
+    acg: 255,
+    alias: '',
+    dateCreated: '2016-11-20T16:39:48.000+0000',
+    dateModified: '2018-12-12T13:05:34.000+0000',
+    description: '',
+    id: 'CE52831411E696C8BD2F0080EFD5AF44',
+    name: 'Consolidated Education Project',
+    owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' },
+    status: 0,
+  },
+  {
+    acg: 255,
+    alias: '',
+    dateCreated: '2016-11-20T16:43:45.000+0000',
+    dateModified: '2018-12-12T13:06:02.000+0000',
+    description: '',
+    id: 'B3FEE61A11E696C8BD0F0080EFC58F44',
+    name: 'Hierarchies Project',
+    owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' },
+    status: 0,
+  },
+  {
+    acg: 255,
+    alias: '',
+    dateCreated: '2016-11-20T16:46:11.000+0000',
+    dateModified: '2018-12-12T13:06:29.000+0000',
+    description:
+      'The Human Resources Analysis Module analyses workforce headcount, trends and profiles, employee attrition and recruitment, compensation and benefit costs and employee qualifications, performance and satisfaction.',
+    id: '4BAE16A340B995CAD24193AA3AC15D29',
+    name: 'Human Resources Analysis Module',
+    owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' },
+    status: 0,
+  },
+  {
+    acg: 255,
+    alias: '',
+    dateCreated: '2016-11-20T16:49:27.000+0000',
+    dateModified: '2018-12-12T13:07:30.000+0000',
+    description: '',
+    id: '4C09350211E69712BAEE0080EFB56D41',
+    name: 'Relationships Project',
+    owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' },
+    status: 0,
+  },
+  {
+    acg: 255,
+    alias: '',
+    dateCreated: '2018-12-12T13:15:41.000+0000',
+    dateModified: '2018-12-18T15:58:31.000+0000',
+    description: 'Platform Analytics (MicroStrategy 2019)',
+    id: '065E7F1E11E8FE1004240080EFE55E79',
+    name: 'Platform Analytics',
+    owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' },
+    platformAnalytics: true,
+    status: 0,
+  },
+];
 export const mockReports = [
   {
     id: 'F9E139BE11E85E842B520080EFC5C210',
@@ -89,7 +147,7 @@ export const mockReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: 'USA', },
+                formValues: { DESC: 'USA' },
                 name: 'USA',
                 id: 'h1;8D679D3811D3E4981000E787EC6DE8A4',
               },
@@ -99,7 +157,7 @@ export const mockReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Central', },
+                    formValues: { DESC: 'Central' },
                     name: 'Central',
                     id: 'h4;8D679D4B11D3E4981000E787EC6DE8A4',
                   },
@@ -109,7 +167,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '24 and under', },
+                        formValues: { DESC: '24 and under' },
                         name: '24 and under',
                         id: 'h1;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -125,7 +183,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '25 to 34', },
+                        formValues: { DESC: '25 to 34' },
                         name: '25 to 34',
                         id: 'h2;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -141,7 +199,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '35 to 44', },
+                        formValues: { DESC: '35 to 44' },
                         name: '35 to 44',
                         id: 'h3;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -157,7 +215,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '45 to 54', },
+                        formValues: { DESC: '45 to 54' },
                         name: '45 to 54',
                         id: 'h4;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -173,7 +231,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '55 and over', },
+                        formValues: { DESC: '55 and over' },
                         name: '55 and over',
                         id: 'h5;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -191,7 +249,7 @@ export const mockReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Mid-Atlantic', },
+                    formValues: { DESC: 'Mid-Atlantic' },
                     name: 'Mid-Atlantic',
                     id: 'h2;8D679D4B11D3E4981000E787EC6DE8A4',
                   },
@@ -201,7 +259,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '24 and under', },
+                        formValues: { DESC: '24 and under' },
                         name: '24 and under',
                         id: 'h1;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -217,7 +275,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '25 to 34', },
+                        formValues: { DESC: '25 to 34' },
                         name: '25 to 34',
                         id: 'h2;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -233,7 +291,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '35 to 44', },
+                        formValues: { DESC: '35 to 44' },
                         name: '35 to 44',
                         id: 'h3;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -249,7 +307,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '45 to 54', },
+                        formValues: { DESC: '45 to 54' },
                         name: '45 to 54',
                         id: 'h4;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -265,7 +323,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '55 and over', },
+                        formValues: { DESC: '55 and over' },
                         name: '55 and over',
                         id: 'h5;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -283,7 +341,7 @@ export const mockReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Northeast', },
+                    formValues: { DESC: 'Northeast' },
                     name: 'Northeast',
                     id: 'h1;8D679D4B11D3E4981000E787EC6DE8A4',
                   },
@@ -293,7 +351,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '24 and under', },
+                        formValues: { DESC: '24 and under' },
                         name: '24 and under',
                         id: 'h1;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -309,7 +367,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '25 to 34', },
+                        formValues: { DESC: '25 to 34' },
                         name: '25 to 34',
                         id: 'h2;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -325,7 +383,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '35 to 44', },
+                        formValues: { DESC: '35 to 44' },
                         name: '35 to 44',
                         id: 'h3;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -341,7 +399,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '45 to 54', },
+                        formValues: { DESC: '45 to 54' },
                         name: '45 to 54',
                         id: 'h4;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -357,7 +415,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '55 and over', },
+                        formValues: { DESC: '55 and over' },
                         name: '55 and over',
                         id: 'h5;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -375,7 +433,7 @@ export const mockReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Northwest', },
+                    formValues: { DESC: 'Northwest' },
                     name: 'Northwest',
                     id: 'h6;8D679D4B11D3E4981000E787EC6DE8A4',
                   },
@@ -385,7 +443,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '24 and under', },
+                        formValues: { DESC: '24 and under' },
                         name: '24 and under',
                         id: 'h1;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -401,7 +459,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '25 to 34', },
+                        formValues: { DESC: '25 to 34' },
                         name: '25 to 34',
                         id: 'h2;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -417,7 +475,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '35 to 44', },
+                        formValues: { DESC: '35 to 44' },
                         name: '35 to 44',
                         id: 'h3;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -433,7 +491,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '45 to 54', },
+                        formValues: { DESC: '45 to 54' },
                         name: '45 to 54',
                         id: 'h4;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -449,7 +507,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '55 and over', },
+                        formValues: { DESC: '55 and over' },
                         name: '55 and over',
                         id: 'h5;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -467,7 +525,7 @@ export const mockReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'South', },
+                    formValues: { DESC: 'South' },
                     name: 'South',
                     id: 'h5;8D679D4B11D3E4981000E787EC6DE8A4',
                   },
@@ -477,7 +535,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '24 and under', },
+                        formValues: { DESC: '24 and under' },
                         name: '24 and under',
                         id: 'h1;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -493,7 +551,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '25 to 34', },
+                        formValues: { DESC: '25 to 34' },
                         name: '25 to 34',
                         id: 'h2;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -509,7 +567,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '35 to 44', },
+                        formValues: { DESC: '35 to 44' },
                         name: '35 to 44',
                         id: 'h3;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -525,7 +583,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '45 to 54', },
+                        formValues: { DESC: '45 to 54' },
                         name: '45 to 54',
                         id: 'h4;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -541,7 +599,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '55 and over', },
+                        formValues: { DESC: '55 and over' },
                         name: '55 and over',
                         id: 'h5;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -559,7 +617,7 @@ export const mockReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Southeast', },
+                    formValues: { DESC: 'Southeast' },
                     name: 'Southeast',
                     id: 'h3;8D679D4B11D3E4981000E787EC6DE8A4',
                   },
@@ -569,7 +627,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '24 and under', },
+                        formValues: { DESC: '24 and under' },
                         name: '24 and under',
                         id: 'h1;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -585,7 +643,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '25 to 34', },
+                        formValues: { DESC: '25 to 34' },
                         name: '25 to 34',
                         id: 'h2;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -601,7 +659,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '35 to 44', },
+                        formValues: { DESC: '35 to 44' },
                         name: '35 to 44',
                         id: 'h3;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -617,7 +675,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '45 to 54', },
+                        formValues: { DESC: '45 to 54' },
                         name: '45 to 54',
                         id: 'h4;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -633,7 +691,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '55 and over', },
+                        formValues: { DESC: '55 and over' },
                         name: '55 and over',
                         id: 'h5;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -651,7 +709,7 @@ export const mockReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Southwest', },
+                    formValues: { DESC: 'Southwest' },
                     name: 'Southwest',
                     id: 'h7;8D679D4B11D3E4981000E787EC6DE8A4',
                   },
@@ -661,7 +719,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '24 and under', },
+                        formValues: { DESC: '24 and under' },
                         name: '24 and under',
                         id: 'h1;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -677,7 +735,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '25 to 34', },
+                        formValues: { DESC: '25 to 34' },
                         name: '25 to 34',
                         id: 'h2;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -693,7 +751,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '35 to 44', },
+                        formValues: { DESC: '35 to 44' },
                         name: '35 to 44',
                         id: 'h3;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -709,7 +767,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '45 to 54', },
+                        formValues: { DESC: '45 to 54' },
                         name: '45 to 54',
                         id: 'h4;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -725,7 +783,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '55 and over', },
+                        formValues: { DESC: '55 and over' },
                         name: '55 and over',
                         id: 'h5;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -745,7 +803,7 @@ export const mockReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: 'Web', },
+                formValues: { DESC: 'Web' },
                 name: 'Web',
                 id: 'h7;8D679D3811D3E4981000E787EC6DE8A4',
               },
@@ -755,7 +813,7 @@ export const mockReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Web', },
+                    formValues: { DESC: 'Web' },
                     name: 'Web',
                     id: 'h12;8D679D4B11D3E4981000E787EC6DE8A4',
                   },
@@ -765,7 +823,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '24 and under', },
+                        formValues: { DESC: '24 and under' },
                         name: '24 and under',
                         id: 'h1;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -781,7 +839,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '25 to 34', },
+                        formValues: { DESC: '25 to 34' },
                         name: '25 to 34',
                         id: 'h2;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -797,7 +855,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '35 to 44', },
+                        formValues: { DESC: '35 to 44' },
                         name: '35 to 44',
                         id: 'h3;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -813,7 +871,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '45 to 54', },
+                        formValues: { DESC: '45 to 54' },
                         name: '45 to 54',
                         id: 'h4;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -829,7 +887,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: '55 and over', },
+                        formValues: { DESC: '55 and over' },
                         name: '55 and over',
                         id: 'h5;5603951E4FE1BC04A44E44B85BBB8ED2',
                       },
@@ -908,7 +966,7 @@ export const mockReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: 'Central', },
+                formValues: { DESC: 'Central' },
                 name: 'Central',
                 id: 'h4;8D679D4B11D3E4981000E787EC6DE8A4',
               },
@@ -924,7 +982,7 @@ export const mockReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: 'Mid-Atlantic', },
+                formValues: { DESC: 'Mid-Atlantic' },
                 name: 'Mid-Atlantic',
                 id: 'h2;8D679D4B11D3E4981000E787EC6DE8A4',
               },
@@ -940,7 +998,7 @@ export const mockReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: 'Northeast', },
+                formValues: { DESC: 'Northeast' },
                 name: 'Northeast',
                 id: 'h1;8D679D4B11D3E4981000E787EC6DE8A4',
               },
@@ -956,7 +1014,7 @@ export const mockReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: 'Northwest', },
+                formValues: { DESC: 'Northwest' },
                 name: 'Northwest',
                 id: 'h6;8D679D4B11D3E4981000E787EC6DE8A4',
               },
@@ -972,7 +1030,7 @@ export const mockReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: 'South', },
+                formValues: { DESC: 'South' },
                 name: 'South',
                 id: 'h5;8D679D4B11D3E4981000E787EC6DE8A4',
               },
@@ -988,7 +1046,7 @@ export const mockReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: 'Southeast', },
+                formValues: { DESC: 'Southeast' },
                 name: 'Southeast',
                 id: 'h3;8D679D4B11D3E4981000E787EC6DE8A4',
               },
@@ -1004,7 +1062,7 @@ export const mockReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: 'Southwest', },
+                formValues: { DESC: 'Southwest' },
                 name: 'Southwest',
                 id: 'h7;8D679D4B11D3E4981000E787EC6DE8A4',
               },
@@ -1020,7 +1078,7 @@ export const mockReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: 'Web', },
+                formValues: { DESC: 'Web' },
                 name: 'Web',
                 id: 'h12;8D679D4B11D3E4981000E787EC6DE8A4',
               },
@@ -1162,7 +1220,7 @@ export const mockReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: 'USA', },
+                formValues: { DESC: 'USA' },
                 name: 'USA',
                 id: 'h1;8D679D3811D3E4981000E787EC6DE8A4',
               },
@@ -1172,7 +1230,7 @@ export const mockReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Central', },
+                    formValues: { DESC: 'Central' },
                     name: 'Central',
                     id: 'h4;8D679D4B11D3E4981000E787EC6DE8A4',
                   },
@@ -1182,7 +1240,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Books', },
+                        formValues: { DESC: 'Books' },
                         name: 'Books',
                         id: 'h1;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -1213,7 +1271,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Electronics', },
+                        formValues: { DESC: 'Electronics' },
                         name: 'Electronics',
                         id: 'h2;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -1244,7 +1302,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Movies', },
+                        formValues: { DESC: 'Movies' },
                         name: 'Movies',
                         id: 'h3;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -1275,7 +1333,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Music', },
+                        formValues: { DESC: 'Music' },
                         name: 'Music',
                         id: 'h4;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -1308,7 +1366,7 @@ export const mockReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Mid-Atlantic', },
+                    formValues: { DESC: 'Mid-Atlantic' },
                     name: 'Mid-Atlantic',
                     id: 'h2;8D679D4B11D3E4981000E787EC6DE8A4',
                   },
@@ -1318,7 +1376,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Books', },
+                        formValues: { DESC: 'Books' },
                         name: 'Books',
                         id: 'h1;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -1349,7 +1407,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Electronics', },
+                        formValues: { DESC: 'Electronics' },
                         name: 'Electronics',
                         id: 'h2;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -1380,7 +1438,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Movies', },
+                        formValues: { DESC: 'Movies' },
                         name: 'Movies',
                         id: 'h3;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -1411,7 +1469,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Music', },
+                        formValues: { DESC: 'Music' },
                         name: 'Music',
                         id: 'h4;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -1444,7 +1502,7 @@ export const mockReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Northeast', },
+                    formValues: { DESC: 'Northeast' },
                     name: 'Northeast',
                     id: 'h1;8D679D4B11D3E4981000E787EC6DE8A4',
                   },
@@ -1454,7 +1512,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Books', },
+                        formValues: { DESC: 'Books' },
                         name: 'Books',
                         id: 'h1;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -1485,7 +1543,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Electronics', },
+                        formValues: { DESC: 'Electronics' },
                         name: 'Electronics',
                         id: 'h2;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -1516,7 +1574,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Movies', },
+                        formValues: { DESC: 'Movies' },
                         name: 'Movies',
                         id: 'h3;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -1547,7 +1605,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Music', },
+                        formValues: { DESC: 'Music' },
                         name: 'Music',
                         id: 'h4;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -1580,7 +1638,7 @@ export const mockReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Northwest', },
+                    formValues: { DESC: 'Northwest' },
                     name: 'Northwest',
                     id: 'h6;8D679D4B11D3E4981000E787EC6DE8A4',
                   },
@@ -1590,7 +1648,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Books', },
+                        formValues: { DESC: 'Books' },
                         name: 'Books',
                         id: 'h1;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -1621,7 +1679,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Electronics', },
+                        formValues: { DESC: 'Electronics' },
                         name: 'Electronics',
                         id: 'h2;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -1652,7 +1710,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Movies', },
+                        formValues: { DESC: 'Movies' },
                         name: 'Movies',
                         id: 'h3;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -1683,7 +1741,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Music', },
+                        formValues: { DESC: 'Music' },
                         name: 'Music',
                         id: 'h4;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -1716,7 +1774,7 @@ export const mockReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'South', },
+                    formValues: { DESC: 'South' },
                     name: 'South',
                     id: 'h5;8D679D4B11D3E4981000E787EC6DE8A4',
                   },
@@ -1726,7 +1784,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Books', },
+                        formValues: { DESC: 'Books' },
                         name: 'Books',
                         id: 'h1;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -1757,7 +1815,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Electronics', },
+                        formValues: { DESC: 'Electronics' },
                         name: 'Electronics',
                         id: 'h2;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -1788,7 +1846,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Movies', },
+                        formValues: { DESC: 'Movies' },
                         name: 'Movies',
                         id: 'h3;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -1819,7 +1877,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Music', },
+                        formValues: { DESC: 'Music' },
                         name: 'Music',
                         id: 'h4;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -1852,7 +1910,7 @@ export const mockReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Southeast', },
+                    formValues: { DESC: 'Southeast' },
                     name: 'Southeast',
                     id: 'h3;8D679D4B11D3E4981000E787EC6DE8A4',
                   },
@@ -1862,7 +1920,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Books', },
+                        formValues: { DESC: 'Books' },
                         name: 'Books',
                         id: 'h1;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -1893,7 +1951,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Electronics', },
+                        formValues: { DESC: 'Electronics' },
                         name: 'Electronics',
                         id: 'h2;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -1924,7 +1982,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Movies', },
+                        formValues: { DESC: 'Movies' },
                         name: 'Movies',
                         id: 'h3;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -1955,7 +2013,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Music', },
+                        formValues: { DESC: 'Music' },
                         name: 'Music',
                         id: 'h4;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -1988,7 +2046,7 @@ export const mockReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Southwest', },
+                    formValues: { DESC: 'Southwest' },
                     name: 'Southwest',
                     id: 'h7;8D679D4B11D3E4981000E787EC6DE8A4',
                   },
@@ -1998,7 +2056,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Books', },
+                        formValues: { DESC: 'Books' },
                         name: 'Books',
                         id: 'h1;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -2029,7 +2087,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Electronics', },
+                        formValues: { DESC: 'Electronics' },
                         name: 'Electronics',
                         id: 'h2;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -2060,7 +2118,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Movies', },
+                        formValues: { DESC: 'Movies' },
                         name: 'Movies',
                         id: 'h3;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -2091,7 +2149,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Music', },
+                        formValues: { DESC: 'Music' },
                         name: 'Music',
                         id: 'h4;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -2126,7 +2184,7 @@ export const mockReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: 'Web', },
+                formValues: { DESC: 'Web' },
                 name: 'Web',
                 id: 'h7;8D679D3811D3E4981000E787EC6DE8A4',
               },
@@ -2136,7 +2194,7 @@ export const mockReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Web', },
+                    formValues: { DESC: 'Web' },
                     name: 'Web',
                     id: 'h12;8D679D4B11D3E4981000E787EC6DE8A4',
                   },
@@ -2146,7 +2204,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Books', },
+                        formValues: { DESC: 'Books' },
                         name: 'Books',
                         id: 'h1;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -2177,7 +2235,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Electronics', },
+                        formValues: { DESC: 'Electronics' },
                         name: 'Electronics',
                         id: 'h2;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -2208,7 +2266,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Movies', },
+                        formValues: { DESC: 'Movies' },
                         name: 'Movies',
                         id: 'h3;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -2239,7 +2297,7 @@ export const mockReports = [
                       depth: 2,
                       element: {
                         attributeIndex: 2,
-                        formValues: { DESC: 'Music', },
+                        formValues: { DESC: 'Music' },
                         name: 'Music',
                         id: 'h4;8D679D3711D3E4981000E787EC6DE8A4',
                       },
@@ -3376,215 +3434,407 @@ export const mockReports = [
     instanceId: '7C36BB4411E935C362760080EF6588E9',
     result: {
       definition: {
-        attributes: [{
-          name: 'Category',
-          id: '8D679D3711D3E4981000E787EC6DE8A4',
-          type: 'Attribute',
-          forms: [{
-            id: 'CCFBE2A5EADB4F50941FB879CCF1721C', name: 'DESC', dataType: 'Char', baseFormType: 'Text',
-          }, {
-            id: '45C11FA478E745FEA08D781CEA190FE5', name: 'ID', dataType: 'Real', baseFormType: 'Number',
-          }],
-        }, {
-          name: 'Subcategory',
-          id: '8D679D4F11D3E4981000E787EC6DE8A4',
-          type: 'Attribute',
-          forms: [{
-            id: 'CCFBE2A5EADB4F50941FB879CCF1721C', name: 'DESC', dataType: 'Char', baseFormType: 'Text',
-          }],
-        }],
-        metrics: [{
-          name: 'Units Received',
-          id: '4C05185811D3E877C000B3B2D86C964F',
-          type: 'Metric',
-          min: 11460,
-          max: 54445,
-          numberFormatting: {
-            category: 0, decimalPlaces: 0, formatString: '#,##0', negativeType: 1,
+        attributes: [
+          {
+            name: 'Category',
+            id: '8D679D3711D3E4981000E787EC6DE8A4',
+            type: 'Attribute',
+            forms: [
+              {
+                id: 'CCFBE2A5EADB4F50941FB879CCF1721C',
+                name: 'DESC',
+                dataType: 'Char',
+                baseFormType: 'Text',
+              },
+              {
+                id: '45C11FA478E745FEA08D781CEA190FE5',
+                name: 'ID',
+                dataType: 'Real',
+                baseFormType: 'Number',
+              },
+            ],
           },
-        }],
+          {
+            name: 'Subcategory',
+            id: '8D679D4F11D3E4981000E787EC6DE8A4',
+            type: 'Attribute',
+            forms: [
+              {
+                id: 'CCFBE2A5EADB4F50941FB879CCF1721C',
+                name: 'DESC',
+                dataType: 'Char',
+                baseFormType: 'Text',
+              },
+            ],
+          },
+        ],
+        metrics: [
+          {
+            name: 'Units Received',
+            id: '4C05185811D3E877C000B3B2D86C964F',
+            type: 'Metric',
+            min: 11460,
+            max: 54445,
+            numberFormatting: {
+              category: 0,
+              decimalPlaces: 0,
+              formatString: '#,##0',
+              negativeType: 1,
+            },
+          },
+        ],
         thresholds: [],
         sorting: [],
       },
       data: {
         paging: {
-          total: 24, current: 24, offset: 0, limit: 1000, prev: null, next: null,
+          total: 24,
+          current: 24,
+          offset: 0,
+          limit: 1000,
+          prev: null,
+          next: null,
         },
         root: {
           isPartial: false,
-          children: [{
-            depth: 0,
-            element: {
-              attributeIndex: 0, formValues: { DESC: 'Books', ID: '1' }, name: 'Books 1', id: 'h1;8D679D3711D3E4981000E787EC6DE8A4',
+          children: [
+            {
+              depth: 0,
+              element: {
+                attributeIndex: 0,
+                formValues: { DESC: 'Books', ID: '1' },
+                name: 'Books 1',
+                id: 'h1;8D679D3711D3E4981000E787EC6DE8A4',
+              },
+              isPartial: false,
+              children: [
+                {
+                  depth: 1,
+                  element: {
+                    attributeIndex: 1,
+                    formValues: { DESC: 'Art & Architecture' },
+                    name: 'Art & Architecture',
+                    id: 'h11;8D679D4F11D3E4981000E787EC6DE8A4',
+                  },
+                  metrics: {
+                    'Units Received': { rv: 28753, fv: '28,753', mi: 0 },
+                  },
+                },
+                {
+                  depth: 1,
+                  element: {
+                    attributeIndex: 1,
+                    formValues: { DESC: 'Business' },
+                    name: 'Business',
+                    id: 'h12;8D679D4F11D3E4981000E787EC6DE8A4',
+                  },
+                  metrics: {
+                    'Units Received': { rv: 28405, fv: '28,405', mi: 0 },
+                  },
+                },
+                {
+                  depth: 1,
+                  element: {
+                    attributeIndex: 1,
+                    formValues: { DESC: 'Literature' },
+                    name: 'Literature',
+                    id: 'h13;8D679D4F11D3E4981000E787EC6DE8A4',
+                  },
+                  metrics: {
+                    'Units Received': { rv: 38859, fv: '38,859', mi: 0 },
+                  },
+                },
+                {
+                  depth: 1,
+                  element: {
+                    attributeIndex: 1,
+                    formValues: { DESC: 'Books - Miscellaneous' },
+                    name: 'Books - Miscellaneous',
+                    id: 'h14;8D679D4F11D3E4981000E787EC6DE8A4',
+                  },
+                  metrics: {
+                    'Units Received': { rv: 38666, fv: '38,666', mi: 0 },
+                  },
+                },
+                {
+                  depth: 1,
+                  element: {
+                    attributeIndex: 1,
+                    formValues: { DESC: 'Science & Technology' },
+                    name: 'Science & Technology',
+                    id: 'h15;8D679D4F11D3E4981000E787EC6DE8A4',
+                  },
+                  metrics: {
+                    'Units Received': { rv: 25141, fv: '25,141', mi: 0 },
+                  },
+                },
+                {
+                  depth: 1,
+                  element: {
+                    attributeIndex: 1,
+                    formValues: { DESC: 'Sports & Health' },
+                    name: 'Sports & Health',
+                    id: 'h16;8D679D4F11D3E4981000E787EC6DE8A4',
+                  },
+                  metrics: {
+                    'Units Received': { rv: 26945, fv: '26,945', mi: 0 },
+                  },
+                },
+              ],
             },
-            isPartial: false,
-            children: [{
-              depth: 1,
+            {
+              depth: 0,
               element: {
-                attributeIndex: 1, formValues: { DESC: 'Art & Architecture' }, name: 'Art & Architecture', id: 'h11;8D679D4F11D3E4981000E787EC6DE8A4',
+                attributeIndex: 0,
+                formValues: { DESC: 'Electronics', ID: '2' },
+                name: 'Electronics 2',
+                id: 'h2;8D679D3711D3E4981000E787EC6DE8A4',
               },
-              metrics: { 'Units Received': { rv: 28753, fv: '28,753', mi: 0 } },
-            }, {
-              depth: 1,
-              element: {
-                attributeIndex: 1, formValues: { DESC: 'Business' }, name: 'Business', id: 'h12;8D679D4F11D3E4981000E787EC6DE8A4',
-              },
-              metrics: { 'Units Received': { rv: 28405, fv: '28,405', mi: 0 } },
-            }, {
-              depth: 1,
-              element: {
-                attributeIndex: 1, formValues: { DESC: 'Literature' }, name: 'Literature', id: 'h13;8D679D4F11D3E4981000E787EC6DE8A4',
-              },
-              metrics: { 'Units Received': { rv: 38859, fv: '38,859', mi: 0 } },
-            }, {
-              depth: 1,
-              element: {
-                attributeIndex: 1, formValues: { DESC: 'Books - Miscellaneous' }, name: 'Books - Miscellaneous', id: 'h14;8D679D4F11D3E4981000E787EC6DE8A4',
-              },
-              metrics: { 'Units Received': { rv: 38666, fv: '38,666', mi: 0 } },
-            }, {
-              depth: 1,
-              element: {
-                attributeIndex: 1, formValues: { DESC: 'Science & Technology' }, name: 'Science & Technology', id: 'h15;8D679D4F11D3E4981000E787EC6DE8A4',
-              },
-              metrics: { 'Units Received': { rv: 25141, fv: '25,141', mi: 0 } },
-            }, {
-              depth: 1,
-              element: {
-                attributeIndex: 1, formValues: { DESC: 'Sports & Health' }, name: 'Sports & Health', id: 'h16;8D679D4F11D3E4981000E787EC6DE8A4',
-              },
-              metrics: { 'Units Received': { rv: 26945, fv: '26,945', mi: 0 } },
-            }],
-          }, {
-            depth: 0,
-            element: {
-              attributeIndex: 0, formValues: { DESC: 'Electronics', ID: '2' }, name: 'Electronics 2', id: 'h2;8D679D3711D3E4981000E787EC6DE8A4',
+              isPartial: false,
+              children: [
+                {
+                  depth: 1,
+                  element: {
+                    attributeIndex: 1,
+                    formValues: { DESC: 'Audio Equipment' },
+                    name: 'Audio Equipment',
+                    id: 'h21;8D679D4F11D3E4981000E787EC6DE8A4',
+                  },
+                  metrics: {
+                    'Units Received': { rv: 15615, fv: '15,615', mi: 0 },
+                  },
+                },
+                {
+                  depth: 1,
+                  element: {
+                    attributeIndex: 1,
+                    formValues: { DESC: 'Cameras' },
+                    name: 'Cameras',
+                    id: 'h22;8D679D4F11D3E4981000E787EC6DE8A4',
+                  },
+                  metrics: {
+                    'Units Received': { rv: 11460, fv: '11,460', mi: 0 },
+                  },
+                },
+                {
+                  depth: 1,
+                  element: {
+                    attributeIndex: 1,
+                    formValues: { DESC: 'Computers' },
+                    name: 'Computers',
+                    id: 'h23;8D679D4F11D3E4981000E787EC6DE8A4',
+                  },
+                  metrics: {
+                    'Units Received': { rv: 16700, fv: '16,700', mi: 0 },
+                  },
+                },
+                {
+                  depth: 1,
+                  element: {
+                    attributeIndex: 1,
+                    formValues: { DESC: 'Electronics - Miscellaneous' },
+                    name: 'Electronics - Miscellaneous',
+                    id: 'h24;8D679D4F11D3E4981000E787EC6DE8A4',
+                  },
+                  metrics: {
+                    'Units Received': { rv: 13310, fv: '13,310', mi: 0 },
+                  },
+                },
+                {
+                  depth: 1,
+                  element: {
+                    attributeIndex: 1,
+                    formValues: { DESC: "TV's" },
+                    name: "TV's",
+                    id: 'h25;8D679D4F11D3E4981000E787EC6DE8A4',
+                  },
+                  metrics: {
+                    'Units Received': { rv: 15275, fv: '15,275', mi: 0 },
+                  },
+                },
+                {
+                  depth: 1,
+                  element: {
+                    attributeIndex: 1,
+                    formValues: { DESC: 'Video Equipment' },
+                    name: 'Video Equipment',
+                    id: 'h26;8D679D4F11D3E4981000E787EC6DE8A4',
+                  },
+                  metrics: {
+                    'Units Received': { rv: 11500, fv: '11,500', mi: 0 },
+                  },
+                },
+              ],
             },
-            isPartial: false,
-            children: [{
-              depth: 1,
+            {
+              depth: 0,
               element: {
-                attributeIndex: 1, formValues: { DESC: 'Audio Equipment' }, name: 'Audio Equipment', id: 'h21;8D679D4F11D3E4981000E787EC6DE8A4',
+                attributeIndex: 0,
+                formValues: { DESC: 'Movies', ID: '3' },
+                name: 'Movies 3',
+                id: 'h3;8D679D3711D3E4981000E787EC6DE8A4',
               },
-              metrics: { 'Units Received': { rv: 15615, fv: '15,615', mi: 0 } },
-            }, {
-              depth: 1,
-              element: {
-                attributeIndex: 1, formValues: { DESC: 'Cameras' }, name: 'Cameras', id: 'h22;8D679D4F11D3E4981000E787EC6DE8A4',
-              },
-              metrics: { 'Units Received': { rv: 11460, fv: '11,460', mi: 0 } },
-            }, {
-              depth: 1,
-              element: {
-                attributeIndex: 1, formValues: { DESC: 'Computers' }, name: 'Computers', id: 'h23;8D679D4F11D3E4981000E787EC6DE8A4',
-              },
-              metrics: { 'Units Received': { rv: 16700, fv: '16,700', mi: 0 } },
-            }, {
-              depth: 1,
-              element: {
-                attributeIndex: 1, formValues: { DESC: 'Electronics - Miscellaneous' }, name: 'Electronics - Miscellaneous', id: 'h24;8D679D4F11D3E4981000E787EC6DE8A4',
-              },
-              metrics: { 'Units Received': { rv: 13310, fv: '13,310', mi: 0 } },
-            }, {
-              depth: 1,
-              element: {
-                attributeIndex: 1, formValues: { DESC: 'TV\'s' }, name: 'TV\'s', id: 'h25;8D679D4F11D3E4981000E787EC6DE8A4',
-              },
-              metrics: { 'Units Received': { rv: 15275, fv: '15,275', mi: 0 } },
-            }, {
-              depth: 1,
-              element: {
-                attributeIndex: 1, formValues: { DESC: 'Video Equipment' }, name: 'Video Equipment', id: 'h26;8D679D4F11D3E4981000E787EC6DE8A4',
-              },
-              metrics: { 'Units Received': { rv: 11500, fv: '11,500', mi: 0 } },
-            }],
-          }, {
-            depth: 0,
-            element: {
-              attributeIndex: 0, formValues: { DESC: 'Movies', ID: '3' }, name: 'Movies 3', id: 'h3;8D679D3711D3E4981000E787EC6DE8A4',
+              isPartial: false,
+              children: [
+                {
+                  depth: 1,
+                  element: {
+                    attributeIndex: 1,
+                    formValues: { DESC: 'Action' },
+                    name: 'Action',
+                    id: 'h31;8D679D4F11D3E4981000E787EC6DE8A4',
+                  },
+                  metrics: {
+                    'Units Received': { rv: 49435, fv: '49,435', mi: 0 },
+                  },
+                },
+                {
+                  depth: 1,
+                  element: {
+                    attributeIndex: 1,
+                    formValues: { DESC: 'Comedy' },
+                    name: 'Comedy',
+                    id: 'h32;8D679D4F11D3E4981000E787EC6DE8A4',
+                  },
+                  metrics: {
+                    'Units Received': { rv: 52925, fv: '52,925', mi: 0 },
+                  },
+                },
+                {
+                  depth: 1,
+                  element: {
+                    attributeIndex: 1,
+                    formValues: { DESC: 'Drama' },
+                    name: 'Drama',
+                    id: 'h33;8D679D4F11D3E4981000E787EC6DE8A4',
+                  },
+                  metrics: {
+                    'Units Received': { rv: 46600, fv: '46,600', mi: 0 },
+                  },
+                },
+                {
+                  depth: 1,
+                  element: {
+                    attributeIndex: 1,
+                    formValues: { DESC: 'Horror' },
+                    name: 'Horror',
+                    id: 'h34;8D679D4F11D3E4981000E787EC6DE8A4',
+                  },
+                  metrics: {
+                    'Units Received': { rv: 50895, fv: '50,895', mi: 0 },
+                  },
+                },
+                {
+                  depth: 1,
+                  element: {
+                    attributeIndex: 1,
+                    formValues: { DESC: 'Kids / Family' },
+                    name: 'Kids / Family',
+                    id: 'h35;8D679D4F11D3E4981000E787EC6DE8A4',
+                  },
+                  metrics: {
+                    'Units Received': { rv: 46655, fv: '46,655', mi: 0 },
+                  },
+                },
+                {
+                  depth: 1,
+                  element: {
+                    attributeIndex: 1,
+                    formValues: { DESC: 'Special Interests' },
+                    name: 'Special Interests',
+                    id: 'h36;8D679D4F11D3E4981000E787EC6DE8A4',
+                  },
+                  metrics: {
+                    'Units Received': { rv: 39370, fv: '39,370', mi: 0 },
+                  },
+                },
+              ],
             },
-            isPartial: false,
-            children: [{
-              depth: 1,
+            {
+              depth: 0,
               element: {
-                attributeIndex: 1, formValues: { DESC: 'Action' }, name: 'Action', id: 'h31;8D679D4F11D3E4981000E787EC6DE8A4',
+                attributeIndex: 0,
+                formValues: { DESC: 'Music', ID: '4' },
+                name: 'Music 4',
+                id: 'h4;8D679D3711D3E4981000E787EC6DE8A4',
               },
-              metrics: { 'Units Received': { rv: 49435, fv: '49,435', mi: 0 } },
-            }, {
-              depth: 1,
-              element: {
-                attributeIndex: 1, formValues: { DESC: 'Comedy' }, name: 'Comedy', id: 'h32;8D679D4F11D3E4981000E787EC6DE8A4',
-              },
-              metrics: { 'Units Received': { rv: 52925, fv: '52,925', mi: 0 } },
-            }, {
-              depth: 1,
-              element: {
-                attributeIndex: 1, formValues: { DESC: 'Drama' }, name: 'Drama', id: 'h33;8D679D4F11D3E4981000E787EC6DE8A4',
-              },
-              metrics: { 'Units Received': { rv: 46600, fv: '46,600', mi: 0 } },
-            }, {
-              depth: 1,
-              element: {
-                attributeIndex: 1, formValues: { DESC: 'Horror' }, name: 'Horror', id: 'h34;8D679D4F11D3E4981000E787EC6DE8A4',
-              },
-              metrics: { 'Units Received': { rv: 50895, fv: '50,895', mi: 0 } },
-            }, {
-              depth: 1,
-              element: {
-                attributeIndex: 1, formValues: { DESC: 'Kids / Family' }, name: 'Kids / Family', id: 'h35;8D679D4F11D3E4981000E787EC6DE8A4',
-              },
-              metrics: { 'Units Received': { rv: 46655, fv: '46,655', mi: 0 } },
-            }, {
-              depth: 1,
-              element: {
-                attributeIndex: 1, formValues: { DESC: 'Special Interests' }, name: 'Special Interests', id: 'h36;8D679D4F11D3E4981000E787EC6DE8A4',
-              },
-              metrics: { 'Units Received': { rv: 39370, fv: '39,370', mi: 0 } },
-            }],
-          }, {
-            depth: 0,
-            element: {
-              attributeIndex: 0, formValues: { DESC: 'Music', ID: '4' }, name: 'Music 4', id: 'h4;8D679D3711D3E4981000E787EC6DE8A4',
+              isPartial: false,
+              children: [
+                {
+                  depth: 1,
+                  element: {
+                    attributeIndex: 1,
+                    formValues: { DESC: 'Alternative' },
+                    name: 'Alternative',
+                    id: 'h41;8D679D4F11D3E4981000E787EC6DE8A4',
+                  },
+                  metrics: {
+                    'Units Received': { rv: 54445, fv: '54,445', mi: 0 },
+                  },
+                },
+                {
+                  depth: 1,
+                  element: {
+                    attributeIndex: 1,
+                    formValues: { DESC: 'Country' },
+                    name: 'Country',
+                    id: 'h42;8D679D4F11D3E4981000E787EC6DE8A4',
+                  },
+                  metrics: {
+                    'Units Received': { rv: 52810, fv: '52,810', mi: 0 },
+                  },
+                },
+                {
+                  depth: 1,
+                  element: {
+                    attributeIndex: 1,
+                    formValues: { DESC: 'Music - Miscellaneous' },
+                    name: 'Music - Miscellaneous',
+                    id: 'h43;8D679D4F11D3E4981000E787EC6DE8A4',
+                  },
+                  metrics: {
+                    'Units Received': { rv: 37035, fv: '37,035', mi: 0 },
+                  },
+                },
+                {
+                  depth: 1,
+                  element: {
+                    attributeIndex: 1,
+                    formValues: { DESC: 'Pop' },
+                    name: 'Pop',
+                    id: 'h44;8D679D4F11D3E4981000E787EC6DE8A4',
+                  },
+                  metrics: {
+                    'Units Received': { rv: 48730, fv: '48,730', mi: 0 },
+                  },
+                },
+                {
+                  depth: 1,
+                  element: {
+                    attributeIndex: 1,
+                    formValues: { DESC: 'Rock' },
+                    name: 'Rock',
+                    id: 'h45;8D679D4F11D3E4981000E787EC6DE8A4',
+                  },
+                  metrics: {
+                    'Units Received': { rv: 51715, fv: '51,715', mi: 0 },
+                  },
+                },
+                {
+                  depth: 1,
+                  element: {
+                    attributeIndex: 1,
+                    formValues: { DESC: 'Soul / R&B' },
+                    name: 'Soul / R&B',
+                    id: 'h46;8D679D4F11D3E4981000E787EC6DE8A4',
+                  },
+                  metrics: {
+                    'Units Received': { rv: 32270, fv: '32,270', mi: 0 },
+                  },
+                },
+              ],
             },
-            isPartial: false,
-            children: [{
-              depth: 1,
-              element: {
-                attributeIndex: 1, formValues: { DESC: 'Alternative' }, name: 'Alternative', id: 'h41;8D679D4F11D3E4981000E787EC6DE8A4',
-              },
-              metrics: { 'Units Received': { rv: 54445, fv: '54,445', mi: 0 } },
-            }, {
-              depth: 1,
-              element: {
-                attributeIndex: 1, formValues: { DESC: 'Country' }, name: 'Country', id: 'h42;8D679D4F11D3E4981000E787EC6DE8A4',
-              },
-              metrics: { 'Units Received': { rv: 52810, fv: '52,810', mi: 0 } },
-            }, {
-              depth: 1,
-              element: {
-                attributeIndex: 1, formValues: { DESC: 'Music - Miscellaneous' }, name: 'Music - Miscellaneous', id: 'h43;8D679D4F11D3E4981000E787EC6DE8A4',
-              },
-              metrics: { 'Units Received': { rv: 37035, fv: '37,035', mi: 0 } },
-            }, {
-              depth: 1,
-              element: {
-                attributeIndex: 1, formValues: { DESC: 'Pop' }, name: 'Pop', id: 'h44;8D679D4F11D3E4981000E787EC6DE8A4',
-              },
-              metrics: { 'Units Received': { rv: 48730, fv: '48,730', mi: 0 } },
-            }, {
-              depth: 1,
-              element: {
-                attributeIndex: 1, formValues: { DESC: 'Rock' }, name: 'Rock', id: 'h45;8D679D4F11D3E4981000E787EC6DE8A4',
-              },
-              metrics: { 'Units Received': { rv: 51715, fv: '51,715', mi: 0 } },
-            }, {
-              depth: 1,
-              element: {
-                attributeIndex: 1, formValues: { DESC: 'Soul / R&B' }, name: 'Soul / R&B', id: 'h46;8D679D4F11D3E4981000E787EC6DE8A4',
-              },
-              metrics: { 'Units Received': { rv: 32270, fv: '32,270', mi: 0 } },
-            }],
-          }],
+          ],
         },
       },
     },
@@ -3806,7 +4056,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: '2014 Q1', },
+                formValues: { DESC: '2014 Q1' },
                 name: '2014 Q1',
                 id: 'h20141;8D679D4A11D3E4981000E787EC6DE8A4',
               },
@@ -3822,7 +4072,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: '2014 Q2', },
+                formValues: { DESC: '2014 Q2' },
                 name: '2014 Q2',
                 id: 'h20142;8D679D4A11D3E4981000E787EC6DE8A4',
               },
@@ -3838,7 +4088,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: '2014 Q3', },
+                formValues: { DESC: '2014 Q3' },
                 name: '2014 Q3',
                 id: 'h20143;8D679D4A11D3E4981000E787EC6DE8A4',
               },
@@ -3854,7 +4104,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: '2014 Q4', },
+                formValues: { DESC: '2014 Q4' },
                 name: '2014 Q4',
                 id: 'h20144;8D679D4A11D3E4981000E787EC6DE8A4',
               },
@@ -3870,7 +4120,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: '2015 Q1', },
+                formValues: { DESC: '2015 Q1' },
                 name: '2015 Q1',
                 id: 'h20151;8D679D4A11D3E4981000E787EC6DE8A4',
               },
@@ -3886,7 +4136,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: '2015 Q2', },
+                formValues: { DESC: '2015 Q2' },
                 name: '2015 Q2',
                 id: 'h20152;8D679D4A11D3E4981000E787EC6DE8A4',
               },
@@ -3902,7 +4152,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: '2015 Q3', },
+                formValues: { DESC: '2015 Q3' },
                 name: '2015 Q3',
                 id: 'h20153;8D679D4A11D3E4981000E787EC6DE8A4',
               },
@@ -3918,7 +4168,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: '2015 Q4', },
+                formValues: { DESC: '2015 Q4' },
                 name: '2015 Q4',
                 id: 'h20154;8D679D4A11D3E4981000E787EC6DE8A4',
               },
@@ -3934,7 +4184,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: '2016 Q1', },
+                formValues: { DESC: '2016 Q1' },
                 name: '2016 Q1',
                 id: 'h20161;8D679D4A11D3E4981000E787EC6DE8A4',
               },
@@ -3950,7 +4200,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: '2016 Q2', },
+                formValues: { DESC: '2016 Q2' },
                 name: '2016 Q2',
                 id: 'h20162;8D679D4A11D3E4981000E787EC6DE8A4',
               },
@@ -3966,7 +4216,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: '2016 Q3', },
+                formValues: { DESC: '2016 Q3' },
                 name: '2016 Q3',
                 id: 'h20163;8D679D4A11D3E4981000E787EC6DE8A4',
               },
@@ -3982,7 +4232,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: '2016 Q4', },
+                formValues: { DESC: '2016 Q4' },
                 name: '2016 Q4',
                 id: 'h20164;8D679D4A11D3E4981000E787EC6DE8A4',
               },
@@ -3998,7 +4248,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: '2017 Q1', },
+                formValues: { DESC: '2017 Q1' },
                 name: '2017 Q1',
                 id: 'h20171;8D679D4A11D3E4981000E787EC6DE8A4',
               },
@@ -4014,7 +4264,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: '2017 Q2', },
+                formValues: { DESC: '2017 Q2' },
                 name: '2017 Q2',
                 id: 'h20172;8D679D4A11D3E4981000E787EC6DE8A4',
               },
@@ -4030,7 +4280,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: '2017 Q3', },
+                formValues: { DESC: '2017 Q3' },
                 name: '2017 Q3',
                 id: 'h20173;8D679D4A11D3E4981000E787EC6DE8A4',
               },
@@ -4046,7 +4296,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: '2017 Q4', },
+                formValues: { DESC: '2017 Q4' },
                 name: '2017 Q4',
                 id: 'h20174;8D679D4A11D3E4981000E787EC6DE8A4',
               },
@@ -4178,7 +4428,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: 'Music', },
+                formValues: { DESC: 'Music' },
                 name: 'Music',
                 id: 'h4;8D679D3711D3E4981000E787EC6DE8A4',
               },
@@ -4188,7 +4438,7 @@ export const mockBadReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Country', },
+                    formValues: { DESC: 'Country' },
                     name: 'Country',
                     id: 'h42;8D679D4F11D3E4981000E787EC6DE8A4',
                   },
@@ -4209,7 +4459,7 @@ export const mockBadReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Alternative', },
+                    formValues: { DESC: 'Alternative' },
                     name: 'Alternative',
                     id: 'h41;8D679D4F11D3E4981000E787EC6DE8A4',
                   },
@@ -4230,7 +4480,7 @@ export const mockBadReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Rock', },
+                    formValues: { DESC: 'Rock' },
                     name: 'Rock',
                     id: 'h45;8D679D4F11D3E4981000E787EC6DE8A4',
                   },
@@ -4251,7 +4501,7 @@ export const mockBadReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Pop', },
+                    formValues: { DESC: 'Pop' },
                     name: 'Pop',
                     id: 'h44;8D679D4F11D3E4981000E787EC6DE8A4',
                   },
@@ -4272,7 +4522,7 @@ export const mockBadReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Music - Miscellaneous', },
+                    formValues: { DESC: 'Music - Miscellaneous' },
                     name: 'Music - Miscellaneous',
                     id: 'h43;8D679D4F11D3E4981000E787EC6DE8A4',
                   },
@@ -4293,7 +4543,7 @@ export const mockBadReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Soul / R&B', },
+                    formValues: { DESC: 'Soul / R&B' },
                     name: 'Soul / R&B',
                     id: 'h46;8D679D4F11D3E4981000E787EC6DE8A4',
                   },
@@ -4316,7 +4566,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: 'Movies', },
+                formValues: { DESC: 'Movies' },
                 name: 'Movies',
                 id: 'h3;8D679D3711D3E4981000E787EC6DE8A4',
               },
@@ -4326,7 +4576,7 @@ export const mockBadReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Special Interests', },
+                    formValues: { DESC: 'Special Interests' },
                     name: 'Special Interests',
                     id: 'h36;8D679D4F11D3E4981000E787EC6DE8A4',
                   },
@@ -4347,7 +4597,7 @@ export const mockBadReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Drama', },
+                    formValues: { DESC: 'Drama' },
                     name: 'Drama',
                     id: 'h33;8D679D4F11D3E4981000E787EC6DE8A4',
                   },
@@ -4368,7 +4618,7 @@ export const mockBadReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Comedy', },
+                    formValues: { DESC: 'Comedy' },
                     name: 'Comedy',
                     id: 'h32;8D679D4F11D3E4981000E787EC6DE8A4',
                   },
@@ -4389,7 +4639,7 @@ export const mockBadReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Kids / Family', },
+                    formValues: { DESC: 'Kids / Family' },
                     name: 'Kids / Family',
                     id: 'h35;8D679D4F11D3E4981000E787EC6DE8A4',
                   },
@@ -4410,7 +4660,7 @@ export const mockBadReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Horror', },
+                    formValues: { DESC: 'Horror' },
                     name: 'Horror',
                     id: 'h34;8D679D4F11D3E4981000E787EC6DE8A4',
                   },
@@ -4431,7 +4681,7 @@ export const mockBadReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Action', },
+                    formValues: { DESC: 'Action' },
                     name: 'Action',
                     id: 'h31;8D679D4F11D3E4981000E787EC6DE8A4',
                   },
@@ -4454,7 +4704,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: 'Electronics', },
+                formValues: { DESC: 'Electronics' },
                 name: 'Electronics',
                 id: 'h2;8D679D3711D3E4981000E787EC6DE8A4',
               },
@@ -4464,7 +4714,7 @@ export const mockBadReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Video Equipment', },
+                    formValues: { DESC: 'Video Equipment' },
                     name: 'Video Equipment',
                     id: 'h26;8D679D4F11D3E4981000E787EC6DE8A4',
                   },
@@ -4485,7 +4735,7 @@ export const mockBadReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Cameras', },
+                    formValues: { DESC: 'Cameras' },
                     name: 'Cameras',
                     id: 'h22;8D679D4F11D3E4981000E787EC6DE8A4',
                   },
@@ -4506,7 +4756,7 @@ export const mockBadReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Electronics - Miscellaneous', },
+                    formValues: { DESC: 'Electronics - Miscellaneous' },
                     name: 'Electronics - Miscellaneous',
                     id: 'h24;8D679D4F11D3E4981000E787EC6DE8A4',
                   },
@@ -4527,8 +4777,8 @@ export const mockBadReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'TV\'s', },
-                    name: 'TV\'s',
+                    formValues: { DESC: "TV's" },
+                    name: "TV's",
                     id: 'h25;8D679D4F11D3E4981000E787EC6DE8A4',
                   },
                   metrics: {
@@ -4548,7 +4798,7 @@ export const mockBadReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Audio Equipment', },
+                    formValues: { DESC: 'Audio Equipment' },
                     name: 'Audio Equipment',
                     id: 'h21;8D679D4F11D3E4981000E787EC6DE8A4',
                   },
@@ -4569,7 +4819,7 @@ export const mockBadReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Computers', },
+                    formValues: { DESC: 'Computers' },
                     name: 'Computers',
                     id: 'h23;8D679D4F11D3E4981000E787EC6DE8A4',
                   },
@@ -4592,7 +4842,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: 'Books', },
+                formValues: { DESC: 'Books' },
                 name: 'Books',
                 id: 'h1;8D679D3711D3E4981000E787EC6DE8A4',
               },
@@ -4602,7 +4852,7 @@ export const mockBadReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Science & Technology', },
+                    formValues: { DESC: 'Science & Technology' },
                     name: 'Science & Technology',
                     id: 'h15;8D679D4F11D3E4981000E787EC6DE8A4',
                   },
@@ -4623,7 +4873,7 @@ export const mockBadReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Art & Architecture', },
+                    formValues: { DESC: 'Art & Architecture' },
                     name: 'Art & Architecture',
                     id: 'h11;8D679D4F11D3E4981000E787EC6DE8A4',
                   },
@@ -4644,7 +4894,7 @@ export const mockBadReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Business', },
+                    formValues: { DESC: 'Business' },
                     name: 'Business',
                     id: 'h12;8D679D4F11D3E4981000E787EC6DE8A4',
                   },
@@ -4665,7 +4915,7 @@ export const mockBadReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Sports & Health', },
+                    formValues: { DESC: 'Sports & Health' },
                     name: 'Sports & Health',
                     id: 'h16;8D679D4F11D3E4981000E787EC6DE8A4',
                   },
@@ -4686,7 +4936,7 @@ export const mockBadReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Books - Miscellaneous', },
+                    formValues: { DESC: 'Books - Miscellaneous' },
                     name: 'Books - Miscellaneous',
                     id: 'h14;8D679D4F11D3E4981000E787EC6DE8A4',
                   },
@@ -4707,7 +4957,7 @@ export const mockBadReports = [
                   depth: 1,
                   element: {
                     attributeIndex: 1,
-                    formValues: { DESC: 'Literature', },
+                    formValues: { DESC: 'Literature' },
                     name: 'Literature',
                     id: 'h13;8D679D4F11D3E4981000E787EC6DE8A4',
                   },
@@ -4772,9 +5022,7 @@ export const mockBadReports = [
             name: 'Standard Deviation of Revenue',
             id: '82F256FE432647176373C289AD3BA126',
             type: 'Metric',
-            thresholds: [
-              0,
-            ],
+            thresholds: [0],
             min: 2427.562126692,
             max: 16037.0517947014,
             numberFormatting: {
@@ -4859,7 +5107,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: 'Central', },
+                formValues: { DESC: 'Central' },
                 name: 'Central',
                 id: 'h4;8D679D4B11D3E4981000E787EC6DE8A4',
               },
@@ -4895,7 +5143,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: 'Mid-Atlantic', },
+                formValues: { DESC: 'Mid-Atlantic' },
                 name: 'Mid-Atlantic',
                 id: 'h2;8D679D4B11D3E4981000E787EC6DE8A4',
               },
@@ -4931,7 +5179,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: 'Northeast', },
+                formValues: { DESC: 'Northeast' },
                 name: 'Northeast',
                 id: 'h1;8D679D4B11D3E4981000E787EC6DE8A4',
               },
@@ -4967,7 +5215,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: 'Northwest', },
+                formValues: { DESC: 'Northwest' },
                 name: 'Northwest',
                 id: 'h6;8D679D4B11D3E4981000E787EC6DE8A4',
               },
@@ -5003,7 +5251,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: 'South', },
+                formValues: { DESC: 'South' },
                 name: 'South',
                 id: 'h5;8D679D4B11D3E4981000E787EC6DE8A4',
               },
@@ -5039,7 +5287,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: 'Southeast', },
+                formValues: { DESC: 'Southeast' },
                 name: 'Southeast',
                 id: 'h3;8D679D4B11D3E4981000E787EC6DE8A4',
               },
@@ -5075,7 +5323,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: 'Southwest', },
+                formValues: { DESC: 'Southwest' },
                 name: 'Southwest',
                 id: 'h7;8D679D4B11D3E4981000E787EC6DE8A4',
               },
@@ -5111,7 +5359,7 @@ export const mockBadReports = [
               depth: 0,
               element: {
                 attributeIndex: 0,
-                formValues: { DESC: 'Web', },
+                formValues: { DESC: 'Web' },
                 name: 'Web',
                 id: 'h12;8D679D4B11D3E4981000E787EC6DE8A4',
               },
@@ -5149,42 +5397,202 @@ export const mockBadReports = [
     },
   },
 ];
-export const mstrTutorial = [{
-  acg: 255, dateCreated: '2018-12-19T09:59:11.000+0000', dateModified: '2018-12-19T13:25:39.000+0000', extType: 0, id: 'BBA0AE1A11E9037408660080EFE5E0E3', name: '-OG_TESTING', owner: { id: '7FC05A65473CE2FD845CE6A1D3F13233', name: 'MSTR User' }, subtype: 2048, type: 8, version: '938FF1A211E9039100000080EFB57FE3',
-}, {
-  acg: 255, dateCreated: '2005-05-06T21:48:43.000+0000', dateModified: '2016-08-12T19:33:44.000+0000', description: 'These folders contain reports that are appropriate for individuals in different organizational roles.', extType: 0, id: '032A5E114A59D28267BDD8B6D9E58B22', name: 'Business Roles', owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' }, subtype: 2048, type: 8, version: '97C25AEC4CD92391DD9AAEBEAB7ACA30',
-}, {
-  acg: 255, dateCreated: '2007-01-13T22:39:22.000+0000', dateModified: '2016-08-12T19:33:44.000+0000', description: 'This folder contains several examples of dashboards.', extType: 0, id: 'F025A94B4C03B6DCEE0F5D9DA825DA67', name: 'Documents and Scorecards', owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' }, subtype: 2048, type: 8, version: '97C25AEC4CD92391DD9AAEBEAB7ACA30',
-}, {
-  acg: 255, dateCreated: '2003-09-08T20:35:27.000+0000', dateModified: '2016-08-12T19:33:44.000+0000', description: 'This folder contains various types of documents such as scorecards and dashboards, managed metrics reports, production and operational reports, invoices and statements, and business reports.', extType: 0, id: '92ADD0F84D07AC532AD03BA0F92A836B', name: 'Enterprise Reporting Documents', owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' }, subtype: 2048, type: 8, version: '97C25AEC4CD92391DD9AAEBEAB7ACA30',
-}, {
-  acg: 255, dateCreated: '2016-02-02T16:46:17.000+0000', dateModified: '2018-02-06T20:29:04.000+0000', extType: 0, id: '7F16A4B811E58ED317D50080EFF554EA', name: 'Getting Started', owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' }, subtype: 2048, type: 8, version: '5F5128C411E80B7C32DC0080EF758A60',
-}, {
-  acg: 255, dateCreated: '2018-12-19T10:56:43.000+0000', dateModified: '2018-12-19T11:06:17.000+0000', extType: 0, id: 'C54EB05811E9037C08660080EFB580E5', name: 'Kuba', owner: { id: '7FC05A65473CE2FD845CE6A1D3F13233', name: 'MSTR User' }, subtype: 2048, type: 8, version: '1B74E08211E9037EE4C00080EF553FAA',
-}, {
-  acg: 255, dateCreated: '2006-05-23T08:55:20.000+0000', dateModified: '2016-08-12T19:33:44.000+0000', description: 'This folder contains examples of many of the sophisticated capabilities within the MicroStrategy platform.', extType: 0, id: 'D64C532E4E7FBA74D29A7CA3576F39CF', name: 'MicroStrategy Platform Capabilities', owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' }, subtype: 2048, type: 8, version: '97C25AEC4CD92391DD9AAEBEAB7ACA30',
-}, {
-  acg: 255, dateCreated: '2017-08-22T21:58:25.000+0000', dateModified: '2018-01-29T21:13:19.000+0000', extType: 0, hidden: true, id: 'C6C5ECF0B571448A9C31C653AB1D5E51', name: 'Sample Dashboards', owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' }, subtype: 2048, type: 8, version: '3A94209811E80539D63E0080EF757F7A',
-}, {
-  acg: 255, dateCreated: '2017-09-19T16:39:15.000+0000', dateModified: '2018-02-02T21:16:55.000+0000', extType: 0, id: '12F7E26011E79D592D640080EFB5E3A2', name: 'Sample Dossiers', owner: { id: '7FC05A65473CE2FD845CE6A1D3F13233', name: 'MSTR User' }, subtype: 2048, type: 8, version: '653768BE11E8085EE8130080EFC5633C',
-}, {
-  acg: 255, dateCreated: '2006-05-22T15:42:06.000+0000', dateModified: '2016-08-12T19:33:44.000+0000', description: 'This folder contains reports that are categorized by topic. Topics include Customer Analysis, Enterprise Performance Management, Human Resource Analysis, Inventory and Supply Chain Analysis, Sales and Profitability Analysis, and Supplier Analysis.', extType: 0, id: '5B68C5AE433C728679340A91DC8F809C', name: 'Subject Areas', owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' }, subtype: 2048, type: 8, version: '97C25AEC4CD92391DD9AAEBEAB7ACA30',
-}, {
-  acg: 255, certifiedInfo: { certified: false }, dateCreated: '2018-12-19T09:59:27.000+0000', dateModified: '2018-12-19T09:59:27.000+0000', extType: 1, id: 'C536EA7A11E903741E640080EF55BFE2', name: 'TEST REPORT 1', owner: { id: '7FC05A65473CE2FD845CE6A1D3F13233', name: 'MSTR User' }, subtype: 768, type: 3, version: 'C5370B1811E90374E2BF0080EF553EA8', viewMedia: 134217728,
-}, {
-  acg: 255, certifiedInfo: { certified: false }, dateCreated: '2018-12-19T10:00:35.000+0000', dateModified: '2018-12-19T10:00:35.000+0000', extType: 1, id: 'EDBFC41C11E90374240C0080EF1541E6', name: 'TEST REPORT 2', owner: { id: '7FC05A65473CE2FD845CE6A1D3F13233', name: 'MSTR User' }, subtype: 768, type: 3, version: 'EDBFEC6211E9037400000080EF15C0AD', viewMedia: 134217728,
-}, {
-  acg: 255, certifiedInfo: { certified: false }, dateCreated: '2018-12-19T10:04:48.000+0000', dateModified: '2018-12-19T10:04:48.000+0000', extType: 1, id: '84C2592411E903751D0E0080EF9540E5', name: 'TEST REPORT 3', owner: { id: '7FC05A65473CE2FD845CE6A1D3F13233', name: 'MSTR User' }, subtype: 768, type: 3, version: '84C29A8811E9037500000080EF95BFAC', viewMedia: 134217728,
-}, {
-  acg: 255, certifiedInfo: { certified: false }, dateCreated: '2016-02-02T19:12:03.000+0000', dateModified: '2018-07-31T21:49:15.000+0000', extType: 0, id: 'D73B9F3411E5C9E00EE20080EFE55B9E', name: 'Tutorial Home', owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' }, subtype: 14081, type: 55, version: 'BCB0031C11E891C0895C0080EF2585AF', viewMedia: 134217845,
-}];
+export const mstrTutorial = [
+  {
+    acg: 255,
+    dateCreated: '2018-12-19T09:59:11.000+0000',
+    dateModified: '2018-12-19T13:25:39.000+0000',
+    extType: 0,
+    id: 'BBA0AE1A11E9037408660080EFE5E0E3',
+    name: '-OG_TESTING',
+    owner: { id: '7FC05A65473CE2FD845CE6A1D3F13233', name: 'MSTR User' },
+    subtype: 2048,
+    type: 8,
+    version: '938FF1A211E9039100000080EFB57FE3',
+  },
+  {
+    acg: 255,
+    dateCreated: '2005-05-06T21:48:43.000+0000',
+    dateModified: '2016-08-12T19:33:44.000+0000',
+    description:
+      'These folders contain reports that are appropriate for individuals in different organizational roles.',
+    extType: 0,
+    id: '032A5E114A59D28267BDD8B6D9E58B22',
+    name: 'Business Roles',
+    owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' },
+    subtype: 2048,
+    type: 8,
+    version: '97C25AEC4CD92391DD9AAEBEAB7ACA30',
+  },
+  {
+    acg: 255,
+    dateCreated: '2007-01-13T22:39:22.000+0000',
+    dateModified: '2016-08-12T19:33:44.000+0000',
+    description: 'This folder contains several examples of dashboards.',
+    extType: 0,
+    id: 'F025A94B4C03B6DCEE0F5D9DA825DA67',
+    name: 'Documents and Scorecards',
+    owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' },
+    subtype: 2048,
+    type: 8,
+    version: '97C25AEC4CD92391DD9AAEBEAB7ACA30',
+  },
+  {
+    acg: 255,
+    dateCreated: '2003-09-08T20:35:27.000+0000',
+    dateModified: '2016-08-12T19:33:44.000+0000',
+    description:
+      'This folder contains various types of documents such as scorecards and dashboards, managed metrics reports, production and operational reports, invoices and statements, and business reports.',
+    extType: 0,
+    id: '92ADD0F84D07AC532AD03BA0F92A836B',
+    name: 'Enterprise Reporting Documents',
+    owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' },
+    subtype: 2048,
+    type: 8,
+    version: '97C25AEC4CD92391DD9AAEBEAB7ACA30',
+  },
+  {
+    acg: 255,
+    dateCreated: '2016-02-02T16:46:17.000+0000',
+    dateModified: '2018-02-06T20:29:04.000+0000',
+    extType: 0,
+    id: '7F16A4B811E58ED317D50080EFF554EA',
+    name: 'Getting Started',
+    owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' },
+    subtype: 2048,
+    type: 8,
+    version: '5F5128C411E80B7C32DC0080EF758A60',
+  },
+  {
+    acg: 255,
+    dateCreated: '2018-12-19T10:56:43.000+0000',
+    dateModified: '2018-12-19T11:06:17.000+0000',
+    extType: 0,
+    id: 'C54EB05811E9037C08660080EFB580E5',
+    name: 'Kuba',
+    owner: { id: '7FC05A65473CE2FD845CE6A1D3F13233', name: 'MSTR User' },
+    subtype: 2048,
+    type: 8,
+    version: '1B74E08211E9037EE4C00080EF553FAA',
+  },
+  {
+    acg: 255,
+    dateCreated: '2006-05-23T08:55:20.000+0000',
+    dateModified: '2016-08-12T19:33:44.000+0000',
+    description:
+      'This folder contains examples of many of the sophisticated capabilities within the MicroStrategy platform.',
+    extType: 0,
+    id: 'D64C532E4E7FBA74D29A7CA3576F39CF',
+    name: 'MicroStrategy Platform Capabilities',
+    owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' },
+    subtype: 2048,
+    type: 8,
+    version: '97C25AEC4CD92391DD9AAEBEAB7ACA30',
+  },
+  {
+    acg: 255,
+    dateCreated: '2017-08-22T21:58:25.000+0000',
+    dateModified: '2018-01-29T21:13:19.000+0000',
+    extType: 0,
+    hidden: true,
+    id: 'C6C5ECF0B571448A9C31C653AB1D5E51',
+    name: 'Sample Dashboards',
+    owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' },
+    subtype: 2048,
+    type: 8,
+    version: '3A94209811E80539D63E0080EF757F7A',
+  },
+  {
+    acg: 255,
+    dateCreated: '2017-09-19T16:39:15.000+0000',
+    dateModified: '2018-02-02T21:16:55.000+0000',
+    extType: 0,
+    id: '12F7E26011E79D592D640080EFB5E3A2',
+    name: 'Sample Dossiers',
+    owner: { id: '7FC05A65473CE2FD845CE6A1D3F13233', name: 'MSTR User' },
+    subtype: 2048,
+    type: 8,
+    version: '653768BE11E8085EE8130080EFC5633C',
+  },
+  {
+    acg: 255,
+    dateCreated: '2006-05-22T15:42:06.000+0000',
+    dateModified: '2016-08-12T19:33:44.000+0000',
+    description:
+      'This folder contains reports that are categorized by topic. Topics include Customer Analysis, Enterprise Performance Management, Human Resource Analysis, Inventory and Supply Chain Analysis, Sales and Profitability Analysis, and Supplier Analysis.',
+    extType: 0,
+    id: '5B68C5AE433C728679340A91DC8F809C',
+    name: 'Subject Areas',
+    owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' },
+    subtype: 2048,
+    type: 8,
+    version: '97C25AEC4CD92391DD9AAEBEAB7ACA30',
+  },
+  {
+    acg: 255,
+    certifiedInfo: { certified: false },
+    dateCreated: '2018-12-19T09:59:27.000+0000',
+    dateModified: '2018-12-19T09:59:27.000+0000',
+    extType: 1,
+    id: 'C536EA7A11E903741E640080EF55BFE2',
+    name: 'TEST REPORT 1',
+    owner: { id: '7FC05A65473CE2FD845CE6A1D3F13233', name: 'MSTR User' },
+    subtype: 768,
+    type: 3,
+    version: 'C5370B1811E90374E2BF0080EF553EA8',
+    viewMedia: 134217728,
+  },
+  {
+    acg: 255,
+    certifiedInfo: { certified: false },
+    dateCreated: '2018-12-19T10:00:35.000+0000',
+    dateModified: '2018-12-19T10:00:35.000+0000',
+    extType: 1,
+    id: 'EDBFC41C11E90374240C0080EF1541E6',
+    name: 'TEST REPORT 2',
+    owner: { id: '7FC05A65473CE2FD845CE6A1D3F13233', name: 'MSTR User' },
+    subtype: 768,
+    type: 3,
+    version: 'EDBFEC6211E9037400000080EF15C0AD',
+    viewMedia: 134217728,
+  },
+  {
+    acg: 255,
+    certifiedInfo: { certified: false },
+    dateCreated: '2018-12-19T10:04:48.000+0000',
+    dateModified: '2018-12-19T10:04:48.000+0000',
+    extType: 1,
+    id: '84C2592411E903751D0E0080EF9540E5',
+    name: 'TEST REPORT 3',
+    owner: { id: '7FC05A65473CE2FD845CE6A1D3F13233', name: 'MSTR User' },
+    subtype: 768,
+    type: 3,
+    version: '84C29A8811E9037500000080EF95BFAC',
+    viewMedia: 134217728,
+  },
+  {
+    acg: 255,
+    certifiedInfo: { certified: false },
+    dateCreated: '2016-02-02T19:12:03.000+0000',
+    dateModified: '2018-07-31T21:49:15.000+0000',
+    extType: 0,
+    id: 'D73B9F3411E5C9E00EE20080EFE55B9E',
+    name: 'Tutorial Home',
+    owner: { id: '54F3D26011D2896560009A8E67019608', name: 'Administrator' },
+    subtype: 14081,
+    type: 55,
+    version: 'BCB0031C11E891C0895C0080EF2585AF',
+    viewMedia: 134217845,
+  },
+];
 
 export const mstrTutorialFolder = [
   {
     name: 'Ad hoc Reporting',
     id: '13557B804DF35080B1704698620187E1',
     type: 8,
-    description: 'These subfolders contain examples of MicroStrategy\'s ad hoc reporting capabilities, which enable users to manipulate reports for ad hoc analysis.',
+    description:
+      "These subfolders contain examples of MicroStrategy's ad hoc reporting capabilities, which enable users to manipulate reports for ad hoc analysis.",
     subtype: 2048,
     extType: 0,
     dateCreated: '2006-09-08T13:17:07.000+0000',
@@ -5200,7 +5608,8 @@ export const mstrTutorialFolder = [
     name: 'Advanced Analytics',
     id: '4C0516A811D3E877C000B3B2D86C964F',
     type: 8,
-    description: 'Contains reports demonstrating MicroStrategy\'s powerful analytical capabilities, including built-in financial functions and statistics as well as linear regression analysis.',
+    description:
+      "Contains reports demonstrating MicroStrategy's powerful analytical capabilities, including built-in financial functions and statistics as well as linear regression analysis.",
     subtype: 2048,
     extType: 0,
     dateCreated: '2001-01-02T20:43:19.000+0000',
@@ -5216,7 +5625,8 @@ export const mstrTutorialFolder = [
     name: 'Advanced Metrics',
     id: '61BA3B0049EAFB09D70FC7B50082C4F5',
     type: 8,
-    description: 'Examples of different types of capabilities available via metrics in MicroStrategy.',
+    description:
+      'Examples of different types of capabilities available via metrics in MicroStrategy.',
     subtype: 2048,
     extType: 0,
     dateCreated: '2006-05-23T09:42:44.000+0000',
@@ -5264,7 +5674,8 @@ export const mstrTutorialFolder = [
     name: 'Custom Groups and Consolidations',
     id: '4D7A3DE34E110F7E6E6D3D97FBCFFC0C',
     type: 8,
-    description: 'Examples of custom groups and consolidations, which are effectively used to create new attributes using existing attributes in the data warehouse.',
+    description:
+      'Examples of custom groups and consolidations, which are effectively used to create new attributes using existing attributes in the data warehouse.',
     subtype: 2048,
     extType: 0,
     dateCreated: '2006-05-23T09:41:39.000+0000',
@@ -5295,7 +5706,8 @@ export const mstrTutorialFolder = [
     name: 'Engine and Data Modeling',
     id: '5E027C5C4841D7D099EDA4B2769CD4DA',
     type: 8,
-    description: 'Examples of Analytic and SQL Engine features such as Aggregate Awareness, Multipass SQL and Logical Views.',
+    description:
+      'Examples of Analytic and SQL Engine features such as Aggregate Awareness, Multipass SQL and Logical Views.',
     subtype: 2048,
     extType: 0,
     dateCreated: '2006-05-23T09:31:01.000+0000',
@@ -5311,7 +5723,8 @@ export const mstrTutorialFolder = [
     name: 'Extended Data Access',
     id: '58FEF6BF44F6A3AF2ADF65BC18ED3885',
     type: 8,
-    description: 'Examples of reporting on data sources besides the main data warehouse, such as Excel and Text Files, via Freeform SQL and Query Builder.',
+    description:
+      'Examples of reporting on data sources besides the main data warehouse, such as Excel and Text Files, via Freeform SQL and Query Builder.',
     subtype: 2048,
     extType: 0,
     dateCreated: '2006-05-23T09:34:06.000+0000',
@@ -5359,7 +5772,8 @@ export const mstrTutorialFolder = [
     name: 'Intro BI Class',
     id: 'BAC4ACA240377E1E8246E79D66E586C5',
     type: 8,
-    description: 'This folder contains objects used for the MicroStrategy class "An Introduction to Business Intelligence with MicroStrategy".',
+    description:
+      'This folder contains objects used for the MicroStrategy class "An Introduction to Business Intelligence with MicroStrategy".',
     subtype: 2048,
     extType: 0,
     dateCreated: '2008-11-18T10:44:04.000+0000',
@@ -5375,7 +5789,8 @@ export const mstrTutorialFolder = [
     name: 'MicroStrategy Data Mining Services',
     id: '0D542348448B99AD53D40484577E7ED4',
     type: 8,
-    description: 'Contains reports demonstrating MicroStrategy\'s powerful data mining functionality.',
+    description:
+      "Contains reports demonstrating MicroStrategy's powerful data mining functionality.",
     subtype: 2048,
     extType: 0,
     dateCreated: '2006-09-22T03:40:38.000+0000',
@@ -5391,7 +5806,8 @@ export const mstrTutorialFolder = [
     name: 'MicroStrategy Mobile',
     id: '5A95704D431A60D7EB90DDB7843FDBA8',
     type: 8,
-    description: 'This folder contains reports used to demonstrate the functionality of MicroStrategy Mobile',
+    description:
+      'This folder contains reports used to demonstrate the functionality of MicroStrategy Mobile',
     subtype: 2048,
     extType: 0,
     dateCreated: '2007-07-06T15:40:08.000+0000',
@@ -5407,7 +5823,8 @@ export const mstrTutorialFolder = [
     name: 'MicroStrategy Multisource Option',
     id: 'BE089562406FCBC9A2D2B5A0A164629E',
     type: 8,
-    description: 'This folder contains reports used to demonstrate the functionality of MicroStrategy Multisource Option.',
+    description:
+      'This folder contains reports used to demonstrate the functionality of MicroStrategy Multisource Option.',
     subtype: 2048,
     extType: 0,
     dateCreated: '2009-02-16T10:25:36.000+0000',
@@ -5423,7 +5840,8 @@ export const mstrTutorialFolder = [
     name: 'MicroStrategy Narrowcast Server',
     id: '3E3ADD7D11D4BB3610004594316DE8A4',
     type: 8,
-    description: 'Components Objects used to demostrate MicroStrategy Narrowcast Server capabilites. Use the Welcome Screen to access MicroStrategy Narrowcast Server demonstrations.',
+    description:
+      'Components Objects used to demostrate MicroStrategy Narrowcast Server capabilites. Use the Welcome Screen to access MicroStrategy Narrowcast Server demonstrations.',
     subtype: 2048,
     extType: 0,
     dateCreated: '2001-01-02T20:46:41.000+0000',
@@ -5439,7 +5857,8 @@ export const mstrTutorialFolder = [
     name: 'MicroStrategy Office',
     id: 'E05E69074C3F9FD1CED50A8B7EF36EF6',
     type: 8,
-    description: 'Components Objects used to demostrate MicroStrategy Office capabilites. Use the Welcome Screen to access MicroStrategy Office demonstrations.',
+    description:
+      'Components Objects used to demostrate MicroStrategy Office capabilites. Use the Welcome Screen to access MicroStrategy Office demonstrations.',
     subtype: 2048,
     extType: 0,
     dateCreated: '2004-12-29T19:37:57.000+0000',
@@ -5471,7 +5890,8 @@ export const mstrTutorialFolder = [
     name: 'MicroStrategy Report Services',
     id: '983F6F874157B008177CA49690DDC837',
     type: 8,
-    description: 'Examples of report services documents, categorized according to document type or specialized functionality.',
+    description:
+      'Examples of report services documents, categorized according to document type or specialized functionality.',
     subtype: 2048,
     extType: 0,
     dateCreated: '2006-05-23T09:31:49.000+0000',
@@ -5487,7 +5907,8 @@ export const mstrTutorialFolder = [
     name: 'MicroStrategy Repository Translation Wizard',
     id: '47EC24A649CAC840FCE3F2AE4AE08212',
     type: 8,
-    description: 'This folder contains search objects used to extract translations using the MicroStrategy Repository Translation Wizard.',
+    description:
+      'This folder contains search objects used to extract translations using the MicroStrategy Repository Translation Wizard.',
     subtype: 2048,
     extType: 0,
     dateCreated: '2010-04-12T11:07:00.000+0000',

@@ -1,5 +1,10 @@
 import {
-  UPDATE_OBJECT, updateObject, REMOVE_OBJECT, removeObject, RESTORE_ALL_OBJECTS, restoreAllObjects
+  REMOVE_OBJECT,
+  removeObject,
+  RESTORE_ALL_OBJECTS,
+  restoreAllObjects,
+  UPDATE_OBJECT,
+  updateObject,
 } from '../../redux-reducer/object-reducer/object-actions';
 
 describe('updateObject', () => {

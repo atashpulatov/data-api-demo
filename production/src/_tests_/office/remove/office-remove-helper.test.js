@@ -1,9 +1,11 @@
-import { officeRemoveHelper } from '../../../office/remove/office-remove-helper';
-import officeApiDataLoader from '../../../office/api/office-api-data-loader';
-import { officeApiHelper } from '../../../office/api/office-api-helper';
-import officeStoreObject from '../../../office/store/office-store-object';
-import { officeApiCrosstabHelper } from '../../../office/api/office-api-crosstab-helper';
 import { homeHelper } from '../../../home/home-helper';
+import { officeApiCrosstabHelper } from '../../../office/api/office-api-crosstab-helper';
+import { officeApiHelper } from '../../../office/api/office-api-helper';
+import { officeRemoveHelper } from '../../../office/remove/office-remove-helper';
+
+import officeStoreObject from '../../../office/store/office-store-object';
+
+import officeApiDataLoader from '../../../office/api/office-api-data-loader';
 
 describe('OfficeRemoveHelper', () => {
   afterEach(() => {
@@ -20,7 +22,7 @@ describe('OfficeRemoveHelper', () => {
     const excelContextMock = {
       sync: excelContextSyncMock,
       workbook: {
-        tables: { getItem: getItemMock }
+        tables: { getItem: getItemMock },
       },
     };
 
@@ -68,7 +70,7 @@ describe('OfficeRemoveHelper', () => {
       sync: excelContextSyncMock,
       workbook: {
         application: {
-          suspendApiCalculationUntilNextSync: suspendApiCalculationUntilNextSyncMock
+          suspendApiCalculationUntilNextSync: suspendApiCalculationUntilNextSyncMock,
         },
       },
     };
@@ -79,7 +81,11 @@ describe('OfficeRemoveHelper', () => {
 
     // then
     expect(officeApiDataLoader.loadSingleExcelData).toBeCalledTimes(1);
-    expect(officeApiDataLoader.loadSingleExcelData).toBeCalledWith(excelContextMock, 'rowsTest', 'count');
+    expect(officeApiDataLoader.loadSingleExcelData).toBeCalledWith(
+      excelContextMock,
+      'rowsTest',
+      'count'
+    );
     expect(suspendApiCalculationUntilNextSyncMock).toBeCalledTimes(1);
   });
 
@@ -109,7 +115,9 @@ describe('OfficeRemoveHelper', () => {
       sync: excelContextSyncMock,
     };
 
-    const getTableMock = jest.spyOn(officeApiHelper, 'getTable').mockImplementation(() => { throw new Error(); });
+    const getTableMock = jest.spyOn(officeApiHelper, 'getTable').mockImplementation(() => {
+      throw new Error();
+    });
 
     // when
     const result = await officeRemoveHelper.checkIfObjectExist(object, excelContextMock);
@@ -124,10 +132,12 @@ describe('OfficeRemoveHelper', () => {
     const releaseByIdAsyncMock = jest.fn().mockImplementation();
     const object = { bindId: 1 };
     const officeContextMock = {
-      document: { bindings: { releaseByIdAsync: releaseByIdAsyncMock } }
+      document: { bindings: { releaseByIdAsync: releaseByIdAsyncMock } },
     };
 
-    const deleteRowsMock = jest.spyOn(officeStoreObject, 'removeObjectFromStore').mockReturnValue(0);
+    const deleteRowsMock = jest
+      .spyOn(officeStoreObject, 'removeObjectFromStore')
+      .mockReturnValue(0);
 
     // when
     await officeRemoveHelper.removeObjectNotExistingInExcel(object, officeContextMock);
@@ -138,18 +148,17 @@ describe('OfficeRemoveHelper', () => {
   });
 
   it.each`
-      expectedRowsNo | contextLimitParam | newRowsCount | expectedLoopSteps
-      
-      ${600}         | ${500}            | ${50}        | ${2}
-      ${20}          | ${100}            | ${9}         | ${1}
-      ${39}          | ${10}             | ${1}         | ${4}
-      ${10000}       | ${500}            | ${484}       | ${20}
-    
-      `('updateRows should work as expected when newRowCount < tableRowCount',
+    expectedRowsNo | contextLimitParam | newRowsCount | expectedLoopSteps
+    ${600}         | ${500}            | ${50}        | ${2}
+    ${20}          | ${100}            | ${9}         | ${1}
+    ${39}          | ${10}             | ${1}         | ${4}
+    ${10000}       | ${500}            | ${484}       | ${20}
+  `(
+    'updateRows should work as expected when newRowCount < tableRowCount',
     async ({ expectedRowsNo, contextLimitParam, newRowsCount, expectedLoopSteps }) => {
       let i = 0;
       jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockImplementation(() => {
-        const newRowsValue = expectedRowsNo - (i * contextLimitParam);
+        const newRowsValue = expectedRowsNo - i * contextLimitParam;
         i += 1;
         return newRowsValue;
       });
@@ -159,46 +168,57 @@ describe('OfficeRemoveHelper', () => {
         sync: excelContextSyncMock,
         workbook: {
           application: {
-            suspendApiCalculationUntilNextSync: suspendApiCalculationUntilNextSyncMock
+            suspendApiCalculationUntilNextSync: suspendApiCalculationUntilNextSyncMock,
           },
         },
       };
       const deleteMock = jest.fn();
       const getResizedRangeMock = jest.fn().mockReturnValue({
-        delete: deleteMock
+        delete: deleteMock,
       });
       const prevOfficeTable = {
         rows: 'rowsTest',
         getRange: () => ({
           getLastRow: () => ({
-            getResizedRange: getResizedRangeMock
-          })
-        })
+            getResizedRange: getResizedRangeMock,
+          }),
+        }),
       };
       // when
-      await officeRemoveHelper.deleteRowsInChunks(excelContextMock, prevOfficeTable, contextLimitParam, newRowsCount);
+      await officeRemoveHelper.deleteRowsInChunks(
+        excelContextMock,
+        prevOfficeTable,
+        contextLimitParam,
+        newRowsCount
+      );
       // then
       expect(deleteMock).toHaveBeenCalledTimes(expectedLoopSteps);
       expect(excelContextSyncMock).toHaveBeenCalledTimes(expectedLoopSteps);
       expect(getResizedRangeMock).toHaveBeenCalledTimes(expectedLoopSteps);
 
-      const nrOfRowsToDeleteInLastStep = -(expectedRowsNo - ((expectedLoopSteps - 1)
-      * contextLimitParam) - (newRowsCount + 1));
+      const nrOfRowsToDeleteInLastStep = -(
+        expectedRowsNo -
+        (expectedLoopSteps - 1) * contextLimitParam -
+        (newRowsCount + 1)
+      );
 
-      expect(getResizedRangeMock).toHaveBeenNthCalledWith(expectedLoopSteps, nrOfRowsToDeleteInLastStep, 0);
-    });
+      expect(getResizedRangeMock).toHaveBeenNthCalledWith(
+        expectedLoopSteps,
+        nrOfRowsToDeleteInLastStep,
+        0
+      );
+    }
+  );
 
   it.each`
-  isCrosstab | isClear       | isSafari
-  
-  ${true}    | ${true}       | ${false}
-  ${true}    | ${false}      | ${true}
-  ${true}    | ${false}      | ${false}
-  ${false}   | ${true}       | ${false}
-  ${false}   | ${false}      | ${true}
-  ${false}   | ${false}      | ${false}
-  ${false}   | ${undefined}  | ${false}
-
+    isCrosstab | isClear      | isSafari
+    ${true}    | ${true}      | ${false}
+    ${true}    | ${false}     | ${true}
+    ${true}    | ${false}     | ${false}
+    ${false}   | ${true}      | ${false}
+    ${false}   | ${false}     | ${true}
+    ${false}   | ${false}     | ${false}
+    ${false}   | ${undefined} | ${false}
   `('removeExcelTable should work as expected', async ({ isCrosstab, isClear, isSafari }) => {
     const deleteMock = jest.fn().mockImplementation();
     const excelContextSyncMock = jest.fn().mockReturnValue();
@@ -208,16 +228,28 @@ describe('OfficeRemoveHelper', () => {
     const removetrackedObjectsMock = jest.fn();
     const excelContextMock = {
       sync: excelContextSyncMock,
-      trackedObjects: { add: addtrackedObjectsMock, remove: removetrackedObjectsMock },
-      runtime: {}
+      trackedObjects: {
+        add: addtrackedObjectsMock,
+        remove: removetrackedObjectsMock,
+      },
+      runtime: {},
     };
 
     const crosstabHeaderDimensions = isCrosstab ? {} : undefined;
-    const officeTable = { getDataBodyRange: getDataBodyRangeMock, delete: deleteMock };
+    const officeTable = {
+      getDataBodyRange: getDataBodyRangeMock,
+      delete: deleteMock,
+    };
 
-    const deleteTableInChunksMock = jest.spyOn(officeRemoveHelper, 'deleteTableInChunks').mockReturnValue(0);
-    const clearCrosstabRangeMock = jest.spyOn(officeApiCrosstabHelper, 'clearCrosstabRange').mockReturnValue(0);
-    const isMacAndSafariBasedMock = jest.spyOn(homeHelper, 'isMacAndSafariBased').mockReturnValue(isSafari);
+    const deleteTableInChunksMock = jest
+      .spyOn(officeRemoveHelper, 'deleteTableInChunks')
+      .mockReturnValue(0);
+    const clearCrosstabRangeMock = jest
+      .spyOn(officeApiCrosstabHelper, 'clearCrosstabRange')
+      .mockReturnValue(0);
+    const isMacAndSafariBasedMock = jest
+      .spyOn(homeHelper, 'isMacAndSafariBased')
+      .mockReturnValue(isSafari);
 
     // when
     await officeRemoveHelper.removeExcelTable(

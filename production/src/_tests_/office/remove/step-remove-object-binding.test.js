@@ -1,14 +1,16 @@
-import stepRemoveObjectBinding from '../../../office/remove/step-remove-object-binding';
 import { officeApiHelper } from '../../../office/api/office-api-helper';
-import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
+
 import officeStoreObject from '../../../office/store/office-store-object';
+
+import stepRemoveObjectBinding from '../../../office/remove/step-remove-object-binding';
+import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
 
 const officeContextMock = {
   document: {
     bindings: {
       releaseByIdAsync: undefined,
-    }
-  }
+    },
+  },
 };
 
 describe('StepRemoveObjectBinding', () => {
@@ -31,7 +33,10 @@ describe('StepRemoveObjectBinding', () => {
     });
 
     // when
-    await stepRemoveObjectBinding.removeObjectBinding({ objectWorkingId: 'objectWorkingIdTest' }, {});
+    await stepRemoveObjectBinding.removeObjectBinding(
+      { objectWorkingId: 'objectWorkingIdTest' },
+      {}
+    );
 
     // then
     expect(officeApiHelper.getOfficeContext).toBeCalledTimes(1);
@@ -41,12 +46,15 @@ describe('StepRemoveObjectBinding', () => {
     expect(console.error).toBeCalledWith(new Error('errorTest'));
 
     expect(operationStepDispatcher.completeRemoveObjectBinding).toBeCalledTimes(1);
-    expect(operationStepDispatcher.completeRemoveObjectBinding).toBeCalledWith('objectWorkingIdTest');
+    expect(operationStepDispatcher.completeRemoveObjectBinding).toBeCalledWith(
+      'objectWorkingIdTest'
+    );
 
     expect(operationStepDispatcher.updateObject).toBeCalledTimes(1);
-    expect(operationStepDispatcher.updateObject).toBeCalledWith(
-      { objectWorkingId: 'objectWorkingIdTest', doNotPersist: true }
-    );
+    expect(operationStepDispatcher.updateObject).toBeCalledWith({
+      objectWorkingId: 'objectWorkingIdTest',
+      doNotPersist: true,
+    });
 
     expect(officeStoreObject.removeObjectInExcelStore).toBeCalledTimes(1);
     expect(officeStoreObject.removeObjectInExcelStore).toBeCalledWith('objectWorkingIdTest');
@@ -79,12 +87,15 @@ describe('StepRemoveObjectBinding', () => {
     expect(releaseByIdAsyncMock).toBeCalledWith('bindIdTest');
 
     expect(operationStepDispatcher.completeRemoveObjectBinding).toBeCalledTimes(1);
-    expect(operationStepDispatcher.completeRemoveObjectBinding).toBeCalledWith('objectWorkingIdTest');
+    expect(operationStepDispatcher.completeRemoveObjectBinding).toBeCalledWith(
+      'objectWorkingIdTest'
+    );
 
     expect(operationStepDispatcher.updateObject).toBeCalledTimes(1);
-    expect(operationStepDispatcher.updateObject).toBeCalledWith(
-      { objectWorkingId: 'objectWorkingIdTest', doNotPersist: true }
-    );
+    expect(operationStepDispatcher.updateObject).toBeCalledWith({
+      objectWorkingId: 'objectWorkingIdTest',
+      doNotPersist: true,
+    });
 
     expect(officeStoreObject.removeObjectInExcelStore).toBeCalledTimes(1);
     expect(officeStoreObject.removeObjectInExcelStore).toBeCalledWith('objectWorkingIdTest');

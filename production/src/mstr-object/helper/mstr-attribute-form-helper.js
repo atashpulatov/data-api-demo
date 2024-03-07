@@ -11,7 +11,7 @@ class MstrAttributeFormHelper {
    */
   splitAttributeForms = (columns, supportForms) => {
     const fullColumnInformation = [];
-    columns.forEach((column) => {
+    columns.forEach(column => {
       const type = column.type ? column.type.toLowerCase() : null;
       switch (type) {
         case 'metric':
@@ -97,7 +97,9 @@ class MstrAttributeFormHelper {
   };
 
   getAttributeWithForms = (elements, attrforms) => {
-    if (!elements) { return []; }
+    if (!elements) {
+      return [];
+    }
 
     let names = [];
     for (const element of elements) {

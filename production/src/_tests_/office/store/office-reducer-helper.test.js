@@ -1,6 +1,7 @@
 import officeReducerHelper from '../../../office/store/office-reducer-helper';
+
+import { HIGHLIGHT_OPERATION, REFRESH_OPERATION } from '../../../operation/operation-type-names';
 import { objectImportType } from '../../../mstr-object/constants';
-import { REFRESH_OPERATION, HIGHLIGHT_OPERATION } from '../../../operation/operation-type-names';
 
 describe('OfficeReducerHelper init', () => {
   it('init work as expected', () => {
@@ -18,20 +19,25 @@ describe('OfficeReducerHelper', () => {
     jest.resetAllMocks();
   });
 
-  const mockObjects = [{ importType: objectImportType.TABLE }, { importType: objectImportType.IMAGE }];
+  const mockObjects = [
+    { importType: objectImportType.TABLE },
+    { importType: objectImportType.IMAGE },
+  ];
   const reduxStoreMock = {
     getState: () => ({
       objectReducer: {
         objects: mockObjects,
       },
       operationReducer: {
-        operations: [{ operationType: HIGHLIGHT_OPERATION, objectWorkingId: 42 },
-          { operationType: REFRESH_OPERATION, objectWorkingId: 69 }],
+        operations: [
+          { operationType: HIGHLIGHT_OPERATION, objectWorkingId: 42 },
+          { operationType: REFRESH_OPERATION, objectWorkingId: 69 },
+        ],
       },
       officeReducer: {
         isShapeAPISupported: true,
       },
-    })
+    }),
   };
 
   it('getObjectsListFromObjectReducer works as expected', () => {
@@ -58,16 +64,17 @@ describe('OfficeReducerHelper', () => {
   });
 
   it.each`
-  expectedNoOperationInProgress | operationsListParam
-  
-  ${true}                       | ${[]}
-  ${false}                      | ${[42]}
-  ${false}                      | ${[42, 42]}
-  
-  `('noOperationInProgress works as expected',
+    expectedNoOperationInProgress | operationsListParam
+    ${true}                       | ${[]}
+    ${false}                      | ${[42]}
+    ${false}                      | ${[42, 42]}
+  `(
+    'noOperationInProgress works as expected',
     ({ expectedNoOperationInProgress, operationsListParam }) => {
-    // given
-      jest.spyOn(officeReducerHelper, 'getOperationsListFromOperationReducer').mockReturnValue(operationsListParam);
+      // given
+      jest
+        .spyOn(officeReducerHelper, 'getOperationsListFromOperationReducer')
+        .mockReturnValue(operationsListParam);
 
       // when
       const result = officeReducerHelper.noOperationInProgress();
@@ -76,7 +83,8 @@ describe('OfficeReducerHelper', () => {
       expect(officeReducerHelper.getOperationsListFromOperationReducer).toBeCalledTimes(1);
 
       expect(result).toEqual(expectedNoOperationInProgress);
-    });
+    }
+  );
 
   it('clearPopupData should dispatch proper Redux action', () => {
     // given
@@ -88,7 +96,9 @@ describe('OfficeReducerHelper', () => {
 
     // then
     expect(officeReducerHelper.reduxStore.dispatch).toHaveBeenCalledTimes(1);
-    expect(officeReducerHelper.reduxStore.dispatch).toHaveBeenCalledWith({ type: 'OFFICE_SET_POPUP_DATA' });
+    expect(officeReducerHelper.reduxStore.dispatch).toHaveBeenCalledWith({
+      type: 'OFFICE_SET_POPUP_DATA',
+    });
   });
 });
 
@@ -98,22 +108,21 @@ describe('OfficeReducerHelper getObjectFromObjectReducerByBindId', () => {
   });
 
   it.each`
-  expectedObject      | bindIdParam | objectsParam
-  
-  ${undefined}        | ${42}       | ${[]}
-  ${undefined}        | ${42}       | ${[{ bindId: 4242 }]}
-  ${{ bindId: 42 }}   | ${42}       | ${[{ bindId: 42 }]}
-  ${{ bindId: 42 }}   | ${42}       | ${[{ bindId: 4242 }, { bindId: 42 }]}
-
-  `('getObjectFromObjectReducer works as expected',
+    expectedObject    | bindIdParam | objectsParam
+    ${undefined}      | ${42}       | ${[]}
+    ${undefined}      | ${42}       | ${[{ bindId: 4242 }]}
+    ${{ bindId: 42 }} | ${42}       | ${[{ bindId: 42 }]}
+    ${{ bindId: 42 }} | ${42}       | ${[{ bindId: 4242 }, { bindId: 42 }]}
+  `(
+    'getObjectFromObjectReducer works as expected',
     ({ expectedObject, bindIdParam, objectsParam }) => {
-    // given
+      // given
       const reduxStoreMock = {
         getState: () => ({
           objectReducer: {
             objects: objectsParam,
           },
-        })
+        }),
       };
 
       officeReducerHelper.init(reduxStoreMock);
@@ -123,5 +132,6 @@ describe('OfficeReducerHelper getObjectFromObjectReducerByBindId', () => {
 
       // then
       expect(result).toEqual(expectedObject);
-    });
+    }
+  );
 });

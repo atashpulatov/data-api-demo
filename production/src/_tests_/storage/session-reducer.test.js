@@ -1,6 +1,7 @@
 import { createStore } from 'redux';
-import { sessionReducer } from '../../redux-reducer/session-reducer/session-reducer';
+
 import { sessionProperties } from '../../redux-reducer/session-reducer/session-properties';
+import { sessionReducer } from '../../redux-reducer/session-reducer/session-reducer';
 
 describe('sessionReducer', () => {
   const sessionStore = createStore(sessionReducer);
@@ -19,14 +20,14 @@ describe('sessionReducer', () => {
         isRememberMeOn: false,
       },
     });
-    sessionStore.dispatch({ type: sessionProperties.actions.logOut, });
+    sessionStore.dispatch({ type: sessionProperties.actions.logOut });
   });
 
   it('should throw error due to missing loading property', () => {
     // given
     // when
     const wrongActionCall = () => {
-      sessionStore.dispatch({ type: sessionProperties.actions.setLoading, });
+      sessionStore.dispatch({ type: sessionProperties.actions.setLoading });
     };
     // then
     expect(wrongActionCall).toThrowError(Error);
@@ -129,7 +130,7 @@ describe('sessionReducer', () => {
     // given
     // when
     const wrongActionCall = () => {
-      sessionStore.dispatch({ type: sessionProperties.actions.loggedIn, });
+      sessionStore.dispatch({ type: sessionProperties.actions.loggedIn });
     };
     // then
     expect(wrongActionCall).toThrowError(Error);
@@ -153,7 +154,7 @@ describe('sessionReducer', () => {
 
   it('should save givenDialog on setDialog action', () => {
     // given
-    const mockDialog = { close: () => { } };
+    const mockDialog = { close: () => {} };
     // when
     sessionStore.dispatch({
       type: sessionProperties.actions.setDialog,

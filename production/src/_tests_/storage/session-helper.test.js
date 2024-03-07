@@ -1,14 +1,17 @@
-import { createStore } from 'redux';
 import { waitFor } from '@testing-library/react';
-import { sessionReducer } from '../../redux-reducer/session-reducer/session-reducer';
-import { sessionProperties } from '../../redux-reducer/session-reducer/session-properties';
-import { sessionHelper } from '../../storage/session-helper';
-import { errorService } from '../../error/error-handler';
+import { createStore } from 'redux';
+
 import { authenticationService } from '../../authentication/auth-rest-service';
 import { homeHelper } from '../../home/home-helper';
+import { sessionHelper } from '../../storage/session-helper';
+
 import { reduxStore } from '../../store';
-import { errorMessages } from '../../error/constants';
+
+import { errorService } from '../../error/error-handler';
 import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
+import { sessionProperties } from '../../redux-reducer/session-reducer/session-properties';
+import { sessionReducer } from '../../redux-reducer/session-reducer/session-reducer';
+import { errorMessages } from '../../error/constants';
 
 describe('sessionHelper', () => {
   const sessionStore = createStore(sessionReducer);
@@ -21,10 +24,12 @@ describe('sessionHelper', () => {
     window.history.pushState({}, 'Test Title', '/test.html?query=true');
 
     delete window.location;
-    window.location = { pathname: 'Test Title',
+    window.location = {
+      pathname: 'Test Title',
       assign: jest.fn(),
       reload: jest.fn(),
-      replace: jest.fn() };
+      replace: jest.fn(),
+    };
   });
 
   afterEach(() => {
@@ -77,7 +82,10 @@ describe('sessionHelper', () => {
     // when
     sessionActions.logIn(authToken);
     // then
-    expect(dispatchSpy).toHaveBeenCalledWith({ type: sessionProperties.actions.loggedIn, authToken });
+    expect(dispatchSpy).toHaveBeenCalledWith({
+      type: sessionProperties.actions.loggedIn,
+      authToken,
+    });
   });
   it('should save envUrl in redux on login', () => {
     // given
@@ -90,7 +98,7 @@ describe('sessionHelper', () => {
     // then
     expect(dispatchSpy).toHaveBeenCalledWith({
       type: sessionProperties.actions.logIn,
-      values: { envUrl: givenValues.envUrl }
+      values: { envUrl: givenValues.envUrl },
     });
   });
 
@@ -99,7 +107,9 @@ describe('sessionHelper', () => {
     const onSessionExpire = jest.fn();
     const putSessionsMock = jest.spyOn(authenticationService, 'putSessions').mockImplementation();
     jest.spyOn(window.navigator, 'onLine', 'get').mockReturnValueOnce(true);
-    jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ sessionReducer: { authToken: 'x-mstr-authToken', envUrl: 'Url' } });
+    jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({
+      sessionReducer: { authToken: 'x-mstr-authToken', envUrl: 'Url' },
+    });
     // when
     const prolongSession = sessionHelper.installSessionProlongingHandler(onSessionExpire);
     prolongSession();
@@ -126,7 +136,9 @@ describe('sessionHelper', () => {
       throw sessionFailureError;
     });
     jest.spyOn(errorService, 'handleError').mockImplementation();
-    jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ sessionReducer: { authToken: 'x-mstr-authToken' } });
+    jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({
+      sessionReducer: { authToken: 'x-mstr-authToken' },
+    });
     // when
     const prolongSession = sessionHelper.installSessionProlongingHandler(onSessionExpire);
     prolongSession();
@@ -146,7 +158,9 @@ describe('sessionHelper', () => {
     authenticationService.putSessions = jest.fn().mockImplementationOnce(() => {
       throw sessionFailureError;
     });
-    jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ sessionReducer: { authToken: 'x-mstr-authToken' } });
+    jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({
+      sessionReducer: { authToken: 'x-mstr-authToken' },
+    });
 
     // when
     const prolongSession = sessionHelper.installSessionProlongingHandler(onSessionExpire);
@@ -159,7 +173,9 @@ describe('sessionHelper', () => {
   it('should call keepSessionAlive with default callback parameter', () => {
     // given
     jest.spyOn(sessionHelper, 'keepSessionAlive').mockImplementationOnce();
-    jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ sessionReducer: { authToken: 'x-mstr-authToken' } });
+    jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({
+      sessionReducer: { authToken: 'x-mstr-authToken' },
+    });
 
     // when
     const prolongSession = sessionHelper.installSessionProlongingHandler();
@@ -209,11 +225,15 @@ describe('sessionHelper', () => {
     }));
 
     const isDevelopmentMock = jest.spyOn(sessionHelper, 'isDevelopment').mockReturnValueOnce(false);
-    const getTokenFromStorageMock = jest.spyOn(homeHelper, 'getTokenFromStorage').mockImplementation(() => '12-abc-34');
-    const getOfficePrivilege = jest.spyOn(authenticationService, 'getOfficePrivilege').mockResolvedValueOnce(true);
+    const getTokenFromStorageMock = jest
+      .spyOn(homeHelper, 'getTokenFromStorage')
+      .mockImplementation(() => '12-abc-34');
+    const getOfficePrivilege = jest
+      .spyOn(authenticationService, 'getOfficePrivilege')
+      .mockResolvedValueOnce(true);
 
     // when
-    const response = await sessionHelper.getCanUseOfficePrivilege();
+    await sessionHelper.getCanUseOfficePrivilege();
 
     // then
     expect(isDevelopmentMock).toHaveBeenCalled();

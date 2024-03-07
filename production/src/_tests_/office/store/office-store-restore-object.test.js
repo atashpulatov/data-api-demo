@@ -1,10 +1,13 @@
+/* eslint-disable no-import-assign */
+import officeStoreHelper from '../../../office/store/office-store-helper';
+
 import officeStoreRestoreObject from '../../../office/store/office-store-restore-object';
 import { reduxStore } from '../../../store';
-import * as objectActions from '../../../redux-reducer/object-reducer/object-actions';
-import * as answersActions from '../../../redux-reducer/answers-reducer/answers-actions';
-import { officeProperties } from '../../../redux-reducer/office-reducer/office-properties';
+
 import { errorService } from '../../../error/error-handler';
-import officeStoreHelper from '../../../office/store/office-store-helper';
+import * as answersActions from '../../../redux-reducer/answers-reducer/answers-actions';
+import * as objectActions from '../../../redux-reducer/object-reducer/object-actions';
+import { officeProperties } from '../../../redux-reducer/office-reducer/office-properties';
 
 const internalData = {};
 
@@ -12,8 +15,8 @@ const settingsMock = {
   set: (key, value) => {
     internalData[key] = value;
   },
-  get: (key) => internalData[key],
-  remove: (key) => {
+  get: key => internalData[key],
+  remove: key => {
     delete internalData[key];
   },
 };
@@ -30,81 +33,88 @@ describe('OfficeStoreRestoreObject init', () => {
 });
 
 describe.each`
-expectedDispatchCallNo | expectedObjectsFromProperties | storedObjectParam     | restoredFromExcelObject
+  expectedDispatchCallNo | expectedObjectsFromProperties | storedObjectParam     | restoredFromExcelObject
+  ${0}                   | ${[]}                         | ${undefined}          | ${undefined}
+  ${0}                   | ${'storedObjectTest'}         | ${'storedObjectTest'} | ${undefined}
+  ${1}                   | ${[]}                         | ${undefined}          | ${'restoredObjectFromExcelTest'}
+  ${1}                   | ${'storedObjectTest'}         | ${'storedObjectTest'} | ${'restoredObjectFromExcelTest'}
+`(
+  'OfficeStoreRestoreObject restoreObjectsFromExcelStore',
+  ({
+    expectedDispatchCallNo,
+    expectedObjectsFromProperties,
+    storedObjectParam,
+    restoredFromExcelObject,
+  }) => {
+    let objectActionsOriginal;
+    beforeAll(() => {
+      objectActionsOriginal = objectActions.restoreAllObjects;
+      objectActions.restoreAllObjects = jest.fn().mockReturnValue('restoreAllObjectsTest');
+    });
 
-${0}                   | ${[]}                         | ${undefined}          | ${undefined}
-${0}                   | ${'storedObjectTest'}         | ${'storedObjectTest'} | ${undefined}
+    beforeEach(() => {
+      jest.clearAllMocks();
 
-${1}                   | ${[]}                         | ${undefined}          | ${'restoredObjectFromExcelTest'}
-${1}                   | ${'storedObjectTest'}         | ${'storedObjectTest'} | ${'restoredObjectFromExcelTest'}
+      internalData[officeProperties.storedObjects] = storedObjectParam;
 
-`('OfficeStoreRestoreObject restoreObjectsFromExcelStore', ({
-  expectedDispatchCallNo,
-  expectedObjectsFromProperties,
-  storedObjectParam,
-  restoredFromExcelObject
-}) => {
-  let objectActionsOriginal;
-  beforeAll(() => {
-    objectActionsOriginal = objectActions.restoreAllObjects;
-    objectActions.restoreAllObjects = jest.fn().mockReturnValue('restoreAllObjectsTest');
-  });
+      officeStoreRestoreObject.init(reduxStore);
+    });
 
-  beforeEach(() => {
-    jest.clearAllMocks();
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
 
-    internalData[officeProperties.storedObjects] = storedObjectParam;
+    afterAll(() => {
+      delete internalData[officeProperties.storedObjects];
 
-    officeStoreRestoreObject.init(reduxStore);
-  });
+      objectActions.restoreAllObjects = objectActionsOriginal;
+    });
 
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
+    it('restoreObjectsFromExcelStore should work as expected', () => {
+      // given
+      jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
+      jest
+        .spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsFromExcelStore')
+        .mockReturnValue(restoredFromExcelObject);
+      jest
+        .spyOn(officeStoreRestoreObject, 'resetIsPromptedForDossiersWithAnswers')
+        .mockReturnValue(restoredFromExcelObject);
+      jest
+        .spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsWithImportType')
+        .mockReturnValue(restoredFromExcelObject);
 
-  afterAll(() => {
-    delete internalData[officeProperties.storedObjects];
+      jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
-    objectActions.restoreAllObjects = objectActionsOriginal;
-  });
+      // when
+      officeStoreRestoreObject.restoreObjectsFromExcelStore();
 
-  it('restoreObjectsFromExcelStore should work as expected', () => {
-    // given
-    jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
-    jest.spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsFromExcelStore').mockReturnValue(restoredFromExcelObject);
-    jest.spyOn(officeStoreRestoreObject, 'resetIsPromptedForDossiersWithAnswers').mockReturnValue(restoredFromExcelObject);
-    jest.spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsWithImportType').mockReturnValue(restoredFromExcelObject);
+      // then
+      expect(officeStoreHelper.getOfficeSettings).toBeCalledTimes(1);
+      expect(officeStoreHelper.getOfficeSettings).toBeCalledWith();
 
-    jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+      expect(officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore).toBeCalledTimes(1);
+      expect(officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore).toBeCalledWith(
+        settingsMock,
+        expectedObjectsFromProperties
+      );
 
-    // when
-    officeStoreRestoreObject.restoreObjectsFromExcelStore();
+      expect(officeStoreRestoreObject.resetIsPromptedForDossiersWithAnswers).toBeCalledTimes(1);
+      expect(officeStoreRestoreObject.restoreLegacyObjectsWithImportType).toBeCalledTimes(1);
 
-    // then
-    expect(officeStoreHelper.getOfficeSettings).toBeCalledTimes(1);
-    expect(officeStoreHelper.getOfficeSettings).toBeCalledWith();
+      expect(reduxStore.dispatch).toBeCalledTimes(expectedDispatchCallNo);
+      if (expectedDispatchCallNo === 1) {
+        expect(reduxStore.dispatch).toBeCalledWith('restoreAllObjectsTest');
+      }
 
-    expect(officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore).toBeCalledTimes(1);
-    expect(officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore).toBeCalledWith(
-      settingsMock, expectedObjectsFromProperties
-    );
+      expect(objectActions.restoreAllObjects).toBeCalledTimes(expectedDispatchCallNo);
+      if (expectedDispatchCallNo === 1) {
+        expect(objectActions.restoreAllObjects).toBeCalledWith('restoredObjectFromExcelTest');
+      }
 
-    expect(officeStoreRestoreObject.resetIsPromptedForDossiersWithAnswers).toBeCalledTimes(1);
-    expect(officeStoreRestoreObject.restoreLegacyObjectsWithImportType).toBeCalledTimes(1);
-
-    expect(reduxStore.dispatch).toBeCalledTimes(expectedDispatchCallNo);
-    if (expectedDispatchCallNo === 1) {
-      expect(reduxStore.dispatch).toBeCalledWith('restoreAllObjectsTest');
-    }
-
-    expect(objectActions.restoreAllObjects).toBeCalledTimes(expectedDispatchCallNo);
-    if (expectedDispatchCallNo === 1) {
-      expect(objectActions.restoreAllObjects).toBeCalledWith('restoredObjectFromExcelTest');
-    }
-
-    expect(settingsMock.get(officeProperties.storedObjects)).toEqual(restoredFromExcelObject);
-  });
-});
+      expect(settingsMock.get(officeProperties.storedObjects)).toEqual(restoredFromExcelObject);
+    });
+  }
+);
 
 describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
   let answersActionsOriginal;
@@ -132,9 +142,15 @@ describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
   it('restoreObjectsFromExcelStore should work as expected', () => {
     // given
     jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
-    jest.spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsFromExcelStore').mockReturnValue('restoredObjectFromExcelTest');
-    jest.spyOn(officeStoreRestoreObject, 'resetIsPromptedForDossiersWithAnswers').mockReturnValue('restoredObjectFromExcelTest');
-    jest.spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsWithImportType').mockReturnValue('restoredFromExcelObject');
+    jest
+      .spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsFromExcelStore')
+      .mockReturnValue('restoredObjectFromExcelTest');
+    jest
+      .spyOn(officeStoreRestoreObject, 'resetIsPromptedForDossiersWithAnswers')
+      .mockReturnValue('restoredObjectFromExcelTest');
+    jest
+      .spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsWithImportType')
+      .mockReturnValue('restoredFromExcelObject');
 
     jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
@@ -160,7 +176,7 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
   });
 
   beforeEach(() => {
-    settingsMock.saveAsync = jest.fn().mockImplementation((func) => {
+    settingsMock.saveAsync = jest.fn().mockImplementation(func => {
       func({ status: 'saveAsyncTest' });
     });
     jest.spyOn(console, 'log');
@@ -175,20 +191,23 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
   });
 
   it.each`
-  expectedResult | objectsParam
-  
-  ${[]}          | ${undefined}
-  ${[]}          | ${[]}
-  ${[1, 2]}      | ${[1, 2]}
-  `('restoreLegacyObjectsFromExcelStore should work as expected when reportArray is empty',
+    expectedResult | objectsParam
+    ${[]}          | ${undefined}
+    ${[]}          | ${[]}
+    ${[1, 2]}      | ${[1, 2]}
+  `(
+    'restoreLegacyObjectsFromExcelStore should work as expected when reportArray is empty',
     ({ expectedResult, objectsParam }) => {
-    // given
+      // given
       jest.spyOn(officeStoreRestoreObject, 'getLegacyObjectsList').mockReturnValue(undefined);
 
       jest.spyOn(officeStoreRestoreObject, 'mapLegacyObjectValue').mockImplementation();
 
       // when
-      const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(settingsMock, objectsParam);
+      const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(
+        settingsMock,
+        objectsParam
+      );
 
       // then
       expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledTimes(1);
@@ -198,94 +217,165 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
       expect(settingsMock.saveAsync).not.toBeCalled();
 
       expect(result).toEqual(expectedResult);
-    });
+    }
+  );
 
   it.each`
-  expectedResult                                                                         | objectsParam
-  
-  ${[{ bindId: 'otherBindId', objectWorkingId: 'nowTest0' }]}                            | ${undefined}
-  ${[{ bindId: 'otherBindId', objectWorkingId: 'nowTest0' }]}                            | ${[]}
-  ${[{ bindId: 'paramBindId' }, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }]} | ${[{ bindId: 'paramBindId' }]}
-  `('restoreLegacyObjectsFromExcelStore should work as expected when 1 object, empty objects or bindId not found',
+    expectedResult                                                                         | objectsParam
+    ${[{ bindId: 'otherBindId', objectWorkingId: 'nowTest0' }]}                            | ${undefined}
+    ${[{ bindId: 'otherBindId', objectWorkingId: 'nowTest0' }]}                            | ${[]}
+    ${[{ bindId: 'paramBindId' }, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }]} | ${[{ bindId: 'paramBindId' }]}
+  `(
+    'restoreLegacyObjectsFromExcelStore should work as expected when 1 object, empty objects or bindId not found',
     ({ expectedResult, objectsParam }) => {
-    // given
-      jest.spyOn(officeStoreRestoreObject, 'getLegacyObjectsList').mockReturnValue([
-        { objectWorkingId: 'objectWorkingIdTest', bindId: 'otherBindId' }
-      ]);
+      // given
+      jest
+        .spyOn(officeStoreRestoreObject, 'getLegacyObjectsList')
+        .mockReturnValue([{ objectWorkingId: 'objectWorkingIdTest', bindId: 'otherBindId' }]);
 
       jest.spyOn(officeStoreRestoreObject, 'mapLegacyObjectValue').mockImplementation();
 
       // when
-      const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(settingsMock, objectsParam);
+      const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(
+        settingsMock,
+        objectsParam
+      );
 
       // then
       expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledTimes(1);
       expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledWith();
 
       expect(officeStoreRestoreObject.mapLegacyObjectValue).toBeCalledTimes(4);
-      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(1, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'objectId', 'id');
-      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(2, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'mstrObjectType', 'objectType');
-      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(3, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'previousTableDimensions', 'tableDimensions');
-      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(4, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'subtotalsInfo', 'subtotalInfo');
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(
+        1,
+        { bindId: 'otherBindId', objectWorkingId: 'nowTest0' },
+        'objectId',
+        'id'
+      );
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(
+        2,
+        { bindId: 'otherBindId', objectWorkingId: 'nowTest0' },
+        'mstrObjectType',
+        'objectType'
+      );
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(
+        3,
+        { bindId: 'otherBindId', objectWorkingId: 'nowTest0' },
+        'previousTableDimensions',
+        'tableDimensions'
+      );
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(
+        4,
+        { bindId: 'otherBindId', objectWorkingId: 'nowTest0' },
+        'subtotalsInfo',
+        'subtotalInfo'
+      );
 
       expect(settingsMock.saveAsync).toBeCalledTimes(1);
       expect(console.log).toBeCalledTimes(1);
       expect(console.log).toBeCalledWith('Clearing report Array in settings saveAsyncTest');
 
       expect(result).toEqual(expectedResult);
-    });
+    }
+  );
 
   it.each`
-  expectedResult                                                                                                                                 | objectsParam
-  
-  ${[{ bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, { bindId: 'otherBindId', objectWorkingId: 'nowTest2' }]}                            | ${undefined}
-  ${[{ bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, { bindId: 'otherBindId', objectWorkingId: 'nowTest2' }]}                            | ${[]}
-  ${[{ bindId: 'paramBindId' }, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, { bindId: 'otherBindId', objectWorkingId: 'nowTest2' }]} | ${[{ bindId: 'paramBindId' }]}
-  `('restoreLegacyObjectsFromExcelStore should work as expected when many objects, empty objects or bindId not found',
+    expectedResult                                                                                                                                 | objectsParam
+    ${[{ bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, { bindId: 'otherBindId', objectWorkingId: 'nowTest2' }]}                            | ${undefined}
+    ${[{ bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, { bindId: 'otherBindId', objectWorkingId: 'nowTest2' }]}                            | ${[]}
+    ${[{ bindId: 'paramBindId' }, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, { bindId: 'otherBindId', objectWorkingId: 'nowTest2' }]} | ${[{ bindId: 'paramBindId' }]}
+  `(
+    'restoreLegacyObjectsFromExcelStore should work as expected when many objects, empty objects or bindId not found',
     ({ expectedResult, objectsParam }) => {
-    // given
+      // given
       jest.spyOn(officeStoreRestoreObject, 'getLegacyObjectsList').mockReturnValue([
         { objectWorkingId: 'objectWorkingIdTest', bindId: 'otherBindId' },
-        { objectWorkingId: 'objectWorkingIdTest', bindId: 'otherBindId' }
+        { objectWorkingId: 'objectWorkingIdTest', bindId: 'otherBindId' },
       ]);
 
       jest.spyOn(officeStoreRestoreObject, 'mapLegacyObjectValue').mockImplementation();
 
       // when
-      const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(settingsMock, objectsParam);
+      const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(
+        settingsMock,
+        objectsParam
+      );
 
       // then
       expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledTimes(1);
       expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledWith();
 
       expect(officeStoreRestoreObject.mapLegacyObjectValue).toBeCalledTimes(8);
-      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(1, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'objectId', 'id');
-      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(2, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'mstrObjectType', 'objectType');
-      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(3, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'previousTableDimensions', 'tableDimensions');
-      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(4, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'subtotalsInfo', 'subtotalInfo');
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(
+        1,
+        { bindId: 'otherBindId', objectWorkingId: 'nowTest0' },
+        'objectId',
+        'id'
+      );
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(
+        2,
+        { bindId: 'otherBindId', objectWorkingId: 'nowTest0' },
+        'mstrObjectType',
+        'objectType'
+      );
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(
+        3,
+        { bindId: 'otherBindId', objectWorkingId: 'nowTest0' },
+        'previousTableDimensions',
+        'tableDimensions'
+      );
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(
+        4,
+        { bindId: 'otherBindId', objectWorkingId: 'nowTest0' },
+        'subtotalsInfo',
+        'subtotalInfo'
+      );
 
-      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(5, { bindId: 'otherBindId', objectWorkingId: 'nowTest2' }, 'objectId', 'id');
-      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(6, { bindId: 'otherBindId', objectWorkingId: 'nowTest2' }, 'mstrObjectType', 'objectType');
-      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(7, { bindId: 'otherBindId', objectWorkingId: 'nowTest2' }, 'previousTableDimensions', 'tableDimensions');
-      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(8, { bindId: 'otherBindId', objectWorkingId: 'nowTest2' }, 'subtotalsInfo', 'subtotalInfo');
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(
+        5,
+        { bindId: 'otherBindId', objectWorkingId: 'nowTest2' },
+        'objectId',
+        'id'
+      );
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(
+        6,
+        { bindId: 'otherBindId', objectWorkingId: 'nowTest2' },
+        'mstrObjectType',
+        'objectType'
+      );
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(
+        7,
+        { bindId: 'otherBindId', objectWorkingId: 'nowTest2' },
+        'previousTableDimensions',
+        'tableDimensions'
+      );
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(
+        8,
+        { bindId: 'otherBindId', objectWorkingId: 'nowTest2' },
+        'subtotalsInfo',
+        'subtotalInfo'
+      );
 
       expect(settingsMock.saveAsync).toBeCalledTimes(1);
       expect(console.log).toBeCalledTimes(1);
       expect(console.log).toBeCalledWith('Clearing report Array in settings saveAsyncTest');
 
       expect(result).toEqual(expectedResult);
-    });
+    }
+  );
 
   it('restoreLegacyObjectsFromExcelStore should work as expected when 1 object, 1 existing bindId', () => {
     // given
-    jest.spyOn(officeStoreRestoreObject, 'getLegacyObjectsList').mockReturnValue([
-      { objectWorkingId: 'objectWorkingIdTest', bindId: 'sameBindId' }
-    ]);
+    jest
+      .spyOn(officeStoreRestoreObject, 'getLegacyObjectsList')
+      .mockReturnValue([{ objectWorkingId: 'objectWorkingIdTest', bindId: 'sameBindId' }]);
 
     jest.spyOn(officeStoreRestoreObject, 'mapLegacyObjectValue').mockImplementation();
 
     // when
-    const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(settingsMock, [{ bindId: 'sameBindId' }]);
+    const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(settingsMock, [
+      { bindId: 'sameBindId' },
+    ]);
 
     // then
     expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledTimes(1);
@@ -310,19 +400,40 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
     jest.spyOn(officeStoreRestoreObject, 'mapLegacyObjectValue').mockImplementation();
 
     // when
-    const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(
-      settingsMock, [{ bindId: 'paramBindId' }, { bindId: 'sameBindId' }]
-    );
+    const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(settingsMock, [
+      { bindId: 'paramBindId' },
+      { bindId: 'sameBindId' },
+    ]);
 
     // then
     expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledTimes(1);
     expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledWith();
 
     expect(officeStoreRestoreObject.mapLegacyObjectValue).toBeCalledTimes(4);
-    expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(1, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'objectId', 'id');
-    expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(2, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'mstrObjectType', 'objectType');
-    expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(3, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'previousTableDimensions', 'tableDimensions');
-    expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(4, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'subtotalsInfo', 'subtotalInfo');
+    expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(
+      1,
+      { bindId: 'otherBindId', objectWorkingId: 'nowTest0' },
+      'objectId',
+      'id'
+    );
+    expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(
+      2,
+      { bindId: 'otherBindId', objectWorkingId: 'nowTest0' },
+      'mstrObjectType',
+      'objectType'
+    );
+    expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(
+      3,
+      { bindId: 'otherBindId', objectWorkingId: 'nowTest0' },
+      'previousTableDimensions',
+      'tableDimensions'
+    );
+    expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(
+      4,
+      { bindId: 'otherBindId', objectWorkingId: 'nowTest0' },
+      'subtotalsInfo',
+      'subtotalInfo'
+    );
 
     expect(settingsMock.saveAsync).toBeCalledTimes(1);
     expect(console.log).toBeCalledTimes(1);
@@ -331,23 +442,30 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
     expect(result).toEqual([
       { bindId: 'paramBindId' },
       { bindId: 'sameBindId' },
-      { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }
+      { bindId: 'otherBindId', objectWorkingId: 'nowTest0' },
     ]);
   });
 
   it('restoreLegacyObjectsFromExcelStore should work as expected when 2 objects, 2 existing bindId', () => {
     // given
     jest.spyOn(officeStoreRestoreObject, 'getLegacyObjectsList').mockReturnValue([
-      { objectWorkingId: 'objectWorkingIdOneTest', bindId: 'oneExistingBindId' },
-      { objectWorkingId: 'objectWorkingIdTwoTest', bindId: 'twoExistingBindId' },
+      {
+        objectWorkingId: 'objectWorkingIdOneTest',
+        bindId: 'oneExistingBindId',
+      },
+      {
+        objectWorkingId: 'objectWorkingIdTwoTest',
+        bindId: 'twoExistingBindId',
+      },
     ]);
 
     jest.spyOn(officeStoreRestoreObject, 'mapLegacyObjectValue').mockImplementation();
 
     // when
-    const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(
-      settingsMock, [{ bindId: 'oneExistingBindId' }, { bindId: 'twoExistingBindId' }]
-    );
+    const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(settingsMock, [
+      { bindId: 'oneExistingBindId' },
+      { bindId: 'twoExistingBindId' },
+    ]);
 
     // then
     expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledTimes(1);
@@ -359,27 +477,18 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
     expect(console.log).toBeCalledTimes(1);
     expect(console.log).toBeCalledWith('Clearing report Array in settings saveAsyncTest');
 
-    expect(result).toEqual([
-      { bindId: 'oneExistingBindId' },
-      { bindId: 'twoExistingBindId' },
-    ]);
+    expect(result).toEqual([{ bindId: 'oneExistingBindId' }, { bindId: 'twoExistingBindId' }]);
   });
 
   it.each`
-  expectedObject     | objectParam        | newKey       | oldKey
-  
-  ${{}}              | ${{}}              | ${undefined} | ${undefined}
-  ${{ someKey: 42 }} | ${{ someKey: 42 }} | ${'newKey'}  | ${'notExistingKey'}
-  ${{ newKey: 42 }}  | ${{ oldKey: 42 }}  | ${'newKey'}  | ${'oldKey'} 
-  
-  `('mapLegacyObjectValue should work as expected',
-    async ({
-      expectedObject,
-      objectParam,
-      newKey,
-      oldKey
-    }) => {
-    // given
+    expectedObject     | objectParam        | newKey       | oldKey
+    ${{}}              | ${{}}              | ${undefined} | ${undefined}
+    ${{ someKey: 42 }} | ${{ someKey: 42 }} | ${'newKey'}  | ${'notExistingKey'}
+    ${{ newKey: 42 }}  | ${{ oldKey: 42 }}  | ${'newKey'}  | ${'oldKey'}
+  `(
+    'mapLegacyObjectValue should work as expected',
+    async ({ expectedObject, objectParam, newKey, oldKey }) => {
+      // given
       const object = { ...objectParam };
 
       // when
@@ -387,14 +496,14 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
 
       // then
       expect(object).toEqual(expectedObject);
-    });
+    }
+  );
 
   it('getLegacyObjectsList handles exception', () => {
     // given
-    jest.spyOn(officeStoreHelper, 'getOfficeSettings')
-      .mockImplementation(() => {
-        throw new Error('errorTest');
-      });
+    jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockImplementation(() => {
+      throw new Error('errorTest');
+    });
 
     jest.spyOn(errorService, 'handleError').mockImplementation();
 

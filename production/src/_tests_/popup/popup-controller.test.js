@@ -1,16 +1,21 @@
+/* eslint-disable no-import-assign */
 import { objectTypes } from '@mstr/mstr-react-library';
-import { selectorProperties } from '../../attribute-selector/selector-properties';
-import { popupController } from '../../popup/popup-controller';
-import { PopupTypeEnum } from '../../home/popup-type-enum';
-import { officeApiHelper } from '../../office/api/office-api-helper';
-import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
+
 import { authenticationHelper } from '../../authentication/authentication-helper';
-import * as operationActions from '../../redux-reducer/operation-reducer/operation-actions';
-import { reduxStore } from '../../store';
-import { Office } from '../mockOffice';
-import overviewHelper, { OverviewActionCommands } from '../../popup/overview/overview-helper';
+import { officeApiHelper } from '../../office/api/office-api-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
+import overviewHelper, { OverviewActionCommands } from '../../popup/overview/overview-helper';
+
+import { reduxStore } from '../../store';
+
+import { selectorProperties } from '../../attribute-selector/selector-properties';
 import { errorService } from '../../error/error-handler';
+import { PopupTypeEnum } from '../../home/popup-type-enum';
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
+import { popupController } from '../../popup/popup-controller';
+import * as operationActions from '../../redux-reducer/operation-reducer/operation-actions';
+
+import { Office } from '../mockOffice';
 
 describe('PopupController', () => {
   const dialog = {};
@@ -34,9 +39,7 @@ describe('PopupController', () => {
     // given
     const popupType = PopupTypeEnum.libraryWindow;
     const size = 80;
-    const runPopupSpy = jest
-      .spyOn(popupController, 'runPopup')
-      .mockImplementationOnce(() => { });
+    const runPopupSpy = jest.spyOn(popupController, 'runPopup').mockImplementationOnce(() => {});
 
     // when
     popupController.runPopupNavigation();
@@ -49,9 +52,9 @@ describe('PopupController', () => {
   it('should call displayDialogAsync on runPopup invocation', async () => {
     // given
     const popupType = PopupTypeEnum.editFilters;
-    jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementationOnce(() => { });
-    jest.spyOn(popupController, 'onMessageFromPopup').mockImplementationOnce(() => { });
-    jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementationOnce(() => { });
+    jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementationOnce(() => {});
+    jest.spyOn(popupController, 'onMessageFromPopup').mockImplementationOnce(() => {});
+    jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementationOnce(() => {});
     // when
     await popupController.runPopup(popupType, 80, 80);
     // then
@@ -63,9 +66,7 @@ describe('PopupController', () => {
     const reportParams = 'chosenObjectData';
     const popupType = PopupTypeEnum.editFilters;
     const size = 80;
-    const runPopupSpy = jest
-      .spyOn(popupController, 'runPopup')
-      .mockImplementationOnce(() => { });
+    const runPopupSpy = jest.spyOn(popupController, 'runPopup').mockImplementationOnce(() => {});
 
     // when
     popupController.runEditFiltersPopup(reportParams);
@@ -80,9 +81,7 @@ describe('PopupController', () => {
     const reportParams = 'chosenObjectData';
     const popupType = PopupTypeEnum.dossierWindow;
     const size = 80;
-    const runPopupSpy = jest
-      .spyOn(popupController, 'runPopup')
-      .mockImplementationOnce(() => { });
+    const runPopupSpy = jest.spyOn(popupController, 'runPopup').mockImplementationOnce(() => {});
 
     // when
     popupController.runEditDossierPopup(reportParams);
@@ -97,9 +96,7 @@ describe('PopupController', () => {
     const reportParams = 'chosenObjectData';
     const popupType = PopupTypeEnum.repromptingWindow;
     const size = 80;
-    const runPopupSpy = jest
-      .spyOn(popupController, 'runPopup')
-      .mockImplementationOnce(() => { });
+    const runPopupSpy = jest.spyOn(popupController, 'runPopup').mockImplementationOnce(() => {});
 
     const dispatchSpy = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
@@ -117,9 +114,7 @@ describe('PopupController', () => {
     const reportParams = 'chosenObjectData';
     const popupType = PopupTypeEnum.dossierWindow;
     const size = 80;
-    const runPopupSpy = jest
-      .spyOn(popupController, 'runPopup')
-      .mockImplementationOnce(() => { });
+    const runPopupSpy = jest.spyOn(popupController, 'runPopup').mockImplementationOnce(() => {});
 
     const dispatchSpy = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
@@ -136,9 +131,7 @@ describe('PopupController', () => {
     // given
     const popupType = PopupTypeEnum.importedDataOverview;
     const size = 80;
-    const runPopupSpy = jest
-      .spyOn(popupController, 'runPopup')
-      .mockImplementationOnce(() => { });
+    const runPopupSpy = jest.spyOn(popupController, 'runPopup').mockImplementationOnce(() => {});
 
     // when
     popupController.runImportedDataOverviewPopup();
@@ -162,11 +155,11 @@ describe('PopupController', () => {
       chosenProject: chosenObjectData.projectId,
       chosenSubtype: objectTypes.getTypeValues('Report').subtype,
     };
-    const arg = { message: JSON.stringify(actionObject), };
+    const arg = { message: JSON.stringify(actionObject) };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
-      .mockImplementationOnce(() => { });
+      .mockImplementationOnce(() => {});
     const handleOkCommandSpy = jest.spyOn(popupController, 'handleOkCommand').mockImplementation();
 
     // when
@@ -197,11 +190,11 @@ describe('PopupController', () => {
       dossierData: chosenObjectData.dossierData,
       chosenSubtype: objectTypes.getTypeValues('Report').subtype,
     };
-    const arg = { message: JSON.stringify(actionObject), };
+    const arg = { message: JSON.stringify(actionObject) };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
-      .mockImplementationOnce(() => { });
+      .mockImplementationOnce(() => {});
     const handleOkCommandSpy = jest.spyOn(popupController, 'handleOkCommand').mockImplementation();
 
     // when
@@ -224,12 +217,14 @@ describe('PopupController', () => {
       body: {},
       chosenObjectName: 'testName',
     };
-    const arg = { message: JSON.stringify(actionObject), };
+    const arg = { message: JSON.stringify(actionObject) };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
-      .mockImplementationOnce(() => { });
-    const handleUpdateCommandSpy = jest.spyOn(popupController, 'handleUpdateCommand').mockImplementation();
+      .mockImplementationOnce(() => {});
+    const handleUpdateCommandSpy = jest
+      .spyOn(popupController, 'handleUpdateCommand')
+      .mockImplementation();
 
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
@@ -251,12 +246,14 @@ describe('PopupController', () => {
       chosenObjectSubtype: objectTypes.getTypeValues('Report').subtype,
       body: {},
     };
-    const arg = { message: JSON.stringify(actionObject), };
+    const arg = { message: JSON.stringify(actionObject) };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
-      .mockImplementationOnce(() => { });
-    const handleUpdateCommandSpy = jest.spyOn(popupController, 'handleUpdateCommand').mockImplementation();
+      .mockImplementationOnce(() => {});
+    const handleUpdateCommandSpy = jest
+      .spyOn(popupController, 'handleUpdateCommand')
+      .mockImplementation();
 
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
@@ -282,12 +279,14 @@ describe('PopupController', () => {
       body: {},
       chosenObjectName: 'testName',
     };
-    const arg = { message: JSON.stringify(actionObject), };
+    const arg = { message: JSON.stringify(actionObject) };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
-      .mockImplementationOnce(() => { });
-    const handleUpdateCommandSpy = jest.spyOn(popupController, 'handleUpdateCommand').mockImplementation();
+      .mockImplementationOnce(() => {});
+    const handleUpdateCommandSpy = jest
+      .spyOn(popupController, 'handleUpdateCommand')
+      .mockImplementation();
 
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
@@ -313,14 +312,18 @@ describe('PopupController', () => {
       body: {},
       chosenObjectName: 'testName',
     };
-    const arg = { message: JSON.stringify(actionObject), };
+    const arg = { message: JSON.stringify(actionObject) };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
-      .mockImplementationOnce(() => { });
+      .mockImplementationOnce(() => {});
     const dispatchSpy = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
-    const handleUpdateCommandSpy = jest.spyOn(popupController, 'getIsMultipleRepromptQueueEmpty').mockImplementation(() => false);
-    jest.spyOn(reduxStore, 'getState').mockReturnValue({ popupStateReducer: { isDataOverviewOpen: false } });
+    const handleUpdateCommandSpy = jest
+      .spyOn(popupController, 'getIsMultipleRepromptQueueEmpty')
+      .mockImplementation(() => false);
+    jest
+      .spyOn(reduxStore, 'getState')
+      .mockReturnValue({ popupStateReducer: { isDataOverviewOpen: false } });
 
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
@@ -347,15 +350,21 @@ describe('PopupController', () => {
       body: {},
       chosenObjectName: 'testName',
     };
-    const arg = { message: JSON.stringify(actionObject), };
+    const arg = { message: JSON.stringify(actionObject) };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
-      .mockImplementationOnce(() => { });
+      .mockImplementationOnce(() => {});
     const dispatchSpy = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
-    const handleUpdateCommandSpy = jest.spyOn(popupController, 'getIsMultipleRepromptQueueEmpty').mockImplementation(() => true);
-    jest.spyOn(reduxStore, 'getState').mockReturnValue({ popupStateReducer: { isDataOverviewOpen: false } });
-    const resetDialogStatesSpy = jest.spyOn(popupController, 'getIsMultipleRepromptQueueEmpty').mockImplementation(() => true);
+    const handleUpdateCommandSpy = jest
+      .spyOn(popupController, 'getIsMultipleRepromptQueueEmpty')
+      .mockImplementation(() => true);
+    jest
+      .spyOn(reduxStore, 'getState')
+      .mockReturnValue({ popupStateReducer: { isDataOverviewOpen: false } });
+    const resetDialogStatesSpy = jest
+      .spyOn(popupController, 'getIsMultipleRepromptQueueEmpty')
+      .mockImplementation(() => true);
 
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
@@ -383,13 +392,13 @@ describe('PopupController', () => {
     };
     const reportParams = {
       duplicateMode: true,
-      object: originalObject
+      object: originalObject,
     };
-    const arg = { message: JSON.stringify(actionObject), };
+    const arg = { message: JSON.stringify(actionObject) };
 
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
-      .mockImplementationOnce(() => { });
+      .mockImplementationOnce(() => {});
 
     operationActions.duplicateRequested = jest.fn().mockReturnValue('duplicateRequestedTest');
     jest.spyOn(reduxStore, 'dispatch').mockImplementation();
@@ -419,13 +428,13 @@ describe('PopupController', () => {
     };
     const reportParams = {
       duplicateMode: true,
-      object: originalObject
+      object: originalObject,
     };
-    const arg = { message: JSON.stringify(actionObject), };
+    const arg = { message: JSON.stringify(actionObject) };
 
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
-      .mockImplementationOnce(() => { });
+      .mockImplementationOnce(() => {});
 
     operationActions.duplicateRequested = jest.fn().mockReturnValue('duplicateRequestedTest');
     jest.spyOn(reduxStore, 'dispatch').mockImplementation();
@@ -441,30 +450,40 @@ describe('PopupController', () => {
   });
 
   it.each`
-  actionCommand
-  ${OverviewActionCommands.REFRESH}     
-  ${OverviewActionCommands.REMOVE}     
-  ${OverviewActionCommands.DUPLICATE}
-  ${OverviewActionCommands.DISMISS_NOTIFICATION}     
+    actionCommand
+    ${OverviewActionCommands.REFRESH}
+    ${OverviewActionCommands.REMOVE}
+    ${OverviewActionCommands.DUPLICATE}
+    ${OverviewActionCommands.DISMISS_NOTIFICATION}
   `('should call handleOverviewActionCommand for overview actions', async ({ actionCommand }) => {
     // given
     const actionObject = {
       command: actionCommand,
       objectWorkingIds: [1],
-      importType: 'table'
+      importType: 'table',
     };
 
-    const handleOverviewActionCommandMock = jest.spyOn(overviewHelper, 'handleOverviewActionCommand').mockImplementation(() => { });
+    const handleOverviewActionCommandMock = jest
+      .spyOn(overviewHelper, 'handleOverviewActionCommand')
+      .mockImplementation(() => {});
 
-    jest.spyOn(reduxStore, 'getState').mockReturnValue({ popupStateReducer: { popupType: PopupTypeEnum.importedDataOverview } });
+    jest.spyOn(reduxStore, 'getState').mockReturnValue({
+      popupStateReducer: { popupType: PopupTypeEnum.importedDataOverview },
+    });
     jest.spyOn(popupController, 'getIsMultipleRepromptQueueEmpty').mockReturnValue(true);
-    jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementation(() => { });
-    jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementation(() => { });
-    jest.spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId').mockImplementation(() => actionObject.importType);
-    const spyValidateAuthToken = jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementation(() => { });
+    jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementation(() => {});
+    jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementation(() => {});
+    jest
+      .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId')
+      .mockImplementation(() => actionObject.importType);
+    const spyValidateAuthToken = jest
+      .spyOn(authenticationHelper, 'validateAuthToken')
+      .mockImplementation(() => {});
 
     // when
-    await popupController.onMessageFromPopup(dialog, null, { message: JSON.stringify(actionObject) });
+    await popupController.onMessageFromPopup(dialog, null, {
+      message: JSON.stringify(actionObject),
+    });
 
     // then
     expect(handleOverviewActionCommandMock).toHaveBeenCalled();
@@ -485,7 +504,10 @@ describe('PopupController', () => {
     await popupController.onMessageFromPopup(dialog, null, arg);
 
     // then
-    expect(mockedStore).toHaveBeenCalledWith({ isDialogLoaded: true, type: 'OFFICE_SET_IS_DIALOG_LOADED' });
+    expect(mockedStore).toHaveBeenCalledWith({
+      isDialogLoaded: true,
+      type: 'OFFICE_SET_IS_DIALOG_LOADED',
+    });
   });
 
   it('should dispatch duplicateRequested for commandCancel - duplication with edit for dossier visualization', async () => {
@@ -503,22 +525,30 @@ describe('PopupController', () => {
     };
     const reportParams = {
       duplicateMode: true,
-      object: originalObject
+      object: originalObject,
     };
-    const arg = { message: JSON.stringify(actionObject), };
+    const arg = { message: JSON.stringify(actionObject) };
 
-    const handleUpdateCommandSpy = jest.spyOn(popupController, 'getIsMultipleRepromptQueueEmpty').mockImplementation(() => true);
-    const spyValidateAuthToken = jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementation(() => { });
-    const manageDialogTypeSpy = jest.spyOn(popupController, 'manageDialogType').mockImplementation(() => { });
-    const runImportedDataOverviewPopupSpy = jest.spyOn(popupController, 'runImportedDataOverviewPopup').mockImplementation(() => { });
+    const handleUpdateCommandSpy = jest
+      .spyOn(popupController, 'getIsMultipleRepromptQueueEmpty')
+      .mockImplementation(() => true);
+    const spyValidateAuthToken = jest
+      .spyOn(authenticationHelper, 'validateAuthToken')
+      .mockImplementation(() => {});
+    const manageDialogTypeSpy = jest
+      .spyOn(popupController, 'manageDialogType')
+      .mockImplementation(() => {});
+    const runImportedDataOverviewPopupSpy = jest
+      .spyOn(popupController, 'runImportedDataOverviewPopup')
+      .mockImplementation(() => {});
 
-    jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementationOnce(() => { });
+    jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementationOnce(() => {});
     jest.spyOn(reduxStore, 'dispatch').mockImplementation();
     jest.spyOn(reduxStore, 'getState').mockReturnValue({
       popupStateReducer: {
         popupType: PopupTypeEnum.repromptDossierDataOverview,
         isDataOverviewOpen: true,
-      }
+      },
     });
 
     // when
@@ -546,22 +576,28 @@ describe('PopupController', () => {
     };
     const reportParams = {
       duplicateMode: true,
-      object: originalObject
+      object: originalObject,
     };
-    const arg = { message: JSON.stringify(actionObject), };
+    const arg = { message: JSON.stringify(actionObject) };
 
-    const handleUpdateCommandSpy = jest.spyOn(popupController, 'getIsMultipleRepromptQueueEmpty').mockImplementation(() => true);
-    const spyValidateAuthToken = jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementation(() => { });
-    const handleErrorSpy = jest.spyOn(errorService, 'handleError').mockImplementation(() => { });
-    const runImportedDataOverviewPopupSpy = jest.spyOn(popupController, 'runImportedDataOverviewPopup').mockImplementation(() => { });
+    const handleUpdateCommandSpy = jest
+      .spyOn(popupController, 'getIsMultipleRepromptQueueEmpty')
+      .mockImplementation(() => true);
+    const spyValidateAuthToken = jest
+      .spyOn(authenticationHelper, 'validateAuthToken')
+      .mockImplementation(() => {});
+    const handleErrorSpy = jest.spyOn(errorService, 'handleError').mockImplementation(() => {});
+    const runImportedDataOverviewPopupSpy = jest
+      .spyOn(popupController, 'runImportedDataOverviewPopup')
+      .mockImplementation(() => {});
 
-    jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementationOnce(() => { });
+    jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementationOnce(() => {});
     jest.spyOn(reduxStore, 'dispatch').mockImplementation();
     jest.spyOn(reduxStore, 'getState').mockReturnValue({
       popupStateReducer: {
         popupType: PopupTypeEnum.repromptDossierDataOverview,
         isDataOverviewOpen: true,
-      }
+      },
     });
 
     // when

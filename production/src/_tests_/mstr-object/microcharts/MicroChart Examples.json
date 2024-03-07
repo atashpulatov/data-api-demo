@@ -23,9 +23,7 @@
           ],
           "elements": [
             {
-              "formValues": [
-                "0:00-0:6:00"
-              ],
+              "formValues": ["0:00-0:6:00"],
               "id": "h0\\:00-0\\:6\\:00;70B32B3311EB13BFA8840080EF65A64C"
             }
           ]
@@ -45,9 +43,7 @@
           ],
           "elements": [
             {
-              "formValues": [
-                "Sunday"
-              ],
+              "formValues": ["Sunday"],
               "id": "hSunday;70B3302911EB13BFA8840080EF65A64C"
             }
           ]
@@ -67,9 +63,7 @@
           ],
           "elements": [
             {
-              "formValues": [
-                "AirTran Airways Corporation"
-              ],
+              "formValues": ["AirTran Airways Corporation"],
               "id": "hAirTran Airways Corporation;70B3220F11EB13BFA8840080EF65A64C"
             }
           ]
@@ -99,75 +93,51 @@
               ],
               "elements": [
                 {
-                  "formValues": [
-                    "January"
-                  ],
+                  "formValues": ["January"],
                   "id": "hJanuary;70B33B9111EB13BFA8840080EF65A64C"
                 },
                 {
-                  "formValues": [
-                    "February"
-                  ],
+                  "formValues": ["February"],
                   "id": "hFebruary;70B33B9111EB13BFA8840080EF65A64C"
                 },
                 {
-                  "formValues": [
-                    "March"
-                  ],
+                  "formValues": ["March"],
                   "id": "hMarch;70B33B9111EB13BFA8840080EF65A64C"
                 },
                 {
-                  "formValues": [
-                    "April"
-                  ],
+                  "formValues": ["April"],
                   "id": "hApril;70B33B9111EB13BFA8840080EF65A64C"
                 },
                 {
-                  "formValues": [
-                    "May"
-                  ],
+                  "formValues": ["May"],
                   "id": "hMay;70B33B9111EB13BFA8840080EF65A64C"
                 },
                 {
-                  "formValues": [
-                    "June"
-                  ],
+                  "formValues": ["June"],
                   "id": "hJune;70B33B9111EB13BFA8840080EF65A64C"
                 },
                 {
-                  "formValues": [
-                    "July"
-                  ],
+                  "formValues": ["July"],
                   "id": "hJuly;70B33B9111EB13BFA8840080EF65A64C"
                 },
                 {
-                  "formValues": [
-                    "August"
-                  ],
+                  "formValues": ["August"],
                   "id": "hAugust;70B33B9111EB13BFA8840080EF65A64C"
                 },
                 {
-                  "formValues": [
-                    "September"
-                  ],
+                  "formValues": ["September"],
                   "id": "hSeptember;70B33B9111EB13BFA8840080EF65A64C"
                 },
                 {
-                  "formValues": [
-                    "October"
-                  ],
+                  "formValues": ["October"],
                   "id": "hOctober;70B33B9111EB13BFA8840080EF65A64C"
                 },
                 {
-                  "formValues": [
-                    "November"
-                  ],
+                  "formValues": ["November"],
                   "id": "hNovember;70B33B9111EB13BFA8840080EF65A64C"
                 },
                 {
-                  "formValues": [
-                    "December"
-                  ],
+                  "formValues": ["December"],
                   "id": "hDecember;70B33B9111EB13BFA8840080EF65A64C"
                 }
               ]
@@ -217,14 +187,7 @@
                   "name": "Flights Cancelled",
                   "id": "70B3567B11EB13BFA8840080EF65A64C",
                   "type": "metric",
-                  "thresholds": [
-                    0,
-                    1,
-                    2,
-                    3,
-                    4,
-                    5
-                  ],
+                  "thresholds": [0, 1, 2, 3, 4, 5],
                   "min": 0.0,
                   "max": 54.0,
                   "dataType": "double",
@@ -249,7 +212,7 @@
               "type": "metric",
               "replacement": {
                 "textType": 4,
-                "text": "..\/images\/quickThresholdImgs\/red_arrow.png"
+                "text": "../images/quickThresholdImgs/red_arrow.png"
               },
               "format": {},
               "condition": "(Bottom 20 Percent of {Flights Cancelled})"
@@ -260,7 +223,7 @@
               "type": "metric",
               "replacement": {
                 "textType": 4,
-                "text": "..\/images\/quickThresholdImgs\/yellow_arrow.png"
+                "text": "../images/quickThresholdImgs/yellow_arrow.png"
               },
               "format": {},
               "condition": "(Between 20 and 80 Percent of {Flights Cancelled})"
@@ -271,7 +234,7 @@
               "type": "metric",
               "replacement": {
                 "textType": 4,
-                "text": "..\/images\/quickThresholdImgs\/green_arrow.png"
+                "text": "../images/quickThresholdImgs/green_arrow.png"
               },
               "format": {},
               "condition": "(Exclude Bottom 80 Percent of {Flights Cancelled})"
@@ -282,7 +245,7 @@
               "type": "metric",
               "replacement": {
                 "textType": 4,
-                "text": "..\/images\/quickThresholdImgs\/red_arrow.png"
+                "text": "../images/quickThresholdImgs/red_arrow.png"
               },
               "format": {},
               "condition": "(Bottom 20 Percent of {Flights Cancelled})"
@@ -293,7 +256,7 @@
               "type": "metric",
               "replacement": {
                 "textType": 4,
-                "text": "..\/images\/quickThresholdImgs\/yellow_arrow.png"
+                "text": "../images/quickThresholdImgs/yellow_arrow.png"
               },
               "format": {},
               "condition": "(Between 20 and 80 Percent of {Flights Cancelled})"
@@ -304,7 +267,7 @@
               "type": "metric",
               "replacement": {
                 "textType": 4,
-                "text": "..\/images\/quickThresholdImgs\/green_arrow.png"
+                "text": "../images/quickThresholdImgs/green_arrow.png"
               },
               "format": {},
               "condition": "(Exclude Bottom 80 Percent of {Flights Cancelled})"
@@ -334,21 +297,15 @@
               ],
               "elements": [
                 {
-                  "formValues": [
-                    "2009"
-                  ],
+                  "formValues": ["2009"],
                   "id": "h2009;70B3351F11EB13BFA8840080EF65A64C"
                 },
                 {
-                  "formValues": [
-                    "2010"
-                  ],
+                  "formValues": ["2010"],
                   "id": "h2010;70B3351F11EB13BFA8840080EF65A64C"
                 },
                 {
-                  "formValues": [
-                    "2011"
-                  ],
+                  "formValues": ["2011"],
                   "id": "h2011;70B3351F11EB13BFA8840080EF65A64C"
                 }
               ]
@@ -479,21 +436,15 @@
               ],
               "elements": [
                 {
-                  "formValues": [
-                    "BWI"
-                  ],
+                  "formValues": ["BWI"],
                   "id": "hBWI;70B3165611EB13BFA8840080EF65A64C"
                 },
                 {
-                  "formValues": [
-                    "DCA"
-                  ],
+                  "formValues": ["DCA"],
                   "id": "hDCA;70B3165611EB13BFA8840080EF65A64C"
                 },
                 {
-                  "formValues": [
-                    "IAD"
-                  ],
+                  "formValues": ["IAD"],
                   "id": "hIAD;70B3165611EB13BFA8840080EF65A64C"
                 }
               ]
@@ -605,21 +556,15 @@
               ],
               "elements": [
                 {
-                  "formValues": [
-                    "BWI"
-                  ],
+                  "formValues": ["BWI"],
                   "id": "hBWI;70B3165611EB13BFA8840080EF65A64C"
                 },
                 {
-                  "formValues": [
-                    "DCA"
-                  ],
+                  "formValues": ["DCA"],
                   "id": "hDCA;70B3165611EB13BFA8840080EF65A64C"
                 },
                 {
-                  "formValues": [
-                    "IAD"
-                  ],
+                  "formValues": ["IAD"],
                   "id": "hIAD;70B3165611EB13BFA8840080EF65A64C"
                 }
               ]
@@ -643,195 +588,52 @@
       "limit": 1
     },
     "headers": {
-      "rows": [
-        [
-          0,
-          0,
-          0
-        ]
-      ],
+      "rows": [[0, 0, 0]],
       "columnSets": [
         [
-          [
-            0,
-            0
-          ],
-          [
-            1,
-            0
-          ],
-          [
-            2,
-            0
-          ],
-          [
-            3,
-            0
-          ],
-          [
-            4,
-            0
-          ],
-          [
-            5,
-            0
-          ],
-          [
-            6,
-            0
-          ],
-          [
-            7,
-            0
-          ],
-          [
-            8,
-            0
-          ],
-          [
-            9,
-            0
-          ],
-          [
-            10,
-            0
-          ],
-          [
-            11,
-            0
-          ]
+          [0, 0],
+          [1, 0],
+          [2, 0],
+          [3, 0],
+          [4, 0],
+          [5, 0],
+          [6, 0],
+          [7, 0],
+          [8, 0],
+          [9, 0],
+          [10, 0],
+          [11, 0]
         ],
+        [[0]],
         [
-          [
-            0
-          ]
+          [0, 0],
+          [1, 0],
+          [2, 0]
         ],
+        [[0], [1], [2], [3]],
         [
-          [
-            0,
-            0
-          ],
-          [
-            1,
-            0
-          ],
-          [
-            2,
-            0
-          ]
+          [0, 0],
+          [1, 0],
+          [2, 0]
         ],
+        [[0]],
         [
-          [
-            0
-          ],
-          [
-            1
-          ],
-          [
-            2
-          ],
-          [
-            3
-          ]
-        ],
-        [
-          [
-            0,
-            0
-          ],
-          [
-            1,
-            0
-          ],
-          [
-            2,
-            0
-          ]
-        ],
-        [
-          [
-            0
-          ]
-        ],
-        [
-          [
-            0,
-            0
-          ],
-          [
-            0,
-            1
-          ],
-          [
-            0,
-            2
-          ]
+          [0, 0],
+          [0, 1],
+          [0, 2]
         ]
       ]
     },
     "metricValues": {
       "columnSets": [
         {
-          "raw": [
-            [
-              1.0,
-              1.0,
-              0.0,
-              0.0,
-              null,
-              null,
-              null,
-              null,
-              0.0,
-              0.0,
-              0.0,
-              1.0
-            ]
-          ],
-          "formatted": [
-            [
-              "1",
-              "1",
-              "0",
-              "0",
-              "",
-              "",
-              "",
-              "",
-              "0",
-              "0",
-              "0",
-              "1"
-            ]
-          ],
-          "extras": [
-            [
-              {},
-              {},
-              {},
-              {},
-              {},
-              {},
-              {},
-              {},
-              {},
-              {},
-              {},
-              {}
-            ]
-          ]
+          "raw": [[1.0, 1.0, 0.0, 0.0, null, null, null, null, 0.0, 0.0, 0.0, 1.0]],
+          "formatted": [["1", "1", "0", "0", "", "", "", "", "0", "0", "0", "1"]],
+          "extras": [[{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]]
         },
         {
-          "raw": [
-            [
-              3.0
-            ]
-          ],
-          "formatted": [
-            [
-              "..\/images\/quickThresholdImgs\/red_arrow.png"
-            ]
-          ],
+          "raw": [[3.0]],
+          "formatted": [["../images/quickThresholdImgs/red_arrow.png"]],
           "extras": [
             [
               {
@@ -841,121 +643,34 @@
           ]
         },
         {
-          "raw": [
-            [
-              15.0,
-              11.0,
-              null
-            ]
-          ],
-          "formatted": [
-            [
-              "15",
-              "11",
-              ""
-            ]
-          ],
-          "extras": [
-            [
-              {},
-              {},
-              {}
-            ]
-          ]
+          "raw": [[15.0, 11.0, null]],
+          "formatted": [["15", "11", ""]],
+          "extras": [[{}, {}, {}]]
         },
         {
-          "raw": [
-            [
-              30.0,
-              4.0,
-              3.0,
-              26.0
-            ]
-          ],
-          "formatted": [
-            [
-              "30",
-              "4",
-              "3",
-              "26"
-            ]
-          ],
-          "extras": [
-            [
-              {},
-              {},
-              {},
-              {}
-            ]
-          ]
+          "raw": [[30.0, 4.0, 3.0, 26.0]],
+          "formatted": [["30", "4", "3", "26"]],
+          "extras": [[{}, {}, {}, {}]]
         },
         {
-          "raw": [
-            [
-              26.0,
-              null,
-              null
-            ]
-          ],
-          "formatted": [
-            [
-              "26",
-              "",
-              ""
-            ]
-          ],
-          "extras": [
-            [
-              {},
-              {},
-              {}
-            ]
-          ]
+          "raw": [[26.0, null, null]],
+          "formatted": [["26", "", ""]],
+          "extras": [[{}, {}, {}]]
         },
         {
-          "raw": [
-            [
-              25.0
-            ]
-          ],
-          "formatted": [
-            [
-              "2.50E+01"
-            ]
-          ],
-          "extras": [
-            [
-              {}
-            ]
-          ]
+          "raw": [[25.0]],
+          "formatted": [["2.50E+01"]],
+          "extras": [[{}]]
         },
         {
-          "raw": [
-            [
-              26.0,
-              null,
-              null
-            ]
-          ],
-          "formatted": [
-            [
-              "26",
-              "",
-              ""
-            ]
-          ],
-          "extras": [
-            [
-              {},
-              {},
-              {}
-            ]
-          ]
+          "raw": [[26.0, null, null]],
+          "formatted": [["26", "", ""]],
+          "extras": [[{}, {}, {}]]
         }
       ]
     }
   },
   "internal": {
-    "manipulations": "&lt;rw_manipulations&gt;&lt;rw_manipulation&gt;&lt;rw_manipulation_method&gt;51&lt;\/rw_manipulation_method&gt;&lt;rw_node_key&gt;K36&lt;\/rw_node_key&gt;&lt;\/rw_manipulation&gt;&lt;rw_manipulation&gt;&lt;rw_manipulation_method&gt;72&lt;\/rw_manipulation_method&gt;&lt;rw_node_key&gt;K53&lt;\/rw_node_key&gt;&lt;\/rw_manipulation&gt;&lt;\/rw_manipulations&gt;"
+    "manipulations": "&lt;rw_manipulations&gt;&lt;rw_manipulation&gt;&lt;rw_manipulation_method&gt;51&lt;/rw_manipulation_method&gt;&lt;rw_node_key&gt;K36&lt;/rw_node_key&gt;&lt;/rw_manipulation&gt;&lt;rw_manipulation&gt;&lt;rw_manipulation_method&gt;72&lt;/rw_manipulation_method&gt;&lt;rw_node_key&gt;K53&lt;/rw_node_key&gt;&lt;/rw_manipulation&gt;&lt;/rw_manipulations&gt;"
   }
 }

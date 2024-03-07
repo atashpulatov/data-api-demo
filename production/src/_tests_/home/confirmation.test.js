@@ -1,11 +1,27 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
-import { ConfirmationNotConnected } from '../../home/confirmation';
-import { officeApiHelper } from '../../office/api/office-api-helper';
-import { errorService } from '../../error/error-handler';
-import { officeRemoveHelper } from '../../office/remove/office-remove-helper';
+
 import { homeHelper } from '../../home/home-helper';
 import { notificationService } from '../../notification-v2/notification-service';
+import { officeApiHelper } from '../../office/api/office-api-helper';
+import { officeRemoveHelper } from '../../office/remove/office-remove-helper';
+
+import { errorService } from '../../error/error-handler';
+import { ConfirmationNotConnected } from '../../home/confirmation';
+
+const createMockFilesArray = () => {
+  const mockArray = [];
+  for (let i = 0; i < 1; i++) {
+    mockArray.push({
+      refreshDate: new Date(),
+      id: `mockId_${i}`,
+      name: `mockName_${i}`,
+      bindId: `mockBindId_${i}`,
+      isCrosstab: true,
+    });
+  }
+  return mockArray;
+};
 
 describe('Confirmation', () => {
   afterEach(() => {
@@ -15,13 +31,18 @@ describe('Confirmation', () => {
   it('should call proper methods from secureData when Ok button is clicked', () => {
     // given
     const mockSecureData = jest.spyOn(homeHelper, 'secureData').mockImplementation(() => jest.fn);
-    const mockDismissAll = jest.spyOn(notificationService, 'dismissNotifications').mockImplementation(() => jest.fn);
+    const mockDismissAll = jest
+      .spyOn(notificationService, 'dismissNotifications')
+      .mockImplementation(() => jest.fn);
     const mockToggleIsConfirmFlag = jest.fn();
     const mockReportArray = createMockFilesArray();
-    const { getByText } = render(<ConfirmationNotConnected
-      objects={mockReportArray}
-      isSecured={false}
-      toggleIsConfirmFlag={mockToggleIsConfirmFlag} />);
+    const { getByText } = render(
+      <ConfirmationNotConnected
+        objects={mockReportArray}
+        isSecured={false}
+        toggleIsConfirmFlag={mockToggleIsConfirmFlag}
+      />
+    );
     // when
     fireEvent.click(getByText('OK'));
     // then
@@ -33,10 +54,14 @@ describe('Confirmation', () => {
     // given
     const mockSync = jest.fn();
     const error = new Error('test error');
-    jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementationOnce(() => ({ sync: mockSync, }));
+    jest
+      .spyOn(officeApiHelper, 'getExcelContext')
+      .mockImplementationOnce(() => ({ sync: mockSync }));
     jest.spyOn(officeRemoveHelper, 'checkIfObjectExist').mockImplementationOnce(() => true);
-    jest.spyOn(officeApiHelper, 'getTable').mockImplementationOnce(() => { throw error; });
-    jest.spyOn(errorService, 'handleError').mockImplementationOnce(() => { });
+    jest.spyOn(officeApiHelper, 'getTable').mockImplementationOnce(() => {
+      throw error;
+    });
+    jest.spyOn(errorService, 'handleError').mockImplementationOnce(() => {});
     const clearErrors = [];
     const chosenObjectName = 'Test';
     const returnValue = {};
@@ -47,12 +72,15 @@ describe('Confirmation', () => {
     const mockToggleIsClearDataFailedFlag = jest.fn();
     const mockToggleSecuredFlag = jest.fn();
     const mockReportArray = createMockFilesArray();
-    const { getByText } = render(<ConfirmationNotConnected
-      objects={mockReportArray}
-      isSecured={false}
-      toggleIsConfirmFlag={mockToggleIsConfirmFlag}
-      toggleIsClearDataFailedFlag={mockToggleIsClearDataFailedFlag}
-      toggleSecuredFlag={mockToggleSecuredFlag} />);
+    const { getByText } = render(
+      <ConfirmationNotConnected
+        objects={mockReportArray}
+        isSecured={false}
+        toggleIsConfirmFlag={mockToggleIsConfirmFlag}
+        toggleIsClearDataFailedFlag={mockToggleIsClearDataFailedFlag}
+        toggleSecuredFlag={mockToggleSecuredFlag}
+      />
+    );
     // when
     fireEvent.click(getByText('OK'));
     // then
@@ -62,10 +90,9 @@ describe('Confirmation', () => {
   it('should set isConfirm flag to false when Cancel is clicked', async () => {
     // given
     const mockToggleIsConfirmFlag = jest.fn();
-    const { getByText } = render(<ConfirmationNotConnected
-      isSecured={false}
-      toggleIsConfirmFlag={mockToggleIsConfirmFlag}
-    />);
+    const { getByText } = render(
+      <ConfirmationNotConnected isSecured={false} toggleIsConfirmFlag={mockToggleIsConfirmFlag} />
+    );
     // when
     fireEvent.click(getByText('Cancel'));
     // then
@@ -103,9 +130,7 @@ describe('Confirmation', () => {
     document.addEventListener = jest.fn((event, cb) => {
       map[event] = cb;
     });
-    render(
-      <ConfirmationNotConnected isConfirm toggleIsConfirmFlag={toggleIsConfirmFlagMock} />
-    );
+    render(<ConfirmationNotConnected isConfirm toggleIsConfirmFlag={toggleIsConfirmFlagMock} />);
     // when
     map.click({ target: null });
     // then
@@ -118,9 +143,7 @@ describe('Confirmation', () => {
     document.addEventListener = jest.fn((event, cb) => {
       map[event] = cb;
     });
-    render(
-      <ConfirmationNotConnected isConfirm toggleIsConfirmFlag={toggleIsConfirmFlagMock} />
-    );
+    render(<ConfirmationNotConnected isConfirm toggleIsConfirmFlag={toggleIsConfirmFlagMock} />);
     // when
     map.keyup({ keyCode: 27 });
     // then
@@ -133,26 +156,10 @@ describe('Confirmation', () => {
     document.addEventListener = jest.fn((event, cb) => {
       map[event] = cb;
     });
-    render(
-      <ConfirmationNotConnected isConfirm toggleIsConfirmFlag={toggleIsConfirmFlagMock} />
-    );
+    render(<ConfirmationNotConnected isConfirm toggleIsConfirmFlag={toggleIsConfirmFlagMock} />);
     // when
     map.keyup({ keyCode: 26 });
     // then
     expect(toggleIsConfirmFlagMock).toHaveBeenCalledTimes(0);
   });
 });
-
-const createMockFilesArray = () => {
-  const mockArray = [];
-  for (let i = 0; i < 1; i++) {
-    mockArray.push({
-      refreshDate: new Date(),
-      id: `mockId_${i}`,
-      name: `mockName_${i}`,
-      bindId: `mockBindId_${i}`,
-      isCrosstab: true,
-    });
-  }
-  return mockArray;
-};

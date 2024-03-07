@@ -1,9 +1,10 @@
-import { IncorrectInputTypeError } from '../incorrect-input-type';
-import { OutsideOfRangeError } from '../../error/outside-of-range-error';
-import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { officeApiCrosstabHelper } from './office-api-crosstab-helper';
+
+import { OutsideOfRangeError } from '../../error/outside-of-range-error';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
+import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
+import { IncorrectInputTypeError } from '../incorrect-input-type';
 import { DEFAULT_CELL_POSITION, DEFAULT_RANGE_POSITION } from '../../mstr-object/constants';
 
 const ALPHABET_RANGE_START = 1;
@@ -14,7 +15,7 @@ const EXCEL_COL_LIMIT = 16384;
 const INVALID_SELECTION = 'InvalidSelection';
 
 class OfficeApiHelper {
-  init = (reduxStore) => {
+  init = reduxStore => {
     this.reduxStore = reduxStore;
   };
 
@@ -23,10 +24,7 @@ class OfficeApiHelper {
    *
    */
   checkStatusOfSessions = async () => {
-    await Promise.all([
-      this.getExcelSessionStatus(),
-      authenticationHelper.validateAuthToken(),
-    ]);
+    await Promise.all([this.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
   };
 
   /**
@@ -36,7 +34,8 @@ class OfficeApiHelper {
    * @param {String} bindId Id of the Office table created on import used for referencing the Excel table
    * @return {Office} Reference to Excel Range
    */
-  getBindingRange = (excelContext, bindId) => excelContext.workbook.bindings.getItem(bindId).getTable().getRange();
+  getBindingRange = (excelContext, bindId) =>
+    excelContext.workbook.bindings.getItem(bindId).getTable().getRange();
 
   /**
    * Gets Excel table added to Workbook binded item collection.
@@ -52,7 +51,8 @@ class OfficeApiHelper {
    *
    * @return {Office} Reference to a new Excel Context used by Excel API functions
    */
-  getExcelContext = async () => window.Excel.run({ delayForCellEdit: true }, async (excelContext) => excelContext);
+  getExcelContext = async () =>
+    window.Excel.run({ delayForCellEdit: true }, async excelContext => excelContext);
 
   /**
    * Gets Office Context.
@@ -66,7 +66,7 @@ class OfficeApiHelper {
    *
    * @return {Boolean} Returns true if the Excel session is active, false otherwise
    */
-  getExcelSessionStatus = async () => !!await this.getExcelContext();
+  getExcelSessionStatus = async () => !!(await this.getExcelContext());
 
   /**
    * Returns top left cell of selected range. If the selected cell is invalid,
@@ -76,7 +76,7 @@ class OfficeApiHelper {
    * @return {String} Address of the cell.
    * @throws {Error} INVALID_SELECTION error if the selected cell is invalid
    */
-  getSelectedCell = async (excelContext) => {
+  getSelectedCell = async excelContext => {
     try {
       const selectedRangeStart = excelContext.workbook.getSelectedRange().getCell(0, 0);
       selectedRangeStart.load(officeProperties.officeAddress);
@@ -117,7 +117,7 @@ class OfficeApiHelper {
    * @return {Object} object containing the top, left value of the range.
    * @throws {Error} INVALID_SELECTION error if the selected cell is invalid
    */
-  getSelectedRangePosition = async (excelContext) => {
+  getSelectedRangePosition = async excelContext => {
     try {
       const selectedRange = excelContext.workbook.getSelectedRange().getCell(0, 0);
       selectedRange.load(['top', 'left']);
@@ -142,7 +142,10 @@ class OfficeApiHelper {
       const { activeCellAddress } = this.reduxStore.getState().officeReducer;
       // If the active cell address is valid, then select the last active range
       if (activeCellAddress) {
-        defaultRangePosition = await this.convertCellAddressToRangePosition(excelContext, activeCellAddress);
+        defaultRangePosition = await this.convertCellAddressToRangePosition(
+          excelContext,
+          activeCellAddress
+        );
       } else {
         defaultRangePosition = DEFAULT_RANGE_POSITION;
         // Update the active cell address with default cell address
@@ -179,7 +182,7 @@ class OfficeApiHelper {
    * @param {Office} excelAddress Reference to Excel Context used by Excel API functions
    * @return {String} Address of the cell.
    */
-  getStartCellOfRange = (excelAddress) => excelAddress.match(/!(\w+\d+)(:|$)/)[1];
+  getStartCellOfRange = excelAddress => excelAddress.match(/!(\w+\d+)(:|$)/)[1];
 
   /**
    * Gets Excel range based on starting cell and number of columns and rows.
@@ -229,7 +232,7 @@ class OfficeApiHelper {
    *
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    */
-  getCurrentExcelSheet = (excelContext) => excelContext.workbook.worksheets.getActiveWorksheet();
+  getCurrentExcelSheet = excelContext => excelContext.workbook.worksheets.getActiveWorksheet();
 
   /**
    * Converts number of column to Excel column name.
@@ -237,16 +240,17 @@ class OfficeApiHelper {
    * @param {Number} headerCount Number of rows
    * @return {String} Excel column indicator
    */
-  numberToLetters = (headerCount) => {
+  numberToLetters = headerCount => {
     let result = '';
     let firstNumber = ALPHABET_RANGE_START;
     let secondNumber = ALPHABET_RANGE_END;
 
     headerCount -= firstNumber;
     while (headerCount >= 0) {
-      result = String.fromCharCode(parseInt((headerCount % secondNumber) / firstNumber, 10)
-        + ASCII_CAPITAL_LETTER_INDEX)
-        + result;
+      result =
+        String.fromCharCode(
+          parseInt((headerCount % secondNumber) / firstNumber, 10) + ASCII_CAPITAL_LETTER_INDEX
+        ) + result;
 
       firstNumber = secondNumber;
       secondNumber *= ALPHABET_RANGE_END;
@@ -262,7 +266,7 @@ class OfficeApiHelper {
    * @param {String} letters Name of the Excel column
    * @return {Number} Index of the Excel column
    */
-  lettersToNumber = (letters) => {
+  lettersToNumber = letters => {
     if (!letters.match(/^[A-Z]*[A-Z]$/)) {
       throw new IncorrectInputTypeError();
     }
@@ -297,7 +301,7 @@ class OfficeApiHelper {
    * @param {Boolean} isCrosstab Specify if object is a crosstab
    * @param {Object} crosstabHeaderDimensions Contains information about crosstab headers dimensions
    */
-  onBindingObjectClick = async (ObjectData) => {
+  onBindingObjectClick = async ObjectData => {
     let crosstabRange;
     const { bindId, isCrosstab, crosstabHeaderDimensions } = ObjectData;
 
@@ -328,17 +332,25 @@ class OfficeApiHelper {
    * @param {Office} namedItem Excel Table
    * @param {String} bindId Id of the Office table created on import used for referencing the Excel table
    */
-  bindNamedItem = (namedItem, bindId) => new Promise((resolve, reject) => {
-    window.Office.context.document.bindings.addFromNamedItemAsync(namedItem, 'table', { id: bindId }, (result) => {
-      if (result.status === 'succeeded') {
-        console.log(`Added new binding with type: ${result.value.type} and id: ${result.value.id}`);
-        resolve();
-      } else {
-        console.error(`Error: ${result.error.message}`);
-        reject(result.error);
-      }
+  bindNamedItem = (namedItem, bindId) =>
+    new Promise((resolve, reject) => {
+      window.Office.context.document.bindings.addFromNamedItemAsync(
+        namedItem,
+        'table',
+        { id: bindId },
+        result => {
+          if (result.status === 'succeeded') {
+            console.log(
+              `Added new binding with type: ${result.value.type} and id: ${result.value.id}`
+            );
+            resolve();
+          } else {
+            console.error(`Error: ${result.error.message}`);
+            reject(result.error);
+          }
+        }
+      );
     });
-  });
 
   /**
    * Returns the new initial cell considering crosstabs.
@@ -358,11 +370,15 @@ class OfficeApiHelper {
         crosstabHeaderDimensions,
         toCrosstabChange,
         fromCrosstabChange,
-      }
+      },
     } = instanceDefinition;
 
     if (fromCrosstabChange) {
-      return this.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX);
+      return this.offsetCellBy(
+        startCell,
+        -prevCrosstabDimensions.columnsY,
+        -prevCrosstabDimensions.rowsX
+      );
     }
 
     if (!toCrosstabChange && (!isCrosstab || prevOfficeTable)) {
@@ -397,7 +413,7 @@ class OfficeApiHelper {
    * @param {String} cellAddress Excel address of seleted cell, e.g 'Sheet1!AB21'
    * @returns {String} cellAddres with $ at the begginig and beetwen row and column indicator, e.g. '$AB$21'
    */
-  getCellAddressWithDollars = (cellAddress) => {
+  getCellAddressWithDollars = cellAddress => {
     try {
       const splitAt = (string, index) => [string.slice(0, index), string.slice(index)];
       const [cell] = cellAddress.split('!').reverse();

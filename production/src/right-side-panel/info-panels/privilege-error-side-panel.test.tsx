@@ -1,8 +1,10 @@
 import React from 'react';
-import '@testing-library/jest-dom'; // TODO check why tests are not passing without it
-import { render, fireEvent } from '@testing-library/react';
-import PrivilegeErrorSidePanel from './privilege-error-side-panel';
+import { fireEvent, render } from '@testing-library/react';
+
 import { sessionHelper } from '../../storage/session-helper';
+
+import '@testing-library/jest-dom'; // TODO check why tests are not passing without it
+import PrivilegeErrorSidePanel from './privilege-error-side-panel';
 
 describe('PrivilegeErrorSidePanel', () => {
   it('should render PrivilegeErrorSidePanel', () => {
@@ -12,13 +14,17 @@ describe('PrivilegeErrorSidePanel', () => {
 
     // Then
     expect(getByText('MicroStrategy for Office')).toBeInTheDocument();
-    expect(getByText('You do not have the rights to access MicroStrategy for Office')).toBeInTheDocument();
+    expect(
+      getByText('You do not have the rights to access MicroStrategy for Office')
+    ).toBeInTheDocument();
     expect(getByText('Try Again')).toBeInTheDocument();
   });
 
   it('handleTryAgain should be called when button is clicked', () => {
     // Given
-    const handleLogoutForPrivilegeMissingSpy = jest.spyOn(sessionHelper, 'handleLogoutForPrivilegeMissing').mockImplementation();
+    const handleLogoutForPrivilegeMissingSpy = jest
+      .spyOn(sessionHelper, 'handleLogoutForPrivilegeMissing')
+      .mockImplementation();
 
     // When
     const { getByText } = render(<PrivilegeErrorSidePanel />);

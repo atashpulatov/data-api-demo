@@ -1,14 +1,15 @@
 import {
   RESET_STATE,
-  SET_REPORT_N_FILTERS,
   SET_PREPARED_REPORT,
-  SWITCH_IMPORT_SUBTOTALS_ON_EDIT } from '../../redux-reducer/popup-reducer/popup-actions';
+  SET_REPORT_N_FILTERS,
+  SWITCH_IMPORT_SUBTOTALS_ON_EDIT,
+} from '../../redux-reducer/popup-reducer/popup-actions';
 import { initialState, popupReducer } from '../../redux-reducer/popup-reducer/popup-reducer';
 
 describe('Popup Reducer', () => {
   it('should return proper state in case of RESET_STATE action', () => {
     // given
-    const action = { type: RESET_STATE, };
+    const action = { type: RESET_STATE };
     // when
     const newState = popupReducer(initialState, action);
     // then
@@ -40,14 +41,17 @@ describe('Popup Reducer', () => {
     // when
     const newState = popupReducer(initialState, action);
     // then
-    expect(newState).toEqual({ preparedInstance: instanceId, editedObject: chosenObjectData });
+    expect(newState).toEqual({
+      preparedInstance: instanceId,
+      editedObject: chosenObjectData,
+    });
   });
 
   it('should return proper state in case of SWITCH_IMPORT_SUBTOTALS_ON_EDIT action, no initial subtotalsInfo', () => {
     // given
     const action = {
       type: SWITCH_IMPORT_SUBTOTALS_ON_EDIT,
-      data: { newSubtotalProperty: 'testNewSubtotalProperty', },
+      data: { newSubtotalProperty: 'testNewSubtotalProperty' },
     };
 
     initialState.editedObject = {};
@@ -63,16 +67,18 @@ describe('Popup Reducer', () => {
     // given
     const action = {
       type: SWITCH_IMPORT_SUBTOTALS_ON_EDIT,
-      data: { newSubtotalProperty: 'testNewSubtotalProperty', },
+      data: { newSubtotalProperty: 'testNewSubtotalProperty' },
     };
 
-    initialState.editedObject = { subtotalsInfo: { initialSubtotalProperty: 'testInitialSubtotalProperty' } };
+    initialState.editedObject = {
+      subtotalsInfo: { initialSubtotalProperty: 'testInitialSubtotalProperty' },
+    };
 
     const resultState = {
       subtotalsInfo: {
         importSubtotal: { newSubtotalProperty: 'testNewSubtotalProperty' },
-        initialSubtotalProperty: 'testInitialSubtotalProperty'
-      }
+        initialSubtotalProperty: 'testInitialSubtotalProperty',
+      },
     };
 
     // when
@@ -86,7 +92,7 @@ describe('Popup Reducer', () => {
     // given
     const action = {
       type: SWITCH_IMPORT_SUBTOTALS_ON_EDIT,
-      data: { newSubtotalProperty: 'testNewSubtotalProperty', },
+      data: { newSubtotalProperty: 'testNewSubtotalProperty' },
     };
 
     initialState.editedObject = undefined;

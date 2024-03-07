@@ -1,8 +1,9 @@
 import React from 'react';
-
+import { ObjectNotificationTypes } from '@mstr/connector-components';
 import { render } from '@testing-library/react';
-import { objectNotificationTypes } from '@mstr/connector-components';
+
 import { OverviewWindowNotConnected } from './overview-window';
+
 import { mockedObjectsFromStore } from '../../_tests_/mockDataV2';
 
 describe('OverviewWindowNotConnected', () => {
@@ -13,7 +14,7 @@ describe('OverviewWindowNotConnected', () => {
       onRefresh: jest.fn(),
       onDelete: jest.fn(),
       onDuplicate: jest.fn(),
-      notifications: []
+      notifications: [],
     };
 
     window.Office = {
@@ -23,7 +24,7 @@ describe('OverviewWindowNotConnected', () => {
       context: {
         ui: {
           messageParent: () => {},
-          addHandlerAsync: () => {}
+          addHandlerAsync: () => {},
         },
       },
     };
@@ -37,20 +38,22 @@ describe('OverviewWindowNotConnected', () => {
 
   it('should render DataOverview component with blocked actions when there is operation in progress', () => {
     // Given
-    const mockedNotifications = [{
-      objectWorkingId: 1707383886748,
-      title: 'Duplicating',
-      type: objectNotificationTypes.PROGRESS,
-      operationType: 'DUPLICATE_OPERATION',
-      isIndeterminate: false
-    }];
+    const mockedNotifications = [
+      {
+        objectWorkingId: 1707383886748,
+        title: 'Duplicating',
+        type: ObjectNotificationTypes.PROGRESS,
+        operationType: 'DUPLICATE_OPERATION',
+        isIndeterminate: false,
+      },
+    ];
 
     const props = {
       objects: mockedObjectsFromStore,
       onRefresh: jest.fn(),
       onDelete: jest.fn(),
       onDuplicate: jest.fn(),
-      notifications: mockedNotifications
+      notifications: mockedNotifications,
     };
 
     // When
@@ -66,20 +69,22 @@ describe('OverviewWindowNotConnected', () => {
 
   it('should render DataOverview component with enabled actions when there is operation in progress', () => {
     // Given
-    const mockedNotifications = [{
-      objectWorkingId: 1707383886748,
-      title: 'Duplicating',
-      type: objectNotificationTypes.SUCCESS,
-      operationType: 'DUPLICATE_OPERATION',
-      isIndeterminate: false
-    }];
+    const mockedNotifications = [
+      {
+        objectWorkingId: 1707383886748,
+        title: 'Duplicating',
+        type: ObjectNotificationTypes.SUCCESS,
+        operationType: 'DUPLICATE_OPERATION',
+        isIndeterminate: false,
+      },
+    ];
 
     const props = {
       objects: mockedObjectsFromStore,
       onRefresh: jest.fn(),
       onDelete: jest.fn(),
       onDuplicate: jest.fn(),
-      notifications: mockedNotifications
+      notifications: mockedNotifications,
     };
 
     // When

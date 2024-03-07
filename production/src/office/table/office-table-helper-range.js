@@ -1,5 +1,5 @@
-import { errorMessages } from '../../error/constants';
 import { OverlappingTablesError } from '../../error/overlapping-tables-error';
+import { errorMessages } from '../../error/constants';
 
 class OfficeTableHelperRange {
   /**
@@ -13,13 +13,23 @@ class OfficeTableHelperRange {
    *
    * @throws {OverlappingTablesError} when range is not empty.
    */
-  async checkObjectRangeValidity(prevOfficeTable, excelContext, range, instanceDefinition, isRepeatStep) {
+  async checkObjectRangeValidity(
+    prevOfficeTable,
+    excelContext,
+    range,
+    instanceDefinition,
+    isRepeatStep
+  ) {
     if (prevOfficeTable) {
       if (isRepeatStep) {
         await this.checkRangeValidity(excelContext, range);
         await this.deletePrevOfficeTable(excelContext, prevOfficeTable);
       } else {
-        await this.checkObjectRangeValidityOnRefresh(prevOfficeTable, excelContext, instanceDefinition);
+        await this.checkObjectRangeValidityOnRefresh(
+          prevOfficeTable,
+          excelContext,
+          instanceDefinition
+        );
       }
     } else {
       await this.checkRangeValidity(excelContext, range);
@@ -46,7 +56,13 @@ class OfficeTableHelperRange {
       columns
     );
 
-    await this.checkExtendedRangeRows(addedColumns, prevOfficeTable, mstrTable, excelContext, addedRows);
+    await this.checkExtendedRangeRows(
+      addedColumns,
+      prevOfficeTable,
+      mstrTable,
+      excelContext,
+      addedRows
+    );
 
     await this.checkExtendedRangeColumns(addedColumns, prevOfficeTable, mstrTable, excelContext);
 
@@ -109,14 +125,14 @@ class OfficeTableHelperRange {
         addedRows += crosstabColumnsY;
         addedColumns += crosstabRowsX;
       } else if (prevColumnsY === crosstabColumnsY && prevRowsX === crosstabRowsX) {
-        addedRows += (crosstabColumnsY - prevColumnsY);
-        addedColumns += (crosstabRowsX - prevRowsX);
+        addedRows += crosstabColumnsY - prevColumnsY;
+        addedColumns += crosstabRowsX - prevRowsX;
       }
     }
 
     return {
       addedRows,
-      addedColumns
+      addedColumns,
     };
   };
 
@@ -135,7 +151,11 @@ class OfficeTableHelperRange {
 
     if (addedColumns) {
       const range = this.prepareRangeColumns(prevOfficeTable, addedColumns);
-      const rangeCrosstab = this.prepareRangeColumnsCrosstab(range, prevCrosstabDimensions.columnsY, isCrosstab);
+      const rangeCrosstab = this.prepareRangeColumnsCrosstab(
+        range,
+        prevCrosstabDimensions.columnsY,
+        isCrosstab
+      );
 
       await this.checkRangeValidity(excelContext, rangeCrosstab);
     }
@@ -149,7 +169,8 @@ class OfficeTableHelperRange {
    *
    * @returns {Office} Reference to Excel range object
    */
-  prepareRangeColumns = (prevOfficeTable, addedColumns) => prevOfficeTable.getRange().getColumnsAfter(addedColumns);
+  prepareRangeColumns = (prevOfficeTable, addedColumns) =>
+    prevOfficeTable.getRange().getColumnsAfter(addedColumns);
 
   /**
    * Extends the Excel range by crosstab header column dimension.
@@ -164,9 +185,7 @@ class OfficeTableHelperRange {
    */
   prepareRangeColumnsCrosstab = (range, columnsY, isCrosstab) => {
     if (isCrosstab) {
-      return range
-        .getOffsetRange(-columnsY, 0)
-        .getResizedRange(columnsY, 0);
+      return range.getOffsetRange(-columnsY, 0).getResizedRange(columnsY, 0);
     }
 
     return range;
@@ -188,7 +207,11 @@ class OfficeTableHelperRange {
 
     if (addedRows) {
       const range = this.prepareRangeRows(prevOfficeTable, addedColumns, addedRows);
-      const rangeCrosstab = this.prepareRangeRowsCrosstab(range, prevCrosstabDimensions.rowsX, isCrosstab);
+      const rangeCrosstab = this.prepareRangeRowsCrosstab(
+        range,
+        prevCrosstabDimensions.rowsX,
+        isCrosstab
+      );
 
       await this.checkRangeValidity(excelContext, rangeCrosstab);
     }
@@ -203,8 +226,8 @@ class OfficeTableHelperRange {
    *
    * @returns {Office} Reference to Excel range object
    */
-  prepareRangeRows = (prevOfficeTable, addedColumns, addedRows) => prevOfficeTable
-    .getRange().getRowsBelow(addedRows).getResizedRange(0, addedColumns);
+  prepareRangeRows = (prevOfficeTable, addedColumns, addedRows) =>
+    prevOfficeTable.getRange().getRowsBelow(addedRows).getResizedRange(0, addedColumns);
 
   /**
    * Extends the Excel range by crosstab header row dimension.
@@ -219,9 +242,7 @@ class OfficeTableHelperRange {
    */
   prepareRangeRowsCrosstab = (range, rowsX, isCrosstab) => {
     if (isCrosstab) {
-      return range
-        .getOffsetRange(0, -rowsX)
-        .getResizedRange(0, rowsX);
+      return range.getOffsetRange(0, -rowsX).getResizedRange(0, rowsX);
     }
 
     return range;

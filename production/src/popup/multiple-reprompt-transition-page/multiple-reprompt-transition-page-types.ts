@@ -1,8 +1,8 @@
 export interface MultipleRepromptTransitionPageTypes {
-  nextObjectBindId: string,
-  nextObjectIndex: number,
-  total: number,
+  nextObjectBindId: string;
+  nextObjectIndex: number;
+  total: number;
   popupData: {
-    objectWorkingId: number
-  }
+    objectWorkingId: number;
+  };
 }

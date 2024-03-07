@@ -1,5 +1,6 @@
-import onlyAttrCompoundJSON from './compound-grid/Compound Grid with Only Attribute on Row.json';
 import mstrCompoundGridFlatten from '../../mstr-object/helper/mstr-compound-grid-flatten';
+
+import onlyAttrCompoundJSON from './compound-grid/Compound Grid with Only Attribute on Row.json';
 
 describe('MstrCompoundGridFlatten', () => {
   afterEach(() => {
@@ -8,17 +9,25 @@ describe('MstrCompoundGridFlatten', () => {
 
   it('filterEmptyColumnSets should work correctly', () => {
     // given
-    const response = { data: {
-      headers: { columnSets: [[]] },
-      metricValues: { columnSets: [{ raw: [] }] } },
-    definition: {
-      grid: { columnSets: [{ columns: [] }] } } };
+    const response = {
+      data: {
+        headers: { columnSets: [[]] },
+        metricValues: { columnSets: [{ raw: [] }] },
+      },
+      definition: {
+        grid: { columnSets: [{ columns: [] }] },
+      },
+    };
 
-    const expectedValue = { data: {
-      headers: { columnSets: [] },
-      metricValues: { columnSets: [] } },
-    definition: {
-      grid: { columnSets: [] } } };
+    const expectedValue = {
+      data: {
+        headers: { columnSets: [] },
+        metricValues: { columnSets: [] },
+      },
+      definition: {
+        grid: { columnSets: [] },
+      },
+    };
 
     // when
     mstrCompoundGridFlatten.filterEmptyColumnSets(response);
@@ -29,11 +38,20 @@ describe('MstrCompoundGridFlatten', () => {
 
   it('flattenColumnSets should work correctly', () => {
     // given
-    const response = { data: { headers: {} }, definition: { grid: { columnSets: [{ columns: [1] }] } } };
+    const response = {
+      data: { headers: {} },
+      definition: { grid: { columnSets: [{ columns: [1] }] } },
+    };
 
-    const mockFlattenColumnSetsMetricElemets = jest.spyOn(mstrCompoundGridFlatten, 'flattenColumnSetsMetricElemets').mockImplementation();
-    const mockFlattenColumnSetsHeaders = jest.spyOn(mstrCompoundGridFlatten, 'flattenColumnSetsHeaders').mockReturnValue([1]);
-    const mockFlattenMetricValues = jest.spyOn(mstrCompoundGridFlatten, 'flattenMetricValues').mockImplementation();
+    const mockFlattenColumnSetsMetricElemets = jest
+      .spyOn(mstrCompoundGridFlatten, 'flattenColumnSetsMetricElemets')
+      .mockImplementation();
+    const mockFlattenColumnSetsHeaders = jest
+      .spyOn(mstrCompoundGridFlatten, 'flattenColumnSetsHeaders')
+      .mockReturnValue([1]);
+    const mockFlattenMetricValues = jest
+      .spyOn(mstrCompoundGridFlatten, 'flattenMetricValues')
+      .mockImplementation();
     // when
     mstrCompoundGridFlatten.flattenColumnSets(response);
     // then
@@ -45,9 +63,15 @@ describe('MstrCompoundGridFlatten', () => {
   it('flattenColumnSets should work correctly for attributes only report', () => {
     // given
 
-    const mockFlattenColumnSetsMetricElemets = jest.spyOn(mstrCompoundGridFlatten, 'flattenColumnSetsMetricElemets').mockImplementation();
-    const mockFlattenColumnSetsHeaders = jest.spyOn(mstrCompoundGridFlatten, 'flattenColumnSetsHeaders').mockReturnValue([]);
-    const mockFlattenMetricValues = jest.spyOn(mstrCompoundGridFlatten, 'flattenMetricValues').mockImplementation();
+    const mockFlattenColumnSetsMetricElemets = jest
+      .spyOn(mstrCompoundGridFlatten, 'flattenColumnSetsMetricElemets')
+      .mockImplementation();
+    const mockFlattenColumnSetsHeaders = jest
+      .spyOn(mstrCompoundGridFlatten, 'flattenColumnSetsHeaders')
+      .mockReturnValue([]);
+    const mockFlattenMetricValues = jest
+      .spyOn(mstrCompoundGridFlatten, 'flattenMetricValues')
+      .mockImplementation();
     // when
     mstrCompoundGridFlatten.flattenColumnSets(onlyAttrCompoundJSON);
     // then
@@ -80,9 +104,9 @@ describe('MstrCompoundGridFlatten', () => {
 
   it('flattenColumnSetsMetricElemets should work correctly', () => {
     // given
-    const grid = { columnSets: [
-      { columns: [{ elements: ['test'] }] },
-      { columns: [{ elements: ['test1'] }] }] };
+    const grid = {
+      columnSets: [{ columns: [{ elements: ['test'] }] }, { columns: [{ elements: ['test1'] }] }],
+    };
     const expectedValue = ['test', 'test1'];
 
     // when

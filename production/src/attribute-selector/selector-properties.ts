@@ -1,7 +1,7 @@
 export const selectorProperties = {
   /**
-     * propertyAlias: propertyName,
-     */
+   * propertyAlias: propertyName,
+   */
   envUrl: 'envUrl',
   authToken: 'authToken',
   projectId: 'projectId',

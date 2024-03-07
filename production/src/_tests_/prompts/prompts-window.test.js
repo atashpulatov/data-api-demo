@@ -1,11 +1,13 @@
 import React from 'react';
-import { fireEvent, render, waitFor, cleanup } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { PromptsWindowNotConnected } from '../../prompts/prompts-window';
-import { authenticationHelper } from '../../authentication/authentication-helper';
+import { cleanup, fireEvent, render, waitFor } from '@testing-library/react';
+
 import { popupHelper } from '../../popup/popup-helper';
-import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
+import { EXTEND_SESSION, sessionHelper } from '../../storage/session-helper';
+
 import { reduxStore } from '../../store';
+
+import { PromptsWindowNotConnected } from '../../prompts/prompts-window';
 
 jest.mock('../../popup/popup-helper');
 
@@ -18,7 +20,7 @@ describe('PromptsWindowNotConnected', () => {
 
   const popupState = {
     isReprompt: false,
-    isEdit: false
+    isEdit: false,
   };
 
   const editedObject = {
@@ -27,7 +29,7 @@ describe('PromptsWindowNotConnected', () => {
 
   const session = {
     envUrl: 'url/test',
-    authToken: 'd3d3d3'
+    authToken: 'd3d3d3',
   };
 
   const repromptsQueue = {
@@ -42,14 +44,17 @@ describe('PromptsWindowNotConnected', () => {
   it('should render with props given', () => {
     // given
     // when
-    const wrappedComponent = render(<Provider store={reduxStore}>
-      <PromptsWindowNotConnected
-        mstrData={mstrData}
-        popupState={popupState}
-        editedObject={editedObject}
-        session={session}
-        repromptsQueue={repromptsQueue} />
-    </Provider>);
+    const wrappedComponent = render(
+      <Provider store={reduxStore}>
+        <PromptsWindowNotConnected
+          mstrData={mstrData}
+          popupState={popupState}
+          editedObject={editedObject}
+          session={session}
+          repromptsQueue={repromptsQueue}
+        />
+      </Provider>
+    );
     // then
     const promptsContainer = wrappedComponent.container.getElementsByClassName('promptsContainer');
     expect(promptsContainer).toBeDefined();
@@ -58,18 +63,21 @@ describe('PromptsWindowNotConnected', () => {
   it('should render with props given for Reprompt workflow', () => {
     const repromptPopupState = {
       isReprompt: true,
-      isEdit: false
+      isEdit: false,
     };
     // given
     // when
-    const wrappedComponent = render(<Provider store={reduxStore}>
-      <PromptsWindowNotConnected
-        mstrData={mstrData}
-        popupState={repromptPopupState}
-        editedObject={editedObject}
-        session={session}
-        repromptsQueue={repromptsQueue} />
-    </Provider>);
+    const wrappedComponent = render(
+      <Provider store={reduxStore}>
+        <PromptsWindowNotConnected
+          mstrData={mstrData}
+          popupState={repromptPopupState}
+          editedObject={editedObject}
+          session={session}
+          repromptsQueue={repromptsQueue}
+        />
+      </Provider>
+    );
     // then
     const promptsContainer = wrappedComponent.container.getElementsByClassName('promptsContainer');
     expect(promptsContainer).toBeDefined();
@@ -79,14 +87,17 @@ describe('PromptsWindowNotConnected', () => {
     // given
     const addEventListener = jest.spyOn(window, 'addEventListener');
     // when
-    render(<Provider store={reduxStore}>
-      <PromptsWindowNotConnected
-        mstrData={mstrData}
-        popupState={popupState}
-        editedObject={editedObject}
-        session={session}
-        repromptsQueue={repromptsQueue} />
-    </Provider>);
+    render(
+      <Provider store={reduxStore}>
+        <PromptsWindowNotConnected
+          mstrData={mstrData}
+          popupState={popupState}
+          editedObject={editedObject}
+          session={session}
+          repromptsQueue={repromptsQueue}
+        />
+      </Provider>
+    );
     // then
     await waitFor(() => {
       expect(addEventListener).toHaveBeenCalled();
@@ -97,14 +108,17 @@ describe('PromptsWindowNotConnected', () => {
     // given
     const removeEventListener = jest.spyOn(window, 'removeEventListener');
     // when
-    const wrappedComponent = render(<Provider store={reduxStore}>
-      <PromptsWindowNotConnected
-        mstrData={mstrData}
-        popupState={popupState}
-        editedObject={editedObject}
-        session={session}
-        repromptsQueue={repromptsQueue} />
-    </Provider>);
+    render(
+      <Provider store={reduxStore}>
+        <PromptsWindowNotConnected
+          mstrData={mstrData}
+          popupState={popupState}
+          editedObject={editedObject}
+          session={session}
+          repromptsQueue={repromptsQueue}
+        />
+      </Provider>
+    );
     cleanup();
     // then
     await waitFor(() => {
@@ -115,7 +129,11 @@ describe('PromptsWindowNotConnected', () => {
   it('handlePopupErrors should be called on proper messageReceived', () => {
     // given
     popupHelper.handlePopupErrors = jest.fn();
-    const givenMessage = { data: { value: { statusCode: 201, iServerErrorCode: 1234, message: 'test' } } };
+    const givenMessage = {
+      data: {
+        value: { statusCode: 201, iServerErrorCode: 1234, message: 'test' },
+      },
+    };
 
     const expectedObject = {
       status: givenMessage.data.value.statusCode,
@@ -128,20 +146,23 @@ describe('PromptsWindowNotConnected', () => {
         text: JSON.stringify({
           code: givenMessage.data.value.errorCode,
           iServerCode: givenMessage.data.value.iServerErrorCode,
-          message: givenMessage.data.value.message
+          message: givenMessage.data.value.message,
         }),
-      }
+      },
     };
 
     // when
-    const wrappedComponent = render(<Provider store={reduxStore}>
-      <PromptsWindowNotConnected
-        mstrData={mstrData}
-        popupState={popupState}
-        editedObject={editedObject}
-        session={session}
-        repromptsQueue={repromptsQueue} />
-    </Provider>);
+    render(
+      <Provider store={reduxStore}>
+        <PromptsWindowNotConnected
+          mstrData={mstrData}
+          popupState={popupState}
+          editedObject={editedObject}
+          session={session}
+          repromptsQueue={repromptsQueue}
+        />
+      </Provider>
+    );
 
     fireEvent(window, new MessageEvent('message', givenMessage));
     // then
@@ -154,14 +175,17 @@ describe('PromptsWindowNotConnected', () => {
     const givenMessage = { data: 'test' };
 
     // when
-    const wrappedComponent = render(<Provider store={reduxStore}>
-      <PromptsWindowNotConnected
-        mstrData={mstrData}
-        popupState={popupState}
-        editedObject={editedObject}
-        session={session}
-        repromptsQueue={repromptsQueue} />
-    </Provider>);
+    render(
+      <Provider store={reduxStore}>
+        <PromptsWindowNotConnected
+          mstrData={mstrData}
+          popupState={popupState}
+          editedObject={editedObject}
+          session={session}
+          repromptsQueue={repromptsQueue}
+        />
+      </Provider>
+    );
 
     fireEvent(window, new MessageEvent('message', givenMessage));
     // then
@@ -174,23 +198,28 @@ describe('PromptsWindowNotConnected', () => {
     const message = { data: EXTEND_SESSION, origin: 'http://localhost' };
     global.Office = {
       context: {
-        ui: { messageParent: () => { }, },
+        ui: { messageParent: () => {} },
         diagnostics: { host: 'host', platform: 'platform', version: 'version' },
-        requirements: { isSetSupported: jest.fn() }
-      }
+        requirements: { isSetSupported: jest.fn() },
+      },
     };
 
     // when
-    const wrappedComponent = render(<Provider store={reduxStore}>
-      <PromptsWindowNotConnected
-        mstrData={mstrData}
-        popupState={popupState}
-        editedObject={editedObject}
-        session={session}
-        repromptsQueue={repromptsQueue} />
-    </Provider>);
+    render(
+      <Provider store={reduxStore}>
+        <PromptsWindowNotConnected
+          mstrData={mstrData}
+          popupState={popupState}
+          editedObject={editedObject}
+          session={session}
+          repromptsQueue={repromptsQueue}
+        />
+      </Provider>
+    );
 
-    const keepSessionAlive = jest.spyOn(sessionHelper, 'keepSessionAlive').mockImplementation(() => {});
+    const keepSessionAlive = jest
+      .spyOn(sessionHelper, 'keepSessionAlive')
+      .mockImplementation(() => {});
     fireEvent(window, new MessageEvent('message', message));
 
     // then
@@ -202,16 +231,21 @@ describe('PromptsWindowNotConnected', () => {
     const message = {};
 
     // when
-    const wrappedComponent = render(<Provider store={reduxStore}>
-      <PromptsWindowNotConnected
-        mstrData={mstrData}
-        popupState={popupState}
-        editedObject={editedObject}
-        session={session}
-        repromptsQueue={repromptsQueue} />
-    </Provider>);
+    render(
+      <Provider store={reduxStore}>
+        <PromptsWindowNotConnected
+          mstrData={mstrData}
+          popupState={popupState}
+          editedObject={editedObject}
+          session={session}
+          repromptsQueue={repromptsQueue}
+        />
+      </Provider>
+    );
 
-    const keepSessionAlive = jest.spyOn(sessionHelper, 'keepSessionAlive').mockImplementation(() => {});
+    const keepSessionAlive = jest
+      .spyOn(sessionHelper, 'keepSessionAlive')
+      .mockImplementation(() => {});
     fireEvent(window, new MessageEvent('message', message));
 
     // then
@@ -223,14 +257,17 @@ describe('PromptsWindowNotConnected', () => {
     jest.spyOn(sessionHelper, 'installSessionProlongingHandler');
 
     // when
-    render(<Provider store={reduxStore}>
-      <PromptsWindowNotConnected
-        mstrData={mstrData}
-        popupState={popupState}
-        editedObject={editedObject}
-        session={session}
-        repromptsQueue={repromptsQueue} />
-    </Provider>);
+    render(
+      <Provider store={reduxStore}>
+        <PromptsWindowNotConnected
+          mstrData={mstrData}
+          popupState={popupState}
+          editedObject={editedObject}
+          session={session}
+          repromptsQueue={repromptsQueue}
+        />
+      </Provider>
+    );
     // then
     expect(sessionHelper.installSessionProlongingHandler).toHaveBeenCalled();
   });

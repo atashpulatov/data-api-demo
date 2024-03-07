@@ -1,23 +1,22 @@
-import mstrObjectEnum from '../mstr-object-type-enum';
 import { mstrObjectRestService } from '../mstr-object-rest-service';
-import { IMPORT_OPERATION } from '../../operation/operation-type-names';
-import { errorService } from '../../error/error-handler';
-import { errorTypes, incomingErrorStrings, errorMessages } from '../../error/constants';
 import { visualizationInfoService } from '../visualization-info-service';
 
+import { errorService } from '../../error/error-handler';
+import { IMPORT_OPERATION } from '../../operation/operation-type-names';
+import mstrObjectEnum from '../mstr-object-type-enum';
+import { errorMessages, errorTypes, incomingErrorStrings } from '../../error/constants';
+
 class DossierInstanceDefinition {
-  async getDossierInstanceDefinition(
-    {
-      projectId,
-      objectId,
-      body,
-      dossierData,
-      displayAttrFormNames,
-      manipulationsXML,
-      preparedInstanceId,
-      visualizationInfo,
-    },
-  ) {
+  async getDossierInstanceDefinition({
+    projectId,
+    objectId,
+    body,
+    dossierData,
+    displayAttrFormNames,
+    manipulationsXML,
+    preparedInstanceId,
+    visualizationInfo,
+  }) {
     if (manipulationsXML) {
       if (!body) {
         body = {};
@@ -31,7 +30,11 @@ class DossierInstanceDefinition {
       if (preparedInstanceId) {
         instanceId = preparedInstanceId;
       } else {
-        const instance = await mstrObjectRestService.createDossierInstance(projectId, objectId, body);
+        const instance = await mstrObjectRestService.createDossierInstance(
+          projectId,
+          objectId,
+          body
+        );
         instanceId = instance.mid;
       }
     } catch (error) {
@@ -59,7 +62,8 @@ class DossierInstanceDefinition {
 
     let temporaryInstanceDefinition;
     try {
-      temporaryInstanceDefinition = await mstrObjectRestService.fetchVisualizationDefinition(config);
+      temporaryInstanceDefinition =
+        await mstrObjectRestService.fetchVisualizationDefinition(config);
     } catch (error) {
       error.type = this.getVisualizationErrorType(error);
       throw error;
@@ -67,7 +71,7 @@ class DossierInstanceDefinition {
 
     const instanceDefinition = {
       ...temporaryInstanceDefinition,
-      instanceId
+      instanceId,
     };
 
     return {
@@ -117,9 +121,12 @@ class DossierInstanceDefinition {
   getVisualizationName = (operationData, name, instanceDefinition) => {
     const { objectEditedData, operationType } = operationData;
 
-    if (operationType === IMPORT_OPERATION
-      || (objectEditedData && objectEditedData.visualizationInfo
-        && objectEditedData.visualizationInfo.nameAndFormatShouldUpdate)) {
+    if (
+      operationType === IMPORT_OPERATION ||
+      (objectEditedData &&
+        objectEditedData.visualizationInfo &&
+        objectEditedData.visualizationInfo.nameAndFormatShouldUpdate)
+    ) {
       name = instanceDefinition.mstrTable.name;
     }
     return name;
@@ -131,17 +138,18 @@ class DossierInstanceDefinition {
    * @param {Object} error
    * @return {String || undefined} errorType
    */
-  getVisualizationErrorType = (error) => {
+  getVisualizationErrorType = error => {
     if (!error) {
       return;
     }
 
     let errorType = error.type;
-    if ((error.message && error.message.includes(incomingErrorStrings.INVALID_VIZ_KEY))
-      || (error.response
-        && error.response.body
-        && error.response.body.message
-        && error.response.body.message.includes(incomingErrorStrings.INVALID_VIZ_KEY))
+    if (
+      (error.message && error.message.includes(incomingErrorStrings.INVALID_VIZ_KEY)) ||
+      (error.response &&
+        error.response.body &&
+        error.response.body.message &&
+        error.response.body.message.includes(incomingErrorStrings.INVALID_VIZ_KEY))
     ) {
       errorType = errorTypes.INVALID_VIZ_KEY;
     }

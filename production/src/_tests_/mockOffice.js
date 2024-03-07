@@ -2,7 +2,7 @@ export const mockOffice = {
   context: {
     ui: {
       messageParent: () => {},
-      displayDialogAsync: jest.fn()
+      displayDialogAsync: jest.fn(),
     },
     diagnostics: {},
   },

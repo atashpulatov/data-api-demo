@@ -1,9 +1,11 @@
-import { officeShapeApiHelper } from '../../../office/shapes/office-shape-api-helper';
-import stepRemoveVisualizationImage from '../../../office/shapes/step-remove-visualization-image';
 import { officeApiHelper } from '../../../office/api/office-api-helper';
+import { officeShapeApiHelper } from '../../../office/shapes/office-shape-api-helper';
+
+import officeStoreObject from '../../../office/store/office-store-object';
+
+import stepRemoveVisualizationImage from '../../../office/shapes/step-remove-visualization-image';
 import operationErrorHandler from '../../../operation/operation-error-handler';
 import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
-import officeStoreObject from '../../../office/store/office-store-object';
 
 describe('StepRemoveVisualizationImage', () => {
   const objectDataMock = {
@@ -19,13 +21,13 @@ describe('StepRemoveVisualizationImage', () => {
       visualizationKey: 'visualizationKeyTest',
       vizDimensions: {
         width: 123,
-        height: 342
-      }
+        height: 342,
+      },
     },
     displayAttrFormNames: 'displayAttrFormNamesTest',
     objectWorkingId: 'objectWorkingIdTest',
     importType: 'image',
-    bindId: '{1234-5678-9012-3456}'
+    bindId: '{1234-5678-9012-3456}',
   };
 
   const mockFn = jest.fn();
@@ -38,27 +40,29 @@ describe('StepRemoveVisualizationImage', () => {
           items: [
             {
               shapes: {
-                getItemOrNullObject: jest.fn().mockImplementation((id) => ({
+                getItemOrNullObject: jest.fn().mockImplementation(_id => ({
                   load: mockFn,
                   delete: mockFn,
                   isNullObject: false,
-                  id: '{1234-5678-9012-3456}'
-                }))
-              }
-            }
+                  id: '{1234-5678-9012-3456}',
+                })),
+              },
+            },
           ],
           getActiveWorksheet: jest.fn().mockImplementation(() => ({
             shapes: {
-              addImage: jest.fn().mockImplementation((image) => Promise.resolve({
-                set: mockFn,
-                id: '{1234-5678-9012-3456}'
-              }))
-            }
-          }))
-        }
+              addImage: jest.fn().mockImplementation(_image =>
+                Promise.resolve({
+                  set: mockFn,
+                  id: '{1234-5678-9012-3456}',
+                })
+              ),
+            },
+          })),
+        },
       ],
-      sync: mockFn
-    }
+      sync: mockFn,
+    },
   };
 
   const operationDataMock = {
@@ -100,8 +104,14 @@ describe('StepRemoveVisualizationImage', () => {
     // then
     expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
     expect(operationStepDispatcher.completeRemoveVisualizationImage).toBeCalledTimes(1);
-    expect(officeShapeApiHelper.deleteImage).toBeCalledWith(excelContextMock, '{1234-5678-9012-3456}');
-    expect(operationStepDispatcher.updateObject).toBeCalledWith({ objectWorkingId: 'objectWorkingIdTest', doNotPersist: true });
+    expect(officeShapeApiHelper.deleteImage).toBeCalledWith(
+      excelContextMock,
+      '{1234-5678-9012-3456}'
+    );
+    expect(operationStepDispatcher.updateObject).toBeCalledWith({
+      objectWorkingId: 'objectWorkingIdTest',
+      doNotPersist: true,
+    });
     expect(officeStoreObject.removeObjectInExcelStore).toBeCalledWith('objectWorkingIdTest');
     expect(operationErrorHandler.handleOperationError).toBeCalledTimes(0);
   });

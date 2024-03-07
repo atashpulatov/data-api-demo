@@ -1,11 +1,11 @@
 .mstrd-PromptEditorContainer-overlay {
-    background: transparent !important;
+  background: transparent !important;
 }
 .mstrd-PromptEditor {
-    width: 100% !important;
-    margin-left: 0px !important;
-    top: 0 !important;
-    left: 0 !important;
+  width: 100% !important;
+  margin-left: 0px !important;
+  top: 0 !important;
+  left: 0 !important;
 }
 
 #mstrdossierPromptEditor {
@@ -13,14 +13,14 @@
 }
 
 .icon-close {
-    display: none !important;
+  display: none !important;
 }
 .mstrPromptEditorButtons {
-    display: none !important;
+  display: none !important;
 }
 .mstrmojo-VIDocument {
-    display: none !important;
+  display: none !important;
 }
 #ExpressionFormValues1Popup1 {
-    top: 30px !important;
+  top: 30px !important;
 }

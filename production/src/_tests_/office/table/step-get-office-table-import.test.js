@@ -1,7 +1,7 @@
 import officeTableCreate from '../../../office/table/office-table-create';
 import stepGetOfficeTableImport from '../../../office/table/step-get-office-table-import';
-import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
 import operationErrorHandler from '../../../operation/operation-error-handler';
+import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
 
 describe('StepGetOfficeTableImport', () => {
   afterEach(() => {
@@ -28,7 +28,11 @@ describe('StepGetOfficeTableImport', () => {
     expect(console.error).toBeCalledWith(new Error('errorTest'));
 
     expect(operationErrorHandler.handleOperationError).toBeCalledTimes(1);
-    expect(operationErrorHandler.handleOperationError).toBeCalledWith({}, {}, new Error('errorTest'));
+    expect(operationErrorHandler.handleOperationError).toBeCalledWith(
+      {},
+      {},
+      new Error('errorTest')
+    );
   });
 
   it('getOfficeTableImport should work as expected', async () => {
@@ -86,6 +90,8 @@ describe('StepGetOfficeTableImport', () => {
     });
 
     expect(operationStepDispatcher.completeGetOfficeTableImport).toBeCalledTimes(1);
-    expect(operationStepDispatcher.completeGetOfficeTableImport).toBeCalledWith('objectWorkingIdTest');
+    expect(operationStepDispatcher.completeGetOfficeTableImport).toBeCalledWith(
+      'objectWorkingIdTest'
+    );
   });
 });

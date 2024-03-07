@@ -5,19 +5,19 @@ class FakeStore {
 
   getState = () => this.state;
 
-  subscribe = (listener) => {
+  subscribe = listener => {
     this.listener = listener;
   };
 
   resetState = () => {
     this.state = {
-      operationReducer: { operations: [{ stepsQueue: [], }], },
-      objectReducer: { objects: [] }
+      operationReducer: { operations: [{ stepsQueue: [] }] },
+      objectReducer: { objects: [] },
     };
     this.listener && this.listener();
   };
 
-  addStep = (stepName) => {
+  addStep = stepName => {
     const operation = this.state.operationReducer.operations[0];
     operation.stepsQueue = [...operation.stepsQueue, stepName];
 

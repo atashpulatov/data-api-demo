@@ -1,8 +1,7 @@
-import stepSaveObjectInExcel from '../../../office/store/step-save-object-in-excel';
 import officeStoreObject from '../../../office/store/office-store-object';
+import stepSaveObjectInExcel from '../../../office/store/step-save-object-in-excel';
+
 import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
-import operationErrorHandler from '../../../operation/operation-error-handler';
-import { reduxStore } from '../../../store';
 
 describe('StepSaveObjectInExcel', () => {
   let dateOriginal;
@@ -34,7 +33,7 @@ describe('StepSaveObjectInExcel', () => {
       objectWorkingId: 'objectWorkingIdTest',
       preparedInstanceId: 'preparedInstanceIdTest',
       details: {},
-      importType: 'table'
+      importType: 'table',
     };
     const instanceDefinition = {
       rows: 5,
@@ -51,7 +50,7 @@ describe('StepSaveObjectInExcel', () => {
 
     // when
     await stepSaveObjectInExcel.saveObject(objectDataMock, {
-      instanceDefinition
+      instanceDefinition,
     });
 
     // then
@@ -67,7 +66,7 @@ describe('StepSaveObjectInExcel', () => {
       objectWorkingId: 'objectWorkingIdTest',
       preparedInstanceId: 'preparedInstanceIdTest',
       details: {},
-      importType: 'table'
+      importType: 'table',
     };
 
     jest.spyOn(officeStoreObject, 'saveObjectsInExcelStore').mockImplementation();
@@ -81,22 +80,18 @@ describe('StepSaveObjectInExcel', () => {
         rows: 5,
         columns: 'columnsTest',
         mstrTable: {},
-      }
+      },
     });
 
     // then
-    expect(objectDataMock.previousTableDimensions).toEqual(
-      {
-        rows: 5,
-        columns: 'columnsTest'
-      }
-    );
-    expect(objectDataMock.details.excelTableSize).toEqual(
-      {
-        rows: 6,
-        columns: 'columnsTest'
-      }
-    );
+    expect(objectDataMock.previousTableDimensions).toEqual({
+      rows: 5,
+      columns: 'columnsTest',
+    });
+    expect(objectDataMock.details.excelTableSize).toEqual({
+      rows: 6,
+      columns: 'columnsTest',
+    });
     expect(objectDataMock.refreshDate).toEqual('nowTest');
     expect(objectDataMock).not.toHaveProperty('preparedInstanceId');
 

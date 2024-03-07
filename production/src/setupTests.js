@@ -1,9 +1,11 @@
 // setup file
 import React from 'react';
-import 'jest-localstorage-mock';
 import 'regenerator-runtime';
-import { diContainer } from './dependency-container';
+
 import '@testing-library/jest-dom';
+import { diContainer } from './dependency-container';
+
+import 'jest-localstorage-mock';
 
 jest.mock('@mstr/connector-components', () => {
   const originalModule = jest.requireActual('@mstr/connector-components');
@@ -18,11 +20,6 @@ jest.mock('@mstr/connector-components', () => {
     SidePanel: () => <div />,
     // eslint-disable-next-line react/no-multi-comp,react/react-in-jsx-scope
     Empty: () => <div />,
-    objectNotificationTypes: {
-      PROGRESS: 'PROGRESS',
-      WARNING: 'WARNING',
-      SUCCESS: 'SUCCESS',
-    }
   };
 });
 

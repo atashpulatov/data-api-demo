@@ -6,15 +6,15 @@ describe('OfficeApiWorksheetHelper', () => {
   });
 
   it.each`
-    objectName                                      | expectedResult
-    ${'name'}                                       | ${'name'}
-    ${'Test'}                                       | ${'Test (3)'}
-    ${'some random name'}                           | ${'some random name'}
-    ${'some name'}                                  | ${'some name (4)'}
-    ${'*test?'}                                     | ${'_test_'}
-    ${''}                                           | ${'_'}
-    ${'test name having over 31 characters'}        | ${'test name having over 31 cha...'}
-    ${'some test name having over 31 characters'}   | ${'some test name having ov ...(2)'}
+    objectName                                    | expectedResult
+    ${'name'}                                     | ${'name'}
+    ${'Test'}                                     | ${'Test (3)'}
+    ${'some random name'}                         | ${'some random name'}
+    ${'some name'}                                | ${'some name (4)'}
+    ${'*test?'}                                   | ${'_test_'}
+    ${''}                                         | ${'_'}
+    ${'test name having over 31 characters'}      | ${'test name having over 31 cha...'}
+    ${'some test name having over 31 characters'} | ${'some test name having ov ...(2)'}
   `('prepareWorksheetName should return proper name', async ({ objectName, expectedResult }) => {
     // given
     const mockSync = jest.fn();
@@ -29,8 +29,8 @@ describe('OfficeApiWorksheetHelper', () => {
             { name: 'some name (2)' },
             { name: 'some name (3)' },
             { name: 'some test name having over 3...' },
-          ]
-        }
+          ],
+        },
       },
       sync: mockSync,
     };
@@ -44,17 +44,21 @@ describe('OfficeApiWorksheetHelper', () => {
 
   it('renameExistingWorksheet should execute prepareWorksheetName', async () => {
     // given
-    const prepareWorksheetNameMock = jest.spyOn(officeApiWorksheetHelper, 'prepareWorksheetName').mockImplementation();
+    const prepareWorksheetNameMock = jest
+      .spyOn(officeApiWorksheetHelper, 'prepareWorksheetName')
+      .mockImplementation();
 
     const mockSync = jest.fn();
-    const mockGetUsedRangeOrNullObject = jest.fn().mockImplementation(() => ({ isNullObject: true }));
+    const mockGetUsedRangeOrNullObject = jest
+      .fn()
+      .mockImplementation(() => ({ isNullObject: true }));
     const context = {
       workbook: {
         worksheets: {
           getActiveWorksheet: jest.fn().mockImplementation(() => ({
-            getUsedRangeOrNullObject: mockGetUsedRangeOrNullObject
+            getUsedRangeOrNullObject: mockGetUsedRangeOrNullObject,
           })),
-        }
+        },
       },
       sync: mockSync,
     };

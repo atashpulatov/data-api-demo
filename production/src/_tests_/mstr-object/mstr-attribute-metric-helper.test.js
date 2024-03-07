@@ -1,7 +1,9 @@
 import mstrAttributeMetricHelper from '../../mstr-object/helper/mstr-attribute-metric-helper';
-import { reportV2, reportWithMetricsInRows, dossierWithMetricsInRows } from '../mockDataV2';
-import regularCompoundJSON from './compound-grid/Regular Compound Grid.json';
+
 import compoundJSONwithMetricsInRows from './compound-grid/Compound Grid with Metrics on Row.json';
+import regularCompoundJSON from './compound-grid/Regular Compound Grid.json';
+
+import { dossierWithMetricsInRows, reportV2, reportWithMetricsInRows } from '../mockDataV2';
 
 describe('MstrAttributeMetricHelper', () => {
   describe('extractAttributesMetricsCompoundGrid', () => {
@@ -22,7 +24,8 @@ describe('MstrAttributeMetricHelper', () => {
           {
             id: '8D679D4F11D3E4981000E787EC6DE8A4',
             name: 'Subcategory',
-          }],
+          },
+        ],
         metrics: [
           {
             id: '4C051DB611D3E877C000B3B2D86C964F',
@@ -77,7 +80,7 @@ describe('MstrAttributeMetricHelper', () => {
           },
         ],
       };
-        // when
+      // when
       const element = mstrAttributeMetricHelper.extractAttributesMetrics(grid);
       // then
       expect(element).toEqual(expectedElement);
@@ -93,16 +96,16 @@ describe('MstrAttributeMetricHelper', () => {
       const expectedElement = [
         {
           id: '1D5F4A7811E97722F1050080EF65506C',
-          name: 'Origin Airport'
+          name: 'Origin Airport',
         },
         {
           id: '9BC4691C11E97721AF570080EF55306C',
-          name: 'Year'
+          name: 'Year',
         },
         {
           id: '9BC470B011E977217DA10080EF55306D',
-          name: 'Month'
-        }
+          name: 'Month',
+        },
       ];
       // when
       const element = mstrAttributeMetricHelper.extractAttributes(rows, columns);
@@ -120,16 +123,16 @@ describe('MstrAttributeMetricHelper', () => {
       const expectedElement = [
         {
           id: '9BC486D611E977217DA10080EF55306D',
-          name: 'Flights Delayed'
+          name: 'Flights Delayed',
         },
         {
           id: '9BC4944611E977217DA10080EF55306D',
-          name: 'Avg Delay (min)'
+          name: 'Avg Delay (min)',
         },
         {
           id: '9BC4778611E977217DA10080EF55306D',
-          name: 'On-Time'
-        }
+          name: 'On-Time',
+        },
       ];
       // when
       const element = mstrAttributeMetricHelper.extractMetrics(rows, columns);
@@ -155,7 +158,7 @@ describe('MstrAttributeMetricHelper', () => {
         {
           id: '7FD5B69611D5AC76C000D98A4CC5F24F',
           name: 'Cost',
-        }
+        },
       ];
       // when
       const result = mstrAttributeMetricHelper.extractMetricsInRows(body);
@@ -171,7 +174,7 @@ describe('MstrAttributeMetricHelper', () => {
         {
           id: '7FD5B69611D5AC76C000D98A4CC5F24F',
           name: 'Cost',
-        }
+        },
       ];
       // when
       const result = mstrAttributeMetricHelper.extractMetricsInRows(body);
@@ -193,14 +196,14 @@ describe('MstrAttributeMetricHelper', () => {
         {
           id: '7FD5B69611D5AC76C000D98A4CC5F24F',
           name: 'Cost',
-        }
+        },
       ];
 
       const currentMetricsMock = [
         {
           id: '4C051DB611D3E877C000B3B2D86C964F',
           name: 'Profit',
-        }
+        },
       ];
 
       const expectedResult = [
@@ -211,11 +214,14 @@ describe('MstrAttributeMetricHelper', () => {
         {
           id: '7FD5B69611D5AC76C000D98A4CC5F24F',
           name: 'Cost',
-        }
+        },
       ];
 
       // when
-      const result = mstrAttributeMetricHelper.getMetricsDifference(fetchedMetricsMock, currentMetricsMock);
+      const result = mstrAttributeMetricHelper.getMetricsDifference(
+        fetchedMetricsMock,
+        currentMetricsMock
+      );
       // then
       expect(result).toEqual(expectedResult);
     });
@@ -228,7 +234,7 @@ describe('MstrAttributeMetricHelper', () => {
         {
           id: '4C051DB611D3E877C000B3B2D86C964F',
           name: 'Profit',
-        }
+        },
       ];
 
       const expectedResult = [
@@ -239,7 +245,7 @@ describe('MstrAttributeMetricHelper', () => {
         {
           id: '7FD5B69611D5AC76C000D98A4CC5F24F',
           name: 'Cost',
-        }
+        },
       ];
 
       // when
@@ -284,12 +290,12 @@ describe('MstrAttributeMetricHelper', () => {
         metricsInRows: [
           {
             id: '7FD5B69611D5AC76C000D98A4CC5F24F',
-            name: 'Cost'
+            name: 'Cost',
           },
           {
             id: '4C05177011D3E877C000B3B2D86C964F',
-            name: 'Revenue'
-          }
+            name: 'Revenue',
+          },
         ],
         metricsRows: [
           {
@@ -305,9 +311,9 @@ describe('MstrAttributeMetricHelper', () => {
               decimalPlaces: 0,
               formatString: '"$"#,##0',
               negativeType: 1,
-              thousandSeparator: true
+              thousandSeparator: true,
             },
-            type: 'metric'
+            type: 'metric',
           },
           {
             dataType: 'double',
@@ -315,24 +321,25 @@ describe('MstrAttributeMetricHelper', () => {
             max: 15443.9,
             min: 2563.9,
             name: 'Revenue',
-            numberFormatting:
-              {
-                category: 4,
-                currencyPosition: 0,
-                currencySymbol: '$',
-                decimalPlaces: 0,
-                formatString: '0%;(0%)',
-                negativeType: 3,
-                thousandSeparator: true
-              },
-            type: 'metric'
-          }
-        ]
+            numberFormatting: {
+              category: 4,
+              currencyPosition: 0,
+              currencySymbol: '$',
+              decimalPlaces: 0,
+              formatString: '0%;(0%)',
+              negativeType: 3,
+              thousandSeparator: true,
+            },
+            type: 'metric',
+          },
+        ],
       };
 
       // when
       const metricsInRowsInfo = mstrAttributeMetricHelper.getMetricsInRowsInfo(
-        body, metricsInRows, fetchedBody
+        body,
+        metricsInRows,
+        fetchedBody
       );
 
       // then
@@ -351,7 +358,9 @@ describe('MstrAttributeMetricHelper', () => {
 
       // when
       const metricsInRowsInfo = mstrAttributeMetricHelper.getMetricsInRowsInfo(
-        body, metricsInRows, fetchedBody
+        body,
+        metricsInRows,
+        fetchedBody
       );
 
       // then

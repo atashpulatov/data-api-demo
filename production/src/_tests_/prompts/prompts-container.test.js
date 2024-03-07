@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
+
 import { PromptsContainer } from '../../prompts/prompts-container';
 
 describe('PromptsContainer', () => {

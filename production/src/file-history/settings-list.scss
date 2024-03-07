@@ -2,7 +2,7 @@
   border-bottom: solid 1px #e4e4e4;
 }
 
-$text-color: #3F4042;
+$text-color: #3f4042;
 
 .settings-list {
   position: absolute;
@@ -16,7 +16,7 @@ $text-color: #3F4042;
   list-style: none;
   background: #fff;
   color: $text-color;
-  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.20);
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2);
   border-radius: 2px;
   li {
     a {
@@ -24,7 +24,7 @@ $text-color: #3F4042;
       font-size: 12px;
       cursor: default;
       line-height: 15px;
-      user-select: none; 
+      user-select: none;
       display: block;
       color: $text-color;
     }
@@ -33,14 +33,14 @@ $text-color: #3F4042;
     }
     &:not(:first-child):not(:last-child):not(.clear-data-inactive) {
       &:hover {
-        background: #F7F7F7;
+        background: #f7f7f7;
       }
       &:active {
-        background:  #F0F7FE ;
+        background: #f0f7fe;
       }
     }
-  } 
-  .not-linked-list{
+  }
+  .not-linked-list {
     padding: 8px 16px;
     font-size: 12px;
     cursor: default;

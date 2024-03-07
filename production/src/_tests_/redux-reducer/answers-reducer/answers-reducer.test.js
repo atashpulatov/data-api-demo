@@ -1,6 +1,10 @@
 import { createStore } from 'redux';
-import { RESTORE_ALL_ANSWERS, CLEAR_ANSWERS } from '../../../redux-reducer/answers-reducer/answers-actions';
-import { IMPORT_OPERATION, EDIT_OPERATION } from '../../../operation/operation-type-names';
+
+import { EDIT_OPERATION, IMPORT_OPERATION } from '../../../operation/operation-type-names';
+import {
+  CLEAR_ANSWERS,
+  RESTORE_ALL_ANSWERS,
+} from '../../../redux-reducer/answers-reducer/answers-actions';
 import { answersReducer } from '../../../redux-reducer/answers-reducer/answers-reducer';
 
 describe('answersReducer', () => {
@@ -9,7 +13,7 @@ describe('answersReducer', () => {
   beforeEach(() => {
     // default state should be empty
     expect(answersStore.getState()).toEqual({
-      answers: []
+      answers: [],
     });
   });
 
@@ -21,12 +25,14 @@ describe('answersReducer', () => {
       payload: {
         object: {
           isPrompted: true,
-          promptsAnswers: [{
-            messageName: 'someMessageName',
-            answers: [{ key: '1', values: ['1'] }]
-          }]
-        }
-      }
+          promptsAnswers: [
+            {
+              messageName: 'someMessageName',
+              answers: [{ key: '1', values: ['1'] }],
+            },
+          ],
+        },
+      },
     };
     // when
     const newState = answersReducer(prevState, action);
@@ -42,14 +48,14 @@ describe('answersReducer', () => {
       payload: {
         object: {
           mstrObjectType: {
-            name: 'visualization'
+            name: 'visualization',
           },
           promptsAnswers: {
             messageName: 'someMessageName',
-            answers: [{ key: '1', values: ['1'] }]
-          }
-        }
-      }
+            answers: [{ key: '1', values: ['1'] }],
+          },
+        },
+      },
     };
     // when
     const newState = answersReducer(prevState, action);
@@ -62,7 +68,7 @@ describe('answersReducer', () => {
     const prevState = { answers: [] };
     const action = {
       type: RESTORE_ALL_ANSWERS,
-      payload: [{ key: '1', values: ['1'] }]
+      payload: [{ key: '1', values: ['1'] }],
     };
     // when
     const newState = answersReducer(prevState, action);
@@ -79,13 +85,15 @@ describe('answersReducer', () => {
         operation: {
           objectEditedData: {
             isPrompted: true,
-            promptsAnswers: [{
-              messageName: 'someMessageName',
-              answers: [{ key: '1', values: ['2'] }]
-            }]
-          }
-        }
-      }
+            promptsAnswers: [
+              {
+                messageName: 'someMessageName',
+                answers: [{ key: '1', values: ['2'] }],
+              },
+            ],
+          },
+        },
+      },
     };
     // when
     const newState = answersReducer(prevState, action);
@@ -102,15 +110,15 @@ describe('answersReducer', () => {
         operation: {
           objectEditedData: {
             visualizationInfo: {
-              name: 'visualization'
+              name: 'visualization',
             },
             promptsAnswers: {
               messageName: 'someMessageName',
-              answers: [{ key: '1', values: ['2'] }]
-            }
-          }
-        }
-      }
+              answers: [{ key: '1', values: ['2'] }],
+            },
+          },
+        },
+      },
     };
     // when
     const newState = answersReducer(prevState, action);
@@ -122,7 +130,7 @@ describe('answersReducer', () => {
     // given
     const prevState = { answers: [{ key: '1', values: ['1'] }] };
     const action = {
-      type: CLEAR_ANSWERS
+      type: CLEAR_ANSWERS,
     };
     // when
     const newState = answersReducer(prevState, action);

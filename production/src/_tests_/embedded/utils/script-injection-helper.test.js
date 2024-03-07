@@ -12,7 +12,7 @@ describe('ScriptInjectionHelper', () => {
       head: {
         insertBefore: jest.fn(),
         getElementsByTagName: jest.fn().mockReturnValue(['title']),
-      }
+      },
     };
     jest.spyOn(scriptInjectionHelper, 'createFileLocation');
 
@@ -53,7 +53,7 @@ describe('ScriptInjectionHelper', () => {
     const contentDocument = {
       head: {
         appendChild: jest.fn(),
-      }
+      },
     };
     jest.spyOn(scriptInjectionHelper, 'createFileLocation');
     jest.spyOn(document, 'createElement').mockReturnValue({});
@@ -68,9 +68,7 @@ describe('ScriptInjectionHelper', () => {
     expect(document.createElement).toBeCalledWith('link');
     expect(document.createElement).toBeCalledTimes(1);
 
-    expect(contentDocument.head.appendChild).toBeCalledWith(
-      document.createElement()
-    );
+    expect(contentDocument.head.appendChild).toBeCalledWith(document.createElement());
     expect(contentDocument.head.appendChild).toBeCalledTimes(1);
   });
 
@@ -89,7 +87,7 @@ describe('ScriptInjectionHelper', () => {
   it('should check if isLoginPage returns true for loginPage', () => {
     // given
     const contentDocument = {
-      URL: 'https://MicroStrategyLibrary/embeddedTest/embeddedLogin.jsp'
+      URL: 'https://MicroStrategyLibrary/embeddedTest/embeddedLogin.jsp',
     };
     // when
     const isLoginPage = scriptInjectionHelper.isLoginPage(contentDocument);
@@ -100,7 +98,7 @@ describe('ScriptInjectionHelper', () => {
   it('should check if isLoginPage returns false for dossierPage', () => {
     // given
     const contentDocument = {
-      URL: 'https://MicroStrategyLibrary/embeddedTest/dossierPage.jsp'
+      URL: 'https://MicroStrategyLibrary/embeddedTest/dossierPage.jsp',
     };
     // when
     const isLoginPage = scriptInjectionHelper.isLoginPage(contentDocument);
@@ -116,9 +114,9 @@ describe('ScriptInjectionHelper', () => {
       target: {
         contentDocument: {
           getElementsByClassName: jest.fn(() => [promptEditorContainerElement]),
-          getElementsByTagName: jest.fn(() => [tableDataElement])
-        }
-      }
+          getElementsByTagName: jest.fn(() => [tableDataElement]),
+        },
+      },
     };
     const focusSpy = jest.spyOn(tableDataElement, 'focus');
     // when
@@ -133,11 +131,11 @@ describe('ScriptInjectionHelper', () => {
     const focusEvent = {
       target: {
         contentDocument: {
-          getElementsByClassName: jest.fn((className) => (
+          getElementsByClassName: jest.fn(className =>
             className === 'mstrd-PromptEditorContainer-overlay' ? [] : [tableOfContentsElement]
-          ))
-        }
-      }
+          ),
+        },
+      },
     };
     const focusSpy = jest.spyOn(tableOfContentsElement, 'focus');
     // when

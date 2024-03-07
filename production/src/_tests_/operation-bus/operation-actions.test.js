@@ -1,18 +1,18 @@
+import { operationsMap } from '../../operation/operation-steps';
 import {
-  importRequested,
-  markStepCompleted,
-  cancelOperation,
-  duplicateRequested,
-  clearDataRequested,
-} from '../../redux-reducer/operation-reducer/operation-actions';
-import {
+  CANCEL_OPERATION,
+  CLEAR_DATA_OPERATION,
+  DUPLICATE_OPERATION,
   IMPORT_OPERATION,
   MARK_STEP_COMPLETED,
-  CANCEL_OPERATION,
-  DUPLICATE_OPERATION,
-  CLEAR_DATA_OPERATION,
 } from '../../operation/operation-type-names';
-import { operationsMap } from '../../operation/operation-steps';
+import {
+  cancelOperation,
+  clearDataRequested,
+  duplicateRequested,
+  importRequested,
+  markStepCompleted,
+} from '../../redux-reducer/operation-reducer/operation-actions';
 
 describe('OperationActions', () => {
   it('returns IMPORT_OPERATION action on importRequested call', () => {
@@ -41,7 +41,9 @@ describe('OperationActions', () => {
     expect(importAction.payload.objectWorkingId).toBe(objectWorkingId);
     expect(importAction.payload.operation.objectWorkingId).toEqual(objectWorkingId);
     expect(importAction.payload.operation.operationType).toEqual(CLEAR_DATA_OPERATION);
-    expect(importAction.payload.operation.stepsQueue).toEqual(operationsMap.table[CLEAR_DATA_OPERATION]);
+    expect(importAction.payload.operation.stepsQueue).toEqual(
+      operationsMap.table[CLEAR_DATA_OPERATION]
+    );
   });
 
   it('returns MARK_STEP_COMPLETED action on markStepCompleted call', () => {
@@ -72,13 +74,15 @@ describe('OperationActions', () => {
     // given
     const exampleObject = {
       objectWorkingId: 123,
-      otherProperty: 'someValue'
+      otherProperty: 'someValue',
     };
     // when
     const duplicateAction = duplicateRequested(exampleObject);
     // then
     expect(duplicateAction.type).toEqual(DUPLICATE_OPERATION);
-    expect(duplicateAction.payload.operation.objectWorkingId).toEqual(exampleObject.objectWorkingId);
+    expect(duplicateAction.payload.operation.objectWorkingId).toEqual(
+      exampleObject.objectWorkingId
+    );
     expect(duplicateAction.payload.operation.operationType).toEqual('DUPLICATE_OPERATION');
   });
 });

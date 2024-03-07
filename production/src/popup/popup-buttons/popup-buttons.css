@@ -1,64 +1,65 @@
 .popup-buttons {
-    padding: 19px 20px;
-    text-align: right;
-    background-color: #fff;
+  padding: 19px 20px;
+  text-align: right;
+  background-color: #fff;
 }
 
 .popup-buttons .mstr-rc-3-button,
 .popup-buttons .mstr-rc-3-button .button-tooltip {
-    height: 30px;
-    padding-left: 20px;
-    padding-right: 20px;
+  height: 30px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .popup-buttons #back {
-    float: left;
-    margin-left: 0;
-    margin-right: auto;
+  float: left;
+  margin-left: 0;
+  margin-right: auto;
 }
 
 .popup-buttons .mstr-rc-3-button {
-    margin-left: 14px;
-    vertical-align: top;
+  margin-left: 14px;
+  vertical-align: top;
 }
 
 .mstr-rc-3-button:disabled {
-    opacity: 0.5;
+  opacity: 0.5;
 }
 
 .mstr-rc-3-tooltip-source {
-    display: inline;
+  display: inline;
 }
 
 #data-preview:focus:not(:hover) {
-    background-color: white;
+  background-color: white;
 }
 
 .hidden {
-    visibility: hidden;
+  visibility: hidden;
 }
 
-.popup-buttons .ant-btn.ant-btn-primary[disabled], .ant-btn.ant-btn-primary[disabled]:hover {
-    color: #ffffff;
-    background: #1C91DC;
-    border: 1px solid #1C91DC;
- }
+.popup-buttons .ant-btn.ant-btn-primary[disabled],
+.ant-btn.ant-btn-primary[disabled]:hover {
+  color: #ffffff;
+  background: #1c91dc;
+  border: 1px solid #1c91dc;
+}
 
- .popup-buttons span .mstr-rc-3-button {
-     margin-left: 0 !important;
- }
+.popup-buttons span .mstr-rc-3-button {
+  margin-left: 0 !important;
+}
 
- .popup-buttons>span {
-    margin-left: 14px;
- }
+.popup-buttons > span {
+  margin-left: 14px;
+}
 
- #root .button-tooltip[style='display: inline-block; cursor: not-allowed;'] {
-    cursor: default !important;
- }
+#root .button-tooltip[style='display: inline-block; cursor: not-allowed;'] {
+  cursor: default !important;
+}
 
 .ant-popover-inner-content {
-    max-width: 100%;
- }
+  max-width: 100%;
+}
 
 .dossier-iframe,
 .library-iframe {
@@ -70,14 +71,14 @@
 }
 
 .dossier-iframe {
-    min-height: calc(100vh - 125px);
+  min-height: calc(100vh - 125px);
 }
 
 .library-iframe {
-    min-height: calc(100vh - 125px);
+  min-height: calc(100vh - 125px);
 }
 
- @media (max-width: 530px) {
+@media (max-width: 530px) {
   .dossier-window .popup-buttons,
   .library-window .popup-buttons {
     margin-bottom: 15px;

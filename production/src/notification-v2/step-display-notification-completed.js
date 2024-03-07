@@ -1,7 +1,7 @@
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 
 class StepDisplayNotificationCompleted {
-  displayNotificationCompleted = (objectData, operationData) => {
+  displayNotificationCompleted = (objectData, _operationData) => {
     setTimeout(() => {
       operationStepDispatcher.displaySuccessNotification(objectData.objectWorkingId);
       operationStepDispatcher.completeDisplaySuccessNotification(objectData.objectWorkingId);

@@ -1,7 +1,9 @@
 import { authenticationService } from '../../authentication/auth-rest-service';
-import { errorService } from '../../error/error-handler';
 import { authenticationHelper } from '../../authentication/authentication-helper';
+
 import { reduxStore } from '../../store';
+
+import { errorService } from '../../error/error-handler';
 import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
 
 jest.mock('../../error/error-handler');
@@ -54,11 +56,12 @@ describe('loginUser', () => {
     authenticationHelper.loginUser(givenError, givenValues);
     // then
     expect(authenticate).toBeCalled();
-    expect(authenticate)
-      .toBeCalledWith(givenValues.username,
-        givenValues.password,
-        givenValues.envUrl,
-        1);
+    expect(authenticate).toBeCalledWith(
+      givenValues.username,
+      givenValues.password,
+      givenValues.envUrl,
+      1
+    );
   });
   it('should save authToken', async () => {
     // given
@@ -69,7 +72,9 @@ describe('loginUser', () => {
       envUrl: 'testEnvUrl',
     };
     const givenAuthToken = 'someAuthToken';
-    const authenticateMock = jest.spyOn(authenticationService, 'authenticate').mockResolvedValue(givenAuthToken);
+    const authenticateMock = jest
+      .spyOn(authenticationService, 'authenticate')
+      .mockResolvedValue(givenAuthToken);
     // when
     await authenticationHelper.loginUser(givenError, givenValues);
     // then
@@ -87,7 +92,8 @@ describe('loginUser', () => {
       envUrl: 'testEnvUrl',
     };
     const testError = new Error();
-    const authenticateMock = jest.spyOn(authenticationService, 'authenticate')
+    const authenticateMock = jest
+      .spyOn(authenticationService, 'authenticate')
       .mockImplementation(async () => {
         throw testError;
       });
@@ -96,7 +102,9 @@ describe('loginUser', () => {
     // then
     expect(authenticateMock).toBeCalled();
     expect(errorService.handleError).toBeCalled();
-    expect(errorService.handleError).toBeCalledWith(testError, { isLogout: true });
+    expect(errorService.handleError).toBeCalledWith(testError, {
+      isLogout: true,
+    });
     expect(sessionActions.disableLoading).toBeCalled();
   });
   it('should call putSessions on validating authToken', () => {

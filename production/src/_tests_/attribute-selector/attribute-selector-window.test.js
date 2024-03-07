@@ -1,9 +1,12 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { fireEvent, render } from '@testing-library/react';
-import { reduxStore } from '../../store';
-import { AttributeSelectorWindowNotConnected } from '../../attribute-selector/attribute-selector-window';
+
 import { popupHelper } from '../../popup/popup-helper';
+
+import { reduxStore } from '../../store';
+
+import { AttributeSelectorWindowNotConnected } from '../../attribute-selector/attribute-selector-window';
 
 jest.mock('../../office/office-context');
 jest.mock('../../popup/popup-helper');
@@ -15,12 +18,11 @@ describe('AttributeSelectorWindow', () => {
     const chosenObject = { objectType: { name: 'dossier' } };
     // when
     // when
-    const { getByText } = render(<Provider store={reduxStore}>
-      <AttributeSelectorWindowNotConnected
-        mstrData={mstrData}
-        chosenObject={chosenObject}
-      />
-    </Provider>);
+    const { getByText } = render(
+      <Provider store={reduxStore}>
+        <AttributeSelectorWindowNotConnected mstrData={mstrData} chosenObject={chosenObject} />
+      </Provider>
+    );
     // then
     getByText('Data Preview');
     getByText('Import Data');
@@ -34,18 +36,20 @@ describe('AttributeSelectorWindow', () => {
     const mstrData = {
       envUrl: 'envUrl',
       authToken: 'authToken',
-      projectId: 'proId'
+      projectId: 'proId',
     };
     const chosenObject = { chosenObjectName: '55' };
 
     // when
-    const { getByText } = render(<Provider store={reduxStore}>
-      <AttributeSelectorWindowNotConnected
-        mstrData={mstrData}
-        chosenObject={chosenObject}
-        handleBack={handleBack}
-      />
-    </Provider>);
+    const { getByText } = render(
+      <Provider store={reduxStore}>
+        <AttributeSelectorWindowNotConnected
+          mstrData={mstrData}
+          chosenObject={chosenObject}
+          handleBack={handleBack}
+        />
+      </Provider>
+    );
 
     const backButton = getByText('Back');
     fireEvent.click(backButton);
@@ -59,17 +63,16 @@ describe('AttributeSelectorWindow', () => {
     const mstrData = {
       envUrl: 'envUrl',
       authToken: 'authToken',
-      projectId: 'proId'
+      projectId: 'proId',
     };
     const chosenObject = { chosenObjectName: '55' };
 
     // when
-    const { getByText } = render(<Provider store={reduxStore}>
-      <AttributeSelectorWindowNotConnected
-        mstrData={mstrData}
-        chosenObject={chosenObject}
-      />
-    </Provider>);
+    const { getByText } = render(
+      <Provider store={reduxStore}>
+        <AttributeSelectorWindowNotConnected mstrData={mstrData} chosenObject={chosenObject} />
+      </Provider>
+    );
 
     const officeMessageParentSpy = jest.spyOn(popupHelper, 'officeMessageParent');
     officeMessageParentSpy.mockClear();

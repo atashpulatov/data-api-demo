@@ -1,7 +1,7 @@
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 
 class StepNotificationInProgress {
-  moveNotificationToInProgress = (objectData, operationData) => {
+  moveNotificationToInProgress = (objectData, _operationData) => {
     operationStepDispatcher.moveNotificationToInProgress(objectData.objectWorkingId);
     operationStepDispatcher.completeMoveNotificationToInProgress(objectData.objectWorkingId);
   };

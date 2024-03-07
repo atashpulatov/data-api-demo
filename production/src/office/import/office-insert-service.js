@@ -34,22 +34,20 @@ class OfficeInsertService {
    * @param {Object} header Contains data for crosstab headers.
    * @param {Object} mstrTable Contains informations about mstr object
    */
-  appendRows = async (
-    {
-      officeTable,
-      excelContext,
-      excelRows,
-      rowIndex,
-      operationType,
-      tableChanged,
-      contextPromises,
-      header,
-      mstrTable
-    }
-  ) => {
-    await this.appendRowsToTable(excelRows, excelContext, officeTable, rowIndex, tableChanged, operationType);
+  appendRows = async ({
+    officeTable,
+    excelContext,
+    excelRows,
+    rowIndex,
+    contextPromises,
+    header,
+    mstrTable,
+  }) => {
+    await this.appendRowsToTable(excelRows, excelContext, officeTable, rowIndex);
 
-    if (mstrTable.isCrosstab) { this.appendCrosstabRowsToRange(officeTable, header.rows, rowIndex); }
+    if (mstrTable.isCrosstab) {
+      this.appendCrosstabRowsToRange(officeTable, header.rows, rowIndex);
+    }
     contextPromises.push(excelContext.sync());
   };
 
@@ -63,7 +61,7 @@ class OfficeInsertService {
    * @param {Boolean} tableChanged Specify if table columns has been changed
    * @param {Boolean} isRefresh
    */
-  appendRowsToTable = async (excelRows, excelContext, officeTable, rowIndex, tableChanged, operationType) => {
+  appendRowsToTable = async (excelRows, excelContext, officeTable, rowIndex) => {
     console.group('Append rows');
     const isOverLimit = officeInsertSplitHelper.checkIfSizeOverLimit(excelRows);
     const splitExcelRows = officeInsertSplitHelper.getExcelRows(excelRows, isOverLimit);
@@ -88,12 +86,12 @@ class OfficeInsertService {
   };
 
   /**
-  * Appends crosstab row headers to imported object.
-  *
-  * @param {Office} officeTable Reference to Ecxcel table.
-  * @param {Array} header Contains data for crosstab row headers.
-  * @param {Number} rowIndex Specify from row we should append rows
-  */
+   * Appends crosstab row headers to imported object.
+   *
+   * @param {Office} officeTable Reference to Ecxcel table.
+   * @param {Array} header Contains data for crosstab row headers.
+   * @param {Number} rowIndex Specify from row we should append rows
+   */
   appendCrosstabRowsToRange = (officeTable, headerRows, rowIndex) => {
     console.time('Append crosstab rows');
     const startCell = officeTable

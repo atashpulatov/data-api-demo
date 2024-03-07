@@ -1,8 +1,11 @@
-import officeStoreObject from '../../../office/store/office-store-object';
-import * as objectActions from '../../../redux-reducer/object-reducer/object-actions';
-import { reduxStore } from '../../../store';
+/* eslint-disable no-import-assign */
 import officeStoreHelper from '../../../office/store/office-store-helper';
+
+import officeStoreObject from '../../../office/store/office-store-object';
+import { reduxStore } from '../../../store';
+
 import { errorService } from '../../../error/error-handler';
+import * as objectActions from '../../../redux-reducer/object-reducer/object-actions';
 
 const internalData = {};
 
@@ -10,8 +13,8 @@ const settingsMock = {
   set: (key, value) => {
     internalData[key] = value;
   },
-  get: (key) => internalData[key],
-  remove: (key) => {
+  get: key => internalData[key],
+  remove: key => {
     delete internalData[key];
   },
   saveAsync: jest.fn(),
@@ -50,10 +53,9 @@ describe('OfficeStoreObject', () => {
 
   it('removeObjectInExcelStore should handle exception', () => {
     // given
-    jest.spyOn(officeStoreHelper, 'getOfficeSettings')
-      .mockImplementation(() => {
-        throw new Error('errorTest');
-      });
+    jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockImplementation(() => {
+      throw new Error('errorTest');
+    });
 
     jest.spyOn(errorService, 'handleError').mockImplementation();
 
@@ -84,17 +86,16 @@ describe('OfficeStoreObject', () => {
   });
 
   it.each`
-  expectedStoredObjects                                 | storedObjectsParam                                      | objectWorkingIdParam
-  
-  ${[]}                                                 | ${[]}                                                   | ${'42'}
-  ${[]}                                                 | ${[{ objectWorkingId: 42 }]}                            | ${42}
-  ${[{ objectWorkingId: 4242 }]}                        | ${[{ objectWorkingId: 42 }, { objectWorkingId: 4242 }]} | ${42}
-  ${[{ objectWorkingId: 42 }]}                          | ${[{ objectWorkingId: 42 }]}                            | ${4242}
-  ${[{ objectWorkingId: 42 }, { objectWorkingId: 43 }]} | ${[{ objectWorkingId: 42 }, { objectWorkingId: 43 }]}   | ${4242}
-  
-  `('removeObjectInExcelStore should work as expected when objectWorkingId specified',
+    expectedStoredObjects                                 | storedObjectsParam                                      | objectWorkingIdParam
+    ${[]}                                                 | ${[]}                                                   | ${'42'}
+    ${[]}                                                 | ${[{ objectWorkingId: 42 }]}                            | ${42}
+    ${[{ objectWorkingId: 4242 }]}                        | ${[{ objectWorkingId: 42 }, { objectWorkingId: 4242 }]} | ${42}
+    ${[{ objectWorkingId: 42 }]}                          | ${[{ objectWorkingId: 42 }]}                            | ${4242}
+    ${[{ objectWorkingId: 42 }, { objectWorkingId: 43 }]} | ${[{ objectWorkingId: 42 }, { objectWorkingId: 43 }]}   | ${4242}
+  `(
+    'removeObjectInExcelStore should work as expected when objectWorkingId specified',
     ({ expectedStoredObjects, storedObjectsParam, objectWorkingIdParam }) => {
-    /*
+      /*
 
      */
       // given
@@ -109,7 +110,8 @@ describe('OfficeStoreObject', () => {
       expect(settingsMock.get('storedObjects')).toEqual(expectedStoredObjects);
 
       expect(settingsMock.saveAsync).toBeCalledTimes(1);
-    });
+    }
+  );
 
   it('removeObjectFromStore should work as expected', () => {
     // given
@@ -133,7 +135,9 @@ describe('OfficeStoreObject', () => {
 
   it('saveObjectsInExcelStore should work as expected', async () => {
     // given
-    jest.spyOn(reduxStore, 'getState').mockReturnValue({ objectReducer: { objects: 'objectsTest' } });
+    jest
+      .spyOn(reduxStore, 'getState')
+      .mockReturnValue({ objectReducer: { objects: 'objectsTest' } });
 
     jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
 

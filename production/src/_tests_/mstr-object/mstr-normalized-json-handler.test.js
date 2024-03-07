@@ -1,4 +1,5 @@
 import jsonHandler from '../../mstr-object/handler/mstr-normalized-json-handler';
+
 import { reportV2 } from '../mockDataV2';
 
 describe('Normalized JSON Handler', () => {
@@ -16,7 +17,10 @@ describe('Normalized JSON Handler', () => {
     };
     // when
     const element = jsonHandler.lookupElement({
-      definition, axis, attributeIndex, elementIndex,
+      definition,
+      axis,
+      attributeIndex,
+      elementIndex,
     });
     // then
     expect(element).toEqual(expectedElement);
@@ -29,11 +33,17 @@ describe('Normalized JSON Handler', () => {
     const attributeIndex = 0;
     const elementIndex = 1;
     const expectedElement = {
-      id: 'h2010;9BC4691C11E97721AF570080EF55306C', formValues: ['2010'], value: ['2010'], subtotalAddress: false,
+      id: 'h2010;9BC4691C11E97721AF570080EF55306C',
+      formValues: ['2010'],
+      value: ['2010'],
+      subtotalAddress: false,
     };
     // when
     const element = jsonHandler.lookupElement({
-      definition, axis, attributeIndex, elementIndex,
+      definition,
+      axis,
+      attributeIndex,
+      elementIndex,
     });
     // then
     expect(element).toEqual(expectedElement);
@@ -53,11 +63,17 @@ describe('Normalized JSON Handler', () => {
     });
 
     const expectedElement = {
-      id: 'h2010;9BC4691C11E97721AF570080EF55306C', formValues: ['', '2010'], value: ['', '2010'], subtotalAddress: false,
+      id: 'h2010;9BC4691C11E97721AF570080EF55306C',
+      formValues: ['', '2010'],
+      value: ['', '2010'],
+      subtotalAddress: false,
     };
     // when
     const element = jsonHandler.lookupElement({
-      definition, axis, attributeIndex, elementIndex,
+      definition,
+      axis,
+      attributeIndex,
+      elementIndex,
     });
     // then
     expect(element).toEqual(expectedElement);
@@ -68,25 +84,35 @@ describe('Normalized JSON Handler', () => {
     const { definition } = reportV2;
     const axis = 'columns';
     const headerCells = [0, 0];
-    const expectedElements = [{
-      formValues: ['BWI', '1'], id: 'h1;1D5F4A7811E97722F1050080EF65506C', value: ['BWI', '1'], subtotalAddress: false,
-    }, {
-      id: '9BC486D611E977217DA10080EF55306D',
-      dataType: 6,
-      type: 'Metric',
-      value: ['Flights Delayed'],
-      subtotalAddress: false,
-      max: 10000,
-      min: 0,
-      name: 'Flights Delayed',
-      numberFormatting: {
-        category: 7,
-        decimalPlaces: 0,
-        formatString: '0',
+    const expectedElements = [
+      {
+        formValues: ['BWI', '1'],
+        id: 'h1;1D5F4A7811E97722F1050080EF65506C',
+        value: ['BWI', '1'],
+        subtotalAddress: false,
       },
-    }];
+      {
+        id: '9BC486D611E977217DA10080EF55306D',
+        dataType: 6,
+        type: 'Metric',
+        value: ['Flights Delayed'],
+        subtotalAddress: false,
+        max: 10000,
+        min: 0,
+        name: 'Flights Delayed',
+        numberFormatting: {
+          category: 7,
+          decimalPlaces: 0,
+          formatString: '0',
+        },
+      },
+    ];
     // when
-    const elements = jsonHandler.mapElementIndicesToElements({ definition, axis, headerCells });
+    const elements = jsonHandler.mapElementIndicesToElements({
+      definition,
+      axis,
+      headerCells,
+    });
     // then
     expect(elements).toEqual(expectedElements);
   });
@@ -94,8 +120,11 @@ describe('Normalized JSON Handler', () => {
   it('should render tabular data', () => {
     // given
     const { definition, data } = reportV2;
-    definition.attrforms = { supportForms: false, displayAttrFormNames: 'Automatic' };
-    const onElement = (element) => element.value[0];
+    definition.attrforms = {
+      supportForms: false,
+      displayAttrFormNames: 'Automatic',
+    };
+    const onElement = element => element.value[0];
     const expectedFirstRow = ['2009', 'January', 3139, 17046.02, 4543, 2406, 20915.41, 3449];
     // when
     const tabular = jsonHandler.renderTabular(definition, data, onElement);
@@ -110,7 +139,12 @@ describe('Normalized JSON Handler', () => {
     const headerIndex = 1;
     const expectedId = 'h2;1D5F4A7811E97722F1050080EF65506C';
     // when
-    const tabular = jsonHandler.getElementIdForGivenHeaderCell(definition, axis, attributeIndex, headerIndex);
+    const tabular = jsonHandler.getElementIdForGivenHeaderCell(
+      definition,
+      axis,
+      attributeIndex,
+      headerIndex
+    );
     // then
     expect(tabular).toEqual(expectedId);
   });
@@ -144,7 +178,14 @@ describe('Normalized JSON Handler', () => {
     const axis = 'columns';
     const expectedHeaders = [
       ['BWI', 'BWI', 'BWI', 'DCA', 'DCA', 'DCA'],
-      ['Flights Delayed', 'Avg Delay (min)', 'On-Time', 'Flights Delayed', 'Avg Delay (min)', 'On-Time'],
+      [
+        'Flights Delayed',
+        'Avg Delay (min)',
+        'On-Time',
+        'Flights Delayed',
+        'Avg Delay (min)',
+        'On-Time',
+      ],
     ];
     const onElement = ({ value }) => value[0];
     // when
@@ -166,8 +207,9 @@ describe('Normalized JSON Handler', () => {
       ['2010', 'January'],
       ['2010', 'February'],
       ['2010', 'March'],
-      ['2010', 'Total']];
-    const onElement = (e) => e.value[0];
+      ['2010', 'Total'],
+    ];
+    const onElement = e => e.value[0];
     // when
     const colHeaders = jsonHandler.renderHeaders(definition, axis, headers, onElement);
     // then
@@ -176,8 +218,15 @@ describe('Normalized JSON Handler', () => {
 
   it('should transpose 2D arrays', () => {
     // given
-    const matrix = [[0, 1], [2, 3], [4, 5]];
-    const expectedMatrix = [[0, 2, 4], [1, 3, 5]];
+    const matrix = [
+      [0, 1],
+      [2, 3],
+      [4, 5],
+    ];
+    const expectedMatrix = [
+      [0, 2, 4],
+      [1, 3, 5],
+    ];
     // when
     const transposedMatrix = jsonHandler.transposeMatrix(matrix);
     // then

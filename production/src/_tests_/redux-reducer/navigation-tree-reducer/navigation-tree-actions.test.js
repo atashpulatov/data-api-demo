@@ -1,4 +1,16 @@
-import { navigationTreeActions, SELECT_OBJECT, CANCEL_REQUEST_IMPORT, START_IMPORT, REQUEST_IMPORT, PROMPTS_ANSWERED, REQUEST_DOSSIER_OPEN, CANCEL_DOSSIER_OPEN, SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, CLEAR_PROMPTS_ANSWERS, UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT } from '../../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import {
+  CANCEL_DOSSIER_OPEN,
+  CANCEL_REQUEST_IMPORT,
+  CLEAR_PROMPTS_ANSWERS,
+  navigationTreeActions,
+  PROMPTS_ANSWERED,
+  REQUEST_DOSSIER_OPEN,
+  REQUEST_IMPORT,
+  SELECT_OBJECT,
+  START_IMPORT,
+  SWITCH_IMPORT_SUBTOTALS_ON_IMPORT,
+  UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT,
+} from '../../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 
 describe('NavigationTree Actions', () => {
   it('should dispatch proper selectObject action', () => {
@@ -73,7 +85,10 @@ describe('NavigationTree Actions', () => {
     // when
     navigationTreeActions.switchImportSubtotalsOnImport(data)(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({ type: SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, data });
+    expect(listener).toHaveBeenCalledWith({
+      type: SWITCH_IMPORT_SUBTOTALS_ON_IMPORT,
+      data,
+    });
   });
 
   it('should dispatch proper clearPromptAnswers action', () => {
@@ -92,6 +107,9 @@ describe('NavigationTree Actions', () => {
     // when
     navigationTreeActions.updateDisplayAttrFormOnImport(data)(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({ type: UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT, data });
+    expect(listener).toHaveBeenCalledWith({
+      type: UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT,
+      data,
+    });
   });
 });

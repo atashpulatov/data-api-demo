@@ -1,6 +1,8 @@
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { officeApiHelper } from '../api/office-api-helper';
+
 import officeStoreObject from '../store/office-store-object';
+
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepRemoveObjectBinding {
   /**
@@ -12,7 +14,7 @@ class StepRemoveObjectBinding {
    * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
    * @param {String} objectData.bindId Id of the Office table created on import used for referencing the Excel table
    */
-  removeObjectBinding = async (objectData, operationData) => {
+  removeObjectBinding = async (objectData, _operationData) => {
     const { bindId, objectWorkingId } = objectData;
 
     const officeContext = await officeApiHelper.getOfficeContext();
@@ -23,7 +25,10 @@ class StepRemoveObjectBinding {
       console.error(error);
     }
     operationStepDispatcher.completeRemoveObjectBinding(objectWorkingId);
-    operationStepDispatcher.updateObject({ objectWorkingId, doNotPersist: true });
+    operationStepDispatcher.updateObject({
+      objectWorkingId,
+      doNotPersist: true,
+    });
     officeStoreObject.removeObjectInExcelStore(objectWorkingId);
   };
 }

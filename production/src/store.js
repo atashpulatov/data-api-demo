@@ -1,22 +1,22 @@
-import {
-  createStore, combineReducers, applyMiddleware, compose
-} from 'redux';
-import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+// issue with storage import
+// eslint-disable-next-line simple-import-sort/imports
+import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
+import { persistReducer, persistStore } from 'redux-persist';
 import thunk from 'redux-thunk';
-import { sessionReducer } from './redux-reducer/session-reducer/session-reducer';
-import { navigationTree } from './redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
-import { officeReducer } from './redux-reducer/office-reducer/office-reducer';
+
+import storage from 'redux-persist/lib/storage';
+import packageJson from '../package.json';
+import { answersReducer } from './redux-reducer/answers-reducer/answers-reducer';
 import { configReducer } from './redux-reducer/config-reducer/config-reducer';
+import { navigationTree } from './redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 import { notificationReducer } from './redux-reducer/notification-reducer/notification-reducer';
+import { objectReducer } from './redux-reducer/object-reducer/object-reducer';
+import { officeReducer } from './redux-reducer/office-reducer/office-reducer';
+import { operationReducer } from './redux-reducer/operation-reducer/operation-reducer';
 import { popupReducer } from './redux-reducer/popup-reducer/popup-reducer';
 import { popupStateReducer } from './redux-reducer/popup-state-reducer/popup-state-reducer';
-import { operationReducer } from './redux-reducer/operation-reducer/operation-reducer';
-import { objectReducer } from './redux-reducer/object-reducer/object-reducer';
-import { answersReducer } from './redux-reducer/answers-reducer/answers-reducer';
 import { repromptsQueueReducer } from './redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer';
-
-import packageJson from '../package.json';
+import { sessionReducer } from './redux-reducer/session-reducer/session-reducer';
 
 const rootReducer = combineReducers({
   sessionReducer,

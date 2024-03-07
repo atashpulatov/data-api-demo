@@ -1,17 +1,18 @@
+import officeReducerHelper from '../office/store/office-reducer-helper';
+
 import {
+  clearGlobalNotification,
   createConnectionLostNotification,
   createSessionExpiredNotification,
-  clearGlobalNotification,
-  displayGlobalNotification,
   deleteObjectNotification,
+  displayGlobalNotification,
   displayObjectWarning,
 } from '../redux-reducer/notification-reducer/notification-action-creators';
 import { removeObject } from '../redux-reducer/object-reducer/object-actions';
 import { cancelOperation } from '../redux-reducer/operation-reducer/operation-actions';
-import officeReducerHelper from '../office/store/office-reducer-helper';
 
 class NotificationService {
-  init = (reduxStore) => {
+  init = reduxStore => {
     this.reduxStore = reduxStore;
   };
 
@@ -31,7 +32,7 @@ class NotificationService {
     this.reduxStore.dispatch(clearGlobalNotification());
   };
 
-  globalWarningAppeared = (payload) => {
+  globalWarningAppeared = payload => {
     this.reduxStore.dispatch(displayGlobalNotification(payload));
   };
 
@@ -43,20 +44,20 @@ class NotificationService {
     this.reduxStore.dispatch(displayObjectWarning(objectWorkingId, notification));
   };
 
-  dismissNotification = (objectWorkingId) => {
+  dismissNotification = objectWorkingId => {
     this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
   };
 
-  dismissSuccessfulRemoveNotification = (objectWorkingId) => {
+  dismissSuccessfulRemoveNotification = objectWorkingId => {
     this.reduxStore.dispatch(removeObject(objectWorkingId));
     this.dismissNotification(objectWorkingId);
   };
 
-  removeObjectFromNotification = (objectWorkingId) => {
+  removeObjectFromNotification = objectWorkingId => {
     this.reduxStore.dispatch(removeObject(objectWorkingId));
   };
 
-  cancelOperationFromNotification = (objectWorkingId) => {
+  cancelOperationFromNotification = objectWorkingId => {
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
   };
 
@@ -65,8 +66,9 @@ class NotificationService {
    *
    * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
    */
-  removeExistingNotification = (objectWorkingId) => {
-    const notification = officeReducerHelper.getNotificationFromNotificationReducer(objectWorkingId);
+  removeExistingNotification = objectWorkingId => {
+    const notification =
+      officeReducerHelper.getNotificationFromNotificationReducer(objectWorkingId);
     if (notification) {
       this.callDismissNotification(notification);
     }
@@ -83,7 +85,7 @@ class NotificationService {
   dismissNotifications = () => {
     const currentState = this.reduxStore.getState();
     const { notifications } = currentState.notificationReducer;
-    notifications.forEach((notification) => {
+    notifications.forEach(notification => {
       this.callDismissNotification(notification);
     });
   };
@@ -94,7 +96,7 @@ class NotificationService {
    *
    * @param {Object} notification
    */
-  callDismissNotification = (notification) => {
+  callDismissNotification = notification => {
     notification.dismissNotification && notification.dismissNotification();
     notification.callback && notification.callback();
   };

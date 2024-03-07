@@ -1,8 +1,9 @@
-import dossierInstanceDefinition from '../../mstr-object/instance/dossier-instance-definition';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
+import { visualizationInfoService } from '../../mstr-object/visualization-info-service';
+
+import dossierInstanceDefinition from '../../mstr-object/instance/dossier-instance-definition';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { errorTypes, incomingErrorStrings } from '../../error/constants';
-import { visualizationInfoService } from '../../mstr-object/visualization-info-service';
 
 describe('DossierInstanceDefinition', () => {
   afterEach(() => {
@@ -40,7 +41,11 @@ describe('DossierInstanceDefinition', () => {
     }
 
     expect(mstrObjectRestService.createDossierInstance).toBeCalledTimes(1);
-    expect(mstrObjectRestService.createDossierInstance).toBeCalledWith('projectIdTest', 'objectIdTest', 'bodyTest');
+    expect(mstrObjectRestService.createDossierInstance).toBeCalledWith(
+      'projectIdTest',
+      'objectIdTest',
+      'bodyTest'
+    );
 
     expect(visualizationInfoService.getVisualizationInfo).not.toBeCalled();
     expect(mstrObjectRestService.fetchVisualizationDefinition).not.toBeCalled();
@@ -51,13 +56,17 @@ describe('DossierInstanceDefinition', () => {
     // given
     jest.spyOn(mstrObjectRestService, 'createDossierInstance').mockImplementation();
 
-    jest.spyOn(visualizationInfoService, 'getVisualizationInfo').mockReturnValue('updatedVisualizationInfoTest');
+    jest
+      .spyOn(visualizationInfoService, 'getVisualizationInfo')
+      .mockReturnValue('updatedVisualizationInfoTest');
 
     jest.spyOn(mstrObjectRestService, 'fetchVisualizationDefinition').mockImplementation(() => {
       throw new Error('errorTest');
     });
 
-    jest.spyOn(dossierInstanceDefinition, 'getVisualizationErrorType').mockReturnValue('getVisualizationErrorTypeTest');
+    jest
+      .spyOn(dossierInstanceDefinition, 'getVisualizationErrorType')
+      .mockReturnValue('getVisualizationErrorTypeTest');
 
     // when
     let result;
@@ -99,49 +108,43 @@ describe('DossierInstanceDefinition', () => {
       mstrObjectType: mstrObjectEnum.mstrObjectType.dossier.name,
       objectId: 'objectIdTest',
       projectId: 'projectIdTest',
-      visualizationInfo: 'updatedVisualizationInfoTest'
+      visualizationInfo: 'updatedVisualizationInfoTest',
     });
 
     expect(dossierInstanceDefinition.getVisualizationErrorType).toBeCalledTimes(1);
-    expect(dossierInstanceDefinition.getVisualizationErrorType).toBeCalledWith(new Error('errorTest'));
+    expect(dossierInstanceDefinition.getVisualizationErrorType).toBeCalledWith(
+      new Error('errorTest')
+    );
   });
 
   it.each`
-  expectedBody      | expectedInstanceId  | bodyParam         | manipulationsXMLParam | preparedInstanceIdParam
-
-  ${undefined}      | ${'instanceIdTest'} | ${undefined}      | ${undefined}          | ${undefined}
-  ${{ sth: 'sth' }} | ${'instanceIdTest'} | ${{ sth: 'sth' }} | ${undefined}          | ${undefined}
-
-  ${undefined}      | ${'instanceIdTest'} | ${undefined}      | ${{}}                 | ${undefined}
-  ${{ sth: 'sth' }} | ${'instanceIdTest'} | ${{ sth: 'sth' }} | ${{}}                 | ${undefined}
-
-  ${undefined}      | ${42}               | ${undefined}      | ${undefined}          | ${42}
-  ${{ sth: 'sth' }} | ${42}               | ${{ sth: 'sth' }} | ${undefined}          | ${42}
-
-  ${undefined}      | ${42}               | ${undefined}      | ${{}}                 | ${42}
-  ${{ sth: 'sth' }} | ${42}               | ${{ sth: 'sth' }} | ${{}}                 | ${42}
-
-  ${undefined}      | ${'instanceIdTest'} | ${undefined}      | ${undefined}          | ${undefined}
-  ${{ sth: 'sth' }} | ${'instanceIdTest'} | ${{ sth: 'sth' }} | ${undefined}          | ${undefined}
-
-  ${undefined}      | ${'instanceIdTest'} | ${undefined}      | ${{}}                 | ${undefined}
-  ${{ sth: 'sth' }} | ${'instanceIdTest'} | ${{ sth: 'sth' }} | ${{}}                 | ${undefined}
-
-  ${undefined}      | ${42}               | ${undefined}      | ${undefined}          | ${42}
-  ${{ sth: 'sth' }} | ${42}               | ${{ sth: 'sth' }} | ${undefined}          | ${42}
-
-  ${undefined}      | ${42}               | ${undefined}      | ${{}}                 | ${42}
-  ${{ sth: 'sth' }} | ${42}               | ${{ sth: 'sth' }} | ${{}}                 | ${42}
-
-  `('getDossierInstanceDefinition should work as expected',
+    expectedBody      | expectedInstanceId  | bodyParam         | manipulationsXMLParam | preparedInstanceIdParam
+    ${undefined}      | ${'instanceIdTest'} | ${undefined}      | ${undefined}          | ${undefined}
+    ${{ sth: 'sth' }} | ${'instanceIdTest'} | ${{ sth: 'sth' }} | ${undefined}          | ${undefined}
+    ${undefined}      | ${'instanceIdTest'} | ${undefined}      | ${{}}                 | ${undefined}
+    ${{ sth: 'sth' }} | ${'instanceIdTest'} | ${{ sth: 'sth' }} | ${{}}                 | ${undefined}
+    ${undefined}      | ${42}               | ${undefined}      | ${undefined}          | ${42}
+    ${{ sth: 'sth' }} | ${42}               | ${{ sth: 'sth' }} | ${undefined}          | ${42}
+    ${undefined}      | ${42}               | ${undefined}      | ${{}}                 | ${42}
+    ${{ sth: 'sth' }} | ${42}               | ${{ sth: 'sth' }} | ${{}}                 | ${42}
+    ${undefined}      | ${'instanceIdTest'} | ${undefined}      | ${undefined}          | ${undefined}
+    ${{ sth: 'sth' }} | ${'instanceIdTest'} | ${{ sth: 'sth' }} | ${undefined}          | ${undefined}
+    ${undefined}      | ${'instanceIdTest'} | ${undefined}      | ${{}}                 | ${undefined}
+    ${{ sth: 'sth' }} | ${'instanceIdTest'} | ${{ sth: 'sth' }} | ${{}}                 | ${undefined}
+    ${undefined}      | ${42}               | ${undefined}      | ${undefined}          | ${42}
+    ${{ sth: 'sth' }} | ${42}               | ${{ sth: 'sth' }} | ${undefined}          | ${42}
+    ${undefined}      | ${42}               | ${undefined}      | ${{}}                 | ${42}
+    ${{ sth: 'sth' }} | ${42}               | ${{ sth: 'sth' }} | ${{}}                 | ${42}
+  `(
+    'getDossierInstanceDefinition should work as expected',
     async ({
       expectedBody,
       expectedInstanceId,
       bodyParam,
       manipulationsXMLParam,
-      preparedInstanceIdParam
+      preparedInstanceIdParam,
     }) => {
-    // given
+      // given
       if (manipulationsXMLParam) {
         manipulationsXMLParam.manipulations = 'manipulationsTest';
         manipulationsXMLParam.promptAnswers = 'promptAnswersTest';
@@ -158,11 +161,13 @@ describe('DossierInstanceDefinition', () => {
       // Mock the createDossierInstance function to return a predefined instance
       mockCreateDossierInstance.mockResolvedValue({ mid: expectedInstanceId });
 
-      jest.spyOn(visualizationInfoService, 'getVisualizationInfo').mockReturnValue('getVisualizationInfoTest');
+      jest
+        .spyOn(visualizationInfoService, 'getVisualizationInfo')
+        .mockReturnValue('getVisualizationInfoTest');
 
-      jest.spyOn(mstrObjectRestService, 'fetchVisualizationDefinition').mockReturnValue(
-        { sth: 'fetchVisualizationDefinitionTest' }
-      );
+      jest
+        .spyOn(mstrObjectRestService, 'fetchVisualizationDefinition')
+        .mockReturnValue({ sth: 'fetchVisualizationDefinitionTest' });
 
       jest.spyOn(dossierInstanceDefinition, 'getVisualizationErrorType').mockImplementation();
 
@@ -182,7 +187,11 @@ describe('DossierInstanceDefinition', () => {
       if (preparedInstanceIdParam) {
         expect(mstrObjectRestService.createDossierInstance).not.toBeCalled();
       } else {
-        expect(mstrObjectRestService.createDossierInstance).toBeCalledWith('projectIdTest', 'objectIdTest', expectedBody);
+        expect(mstrObjectRestService.createDossierInstance).toBeCalledWith(
+          'projectIdTest',
+          'objectIdTest',
+          expectedBody
+        );
       }
 
       expect(visualizationInfoService.getVisualizationInfo).toBeCalledTimes(1);
@@ -202,7 +211,7 @@ describe('DossierInstanceDefinition', () => {
         dossierData: 'dossierDataTest',
         body: expectedBody,
         visualizationInfo: 'getVisualizationInfoTest',
-        displayAttrFormNames: 'displayAttrFormNamesTest'
+        displayAttrFormNames: 'displayAttrFormNamesTest',
       });
 
       expect(dossierInstanceDefinition.getVisualizationErrorType).not.toBeCalled();
@@ -211,41 +220,35 @@ describe('DossierInstanceDefinition', () => {
       expect(result.visualizationInfo).toEqual('getVisualizationInfoTest');
       expect(result.instanceDefinition).toEqual({
         sth: 'fetchVisualizationDefinitionTest',
-        instanceId: expectedInstanceId
+        instanceId: expectedInstanceId,
       });
-    });
+    }
+  );
 
   it.each`
-  expectedErrorType | error
-  
-  ${undefined}                  | ${undefined}
-  ${undefined}                  | ${{ sth: 'sth' }}
-  ${'typeTest'}                 | ${{ type: 'typeTest' }}
-  ${undefined}                  | ${{ message: '' }}
-  ${undefined}                  | ${{ message: 'messageTest' }}
-  ${'typeTest'}                 | ${{ type: 'typeTest', message: '' }}
-  ${'typeTest'}                 | ${{ type: 'typeTest', message: 'messageTest' }}
-
-  ${errorTypes.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: `test1 ${incomingErrorStrings.INVALID_VIZ_KEY} test1` }}
-
-  ${'typeTest'}                 | ${{ type: 'typeTest', response: 'test' }}
-  ${'typeTest'}                 | ${{ type: 'typeTest', response: { body: 'test' } }}
-  ${'typeTest'}                 | ${{ type: 'typeTest', response: { body: { message: 'test' } } }}
-
-  ${errorTypes.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: 'testMessage', response: { body: { message: `test2 ${incomingErrorStrings.INVALID_VIZ_KEY} test2` } } }}
-  ${errorTypes.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: 'testMessage', response: { body: { message: `test2 ${incomingErrorStrings.INVALID_VIZ_KEY} test2` } } }}
-
-  ${errorTypes.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: `test1 ${incomingErrorStrings.INVALID_VIZ_KEY} test1`, response: 'test' }}
-  ${errorTypes.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: `test1 ${incomingErrorStrings.INVALID_VIZ_KEY} test1`, response: { body: 'test' } }}
-  ${errorTypes.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: `test1 ${incomingErrorStrings.INVALID_VIZ_KEY} test1`, response: { body: { message: 'test' } } }}
-  ${errorTypes.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: `test1 ${incomingErrorStrings.INVALID_VIZ_KEY} test1`, response: { body: { message: `test2 ${incomingErrorStrings.INVALID_VIZ_KEY} test2` } } }}
-  
-  `('getVisualizationErrorType work as expected',
-    ({ expectedErrorType, error }) => {
+    expectedErrorType             | error
+    ${undefined}                  | ${undefined}
+    ${undefined}                  | ${{ sth: 'sth' }}
+    ${'typeTest'}                 | ${{ type: 'typeTest' }}
+    ${undefined}                  | ${{ message: '' }}
+    ${undefined}                  | ${{ message: 'messageTest' }}
+    ${'typeTest'}                 | ${{ type: 'typeTest', message: '' }}
+    ${'typeTest'}                 | ${{ type: 'typeTest', message: 'messageTest' }}
+    ${errorTypes.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: `test1 ${incomingErrorStrings.INVALID_VIZ_KEY} test1` }}
+    ${'typeTest'}                 | ${{ type: 'typeTest', response: 'test' }}
+    ${'typeTest'}                 | ${{ type: 'typeTest', response: { body: 'test' } }}
+    ${'typeTest'}                 | ${{ type: 'typeTest', response: { body: { message: 'test' } } }}
+    ${errorTypes.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: 'testMessage', response: { body: { message: `test2 ${incomingErrorStrings.INVALID_VIZ_KEY} test2` } } }}
+    ${errorTypes.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: 'testMessage', response: { body: { message: `test2 ${incomingErrorStrings.INVALID_VIZ_KEY} test2` } } }}
+    ${errorTypes.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: `test1 ${incomingErrorStrings.INVALID_VIZ_KEY} test1`, response: 'test' }}
+    ${errorTypes.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: `test1 ${incomingErrorStrings.INVALID_VIZ_KEY} test1`, response: { body: 'test' } }}
+    ${errorTypes.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: `test1 ${incomingErrorStrings.INVALID_VIZ_KEY} test1`, response: { body: { message: 'test' } } }}
+    ${errorTypes.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: `test1 ${incomingErrorStrings.INVALID_VIZ_KEY} test1`, response: { body: { message: `test2 ${incomingErrorStrings.INVALID_VIZ_KEY} test2` } } }}
+  `('getVisualizationErrorType work as expected', ({ expectedErrorType, error }) => {
     // when
-      const result = dossierInstanceDefinition.getVisualizationErrorType(error);
+    const result = dossierInstanceDefinition.getVisualizationErrorType(error);
 
-      // then
-      expect(result).toEqual(expectedErrorType);
-    });
+    // then
+    expect(result).toEqual(expectedErrorType);
+  });
 });

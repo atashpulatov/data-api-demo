@@ -1,6 +1,7 @@
 import { createStore } from 'redux';
-import { configReducer } from '../../../redux-reducer/config-reducer/config-reducer';
+
 import { configActions } from '../../../redux-reducer/config-reducer/config-actions';
+import { configReducer } from '../../../redux-reducer/config-reducer/config-reducer';
 
 describe('officeReducer', () => {
   const configStore = createStore(configReducer);
@@ -8,7 +9,7 @@ describe('officeReducer', () => {
   beforeEach(() => {
     // default state should be empty
     expect(configStore.getState()).toEqual({
-      showHidden: false
+      showHidden: false,
     });
   });
 
