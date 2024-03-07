@@ -67,7 +67,7 @@ export const notificationReducer = (state = initialState, action = {}) => {
       return createGlobalNotification(state, payload);
 
     case REMOVE_GLOBAL_NOTIFICATION:
-      return removeGlobalNotification(state, payload);
+      return removeGlobalNotification(state);
 
     case officeProperties.actions.toggleSecuredFlag:
       return deleteAllNotifications(action, state);
