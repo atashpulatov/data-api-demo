@@ -47,7 +47,7 @@ describe('Dossierwindow', () => {
     expect(popupHelper.officeMessageParent).toHaveBeenCalledWith(message);
   });
 
-  it('should call installSessionProlongingHandler on mount', async () => {
+  it('should call installSessionProlongingHandler on mount', () => {
     // given
     jest.spyOn(sessionHelper, 'installSessionProlongingHandler');
 
