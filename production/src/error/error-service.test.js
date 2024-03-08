@@ -1,18 +1,18 @@
-import { notificationService } from '../../notification/notification-service';
-import { sessionHelper } from '../../storage/session-helper';
+import { notificationService } from '../notification/notification-service';
+import { sessionHelper } from '../storage/session-helper';
 
-import { reduxStore } from '../../store';
+import { reduxStore } from '../store';
 
-import { errorService } from '../../error/error-handler';
-import { OutsideOfRangeError } from '../../error/outside-of-range-error';
-import { PopupTypeEnum } from '../../home/popup-type-enum';
-import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-import { popupController } from '../../popup/popup-controller';
-import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
-import { errorTypes } from '../../error/constants';
-import * as Constants from '../../error/constants';
+import { PopupTypeEnum } from '../home/popup-type-enum';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { popupController } from '../popup/popup-controller';
+import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
+import { errorService } from './error-handler';
+import { OutsideOfRangeError } from './outside-of-range-error';
+import { errorTypes } from './constants';
+import * as Constants from './constants';
 
-jest.mock('../../storage/session-helper');
+jest.mock('../storage/session-helper');
 jest.useFakeTimers();
 
 // TODO fix after adding object notifications

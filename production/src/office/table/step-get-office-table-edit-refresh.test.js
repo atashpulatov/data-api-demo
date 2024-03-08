@@ -1,11 +1,11 @@
-import getOfficeTableHelper from '../../../office/table/get-office-table-helper';
+import getOfficeTableHelper from './get-office-table-helper';
 
-import officeTableCreate from '../../../office/table/office-table-create';
-import officeTableRefresh from '../../../office/table/office-table-refresh';
-import officeTableUpdate from '../../../office/table/office-table-update';
-import stepGetOfficeTableEditRefresh from '../../../office/table/step-get-office-table-edit-refresh';
-import operationErrorHandler from '../../../operation/operation-error-handler';
-import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
+import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import officeTableCreate from './office-table-create';
+import officeTableRefresh from './office-table-refresh';
+import officeTableUpdate from './office-table-update';
+import stepGetOfficeTableEditRefresh from './step-get-office-table-edit-refresh';
 
 describe('StepGetOfficeTableEditRefresh', () => {
   const mockFn = jest.fn();

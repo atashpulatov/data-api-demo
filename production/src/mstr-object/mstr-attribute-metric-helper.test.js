@@ -1,8 +1,7 @@
 import mstrAttributeMetricHelper from './helper/mstr-attribute-metric-helper';
 
-import compoundJSONwithMetricsInRows from '../_tests_/mstr-object/compound-grid/Compound Grid with Metrics on Row.json';
-import regularCompoundJSON from '../_tests_/mstr-object/compound-grid/Regular Compound Grid.json';
-
+import compoundJSONwithMetricsInRows from '../../__mocks__/compound-grid/Compound Grid with Metrics on Row.json';
+import regularCompoundJSON from '../../__mocks__/compound-grid/Regular Compound Grid.json';
 import {
   dossierWithMetricsInRows,
   reportV2,

@@ -1,7 +1,7 @@
-import officeStoreObject from '../../../office/store/office-store-object';
-import stepSaveObjectInExcel from '../../../office/store/step-save-object-in-excel';
+import officeStoreObject from './office-store-object';
 
-import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import stepSaveObjectInExcel from './step-save-object-in-excel';
 
 describe('StepSaveObjectInExcel', () => {
   let dateOriginal;

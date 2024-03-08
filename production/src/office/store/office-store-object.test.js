@@ -1,11 +1,11 @@
 /* eslint-disable no-import-assign */
-import officeStoreHelper from '../../../office/store/office-store-helper';
+import officeStoreHelper from './office-store-helper';
 
-import officeStoreObject from '../../../office/store/office-store-object';
-import { reduxStore } from '../../../store';
+import { reduxStore } from '../../store';
+import officeStoreObject from './office-store-object';
 
-import { errorService } from '../../../error/error-handler';
-import * as objectActions from '../../../redux-reducer/object-reducer/object-actions';
+import { errorService } from '../../error/error-handler';
+import * as objectActions from '../../redux-reducer/object-reducer/object-actions';
 
 const internalData = {};
 

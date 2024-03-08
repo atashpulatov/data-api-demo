@@ -1,18 +1,18 @@
 import mstrAttributeFormHelper from '../mstr-object/helper/mstr-attribute-form-helper';
 import officeConverter from './office-converter-service-v2';
 
-import response from '../../mstr-object/rest-api-v2.json';
-import regularCompoundJSON from '../mstr-object/compound-grid/Regular Compound Grid.json';
 import mstrCompoundGridHandler from '../mstr-object/handler/mstr-compound-grid-handler';
 import mstrGridHandler from '../mstr-object/handler/mstr-grid-handler';
 import jsonHandler from '../mstr-object/handler/mstr-normalized-json-handler';
-import microchartsExamples from '../mstr-object/microcharts/MicroChart Examples.json';
 
 import {
   columnInformationMock,
   expectedColumnNoSplit,
   expectedColumnSplit,
 } from '../../__mocks__/column-information-mock';
+import regularCompoundJSON from '../../__mocks__/compound-grid/Regular Compound Grid.json';
+import microchartsExamples from '../../__mocks__/microcharts/MicroChart Examples.json';
+import response from '../../__mocks__/rest-api-v2.json';
 
 describe('Office converter service v2', () => {
   it('should return create a table', () => {

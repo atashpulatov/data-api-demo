@@ -1,13 +1,13 @@
 /* eslint-disable no-import-assign */
-import officeStoreHelper from '../../../office/store/office-store-helper';
+import officeStoreHelper from './office-store-helper';
 
-import officeStoreRestoreObject from '../../../office/store/office-store-restore-object';
-import { reduxStore } from '../../../store';
+import { reduxStore } from '../../store';
+import officeStoreRestoreObject from './office-store-restore-object';
 
-import { errorService } from '../../../error/error-handler';
-import * as answersActions from '../../../redux-reducer/answers-reducer/answers-actions';
-import * as objectActions from '../../../redux-reducer/object-reducer/object-actions';
-import { officeProperties } from '../../../redux-reducer/office-reducer/office-properties';
+import { errorService } from '../../error/error-handler';
+import * as answersActions from '../../redux-reducer/answers-reducer/answers-actions';
+import * as objectActions from '../../redux-reducer/object-reducer/object-actions';
+import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 
 const internalData = {};
 

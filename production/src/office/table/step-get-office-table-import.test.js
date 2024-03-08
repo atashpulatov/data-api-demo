@@ -1,7 +1,7 @@
-import officeTableCreate from '../../../office/table/office-table-create';
-import stepGetOfficeTableImport from '../../../office/table/step-get-office-table-import';
-import operationErrorHandler from '../../../operation/operation-error-handler';
-import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
+import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import officeTableCreate from './office-table-create';
+import stepGetOfficeTableImport from './step-get-office-table-import';
 
 describe('StepGetOfficeTableImport', () => {
   afterEach(() => {

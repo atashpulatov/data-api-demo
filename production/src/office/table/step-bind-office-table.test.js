@@ -1,10 +1,10 @@
-import { officeApiHelper } from '../../../office/api/office-api-helper';
+import { officeApiHelper } from '../api/office-api-helper';
 
-import officeApiDataLoader from '../../../office/api/office-api-data-loader';
-import stepBindOfficeTable from '../../../office/table/step-bind-office-table';
-import operationErrorHandler from '../../../operation/operation-error-handler';
-import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
-import { EDIT_OPERATION, REFRESH_OPERATION } from '../../../operation/operation-type-names';
+import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import { EDIT_OPERATION, REFRESH_OPERATION } from '../../operation/operation-type-names';
+import officeApiDataLoader from '../api/office-api-data-loader';
+import stepBindOfficeTable from './step-bind-office-table';
 
 describe('StepBindOfficeTable', () => {
   afterEach(() => {
