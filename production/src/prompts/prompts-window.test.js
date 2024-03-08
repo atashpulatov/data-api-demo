@@ -9,7 +9,7 @@ import { reduxStore } from '../store';
 
 import { PromptsWindowNotConnected } from './prompts-window';
 
-jest.mock('../../popup/popup-helper');
+jest.mock('../popup/popup-helper');
 
 describe('PromptsWindowNotConnected', () => {
   const mstrData = {

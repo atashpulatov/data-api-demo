@@ -13,14 +13,14 @@ import {
 } from '../redux-reducer/popup-reducer/popup-actions';
 import { popupController } from './popup-controller';
 
-jest.mock('../../office/api/office-api-helper');
-jest.mock('../../authentication/authentication-helper');
-jest.mock('../../office/store/office-reducer-helper');
-jest.mock('../../popup/popup-controller');
-jest.mock('../../error/error-handler');
-jest.mock('../../store');
-jest.mock('../../mstr-object/mstr-object-rest-service');
-jest.mock('../../mstr-object/visualization-info-service');
+jest.mock('../office/api/office-api-helper');
+jest.mock('../authentication/authentication-helper');
+jest.mock('../office/store/office-reducer-helper');
+jest.mock('../popup/popup-controller');
+jest.mock('../error/error-handler');
+jest.mock('../store');
+jest.mock('../mstr-object/mstr-object-rest-service');
+jest.mock('../mstr-object/visualization-info-service');
 
 const { createDossierInstance } = mstrObjectRestService;
 const { getVisualizationInfo } = visualizationInfoService;

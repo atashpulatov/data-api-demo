@@ -12,8 +12,8 @@ import { configActions } from '../redux-reducer/config-reducer/config-actions';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import { objectImportType } from '../mstr-object/constants';
 
-jest.mock('../../storage/session-helper');
-jest.mock('../../redux-reducer/session-reducer/session-actions');
+jest.mock('../storage/session-helper');
+jest.mock('../redux-reducer/session-reducer/session-actions');
 
 describe('HomeHelper', () => {
   beforeAll(() => {

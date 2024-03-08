@@ -3,9 +3,9 @@ import officeReducerHelper from '../office/store/office-reducer-helper';
 
 import { errorService } from './error-handler';
 
-jest.mock('../../office/store/office-reducer-helper');
-jest.mock('../../store');
-jest.mock('../../notification-v2/notification-service');
+jest.mock('../office/store/office-reducer-helper');
+jest.mock('../store');
+jest.mock('../notification/notification-service');
 
 describe('ErrorService', () => {
   beforeEach(() => {

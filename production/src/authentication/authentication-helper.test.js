@@ -6,10 +6,10 @@ import { reduxStore } from '../store';
 import { errorService } from '../error/error-handler';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 
-jest.mock('../../error/error-handler');
-jest.mock('../../authentication/auth-rest-service');
-jest.mock('../../storage/session-helper');
-jest.mock('../../redux-reducer/session-reducer/session-actions');
+jest.mock('../error/error-handler');
+jest.mock('../authentication/auth-rest-service');
+jest.mock('../storage/session-helper');
+jest.mock('../redux-reducer/session-reducer/session-actions');
 
 describe('loginUser', () => {
   beforeAll(() => {

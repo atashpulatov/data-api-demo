@@ -8,8 +8,8 @@ import { reduxStore } from '../store';
 
 import { AttributeSelectorWindowNotConnected } from './attribute-selector-window';
 
-jest.mock('../../office/office-context');
-jest.mock('../../popup/popup-helper');
+jest.mock('../office/office-context');
+jest.mock('../popup/popup-helper');
 
 describe('AttributeSelectorWindow', () => {
   it('should render attribute selector elements', () => {
