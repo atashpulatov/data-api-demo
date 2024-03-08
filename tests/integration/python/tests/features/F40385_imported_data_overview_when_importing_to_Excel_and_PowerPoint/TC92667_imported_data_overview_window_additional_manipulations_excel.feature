@@ -75,8 +75,8 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
       And I waited for all objects to be refreshed successfully
 
      When I selected object "9" using object checkbox in Overview window
-     Then I verified "Re-prompt" button in Overview window is enabled
-      And I clicked "Re-prompt" button in Overview window
+     Then I verified "Re-Prompt" button in Overview window is enabled
+      And I clicked "Re-Prompt" button in Overview window
       And I unselected "Books" as an answer for "1. Category" prompt - object prompt
       And I selected "Movies" as an answer for "1. Category" prompt - object prompt
       And I clicked Apply button
