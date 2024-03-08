@@ -7,7 +7,7 @@ import { OverflowTooltip } from '@mstr/rc';
 
 import PropTypes from 'prop-types';
 import getDocumentationLocale from '../helpers/get-documentation-locale';
-import { notificationService } from '../notification-v2/notification-service';
+import { notificationService } from '../notification/notification-service';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { sessionHelper } from '../storage/session-helper';
 

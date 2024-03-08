@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { PopupTypes, SidePanel } from '@mstr/connector-components';
 
 import PropTypes from 'prop-types';
-import { notificationService } from '../notification-v2/notification-service';
+import { notificationService } from '../notification/notification-service';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import officeStoreHelper from '../office/store/office-store-helper';

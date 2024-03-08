@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { ObjectNotificationTypes } from '@mstr/connector-components';
 
-import { notificationService } from '../../notification-v2/notification-service';
+import { notificationService } from '../../notification/notification-service';
 
 import { customT } from '../../customTranslation';
-import { getNotificationButtons } from '../../notification-v2/notification-buttons';
+import { getNotificationButtons } from '../../notification/notification-buttons';
 import {
   DISPLAY_NOTIFICATION_COMPLETED,
   FETCH_INSERT_DATA,

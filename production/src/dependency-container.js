@@ -4,7 +4,7 @@ import { homeHelper } from './home/home-helper';
 import { userRestService } from './home/user-rest-service';
 import { mstrObjectRestService } from './mstr-object/mstr-object-rest-service';
 import { visualizationInfoService } from './mstr-object/visualization-info-service';
-import { notificationService } from './notification-v2/notification-service';
+import { notificationService } from './notification/notification-service';
 import { officeApiHelper } from './office/api/office-api-helper';
 import officeReducerHelper from './office/store/office-reducer-helper';
 import officeStoreHelper from './office/store/office-store-helper';

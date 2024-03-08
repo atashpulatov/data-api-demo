@@ -2,7 +2,7 @@ import officeReducerHelper from '../office/store/office-reducer-helper';
 
 import { customT } from '../customTranslation';
 import { PopupTypeEnum } from '../home/popup-type-enum';
-import { getNotificationButtons } from '../notification-v2/notification-buttons';
+import { getNotificationButtons } from '../notification/notification-buttons';
 import {
   DUPLICATE_OPERATION,
   EDIT_OPERATION,

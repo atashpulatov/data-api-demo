@@ -2,7 +2,7 @@ import { PopupTypes } from '@mstr/connector-components';
 
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { homeHelper } from '../home/home-helper';
-import { notificationService } from '../notification-v2/notification-service';
+import { notificationService } from '../notification/notification-service';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { sidePanelService } from './side-panel-service';
