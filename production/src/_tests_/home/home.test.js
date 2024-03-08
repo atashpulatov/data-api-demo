@@ -20,8 +20,8 @@ describe('HomeNotConnected', () => {
     );
 
     // then
-    getByText('Excel');
-    getByText('Username');
+    expect(getByText('Excel')).toBeInTheDocument();
+    expect(getByText('Username')).toBeInTheDocument();
     expect(sessionRestoredSpy).toHaveBeenCalled();
   });
 
