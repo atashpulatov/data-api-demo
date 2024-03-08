@@ -1,6 +1,6 @@
 import { GlobalNotificationTypes, ObjectNotificationTypes } from '@mstr/connector-components';
 
-import { notificationService } from '../../notification-v2/notification-service';
+import { notificationService } from '../../notification/notification-service';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-notification-helper';
 import { sidePanelService } from '../../right-side-panel/side-panel-service';
@@ -22,7 +22,7 @@ import {
   mockedNotificationsFromStore,
   mockedObjectsFromStore,
   mockedWarningImportNotification,
-} from '../../_tests_/mockDataV2';
+} from '../../../__mocks__/mockDataV2';
 
 describe('overview-helper', () => {
   const objectWorkingIds = [1, 2];

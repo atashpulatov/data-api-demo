@@ -1,6 +1,6 @@
 import request from 'superagent';
 
-import { notificationService } from '../notification-v2/notification-service';
+import { notificationService } from '../notification/notification-service';
 
 class AuthenticationHelper {
   reduxStore: any;
