@@ -9,13 +9,30 @@ jest.mock('../../home/home-helper');
 describe('Home', () => {
   it('should render home component and side panel', () => {
     // given
+
     // when
     const { getByText } = render(
       <Provider store={reduxStore}>
-        <HomeNotConnected authToken="testToken" />
+        <HomeNotConnected />
       </Provider>,
     );
+
     // then
-    getByText('MicroStrategy for Office');
+    getByText('Excel');
+    getByText('Username');
+  });
+
+  it('should render no rights message if no authToken is provided', () => {
+    // given
+
+    // when
+    const { getByText } = render(
+      <Provider store={reduxStore}>
+        <HomeNotConnected authToken="noRightsToken" />
+      </Provider>,
+    );
+
+    // then
+    getByText('You do not have the rights to access MicroStrategy for Office');
   });
 });
