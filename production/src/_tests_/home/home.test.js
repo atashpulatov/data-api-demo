@@ -10,6 +10,7 @@ jest.mock('../../home/home-helper');
 describe('HomeNotConnected', () => {
   it('should render home component and side panel', () => {
     // given
+    const sessionRestoredSpy = jest.spyOn(notificationService, 'sessionRestored');
 
     // when
     const { getByText } = render(
@@ -21,6 +22,7 @@ describe('HomeNotConnected', () => {
     // then
     getByText('Excel');
     getByText('Username');
+    expect(sessionRestoredSpy).toHaveBeenCalled();
   });
 
   it('should render no rights message if no authToken is provided', () => {
@@ -55,34 +57,9 @@ describe('HomeNotConnected', () => {
         <HomeNotConnected {...props} />
       </Provider>,
     );
-
-    // simulate offline event
     window.dispatchEvent(new Event('offline'));
 
     // then
     expect(connectionLostSpy).toHaveBeenCalled();
-  });
-
-  it('should call sessionRestored when authToken is null', () => {
-    // given
-    const sessionRestoredSpy = jest.spyOn(notificationService, 'sessionRestored');
-    const props = {
-      loading: false,
-      isDialogOpen: false,
-      authToken: null,
-      hideDialog: jest.fn(),
-      toggleIsSettingsFlag: jest.fn(),
-      clearDialogState: jest.fn()
-    };
-
-    // when
-    render(
-      <Provider store={reduxStore}>
-        <HomeNotConnected {...props} />
-      </Provider>,
-    );
-
-    // then
-    expect(sessionRestoredSpy).toHaveBeenCalled();
   });
 });
