@@ -21,9 +21,7 @@ class StepApplyFormatting {
     console.group('Apply formatting');
     console.time('Total');
 
-    const {
-      objectWorkingId, officeTable, instanceDefinition, excelContext
-    } = operationData;
+    const { objectWorkingId, officeTable, instanceDefinition, excelContext } = operationData;
 
     const { columns } = instanceDefinition;
     const { columnInformation, isCrosstab, metricsInRows } = instanceDefinition.mstrTable;
@@ -34,7 +32,13 @@ class StepApplyFormatting {
 
       await excelContext.sync();
       await this.setupFormatting(
-        filteredColumnInformation, isCrosstab, offset, officeTable, excelContext, columns, metricsInRows
+        filteredColumnInformation,
+        isCrosstab,
+        offset,
+        officeTable,
+        excelContext,
+        columns,
+        metricsInRows
       );
 
       await excelContext.sync();
@@ -59,7 +63,10 @@ class StepApplyFormatting {
    */
   calculateMetricColumnOffset = (columnInformation, isCrosstab) => {
     if (isCrosstab) {
-      return Math.max(columnInformation.findIndex(col => !col.isAttribute), 0);
+      return Math.max(
+        columnInformation.findIndex(col => !col.isAttribute),
+        0
+      );
     }
     return 0;
   };
@@ -76,12 +83,23 @@ class StepApplyFormatting {
    * @param {Boolean} metricsInRows Specify if metrics are present in rows
    */
   setupFormatting = async (
-    filteredColumnInformation, isCrosstab, offset, officeTable, excelContext, columns, metricsInRows
+    filteredColumnInformation,
+    isCrosstab,
+    offset,
+    officeTable,
+    excelContext,
+    columns,
+    metricsInRows
   ) => {
     for (let index = 0; index < filteredColumnInformation.length; index++) {
       const object = filteredColumnInformation[index];
       const columnRange = this.getColumnRangeForFormatting(
-        index, isCrosstab, offset, officeTable, columns, metricsInRows
+        index,
+        isCrosstab,
+        offset,
+        officeTable,
+        columns,
+        metricsInRows
       );
       if (object.isAttribute) {
         await officeFormatHyperlinks.formatColumnAsHyperlinks(object, columnRange, excelContext);
@@ -108,7 +126,14 @@ class StepApplyFormatting {
    * @param {Boolean} metricsInRows Specify if metrics are present in rows
    * @returns {Office} Columns range to apply formatting to
    */
-  getColumnRangeForFormatting = (index, isCrosstab, offset, officeTable, columns, metricsInRows) => {
+  getColumnRangeForFormatting = (
+    index,
+    isCrosstab,
+    offset,
+    officeTable,
+    columns,
+    metricsInRows
+  ) => {
     const objectIndex = isCrosstab ? index - offset : index + offset;
     // Crosstab
     if (isCrosstab && index < offset) {
@@ -121,7 +146,10 @@ class StepApplyFormatting {
         return officeTable.rows.getItemAt(objectIndex).getRange();
       }
 
-      return officeTable.rows.getItemAt(objectIndex).getRange().getOffsetRange(0, columns - 1);
+      return officeTable.rows
+        .getItemAt(objectIndex)
+        .getRange()
+        .getOffsetRange(0, columns - 1);
     }
 
     // Tabular
@@ -134,7 +162,8 @@ class StepApplyFormatting {
    * @param {Array} columnInformation Columns data
    * @return {Array} filteredColumnInformation Filtered columnInformation
    */
-  filterColumnInformation = (columnInformation) => columnInformation.filter((col) => Object.keys(col).length !== 0);
+  filterColumnInformation = columnInformation =>
+    columnInformation.filter(col => Object.keys(col).length !== 0);
 
   /**
    * Returns Excel format string based on MicroStrategy format string.
@@ -158,7 +187,8 @@ class StepApplyFormatting {
 
     // Normalizing formatString from MicroStrategy when locale codes are used [$-\d+]
     if (formatString && formatString.indexOf('$') !== -1) {
-      return formatString.replace(/\[\$-/g, '[$$$$-')
+      return formatString
+        .replace(/\[\$-/g, '[$$$$-')
         .replace(/\$/g, '\\$')
         .replace(/\\\$\\\$/g, '$')
         .replace(/"/g, '');

@@ -1,5 +1,8 @@
 import {
-  IMPORT_OPERATION, REFRESH_OPERATION, EDIT_OPERATION, DUPLICATE_OPERATION
+  DUPLICATE_OPERATION,
+  EDIT_OPERATION,
+  IMPORT_OPERATION,
+  REFRESH_OPERATION,
 } from './operation-type-names';
 import { objectImportType } from '../mstr-object/constants';
 
@@ -81,7 +84,7 @@ const loadingStateEnumWeights = {
       GET_OBJECT_DETAILS: 35,
       MANIPULATE_VISUALIZATION_IMAGE: 40,
       SAVE_OBJECT_IN_EXCEL: 90,
-      DISPLAY_NOTIFICATION_COMPLETED: 100
+      DISPLAY_NOTIFICATION_COMPLETED: 100,
     },
     [DUPLICATE_OPERATION]: {
       MODIFY_OBJECT: 10,
@@ -90,15 +93,13 @@ const loadingStateEnumWeights = {
       GET_OBJECT_DETAILS: 40,
       MANIPULATE_VISUALIZATION_IMAGE: 50,
       SAVE_OBJECT_IN_EXCEL: 90,
-      DISPLAY_NOTIFICATION_COMPLETED: 100
-    }
-  }
+      DISPLAY_NOTIFICATION_COMPLETED: 100,
+    },
+  },
 };
 
 export const calculateLoadingProgress = (objectOperation, importType = objectImportType.TABLE) => {
-  const {
-    operationType, stepsQueue, loadedRows, totalRows
-  } = objectOperation;
+  const { operationType, stepsQueue, loadedRows, totalRows } = objectOperation;
 
   const step = stepsQueue[0];
 

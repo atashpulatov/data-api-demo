@@ -3,7 +3,7 @@
  *
  * @param response readable image stream
  */
-export const convertImageToBase64 = async (response) => {
+export const convertImageToBase64 = async response => {
   const arrayBuffer = await response.arrayBuffer();
   const uint8Array = new Uint8Array(arrayBuffer);
   const binaryString = uint8Array.reduce((str, byte) => str + String.fromCharCode(byte), '');
@@ -19,7 +19,7 @@ export const convertImageToBase64 = async (response) => {
  * @param {Number} points css points
  * @returns {Number} pixel value
  */
-export const convertPointsToPixels = (points) => {
+export const convertPointsToPixels = points => {
   if (!points) {
     return -1;
   }
@@ -35,7 +35,7 @@ export const convertPointsToPixels = (points) => {
  * @param {Number} pixels css pixels
  * @returns {Number} points value
  */
-export const convertPixelsToPoints = (pixels) => {
+export const convertPixelsToPoints = pixels => {
   if (!pixels) {
     return -1;
   }

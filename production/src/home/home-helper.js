@@ -1,13 +1,15 @@
 import { officeApiHelper } from '../office/api/office-api-helper';
-import { errorService } from '../error/error-handler';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
-import { clearDataRequested } from '../redux-reducer/operation-reducer/operation-actions';
-import { officeActions } from '../redux-reducer/office-reducer/office-actions';
-import { configActions } from '../redux-reducer/config-reducer/config-actions';
-import { officeContext } from '../office/office-context';
-import officeStoreRestoreObject from '../office/store/office-store-restore-object';
-import { objectImportType } from '../mstr-object/constants';
 import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
+
+import officeStoreRestoreObject from '../office/store/office-store-restore-object';
+
+import { errorService } from '../error/error-handler';
+import { officeContext } from '../office/office-context';
+import { configActions } from '../redux-reducer/config-reducer/config-actions';
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
+import { clearDataRequested } from '../redux-reducer/operation-reducer/operation-actions';
+import { objectImportType } from '../mstr-object/constants';
 
 const SHOW_HIDDEN_KEY = 'showHidden';
 const EXCEL_SHAPE_API_VERSION = 1.9;
@@ -29,7 +31,7 @@ export class HomeHelper {
       const currentPath = location.pathname;
       const pathBeginning = currentPath.split('/apps/')[0];
       const envUrl = `${location.origin}${pathBeginning}/api`;
-      const values = { envUrl, };
+      const values = { envUrl };
       this.sessionActions.saveLoginValues(values);
       return values.envUrl;
     }
@@ -38,21 +40,23 @@ export class HomeHelper {
   getParsedCookies = () => {
     // F25871: Unused method since all cookies are set as HttpOnly so we cannot access them with JS
     const cookieJar = this.getDocumentCookie();
-    return cookieJar.split(';')
-      .reduce((res, c) => {
-        const [key, val] = c.trim().split('=').map(decodeURIComponent);
-        const allNumbers = (str) => /^\d+$/.test(str);
-        try {
-          return Object.assign(res, { [key]: allNumbers(val) ? val : JSON.parse(val) });
-        } catch (e) {
-          return Object.assign(res, { [key]: val });
-        }
-      }, {});
+    return cookieJar.split(';').reduce((res, c) => {
+      const [key, val] = c.trim().split('=').map(decodeURIComponent);
+      const allNumbers = str => /^\d+$/.test(str);
+      try {
+        return Object.assign(res, {
+          [key]: allNumbers(val) ? val : JSON.parse(val),
+        });
+      } catch (e) {
+        return Object.assign(res, { [key]: val });
+      }
+    }, {});
   };
 
   storeShowHidden = () => {
     try {
-      const showHiddenOfficeSettings = officeStoreRestoreObject.getExcelSettingValue(SHOW_HIDDEN_KEY);
+      const showHiddenOfficeSettings =
+        officeStoreRestoreObject.getExcelSettingValue(SHOW_HIDDEN_KEY);
       const showHiddenLocalStorage = this.getStorageItem(SHOW_HIDDEN_KEY);
       const showHidden = showHiddenOfficeSettings || showHiddenLocalStorage !== 'false';
       const { dispatch } = this.reduxStore;
@@ -71,7 +75,8 @@ export class HomeHelper {
    * @returns {String} iSession token
    */
   getTokenFromStorage = () => {
-    const iSession = this.getStorageItem('iSession') || officeStoreRestoreObject.getExcelSettingValue('iSession');
+    const iSession =
+      this.getStorageItem('iSession') || officeStoreRestoreObject.getExcelSettingValue('iSession');
     if (iSession) {
       this.sessionActions.logIn(iSession);
       return iSession;
@@ -82,7 +87,7 @@ export class HomeHelper {
 
   getDocumentCookie = () => document.cookie;
 
-  secureData = async (objects) => {
+  secureData = async objects => {
     try {
       const { dispatch } = this.reduxStore;
       officeActions.toggleIsConfirmFlag(false)(dispatch);
@@ -96,12 +101,14 @@ export class HomeHelper {
           // the queue of clear data operation.
           let triggerClearData = true;
           if (object?.importType === objectImportType.IMAGE) {
-            const shapeInWorksheet = object?.bindId && await officeShapeApiHelper.getShape(excelContext, object.bindId);
+            const shapeInWorksheet =
+              object?.bindId && (await officeShapeApiHelper.getShape(excelContext, object.bindId));
             if (!shapeInWorksheet) {
               triggerClearData = false;
             }
           }
-          triggerClearData && this.reduxStore.dispatch(clearDataRequested(object.objectWorkingId, object.importType));
+          triggerClearData &&
+            this.reduxStore.dispatch(clearDataRequested(object.objectWorkingId, object.importType));
         }
       }, 0);
     } catch (error) {

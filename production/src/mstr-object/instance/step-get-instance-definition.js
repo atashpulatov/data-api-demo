@@ -1,16 +1,17 @@
-import { mstrObjectRestService } from '../mstr-object-rest-service';
-import { GET_OFFICE_TABLE_IMPORT } from '../../operation/operation-steps';
+import { authenticationHelper } from '../../authentication/authentication-helper';
+import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
+import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-helper';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
-import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-helper';
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
-import dossierInstanceDefinition from './dossier-instance-definition';
-import mstrObjectEnum from '../mstr-object-type-enum';
-import { authenticationHelper } from '../../authentication/authentication-helper';
+import { mstrObjectRestService } from '../mstr-object-rest-service';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import { GET_OFFICE_TABLE_IMPORT } from '../../operation/operation-steps';
+import mstrObjectEnum from '../mstr-object-type-enum';
+import dossierInstanceDefinition from './dossier-instance-definition';
 import { errorMessages } from '../../error/constants';
-import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
-import { objectImportType, importOperationStepDict } from '../constants';
+import { importOperationStepDict, objectImportType } from '../constants';
 
 class StepGetInstanceDefinition {
   /**
@@ -46,7 +47,7 @@ class StepGetInstanceDefinition {
         mstrObjectType,
         isPrompted,
         definition,
-        importType
+        importType,
       } = objectData;
       let { visualizationInfo, body, name } = objectData;
 
@@ -59,17 +60,26 @@ class StepGetInstanceDefinition {
       let shouldRenameExcelWorksheet = false;
 
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-        ({ body, visualizationInfo, instanceDefinition } = await dossierInstanceDefinition.getDossierInstanceDefinition(
-          { ...objectData, visualizationInfo }
-        ));
+        ({ body, visualizationInfo, instanceDefinition } =
+          await dossierInstanceDefinition.getDossierInstanceDefinition({
+            ...objectData,
+            visualizationInfo,
+          }));
 
-        name = dossierInstanceDefinition.getVisualizationName(operationData, name, instanceDefinition);
+        name = dossierInstanceDefinition.getVisualizationName(
+          operationData,
+          name,
+          instanceDefinition
+        );
       } else {
         instanceDefinition = await mstrObjectRestService.createInstance(objectData);
       }
 
       // TODO check if dossierData is still needed
-      instanceDefinition = await this.modifyInstanceWithPrompt({ instanceDefinition, ...objectData });
+      instanceDefinition = await this.modifyInstanceWithPrompt({
+        instanceDefinition,
+        ...objectData,
+      });
 
       this.savePreviousObjectData(
         instanceDefinition,
@@ -81,12 +91,18 @@ class StepGetInstanceDefinition {
 
       // FIXME: below flow should not be part of this step
       if (futureStep in importOperationStepDict) {
-        startCell = await officeApiWorksheetHelper.getStartCell(importType, insertNewWorksheet, excelContext, name);
+        startCell = await officeApiWorksheetHelper.getStartCell(
+          importType,
+          insertNewWorksheet,
+          excelContext,
+          name
+        );
       }
       if (insertNewWorksheet) {
         delete objectData.insertNewWorksheet;
       } else {
-        shouldRenameExcelWorksheet = await officeApiWorksheetHelper.isActiveWorksheetEmpty(excelContext);
+        shouldRenameExcelWorksheet =
+          await officeApiWorksheetHelper.isActiveWorksheetEmpty(excelContext);
       }
 
       const { mstrTable } = instanceDefinition;
@@ -108,7 +124,7 @@ class StepGetInstanceDefinition {
         objectWorkingId,
         instanceDefinition,
         excelContext,
-        shouldRenameExcelWorksheet
+        shouldRenameExcelWorksheet,
       };
 
       if (importType === objectImportType.TABLE) {
@@ -122,7 +138,9 @@ class StepGetInstanceDefinition {
       }
 
       if (mstrTable.rows.length === 0) {
-        throw new Error(isPrompted ? errorMessages.ALL_DATA_FILTERED_OUT : errorMessages.NO_DATA_RETURNED);
+        throw new Error(
+          isPrompted ? errorMessages.ALL_DATA_FILTERED_OUT : errorMessages.NO_DATA_RETURNED
+        );
       }
 
       operationStepDispatcher.updateOperation(updatedOperation);
@@ -144,9 +162,12 @@ class StepGetInstanceDefinition {
    *
    * @param {Object} body to modify template and requestedObject
    */
-  setupBodyTemplate = (body) => {
+  setupBodyTemplate = body => {
     if (body && body.requestedObjects) {
-      if (body.requestedObjects.attributes.length === 0 && body.requestedObjects.metrics.length === 0) {
+      if (
+        body.requestedObjects.attributes.length === 0 &&
+        body.requestedObjects.metrics.length === 0
+      ) {
         delete body.requestedObjects;
       }
       body.template = body.requestedObjects;
@@ -163,17 +184,15 @@ class StepGetInstanceDefinition {
    * @param {Object} dossierData
    * @param {Object} body Contains requested objects and filters.
    */
-  modifyInstanceWithPrompt = async (
-    {
-      instanceDefinition,
-      objectId,
-      projectId,
-      promptsAnswers,
-      dossierData,
-      body,
-      displayAttrFormNames
-    }
-  ) => {
+  modifyInstanceWithPrompt = async ({
+    instanceDefinition,
+    objectId,
+    projectId,
+    promptsAnswers,
+    dossierData,
+    body,
+    displayAttrFormNames,
+  }) => {
     // Status 2 = report has open prompts to be answered before data can be returned
     if (instanceDefinition.status !== ObjectExecutionStatus.PROMPTED) {
       return instanceDefinition;
@@ -182,12 +201,15 @@ class StepGetInstanceDefinition {
     try {
       let count = 0;
 
-      while (instanceDefinition.status === ObjectExecutionStatus.PROMPTED && count < promptsAnswers.length) {
+      while (
+        instanceDefinition.status === ObjectExecutionStatus.PROMPTED &&
+        count < promptsAnswers.length
+      ) {
         const config = {
           objectId,
           projectId,
           instanceId: instanceDefinition.instanceId,
-          promptsAnswers: promptsAnswers[count]
+          promptsAnswers: promptsAnswers[count],
         };
 
         await mstrObjectRestService.answerPrompts(config);
@@ -196,7 +218,7 @@ class StepGetInstanceDefinition {
           ...config,
           dossierData,
           body,
-          displayAttrFormNames
+          displayAttrFormNames,
         };
 
         if (count === promptsAnswers.length - 1) {

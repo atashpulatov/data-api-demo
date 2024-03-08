@@ -1,12 +1,20 @@
-import { officeShapeApiHelper } from './office-shape-api-helper';
-import { officeApiHelper } from '../api/office-api-helper';
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
-import operationErrorHandler from '../../operation/operation-error-handler';
+import {
+  convertImageToBase64,
+  convertPointsToPixels,
+} from '../../helpers/visualization-image-utils';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
-import { convertImageToBase64, convertPointsToPixels } from '../../helpers/visualization-image-utils';
+import { officeApiHelper } from '../api/office-api-helper';
+import { officeShapeApiHelper } from './office-shape-api-helper';
 import { determineImagePropsToBeAddedToBook } from './shape-helper-util';
+
+import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import {
+  DUPLICATE_OPERATION,
+  EDIT_OPERATION,
+  REFRESH_OPERATION,
+} from '../../operation/operation-type-names';
 import { errorMessages } from '../../error/constants';
-import { DUPLICATE_OPERATION, REFRESH_OPERATION, EDIT_OPERATION } from '../../operation/operation-type-names';
 
 class StepManipulateVisualizationImage {
   /**
@@ -42,11 +50,13 @@ class StepManipulateVisualizationImage {
       const excelContext = await officeApiHelper.getExcelContext();
 
       // retrieve the shape in the worksheet
-      const shapeInWorksheet = bindId && await officeShapeApiHelper.getShape(excelContext, bindId);
+      const shapeInWorksheet =
+        bindId && (await officeShapeApiHelper.getShape(excelContext, bindId));
 
       // retrieve the shape to be duplicated if the operation is DUPLICATE
-      const shapeToBeDuplicated = bindIdToBeDuplicated
-        && await officeShapeApiHelper.getShape(excelContext, bindIdToBeDuplicated);
+      const shapeToBeDuplicated =
+        bindIdToBeDuplicated &&
+        (await officeShapeApiHelper.getShape(excelContext, bindIdToBeDuplicated));
 
       // validate the operation and throw error if the operation is invalid
       this.validateOperation(shapeInWorksheet, shapeToBeDuplicated, operationType);
@@ -58,20 +68,14 @@ class StepManipulateVisualizationImage {
       const selectedRangePos = await officeApiHelper.getSelectedRangePosition(excelContext);
 
       // Get the properties of image and the sheet where it needs to be inserted
-      const {
-        top,
-        left,
-        width,
-        height,
-        sheet
-      } = determineImagePropsToBeAddedToBook({
+      const { top, left, width, height, sheet } = determineImagePropsToBeAddedToBook({
         operationType,
         shapeProps,
         shapeInWorksheet,
         shapeToBeDuplicated,
         vizDimensions,
         selectedRangePos,
-        excelContext
+        excelContext,
       });
 
       // Generate the visualization image to be added to the worksheet
@@ -82,7 +86,7 @@ class StepManipulateVisualizationImage {
         visualizationKey,
         {
           width: convertPointsToPixels(width),
-          height: convertPointsToPixels(height)
+          height: convertPointsToPixels(height),
         }
       );
 
@@ -141,16 +145,13 @@ class StepManipulateVisualizationImage {
    * @param {String} operationType Type of operation
    * @throws {Error} VISUALIZATION_REMOVED_FROM_EXCEL error if the image was manually removed from sheet
    */
-  validateOperation = (
-    shapeInWorksheet,
-    shapeToBeDuplicated,
-    operationType,
-  ) => {
+  validateOperation = (shapeInWorksheet, shapeToBeDuplicated, operationType) => {
     const isInValidEditOperation = operationType === EDIT_OPERATION && !shapeInWorksheet;
 
     const isInValidRefreshOperation = operationType === REFRESH_OPERATION && !shapeInWorksheet;
 
-    const isInValidDuplicateOperation = operationType === DUPLICATE_OPERATION && !shapeToBeDuplicated;
+    const isInValidDuplicateOperation =
+      operationType === DUPLICATE_OPERATION && !shapeToBeDuplicated;
 
     if (isInValidDuplicateOperation || isInValidEditOperation || isInValidRefreshOperation) {
       throw new Error(errorMessages.VISUALIZATION_REMOVED_FROM_EXCEL);

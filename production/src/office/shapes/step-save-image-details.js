@@ -1,7 +1,8 @@
-import { officeShapeApiHelper } from './office-shape-api-helper';
 import { officeApiHelper } from '../api/office-api-helper';
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import { officeShapeApiHelper } from './office-shape-api-helper';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { errorMessages } from '../../error/constants';
 
 class StepSaveImageDetails {
@@ -19,20 +20,15 @@ class StepSaveImageDetails {
       const { objectWorkingId, bindId } = objectData;
       const excelContext = await officeApiHelper.getExcelContext();
 
-      const shapeInWorksheet = bindId && await officeShapeApiHelper.getShape(excelContext, bindId);
+      const shapeInWorksheet =
+        bindId && (await officeShapeApiHelper.getShape(excelContext, bindId));
 
       if (!shapeInWorksheet) {
         throw new Error(errorMessages.VISUALIZATION_REMOVED_FROM_EXCEL);
       }
 
       if (shapeInWorksheet) {
-        const {
-          top,
-          left,
-          width,
-          height,
-          worksheetId
-        } = shapeInWorksheet;
+        const { top, left, width, height, worksheetId } = shapeInWorksheet;
         operationStepDispatcher.updateObject({
           objectWorkingId,
           shapeProps: {
@@ -40,8 +36,8 @@ class StepSaveImageDetails {
             left,
             width,
             height,
-            worksheetId
-          }
+            worksheetId,
+          },
         });
       }
 

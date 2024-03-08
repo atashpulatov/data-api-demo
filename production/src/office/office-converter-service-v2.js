@@ -1,7 +1,8 @@
-import mstrObjectType from '../mstr-object/mstr-object-type-enum';
+import mstrCompoundGridFlatten from '../mstr-object/helper/mstr-compound-grid-flatten';
+
 import mstrCompoundGridHandler from '../mstr-object/handler/mstr-compound-grid-handler';
 import mstrGridHandler from '../mstr-object/handler/mstr-grid-handler';
-import mstrCompoundGridFlatten from '../mstr-object/helper/mstr-compound-grid-flatten';
+import mstrObjectType from '../mstr-object/mstr-object-type-enum';
 
 /**
  * Service to parse JSON response from REST API v2
@@ -22,7 +23,10 @@ class OfficeConverterServiceV2 {
     mstrTable.subtotalsInfo = {};
     const subtotals = this.getSubtotalsInformation(response);
     if (subtotals) {
-      mstrTable.subtotalsInfo = { subtotalsDefined: subtotals.defined, subtotalsVisible: subtotals.visible };
+      mstrTable.subtotalsInfo = {
+        subtotalsDefined: subtotals.defined,
+        subtotalsVisible: subtotals.visible,
+      };
     }
 
     return mstrTable;
@@ -55,23 +59,23 @@ class OfficeConverterServiceV2 {
   };
 
   /**
-     * Gets subtotals defined or visible information from the response.
-     *
-     * @param {JSON} response
-     * @return {Object}
-     */
-  getSubtotalsInformation = (response) => {
+   * Gets subtotals defined or visible information from the response.
+   *
+   * @param {JSON} response
+   * @return {Object}
+   */
+  getSubtotalsInformation = response => {
     const handler = this.getHandler(response);
     return handler.getSubtotalsInformation(response);
   };
 
   /**
-     * Checks if response contains crosstabs
-     *
-     * @param {JSON} response
-     * @return {Boolean}
-     */
-  isCrosstab = (response) => {
+   * Checks if response contains crosstabs
+   *
+   * @param {JSON} response
+   * @return {Boolean}
+   */
+  isCrosstab = response => {
     try {
       const { grid } = response.definition;
       return !!grid.crossTab && grid.columns.length !== 0;
@@ -87,7 +91,7 @@ class OfficeConverterServiceV2 {
    * @param {JSON} response
    * @return {Class}
    */
-  getHandler = (response) => {
+  getHandler = response => {
     switch (response.visualizationType) {
       case mstrObjectType.visualizationType.COMPOUND_GRID:
       case mstrObjectType.visualizationType.MICROCHARTS:
@@ -103,8 +107,10 @@ class OfficeConverterServiceV2 {
    * @param {JSON} response
    * @return {Class}
    */
-  getHandlerForCompoundGrid = (response) => {
-    const { definition: { grid } } = response;
+  getHandlerForCompoundGrid = response => {
+    const {
+      definition: { grid },
+    } = response;
     const isCrosstab = grid.crossTab;
     const notEmptyColumnSet = grid.columnSets.find(({ columns }) => columns.length > 0);
 
@@ -116,7 +122,8 @@ class OfficeConverterServiceV2 {
 
     const { metricsPosition, columnSets } = grid;
     const isMetricsInRows = metricsPosition && metricsPosition.axis === 'rows';
-    const columnSetsCondition = columnSets.length <= 1 && !columnSets[0].length && !columnSets[0].columns.length;
+    const columnSetsCondition =
+      columnSets.length <= 1 && !columnSets[0].length && !columnSets[0].columns.length;
 
     if (isCrosstab && !(isMetricsInRows && columnSetsCondition)) {
       return mstrCompoundGridHandler;
@@ -133,13 +140,15 @@ class OfficeConverterServiceV2 {
    * @param {body} response body
    * @return {body}
    */
-  convertCellValuesToExcelStandard = (body) => {
-    const replaceNullValues = (value) => (value === null ? '' : value);
+  convertCellValuesToExcelStandard = body => {
+    const replaceNullValues = value => (value === null ? '' : value);
 
-    const replaceNullsInNestedRawValues = (metricValues) => {
-      Object.keys(metricValues).forEach((key) => {
+    const replaceNullsInNestedRawValues = metricValues => {
+      Object.keys(metricValues).forEach(key => {
         if (key === 'raw') {
-          metricValues[key] = metricValues[key].map((singleRawArray) => singleRawArray.map(replaceNullValues));
+          metricValues[key] = metricValues[key].map(singleRawArray =>
+            singleRawArray.map(replaceNullValues)
+          );
         } else {
           replaceNullsInNestedRawValues(metricValues[key]);
         }

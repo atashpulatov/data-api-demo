@@ -1,8 +1,9 @@
+import { notificationService } from '../notification/notification-service';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
-import { officeContext } from '../office/office-context';
-import { notificationService } from '../notification-v2/notification-service';
 import { sidePanelService } from './side-panel-service';
+
+import { officeContext } from '../office/office-context';
 
 class SidePanelEventHelper {
   /**
@@ -33,7 +34,7 @@ class SidePanelEventHelper {
    *
    * @param {Function} setActiveCellAddress Callback to modify the activeCellAddress in state of RightSidePanel
    */
-  initializeActiveCellChangedListener = async (setActiveCellAddress) => {
+  initializeActiveCellChangedListener = async setActiveCellAddress => {
     const excelContext = await officeApiHelper.getExcelContext();
     const initialCellAddress = await officeApiHelper.getSelectedCell(excelContext);
     setActiveCellAddress(initialCellAddress);
@@ -45,7 +46,7 @@ class SidePanelEventHelper {
    *
    * @param {Object} e Contains information about deleted object
    */
-  setOnDeletedTablesEvent = async (e) => {
+  setOnDeletedTablesEvent = async e => {
     const ObjectToDelete = officeReducerHelper.getObjectFromObjectReducerByBindId(e.tableId);
     notificationService.removeExistingNotification(ObjectToDelete.objectWorkingId);
     await officeApiHelper.checkStatusOfSessions();
@@ -57,21 +58,22 @@ class SidePanelEventHelper {
    *
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    */
-  setOnDeletedWorksheetEvent = async (excelContext) => {
+  setOnDeletedWorksheetEvent = async excelContext => {
     await officeApiHelper.checkStatusOfSessions();
     excelContext.workbook.tables.load('items');
     await excelContext.sync();
 
     const objectsOfSheets = excelContext.workbook.tables.items;
     const objectsList = officeReducerHelper.getObjectsListFromObjectReducer();
-    const objectsToDelete = objectsList.filter((object) => !objectsOfSheets
-      .find((officeTable) => officeTable.id === object.bindId));
+    const objectsToDelete = objectsList.filter(
+      object => !objectsOfSheets.find(officeTable => officeTable.id === object.bindId)
+    );
 
-    objectsToDelete.forEach((object) => {
+    objectsToDelete.forEach(object => {
       notificationService.removeExistingNotification(object.objectWorkingId);
     });
 
-    const objectWorkingIds = objectsToDelete.map((object) => object.objectWorkingId);
+    const objectWorkingIds = objectsToDelete.map(object => object.objectWorkingId);
     sidePanelService.remove(objectWorkingIds);
   };
 }

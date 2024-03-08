@@ -1,11 +1,19 @@
-import {
-  SELECT_OBJECT, START_IMPORT, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED,
-  CLEAR_PROMPTS_ANSWERS, REQUEST_DOSSIER_OPEN, CANCEL_DOSSIER_OPEN, UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT,
-  SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, SET_PROMPT_OBJECTS, UPDATE_SELECTED_MENU
-} from './navigation-tree-actions';
-
-import { SET_POPUP_TYPE } from '../popup-state-reducer/popup-state-actions';
 import { PopupTypeEnum } from '../../home/popup-type-enum';
+import { SET_POPUP_TYPE } from '../popup-state-reducer/popup-state-actions';
+import {
+  CANCEL_DOSSIER_OPEN,
+  CANCEL_REQUEST_IMPORT,
+  CLEAR_PROMPTS_ANSWERS,
+  PROMPTS_ANSWERED,
+  REQUEST_DOSSIER_OPEN,
+  REQUEST_IMPORT,
+  SELECT_OBJECT,
+  SET_PROMPT_OBJECTS,
+  START_IMPORT,
+  SWITCH_IMPORT_SUBTOTALS_ON_IMPORT,
+  UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT,
+  UPDATE_SELECTED_MENU,
+} from './navigation-tree-actions';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
 
@@ -43,7 +51,7 @@ function makeSelection(newState, data) {
   return newState;
 }
 
-export const navigationTree = (state = initialState, action) => {
+export const navigationTree = (state = initialState, action = {}) => {
   const { type, data, popupType } = action;
   switch (type) {
     case SELECT_OBJECT: {
@@ -53,7 +61,7 @@ export const navigationTree = (state = initialState, action) => {
         chosenSubtype: null,
         chosenObjectName: DEFAULT_PROJECT_NAME,
         mstrObjectType: null,
-        ...data
+        ...data,
       };
       const newState = { ...state };
       return makeSelection(newState, newData);

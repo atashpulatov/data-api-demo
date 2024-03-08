@@ -21,9 +21,8 @@ class StepFormatTable {
    */
   formatTable = async (objectData, operationData) => {
     console.time('Column auto size');
-    const {
-      objectWorkingId, excelContext, instanceDefinition, officeTable, shouldFormat,
-    } = operationData;
+    const { objectWorkingId, excelContext, instanceDefinition, officeTable, shouldFormat } =
+      operationData;
     const { crosstabHeaderDimensions, isCrosstab } = instanceDefinition.mstrTable;
     const { columns } = instanceDefinition;
 
@@ -40,7 +39,9 @@ class StepFormatTable {
           console.log('Error when formatting - no columns autofit applied', error);
         }
       } else {
-        console.log('The column count is more than columns autofit limit or should not format - no columns autofit applied.');
+        console.log(
+          'The column count is more than columns autofit limit or should not format - no columns autofit applied.'
+        );
       }
     }
 
@@ -59,10 +60,7 @@ class StepFormatTable {
    */
   formatCrosstabHeaders = (officeTable, isCrosstab, rowsX) => {
     if (isCrosstab) {
-      officeTable.getDataBodyRange()
-        .getColumnsBefore(rowsX)
-        .format
-        .autofitColumns();
+      officeTable.getDataBodyRange().getColumnsBefore(rowsX).format.autofitColumns();
 
       officeTable.showHeaders = false;
     }
@@ -75,7 +73,11 @@ class StepFormatTable {
    * @param {Office} columns Reference to Excel columns collection
    */
   formatColumns = async (excelContext, columns) => {
-    const columnsCount = await officeApiDataLoader.loadSingleExcelData(excelContext, columns, 'count');
+    const columnsCount = await officeApiDataLoader.loadSingleExcelData(
+      excelContext,
+      columns,
+      'count'
+    );
 
     for (let i = 0; i < columnsCount; i++) {
       await this.formatSingleColumn(excelContext, columns.getItemAt(i));
@@ -89,9 +91,7 @@ class StepFormatTable {
    * @param {Office} column Reference to Excel column
    */
   formatSingleColumn = async (excelContext, column) => {
-    column.getRange()
-      .format
-      .autofitColumns();
+    column.getRange().format.autofitColumns();
 
     await excelContext.sync();
   };

@@ -1,29 +1,32 @@
-import React, {
-  useEffect, useCallback, useState, useMemo, useRef
-} from 'react';
-import { connect } from 'react-redux';
+// issue with proptype import
+// eslint-disable-next-line simple-import-sort/imports
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { ObjectWindowTitle, Popup } from '@mstr/connector-components';
 import { MSTRIcon } from '@mstr/mstr-react-library';
 import { Spinner } from '@mstr/rc';
-import { ObjectWindowTitle, Popup } from '@mstr/connector-components';
-import i18n from '../../i18n';
-import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
-import { selectorProperties } from '../../attribute-selector/selector-properties';
-import { EmbeddedDossier } from './embedded-dossier';
-import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-import './dossier.css';
-import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
-import { popupHelper } from '../../popup/popup-helper';
-import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
-import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
+
+import PropTypes from 'prop-types';
 import { authenticationHelper } from '../../authentication/authentication-helper';
-import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
+import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
+import overviewHelper from '../../popup/overview/overview-helper';
+import { popupHelper } from '../../popup/popup-helper';
+import { EXTEND_SESSION, sessionHelper } from '../../storage/session-helper';
+
+import { selectorProperties } from '../../attribute-selector/selector-properties';
+import i18n from '../../i18n';
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
+import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
+import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
+import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
+import { EmbeddedDossier } from './embedded-dossier';
 import { errorCodes } from '../../error/constants';
 import { objectImportType } from '../../mstr-object/constants';
-import overviewHelper from '../../popup/overview/overview-helper';
 
-export const DossierWindowNotConnected = (props) => {
+import './dossier.css';
+
+export const DossierWindowNotConnected = props => {
   const [t] = useTranslation('common', { i18n });
   const [promptsAnswers, setPromptsAnswers] = useState([]);
   const instanceId = useRef('');
@@ -54,10 +57,13 @@ export const DossierWindowNotConnected = (props) => {
   const { chapterKey, visualizationKey, vizDimensions } = lastSelectedViz;
   const [dialogPopup, setDialogPopup] = React.useState(null);
 
-  const vizData = useMemo(() => vizualizationsData.find(
-    el => (el.visualizationKey === visualizationKey
-    && el.chapterKey === chapterKey)
-  ), [chapterKey, visualizationKey, vizualizationsData]);
+  const vizData = useMemo(
+    () =>
+      vizualizationsData.find(
+        el => el.visualizationKey === visualizationKey && el.chapterKey === chapterKey
+      ),
+    [chapterKey, visualizationKey, vizualizationsData]
+  );
 
   const isSelected = !!(chapterKey && visualizationKey);
   const isSupported = !!(isSelected && vizData && vizData.isSupported);
@@ -67,7 +73,7 @@ export const DossierWindowNotConnected = (props) => {
 
   const handleCancel = () => {
     const { commandCancel } = selectorProperties;
-    const message = { command: commandCancel, };
+    const message = { command: commandCancel };
     popupHelper.officeMessageParent(message);
   };
 
@@ -75,13 +81,16 @@ export const DossierWindowNotConnected = (props) => {
 
   const prolongSession = installSessionProlongingHandler(handleCancel);
 
-  const extendSession = useCallback((message = {}) => {
-    const { data: postMessage, origin } = message;
-    const { origin: targetOrigin } = window;
-    if (origin === targetOrigin && postMessage === EXTEND_SESSION) {
-      prolongSession();
-    }
-  }, [prolongSession]);
+  const extendSession = useCallback(
+    (message = {}) => {
+      const { data: postMessage, origin } = message;
+      const { origin: targetOrigin } = window;
+      if (origin === targetOrigin && postMessage === EXTEND_SESSION) {
+        prolongSession();
+      }
+    },
+    [prolongSession]
+  );
 
   useEffect(() => {
     window.addEventListener('message', extendSession);
@@ -91,49 +100,57 @@ export const DossierWindowNotConnected = (props) => {
 
   useEffect(() => {
     if (popupData) {
-      overviewHelper.setRangeTakenPopup({ objectWorkingId: popupData.objectWorkingId, setDialogPopup });
+      overviewHelper.setRangeTakenPopup({
+        objectWorkingId: popupData.objectWorkingId,
+        setDialogPopup,
+      });
     } else {
       setDialogPopup(null);
     }
   }, [popupData]);
 
-  const handleSelection = useCallback(async (dossierData) => {
-    const {
-      chapterKey: chosenVizchapterKey,
-      visualizationKey: chosenVizKey,
-      vizDimensions: chosenVizDimensions,
-      promptsAnswers: chosenVizPromptAnswers,
-      instanceId: chosenVizInstanceId
-    } = dossierData;
-
-    if (chosenVizInstanceId) {
-      setLastSelectedViz({
+  const handleSelection = useCallback(
+    async dossierData => {
+      const {
         chapterKey: chosenVizchapterKey,
         visualizationKey: chosenVizKey,
         vizDimensions: chosenVizDimensions,
-      });
-      setPromptsAnswers(chosenVizPromptAnswers);
-      instanceId.current = chosenVizInstanceId;
+        promptsAnswers: chosenVizPromptAnswers,
+        instanceId: chosenVizInstanceId,
+      } = dossierData;
 
-      if (!vizualizationsData.find(el => (
-        el.visualizationKey === chosenVizKey
-        && el.chapterKey === chosenVizchapterKey))) {
-        let isVizSupported = true;
+      if (chosenVizInstanceId) {
+        setLastSelectedViz({
+          chapterKey: chosenVizchapterKey,
+          visualizationKey: chosenVizKey,
+          vizDimensions: chosenVizDimensions,
+        });
+        setPromptsAnswers(chosenVizPromptAnswers);
+        instanceId.current = chosenVizInstanceId;
 
-        const checkIfVizDataCanBeImported = async () => {
-          await mstrObjectRestService.fetchVisualizationDefinition({
-            projectId: chosenProjectId,
-            objectId: chosenObjectId,
-            instanceId: chosenVizInstanceId,
-            visualizationInfo: { chapterKey: chosenVizchapterKey, visualizationKey: chosenVizKey }
-          });
-        };
+        if (
+          !vizualizationsData.find(
+            el => el.visualizationKey === chosenVizKey && el.chapterKey === chosenVizchapterKey
+          )
+        ) {
+          let isVizSupported = true;
 
-        await Promise.all([
-          checkIfVizDataCanBeImported(),
-          // For future: add different checks if needed - e.g. visualization not included in dossier instance definition
-        ])
-          .catch(error => {
+          const checkIfVizDataCanBeImported = async () => {
+            await mstrObjectRestService.fetchVisualizationDefinition({
+              projectId: chosenProjectId,
+              objectId: chosenObjectId,
+              instanceId: chosenVizInstanceId,
+              visualizationInfo: {
+                chapterKey: chosenVizchapterKey,
+                visualizationKey: chosenVizKey,
+              },
+            });
+          };
+
+          await Promise.all([
+            checkIfVizDataCanBeImported(),
+            // For future: add different checks if needed - e.g. visualization not included in dossier instance definition
+          ]).catch(error => {
             console.error(error);
             const { ERR009 } = errorCodes;
             if (error.response && error.response.body.code === ERR009) {
@@ -144,36 +161,53 @@ export const DossierWindowNotConnected = (props) => {
             }
           });
 
-        setVizualizationsData([...vizualizationsData, {
-          chapterKey: chosenVizchapterKey,
-          visualizationKey: chosenVizKey,
-          isSupported: isVizSupported,
-        }]);
+          setVizualizationsData([
+            ...vizualizationsData,
+            {
+              chapterKey: chosenVizchapterKey,
+              visualizationKey: chosenVizKey,
+              isSupported: isVizSupported,
+            },
+          ]);
+        }
       }
-    }
-  }, [chosenObjectId, chosenProjectId, vizualizationsData]);
+    },
+    [chosenObjectId, chosenProjectId, vizualizationsData]
+  );
 
-  const handleOk = useCallback((impType = objectImportType.TABLE) => {
-    const message = {
-      command: selectorProperties.commandOk,
+  const handleOk = useCallback(
+    (impType = objectImportType.TABLE) => {
+      const message = {
+        command: selectorProperties.commandOk,
+        chosenObjectName,
+        chosenObject: chosenObjectId,
+        chosenProject: chosenProjectId,
+        chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
+        isPrompted: promptsAnswers?.answers?.length > 0,
+        promptsAnswers,
+        importType: impType,
+        visualizationInfo: {
+          chapterKey,
+          visualizationKey,
+          vizDimensions,
+        },
+        preparedInstanceId: instanceId.current,
+        isEdit,
+      };
+      popupHelper.officeMessageParent(message);
+    },
+    [
+      chapterKey,
+      chosenObjectId,
       chosenObjectName,
-      chosenObject: chosenObjectId,
-      chosenProject: chosenProjectId,
-      chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
-      isPrompted: promptsAnswers?.answers?.length > 0,
-      promptsAnswers,
-      importType: impType,
-      visualizationInfo: {
-        chapterKey,
-        visualizationKey,
-        vizDimensions,
-      },
-      preparedInstanceId: instanceId.current,
+      chosenProjectId,
+      instanceId,
       isEdit,
-    };
-    popupHelper.officeMessageParent(message);
-  }, [chapterKey, chosenObjectId, chosenObjectName, chosenProjectId,
-    instanceId, isEdit, promptsAnswers, visualizationKey, vizDimensions]);
+      promptsAnswers,
+      visualizationKey,
+      vizDimensions,
+    ]
+  );
 
   // Automatically close popup if re-prompted dossier is answered
   // and visualization is selected
@@ -194,48 +228,57 @@ export const DossierWindowNotConnected = (props) => {
    *
    * @param {String} newInstanceId
    */
-  const handleInstanceIdChange = useCallback((newInstanceId) => {
-    const backup = previousSelectionBackup.current.find((el) => el.instanceId === newInstanceId);
+  const handleInstanceIdChange = useCallback(
+    newInstanceId => {
+      const backup = previousSelectionBackup.current.find(el => el.instanceId === newInstanceId);
 
-    if (instanceId.current !== newInstanceId && !backup) {
-      const currentInstanceId = instanceId.current;
-      // Make a backup of last selection info.
-      previousSelectionBackup.current = [{ currentInstanceId, lastSelectedViz, }, ...previousSelectionBackup.current];
-      // Clear selection of viz and update instance id.
-      instanceId.current = newInstanceId;
-      lastSelectedViz && Object.keys(lastSelectedViz).length > 0 && setLastSelectedViz([]);
-      vizualizationsData?.length > 0 && setVizualizationsData([]);
-    } else {
-      // Restore backuped viz selection info in case of return to prev instance
-      vizualizationsData?.length > 0 && setVizualizationsData([]);
-      handleSelection({
-        ...backup.lastSelectedViz,
-        promptsAnswers,
-        instanceId: backup.instanceId,
-      });
-    }
-  }, [handleSelection, lastSelectedViz, promptsAnswers, vizualizationsData]);
+      if (instanceId.current !== newInstanceId && !backup) {
+        const currentInstanceId = instanceId.current;
+        // Make a backup of last selection info.
+        previousSelectionBackup.current = [
+          { currentInstanceId, lastSelectedViz },
+          ...previousSelectionBackup.current,
+        ];
+        // Clear selection of viz and update instance id.
+        instanceId.current = newInstanceId;
+        lastSelectedViz && Object.keys(lastSelectedViz).length > 0 && setLastSelectedViz([]);
+        vizualizationsData?.length > 0 && setVizualizationsData([]);
+      } else {
+        // Restore backuped viz selection info in case of return to prev instance
+        vizualizationsData?.length > 0 && setVizualizationsData([]);
+        handleSelection({
+          ...backup.lastSelectedViz,
+          promptsAnswers,
+          instanceId: backup.instanceId,
+        });
+      }
+    },
+    [handleSelection, lastSelectedViz, promptsAnswers, vizualizationsData]
+  );
 
   /**
    * Store new prompts answers in state
    *
    * @param {Array} newAnswers
    */
-  const handlePromptAnswer = useCallback((newAnswers) => {
-    setPromptsAnswers(newAnswers);
-    vizualizationsData?.length > 0 && setVizualizationsData([]);
-  }, [vizualizationsData]);
+  const handlePromptAnswer = useCallback(
+    newAnswers => {
+      setPromptsAnswers(newAnswers);
+      vizualizationsData?.length > 0 && setVizualizationsData([]);
+    },
+    [vizualizationsData]
+  );
 
   /**
-  * Change state of component so that informative message is showed only after embedded dossier is loaded.
-  *
-  */
+   * Change state of component so that informative message is showed only after embedded dossier is loaded.
+   *
+   */
   const handleEmbeddedDossierLoad = useCallback(() => {
     setIsEmbeddedDossierLoaded(true);
   }, []);
 
   const validateSession = useCallback(() => {
-    authenticationHelper.validateAuthToken().catch((error) => {
+    authenticationHelper.validateAuthToken().catch(error => {
       popupHelper.handlePopupErrors(error);
     });
   }, []);
@@ -247,26 +290,22 @@ export const DossierWindowNotConnected = (props) => {
    *
    * @param {Boolean} enableVisibility true to show the embedded dossier, false to hide it
    */
-  const handleEmbeddedDossierVisibility = useCallback((enableVisibility) => {
+  const handleEmbeddedDossierVisibility = useCallback(enableVisibility => {
     setVisibleEmbeddedDossier(enableVisibility);
   }, []);
 
   return (
-    <div className="dossier-window">
-      { isEmbeddedDossierLoaded
-        && (
-          <span className="dossier-window-information-frame">
-            <MSTRIcon
-              clasName="dossier-window-information-icon"
-              type="info-icon"
-            />
-            <span className="dossier-window-information-text">
-              {`${t(
-                'This view supports the regular dossier manipulations. To import data, select a visualization.'
-              )}`}
-            </span>
+    <div className='dossier-window'>
+      {isEmbeddedDossierLoaded && (
+        <span className='dossier-window-information-frame'>
+          <MSTRIcon clasName='dossier-window-information-icon' type='info-icon' />
+          <span className='dossier-window-information-text'>
+            {`${t(
+              'This view supports the regular dossier manipulations. To import data, select a visualization.'
+            )}`}
           </span>
-        )}
+        </span>
+      )}
       <ObjectWindowTitle
         objectType={mstrObjectEnum.mstrObjectType.dossier.name}
         objectName={chosenObjectName}
@@ -275,10 +314,14 @@ export const DossierWindowNotConnected = (props) => {
         index={repromptsQueue.index}
         total={repromptsQueue.total}
       />
-      <Spinner className="loading-spinner" type="large">{t('Loading...')}</Spinner>
+      <Spinner className='loading-spinner' type='large'>
+        {t('Loading...')}
+      </Spinner>
       {!showLoading && ( // Hide embedded dossier only after prompts are answered.
         <>
-          <div className={`${visibleEmbeddedDossier ? 'dossier-window-embedded' : 'dossier-window-embedded-empty'}`}>
+          <div
+            className={`${visibleEmbeddedDossier ? 'dossier-window-embedded' : 'dossier-window-embedded-empty'}`}
+          >
             <EmbeddedDossier
               handleSelection={handleSelection}
               handlePromptAnswer={handlePromptAnswer}
@@ -304,12 +347,11 @@ export const DossierWindowNotConnected = (props) => {
           />
         </>
       )}
-      {!!dialogPopup
-       && (
-         <div className="standalone-popup">
-           <Popup {...dialogPopup} />
-         </div>
-       )}
+      {!!dialogPopup && (
+        <div className='standalone-popup'>
+          <Popup {...dialogPopup} />
+        </div>
+      )}
     </div>
   );
 };
@@ -369,8 +411,14 @@ DossierWindowNotConnected.defaultProps = {
 
 function mapStateToProps(state) {
   const {
-    navigationTree, popupReducer, sessionReducer, objectReducer,
-    officeReducer, answersReducer, popupStateReducer, repromptsQueueReducer
+    navigationTree,
+    popupReducer,
+    sessionReducer,
+    objectReducer,
+    officeReducer,
+    answersReducer,
+    popupStateReducer,
+    repromptsQueueReducer,
   } = state;
   const {
     chosenObjectName,
@@ -378,33 +426,26 @@ function mapStateToProps(state) {
     chosenProjectId,
     promptsAnswers,
     promptObjects,
-    importRequested
+    importRequested,
   } = navigationTree;
   const { editedObject } = popupReducer;
   const { supportForms, isShapeAPISupported, popupData } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
   const { answers } = answersReducer;
-  const isReport = editedObject && editedObject.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
+  const isReport =
+    editedObject && editedObject.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const { objects } = objectReducer;
   const editedObjectParse = {
-    ...popupHelper.parsePopupState(
-      editedObject,
-      promptsAnswers,
-      formsPrivilege
-    ),
+    ...popupHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege),
   };
-  editedObjectParse.importType = objects.find(obj => obj.objectId === editedObjectParse.chosenObjectId)?.importType;
+  editedObjectParse.importType = objects.find(
+    obj => obj.objectId === editedObjectParse.chosenObjectId
+  )?.importType;
   return {
-    chosenObjectName: editedObject
-      ? editedObjectParse.dossierName
-      : chosenObjectName,
-    chosenObjectId: editedObject
-      ? editedObjectParse.chosenObjectId
-      : chosenObjectId,
-    chosenProjectId: editedObject
-      ? editedObjectParse.projectId
-      : chosenProjectId,
+    chosenObjectName: editedObject ? editedObjectParse.dossierName : chosenObjectName,
+    chosenObjectId: editedObject ? editedObjectParse.chosenObjectId : chosenObjectId,
+    chosenProjectId: editedObject ? editedObjectParse.projectId : chosenProjectId,
     editedObject: editedObjectParse,
     previousPromptsAnswers: answers,
     promptObjects,

@@ -1,29 +1,35 @@
 import React, { useState } from 'react';
-import '../home/home.css';
 import { connect } from 'react-redux';
-import { selectorProperties } from './selector-properties';
-import { AttributeSelector } from './attribute-selector';
-import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
-import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
+
 import { popupHelper } from '../popup/popup-helper';
-import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
+
 import { AttributeSelectorWindowNotConnectedProps } from './attribute-selector-types';
+
+import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
+import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
+import { AttributeSelector } from './attribute-selector';
+import { selectorProperties } from './selector-properties';
 import { objectImportType } from '../mstr-object/constants';
+
+import '../home/home.css';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
 
-export const AttributeSelectorWindowNotConnected = (props: AttributeSelectorWindowNotConnectedProps) => {
+export const AttributeSelectorWindowNotConnected: React.FC<
+  AttributeSelectorWindowNotConnectedProps
+> = props => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [attributesSelected, setAttributesSelected] = useState(false);
 
-  const handleOk = () => {
+  const handleOk = (): void => {
     setTriggerUpdate(true);
   };
 
-  const handleCancel = () => {
+  const handleCancel = (): void => {
     const { commandCancel } = selectorProperties;
-    const message = { command: commandCancel, };
+    const message = { command: commandCancel };
     popupHelper.officeMessageParent(message);
   };
 
@@ -34,22 +40,25 @@ export const AttributeSelectorWindowNotConnected = (props: AttributeSelectorWind
     chosenObjectSubtype: string,
     body: any,
     chosenObjectName: string,
-    filterDetails: any,
-  ) => {
-    const { chosenObject: { chosenObjectName: objectName } } = props;
+    filterDetails: any
+  ): void => {
+    const {
+      chosenObject: { chosenObjectName: objectName },
+    } = props;
     chosenObjectName = chosenObjectName || objectName;
 
-    const {
-      chosenObject, editedObject, importSubtotal, displayAttrFormNames
-    } = props;
+    const { chosenObject, editedObject, importSubtotal, displayAttrFormNames } = props;
 
     const subtotalsInfo = {
-      importSubtotal: (editedObject && editedObject.subtotalsInfo)
-        ? editedObject.subtotalsInfo.importSubtotal
-        : importSubtotal
+      importSubtotal:
+        editedObject && editedObject.subtotalsInfo
+          ? editedObject.subtotalsInfo.importSubtotal
+          : importSubtotal,
     };
-    const displayAttrFormNamesSet = (editedObject && editedObject.displayAttrFormNames) || displayAttrFormNames
-    || officeProperties.displayAttrFormNames.automatic;
+    const displayAttrFormNamesSet =
+      (editedObject && editedObject.displayAttrFormNames) ||
+      displayAttrFormNames ||
+      officeProperties.displayAttrFormNames.automatic;
 
     const message = {
       command: selectorProperties.commandOnUpdate,
@@ -72,25 +81,27 @@ export const AttributeSelectorWindowNotConnected = (props: AttributeSelectorWind
    * resets triggerUpdate property to false in order to allow re-pressing OK button
    * should be called every time OK is pressed but selector popup should not close
    */
-  const resetTriggerUpdate = () => {
+  const resetTriggerUpdate = (): void => {
     setTriggerUpdate(false);
   };
 
-  const {
-    handleBack, chosenObject, mstrData, objectName, editedObject
-  } = props;
+  const { handleBack, chosenObject, mstrData, objectName, editedObject } = props;
   const { isPrompted } = mstrData;
   const { chosenObjectName } = chosenObject;
   const typeOfObject = editedObject || chosenObject;
   const typeName = typeOfObject.mstrObjectType
-    ? typeOfObject.mstrObjectType.name.charAt(0).toUpperCase() + typeOfObject.mstrObjectType.name.substring(1)
+    ? typeOfObject.mstrObjectType.name.charAt(0).toUpperCase() +
+      typeOfObject.mstrObjectType.name.substring(1)
     : 'Data';
-  const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
+  const isEdit = chosenObjectName === DEFAULT_PROJECT_NAME;
   return (
-    <div className="attribute-selector-window">
+    <div className='attribute-selector-window'>
+      {/* @ts-expect-error */}
       <AttributeSelector
         title={`Import ${typeName} > ${objectName}`}
-        attributesSelectedChange={(attributes: React.SetStateAction<boolean>) => setAttributesSelected(attributes)}
+        attributesSelectedChange={(attributes: React.SetStateAction<boolean>) =>
+          setAttributesSelected(attributes)
+        }
         triggerUpdate={triggerUpdate}
         onTriggerUpdate={onTriggerUpdate}
         resetTriggerUpdate={resetTriggerUpdate}
@@ -112,13 +123,15 @@ export const AttributeSelectorWindowNotConnected = (props: AttributeSelectorWind
 };
 
 // TODO: fix any types
-const mapStateToProps = (
-  state: {
-    navigationTree: { [x: string]: any; importSubtotal: any; displayAttrFormNames: any; };
-    popupReducer: { editedObject: any; };
-    popupStateReducer: any;
-    }
-) => {
+const mapStateToProps = (state: {
+  navigationTree: {
+    [x: string]: any;
+    importSubtotal: any;
+    displayAttrFormNames: any;
+  };
+  popupReducer: { editedObject: any };
+  popupStateReducer: any;
+}): any => {
   const { importSubtotal, displayAttrFormNames, ...chosenObject } = state.navigationTree;
   const { editedObject } = state.popupReducer;
 
@@ -128,13 +141,13 @@ const mapStateToProps = (
     objectName: editedObject ? editedObject.name : chosenObject.chosenObjectName,
     importSubtotal,
     displayAttrFormNames,
-    editedObject: state.popupReducer.editedObject
+    editedObject: state.popupReducer.editedObject,
   };
 };
 
 const mapDispatchToProps = {
   handleBack: popupStateActions.onPopupBack,
-  handlePrepare: popupStateActions.onPrepareData
+  handlePrepare: popupStateActions.onPrepareData,
 };
 
 export const AttributeSelectorWindow = connect(

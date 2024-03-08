@@ -1,9 +1,10 @@
-import officeTableRefresh from './office-table-refresh';
 import getOfficeTableHelper from './get-office-table-helper';
-import officeTableCreate from './office-table-create';
-import officeTableUpdate from './office-table-update';
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import officeTableCreate from './office-table-create';
+import officeTableRefresh from './office-table-refresh';
+import officeTableUpdate from './office-table-update';
 
 class StepGetOfficeTableEditRefresh {
   /**
@@ -29,13 +30,8 @@ class StepGetOfficeTableEditRefresh {
     try {
       console.time('Create or get table - edit or refresh');
       const { tableName, previousTableDimensions, objectWorkingId } = objectData;
-      const {
-        excelContext,
-        instanceDefinition,
-        oldBindId,
-        objectEditedData,
-        insertNewWorksheet,
-      } = operationData;
+      const { excelContext, instanceDefinition, oldBindId, objectEditedData, insertNewWorksheet } =
+        operationData;
       let { tableChanged, startCell } = operationData;
 
       const { mstrTable } = instanceDefinition;
@@ -46,42 +42,45 @@ class StepGetOfficeTableEditRefresh {
       let officeTable;
 
       getOfficeTableHelper.checkReportTypeChange(mstrTable);
-      const prevOfficeTable = await officeTableRefresh.getPreviousOfficeTable(excelContext, oldBindId);
+      const prevOfficeTable = await officeTableRefresh.getPreviousOfficeTable(
+        excelContext,
+        oldBindId
+      );
 
       if (!isRepeatStep) {
         ({ tableChanged, startCell } = await officeTableRefresh.getExistingOfficeTableData(
           excelContext,
           instanceDefinition,
           prevOfficeTable,
-          previousTableDimensions,
+          previousTableDimensions
         ));
       }
 
       if (tableChanged) {
         console.log('Instance definition changed, creating new table');
 
-        ({ officeTable, bindId } = await officeTableCreate.createOfficeTable(
-          {
-            instanceDefinition,
-            excelContext,
-            startCell,
-            tableName,
-            prevOfficeTable,
-            tableChanged,
-            isRepeatStep,
-            insertNewWorksheet
-          }
-        ));
+        ({ officeTable, bindId } = await officeTableCreate.createOfficeTable({
+          instanceDefinition,
+          excelContext,
+          startCell,
+          tableName,
+          prevOfficeTable,
+          tableChanged,
+          isRepeatStep,
+          insertNewWorksheet,
+        }));
       } else {
-        shouldFormat = (objectEditedData
-          && objectEditedData.visualizationInfo
-          && objectEditedData.visualizationInfo.nameAndFormatShouldUpdate) || false;
+        shouldFormat =
+          (objectEditedData &&
+            objectEditedData.visualizationInfo &&
+            objectEditedData.visualizationInfo.nameAndFormatShouldUpdate) ||
+          false;
 
         officeTable = await officeTableUpdate.updateOfficeTable(
           instanceDefinition,
           excelContext,
           startCell,
-          prevOfficeTable,
+          prevOfficeTable
         );
       }
 
@@ -95,7 +94,11 @@ class StepGetOfficeTableEditRefresh {
         isTotalsRowVisible: prevOfficeTable.showTotals,
       };
 
-      startCell = officeTableRefresh.getCrosstabStartCell(startCell, instanceDefinition, tableChanged);
+      startCell = officeTableRefresh.getCrosstabStartCell(
+        startCell,
+        instanceDefinition,
+        tableChanged
+      );
 
       officeTable.worksheet.load(['id', 'name']);
       await excelContext.sync();
@@ -106,7 +109,7 @@ class StepGetOfficeTableEditRefresh {
         objectWorkingId,
         bindId,
         startCell,
-        worksheet: { id, name }
+        worksheet: { id, name },
       };
 
       operationStepDispatcher.updateOperation(updatedOperation);

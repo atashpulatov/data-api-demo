@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { officeProperties } from './office-properties';
 
 const initialState = {
@@ -14,7 +15,7 @@ const initialState = {
   isShapeAPISupported: false,
 };
 
-export const officeReducer = (state = initialState, action) => {
+export const officeReducer = (state = initialState, action = {}) => {
   switch (action.type) {
     case officeProperties.actions.showDialog:
       return onShowDialog(state);
@@ -125,14 +126,14 @@ function toggleIsClearDataFailedFlag(action, state) {
 function toggleSettingsPanelLoadedFlag(action, state) {
   return {
     ...state,
-    settingsPanelLoaded: !state.settingsPanelLoaded
+    settingsPanelLoaded: !state.settingsPanelLoaded,
   };
 }
 
 function toggleReusePromptAnswersFlag(action, state) {
   return {
     ...state,
-    reusePromptAnswers: action.reusePromptAnswers
+    reusePromptAnswers: action.reusePromptAnswers,
   };
 }
 
@@ -160,6 +161,6 @@ function clearPopupData(action, state) {
 function setIsShapeAPISupported(action, state) {
   return {
     ...state,
-    isShapeAPISupported: action.data
+    isShapeAPISupported: action.data,
   };
 }

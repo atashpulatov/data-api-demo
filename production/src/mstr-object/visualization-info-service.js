@@ -7,7 +7,7 @@ class VisualizationInfoService {
     this.parseDossierPage = this.parseDossierPage.bind(this);
   }
 
-  init = (mstrObjectRestService) => {
+  init = mstrObjectRestService => {
     this.mstrObjectRestService = mstrObjectRestService;
   };
 
@@ -24,14 +24,24 @@ class VisualizationInfoService {
    * @returns {Object} Contains info for visualization or null if visualization key is not found
    */
   async getVisualizationInfo(projectId, objectId, visualizationKey, dossierInstance) {
-    const dossierDefinition = await this.mstrObjectRestService
-      .getDossierInstanceDefinition(projectId, objectId, dossierInstance);
+    const dossierDefinition = await this.mstrObjectRestService.getDossierInstanceDefinition(
+      projectId,
+      objectId,
+      dossierInstance
+    );
 
     for (const chapter of dossierDefinition.chapters) {
       const chapterData = { name: chapter.name, key: chapter.key };
       for (const page of chapter.pages) {
-        const vizInfo = this.parseDossierPage(page, visualizationKey, chapterData, dossierDefinition.name);
-        if (vizInfo) { return vizInfo; }
+        const vizInfo = this.parseDossierPage(
+          page,
+          visualizationKey,
+          chapterData,
+          dossierDefinition.name
+        );
+        if (vizInfo) {
+          return vizInfo;
+        }
       }
     }
 
@@ -58,7 +68,7 @@ class VisualizationInfoService {
         chapterName: chapterData.name,
         dossierName,
         pageName: pageData.name,
-      }
+      },
     };
   }
 
@@ -76,7 +86,12 @@ class VisualizationInfoService {
   parseVisualizations(visualizations, chapterData, pageData, visualizationKey, dossierName) {
     for (const visualization of visualizations) {
       if (visualization.key === visualizationKey) {
-        return this.prepareVisualizationInfoObject(chapterData, pageData, visualizationKey, dossierName);
+        return this.prepareVisualizationInfoObject(
+          chapterData,
+          pageData,
+          visualizationKey,
+          dossierName
+        );
       }
     }
 
@@ -99,16 +114,28 @@ class VisualizationInfoService {
       for (const panel of panelStack.panels) {
         if (panel.visualizations) {
           const vizInfo = this.parseVisualizations(
-            panel.visualizations, chapterData, pageData, visualizationKey, dosierName
+            panel.visualizations,
+            chapterData,
+            pageData,
+            visualizationKey,
+            dosierName
           );
-          if (vizInfo) { return vizInfo; }
+          if (vizInfo) {
+            return vizInfo;
+          }
         }
 
         if (panel.panelStacks) {
           const vizInfo = this.parsePanelStacks(
-            panel.panelStacks, visualizationKey, chapterData, pageData, dosierName
+            panel.panelStacks,
+            visualizationKey,
+            chapterData,
+            pageData,
+            dosierName
           );
-          if (vizInfo) { return vizInfo; }
+          if (vizInfo) {
+            return vizInfo;
+          }
         }
       }
     }
@@ -130,16 +157,28 @@ class VisualizationInfoService {
 
     if (page.visualizations) {
       const vizInfo = this.parseVisualizations(
-        page.visualizations, chapterData, pageData, visualizationKey, dossierName
+        page.visualizations,
+        chapterData,
+        pageData,
+        visualizationKey,
+        dossierName
       );
-      if (vizInfo) { return vizInfo; }
+      if (vizInfo) {
+        return vizInfo;
+      }
     }
 
     if (page.panelStacks) {
       const vizInfo = this.parsePanelStacks(
-        page.panelStacks, visualizationKey, chapterData, pageData, dossierName
+        page.panelStacks,
+        visualizationKey,
+        chapterData,
+        pageData,
+        dossierName
       );
-      if (vizInfo) { return vizInfo; }
+      if (vizInfo) {
+        return vizInfo;
+      }
     }
 
     return null;

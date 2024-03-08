@@ -1,12 +1,8 @@
 import React from 'react';
-import { sessionHelper } from './storage/session-helper';
-import mstrObjectType from './mstr-object/mstr-object-type-enum';
 
-export const DevelopmentImportList = () => (
-  <div className="refresh-button-container">
-    <button type="button" onClick={() => sessionHelper.importObjectWithouPopup(objectList.SeasonalReport)}>Quick Import</button>
-  </div>
-);
+import { sessionHelper } from './storage/session-helper';
+
+import mstrObjectType from './mstr-object/mstr-object-type-enum';
 
 const objectList = {
   SeasonalReport: {
@@ -28,39 +24,44 @@ const objectList = {
     projectId: 'B7CA92F04B9FAE8D941C3E9B7E0CD754',
     body: {
       viewFilter: {
-        operator: 'And', operands: [
+        operator: 'And',
+        operands: [
           {
-            operator: 'In', operands: [
+            operator: 'In',
+            operands: [
               {
                 type: 'attribute',
-                id: '8D679D4411D3E4981000E787EC6DE8A4'
+                id: '8D679D4411D3E4981000E787EC6DE8A4',
               },
               {
                 type: 'elements',
                 elements: [
                   { id: '8D679D4411D3E4981000E787EC6DE8A4:201401' },
                   { id: '8D679D4411D3E4981000E787EC6DE8A4:201402' },
-                  { id: '8D679D4411D3E4981000E787EC6DE8A4:201403' }]
-              }
-            ]
+                  { id: '8D679D4411D3E4981000E787EC6DE8A4:201403' },
+                ],
+              },
+            ],
           },
           {
-            operator: 'In', operands: [
+            operator: 'In',
+            operands: [
               {
                 type: 'attribute',
-                id: '8D679D4F11D3E4981000E787EC6DE8A4'
+                id: '8D679D4F11D3E4981000E787EC6DE8A4',
               },
               {
                 type: 'elements',
                 elements: [
                   { id: '8D679D4F11D3E4981000E787EC6DE8A4:11' },
-                  { id: '8D679D4F11D3E4981000E787EC6DE8A4:12' }]
-              }
-            ]
+                  { id: '8D679D4F11D3E4981000E787EC6DE8A4:12' },
+                ],
+              },
+            ],
           },
-        ]
-      }
-    }
+        ],
+      },
+    },
   },
   CrosstabSubtotal: {
     name: 'Report with crosstab & subtotal',
@@ -69,38 +70,54 @@ const objectList = {
     projectId: 'B7CA92F04B9FAE8D941C3E9B7E0CD754',
     body: {
       viewFilter: {
-        operator: 'And', operands: [
+        operator: 'And',
+        operands: [
           {
-            operator: 'In', operands: [
+            operator: 'In',
+            operands: [
               {
                 type: 'attribute',
-                id: '8D679D4411D3E4981000E787EC6DE8A4'
+                id: '8D679D4411D3E4981000E787EC6DE8A4',
               },
               {
                 type: 'elements',
                 elements: [
                   { id: '8D679D4411D3E4981000E787EC6DE8A4:201401' },
                   { id: '8D679D4411D3E4981000E787EC6DE8A4:201402' },
-                  { id: '8D679D4411D3E4981000E787EC6DE8A4:201403' }]
-              }
-            ]
+                  { id: '8D679D4411D3E4981000E787EC6DE8A4:201403' },
+                ],
+              },
+            ],
           },
           {
-            operator: 'In', operands: [
+            operator: 'In',
+            operands: [
               {
                 type: 'attribute',
-                id: '8D679D4F11D3E4981000E787EC6DE8A4'
+                id: '8D679D4F11D3E4981000E787EC6DE8A4',
               },
               {
                 type: 'elements',
                 elements: [
                   { id: '8D679D4F11D3E4981000E787EC6DE8A4:11' },
-                  { id: '8D679D4F11D3E4981000E787EC6DE8A4:12' }]
-              }
-            ]
+                  { id: '8D679D4F11D3E4981000E787EC6DE8A4:12' },
+                ],
+              },
+            ],
           },
-        ]
-      }
-    }
-  }
+        ],
+      },
+    },
+  },
 };
+
+export const DevelopmentImportList = (): React.ReactElement => (
+  <div className='refresh-button-container'>
+    <button
+      type='button'
+      onClick={() => sessionHelper.importObjectWithouPopup(objectList.SeasonalReport)}
+    >
+      Quick Import
+    </button>
+  </div>
+);

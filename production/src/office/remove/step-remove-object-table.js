@@ -1,8 +1,9 @@
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
-import { officeRemoveHelper } from './office-remove-helper';
-import { officeApiHelper } from '../api/office-api-helper';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
+import { officeApiHelper } from '../api/office-api-helper';
+import { officeRemoveHelper } from './office-remove-helper';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepRemoveObjectTable {
   /**
@@ -39,19 +40,25 @@ class StepRemoveObjectTable {
       } else {
         const officeTable = excelContext.workbook.tables.getItem(bindId);
 
-        const { validColumnsY, validRowsX } = await officeApiCrosstabHelper.getCrosstabHeadersSafely(
-          crosstabHeaderDimensions,
-          officeTable,
-          excelContext
-        );
+        const { validColumnsY, validRowsX } =
+          await officeApiCrosstabHelper.getCrosstabHeadersSafely(
+            crosstabHeaderDimensions,
+            officeTable,
+            excelContext
+          );
 
         const validCrosstabHeaderDimnesions = {
           ...crosstabHeaderDimensions,
           columnsY: validColumnsY - 1,
-          rowsX: validRowsX
+          rowsX: validRowsX,
         };
 
-        await officeRemoveHelper.removeExcelTable(officeTable, excelContext, isCrosstab, validCrosstabHeaderDimnesions);
+        await officeRemoveHelper.removeExcelTable(
+          officeTable,
+          excelContext,
+          isCrosstab,
+          validCrosstabHeaderDimnesions
+        );
 
         operationStepDispatcher.completeRemoveObjectTable(objectWorkingId);
       }

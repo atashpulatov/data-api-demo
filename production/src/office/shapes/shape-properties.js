@@ -3,7 +3,7 @@ export const shapeProps = {
   TOP: 'top',
   LEFT: 'left',
   WIDTH: 'width',
-  HEIGHT: 'height'
+  HEIGHT: 'height',
 };
 
 export const sheetCollectionProps = { ITEMS: 'items' };

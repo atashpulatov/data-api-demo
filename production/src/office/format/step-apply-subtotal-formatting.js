@@ -1,5 +1,5 @@
-import officeFormatSubtotals from './office-format-subtotals';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import officeFormatSubtotals from './office-format-subtotals';
 
 class StepApplySubtotalFormatting {
   /**
@@ -14,9 +14,7 @@ class StepApplySubtotalFormatting {
    * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
    */
   applySubtotalFormattingRedux = async (objectData, operationData) => {
-    const {
-      objectWorkingId, excelContext, instanceDefinition, officeTable,
-    } = operationData;
+    const { objectWorkingId, excelContext, instanceDefinition, officeTable } = operationData;
     const { mstrTable } = instanceDefinition;
 
     if (mstrTable.subtotalsInfo.subtotalsAddresses.length) {

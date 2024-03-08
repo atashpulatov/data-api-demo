@@ -1,77 +1,97 @@
-import { objectNotificationTypes, globalNotificationTypes } from '@mstr/connector-components';
-import { notificationService } from '../../notification-v2/notification-service';
+import { GlobalNotificationTypes, ObjectNotificationTypes } from '@mstr/connector-components';
+
+import { notificationService } from '../../notification/notification-service';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
-import operationErrorHandler from '../../operation/operation-error-handler';
 import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-notification-helper';
 import { sidePanelService } from '../../right-side-panel/side-panel-service';
 import { popupHelper } from '../popup-helper';
 import overviewHelper, { OverviewActionCommands } from './overview-helper';
-import {
-  DUPLICATE_OPERATION, EDIT_OPERATION, IMPORT_OPERATION, REFRESH_OPERATION, REMOVE_OPERATION
-} from '../../operation/operation-type-names';
-import {
-  mockedGlobalWarningNotification, mockedNotificationsFromStore, mockedObjectsFromStore, mockedWarningImportNotification
-} from '../../_tests_/mockDataV2';
+
 import { reduxStore } from '../../store';
+
+import {
+  DUPLICATE_OPERATION,
+  EDIT_OPERATION,
+  IMPORT_OPERATION,
+  REFRESH_OPERATION,
+  REMOVE_OPERATION,
+} from '../../operation/operation-type-names';
+
+import {
+  mockedGlobalWarningNotification,
+  mockedNotificationsFromStore,
+  mockedObjectsFromStore,
+  mockedWarningImportNotification,
+} from '../../../__mocks__/mockDataV2';
 
 describe('overview-helper', () => {
   const objectWorkingIds = [1, 2];
 
   it('should send refresh request to side panel', () => {
     // Given
-    const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+    const officeMessageParentMock = jest
+      .spyOn(popupHelper, 'officeMessageParent')
+      .mockImplementation();
     // When
     overviewHelper.sendRefreshRequest(objectWorkingIds);
 
     // Then
     expect(officeMessageParentMock).toHaveBeenCalledWith({
       command: OverviewActionCommands.REFRESH,
-      objectWorkingIds
+      objectWorkingIds,
     });
   });
 
   it('should send edit request to side panel', () => {
     // Given
-    const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+    const officeMessageParentMock = jest
+      .spyOn(popupHelper, 'officeMessageParent')
+      .mockImplementation();
     // When
     overviewHelper.sendEditRequest(objectWorkingIds[0]);
 
     // Then
     expect(officeMessageParentMock).toHaveBeenCalledWith({
       command: OverviewActionCommands.EDIT,
-      objectWorkingId: objectWorkingIds[0]
+      objectWorkingId: objectWorkingIds[0],
     });
   });
 
   it('should send reprompt request to side panel', () => {
     // Given
-    const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+    const officeMessageParentMock = jest
+      .spyOn(popupHelper, 'officeMessageParent')
+      .mockImplementation();
     // When
     overviewHelper.sendRepromptRequest(objectWorkingIds);
 
     // Then
     expect(officeMessageParentMock).toHaveBeenCalledWith({
       command: OverviewActionCommands.REPROMPT,
-      objectWorkingIds
+      objectWorkingIds,
     });
   });
 
   it('should send delete request to side panel', () => {
     // Given
-    const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+    const officeMessageParentMock = jest
+      .spyOn(popupHelper, 'officeMessageParent')
+      .mockImplementation();
     // When
     overviewHelper.sendDeleteRequest(objectWorkingIds);
 
     // Then
     expect(officeMessageParentMock).toHaveBeenCalledWith({
       command: OverviewActionCommands.REMOVE,
-      objectWorkingIds
+      objectWorkingIds,
     });
   });
 
   it('should send duplicate request to side panel', () => {
     // Given
-    const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+    const officeMessageParentMock = jest
+      .spyOn(popupHelper, 'officeMessageParent')
+      .mockImplementation();
 
     // When
     overviewHelper.sendDuplicateRequest(objectWorkingIds, true, false);
@@ -81,14 +101,16 @@ describe('overview-helper', () => {
       command: OverviewActionCommands.DUPLICATE,
       objectWorkingIds,
       insertNewWorksheet: true,
-      withEdit: false
+      withEdit: false,
     });
   });
 
   it('should send rangeTakenOk request to side panel', () => {
     // Given
     const objectWorkingId = objectWorkingIds[0];
-    const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+    const officeMessageParentMock = jest
+      .spyOn(popupHelper, 'officeMessageParent')
+      .mockImplementation();
 
     // When
     overviewHelper.handleRangeTakenOk(objectWorkingId);
@@ -103,7 +125,9 @@ describe('overview-helper', () => {
   it('should send rangeTakenClose request to side panel', () => {
     // Given
     const objectWorkingId = objectWorkingIds[0];
-    const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+    const officeMessageParentMock = jest
+      .spyOn(popupHelper, 'officeMessageParent')
+      .mockImplementation();
 
     // When
     overviewHelper.handleRangeTakenClose(objectWorkingId);
@@ -118,7 +142,9 @@ describe('overview-helper', () => {
   it('should send rename request to side panel', () => {
     // Given
     const objectWorkingId = objectWorkingIds[0];
-    const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+    const officeMessageParentMock = jest
+      .spyOn(popupHelper, 'officeMessageParent')
+      .mockImplementation();
 
     // When
     overviewHelper.sendRenameRequest(objectWorkingId, 'newName');
@@ -127,14 +153,16 @@ describe('overview-helper', () => {
     expect(officeMessageParentMock).toHaveBeenCalledWith({
       command: OverviewActionCommands.RENAME,
       objectWorkingId,
-      newName: 'newName'
+      newName: 'newName',
     });
   });
 
   it('should send goToWorksheet request to side panel', () => {
     // Given
     const objectWorkingId = objectWorkingIds[0];
-    const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+    const officeMessageParentMock = jest
+      .spyOn(popupHelper, 'officeMessageParent')
+      .mockImplementation();
 
     // When
     overviewHelper.sendGoToWorksheetRequest(objectWorkingId);
@@ -142,39 +170,45 @@ describe('overview-helper', () => {
     // Then
     expect(officeMessageParentMock).toHaveBeenCalledWith({
       command: OverviewActionCommands.GO_TO_WORKSHEET,
-      objectWorkingId
+      objectWorkingId,
     });
   });
 
   it('should send Dismiss Notification request to side panel', () => {
     // Given
-    const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+    const officeMessageParentMock = jest
+      .spyOn(popupHelper, 'officeMessageParent')
+      .mockImplementation();
     // When
     overviewHelper.sendDismissNotificationRequest(objectWorkingIds);
 
     // Then
     expect(officeMessageParentMock).toHaveBeenCalledWith({
       command: OverviewActionCommands.DISMISS_NOTIFICATION,
-      objectWorkingIds
+      objectWorkingIds,
     });
   });
 
   it('should send Dismiss Global Notification request to side panel', () => {
     // Given
-    const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+    const officeMessageParentMock = jest
+      .spyOn(popupHelper, 'officeMessageParent')
+      .mockImplementation();
 
     // When
     overviewHelper.sendDismissGlobalNotificationRequest();
 
     // Then
-    expect(officeMessageParentMock).toHaveBeenCalledWith(
-      { command: OverviewActionCommands.DISMISS_GLOBAL_NOTIFICATION, }
-    );
+    expect(officeMessageParentMock).toHaveBeenCalledWith({
+      command: OverviewActionCommands.DISMISS_GLOBAL_NOTIFICATION,
+    });
   });
 
   it('should handle Dismiss Global Notification request to side panel', () => {
     // Given
-    const notificationServiceMock = jest.spyOn(notificationService, 'globalNotificationDissapear').mockImplementation();
+    const notificationServiceMock = jest
+      .spyOn(notificationService, 'globalNotificationDissapear')
+      .mockImplementation();
 
     // When
     overviewHelper.handleDismissGlobalNotification();
@@ -187,7 +221,7 @@ describe('overview-helper', () => {
     // Given
     const actionCommand = {
       command: OverviewActionCommands.REFRESH,
-      objectWorkingIds
+      objectWorkingIds,
     };
 
     const refreshMock = jest.spyOn(sidePanelService, 'refresh').mockImplementation();
@@ -203,7 +237,7 @@ describe('overview-helper', () => {
     // Given
     const actionCommand = {
       command: OverviewActionCommands.EDIT,
-      objectWorkingId: objectWorkingIds[0]
+      objectWorkingId: objectWorkingIds[0],
     };
 
     const editMock = jest.spyOn(sidePanelService, 'edit').mockImplementation();
@@ -235,7 +269,7 @@ describe('overview-helper', () => {
     // Given
     const actionCommand = {
       command: OverviewActionCommands.REMOVE,
-      objectWorkingIds
+      objectWorkingIds,
     };
 
     const removeMock = jest.spyOn(sidePanelService, 'remove').mockImplementation();
@@ -253,7 +287,7 @@ describe('overview-helper', () => {
       command: OverviewActionCommands.DUPLICATE,
       objectWorkingIds,
       insertNewWorksheet: true,
-      withEdit: false
+      withEdit: false,
     };
 
     const duplicateMock = jest.spyOn(sidePanelService, 'duplicate').mockImplementation();
@@ -270,11 +304,15 @@ describe('overview-helper', () => {
     // Given
     const actionCommand = {
       command: OverviewActionCommands.RANGE_TAKEN_OK,
-      objectWorkingId: objectWorkingIds[0]
+      objectWorkingId: objectWorkingIds[0],
     };
 
-    const importInNewRangeMock = jest.spyOn(sidePanelNotificationHelper, 'importInNewRange').mockImplementation();
-    const clearPopupDataMock = jest.spyOn(officeReducerHelper, 'clearPopupData').mockImplementation();
+    const importInNewRangeMock = jest
+      .spyOn(sidePanelNotificationHelper, 'importInNewRange')
+      .mockImplementation();
+    const clearPopupDataMock = jest
+      .spyOn(officeReducerHelper, 'clearPopupData')
+      .mockImplementation();
 
     // When
     await overviewHelper.handleOverviewActionCommand(actionCommand);
@@ -288,14 +326,18 @@ describe('overview-helper', () => {
     // Given
     const actionCommand = {
       command: OverviewActionCommands.RANGE_TAKEN_CLOSE,
-      objectWorkingId: objectWorkingIds[0]
+      objectWorkingId: objectWorkingIds[0],
     };
 
-    const mockedStore = { officeReducer: { popupData: { callback: jest.fn() } } };
+    const mockedStore = {
+      officeReducer: { popupData: { callback: jest.fn() } },
+    };
     const { callback } = mockedStore.officeReducer.popupData;
 
     jest.spyOn(reduxStore, 'getState').mockReturnValueOnce(mockedStore);
-    const clearPopupDataMock = jest.spyOn(officeReducerHelper, 'clearPopupData').mockImplementation();
+    const clearPopupDataMock = jest
+      .spyOn(officeReducerHelper, 'clearPopupData')
+      .mockImplementation();
 
     // When
     await overviewHelper.handleOverviewActionCommand(actionCommand);
@@ -309,10 +351,12 @@ describe('overview-helper', () => {
     // Given
     const actionCommand = {
       command: OverviewActionCommands.DISMISS_NOTIFICATION,
-      objectWorkingIds
+      objectWorkingIds,
     };
 
-    const removeMock = jest.spyOn(notificationService, 'removeExistingNotification').mockImplementation();
+    const removeMock = jest
+      .spyOn(notificationService, 'removeExistingNotification')
+      .mockImplementation();
 
     // When
     await overviewHelper.handleOverviewActionCommand(actionCommand);
@@ -330,7 +374,7 @@ describe('overview-helper', () => {
         type: 55,
         subtypes: 'undefined',
         name: 'visualization',
-        request: 'visualizations'
+        request: 'visualizations',
       },
       name: 'Campaign Finances per Candidate',
       worksheet: 'Sheet 1',
@@ -350,7 +394,10 @@ describe('overview-helper', () => {
     };
 
     // When
-    const result = overviewHelper.transformExcelObjects(mockedObjectsFromStore, mockedNotificationsFromStore);
+    const result = overviewHelper.transformExcelObjects(
+      mockedObjectsFromStore,
+      mockedNotificationsFromStore
+    );
 
     // Then
     expect(result).toEqual([expectedResult]);
@@ -362,12 +409,13 @@ describe('overview-helper', () => {
       objectWorkingId: 1708520901973,
       type: 'warning',
       title: 'The table you try to import exceeds the worksheet limits.',
-      details: 'Failure details'
-
+      details: 'Failure details',
     };
 
     // When
-    const result = overviewHelper.getWarningsToDisplay({ notifications: [mockedWarningImportNotification] });
+    const result = overviewHelper.getWarningsToDisplay({
+      notifications: [mockedWarningImportNotification],
+    });
 
     // Then
     expect(result).toBeInstanceOf(Array);
@@ -380,13 +428,15 @@ describe('overview-helper', () => {
   it('getWarningsToDisplay should work correctly for global notifications', async () => {
     // Given
     const expectedResult = {
-      type: globalNotificationTypes.GLOBAL_WARNING,
+      type: GlobalNotificationTypes.GLOBAL_WARNING,
       title: 'You cannot import an unpublished cube.',
-      details: 'Failure details'
+      details: 'Failure details',
     };
 
     // When
-    const result = overviewHelper.getWarningsToDisplay({ globalNotification: mockedGlobalWarningNotification });
+    const result = overviewHelper.getWarningsToDisplay({
+      globalNotification: mockedGlobalWarningNotification,
+    });
 
     // Then
     expect(result).toBeInstanceOf(Array);
@@ -397,24 +447,33 @@ describe('overview-helper', () => {
   });
 
   it.each`
-    operationType           | notificationType                      | expectedResultLength
-    ${IMPORT_OPERATION}     | ${objectNotificationTypes.WARNING}    | ${1}
-    ${IMPORT_OPERATION}     | ${objectNotificationTypes.PROGRESS}   | ${0}
-    ${REMOVE_OPERATION}     | ${objectNotificationTypes.WARNING}    | ${1}
-    ${DUPLICATE_OPERATION}  | ${objectNotificationTypes.WARNING}    | ${1}
-    ${REFRESH_OPERATION}    | ${objectNotificationTypes.WARNING}    | ${1}
-    ${EDIT_OPERATION}       | ${objectNotificationTypes.WARNING}    | ${1}
-    `('getWarningsToDisplay should correctly determine whether to display notification as global notification in overview', ({ operationType, notificationType, expectedResultLength }) => {
-    // Given
-    const notifications = [{ ...mockedWarningImportNotification, operationType, type: notificationType }];
+    operationType          | notificationType                    | expectedResultLength
+    ${IMPORT_OPERATION}    | ${ObjectNotificationTypes.WARNING}  | ${1}
+    ${IMPORT_OPERATION}    | ${ObjectNotificationTypes.PROGRESS} | ${0}
+    ${REMOVE_OPERATION}    | ${ObjectNotificationTypes.WARNING}  | ${1}
+    ${DUPLICATE_OPERATION} | ${ObjectNotificationTypes.WARNING}  | ${1}
+    ${REFRESH_OPERATION}   | ${ObjectNotificationTypes.WARNING}  | ${1}
+    ${EDIT_OPERATION}      | ${ObjectNotificationTypes.WARNING}  | ${1}
+  `(
+    'getWarningsToDisplay should correctly determine whether to display notification as global notification in overview',
+    ({ operationType, notificationType, expectedResultLength }) => {
+      // Given
+      const notifications = [
+        {
+          ...mockedWarningImportNotification,
+          operationType,
+          type: notificationType,
+        },
+      ];
 
-    // When
-    const result = overviewHelper.getWarningsToDisplay({ notifications });
+      // When
+      const result = overviewHelper.getWarningsToDisplay({ notifications });
 
-    // Then
-    expect(result).toBeInstanceOf(Array);
-    expect(result).toHaveLength(expectedResultLength);
-  });
+      // Then
+      expect(result).toBeInstanceOf(Array);
+      expect(result).toHaveLength(expectedResultLength);
+    }
+  );
 
   it('should transform objects and notifications correctly', () => {
     // Given

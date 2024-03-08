@@ -1,10 +1,12 @@
 import request from 'superagent';
-import { errorMessages } from '../error/constants';
-import { OutsideOfRangeError } from '../error/outside-of-range-error';
+
 import officeConverterServiceV2 from '../office/office-converter-service-v2';
-import mstrObjectEnum from './mstr-object-type-enum';
 import mstrAttributeFormHelper from './helper/mstr-attribute-form-helper';
 import mstrAttributeMetricHelper from './helper/mstr-attribute-metric-helper';
+
+import { OutsideOfRangeError } from '../error/outside-of-range-error';
+import mstrObjectEnum from './mstr-object-type-enum';
+import { errorMessages } from '../error/constants';
 
 const reportObjectType = mstrObjectEnum.mstrObjectType.report;
 
@@ -31,7 +33,9 @@ function parseInstanceDefinition(res, attrforms) {
   }
   const { instanceId, data, internal } = body;
   body.attrforms = attrforms;
-  if (data.paging.total === 0) { throw new Error(errorMessages.NO_DATA_RETURNED); }
+  if (data.paging.total === 0) {
+    throw new Error(errorMessages.NO_DATA_RETURNED);
+  }
   const mstrTable = officeConverterServiceV2.createTable(body);
   const { rows, columns } = checkTableDimensions(mstrTable.tableSize);
 
@@ -45,7 +49,13 @@ function parseInstanceDefinition(res, attrforms) {
 }
 
 function getFullPath({
-  envUrl, limit, mstrObjectType, objectId, instanceId, version = 1, visualizationInfo = false,
+  envUrl,
+  limit,
+  mstrObjectType,
+  objectId,
+  instanceId,
+  version = 1,
+  visualizationInfo = false,
 }) {
   let path;
   if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
@@ -58,20 +68,6 @@ function getFullPath({
     path += limit ? `?limit=${limit}` : '';
   }
   return path;
-}
-
-function fetchObjectContent(fullPath, authToken, projectId, visualizationType, offset = 0, limit = -1) {
-  if (limit > IMPORT_ROW_LIMIT || offset > EXCEL_ROW_LIMIT) {
-    throw new Error(errorMessages.PROBLEM_WITH_REQUEST);
-  }
-  const contentFields = getFetchObjectContentFields(visualizationType);
-  const validPath = encodeURI(`${fullPath}?offset=${offset}&limit=${limit}&fields=${contentFields}`);
-
-  return request
-    .get(validPath)
-    .set('x-mstr-authtoken', authToken)
-    .set('x-mstr-projectid', projectId)
-    .withCredentials();
 }
 
 /**
@@ -90,6 +86,29 @@ function getFetchObjectContentFields(visualizationType) {
   }
 }
 
+function fetchObjectContent(
+  fullPath,
+  authToken,
+  projectId,
+  visualizationType,
+  offset = 0,
+  limit = -1
+) {
+  if (limit > IMPORT_ROW_LIMIT || offset > EXCEL_ROW_LIMIT) {
+    throw new Error(errorMessages.PROBLEM_WITH_REQUEST);
+  }
+  const contentFields = getFetchObjectContentFields(visualizationType);
+  const validPath = encodeURI(
+    `${fullPath}?offset=${offset}&limit=${limit}&fields=${contentFields}`
+  );
+
+  return request
+    .get(validPath)
+    .set('x-mstr-authtoken', authToken)
+    .set('x-mstr-projectid', projectId)
+    .withCredentials();
+}
+
 /**
  * This function fetches the content of the object.
  * It is used to fetch the dossier or report in chunks to be inserted in workbook.
@@ -101,14 +120,7 @@ function getFetchObjectContentFields(visualizationType) {
  * @param {*} visualizationType
  * @returns
  */
-async function fetchContentPart(
-  fullPath,
-  authToken,
-  projectId,
-  offset,
-  limit,
-  visualizationType
-) {
+async function fetchContentPart(fullPath, authToken, projectId, offset, limit, visualizationType) {
   const { body: fetchedBody } = await fetchObjectContent(
     fullPath,
     authToken,
@@ -150,12 +162,12 @@ class MstrObjectRestService {
     this.fetchContentGenerator = this.fetchContentGenerator.bind(this);
   }
 
-  init = (reduxStore) => {
+  init = reduxStore => {
     this.reduxStore = reduxStore;
   };
 
   // eslint-disable-next-line class-methods-use-this
-  async* fetchContentGenerator({
+  async *fetchContentGenerator({
     instanceDefinition,
     objectId,
     projectId,
@@ -163,12 +175,12 @@ class MstrObjectRestService {
     dossierData,
     limit = IMPORT_ROW_LIMIT,
     visualizationInfo,
-    displayAttrFormNames
+    displayAttrFormNames,
   }) {
     const {
       rows: totalRows,
       instanceId,
-      mstrTable: { isCrosstab, visualizationType }
+      mstrTable: { isCrosstab, visualizationType },
     } = instanceDefinition;
 
     const { envUrl, authToken } = this.reduxStore.getState().sessionReducer;
@@ -185,13 +197,13 @@ class MstrObjectRestService {
       objectId,
       instanceId,
       version: API_VERSION,
-      visualizationInfo
+      visualizationInfo,
     });
 
     // Declaring these functions outside of the loop to avoid creating them on each iteration
     // and mitigate eslint no-loop-func rule.
-    const offsetRowSubtotalFn = (e) => offsetRowSubtotal(e, offset);
-    const offsetCrosstabSubtotalFn = (e) => offsetCrosstabSubtotal(e, offset);
+    const offsetRowSubtotalFn = e => offsetRowSubtotal(e, offset);
+    const offsetCrosstabSubtotalFn = e => offsetCrosstabSubtotal(e, offset);
 
     while (fetchedRows < totalRows && fetchedRows < EXCEL_ROW_LIMIT) {
       const fetchedBody = await fetchContentPart(
@@ -208,17 +220,16 @@ class MstrObjectRestService {
       const { current } = body.data.paging;
 
       const metricsInRowsInfo = mstrAttributeMetricHelper.getMetricsInRowsInfo(
-        body, metricsInRows, fetchedBody
+        body,
+        metricsInRows,
+        fetchedBody
       );
 
       metricsInRows.push(...metricsInRowsInfo.metricsInRows);
 
       fetchedRows = current + offset;
       body.attrforms = attrforms;
-      const { row, rowTotals } = officeConverterServiceV2.getRows(
-        body,
-        isCrosstab
-      );
+      const { row, rowTotals } = officeConverterServiceV2.getRows(body, isCrosstab);
 
       let header;
       let crosstabSubtotal;
@@ -239,7 +250,10 @@ class MstrObjectRestService {
         header,
         subtotalAddress: isCrosstab ? crosstabSubtotal : rowTotals,
         metricsInRows,
-        rowsInformation: mstrAttributeFormHelper.splitAttributeForms(metricsInRowsInfo.metricsRows, attrforms)
+        rowsInformation: mstrAttributeFormHelper.splitAttributeForms(
+          metricsInRowsInfo.metricsRows,
+          attrforms
+        ),
       };
     }
   }
@@ -260,7 +274,7 @@ class MstrObjectRestService {
       .set('X-MSTR-ProjectID', projectId)
       .send(promptsAnswers)
       .withCredentials()
-      .then((res) => res.status);
+      .then(res => res.status);
   };
 
   answerPrompts = ({
@@ -279,7 +293,7 @@ class MstrObjectRestService {
       .set('X-MSTR-ProjectID', projectId)
       .send(promptsAnswers)
       .withCredentials()
-      .then((res) => res.status);
+      .then(res => res.status);
   };
 
   createDossierBasedOnReport = (chosenObjectId, instanceId, projectId) => {
@@ -307,7 +321,7 @@ class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .send(body)
       .withCredentials()
-      .then((res) => res.body);
+      .then(res => res.body);
   };
 
   createInstance = ({
@@ -329,7 +343,7 @@ class MstrObjectRestService {
       limit,
       mstrObjectType,
       objectId,
-      version: API_VERSION
+      version: API_VERSION,
     });
 
     return request
@@ -338,7 +352,7 @@ class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .send(body)
       .withCredentials()
-      .then((res) => parseInstanceDefinition(res, attrforms));
+      .then(res => parseInstanceDefinition(res, attrforms));
   };
 
   fetchVisualizationDefinition = ({
@@ -347,7 +361,7 @@ class MstrObjectRestService {
     instanceId,
     visualizationInfo,
     body,
-    displayAttrFormNames
+    displayAttrFormNames,
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
@@ -361,7 +375,7 @@ class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .send(body || '')
       .withCredentials()
-      .then((res) => parseInstanceDefinition(res, attrforms));
+      .then(res => parseInstanceDefinition(res, attrforms));
   };
 
   createDossierInstance = (projectId, objectId, body = {}) => {
@@ -374,7 +388,7 @@ class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .send(body)
       .withCredentials()
-      .then((res) => res.body);
+      .then(res => res.body);
   };
 
   getDossierInstanceDefinition = (projectId, objectId, dossierInstanceId) => {
@@ -386,7 +400,7 @@ class MstrObjectRestService {
       .set('x-mstr-authtoken', authToken)
       .set('x-mstr-projectid', projectId)
       .withCredentials()
-      .then((res) => res.body);
+      .then(res => res.body);
   };
 
   deleteDossierInstance = (projectId, objectId, instanceId) => {
@@ -398,7 +412,7 @@ class MstrObjectRestService {
       .set('x-mstr-authtoken', authToken)
       .set('x-mstr-projectid', projectId)
       .withCredentials()
-      .then((res) => res.body);
+      .then(res => res.body);
   };
 
   getDossierStatus = (dossierId, instanceId, projectId) => {
@@ -411,7 +425,7 @@ class MstrObjectRestService {
       .set('x-mstr-authtoken', authToken)
       .set('x-mstr-projectid', projectId)
       .withCredentials()
-      .then((res) => res);
+      .then(res => res);
   };
 
   getInstance = ({
@@ -421,7 +435,7 @@ class MstrObjectRestService {
     dossierData,
     body = {},
     instanceId,
-    displayAttrFormNames
+    displayAttrFormNames,
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
@@ -442,7 +456,7 @@ class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .send(body)
       .withCredentials()
-      .then((res) => parseInstanceDefinition(res, attrforms));
+      .then(res => parseInstanceDefinition(res, attrforms));
   };
 
   modifyInstance = ({
@@ -452,7 +466,7 @@ class MstrObjectRestService {
     dossierData,
     body = {},
     instanceId,
-    displayAttrFormNames
+    displayAttrFormNames,
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
@@ -473,14 +487,10 @@ class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .send(body)
       .withCredentials()
-      .then((res) => parseInstanceDefinition(res, attrforms));
+      .then(res => parseInstanceDefinition(res, attrforms));
   };
 
-  getObjectDefinition = (
-    objectId,
-    projectId,
-    mstrObjectType = reportObjectType
-  ) => {
+  getObjectDefinition = (objectId, projectId, mstrObjectType = reportObjectType) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const api = API_VERSION > 1 ? 'v2/' : '';
@@ -491,7 +501,7 @@ class MstrObjectRestService {
       .set('x-mstr-authtoken', authToken)
       .set('x-mstr-projectid', projectId)
       .withCredentials()
-      .then((res) => res.body);
+      .then(res => res.body);
   };
 
   getObjectInfo = (objectId, projectId, mstrObjectType = reportObjectType) => {
@@ -509,7 +519,7 @@ class MstrObjectRestService {
       .set('x-mstr-authtoken', authToken)
       .set('x-mstr-projectid', projectId)
       .withCredentials()
-      .then((res) => res.body);
+      .then(res => res.body);
   };
 
   /**
@@ -530,7 +540,7 @@ class MstrObjectRestService {
       .set('x-mstr-authtoken', authToken)
       .set('x-mstr-projectid', projectId)
       .withCredentials()
-      .then((res) => res.body);
+      .then(res => res.body);
   };
 
   isPrompted = (objectId, projectId, objectTypeName) => {
@@ -549,7 +559,7 @@ class MstrObjectRestService {
       .set('x-mstr-authtoken', authToken)
       .set('X-MSTR-ProjectID', projectId)
       .withCredentials()
-      .then((res) => ({
+      .then(res => ({
         // Create JSON object with promptObjects and isPrompted properties, and return it.
         // isPrompted is true if report or dossier has prompts to be answered.
         // If report or dossier has prompts, promptObjects contains an array of
@@ -566,18 +576,20 @@ class MstrObjectRestService {
    * @param {string} projectId
    * @returns {Object} Contains info for cube that match objectId and projectId
    */
-  getCubeInfo = (objectId, projectId) => new Promise((resolve, reject) => {
-    const storeState = this.reduxStore.getState();
-    const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/cubes?id=${objectId}`;
-    return request
-      .get(fullPath)
-      .set('x-mstr-authtoken', authToken)
-      .set('X-MSTR-ProjectID', projectId)
-      .withCredentials()
-      .then((res) => resolve(res.body.cubesInfos[0]))
-      .catch((error) => reject(error));
-  });
+  getCubeInfo = (objectId, projectId) =>
+    new Promise((resolve, reject) => {
+      const storeState = this.reduxStore.getState();
+      const { envUrl, authToken } = storeState.sessionReducer;
+      const fullPath = `${envUrl}/cubes?id=${objectId}`;
+      // eslint-disable-next-line no-promise-executor-return
+      return request
+        .get(fullPath)
+        .set('x-mstr-authtoken', authToken)
+        .set('X-MSTR-ProjectID', projectId)
+        .withCredentials()
+        .then(res => resolve(res.body.cubesInfos[0]))
+        .catch(error => reject(error));
+    });
 
   rePromptDossier = (dossierId, instanceId, projectId) => {
     const storeState = this.reduxStore.getState();
@@ -589,7 +601,7 @@ class MstrObjectRestService {
       .set('X-MSTR-AuthToken', authToken)
       .set('X-MSTR-ProjectID', projectId)
       .withCredentials()
-      .then((res) => res.body);
+      .then(res => res.body);
   };
 
   /**
@@ -614,7 +626,7 @@ class MstrObjectRestService {
       .set('X-MSTR-ProjectID', projectId)
       .send({ prompts: promptsAnswers.answers })
       .withCredentials()
-      .then((res) => res.status);
+      .then(res => res.status);
   };
 
   updateReportPrompts = ({
@@ -633,7 +645,7 @@ class MstrObjectRestService {
       .set('X-MSTR-ProjectID', projectId)
       .send({ prompts: promptsAnswers })
       .withCredentials()
-      .then((res) => res.status);
+      .then(res => res.status);
   };
 
   applyDossierPrompts = ({
@@ -652,7 +664,7 @@ class MstrObjectRestService {
       .set('X-MSTR-ProjectID', projectId)
       .send(promptsAnswers)
       .withCredentials()
-      .then((res) => res.status);
+      .then(res => res.status);
   };
 
   /**
@@ -674,7 +686,7 @@ class MstrObjectRestService {
       .set('x-mstr-authtoken', authToken)
       .set('x-mstr-projectid', projectId)
       .withCredentials()
-      .then((res) => res.body);
+      .then(res => res.body);
   };
 
   /**
@@ -696,7 +708,7 @@ class MstrObjectRestService {
       .set('x-mstr-authtoken', authToken)
       .set('x-mstr-projectid', projectId)
       .withCredentials()
-      .then((res) => res.body);
+      .then(res => res.body);
   };
 
   /**

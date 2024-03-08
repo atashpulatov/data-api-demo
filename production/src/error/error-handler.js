@@ -1,23 +1,24 @@
 import officeReducerHelper from '../office/store/office-reducer-helper';
-import { getNotificationButtons } from '../notification-v2/notification-buttons';
+
 import { customT } from '../customTranslation';
+import { PopupTypeEnum } from '../home/popup-type-enum';
+import { getNotificationButtons } from '../notification/notification-buttons';
+import {
+  DUPLICATE_OPERATION,
+  EDIT_OPERATION,
+  IMPORT_OPERATION,
+  REFRESH_OPERATION,
+} from '../operation/operation-type-names';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import {
+  errorMessageFactory,
+  errorMessages,
   errorTypes,
   httpStatusToErrorType,
-  stringMessageToErrorType,
-  errorMessageFactory,
   incomingErrorStrings,
-  errorMessages
+  stringMessageToErrorType,
 } from './constants';
-import {
-  IMPORT_OPERATION,
-  DUPLICATE_OPERATION,
-  REFRESH_OPERATION,
-  EDIT_OPERATION
-} from '../operation/operation-type-names';
-import { PopupTypeEnum } from '../home/popup-type-enum';
-import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 
 const COLUMN_EXCEL_API_LIMIT = 5000;
 const TIMEOUT = 3000;
@@ -42,7 +43,10 @@ class ErrorService {
 
     if (errorType === errorTypes.OVERLAPPING_TABLES_ERR) {
       const popupData = {
-        objectWorkingId, title: errorMessage, message: details, callback
+        objectWorkingId,
+        title: errorMessage,
+        message: details,
+        callback,
       };
 
       officeReducerHelper.displayPopup(popupData);
@@ -58,22 +62,34 @@ class ErrorService {
       // Mainly for Reprompt All workflow but covers others, close dialog if somehow remained open
       await this.closePopupIfOpen(!isDataOverviewOpen);
       // Show warning notification
-      this.notificationService.showObjectWarning(objectWorkingId, { title: errorMessage, message: details, callback });
+      this.notificationService.showObjectWarning(objectWorkingId, {
+        title: errorMessage,
+        message: details,
+        callback,
+      });
     }
   };
 
   // TODO combine with handleObjectBasedError
-  handleError = async (error, options = {
-    chosenObjectName: 'Report', onConfirm: null, isLogout: false, dialogType: null
-  }) => {
-    const {
-      onConfirm, isLogout, dialogType, ...parameters
-    } = options;
+  handleError = async (
+    error,
+    options = {
+      chosenObjectName: 'Report',
+      onConfirm: null,
+      isLogout: false,
+      dialogType: null,
+    }
+  ) => {
+    const { onConfirm, isLogout, dialogType, ...parameters } = options;
     const errorType = this.getErrorType(error);
-    const errorMessage = errorMessageFactory(errorType)({ error, ...parameters });
+    const errorMessage = errorMessageFactory(errorType)({
+      error,
+      ...parameters,
+    });
 
-    const shouldClosePopup = dialogType === PopupTypeEnum.importedDataOverview
-    && [errorTypes.UNAUTHORIZED_ERR, errorTypes.CONNECTION_BROKEN_ERR].includes(errorType);
+    const shouldClosePopup =
+      dialogType === PopupTypeEnum.importedDataOverview &&
+      [errorTypes.UNAUTHORIZED_ERR, errorTypes.CONNECTION_BROKEN_ERR].includes(errorType);
 
     await this.closePopupIfOpen(shouldClosePopup);
 
@@ -83,16 +99,21 @@ class ErrorService {
 
   getErrorType = (error, operationData) => {
     const updateError = this.getExcelError(error, operationData);
-    return updateError.type
-    || this.getOfficeErrorType(updateError)
-    || this.getRestErrorType(updateError);
+    return (
+      updateError.type || this.getOfficeErrorType(updateError) || this.getRestErrorType(updateError)
+    );
   };
 
   getErrorDetails = (error, errorMessage) => {
     const errorDetails = (error.response && error.response.text) || error.message || '';
     let details;
     const {
-      EXCEEDS_EXCEL_API_LIMITS, SHEET_HIDDEN, TABLE_OVERLAP, INVALID_VIZ_KEY_MESSAGE, NOT_IN_METADATA, EMPTY_REPORT
+      EXCEEDS_EXCEL_API_LIMITS,
+      SHEET_HIDDEN,
+      TABLE_OVERLAP,
+      INVALID_VIZ_KEY_MESSAGE,
+      NOT_IN_METADATA,
+      EMPTY_REPORT,
     } = errorMessages;
     switch (errorMessage) {
       case EXCEEDS_EXCEL_API_LIMITS:
@@ -110,7 +131,7 @@ class ErrorService {
     return details;
   };
 
-  displayErrorNotification = (error, type, message = '', onConfirm = null) => {
+  displayErrorNotification = (error, type, message = '') => {
     const errorDetails = (error.response && error.response.text) || error.message || '';
     const details = message !== errorDetails ? errorDetails : '';
     if (type === errorTypes.UNAUTHORIZED_ERR) {
@@ -122,11 +143,14 @@ class ErrorService {
     this.notificationService.globalWarningAppeared(payload);
   };
 
-  getChildrenButtons = () => getNotificationButtons([{
-    type: 'basic',
-    label: customT('OK'),
-    onClick: () => this.notificationService.globalNotificationDissapear(),
-  }]);
+  getChildrenButtons = () =>
+    getNotificationButtons([
+      {
+        type: 'basic',
+        label: customT('OK'),
+        onClick: () => this.notificationService.globalNotificationDissapear(),
+      },
+    ]);
 
   checkForLogout = (errorType, isLogout = false) => {
     if (!isLogout && [errorTypes.UNAUTHORIZED_ERR].includes(errorType)) {
@@ -136,7 +160,7 @@ class ErrorService {
     }
   };
 
-  getOfficeErrorType = (error) => {
+  getOfficeErrorType = error => {
     console.warn({ error });
     console.warn(error.message);
 
@@ -153,13 +177,16 @@ class ErrorService {
    * @param {Object} operationData Contains informatons about current operation
    * @param {Error} error Error thrown during the operation execution
    */
-  // eslint-disable-next-line class-methods-use-this
   getExcelError(error, operationData) {
     const { name, code, debugInfo } = error;
-    const isExcelApiError = name === 'RichApi.Error' && code === 'GeneralException'
-      && debugInfo.message === 'An internal error has occurred.';
-    const exceedLimit = operationData && operationData.instanceDefinition
-      && operationData.instanceDefinition.columns > COLUMN_EXCEL_API_LIMIT;
+    const isExcelApiError =
+      name === 'RichApi.Error' &&
+      code === 'GeneralException' &&
+      debugInfo.message === 'An internal error has occurred.';
+    const exceedLimit =
+      operationData &&
+      operationData.instanceDefinition &&
+      operationData.instanceDefinition.columns > COLUMN_EXCEL_API_LIMIT;
     let updateError;
     switch (operationData && operationData.operationType) {
       case IMPORT_OPERATION:
@@ -179,7 +206,7 @@ class ErrorService {
     return updateError;
   }
 
-  getRestErrorType = (error) => {
+  getRestErrorType = error => {
     if (!error.status && !error.response) {
       if (error.message && error.message.includes(incomingErrorStrings.CONNECTION_BROKEN)) {
         return errorTypes.CONNECTION_BROKEN_ERR;
@@ -208,7 +235,9 @@ class ErrorService {
         title: 'Ok',
         type: 'basic',
         label: 'Ok',
-        onClick: () => { this.notificationService.globalNotificationDissapear(); },
+        onClick: () => {
+          this.notificationService.globalNotificationDissapear();
+        },
       },
     ];
     const payload = {
@@ -224,11 +253,10 @@ class ErrorService {
    * Also clearing Reprompt task queue if dialog was open for Reprompt workflow.
    * * @param {Boolean} shouldClose flag indicated whether to close the dialog or not
    */
-  closePopupIfOpen = async (shouldClose) => {
+  closePopupIfOpen = async shouldClose => {
     const storeState = this.reduxStore.getState();
 
     const { isDialogOpen } = storeState.officeReducer;
-    const { isDataOverviewOpen } = storeState.popupStateReducer;
 
     if (isDialogOpen && shouldClose) {
       const isDialogOpenForReprompt = storeState.repromptsQueueReducer?.total > 0;
@@ -258,9 +286,14 @@ class ErrorService {
 
       // Show Overview table if there are any reprompts in queue if error occured
       // while reprompting dossier/report in Overview window only.
-      if (total > 0 && (popupType === PopupTypeEnum.repromptDossierDataOverview
-        || popupType === PopupTypeEnum.repromptReportDataOverviewDataOverview)) {
-        this.reduxStore.dispatch(popupStateActions.setPopupType(PopupTypeEnum.importedDataOverview));
+      if (
+        total > 0 &&
+        (popupType === PopupTypeEnum.repromptDossierDataOverview ||
+          popupType === PopupTypeEnum.repromptReportDataOverviewDataOverview)
+      ) {
+        this.reduxStore.dispatch(
+          popupStateActions.setPopupType(PopupTypeEnum.importedDataOverview)
+        );
         this.popupController.runImportedDataOverviewPopup();
       }
     }

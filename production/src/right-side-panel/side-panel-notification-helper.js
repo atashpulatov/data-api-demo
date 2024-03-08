@@ -1,24 +1,29 @@
-import { popupTypes } from '@mstr/connector-components';
-import officeReducerHelper from '../office/store/office-reducer-helper';
-import { officeApiHelper } from '../office/api/office-api-helper';
-import { updateOperation } from '../redux-reducer/operation-reducer/operation-actions';
-import { officeActions } from '../redux-reducer/office-reducer/office-actions';
-import { calculateLoadingProgress } from '../operation/operation-loading-progress';
-import { REMOVE_OPERATION, CLEAR_DATA_OPERATION, HIGHLIGHT_OPERATION } from '../operation/operation-type-names';
-import { errorService } from '../error/error-handler';
-import { notificationService } from '../notification-v2/notification-service';
+import { PopupTypes } from '@mstr/connector-components';
+
 import { authenticationHelper } from '../authentication/authentication-helper';
-import { incomingErrorStrings } from '../error/constants';
 import { homeHelper } from '../home/home-helper';
+import { notificationService } from '../notification/notification-service';
+import { officeApiHelper } from '../office/api/office-api-helper';
+import officeReducerHelper from '../office/store/office-reducer-helper';
 import { sidePanelService } from './side-panel-service';
+
+import { errorService } from '../error/error-handler';
+import { calculateLoadingProgress } from '../operation/operation-loading-progress';
+import {
+  CLEAR_DATA_OPERATION,
+  HIGHLIGHT_OPERATION,
+  REMOVE_OPERATION,
+} from '../operation/operation-type-names';
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
+import { updateOperation } from '../redux-reducer/operation-reducer/operation-actions';
+import { incomingErrorStrings } from '../error/constants';
 import { objectImportType } from '../mstr-object/constants';
 
 const CONNECTION_CHECK_TIMEOUT = 3000;
 
 class SidePanelNotificationHelper {
-  init = (reduxStore) => {
+  init = reduxStore => {
     this.reduxStore = reduxStore;
-    this.popupTypes = popupTypes;
   };
 
   /**
@@ -33,7 +38,10 @@ class SidePanelNotificationHelper {
    * @param {Function} data.setDuplicatedObjectId - Callback to save objectWorkingId in state of RightSidePanel.
    */
   setDuplicatePopup = ({
-    objectWorkingId, activeCellAddress, setSidePanelPopup, setDuplicatedObjectId
+    objectWorkingId,
+    activeCellAddress,
+    setSidePanelPopup,
+    setDuplicatedObjectId,
   }) => {
     const closePopup = () => {
       setSidePanelPopup(null);
@@ -41,17 +49,17 @@ class SidePanelNotificationHelper {
     };
     setDuplicatedObjectId(objectWorkingId);
     setSidePanelPopup({
-      type: this.popupTypes.DUPLICATE,
+      type: PopupTypes.DUPLICATE,
       activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
-      onImport: (isActiveCellOptionSelected) => {
+      onImport: isActiveCellOptionSelected => {
         sidePanelService.duplicate(objectWorkingId, !isActiveCellOptionSelected, false);
         closePopup();
       },
-      onEdit: (isActiveCellOptionSelected) => {
+      onEdit: isActiveCellOptionSelected => {
         sidePanelService.duplicate(objectWorkingId, !isActiveCellOptionSelected, true);
         closePopup();
       },
-      onClose: closePopup
+      onClose: closePopup,
     });
   };
 
@@ -65,23 +73,21 @@ class SidePanelNotificationHelper {
    * @param {String} data.activeCellAddress  Adress of selected cell in excel.
    * @param {Function} data.callback  Callback to cancel operation
    */
-  setRangeTakenPopup = ({
-    objectWorkingId, activeCellAddress, setSidePanelPopup, callback
-  }) => {
+  setRangeTakenPopup = ({ objectWorkingId, activeCellAddress, setSidePanelPopup, callback }) => {
     const onCancel = () => {
       officeReducerHelper.clearPopupData();
       callback();
     };
 
     setSidePanelPopup({
-      type: this.popupTypes.RANGE_TAKEN,
+      type: PopupTypes.RANGE_TAKEN,
       activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
-      onOk: (isActiveCellOptionSelected) => {
+      onOk: isActiveCellOptionSelected => {
         this.importInNewRange(objectWorkingId, activeCellAddress, !isActiveCellOptionSelected);
         officeReducerHelper.clearPopupData();
       },
       onCancel,
-      onClose: onCancel
+      onClose: onCancel,
     });
   };
 
@@ -93,13 +99,15 @@ class SidePanelNotificationHelper {
    * @param {Boolean} insertNewWorksheet  specify if the object will be imported on new worksheet
    */
   importInNewRange = (objectWorkingId, activeCellAddress, insertNewWorksheet) => {
-    this.reduxStore.dispatch(updateOperation({
-      objectWorkingId,
-      startCell: insertNewWorksheet ? 'A1' : activeCellAddress,
-      repeatStep: true,
-      tableChanged: true,
-      insertNewWorksheet,
-    }));
+    this.reduxStore.dispatch(
+      updateOperation({
+        objectWorkingId,
+        startCell: insertNewWorksheet ? 'A1' : activeCellAddress,
+        repeatStep: true,
+        tableChanged: true,
+        insertNewWorksheet,
+      })
+    );
   };
 
   /**
@@ -111,14 +119,16 @@ class SidePanelNotificationHelper {
     let popup = null;
 
     const { isSecured, isClearDataFailed } = this.reduxStore.getState().officeReducer;
-    isSecured && (popup = {
-      type: this.popupTypes.DATA_CLEARED,
-      onViewData: this.handleViewData,
-    });
-    isClearDataFailed && (popup = {
-      type: this.popupTypes.DATA_CLEARED_FAILED,
-      onViewData: this.handleViewData,
-    });
+    isSecured &&
+      (popup = {
+        type: PopupTypes.DATA_CLEARED,
+        onViewData: this.handleViewData,
+      });
+    isClearDataFailed &&
+      (popup = {
+        type: PopupTypes.DATA_CLEARED_FAILED,
+        onViewData: this.handleViewData,
+      });
     return popup;
   };
 
@@ -130,8 +140,11 @@ class SidePanelNotificationHelper {
       await officeApiHelper.checkStatusOfSessions();
       this.reduxStore.dispatch(officeActions.toggleSecuredFlag(false));
       this.reduxStore.dispatch(officeActions.toggleIsClearDataFailedFlag(false));
-      sidePanelService.refresh(officeReducerHelper.getObjectsListFromObjectReducer()
-        .map(({ objectWorkingId }) => objectWorkingId));
+      sidePanelService.refresh(
+        officeReducerHelper
+          .getObjectsListFromObjectReducer()
+          .map(({ objectWorkingId }) => objectWorkingId)
+      );
     } catch (error) {
       errorService.handleError(error);
     }
@@ -144,34 +157,41 @@ class SidePanelNotificationHelper {
    * @param {Array} notifications  Contains data of all notifications to be displayed
    * @param {Array} operations  Contains data of all currently existing operation
    */
-  injectNotificationsToObjects = (loadedObjects, notifications, operations) => loadedObjects.map((object) => {
-    const objectOperation = operations.find((operation) => operation.objectWorkingId === object.objectWorkingId);
-    const objectNotificationData = notifications.find(
-      (notification) => notification.objectWorkingId === object.objectWorkingId
-    );
-    // Validate that isFetchingComplete is not undefined
-    const operationBasedNotificationData = this.shouldGenerateProgressPercentage(objectOperation)
-      ? {
-        percentageComplete: (objectOperation.totalRows || object.importType === objectImportType.IMAGE)
-          ? calculateLoadingProgress(objectOperation, object.importType) : 0,
-        itemsTotal: !objectNotificationData?.isFetchingComplete ? objectOperation.totalRows : 0,
-        itemsComplete: !objectNotificationData?.isFetchingComplete ? objectOperation.loadedRows : 0,
+  injectNotificationsToObjects = (loadedObjects, notifications, operations) =>
+    loadedObjects.map(object => {
+      const objectOperation = operations.find(
+        operation => operation.objectWorkingId === object.objectWorkingId
+      );
+      const objectNotificationData = notifications.find(
+        notification => notification.objectWorkingId === object.objectWorkingId
+      );
+      // Validate that isFetchingComplete is not undefined
+      const operationBasedNotificationData = this.shouldGenerateProgressPercentage(objectOperation)
+        ? {
+            percentageComplete:
+              objectOperation.totalRows || object.importType === objectImportType.IMAGE
+                ? calculateLoadingProgress(objectOperation, object.importType)
+                : 0,
+            itemsTotal: !objectNotificationData?.isFetchingComplete ? objectOperation.totalRows : 0,
+            itemsComplete: !objectNotificationData?.isFetchingComplete
+              ? objectOperation.loadedRows
+              : 0,
+          }
+        : {};
+
+      let notification;
+      if (objectNotificationData) {
+        notification = {
+          ...objectNotificationData,
+          ...operationBasedNotificationData,
+        };
       }
-      : {};
 
-    let notification;
-    if (objectNotificationData) {
-      notification = {
-        ...objectNotificationData,
-        ...operationBasedNotificationData,
+      return {
+        ...object,
+        notification,
       };
-    }
-
-    return {
-      ...object,
-      notification,
-    };
-  });
+    });
 
   /**
    * Determines whether the progress percentages should be displayed based on the type of the operation
@@ -179,10 +199,11 @@ class SidePanelNotificationHelper {
    * @param {Object} objectOperation Data about operation running on specific object
    * @return {Boolean} specify whether progress percentages should be displayed
    */
-  shouldGenerateProgressPercentage = (objectOperation) => objectOperation
-  && objectOperation.operationType !== REMOVE_OPERATION
-  && objectOperation.operationType !== CLEAR_DATA_OPERATION
-  && objectOperation.operationType !== HIGHLIGHT_OPERATION;
+  shouldGenerateProgressPercentage = objectOperation =>
+    objectOperation &&
+    objectOperation.operationType !== REMOVE_OPERATION &&
+    objectOperation.operationType !== CLEAR_DATA_OPERATION &&
+    objectOperation.operationType !== HIGHLIGHT_OPERATION;
 
   /**
    * Handles error thrown during invoking side panel actions like refresh, edit etc.
@@ -192,7 +213,7 @@ class SidePanelNotificationHelper {
    *
    * @param {Object} error Plain error object thrown by method calls.
    */
-  handleSidePanelActionError = (error) => {
+  handleSidePanelActionError = error => {
     const castedError = String(error);
     const { CONNECTION_BROKEN } = incomingErrorStrings;
     if (castedError.includes(CONNECTION_BROKEN)) {

@@ -1,5 +1,6 @@
-import mstrNormalizedJsonHandler from '../../mstr-object/handler/mstr-normalized-json-handler';
 import { mergeHeaderColumns, mergeHeaderRows } from './office-api-header-merge-helper';
+
+import mstrNormalizedJsonHandler from '../../mstr-object/handler/mstr-normalized-json-handler';
 
 const EXCEL_XTABS_BORDER_COLOR = '#a5a5a5';
 
@@ -13,12 +14,10 @@ class OfficeApiCrosstabHelper {
    * @return {Object}
    */
   getCrosstabRange = (cellAddress, headerDimensions, sheet) => {
-    const {
-      columnsY, columnsX, rowsX, rowsY,
-    } = headerDimensions;
+    const { columnsY, columnsX, rowsX, rowsY } = headerDimensions;
     const cell = typeof cellAddress === 'string' ? sheet.getRange(cellAddress) : cellAddress;
     const bodyRange = cell.getOffsetRange(rowsY, columnsX - 1);
-    const startingCell = cell.getCell(0, 0).getOffsetRange(-(columnsY), -rowsX);
+    const startingCell = cell.getCell(0, 0).getOffsetRange(-columnsY, -rowsX);
     return startingCell.getBoundingRect(bodyRange);
   };
 
@@ -34,9 +33,12 @@ class OfficeApiCrosstabHelper {
     const { validColumnsY, validRowsX } = await this.getCrosstabHeadersSafely(
       headerDimensions,
       officeTable,
-      excelContext,
+      excelContext
     );
-    const startingCell = officeTable.getRange().getCell(0, 0).getOffsetRange(-validColumnsY, -validRowsX);
+    const startingCell = officeTable
+      .getRange()
+      .getCell(0, 0)
+      .getOffsetRange(-validColumnsY, -validRowsX);
     return startingCell.getBoundingRect(officeTable.getRange());
   };
 
@@ -100,22 +102,31 @@ class OfficeApiCrosstabHelper {
       // Check if ranges are valid before clearing
       await excelContext.sync();
 
-      if (isClear
-        || (isCrosstab && (JSON.stringify(crosstabHeaderDimensions) === JSON.stringify(prevCrosstabDimensions)))) {
-        if (columnsY) { topRange.clear('contents'); }
+      if (
+        isClear ||
+        (isCrosstab &&
+          JSON.stringify(crosstabHeaderDimensions) === JSON.stringify(prevCrosstabDimensions))
+      ) {
+        if (columnsY) {
+          topRange.clear('contents');
+        }
         if (rowsX) {
           leftRange.clear('contents');
           titlesRange.clear('contents');
         }
       } else {
-        if (columnsY) { topRange.clear(); }
+        if (columnsY) {
+          topRange.clear();
+        }
         if (rowsX) {
           leftRange.clear();
           titlesRange.clear();
         }
       }
 
-      if (columnsY) { excelContext.trackedObjects.remove([topRange]); }
+      if (columnsY) {
+        excelContext.trackedObjects.remove([topRange]);
+      }
       if (rowsX) {
         excelContext.trackedObjects.remove([leftRange, titlesRange]);
       }
@@ -155,7 +166,10 @@ class OfficeApiCrosstabHelper {
    * @param {Object} crosstabHeaderDimensions contains dimension of crosstab headers (columnsY, cloumnsX, RowsY, RowsX)
    */
   createCrosstabHeaders = (tableStartCell, mstrTable, sheet, crosstabHeaderDimensions) => {
-    const { attributesNames, headers: { columns } } = mstrTable;
+    const {
+      attributesNames,
+      headers: { columns },
+    } = mstrTable;
 
     this.createColumnsHeaders(tableStartCell, columns, sheet);
 
@@ -186,18 +200,21 @@ class OfficeApiCrosstabHelper {
   };
 
   /**
-  * Create Title headers for crosstab report
-  *
-  * @param {Office} cellAddress Address of the first cell in report (top left)
-  * @param {Object} attributesNames Contains arrays of attributes names in crosstab report
-  * @param {Office} sheet Active Exccel spreadsheet
-  * @param {Object} crosstabHeaderDimensions Contains dimensions of crosstab report headers
-  */
+   * Create Title headers for crosstab report
+   *
+   * @param {Office} cellAddress Address of the first cell in report (top left)
+   * @param {Object} attributesNames Contains arrays of attributes names in crosstab report
+   * @param {Office} sheet Active Exccel spreadsheet
+   * @param {Object} crosstabHeaderDimensions Contains dimensions of crosstab report headers
+   */
   createRowsTitleHeaders = (cellAddress, attributesNames, sheet, crosstabHeaderDimensions) => {
     const { rowsAttributes, columnsAttributes } = attributesNames;
     const reportStartingCell = sheet.getRange(cellAddress);
     const titlesBottomCell = reportStartingCell.getOffsetRange(0, -1);
-    const rowsTitlesRange = titlesBottomCell.getResizedRange(0, -(crosstabHeaderDimensions.rowsX - 1));
+    const rowsTitlesRange = titlesBottomCell.getResizedRange(
+      0,
+      -(crosstabHeaderDimensions.rowsX - 1)
+    );
 
     const columnsTitlesRange = titlesBottomCell
       .getOffsetRange(-1, 0)
@@ -221,16 +238,26 @@ class OfficeApiCrosstabHelper {
   };
 
   /**
-  * Returns the number of rows and columns headers that are valid for crosstab
-  *
-  * @param {Object} crosstabHeaderDimensions Contains information about crosstab header dimensions
-  * @param {Office} officeTable Excel Object containig information about Excel Table
-  * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-  */
+   * Returns the number of rows and columns headers that are valid for crosstab
+   *
+   * @param {Object} crosstabHeaderDimensions Contains information about crosstab header dimensions
+   * @param {Office} officeTable Excel Object containig information about Excel Table
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   */
   async getCrosstabHeadersSafely(crosstabHeaderDimensions, officeTable, excelContext) {
     const { columnsY, rowsX } = crosstabHeaderDimensions;
-    const validColumnsY = await this.getValidOffset(officeTable, columnsY + 1, 'getRowsAbove', excelContext);
-    const validRowsX = await this.getValidOffset(officeTable, rowsX, 'getColumnsBefore', excelContext);
+    const validColumnsY = await this.getValidOffset(
+      officeTable,
+      columnsY + 1,
+      'getRowsAbove',
+      excelContext
+    );
+    const validRowsX = await this.getValidOffset(
+      officeTable,
+      rowsX,
+      'getColumnsBefore',
+      excelContext
+    );
 
     return { validColumnsY, validRowsX };
   }
@@ -258,7 +285,7 @@ class OfficeApiCrosstabHelper {
    *
    * @param {Office} range Range of the header
    */
-  formatCrosstabRange = (range) => {
+  formatCrosstabRange = range => {
     const { borders } = range.format;
     borders.getItem('EdgeTop').color = EXCEL_XTABS_BORDER_COLOR;
     borders.getItem('EdgeRight').color = EXCEL_XTABS_BORDER_COLOR;
@@ -327,8 +354,11 @@ class OfficeApiCrosstabHelper {
    *
    * @param {Object} instanceDefinition
    */
-  getCrosstabHeaderDimensions = (instanceDefinition) => {
-    const { rows, mstrTable: { isCrosstab, headers } } = instanceDefinition;
+  getCrosstabHeaderDimensions = instanceDefinition => {
+    const {
+      rows,
+      mstrTable: { isCrosstab, headers },
+    } = instanceDefinition;
 
     if (isCrosstab) {
       return {

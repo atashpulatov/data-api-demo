@@ -1,7 +1,8 @@
-import { sessionProperties } from './session-properties';
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { SessionError } from '../../error/session-error';
+import { sessionProperties } from './session-properties';
 
-export const sessionReducer = (state = {}, action) => {
+export const sessionReducer = (state = {}, action = {}) => {
   switch (action.type) {
     case sessionProperties.actions.logIn:
       return onLogIn(action, state);
@@ -45,7 +46,7 @@ function onLogOut(action, state) {
       userID: null,
       userFullName: null,
       userInitials: null,
-      canUseOffice: false
+      canUseOffice: false,
     };
   }
   return {};

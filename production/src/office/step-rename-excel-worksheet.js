@@ -1,6 +1,7 @@
-import operationStepDispatcher from '../operation/operation-step-dispatcher';
-import operationErrorHandler from '../operation/operation-error-handler';
 import { officeApiWorksheetHelper } from './api/office-api-worksheet-helper';
+
+import operationErrorHandler from '../operation/operation-error-handler';
+import operationStepDispatcher from '../operation/operation-step-dispatcher';
 
 class StepRenameExcelWorksheet {
   /**
@@ -26,8 +27,8 @@ class StepRenameExcelWorksheet {
           ...objectData,
           worksheet: {
             ...objectData.worksheet,
-            name: newName
-          }
+            name: newName,
+          },
         });
       }
 

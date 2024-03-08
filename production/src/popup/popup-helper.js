@@ -1,15 +1,14 @@
-import { officeContext } from '../office/office-context';
 import { selectorProperties } from '../attribute-selector/selector-properties';
+import { officeContext } from '../office/office-context';
 
 class PopupHelper {
-  handlePopupErrors = (error) => {
-    const errorObj = error
-     && {
-       status: error.status,
-       message: error.message,
-       response: error.response,
-       type: error.type
-     };
+  handlePopupErrors = error => {
+    const errorObj = error && {
+      status: error.status,
+      message: error.message,
+      response: error.response,
+      type: error.type,
+    };
     const { commandError } = selectorProperties;
     const message = {
       command: commandError,
@@ -18,7 +17,7 @@ class PopupHelper {
     this.officeMessageParent(message);
   };
 
-  officeMessageParent = (message) => {
+  officeMessageParent = message => {
     const office = officeContext.getOffice();
     office.context.ui.messageParent(JSON.stringify(message));
   };
@@ -51,7 +50,7 @@ class PopupHelper {
       visualizationInfo,
       dossierName,
       selectedViz: `${chapterKey}:${visualizationKey}`,
-      displayAttrFormNames: popupState.displayAttrFormNames
+      displayAttrFormNames: popupState.displayAttrFormNames,
     };
 
     return this.restoreFilters(popupState.body, chosenObjectData, formsPrivilege);
@@ -64,11 +63,13 @@ class PopupHelper {
         if (requestedObjects) {
           const { attributes, metrics } = body.requestedObjects;
           if (attributes && attributes.length !== 0) {
-            chosenObjectData.selectedAttributes = attributes.map((attribute) => attribute.id);
-            chosenObjectData.selectedAttrForms = formsPrivilege ? this.getAttrFormKeys(attributes) : [];
+            chosenObjectData.selectedAttributes = attributes.map(attribute => attribute.id);
+            chosenObjectData.selectedAttrForms = formsPrivilege
+              ? this.getAttrFormKeys(attributes)
+              : [];
           }
           if (metrics && metrics.length !== 0) {
-            chosenObjectData.selectedMetrics = metrics.map((metric) => metric.id);
+            chosenObjectData.selectedMetrics = metrics.map(metric => metric.id);
           }
         }
         if (viewFilter) {
@@ -81,25 +82,32 @@ class PopupHelper {
     return chosenObjectData;
   }
 
-  getAttrFormKeys = (attributes) => {
+  getAttrFormKeys = attributes => {
     const checkedForms = [];
-    attributes && [...attributes].forEach((attribute) => {
-      attribute.forms && [...attribute.forms].forEach((form) => {
-        checkedForms.push(`${attribute.id}-${form.id}`);
+    attributes &&
+      [...attributes].forEach(attribute => {
+        attribute.forms &&
+          [...attribute.forms].forEach(form => {
+            checkedForms.push(`${attribute.id}-${form.id}`);
+          });
       });
-    });
     return checkedForms;
   };
 
   parseFilters(filtersNodes) {
     if (filtersNodes && filtersNodes[0] && filtersNodes[0].operands) {
       // equivalent to flatMap((node) => node.operands)
-      return this.parseFilters(filtersNodes.reduce((nodes, node) => nodes.concat(node.operands), []));
+      return this.parseFilters(
+        filtersNodes.reduce((nodes, node) => nodes.concat(node.operands), [])
+      );
     }
-    const elementNodes = filtersNodes.filter((node) => node.type === 'elements');
+    const elementNodes = filtersNodes.filter(node => node.type === 'elements');
     // equivalent to flatMap((node) => node.elements)
-    const reducedElements = elementNodes.reduce((elements, node) => elements.concat(node.elements), []);
-    const elementsIds = reducedElements.map((elem) => elem.id);
+    const reducedElements = elementNodes.reduce(
+      (elements, node) => elements.concat(node.elements),
+      []
+    );
+    const elementsIds = reducedElements.map(elem => elem.id);
     return elementsIds.reduce((filters, elem) => {
       const attrId = elem.split(':')[0];
       filters[attrId] = !filters[attrId] ? [elem] : [...filters[attrId], elem];

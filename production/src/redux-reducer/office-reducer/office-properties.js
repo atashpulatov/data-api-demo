@@ -50,5 +50,5 @@ export const officeProperties = {
       value: 'OFF',
       displayName: 'Off',
     },
-  ]
+  ],
 };

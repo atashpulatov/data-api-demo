@@ -40,8 +40,8 @@ class ScriptInjectionHelper {
    * @param {String} relativePath is a path to file,
    * that will be injected to iframe.
    */
-  createFileLocation = relativePath => window.location.origin
-    + window.location.pathname.replace('index.html', relativePath);
+  createFileLocation = relativePath =>
+    window.location.origin + window.location.pathname.replace('index.html', relativePath);
 
   /**
    * Checks if document is login page of embedded library.
@@ -49,7 +49,7 @@ class ScriptInjectionHelper {
    * @param {Document} document content document of embedded dossier iframe.
    * @returns {Boolean} True if document is login page, false otherwise.
    */
-  isLoginPage = (document) => document && document.URL.includes('embeddedLogin.jsp');
+  isLoginPage = document => document && document.URL.includes('embeddedLogin.jsp');
 
   /**
    * Watches container for child addition and runs callback in case an iframe was added
@@ -58,9 +58,13 @@ class ScriptInjectionHelper {
    */
   watchForIframeAddition = (container, callback) => {
     const config = { childList: true };
-    const onMutation = (mutationList) => {
+    const onMutation = mutationList => {
       for (const mutation of mutationList) {
-        if (mutation.addedNodes && mutation.addedNodes.length && mutation.addedNodes[0].nodeName === 'IFRAME') {
+        if (
+          mutation.addedNodes &&
+          mutation.addedNodes.length &&
+          mutation.addedNodes[0].nodeName === 'IFRAME'
+        ) {
           const iframe = mutation.addedNodes[0];
           iframe.tabIndex = 0;
           iframe.focusEventListenerAdded = false;
@@ -73,16 +77,18 @@ class ScriptInjectionHelper {
   };
 
   /**
-  * When focused on window switch focus to different element in this window.
-  * For prompted dossiers this element will be first Table Data tag.
-  * For non-prompted dossiers it will be the Table of Content button.
-  * Focusing on the window itself is not visible for the user therefore should be skipped.
-  *
-  * @param {FocusEvent} focusEvent
-  */
-  switchFocusToElementOnWindowFocus = (focusEvent) => {
+   * When focused on window switch focus to different element in this window.
+   * For prompted dossiers this element will be first Table Data tag.
+   * For non-prompted dossiers it will be the Table of Content button.
+   * Focusing on the window itself is not visible for the user therefore should be skipped.
+   *
+   * @param {FocusEvent} focusEvent
+   */
+  switchFocusToElementOnWindowFocus = focusEvent => {
     const iframeDocument = focusEvent.target.contentDocument;
-    const overlay = iframeDocument.getElementsByClassName('mstrd-PromptEditorContainer-overlay').length;
+    const overlay = iframeDocument.getElementsByClassName(
+      'mstrd-PromptEditorContainer-overlay'
+    ).length;
     let elementToFocusOn;
     if (overlay) {
       [elementToFocusOn] = iframeDocument.getElementsByTagName('TD');

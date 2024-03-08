@@ -13,7 +13,9 @@ class OfficeFormatSubtotals {
     console.time('Subtotal Formatting');
     try {
       const { isCrosstab } = mstrTable;
-      let { subtotalsInfo: { subtotalsAddresses } } = mstrTable;
+      let {
+        subtotalsInfo: { subtotalsAddresses },
+      } = mstrTable;
       let reportStartCell;
       if (isCrosstab) {
         subtotalsAddresses = new Set(subtotalsAddresses);
@@ -23,7 +25,13 @@ class OfficeFormatSubtotals {
       }
 
       excelContext.trackedObjects.add(reportStartCell);
-      await this.formatSubtotals(reportStartCell, subtotalsAddresses, mstrTable, excelContext, shouldBold);
+      await this.formatSubtotals(
+        reportStartCell,
+        subtotalsAddresses,
+        mstrTable,
+        excelContext,
+        shouldBold
+      );
       excelContext.trackedObjects.remove(reportStartCell);
     } catch (error) {
       console.error(error);
@@ -61,14 +69,20 @@ class OfficeFormatSubtotals {
       };
     } else if (axis === 'columns') {
       offsets = {
-        verticalFirstCell: -((headers.columns.length - cell.attributeIndex) + 1),
+        verticalFirstCell: -(headers.columns.length - cell.attributeIndex + 1),
         horizontalFirstCell: cell.colIndex,
         verticalLastCell: mstrTable.tableSize.rows,
         horizontalLastCell: cell.colIndex,
       };
     }
-    const firstSubtotalCell = startCell.getOffsetRange(offsets.verticalFirstCell, offsets.horizontalFirstCell);
-    const lastSubtotalCell = startCell.getOffsetRange(offsets.verticalLastCell, offsets.horizontalLastCell);
+    const firstSubtotalCell = startCell.getOffsetRange(
+      offsets.verticalFirstCell,
+      offsets.horizontalFirstCell
+    );
+    const lastSubtotalCell = startCell.getOffsetRange(
+      offsets.verticalLastCell,
+      offsets.horizontalLastCell
+    );
     return firstSubtotalCell.getBoundingRect(lastSubtotalCell);
   };
 
@@ -86,7 +100,9 @@ class OfficeFormatSubtotals {
     let contextPromises = [];
     for (const cell of subtotalCells) {
       const subtotalRowRange = this.getSubtotalRange(startCell, cell, mstrTable);
-      if (subtotalRowRange) { subtotalRowRange.format.font.bold = shouldBold; }
+      if (subtotalRowRange) {
+        subtotalRowRange.format.font.bold = shouldBold;
+      }
       contextPromises.push(excelContext.sync());
       if (contextPromises.length % CONTEXT_LIMIT === 0) {
         await Promise.all(contextPromises);

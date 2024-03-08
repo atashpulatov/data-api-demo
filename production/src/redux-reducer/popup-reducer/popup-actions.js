@@ -26,10 +26,12 @@ class PopupActions {
     this.visualizationInfoService = visualizationInfoService;
   };
 
-  callForReprompt = (reportParams) => async (dispatch) => {
+  callForReprompt = reportParams => async dispatch => {
     try {
       await this.officeApiHelper.checkStatusOfSessions();
-      const editedObject = this.officeReducerHelper.getObjectFromObjectReducerByBindId(reportParams.bindId);
+      const editedObject = this.officeReducerHelper.getObjectFromObjectReducerByBindId(
+        reportParams.bindId
+      );
       editedObject.objectType = editedObject.mstrObjectType;
 
       dispatch({
@@ -42,10 +44,12 @@ class PopupActions {
     }
   };
 
-  callForEdit = (reportParams) => async (dispatch) => {
+  callForEdit = reportParams => async dispatch => {
     try {
       await this.officeApiHelper.checkStatusOfSessions();
-      const editedObject = this.officeReducerHelper.getObjectFromObjectReducerByBindId(reportParams.bindId);
+      const editedObject = this.officeReducerHelper.getObjectFromObjectReducerByBindId(
+        reportParams.bindId
+      );
       editedObject.objectType = editedObject.mstrObjectType;
 
       dispatch({
@@ -62,16 +66,19 @@ class PopupActions {
     }
   };
 
-  preparePromptedReport = (instanceId, chosenObjectData) => (dispatch) => dispatch({
-    type: SET_PREPARED_REPORT,
-    instanceId,
-    chosenObjectData,
-  });
+  preparePromptedReport = (instanceId, chosenObjectData) => dispatch =>
+    dispatch({
+      type: SET_PREPARED_REPORT,
+      instanceId,
+      chosenObjectData,
+    });
 
-  callForRepromptDossier = (reportParams) => async (dispatch) => {
+  callForRepromptDossier = reportParams => async dispatch => {
     try {
       await this.officeApiHelper.checkStatusOfSessions();
-      const repromptedDossier = this.officeReducerHelper.getObjectFromObjectReducerByBindId(reportParams.bindId);
+      const repromptedDossier = this.officeReducerHelper.getObjectFromObjectReducerByBindId(
+        reportParams.bindId
+      );
 
       try {
         await this.prepareDossierForReprompt(repromptedDossier);
@@ -92,10 +99,12 @@ class PopupActions {
     }
   };
 
-  callForEditDossier = (reportParams) => async (dispatch) => {
+  callForEditDossier = reportParams => async dispatch => {
     try {
       await this.officeApiHelper.checkStatusOfSessions();
-      const editedDossier = this.officeReducerHelper.getObjectFromObjectReducerByBindId(reportParams.bindId);
+      const editedDossier = this.officeReducerHelper.getObjectFromObjectReducerByBindId(
+        reportParams.bindId
+      );
 
       await this.prepareDossierForEdit(editedDossier);
 
@@ -110,7 +119,7 @@ class PopupActions {
     }
   };
 
-  resetState = () => (dispatch) => dispatch({ type: RESET_STATE, });
+  resetState = () => dispatch => dispatch({ type: RESET_STATE });
 
   /**
    * Prepares object and passes it to excel popup in duplicate edit workflow and
@@ -118,8 +127,9 @@ class PopupActions {
    *
    * @param {Object} object - Data of duplicated object.
    */
-  callForDuplicate = (object) => async (dispatch) => {
-    const isDossier = object.mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
+  callForDuplicate = object => async dispatch => {
+    const isDossier =
+      object.mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
     try {
       await this.officeApiHelper.checkStatusOfSessions();
       object.objectType = object.mstrObjectType;
@@ -135,7 +145,7 @@ class PopupActions {
 
       const reportParams = {
         duplicateMode: true,
-        object
+        object,
       };
 
       if (isDossier) {
@@ -158,16 +168,14 @@ class PopupActions {
    *
    * @param {Object} editedDossier - Contains data of edited dossier.
    */
-  prepareDossierForEdit = async (editedDossier) => {
-    const {
-      projectId, objectId, manipulationsXML, visualizationInfo
-    } = editedDossier;
+  prepareDossierForEdit = async editedDossier => {
+    const { projectId, objectId, manipulationsXML, visualizationInfo } = editedDossier;
 
-    const instance = await this.mstrObjectRestService.createDossierInstance(
-      projectId,
-      objectId,
-      { ...manipulationsXML, disableManipulationsAutoSaving: true, persistViewState: true }
-    );
+    const instance = await this.mstrObjectRestService.createDossierInstance(projectId, objectId, {
+      ...manipulationsXML,
+      disableManipulationsAutoSaving: true,
+      persistViewState: true,
+    });
 
     let updatedVisualizationInfo;
     try {
@@ -175,7 +183,7 @@ class PopupActions {
         projectId,
         objectId,
         visualizationInfo.visualizationKey,
-        instance.mid,
+        instance.mid
       );
     } catch (ignoreError) {
       // Ignored
@@ -186,7 +194,10 @@ class PopupActions {
 
     if (updatedVisualizationInfo) {
       const { vizDimensions } = visualizationInfo;
-      editedDossier.visualizationInfo = { vizDimensions, ...updatedVisualizationInfo };
+      editedDossier.visualizationInfo = {
+        vizDimensions,
+        ...updatedVisualizationInfo,
+      };
     }
     editedDossier.objectType = editedDossier.mstrObjectType;
   };
@@ -195,16 +206,14 @@ class PopupActions {
    * Creates instance of dossier which is used during reprompt workflow.
    * @param {*} repromptedDossier
    */
-  prepareDossierForReprompt = async (repromptedDossier) => {
-    const {
-      projectId, objectId, manipulationsXML, visualizationInfo
-    } = repromptedDossier;
+  prepareDossierForReprompt = async repromptedDossier => {
+    const { projectId, objectId, manipulationsXML, visualizationInfo } = repromptedDossier;
 
-    const instance = await this.mstrObjectRestService.createDossierInstance(
-      projectId,
-      objectId,
-      { ...manipulationsXML, disableManipulationsAutoSaving: true, persistViewState: true }
-    );
+    const instance = await this.mstrObjectRestService.createDossierInstance(projectId, objectId, {
+      ...manipulationsXML,
+      disableManipulationsAutoSaving: true,
+      persistViewState: true,
+    });
 
     let updatedVisualizationInfo;
     try {
@@ -212,14 +221,18 @@ class PopupActions {
         projectId,
         objectId,
         visualizationInfo.visualizationKey,
-        instance.mid,
+        instance.mid
       );
     } catch (ignoreError) {
       // Ignored
     }
 
     // Re-prompt the dossier to open prompts' popup
-    const resp = await this.mstrObjectRestService.rePromptDossier(objectId, instance.mid, projectId);
+    const resp = await this.mstrObjectRestService.rePromptDossier(
+      objectId,
+      instance.mid,
+      projectId
+    );
 
     // Update dossier's instanceId with the new one
     repromptedDossier.instanceId = resp && resp.mid ? resp.mid : instance.mid;
@@ -227,18 +240,22 @@ class PopupActions {
 
     if (updatedVisualizationInfo) {
       const { vizDimensions } = visualizationInfo;
-      repromptedDossier.visualizationInfo = { vizDimensions, ...updatedVisualizationInfo };
+      repromptedDossier.visualizationInfo = {
+        vizDimensions,
+        ...updatedVisualizationInfo,
+      };
     }
     repromptedDossier.objectType = repromptedDossier.mstrObjectType;
   };
 
-  switchImportSubtotalsOnEdit = (data) => (dispatch) => dispatch({ type: SWITCH_IMPORT_SUBTOTALS_ON_EDIT, data });
+  switchImportSubtotalsOnEdit = data => dispatch =>
+    dispatch({ type: SWITCH_IMPORT_SUBTOTALS_ON_EDIT, data });
 
-  clearEditedObject = () => (dispatch) => {
+  clearEditedObject = () => dispatch => {
     dispatch({ type: CLEAR_EDITED_OBJECT });
   };
 
-  updateDisplayAttrFormOnEdit = (data) => (dispatch) => {
+  updateDisplayAttrFormOnEdit = data => dispatch => {
     dispatch({ type: UPDATE_DISPLAY_ATTR_FORM_ON_EDIT, data });
   };
 }

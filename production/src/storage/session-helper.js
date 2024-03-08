@@ -1,8 +1,10 @@
 import throttle from 'lodash.throttle';
+
 import { authenticationService } from '../authentication/auth-rest-service';
-import { userRestService } from '../home/user-rest-service';
-import { errorService } from '../error/error-handler';
 import { homeHelper } from '../home/home-helper';
+import { userRestService } from '../home/user-rest-service';
+
+import { errorService } from '../error/error-handler';
 import { importRequested } from '../redux-reducer/operation-reducer/operation-actions';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import { httpStatusCodes, incomingErrorStrings } from '../error/constants';
@@ -10,7 +12,7 @@ import { httpStatusCodes, incomingErrorStrings } from '../error/constants';
 export const EXTEND_SESSION = 'EXTEND_SESSION';
 const DEFAULT_SESSION_REFRESH_TIME = 60000;
 class SessionHelper {
-  init = (reduxStore) => {
+  init = reduxStore => {
     this.reduxStore = reduxStore;
   };
 
@@ -34,12 +36,12 @@ class SessionHelper {
    */
   handleLogoutForPrivilegeMissing = async () => {
     try {
-      await sessionHelper.logOutRest();
+      await this.logOutRest();
       sessionActions.logOut();
     } catch (error) {
       errorService.handleError(error);
     } finally {
-      sessionHelper.logOutRedirect(true);
+      this.logOutRedirect(true);
     }
   };
 
@@ -117,15 +119,20 @@ class SessionHelper {
   };
 
   /**
-  * Installs throttle on keepSessionAlive method.
-  *
-  * invokes keepSessionAlive method at most once per every DEFAULT_SESSION_REFRESH_TIME
-  *
-  * @param {func} onSessionExpire is callback function e.g closePopup() default value is [null].
-  */
-  installSessionProlongingHandler = (onSessionExpire = null) => throttle(() => {
-    this.keepSessionAlive(onSessionExpire);
-  }, DEFAULT_SESSION_REFRESH_TIME, { trailing: false });
+   * Installs throttle on keepSessionAlive method.
+   *
+   * invokes keepSessionAlive method at most once per every DEFAULT_SESSION_REFRESH_TIME
+   *
+   * @param {func} onSessionExpire is callback function e.g closePopup() default value is [null].
+   */
+  installSessionProlongingHandler = (onSessionExpire = null) =>
+    throttle(
+      () => {
+        this.keepSessionAlive(onSessionExpire);
+      },
+      DEFAULT_SESSION_REFRESH_TIME,
+      { trailing: false }
+    );
 
   /**
    * Get userData about currently logged user from Api and stores the information in redux store
@@ -136,7 +143,9 @@ class SessionHelper {
     const isDevelopment = this.isDevelopment();
     const { getState } = this.reduxStore;
     const envUrl = isDevelopment ? getState().sessionReducer.envUrl : homeHelper.saveLoginValues();
-    const authToken = isDevelopment ? getState().sessionReducer.authToken : homeHelper.getTokenFromStorage();
+    const authToken = isDevelopment
+      ? getState().sessionReducer.authToken
+      : homeHelper.getTokenFromStorage();
     try {
       userData = await userRestService.getUserInfo(authToken, envUrl);
       !userData.userInitials && sessionActions.saveUserInfo(userData);
@@ -153,7 +162,9 @@ class SessionHelper {
     let canChooseAttrForm = false;
     const isDevelopment = this.isDevelopment();
     const { reduxStore } = this;
-    const envUrl = isDevelopment ? reduxStore.getState().sessionReducer.envUrl : homeHelper.saveLoginValues();
+    const envUrl = isDevelopment
+      ? reduxStore.getState().sessionReducer.envUrl
+      : homeHelper.saveLoginValues();
     const authToken = isDevelopment
       ? reduxStore.getState().sessionReducer.authToken
       : homeHelper.getTokenFromStorage();
@@ -179,11 +190,11 @@ class SessionHelper {
   };
 
   /**
-  * Return Url of the current page
-  *
-  * @param {String} propertyName Key used by Office Api to determine value from settings
-  * @return {String} Page Url
-  */
+   * Return Url of the current page
+   *
+   * @param {String} propertyName Key used by Office Api to determine value from settings
+   * @return {String} Page Url
+   */
   getUrl = () => window.location.href;
 
   /**
@@ -206,7 +217,7 @@ class SessionHelper {
    *
    * @param {Objects} object ObjectData needed for import
    */
-  importObjectWithouPopup = async (object) => {
+  importObjectWithouPopup = async object => {
     this.reduxStore.dispatch(importRequested(object));
   };
 }

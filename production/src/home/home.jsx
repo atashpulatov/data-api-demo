@@ -1,31 +1,45 @@
+// issue with proptype import
+// eslint-disable-next-line simple-import-sort/imports
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import './home.css';
 import { useTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Spinner } from '@mstr/rc';
-import i18n from '../i18n';
+
+import PropTypes from 'prop-types';
+import useOfficePrivilege from '../hooks/use-office-privilege';
+
+import { notificationService } from '../notification/notification-service';
 import { sessionHelper } from '../storage/session-helper';
 import { homeHelper } from './home-helper';
-import { officeActions } from '../redux-reducer/office-reducer/office-actions';
-import { RightSidePanel } from '../right-side-panel/right-side-panel';
-import { HomeDialog } from './home-dialog';
+
+import officeStoreRestoreObject from '../office/store/office-store-restore-object';
+
 import { Authenticate } from '../authentication/auth-component';
 import { DevelopmentImportList } from '../development-import-list';
-import { notificationService } from '../notification-v2/notification-service';
-import officeStoreRestoreObject from '../office/store/office-store-restore-object';
+import i18n from '../i18n';
 import { SessionExtendingWrapper } from '../popup/session-extending-wrapper';
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import PrivilegeErrorSidePanel from '../right-side-panel/info-panels/privilege-error-side-panel';
-import useOfficePrivilege from '../hooks/use-office-privilege';
-import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
+import { RightSidePanel } from '../right-side-panel/right-side-panel';
+import { HomeDialog } from './home-dialog';
+
+import './home.css';
 
 const IS_DEVELOPMENT = sessionHelper.isDevelopment();
 
-export const HomeNotConnected = (props) => {
-  const {
-    loading, isDialogOpen, authToken, hideDialog, toggleIsSettingsFlag, clearDialogState
-  } = props;
+async function getUserData(authToken) {
+  if (authToken) {
+    homeHelper.getTokenFromStorage();
+    await sessionHelper.getUserInfo();
+    await sessionHelper.getUserAttributeFormPrivilege();
+  }
+}
+
+export const HomeNotConnected = props => {
+  const { loading, isDialogOpen, authToken, hideDialog, toggleIsSettingsFlag, clearDialogState } =
+    props;
 
   const canUseOffice = useOfficePrivilege(authToken);
 
@@ -43,9 +57,11 @@ export const HomeNotConnected = (props) => {
   useEffect(() => {
     window.addEventListener('online', handleConnectionRestored);
     window.addEventListener('offline', handleConnectionLost);
-    return (() => window.removeEventListener('online', handleConnectionRestored),
-    () => window.removeEventListener('offline', handleConnectionLost));
-  },);
+    return (
+      () => window.removeEventListener('online', handleConnectionRestored),
+      () => window.removeEventListener('offline', handleConnectionLost)
+    );
+  });
 
   useEffect(() => {
     if (!isDialogOpen && !window.navigator.onLine) {
@@ -83,7 +99,8 @@ export const HomeNotConnected = (props) => {
     getUserData(authToken);
   }, [authToken]);
 
-  const renderAuthenticatePage = () => (loading ? <Spinner text="Loading" textPosition="RIGHT" /> : (IS_DEVELOPMENT && <Authenticate />));
+  const renderAuthenticatePage = () =>
+    loading ? <Spinner text='Loading' textPosition='RIGHT' /> : IS_DEVELOPMENT && <Authenticate />;
 
   const sidePanelToRender = () => {
     if (authToken) {
@@ -96,21 +113,16 @@ export const HomeNotConnected = (props) => {
   };
 
   return (
-    <SessionExtendingWrapper id="overlay">
+    <SessionExtendingWrapper id='overlay'>
       {IS_DEVELOPMENT && authToken && <DevelopmentImportList />}
       {sidePanelToRender()}
-      <HomeDialog show={isDialogOpen} text={t('A MicroStrategy for Office Add-in dialog is open')} />
+      <HomeDialog
+        show={isDialogOpen}
+        text={t('A MicroStrategy for Office Add-in dialog is open')}
+      />
     </SessionExtendingWrapper>
   );
 };
-
-async function getUserData(authToken) {
-  if (authToken) {
-    homeHelper.getTokenFromStorage();
-    await sessionHelper.getUserInfo();
-    await sessionHelper.getUserAttributeFormPrivilege();
-  }
-}
 
 function mapStateToProps(state) {
   return {
@@ -118,7 +130,7 @@ function mapStateToProps(state) {
     isDialogOpen: state.officeReducer.isDialogOpen,
     authToken: state.sessionReducer.authToken,
     shouldRenderSettings: state.officeReducer.shouldRenderSettings,
-    canUseOffice: state.sessionReducer.canUseOffice
+    canUseOffice: state.sessionReducer.canUseOffice,
   };
 }
 
@@ -126,7 +138,7 @@ const mapDispatchToProps = {
   toggleRenderSettingsFlag: officeActions.toggleRenderSettingsFlag,
   hideDialog: officeActions.hideDialog,
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
-  clearDialogState: popupStateActions.onClearPopupState
+  clearDialogState: popupStateActions.onClearPopupState,
 };
 
 HomeNotConnected.propTypes = {
