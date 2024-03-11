@@ -17,34 +17,35 @@ class OfficeApiHeaderMergeHelper {
   /**
    * Merges headers for rows.
    *
-   * @param {string[]} attributes - Names of attributes for rows.
-   * @param {Object} titlesRange - Excel range containing attributes titles.
+   * @param attributes - Names of attributes for rows.
+   * @param titlesRange - Excel range containing attributes titles.
    *
    */
-  mergeHeaderRows = (attributes, titlesRange) => {
+  mergeHeaderRows(attributes: string[], titlesRange: Excel.Range): void {
     this.mergeHeaderItems(attributes, titlesRange, this.handleMergeRowsFunc);
-  };
+  }
 
   /**
    * Merges headers for columns.
    *
-   * @param {string[]} attributes - Names of attributes for columns.
-   * @param {Object} titlesRange - Excel range containing attributes titles.
+   * @param attributes - Names of attributes for columns.
+   * @param titlesRange - Excel range containing attributes titles.
    *
    */
-  mergeHeaderColumns = (attributes, titlesRange) => {
+  mergeHeaderColumns(attributes: string[], titlesRange: Excel.Range): void {
     this.mergeHeaderItems(attributes, titlesRange, this.handleMergeColumnsFunc);
-  };
+  }
 
   /**
    * Validates attributes names.
    *
-   * @param {string[]} attributes - Attributes names.
-   * @returns {boolean} true when non-empty array, false otherwise
+   * @param attributes - Attributes names.
+   * @returns true when non-empty array, false otherwise
    *
    */
-  validateAttributes = attributes =>
-    attributes && Array.isArray(attributes) && attributes.length > 0;
+  validateAttributes(attributes: string[]): boolean {
+    return attributes && Array.isArray(attributes) && attributes.length > 0;
+  }
 
   /**
    * Merges header items, using specified handleMergeFunc (handleMergeRowsFunc for rows or handleMergeColumnsFunc
@@ -56,12 +57,12 @@ class OfficeApiHeaderMergeHelper {
    *
    * Do nothing for an empty list of attributes names.
    *
-   * @param {string[]} attributes - Names of attributes for rows.
-   * @param {Object} titlesRange - Excel range containing attributes titles.
-   * @param {Function} handleMergeFunc - function used for merging.
+   * @param attributes - Names of attributes for rows.
+   * @param titlesRange - Excel range containing attributes titles.
+   * @param handleMergeFunc - function used for merging.
    *
    */
-  mergeHeaderItems = (attributes, titlesRange, handleMergeFunc) => {
+  mergeHeaderItems(attributes: string[], titlesRange: Excel.Range, handleMergeFunc: any): void {
     if (!this.validateAttributes(attributes)) {
       return;
     }
@@ -72,7 +73,7 @@ class OfficeApiHeaderMergeHelper {
     for (const interval of intervals) {
       handleMergeFunc(titlesRange, interval, attributes.length);
     }
-  };
+  }
 
   /**
    * Merges and formats Excel cells for rows.
@@ -84,17 +85,17 @@ class OfficeApiHeaderMergeHelper {
    * Resizing is relative to the first cell of titlesRange, negative value means shrinking the range.
    * Moving is relative to the first cell of resized titlesRange.
    *
-   * @param {Object} titlesRange - Excel range containing attributes titles.
-   * @param {Object} interval - object containing start index and length of range to be merged.
-   * @param {number} attributesLength - number of elements in attributes array.
+   * @param titlesRange - Excel range containing attributes titles.
+   * @param interval - object containing start index and length of range to be merged.
+   * @param attributesLength - number of elements in attributes array.
    */
-  handleMergeRowsFunc = (titlesRange, interval, attributesLength) => {
+  handleMergeRowsFunc(titlesRange: Excel.Range, interval: any, attributesLength: number): void {
     const range = titlesRange
       .getResizedRange(0, interval.len - attributesLength)
       .getOffsetRange(0, interval.start);
     range.merge();
     range.format.horizontalAlignment = window.Excel.HorizontalAlignment.center;
-  };
+  }
 
   /**
    * Merges and formats Excel cells for columns.
@@ -106,11 +107,15 @@ class OfficeApiHeaderMergeHelper {
    * Resizing is relative to the first cell of titlesRange, negative value means shrinking the range.
    * Moving is relative to the first cell of resized titlesRange.
    *
-   * @param {Object} titlesRange - Excel range containing attributes titles.
-   * @param {Object} interval - object containing start index and length of range to be merged.
-   * @param {number} attributesLength - number of elements in attributes array.
+   * @param titlesRange - Excel range containing attributes titles.
+   * @param interval - object containing start index and length of range to be merged.
+   * @param attributesLength - number of elements in attributes array.
    */
-  handleMergeColumnsFunc = (titlesRange, interval, attributesLength) => {
+  handleMergeColumnsFunc = (
+    titlesRange: Excel.Range,
+    interval: any,
+    attributesLength: number
+  ): void => {
     const range = titlesRange
       .getResizedRange(interval.len - attributesLength, 0)
       .getOffsetRange(interval.start, 0);
@@ -127,11 +132,11 @@ class OfficeApiHeaderMergeHelper {
    * ['a', 'a'] -> [0]
    * ['a', 'a', 'b'] -> [0, 2]
    *
-   * @param {string[]} attributes - Non empty (already validated) array of names of attributes.
-   * @returns {number[]} Indices of starts of all intervals.
+   * @param attributes - Non empty (already validated) array of names of attributes.
+   * @returns Indices of starts of all intervals.
    *
    */
-  calculateIntervalStarts = attributes => {
+  calculateIntervalStarts(attributes: string[]): number[] {
     const intervalStarts = [0];
 
     for (let i = 1; i < attributes.length; i++) {
@@ -141,7 +146,7 @@ class OfficeApiHeaderMergeHelper {
     }
 
     return intervalStarts;
-  };
+  }
 
   /**
    * Calculates intervals representing Excel cell ranges to be merged. Intervals are not being generated for
@@ -154,13 +159,15 @@ class OfficeApiHeaderMergeHelper {
    * for attributes[] === ['a', 'a', 'b']: [0, 2], 3 -> [{ start: 0, len: 2 }]
    * for attributes[] === ['a', 'a', 'b', 'b']: [0, 2], 4 -> [{ start: 0, len: 2 }, { start: 2, len: 2 }]
    *
-   * @param {number[]} intervalStarts - Indices of starts of all intervals.
-   * @param {number} attributesNo - Number of attributes.
-   * @returns {Array} Intervals representing Excel cell ranges to be merged - array
+   * @param intervalStarts - Indices of starts of all intervals.
+   * @param attributesNo - Number of attributes.
+   * @returns Intervals representing Excel cell ranges to be merged - array
    * of items: { start: number, len: number }
-   *
    */
-  calculateIntervals = (intervalStarts, attributesNo) => {
+  calculateIntervals = (
+    intervalStarts: number[],
+    attributesNo: number
+  ): { start: number; len: number }[] => {
     if (!intervalStarts || !intervalStarts.length || attributesNo <= 1) {
       return [];
     }
@@ -188,5 +195,4 @@ class OfficeApiHeaderMergeHelper {
   };
 }
 
-const { mergeHeaderRows, mergeHeaderColumns } = new OfficeApiHeaderMergeHelper();
-export { mergeHeaderRows, mergeHeaderColumns };
+export const officeApiHeaderMergeHelper = new OfficeApiHeaderMergeHelper();

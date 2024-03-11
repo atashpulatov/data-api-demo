@@ -4,8 +4,6 @@ import { officeApiWorksheetHelper } from '../api/office-api-worksheet-helper';
 import getOfficeTableHelper from './get-office-table-helper';
 import officeTableHelperRange from './office-table-helper-range';
 
-import { objectImportType } from '../../mstr-object/constants';
-
 const DEFAULT_TABLE_STYLE = 'TableStyleLight11';
 
 class OfficeTableCreate {
@@ -44,7 +42,6 @@ class OfficeTableCreate {
 
     if (insertNewWorksheet) {
       startCell = await officeApiWorksheetHelper.getStartCell(
-        objectImportType.TABLE,
         insertNewWorksheet,
         excelContext,
         name
