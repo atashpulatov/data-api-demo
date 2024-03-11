@@ -28,8 +28,8 @@ class OfficeApiHeaderMergeHelper {
   /**
    * Merges headers for columns.
    *
-   * @param {string[]} attributes - Names of attributes for columns.
-   * @param {Object} titlesRange - Excel range containing attributes titles.
+   * @param attributes - Names of attributes for columns.
+   * @param titlesRange - Excel range containing attributes titles.
    *
    */
   mergeHeaderColumns(attributes: string[], titlesRange: Excel.Range): void {
@@ -85,9 +85,9 @@ class OfficeApiHeaderMergeHelper {
    * Resizing is relative to the first cell of titlesRange, negative value means shrinking the range.
    * Moving is relative to the first cell of resized titlesRange.
    *
-   * @param {Object} titlesRange - Excel range containing attributes titles.
-   * @param {Object} interval - object containing start index and length of range to be merged.
-   * @param {number} attributesLength - number of elements in attributes array.
+   * @param titlesRange - Excel range containing attributes titles.
+   * @param interval - object containing start index and length of range to be merged.
+   * @param attributesLength - number of elements in attributes array.
    */
   handleMergeRowsFunc(titlesRange: Excel.Range, interval: any, attributesLength: number): void {
     const range = titlesRange
@@ -107,9 +107,9 @@ class OfficeApiHeaderMergeHelper {
    * Resizing is relative to the first cell of titlesRange, negative value means shrinking the range.
    * Moving is relative to the first cell of resized titlesRange.
    *
-   * @param {Object} titlesRange - Excel range containing attributes titles.
-   * @param {Object} interval - object containing start index and length of range to be merged.
-   * @param {number} attributesLength - number of elements in attributes array.
+   * @param titlesRange - Excel range containing attributes titles.
+   * @param interval - object containing start index and length of range to be merged.
+   * @param attributesLength - number of elements in attributes array.
    */
   handleMergeColumnsFunc = (
     titlesRange: Excel.Range,
@@ -132,8 +132,8 @@ class OfficeApiHeaderMergeHelper {
    * ['a', 'a'] -> [0]
    * ['a', 'a', 'b'] -> [0, 2]
    *
-   * @param {string[]} attributes - Non empty (already validated) array of names of attributes.
-   * @returns {number[]} Indices of starts of all intervals.
+   * @param attributes - Non empty (already validated) array of names of attributes.
+   * @returns Indices of starts of all intervals.
    *
    */
   calculateIntervalStarts(attributes: string[]): number[] {

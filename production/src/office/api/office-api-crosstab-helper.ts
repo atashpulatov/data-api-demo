@@ -203,10 +203,10 @@ class OfficeApiCrosstabHelper {
   /**
    *Prepares parameters for createHeaders
    *
-   * @param {Office} cellAddress Address of the first cell in report (top left)
-   * @param {Array} columns Contains headers structure and data
-   * @param {Office} sheet Active Exccel spreadsheet
-   * @return {Promise} Context.sync
+   * @param cellAddress Address of the first cell in report (top left)
+   * @param columns Contains headers structure and data
+   * @param sheet Active Exccel spreadsheet
+   * @return Context.sync
    */
   createColumnsHeaders = (cellAddress: string, columns: any[], sheet: Excel.Worksheet): void => {
     const reportStartingCell = sheet.getRange(cellAddress);
@@ -226,10 +226,10 @@ class OfficeApiCrosstabHelper {
   /**
    * Create Title headers for crosstab report
    *
-   * @param {Office} cellAddress Address of the first cell in report (top left)
-   * @param {Object} attributesNames Contains arrays of attributes names in crosstab report
-   * @param {Office} sheet Active Exccel spreadsheet
-   * @param {Object} crosstabHeaderDimensions Contains dimensions of crosstab report headers
+   * @param cellAddress Address of the first cell in report (top left)
+   * @param attributesNames Contains arrays of attributes names in crosstab report
+   * @param sheet Active Exccel spreadsheet
+   * @param crosstabHeaderDimensions Contains dimensions of crosstab report headers
    */
   createRowsTitleHeaders = (
     cellAddress: string,
@@ -298,9 +298,9 @@ class OfficeApiCrosstabHelper {
   /**
    * Clear previous formatting and insert data in range
    *
-   * @param {Office} headerRange Range of the header
-   * @param {Array} headerArray Contains rows/headers structure and data
-   * @param {String} axis - Axis to apply formatting columns or rows
+   * @param headerRange Range of the header
+   * @param headerArray Contains rows/headers structure and data
+   * @param axis - Axis to apply formatting columns or rows
    */
   insertHeadersValues(headerRange: Excel.Range, headerArray: any[][], axis = 'rows'): void {
     headerRange.clear('Contents'); // we are unmerging and removing formatting to avoid conflicts while merging cells

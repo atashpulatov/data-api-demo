@@ -41,9 +41,9 @@ class OfficeApiWorksheetHelper {
   /**
    * Get sheet of the table. Return isSheetProtected
    *
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {String} bindId Id of the Office table created on import used for referencing the Excel table
-   * @param {Office} sheet Excel Sheet
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param bindId Id of the Office table created on import used for referencing the Excel table
+   * @param sheet Excel Sheet
    */
   async isCurrentReportSheetProtected(
     excelContext: Excel.RequestContext,
@@ -201,7 +201,7 @@ class OfficeApiWorksheetHelper {
   /**
    * Checks if active worksheet is empty.
    *
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   * @param excelContext Reference to Excel Context used by Excel API functions
    * @returns Flag indicating whether active worksheet is empty
    */
   async isActiveWorksheetEmpty(excelContext: Excel.RequestContext): Promise<boolean> {
