@@ -414,7 +414,6 @@ function mapStateToProps(state) {
     navigationTree,
     popupReducer,
     sessionReducer,
-    objectReducer,
     officeReducer,
     answersReducer,
     popupStateReducer,
@@ -435,13 +434,10 @@ function mapStateToProps(state) {
   const isReport =
     editedObject && editedObject.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
-  const { objects } = objectReducer;
   const editedObjectParse = {
     ...popupHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege),
   };
-  editedObjectParse.importType = objects.find(
-    obj => obj.objectId === editedObjectParse.chosenObjectId
-  )?.importType;
+  editedObjectParse.importType = editedObject?.importType;
   return {
     chosenObjectName: editedObject ? editedObjectParse.dossierName : chosenObjectName,
     chosenObjectId: editedObject ? editedObjectParse.chosenObjectId : chosenObjectId,
