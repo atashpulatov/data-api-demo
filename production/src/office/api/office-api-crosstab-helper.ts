@@ -1,4 +1,4 @@
-import { mergeHeaderColumns, mergeHeaderRows } from './office-api-header-merge-helper';
+import { officeApiHeaderMergeHelper } from './office-api-header-merge-helper';
 
 import mstrNormalizedJsonHandler from '../../mstr-object/handler/mstr-normalized-json-handler';
 
@@ -257,12 +257,12 @@ class OfficeApiCrosstabHelper {
     // we are not inserting row attributes names if they do not exist
     if (rowsAttributes && rowsAttributes.length) {
       rowsTitlesRange.values = [rowsAttributes];
-      mergeHeaderRows(rowsAttributes, rowsTitlesRange);
+      officeApiHeaderMergeHelper.mergeHeaderRows(rowsAttributes, rowsTitlesRange);
     }
 
     if (columnsAttributes && columnsAttributes.length) {
       columnsTitlesRange.values = mstrNormalizedJsonHandler.transposeMatrix([columnsAttributes]);
-      mergeHeaderColumns(columnsAttributes, columnsTitlesRange);
+      officeApiHeaderMergeHelper.mergeHeaderColumns(columnsAttributes, columnsTitlesRange);
     }
   };
 

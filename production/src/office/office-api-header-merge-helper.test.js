@@ -1,4 +1,4 @@
-import { mergeHeaderColumns, mergeHeaderRows } from './api/office-api-header-merge-helper';
+const { officeApiHeaderMergeHelper } = require('./api/office-api-header-merge-helper');
 
 describe('OfficeApiHeaderMergeHelper', () => {
   let offsetRange;
@@ -95,7 +95,7 @@ describe('OfficeApiHeaderMergeHelper', () => {
     ({ attributes, noOfMerges, resultOffsetRange, resultResizedRangeDelta }) => {
       // given
       // when
-      mergeHeaderRows(attributes, titlesRange);
+      officeApiHeaderMergeHelper.mergeHeaderRows(attributes, titlesRange);
 
       // then
       expect(mergeFunc).toBeCalledTimes(noOfMerges);
@@ -160,7 +160,7 @@ describe('OfficeApiHeaderMergeHelper', () => {
     ({ attributes, noOfMerges, resultOffsetRange, resultResizedRangeDelta }) => {
       // given
       // when
-      mergeHeaderColumns(attributes, titlesRange);
+      officeApiHeaderMergeHelper.mergeHeaderColumns(attributes, titlesRange);
 
       // then
       expect(mergeFunc).toBeCalledTimes(noOfMerges);

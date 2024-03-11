@@ -195,5 +195,4 @@ class OfficeApiHeaderMergeHelper {
   };
 }
 
-const { mergeHeaderRows, mergeHeaderColumns } = new OfficeApiHeaderMergeHelper();
-export { mergeHeaderRows, mergeHeaderColumns };
+export const officeApiHeaderMergeHelper = new OfficeApiHeaderMergeHelper();
