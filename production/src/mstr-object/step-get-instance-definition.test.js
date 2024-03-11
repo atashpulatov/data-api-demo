@@ -300,7 +300,6 @@ describe('StepGetInstanceDefinition', () => {
       expect(officeApiWorksheetHelper.getStartCell).toBeCalledTimes(expectedGetStartCellCallsNo);
       if (expectedGetStartCellCallsNo === 1) {
         expect(officeApiWorksheetHelper.getStartCell).toBeCalledWith(
-          objectImportType.TABLE,
           'insertNewWorksheetTest',
           'excelContextTest',
           'getVisualizationNameTest'
@@ -495,7 +494,6 @@ describe('StepGetInstanceDefinition', () => {
       expect(officeApiWorksheetHelper.getStartCell).toBeCalledTimes(expectedGetStartCellCallsNo);
       if (expectedGetStartCellCallsNo === 1) {
         expect(officeApiWorksheetHelper.getStartCell).toBeCalledWith(
-          objectImportType.TABLE,
           'insertNewWorksheetTest',
           'excelContextTest',
           'nameTest'
@@ -783,7 +781,6 @@ describe('StepGetInstanceDefinition', () => {
 
       // when
       const result = await officeApiWorksheetHelper.getStartCell(
-        objectImportType.TABLE,
         insertNewWorksheet,
         'excelContextTest',
         'nameTest'

@@ -6,22 +6,28 @@ class OfficeApiWorksheetHelper {
   /**
    * Returns true if specific worksheet is protected
    *
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {Office} sheet Excel Sheet
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param sheet Excel Sheet
    */
-  isSheetProtected = async (excelContext, sheet) => {
+  async isSheetProtected(
+    excelContext: Excel.RequestContext,
+    sheet: Excel.Worksheet
+  ): Promise<boolean> {
     sheet.load('protection/protected');
     await excelContext.sync();
     return sheet.protection.protected;
-  };
+  }
 
   /**
    * Returns true if specific worksheet is protected
    *
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {Array} reportArray array of Mstr Tables
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param reportArray array of Mstr Tables
    */
-  checkIfAnySheetProtected = async (excelContext, reportArray) => {
+  async checkIfAnySheetProtected(
+    excelContext: Excel.RequestContext,
+    reportArray: any[]
+  ): Promise<boolean> {
     for (const report of reportArray) {
       const sheet = await officeApiHelper.getExcelSheetFromTable(excelContext, report.bindId);
       if (sheet) {
@@ -30,7 +36,7 @@ class OfficeApiWorksheetHelper {
         return false;
       }
     }
-  };
+  }
 
   /**
    * Get sheet of the table. Return isSheetProtected
@@ -39,7 +45,11 @@ class OfficeApiWorksheetHelper {
    * @param {String} bindId Id of the Office table created on import used for referencing the Excel table
    * @param {Office} sheet Excel Sheet
    */
-  isCurrentReportSheetProtected = async (excelContext, bindId, sheet) => {
+  async isCurrentReportSheetProtected(
+    excelContext: Excel.RequestContext,
+    bindId: string,
+    sheet: Excel.Worksheet
+  ): Promise<void> {
     let isProtected = false;
     if (bindId) {
       const currentExcelSheet = await officeApiHelper.getExcelSheetFromTable(excelContext, bindId);
@@ -57,16 +67,19 @@ class OfficeApiWorksheetHelper {
     if (isProtected) {
       throw new ProtectedSheetError();
     }
-  };
+  }
 
   /**
    * Creates Excel worksheet and sets it as a active one. New worksheet name is based on added object name
    *
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {String} objectName Name of the object added to the worksheet
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param objectName Name of the object added to the worksheet
    *
    */
-  createAndActivateNewWorksheet = async (excelContext, objectName) => {
+  async createAndActivateNewWorksheet(
+    excelContext: Excel.RequestContext,
+    objectName: string
+  ): Promise<void> {
     const newSheetName = await this.prepareWorksheetName(excelContext, objectName);
 
     const sheets = excelContext.workbook.worksheets;
@@ -77,23 +90,26 @@ class OfficeApiWorksheetHelper {
     await excelContext.sync();
     sheet.activate();
     await excelContext.sync();
-  };
+  }
 
   /**
    * Get address of the Excel cell based on value of insertNewWorksheet might also create new worksheet.
    *
-   * @param {String} importType object import type(table|image)
-   * @param {Boolean} insertNewWorksheet specify whether new worksheet should be create before getting startcell
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {String} objectName Name of the object added to the new worksheet
-   * @return {String} address of Excel cell
+   * @param insertNewWorksheet specify whether new worksheet should be create before getting startcell
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param objectName Name of the object added to the new worksheet
+   * @return address of Excel cell
    */
-  getStartCell = async (importType, insertNewWorksheet, excelContext, objectName) => {
+  async getStartCell(
+    insertNewWorksheet: boolean,
+    excelContext: Excel.RequestContext,
+    objectName: string
+  ): Promise<string> {
     if (insertNewWorksheet) {
       await this.createAndActivateNewWorksheet(excelContext, objectName);
     }
     return officeApiHelper.getSelectedCell(excelContext);
-  };
+  }
 
   /**
    * Prepares new Excel wooksheet name. Maximum name length is 31.
@@ -101,11 +117,14 @@ class OfficeApiWorksheetHelper {
    * If name already exists, counter is added at the end of the name.
    * Worksheet name restricted chars: \ / ? : [ ] are replaced with _
    *
-   * @param {String} excelContext Reference to Excel Context used by Excel API functions
-   * @param {Array} objectName Name of the object added to the worksheet
-   * @returns {String} New Excel worksheet name
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param objectName Name of the object added to the worksheet
+   * @returns New Excel worksheet name
    */
-  prepareWorksheetName = async (excelContext, objectName) => {
+  async prepareWorksheetName(
+    excelContext: Excel.RequestContext,
+    objectName: string
+  ): Promise<string> {
     const EXCEL_WORKSHEET_CHAR_LIMIT = 31;
 
     const sheets = excelContext.workbook.worksheets;
@@ -155,18 +174,21 @@ class OfficeApiWorksheetHelper {
     }
 
     return newSheetName;
-  };
+  }
 
   /**
    * Renames active worksheet name to the object name
    *
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {String} objectName Name of the object added to the worksheet
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param objectName Name of the object added to the worksheet
    *
-   * @returns {String} New Excel worksheet name
+   * @returns New Excel worksheet name
    */
 
-  renameExistingWorksheet = async (excelContext, objectName) => {
+  async renameExistingWorksheet(
+    excelContext: Excel.RequestContext,
+    objectName: string
+  ): Promise<string> {
     const currentSheet = excelContext.workbook.worksheets.getActiveWorksheet();
     const newSheetName = await this.prepareWorksheetName(excelContext, objectName);
 
@@ -174,7 +196,7 @@ class OfficeApiWorksheetHelper {
     await excelContext.sync();
 
     return newSheetName;
-  };
+  }
 
   /**
    * Checks if active worksheet is empty.
@@ -182,13 +204,13 @@ class OfficeApiWorksheetHelper {
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @returns Flag indicating whether active worksheet is empty
    */
-  isActiveWorksheetEmpty = async excelContext => {
+  async isActiveWorksheetEmpty(excelContext: Excel.RequestContext): Promise<boolean> {
     const activeSheet = excelContext.workbook.worksheets.getActiveWorksheet();
     const rangeOrNullObject = activeSheet.getUsedRangeOrNullObject();
     await excelContext.sync();
 
     return rangeOrNullObject.isNullObject;
-  };
+  }
 }
 
 export const officeApiWorksheetHelper = new OfficeApiWorksheetHelper();

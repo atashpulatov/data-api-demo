@@ -5,19 +5,23 @@ class OfficeApiDataLoader {
   /**
    * Loads single value from Excel.
    *
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions used to load value
-   * @param {Object} object Object to load value from
-   * @param {String} key Name of the variable to load
+   * @param excelContext Reference to Excel Context used by Excel API functions used to load value
+   * @param object Object to load value from
+   * @param key Name of the variable to load
    *
-   * @returns {Promise} Promise with loaded value.
+   * @returns Promise with loaded value.
    *
    * @throws Error when excelContext, any item, any item.object or item.key is empty.
    */
-  loadSingleExcelData = async (excelContext, object, key) => {
+  async loadSingleExcelData(
+    excelContext: Excel.RequestContext,
+    object: any,
+    key: string
+  ): Promise<any> {
     const valueMap = await this.loadExcelData(excelContext, [{ object, key }]);
 
     return valueMap[key];
-  };
+  }
 
   /**
    * Loads multiple values from Excel, synchronizing only once.
@@ -32,7 +36,7 @@ class OfficeApiDataLoader {
    *
    * @throws Error when excelContext, any item, any item.object or item.key is empty.
    */
-  loadExcelData = async (excelContext, items) => {
+  loadExcelData = async (excelContext: Excel.RequestContext, items: any[]): Promise<any> => {
     this.validateExcelContext(excelContext);
 
     if (!items || !items.length) {
@@ -47,7 +51,7 @@ class OfficeApiDataLoader {
 
     await excelContext.sync();
 
-    const result = {};
+    const result: { [key: string]: any } = {};
     for (const param of items) {
       result[param.key] = param.object[param.key];
     }
@@ -62,11 +66,11 @@ class OfficeApiDataLoader {
    *
    * @throws Error when excelContext is empty.
    */
-  validateExcelContext = excelContext => {
+  validateExcelContext(excelContext: Excel.RequestContext): void {
     if (!excelContext) {
       throw new Error(`Cannot load data from Excel, excel context is [${excelContext}]`);
     }
-  };
+  }
 
   /**
    * Validates item, which should be not empty and contain non empty object and key.
@@ -75,7 +79,7 @@ class OfficeApiDataLoader {
    *
    * @throws Error when item, item.object or item.key is empty.
    */
-  validateItem = item => {
+  validateItem(item: any): void {
     if (!item) {
       throw new Error(`Cannot load data from Excel, item is [${item}]`);
     }
@@ -87,7 +91,7 @@ class OfficeApiDataLoader {
     if (!item.key) {
       throw new Error(`Cannot load data from Excel, item.key is [${item.key}]`);
     }
-  };
+  }
 }
 
 const officeApiDataLoader = new OfficeApiDataLoader();
