@@ -14,7 +14,6 @@ import dossierInstanceDefinition from './instance/dossier-instance-definition';
 import stepGetInstanceDefinition from './instance/step-get-instance-definition';
 import mstrObjectEnum from './mstr-object-type-enum';
 import { errorMessages } from '../error/constants';
-import { objectImportType } from './constants';
 
 describe('StepGetInstanceDefinition', () => {
   afterEach(() => {
