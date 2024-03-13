@@ -18,7 +18,7 @@ export interface DialogResponse {
   importType?: string;
   isPrompted?: boolean;
   promptsAnswers?: any;
-  visualizationInfo?: any;
+  visualizationInfo?: VisualizationInfo;
   preparedInstanceId?: string;
   displayAttrFormNames?: string;
   projectId?: string;
