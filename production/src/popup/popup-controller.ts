@@ -1,6 +1,8 @@
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { officeApiHelper } from '../office/api/office-api-helper';
 
+import { DialogResponse, ReportParams } from './popup-controller-types';
+
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { errorService } from '../error/error-handler';
 import { PopupTypeEnum } from '../home/popup-type-enum';
@@ -18,21 +20,30 @@ import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/repro
 const URL = `${window.location.href}`;
 
 class PopupController {
-  constructor(excelXtabsBorderColor) {
-    this.EXCEL_XTABS_BORDER_COLOR = excelXtabsBorderColor;
-  }
+  // TODO: Fix any types
+  reduxStore: any;
 
-  init = (reduxStore, sessionActions, popupActions, overviewHelper) => {
+  sessionActions: any;
+
+  popupActions: any;
+
+  overviewHelper: any;
+
+  reportParams: ReportParams;
+
+  dialog: Office.Dialog;
+
+  init = (reduxStore: any, sessionActions: any, popupActions: any, overviewHelper: any): void => {
     this.reduxStore = reduxStore;
     this.sessionActions = sessionActions;
     this.popupActions = popupActions;
     this.overviewHelper = overviewHelper;
     // The following vars used to store references to current object reportParams and dialog
     this.reportParams = null;
-    this.dialog = {};
+    this.dialog = {} as unknown as Office.Dialog;
   };
 
-  clearPopupStateIfNeeded = () => {
+  clearPopupStateIfNeeded = (): void => {
     // TODO: convert this to a redux action
     const { isDataOverviewOpen } = this.reduxStore.getState().popupStateReducer;
 
@@ -54,12 +65,12 @@ class PopupController {
     this.reduxStore.dispatch(this.popupActions.resetState());
   };
 
-  runPopupNavigation = async () => {
+  runPopupNavigation = async (): Promise<void> => {
     this.clearPopupStateIfNeeded();
     await this.runPopup(PopupTypeEnum.libraryWindow, 80, 80);
   };
 
-  runEditFiltersPopup = async reportParams => {
+  runEditFiltersPopup = async (reportParams: ReportParams): Promise<void> => {
     await this.runPopup(PopupTypeEnum.editFilters, 80, 80, reportParams);
   };
 
@@ -71,7 +82,7 @@ class PopupController {
    * @param {*} reportParams
    * @param {*} isEdit
    */
-  runRepromptPopup = async (reportParams, isEdit = true) => {
+  runRepromptPopup = async (reportParams: any, isEdit = true): Promise<void> => {
     const { popupType } = this.reduxStore.getState().popupStateReducer;
     const isOverviewReprompt = popupType && popupType === PopupTypeEnum.repromptReportDataOverview;
     this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: true, isEdit }));
@@ -87,7 +98,7 @@ class PopupController {
    * This method is used to run the Dossier's re-prompt popup from the Excel add-in
    * @param {*} reportParams
    */
-  runRepromptDossierPopup = async reportParams => {
+  runRepromptDossierPopup = async (reportParams: any): Promise<void> => {
     const { popupType } = this.reduxStore.getState().popupStateReducer;
     const isOverviewReprompt = popupType && popupType === PopupTypeEnum.repromptDossierDataOverview;
     this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: true }));
@@ -99,16 +110,21 @@ class PopupController {
     );
   };
 
-  runEditDossierPopup = async reportParams => {
+  runEditDossierPopup = async (reportParams: ReportParams): Promise<void> => {
     await this.runPopup(PopupTypeEnum.dossierWindow, 80, 80, reportParams);
   };
 
-  runImportedDataOverviewPopup = async () => {
+  runImportedDataOverviewPopup = async (): Promise<void> => {
     this.clearPopupStateIfNeeded();
-    await this.runPopup(PopupTypeEnum.importedDataOverview, 80, 80, null, true);
+    await this.runPopup(PopupTypeEnum.importedDataOverview, 80, 80, null);
   };
 
-  runPopup = async (popupType, height, width, reportParams = null) => {
+  runPopup = async (
+    popupType: string,
+    height: number,
+    width: number,
+    reportParams: ReportParams = null
+  ): Promise<void> => {
     const isDialogForMultipleRepromptOpen = this.getIsDialogAlreadyOpenForMultipleReprompt();
     const { isDataOverviewOpen } = this.reduxStore.getState().popupStateReducer;
     const isRepromptOrOvieviewPopupOpen = isDialogForMultipleRepromptOpen || isDataOverviewOpen;
@@ -182,14 +198,18 @@ class PopupController {
     }
   };
 
-  sendMessageToDialog = message => {
+  sendMessageToDialog = (message: string): void => {
     this.dialog?.messageChild && this.dialog?.messageChild(message);
   };
 
-  onMessageFromPopup = async (dialog, reportParams, arg) => {
+  onMessageFromPopup = async (
+    dialog: Office.Dialog,
+    reportParams: ReportParams,
+    arg: any
+  ): Promise<void> => {
     const isMultipleRepromptQueueEmpty = this.getIsMultipleRepromptQueueEmpty();
     const { message } = arg;
-    const response = JSON.parse(message);
+    const response: DialogResponse = JSON.parse(message);
 
     const { command } = response;
     const {
@@ -238,7 +258,7 @@ class PopupController {
       switch (command) {
         case commandOk:
           if (!reportParams) {
-            await this.handleOkCommand(response, reportParams);
+            await this.handleOkCommand(response);
           } else if (reportParams.duplicateMode) {
             this.reduxStore.dispatch(duplicateRequested(reportParams.object, response));
           } else {
@@ -286,10 +306,11 @@ class PopupController {
       // This check will keep the prompts dialog open in between reports/dossiers, if there are more to prompt
       // as long as there are no errors.
       if (isDataOverviewOpen && isMultipleRepromptQueueEmpty && command !== commandError) {
-        await this.runImportedDataOverviewPopup(true);
+        await this.runImportedDataOverviewPopup();
       }
     } catch (error) {
       console.error(error);
+      // @ts-expect-error TODO: convert error handler to TypeScript
       errorService.handleError(error, { dialogType });
     } finally {
       // always reset this.reportParams to prevent reusing old references in future popups
@@ -302,7 +323,7 @@ class PopupController {
     }
   };
 
-  handleUpdateCommand = async response => {
+  handleUpdateCommand = async (response: DialogResponse): Promise<void> => {
     const objectData = {
       name: response.chosenObjectName,
       objectId: response.chosenObjectId,
@@ -321,7 +342,7 @@ class PopupController {
     this.reduxStore.dispatch(importRequested(objectData));
   };
 
-  handleOkCommand = async (response, bindId) => {
+  handleOkCommand = async (response: DialogResponse): Promise<void> => {
     if (response.chosenObject) {
       const objectData = {
         name: response.chosenObjectName,
@@ -329,7 +350,6 @@ class PopupController {
         objectId: response.chosenObject,
         projectId: response.chosenProject,
         mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(response.chosenSubtype),
-        bindId,
         importType: response.importType,
         isPrompted: response.isPrompted || response.promptsAnswers?.answers?.length > 0,
         promptsAnswers: response.promptsAnswers,
@@ -343,13 +363,13 @@ class PopupController {
   };
 
   loadPending =
-    wrapped =>
-    async (...args) => {
+    (wrapped: any) =>
+    async (...args: any) => {
       this.runPopup(PopupTypeEnum.loadingPage, 30, 40);
       return wrapped(...args);
     };
 
-  closeDialog = dialog => {
+  closeDialog = (dialog: Office.Dialog): void => {
     try {
       return dialog.close();
     } catch (e) {
@@ -359,17 +379,17 @@ class PopupController {
 
   // Used to reset dialog-related state variables in Redux Store
   // and the dialog reference stored in the class object.
-  resetDialogStates = () => {
+  resetDialogStates = (): void => {
     this.reduxStore.dispatch(this.popupActions.resetState());
     this.reduxStore.dispatch(popupStateActions.onClearPopupState());
     this.reduxStore.dispatch(officeActions.hideDialog());
-    this.dialog = {};
+    this.dialog = {} as unknown as Office.Dialog;
   };
 
-  getReportsPreviousState = reportParams => {
+  getReportsPreviousState = (reportParams: ReportParams): void => {
     const currentReportArray = this.reduxStore.getState().officeReducer.reportArray;
     const indexOfOriginalValues = currentReportArray.findIndex(
-      report => report.bindId === reportParams.bindId
+      (report: any) => report.bindId === reportParams.bindId
     );
     const originalValues = currentReportArray[indexOfOriginalValues];
     const { displayAttrFormNames } = officeProperties;
@@ -382,10 +402,10 @@ class PopupController {
     };
   };
 
-  getObjectPreviousState = reportParams => {
+  getObjectPreviousState = (reportParams: ReportParams): void => {
     const { objects } = this.reduxStore.getState().objectReducer;
     const indexOfOriginalValues = objects.findIndex(
-      report => report.bindId === reportParams.bindId
+      (report: any) => report.bindId === reportParams.bindId
     );
     const originalValues = objects[indexOfOriginalValues];
     const { displayAttrFormNames } = officeProperties;
@@ -398,22 +418,22 @@ class PopupController {
     };
   };
 
-  getIsMultipleRepromptQueueEmpty = () => {
+  getIsMultipleRepromptQueueEmpty = (): boolean => {
     const { index = 0, total = 0 } = this.reduxStore.getState().repromptsQueueReducer;
     return total === 0 || (total >= 1 && index === total);
   };
 
-  getIsDialogAlreadyOpenForMultipleReprompt = () => {
+  getIsDialogAlreadyOpenForMultipleReprompt = (): boolean => {
     const { index = 0, total = 0 } = this.reduxStore.getState().repromptsQueueReducer;
     return total > 1 && index > 1;
   };
 
   manageDialogType = async (
-    isMultipleRepromptQueueEmpty,
-    isDataOverviewOpen,
-    dialog,
-    dialogType
-  ) => {
+    isMultipleRepromptQueueEmpty: boolean,
+    isDataOverviewOpen: boolean,
+    dialog: Office.Dialog,
+    dialogType: string
+  ): Promise<void> => {
     // First, clear reprompt task queue if the user cancels the popup.
     this.reduxStore.dispatch(clearRepromptTask());
 
@@ -430,7 +450,7 @@ class PopupController {
         dialogType === PopupTypeEnum.libraryWindow)
     ) {
       // Show overview table if cancel was triggered during Multiple Reprompt workflow.
-      this.runImportedDataOverviewPopup(true);
+      this.runImportedDataOverviewPopup();
     }
   };
 }
