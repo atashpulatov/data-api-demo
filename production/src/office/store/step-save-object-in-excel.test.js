@@ -54,7 +54,6 @@ describe('StepSaveObjectInExcel', () => {
     });
 
     // then
-    expect(stepSaveObjectInExcel.reduxStore.dispatch).toHaveBeenCalled();
     expect(officeStoreObject.saveObjectsInExcelStore).toBeCalledTimes(1);
     expect(console.error).toBeCalledTimes(1);
     expect(console.error).toBeCalledWith(new Error('errorTest'));

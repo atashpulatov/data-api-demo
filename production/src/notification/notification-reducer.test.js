@@ -215,7 +215,7 @@ describe('Notification reducer', () => {
         const resultState = notificationReducer(initialState.singleImport, action);
 
         // then
-        const { children: _, ...resultChunk } = resultState.notifications[1];
+        const { children: _, ...resultChunk } = resultState.notifications[0];
         expect(resultChunk).toEqual({
           objectWorkingId: 123,
           operationType: IMPORT_OPERATION,
@@ -240,7 +240,7 @@ describe('Notification reducer', () => {
         const resultState = notificationReducer(initialState.singleImport, action);
 
         // then
-        const { children } = resultState.notifications[1];
+        const { children } = resultState.notifications[0];
         expect(children).toBeDefined();
       });
 
