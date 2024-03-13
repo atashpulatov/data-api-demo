@@ -60,7 +60,7 @@ describe('PopupController', () => {
     const popupType = PopupTypeEnum.editFilters;
     jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementationOnce(async () => {});
     jest.spyOn(popupController, 'onMessageFromPopup').mockImplementationOnce(async () => {});
-    jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementationOnce(() => true);
+    jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementationOnce(async () => true);
     // when
     await popupController.runPopup(popupType, 80, 80);
     // then
@@ -489,7 +489,7 @@ describe('PopupController', () => {
       popupStateReducer: { popupType: PopupTypeEnum.importedDataOverview },
     });
     jest.spyOn(popupController, 'getIsMultipleRepromptQueueEmpty').mockReturnValue(true);
-    jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementation(() => true);
+    jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementation(async () => true);
     jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementation(async () => {});
     jest
       .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId')
@@ -560,7 +560,7 @@ describe('PopupController', () => {
       .spyOn(popupController, 'runImportedDataOverviewPopup')
       .mockImplementation(async () => {});
 
-    jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementationOnce(() => true);
+    jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementationOnce(async () => true);
     jest.spyOn(reduxStore, 'dispatch').mockImplementation();
     jest.spyOn(reduxStore, 'getState').mockReturnValue({
       popupStateReducer: {
@@ -611,7 +611,7 @@ describe('PopupController', () => {
       .spyOn(popupController, 'runImportedDataOverviewPopup')
       .mockImplementation(async () => {});
 
-    jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementationOnce(() => true);
+    jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementationOnce(async () => true);
     jest.spyOn(reduxStore, 'dispatch').mockImplementation();
     jest.spyOn(reduxStore, 'getState').mockReturnValue({
       popupStateReducer: {
