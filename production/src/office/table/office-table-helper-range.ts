@@ -5,21 +5,21 @@ class OfficeTableHelperRange {
   /**
    * Checks if the range for the table is clear.
    *
-   * @param {Office} prevOfficeTable Reference to previously imported Excel table
-   * @param {Office} excelContext excelContext
-   * @param {Office} range range of the resized table
-   * @param {Object} instanceDefinition
-   * @param {Boolean} isRepeatStep Specify if repeat creating of the table
+   * @param prevOfficeTable Reference to previously imported Excel table
+   * @param excelContext excelContext
+   * @param range range of the resized table
+   * @param instanceDefinition
+   * @param isRepeatStep Specify if repeat creating of the table
    *
    * @throws {OverlappingTablesError} when range is not empty.
    */
   async checkObjectRangeValidity(
-    prevOfficeTable,
-    excelContext,
-    range,
-    instanceDefinition,
-    isRepeatStep
-  ) {
+    prevOfficeTable: Excel.Table | null,
+    excelContext: Excel.RequestContext,
+    range: Excel.Range,
+    instanceDefinition: any,
+    isRepeatStep: boolean
+  ): Promise<void> {
     if (prevOfficeTable) {
       if (isRepeatStep) {
         await this.checkRangeValidity(excelContext, range);
@@ -39,13 +39,17 @@ class OfficeTableHelperRange {
   /**
    * Checks if range is valid on refresh.
    *
-   * @param {Object} prevOfficeTable previous office table
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {Object} instanceDefinition
+   * @param prevOfficeTable previous office table
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param instanceDefinition
    *
    * @throws {OverlappingTablesError} when range is not empty.
    */
-  async checkObjectRangeValidityOnRefresh(prevOfficeTable, excelContext, instanceDefinition) {
+  async checkObjectRangeValidityOnRefresh(
+    prevOfficeTable: Excel.Table,
+    excelContext: Excel.RequestContext,
+    instanceDefinition: any
+  ): Promise<void> {
     const { rows, columns, mstrTable } = instanceDefinition;
 
     const { addedRows, addedColumns } = await this.calculateRowsAndColumnsSize(
@@ -76,9 +80,15 @@ class OfficeTableHelperRange {
    * @param prevOfficeTable
    * @param rows
    * @param columns
-   * @returns {Promise<{addedRows, addedColumns}>}
+   * @returns
    */
-  async calculateRowsAndColumnsSize(excelContext, mstrTable, prevOfficeTable, rows, columns) {
+  async calculateRowsAndColumnsSize(
+    excelContext: Excel.RequestContext,
+    mstrTable: any,
+    prevOfficeTable: Excel.Table,
+    rows: number,
+    columns: number
+  ): Promise<{ addedRows: number; addedColumns: number }> {
     prevOfficeTable.columns.load('count');
     prevOfficeTable.rows.load('count');
     await excelContext.sync();
@@ -92,10 +102,13 @@ class OfficeTableHelperRange {
   /**
    * Removes table created on import during refresh/edit workflow.
    *
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {Object} prevOfficeTable previous office table
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param prevOfficeTable previous office table
    */
-  deletePrevOfficeTable = async (excelContext, prevOfficeTable) => {
+  async deletePrevOfficeTable(
+    excelContext: Excel.RequestContext,
+    prevOfficeTable: Excel.Table
+  ): Promise<void> {
     excelContext.runtime.enableEvents = false;
     await excelContext.sync();
 
@@ -103,18 +116,22 @@ class OfficeTableHelperRange {
 
     excelContext.runtime.enableEvents = true;
     await excelContext.sync();
-  };
+  }
 
   /**
    * Checks the added rows and columns for crosstab.
    *
-   * @param {Object} mstrTable contains informations about mstr object
-   * @param {number} addedColumns excelContext
-   * @param {number} addedRows shows the number of added rows to the table
+   * @param mstrTable contains informations about mstr object
+   * @param addedColumns excelContext
+   * @param addedRows shows the number of added rows to the table
    *
    * @throws {OverlappingTablesError} when range is not empty.
    */
-  checkCrosstabAddedRowsAndColumns = (mstrTable, addedRows, addedColumns) => {
+  checkCrosstabAddedRowsAndColumns(
+    mstrTable: any,
+    addedRows: number,
+    addedColumns: number
+  ): { addedRows: number; addedColumns: number } {
     const { isCrosstab, crosstabHeaderDimensions, prevCrosstabDimensions } = mstrTable;
 
     if (isCrosstab) {
@@ -134,19 +151,24 @@ class OfficeTableHelperRange {
       addedRows,
       addedColumns,
     };
-  };
+  }
 
   /**
    * Checks if range is valid on refresh for added columns.
    *
-   * @param {Number} addedColumns shows the number of added columns to the table
-   * @param {Object} prevOfficeTable previous office table
-   * @param {Object} mstrTable contains informations about mstr object
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   * @param addedColumns shows the number of added columns to the table
+   * @param prevOfficeTable previous office table
+   * @param mstrTable contains informations about mstr object
+   * @param excelContext Reference to Excel Context used by Excel API functions
    *
    * @throws {OverlappingTablesError} when range is not empty.
    */
-  async checkExtendedRangeColumns(addedColumns, prevOfficeTable, mstrTable, excelContext) {
+  async checkExtendedRangeColumns(
+    addedColumns: number,
+    prevOfficeTable: Excel.Table,
+    mstrTable: any,
+    excelContext: Excel.RequestContext
+  ): Promise<void> {
     const { isCrosstab, prevCrosstabDimensions } = mstrTable;
 
     if (addedColumns) {
@@ -169,40 +191,51 @@ class OfficeTableHelperRange {
    *
    * @returns {Office} Reference to Excel range object
    */
-  prepareRangeColumns = (prevOfficeTable, addedColumns) =>
-    prevOfficeTable.getRange().getColumnsAfter(addedColumns);
+  prepareRangeColumns(prevOfficeTable: Excel.Table, addedColumns: number): Excel.Range {
+    return prevOfficeTable.getRange().getColumnsAfter(addedColumns);
+  }
 
   /**
    * Extends the Excel range by crosstab header column dimension.
    *
    * For tabular report return range without changes.
    *
-   * @param {Office} range Reference to Excel range object.
-   * @param {number} columnsY Number of rows in crosstab column headers
-   * @param {Boolean} isCrosstab Specify if object is a crosstab
+   * @param range Reference to Excel range object.
+   * @param columnsY Number of rows in crosstab column headers
+   * @param isCrosstab Specify if object is a crosstab
    *
-   * @returns {Office} Reference to Excel range object
+   * @returns Reference to Excel range object
    */
-  prepareRangeColumnsCrosstab = (range, columnsY, isCrosstab) => {
+  prepareRangeColumnsCrosstab(
+    range: Excel.Range,
+    columnsY: number,
+    isCrosstab: boolean
+  ): Excel.Range {
     if (isCrosstab) {
       return range.getOffsetRange(-columnsY, 0).getResizedRange(columnsY, 0);
     }
 
     return range;
-  };
+  }
 
   /**
    * Checks if range is valid on refresh for added rows.
    *
-   * @param {Number} addedColumns shows the number of added columns to the table
-   * @param {Office} prevOfficeTable Reference to previously imported Excel table
-   * @param {Object} mstrTable contains informations about mstr object
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {number} addedRows shows the number of added rows to the table
+   * @param addedColumns shows the number of added columns to the table
+   * @param prevOfficeTable Reference to previously imported Excel table
+   * @param mstrTable contains informations about mstr object
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param addedRows shows the number of added rows to the table
    *
    * @throws {OverlappingTablesError} when range is not empty.
    */
-  async checkExtendedRangeRows(addedColumns, prevOfficeTable, mstrTable, excelContext, addedRows) {
+  async checkExtendedRangeRows(
+    addedColumns: number,
+    prevOfficeTable: Excel.Table,
+    mstrTable: any,
+    excelContext: Excel.RequestContext,
+    addedRows: number
+  ): Promise<void> {
     const { isCrosstab, prevCrosstabDimensions } = mstrTable;
 
     if (addedRows) {
@@ -220,43 +253,51 @@ class OfficeTableHelperRange {
   /**
    * Extends the Excel table range for rows and columns added during import/refresh.
    *
-   * @param {Office} prevOfficeTable Reference to previously imported Excel table
-   * @param {Number} addedColumns Number of added columns to the table
-   * @param {number} addedRows Number of added rows to the table
+   * @param prevOfficeTable Reference to previously imported Excel table
+   * @param addedColumns Number of added columns to the table
+   * @param addedRows Number of added rows to the table
    *
-   * @returns {Office} Reference to Excel range object
+   * @returns Reference to Excel range object
    */
-  prepareRangeRows = (prevOfficeTable, addedColumns, addedRows) =>
-    prevOfficeTable.getRange().getRowsBelow(addedRows).getResizedRange(0, addedColumns);
+  prepareRangeRows(
+    prevOfficeTable: Excel.Table,
+    addedColumns: number,
+    addedRows: number
+  ): Excel.Range {
+    return prevOfficeTable.getRange().getRowsBelow(addedRows).getResizedRange(0, addedColumns);
+  }
 
   /**
    * Extends the Excel range by crosstab header row dimension.
    *
    * For tabular report returns range without changes.
    *
-   * @param {Office} range Reference to Excel range object.
-   * @param {number} rowsX Number of columns in crosstab row headers
-   * @param {Boolean} isCrosstab Specify if object is a crosstab
+   * @param range Reference to Excel range object.
+   * @param rowsX Number of columns in crosstab row headers
+   * @param isCrosstab Specify if object is a crosstab
    *
-   * @returns {Office} Reference to Excel range object
+   * @returns Reference to Excel range object
    */
-  prepareRangeRowsCrosstab = (range, rowsX, isCrosstab) => {
+  prepareRangeRowsCrosstab(range: Excel.Range, rowsX: number, isCrosstab: boolean): Excel.Range {
     if (isCrosstab) {
       return range.getOffsetRange(0, -rowsX).getResizedRange(0, rowsX);
     }
 
     return range;
-  };
+  }
 
   /**
    * Checks if the range is empty.
    *
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {Object} excelRange range in which table will be inserted
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param excelRange range in which table will be inserted
    *
    * @throws {OverlappingTablesError} when excelRange is not empty.
    */
-  checkRangeValidity = async (excelContext, excelRange) => {
+  async checkRangeValidity(
+    excelContext: Excel.RequestContext,
+    excelRange: Excel.Range
+  ): Promise<void> {
     // Pass true so only cells with values count as used
     const usedDataRange = excelRange.getUsedRangeOrNullObject(true);
     await excelContext.sync();
@@ -264,7 +305,7 @@ class OfficeTableHelperRange {
     if (!usedDataRange.isNullObject) {
       throw new OverlappingTablesError(errorMessages.TABLE_OVERLAP);
     }
-  };
+  }
 }
 
 const officeTableHelperRange = new OfficeTableHelperRange();

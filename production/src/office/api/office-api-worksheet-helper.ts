@@ -19,10 +19,11 @@ class OfficeApiWorksheetHelper {
   }
 
   /**
-   * Returns true if specific worksheet is protected
+   * Returns true if any worksheet is protected
    *
    * @param excelContext Reference to Excel Context used by Excel API functions
    * @param reportArray array of Mstr Tables
+   * @returns true if any sheet is protected
    */
   async checkIfAnySheetProtected(
     excelContext: Excel.RequestContext,

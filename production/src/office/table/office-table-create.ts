@@ -21,7 +21,7 @@ class OfficeTableCreate {
    * @param {Boolean} insertNewWorksheet Specify if new worksheet has to be created before creating the table
    *
    */
-  createOfficeTable = async ({
+  async createOfficeTable({
     instanceDefinition,
     excelContext,
     startCell,
@@ -30,7 +30,16 @@ class OfficeTableCreate {
     tableChanged = false,
     isRepeatStep,
     insertNewWorksheet,
-  }) => {
+  }: {
+    instanceDefinition: any;
+    excelContext: Excel.RequestContext;
+    startCell: string;
+    tableName: string;
+    prevOfficeTable: Excel.Table;
+    tableChanged: boolean;
+    isRepeatStep: boolean;
+    insertNewWorksheet: boolean;
+  }): Promise<any> {
     const {
       rows,
       columns,
@@ -51,7 +60,6 @@ class OfficeTableCreate {
     const worksheet = this.getExcelWorksheet(prevOfficeTable, insertNewWorksheet, excelContext);
     const tableStartCell = this.getTableStartCell(
       startCell,
-      worksheet,
       instanceDefinition,
       prevOfficeTable,
       tableChanged
@@ -69,19 +77,18 @@ class OfficeTableCreate {
       isRepeatStep
     );
 
-    range.numberFormat = '';
-
-    if (isCrosstab) {
-      officeApiCrosstabHelper.createCrosstabHeaders(
-        tableStartCell,
-        mstrTable,
-        worksheet,
-        crosstabHeaderDimensions
-      );
-    }
+    range.numberFormat = '' as unknown as any[][];
 
     const officeTable = worksheet.tables.add(tableRange, true); // create office table based on the range
     this.styleHeaders(officeTable);
+
+    if (isCrosstab) {
+      officeApiCrosstabHelper.createCrosstabHeaders(
+        officeTable,
+        mstrTable,
+        crosstabHeaderDimensions
+      );
+    }
 
     return this.setOfficeTableProperties({
       officeTable,
@@ -90,45 +97,50 @@ class OfficeTableCreate {
       worksheet,
       excelContext,
     });
-  };
+  }
 
   /**
    * Set style for office table
-   *
-   * @param {Object} officeTable
-   * @param {string} fontColor
-   * @param {string} fillColor
+   * @param officeTable
    *
    */
-  styleHeaders = officeTable => {
+  styleHeaders(officeTable: Excel.Table): void {
     officeTable.style = DEFAULT_TABLE_STYLE;
-  };
+  }
 
   /**
    * Get excel worksheet of previous office table or acxtive if no table was passed.
    *
-   * @param {Object} prevOfficeTable previous office table
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   * @param prevOfficeTable previous office table
+   * @param excelContext Reference to Excel Context used by Excel API functions
    *
    */
-  getExcelWorksheet = (prevOfficeTable, insertNewWorksheet, excelContext) => {
+  getExcelWorksheet(
+    prevOfficeTable: Excel.Table,
+    insertNewWorksheet: boolean,
+    excelContext: Excel.RequestContext
+  ): Excel.Worksheet {
     if (prevOfficeTable && !insertNewWorksheet) {
       return prevOfficeTable.worksheet;
     }
     return excelContext.workbook.worksheets.getActiveWorksheet();
-  };
+  }
 
   /**
    * Get range of the table. For crosstabs range is extended by headers.
    *
-   * @param {Boolean} isCrosstab Specify if object is a crosstab
-   * @param {Object} tableStartCell  Top left corner cell
-   * @param {Object} crosstabHeaderDimensions contains dimension of crosstab headers (columnsY, cloumnsX, RowsY, RowsX)
-   * @param {Object} sheet  excel worksheet
-   * @param {Object} tableRange range of the table
+   * @param tableStartCell  Top left corner cell
+   * @param crosstabHeaderDimensions contains dimension of crosstab headers (columnsY, cloumnsX, RowsY, RowsX)
+   * @param sheet  excel worksheet
+   * @param tableRange range of the table
    *
    */
-  getObjectRange = (tableStartCell, sheet, tableRange, mstrTable) => {
+  getObjectRange(
+    tableStartCell: string,
+    sheet: Excel.Worksheet,
+    tableRange: string,
+    mstrTable: any
+  ): Excel.Range {
     const { isCrosstab, crosstabHeaderDimensions } = mstrTable;
     if (isCrosstab) {
       return officeApiCrosstabHelper.getCrosstabRange(
@@ -138,19 +150,23 @@ class OfficeTableCreate {
       );
     }
     return sheet.getRange(tableRange);
-  };
+  }
 
   /**
    * Get top left cell from the excel table. For crosstabs return the first cell of Excel table not crosstab headers.
    *
-   * @param {string} startCell  Top left corner cell
-   * @param {Object} sheet  excel worksheet
-   * @param {Object} instanceDefinition
-   * @param {Object} prevOfficeTable previous office table
-   * @param {Boolean} tableChanged Specify if table columns has been changed.
+   * @param startCell  Top left corner cell
+   * @param instanceDefinition
+   * @param prevOfficeTable previous office table
+   * @param tableChanged Specify if table columns has been changed.
    *
    */
-  getTableStartCell = (startCell, sheet, instanceDefinition, prevOfficeTable, tableChanged) => {
+  getTableStartCell(
+    startCell: string,
+    instanceDefinition: any,
+    prevOfficeTable: Excel.Table,
+    tableChanged: boolean
+  ): string {
     const { mstrTable } = instanceDefinition;
     const {
       isCrosstab,
@@ -162,10 +178,8 @@ class OfficeTableCreate {
 
     let tableStartCell = officeApiHelper.getTableStartCell({
       startCell,
-      sheet,
       instanceDefinition,
       prevOfficeTable,
-      tableChanged,
     });
 
     if (
@@ -174,7 +188,7 @@ class OfficeTableCreate {
       isCrosstab
     ) {
       if (tableChanged) {
-        tableStartCell = officeApiHelper.offsetCellBy(tableStartCell, columnsY, rowsX);
+        tableStartCell = officeApiHelper.offsetCellBy(tableStartCell, columnsY - 1, rowsX);
       } else {
         tableStartCell = officeApiHelper.offsetCellBy(
           tableStartCell,
@@ -185,7 +199,7 @@ class OfficeTableCreate {
     }
 
     return tableStartCell;
-  };
+  }
 
   /**
    * Set name of the table and format office table headers
@@ -197,21 +211,24 @@ class OfficeTableCreate {
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    *
    */
-  setOfficeTableProperties = async ({
+  async setOfficeTableProperties({
     officeTable,
     newOfficeTableName,
     mstrTable,
     worksheet,
     excelContext,
-  }) => {
+  }: {
+    officeTable: Excel.Table;
+    newOfficeTableName: string;
+    mstrTable: any;
+    worksheet: Excel.Worksheet;
+    excelContext: Excel.RequestContext;
+  }): Promise<any> {
     const { isCrosstab } = mstrTable;
     try {
       officeTable.load(['name', 'id']);
       officeTable.name = newOfficeTableName;
-      if (isCrosstab) {
-        officeTable.showFilterButton = false;
-        officeTable.showHeaders = false;
-      } else {
+      if (!isCrosstab) {
         officeTable.getHeaderRowRange().values = [
           mstrTable.headers.columns[mstrTable.headers.columns.length - 1],
         ];
@@ -236,7 +253,8 @@ class OfficeTableCreate {
       await excelContext.sync();
       throw error;
     }
-  };
+  }
 }
+
 const officeTableCreate = new OfficeTableCreate();
 export default officeTableCreate;

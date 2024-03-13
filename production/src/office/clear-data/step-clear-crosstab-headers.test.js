@@ -32,7 +32,7 @@ describe('StepClearCrosstabHeaders', () => {
         .spyOn(officeApiHelper, 'getTable')
         .mockReturnValue({ getHeaderRowRange: mockedGetHeaderRowRange });
       const mockedCheckObject = jest
-        .spyOn(officeApiCrosstabHelper, 'clearEmptyCrosstabRow')
+        .spyOn(officeApiCrosstabHelper, 'clearCrosstabRowForTableHeader')
         .mockImplementation();
       const mockedCompleteStep = jest
         .spyOn(operationStepDispatcher, 'completeClearCrosstabHeaders')

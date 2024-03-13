@@ -39,7 +39,7 @@ class OfficeTableUpdate {
       await this.validateAddedRowsRange(excelContext, rows, prevOfficeTable);
 
       if (isCrosstab) {
-        this.createHeadersForCrosstab(prevOfficeTable.worksheet, instanceDefinition, startCell);
+        this.createHeadersForCrosstab(prevOfficeTable, instanceDefinition);
       } else {
         this.setHeaderValuesNoCrosstab(excelContext, prevOfficeTable, mstrTable.headers.columns);
       }
@@ -102,15 +102,14 @@ class OfficeTableUpdate {
     return Math.max(0, newRowsCount - prevRowsCount);
   };
 
-  createHeadersForCrosstab = (sheet, instanceDefinition, startCell) => {
+  createHeadersForCrosstab = (prevOfficeTable, instanceDefinition) => {
     const crosstabHeaderDimensions =
       officeApiCrosstabHelper.getCrosstabHeaderDimensions(instanceDefinition);
 
     const { mstrTable } = instanceDefinition;
     officeApiCrosstabHelper.createCrosstabHeaders(
-      startCell,
+      prevOfficeTable,
       mstrTable,
-      sheet,
       crosstabHeaderDimensions
     );
   };

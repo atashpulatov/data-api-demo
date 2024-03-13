@@ -34,7 +34,7 @@ class OfficeApiHelper {
    *
    * @param excelContext Reference to Excel Context used by Excel API functions
    * @param bindId Id of the Office table created on import used for referencing the Excel table
-   * @return Reference to Excel Range
+   * @returns Reference to Excel Range
    */
   getBindingRange(excelContext: Excel.RequestContext, bindId: string): Excel.Range {
     return excelContext.workbook.bindings.getItem(bindId).getTable().getRange();
@@ -45,7 +45,7 @@ class OfficeApiHelper {
    *
    * @param excelContext Reference to Excel Context used by Excel API functions
    * @param bindId Id of the Office table created on import used for referencing the Excel table
-   * @return Reference to Excel Table
+   * @returns Reference to Excel Table
    */
   getTable(excelContext: Excel.RequestContext, bindId: string): Excel.Table {
     return excelContext.workbook.bindings.getItem(bindId).getTable();
@@ -54,7 +54,7 @@ class OfficeApiHelper {
   /**
    * Gets a new Excel Context.
    *
-   * @return Reference to a new Excel Context used by Excel API functions
+   * @returns Reference to a new Excel Context used by Excel API functions
    */
   async getExcelContext(): Promise<Excel.RequestContext> {
     return window.Excel.run({ delayForCellEdit: true }, async excelContext => excelContext);
@@ -63,7 +63,7 @@ class OfficeApiHelper {
   /**
    * Gets Office Context.
    *
-   * @return Reference to Office Context used by Office API functions
+   * @returns Reference to Office Context used by Office API functions
    */
   async getOfficeContext(): Promise<Office.Context> {
     return window.Office.context;
@@ -72,7 +72,7 @@ class OfficeApiHelper {
   /**
    * Checks the status of Excel session.
    *
-   * @return Returns true if the Excel session is active, false otherwise
+   * @returns Returns true if the Excel session is active, false otherwise
    */
   async getExcelSessionStatus(): Promise<boolean> {
     return !!(await this.getExcelContext());
@@ -83,7 +83,7 @@ class OfficeApiHelper {
    * returns the top left cell of the last active cell, else returns the default cell address.
    *
    * @param excelContext Reference to Excel Context used by Excel API functions
-   * @return Address of the cell.
+   * @returns Address of the cell.
    * @throws INVALID_SELECTION error if the selected cell is invalid
    */
   async getSelectedCell(excelContext: Excel.RequestContext): Promise<string> {
@@ -124,7 +124,7 @@ class OfficeApiHelper {
    * returns the topLeftMost cell of the last active range, else returns the default range position.
    *
    * @param excelContext Reference to Excel Context used by Excel API functions
-   * @return object containing the top, left value of the range.
+   * @returns object containing the top, left value of the range.
    * @throws INVALID_SELECTION error if the selected cell is invalid
    */
   async getSelectedRangePosition(
@@ -173,7 +173,7 @@ class OfficeApiHelper {
    *
    * @param excelContext Reference to Excel Context used by Excel API functions
    * @param cellAddress Excel cell address
-   * @return object containing the top, left value of the range.
+   * @returns object containing the top, left value of the range.
    */
   async convertCellAddressToRangePosition(
     excelContext: Excel.RequestContext,
@@ -195,10 +195,11 @@ class OfficeApiHelper {
    * Returns top left cell from passed address.
    *
    * @param excelAddress Reference to Excel Context used by Excel API functions
-   * @return Address of the cell.
+   * @returns Address of the cell.
    */
   getStartCellOfRange(excelAddress: string): string {
-    return excelAddress.match(/!(\w+\d+)(:|$)/)[1];
+    const regexCellAddress = /!(\w+\d+)(:|$)/; // NO SONAR
+    return excelAddress.match(regexCellAddress)[1];
   }
 
   /**
@@ -207,7 +208,7 @@ class OfficeApiHelper {
    * @param headerCount Number of rows
    * @param startCell Address of the cell in Excel spreadsheet
    * @param rowCount Number of rows
-   * @return Address of Excel Range
+   * @returns Address of Excel Range
    */
   getRange(headerCount: number, startCell: string, rowCount: number = 0): string {
     if (!Number.isInteger(headerCount)) {
@@ -232,7 +233,7 @@ class OfficeApiHelper {
    * @param excelContext Reference to Excel Context used by Excel API functions
    * @param bindId Id of the Office table created on import used for referencing the Excel table
    *
-   * @return Excel sheet or false in case of error
+   * @returns Excel sheet or false in case of error
    */
   async getExcelSheetFromTable(
     excelContext: Excel.RequestContext,
@@ -251,6 +252,7 @@ class OfficeApiHelper {
    * Returns current excel sheet.
    *
    * @param excelContext Reference to Excel Context used by Excel API functions
+   * @returns Reference to active Excel Worksheet
    */
   getCurrentExcelSheet(excelContext: Excel.RequestContext): Excel.Worksheet {
     return excelContext.workbook.worksheets.getActiveWorksheet();
@@ -330,7 +332,7 @@ class OfficeApiHelper {
     if (isCrosstab) {
       const tmpXtabDimensions = {
         ...crosstabHeaderDimensions,
-        columnsY: crosstabHeaderDimensions.columnsY + 1,
+        columnsY: crosstabHeaderDimensions.columnsY,
       };
       crosstabRange = await officeApiCrosstabHelper.getCrosstabRangeSafely(
         officeTable,
@@ -380,7 +382,7 @@ class OfficeApiHelper {
    * @param cell Starting table body cell
    * @param headers Headers object from OfficeConverterServiceV2.getHeaders
    * @param isCrosstab Indicates if it's a crosstab
-   * @return
+   * @return Address of Excel table start cell
    */
   getTableStartCell({
     startCell,
@@ -413,7 +415,7 @@ class OfficeApiHelper {
       return startCell;
     }
 
-    const rowOffset = crosstabHeaderDimensions.columnsY;
+    const rowOffset = crosstabHeaderDimensions.columnsY - 1;
     const colOffset = crosstabHeaderDimensions.rowsX;
     return this.offsetCellBy(startCell, rowOffset, colOffset);
   }
