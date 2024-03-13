@@ -61,8 +61,8 @@ export const RightSidePanelNotConnected = ({
     // DE288915: Before rendering the SidePanel, determine whether to filter out the image objects
     // if the shape API is not supported, instead of handling it in mapStateToProps when mapping
     // state properties, as this could result in sending extra notifications by triggering useEffects.
-    if (!isShapeAPISupported) {
-      return loadedObjects?.filter(object => object?.importType !== objectImportType.IMAGE);
+    if (!isShapeAPISupported && loadedObjects?.length > 0) {
+      return loadedObjects.filter(object => object?.importType !== objectImportType.IMAGE);
     }
     return loadedObjects;
   }, [loadedObjects, isShapeAPISupported]);
