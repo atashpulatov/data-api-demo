@@ -1,5 +1,5 @@
-job 'stage-0-premerge-ghas' do
-  description 'premerge with GHAS scan'
+job 'stage-0-premerge-codeql' do
+  description 'premerge with ghas codeql scan'
 
   configure_common_items{}
 

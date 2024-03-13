@@ -1,5 +1,5 @@
-job 'stage-2-ghas-scan' do
-  description 'The stage 2 GHAS scan'
+job 'stage-2-codeql' do
+  description 'The stage 2 ghas codeql scan'
 
   configure_common_items{}
 
