@@ -406,7 +406,7 @@ class OfficeApiHelper {
     if (fromCrosstabChange) {
       return this.offsetCellBy(
         startCell,
-        -prevCrosstabDimensions.columnsY,
+        -(prevCrosstabDimensions.columnsY - 1),
         -prevCrosstabDimensions.rowsX
       );
     }
