@@ -172,7 +172,6 @@ describe('PopupController', () => {
       chosenSubtype: objectTypes.getTypeValues('Report').subtype,
     };
     const arg = { message: JSON.stringify(actionObject) };
-    // officeApiHelper.getOfficeSessionStatus = jest.fn();
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
       .mockImplementationOnce(async () => {});
@@ -207,7 +206,6 @@ describe('PopupController', () => {
       chosenSubtype: objectTypes.getTypeValues('Report').subtype,
     };
     const arg = { message: JSON.stringify(actionObject) };
-    // officeApiHelper.getOfficeSessionStatus = jest.fn();
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
       .mockImplementationOnce(async () => {});
@@ -234,7 +232,6 @@ describe('PopupController', () => {
       chosenObjectName: 'testName',
     };
     const arg = { message: JSON.stringify(actionObject) };
-    // officeApiHelper.getOfficeSessionStatus = jest.fn();
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
       .mockImplementationOnce(async () => {});
@@ -263,7 +260,6 @@ describe('PopupController', () => {
       body: {},
     };
     const arg = { message: JSON.stringify(actionObject) };
-    // officeApiHelper.getOfficeSessionStatus = jest.fn();
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
       .mockImplementationOnce(async () => {});
@@ -296,7 +292,6 @@ describe('PopupController', () => {
       chosenObjectName: 'testName',
     };
     const arg = { message: JSON.stringify(actionObject) };
-    // officeApiHelper.getOfficeSessionStatus = jest.fn();
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
       .mockImplementationOnce(async () => {});
@@ -329,7 +324,6 @@ describe('PopupController', () => {
       chosenObjectName: 'testName',
     };
     const arg = { message: JSON.stringify(actionObject) };
-    // officeApiHelper.getOfficeSessionStatus = jest.fn();
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
       .mockImplementationOnce(async () => {});
@@ -367,7 +361,6 @@ describe('PopupController', () => {
       chosenObjectName: 'testName',
     };
     const arg = { message: JSON.stringify(actionObject) };
-    // officeApiHelper.getOfficeSessionStatus = jest.fn();
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
       .mockImplementationOnce(async () => {});
