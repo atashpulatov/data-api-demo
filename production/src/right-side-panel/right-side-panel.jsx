@@ -277,8 +277,6 @@ export const mapStateToProps = state => {
   // and even if remains unfiltered, it still represents a new reference in memory.
   // Consequently, React seems to interpret it as either new or updated,
   // thereby triggering the useEffect hook to listen for changes in the objects' state value.
-
-  // const objects = officeReducerHelper.getObjectsListFromObjectReducer();
   const { objects } = state.objectReducer;
   const { isShapeAPISupported } = state.officeReducer;
 
