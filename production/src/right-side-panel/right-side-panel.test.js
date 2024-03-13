@@ -1,7 +1,9 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { RightSidePanelNotConnected } from '../../right-side-panel/right-side-panel';
-import officeStoreHelper from '../../office/store/office-store-helper';
+
+import officeStoreHelper from '../office/store/office-store-helper';
+
+import { RightSidePanelNotConnected } from './right-side-panel';
 
 describe('RightSidePanelNotConnected', () => {
   const mockedProps = {
@@ -16,9 +18,7 @@ describe('RightSidePanelNotConnected', () => {
     jest.spyOn(officeStoreHelper, 'isClearDataFailed').mockReturnValue(true);
 
     // when
-    render(
-      <RightSidePanelNotConnected {...mockedProps} />
-    );
+    render(<RightSidePanelNotConnected {...mockedProps} />);
 
     // then
     expect(mockedProps.toggleSecuredFlag).toHaveBeenCalledWith(true);

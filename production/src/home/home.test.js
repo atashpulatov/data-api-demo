@@ -1,11 +1,14 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { render } from '@testing-library/react';
-import { HomeNotConnected } from '../../home/home';
-import { notificationService } from '../../notification-v2/notification-service';
-import { reduxStore } from '../../store';
 
-jest.mock('../../home/home-helper');
+import { notificationService } from '../notification/notification-service';
+
+import { reduxStore } from '../store';
+
+import { HomeNotConnected } from './home';
+
+jest.mock('./home-helper');
 
 describe('HomeNotConnected', () => {
   it('should render home component and side panel', () => {
@@ -16,7 +19,7 @@ describe('HomeNotConnected', () => {
     const { getByText } = render(
       <Provider store={reduxStore}>
         <HomeNotConnected />
-      </Provider>,
+      </Provider>
     );
 
     // then
@@ -31,8 +34,8 @@ describe('HomeNotConnected', () => {
     // when
     const { getByText } = render(
       <Provider store={reduxStore}>
-        <HomeNotConnected authToken="noRightsToken" />
-      </Provider>,
+        <HomeNotConnected authToken='noRightsToken' />
+      </Provider>
     );
 
     // then
@@ -48,14 +51,14 @@ describe('HomeNotConnected', () => {
       authToken: 'testToken',
       hideDialog: jest.fn(),
       toggleIsSettingsFlag: jest.fn(),
-      clearDialogState: jest.fn()
+      clearDialogState: jest.fn(),
     };
 
     // when
     render(
       <Provider store={reduxStore}>
         <HomeNotConnected {...props} />
-      </Provider>,
+      </Provider>
     );
     window.dispatchEvent(new Event('offline'));
 

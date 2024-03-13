@@ -1,7 +1,9 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { SessionExtendingWrapper } from '../../popup/session-extending-wrapper';
-import { sessionHelper } from '../../storage/session-helper';
+
+import { sessionHelper } from '../storage/session-helper';
+
+import { SessionExtendingWrapper } from './session-extending-wrapper';
 
 describe('SessionExtendingWrapper.js', () => {
   it('should render component and passed child', () => {
@@ -12,9 +14,9 @@ describe('SessionExtendingWrapper.js', () => {
     const child = <div>{testText}</div>;
 
     // when
-    const { getByText, container } = render(<SessionExtendingWrapper id={testId}>
-      {child}
-    </SessionExtendingWrapper>);
+    const { getByText, container } = render(
+      <SessionExtendingWrapper id={testId}>{child}</SessionExtendingWrapper>
+    );
 
     // then
     expect(container.querySelector(`#${testId}`)).toBeInTheDocument();

@@ -1,13 +1,16 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { render, fireEvent } from '@testing-library/react';
-import { DossierWindowNotConnected } from '../../../embedded/dossier/dossier-window';
-import { selectorProperties } from '../../../attribute-selector/selector-properties';
-import { popupHelper } from '../../../popup/popup-helper';
-import { sessionHelper } from '../../../storage/session-helper';
-import { reduxStore } from '../../../store';
+import { fireEvent,render } from '@testing-library/react';
 
-jest.mock('../../../popup/popup-helper');
+import { popupHelper } from '../../popup/popup-helper';
+import { sessionHelper } from '../../storage/session-helper';
+
+import { reduxStore } from '../../store';
+
+import { selectorProperties } from '../../attribute-selector/selector-properties';
+import { DossierWindowNotConnected } from './dossier-window';
+
+jest.mock('../../popup/popup-helper');
 
 describe('Dossierwindow', () => {
   afterEach(() => {
@@ -32,7 +35,7 @@ describe('Dossierwindow', () => {
   it('should call proper method on cancel action', () => {
     // given
     const { commandCancel } = selectorProperties;
-    const message = { command: commandCancel, };
+    const message = { command: commandCancel };
     jest.spyOn(popupHelper, 'officeMessageParent');
 
     // when
