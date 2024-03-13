@@ -15,68 +15,78 @@ const EXCEL_COL_LIMIT = 16384;
 const INVALID_SELECTION = 'InvalidSelection';
 
 class OfficeApiHelper {
-  init = reduxStore => {
+  reduxStore: any;
+
+  init(reduxStore: any): void {
     this.reduxStore = reduxStore;
-  };
+  }
 
   /**
    * checks excel session and auth token
    *
    */
-  checkStatusOfSessions = async () => {
+  async checkStatusOfSessions(): Promise<void> {
     await Promise.all([this.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
-  };
+  }
 
   /**
    * Gets range of the Excel table added to Workbook binded item collection.
    *
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {String} bindId Id of the Office table created on import used for referencing the Excel table
-   * @return {Office} Reference to Excel Range
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param bindId Id of the Office table created on import used for referencing the Excel table
+   * @return Reference to Excel Range
    */
-  getBindingRange = (excelContext, bindId) =>
-    excelContext.workbook.bindings.getItem(bindId).getTable().getRange();
+  getBindingRange(excelContext: Excel.RequestContext, bindId: string): Excel.Range {
+    return excelContext.workbook.bindings.getItem(bindId).getTable().getRange();
+  }
 
   /**
    * Gets Excel table added to Workbook binded item collection.
    *
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {String} bindId Id of the Office table created on import used for referencing the Excel table
-   * @return {Office} Reference to Excel Table
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param bindId Id of the Office table created on import used for referencing the Excel table
+   * @return Reference to Excel Table
    */
-  getTable = (excelContext, bindId) => excelContext.workbook.bindings.getItem(bindId).getTable();
+  getTable(excelContext: Excel.RequestContext, bindId: string): Excel.Table {
+    return excelContext.workbook.bindings.getItem(bindId).getTable();
+  }
 
   /**
    * Gets a new Excel Context.
    *
-   * @return {Office} Reference to a new Excel Context used by Excel API functions
+   * @return Reference to a new Excel Context used by Excel API functions
    */
-  getExcelContext = async () =>
-    window.Excel.run({ delayForCellEdit: true }, async excelContext => excelContext);
+  async getExcelContext(): Promise<Excel.RequestContext> {
+    return window.Excel.run({ delayForCellEdit: true }, async excelContext => excelContext);
+  }
 
   /**
    * Gets Office Context.
    *
-   * @return {Office} Reference to Office Context used by Office API functions
+   * @return Reference to Office Context used by Office API functions
    */
-  getOfficeContext = async () => window.Office.context;
+  async getOfficeContext(): Promise<Office.Context> {
+    return window.Office.context;
+  }
 
   /**
    * Checks the status of Excel session.
    *
-   * @return {Boolean} Returns true if the Excel session is active, false otherwise
+   * @return Returns true if the Excel session is active, false otherwise
    */
-  getExcelSessionStatus = async () => !!(await this.getExcelContext());
+  async getExcelSessionStatus(): Promise<boolean> {
+    return !!(await this.getExcelContext());
+  }
 
   /**
    * Returns top left cell of selected range. If the selected cell is invalid,
    * returns the top left cell of the last active cell, else returns the default cell address.
    *
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @return {String} Address of the cell.
-   * @throws {Error} INVALID_SELECTION error if the selected cell is invalid
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @return Address of the cell.
+   * @throws INVALID_SELECTION error if the selected cell is invalid
    */
-  getSelectedCell = async excelContext => {
+  async getSelectedCell(excelContext: Excel.RequestContext): Promise<string> {
     try {
       const selectedRangeStart = excelContext.workbook.getSelectedRange().getCell(0, 0);
       selectedRangeStart.load(officeProperties.officeAddress);
@@ -107,17 +117,19 @@ class OfficeApiHelper {
 
       return defaultCellAddress;
     }
-  };
+  }
 
   /**
    * Returns the position of the topLeftMost cell of the selected range. If the selected range is invalid,
    * returns the topLeftMost cell of the last active range, else returns the default range position.
    *
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @return {Object} object containing the top, left value of the range.
-   * @throws {Error} INVALID_SELECTION error if the selected cell is invalid
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @return object containing the top, left value of the range.
+   * @throws INVALID_SELECTION error if the selected cell is invalid
    */
-  getSelectedRangePosition = async excelContext => {
+  async getSelectedRangePosition(
+    excelContext: Excel.RequestContext
+  ): Promise<{ top: number; left: number } | undefined> {
     try {
       const selectedRange = excelContext.workbook.getSelectedRange().getCell(0, 0);
       selectedRange.load(['top', 'left']);
@@ -154,16 +166,19 @@ class OfficeApiHelper {
 
       return defaultRangePosition;
     }
-  };
+  }
 
   /**
    * Converts the cell address to range position.
    *
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {Office} cellAddress Excel cell address
-   * @return {Object} object containing the top, left value of the range.
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param cellAddress Excel cell address
+   * @return object containing the top, left value of the range.
    */
-  convertCellAddressToRangePosition = async (excelContext, cellAddress) => {
+  async convertCellAddressToRangePosition(
+    excelContext: Excel.RequestContext,
+    cellAddress: string
+  ): Promise<{ top: number; left: number }> {
     const currentExcelSheet = this.getCurrentExcelSheet(excelContext);
     const rangePosition = currentExcelSheet.getRange(cellAddress);
 
@@ -174,31 +189,33 @@ class OfficeApiHelper {
       top: rangePosition.top,
       left: rangePosition.left,
     };
-  };
+  }
 
   /**
    * Returns top left cell from passed address.
    *
-   * @param {Office} excelAddress Reference to Excel Context used by Excel API functions
-   * @return {String} Address of the cell.
+   * @param excelAddress Reference to Excel Context used by Excel API functions
+   * @return Address of the cell.
    */
-  getStartCellOfRange = excelAddress => excelAddress.match(/!(\w+\d+)(:|$)/)[1];
+  getStartCellOfRange(excelAddress: string): string {
+    return excelAddress.match(/!(\w+\d+)(:|$)/)[1];
+  }
 
   /**
    * Gets Excel range based on starting cell and number of columns and rows.
    *
-   * @param {Number} headerCount Number of rows
-   * @param {String} startCell Address of the cell in Excel spreadsheet
-   * @param {Number} rowCount Number of rows
-   * @return {String} Address of Excel Range
+   * @param headerCount Number of rows
+   * @param startCell Address of the cell in Excel spreadsheet
+   * @param rowCount Number of rows
+   * @return Address of Excel Range
    */
-  getRange = (headerCount, startCell, rowCount = 0) => {
+  getRange(headerCount: number, startCell: string, rowCount: number = 0): string {
     if (!Number.isInteger(headerCount)) {
       throw new IncorrectInputTypeError();
     }
 
     const startCellArray = startCell.split(/(\d+)/);
-    headerCount += parseInt(this.lettersToNumber(startCellArray[0]) - 1, 10);
+    headerCount += this.lettersToNumber(startCellArray[0]) - 1;
 
     const endColumn = this.numberToLetters(headerCount);
     const endRow = Number(startCellArray[1]) + rowCount;
@@ -207,17 +224,20 @@ class OfficeApiHelper {
       throw new OutsideOfRangeError('The table you try to import exceeds the worksheet limits.');
     }
     return `${startCell}:${endColumn}${endRow}`;
-  };
+  }
 
   /**
    * Returns excel sheet from specific table.
    *
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {String} bindId Id of the Office table created on import used for referencing the Excel table
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param bindId Id of the Office table created on import used for referencing the Excel table
    *
-   * @return {String} Excel sheet or false in case of error
+   * @return Excel sheet or false in case of error
    */
-  getExcelSheetFromTable = async (excelContext, bindId) => {
+  async getExcelSheetFromTable(
+    excelContext: Excel.RequestContext,
+    bindId: string
+  ): Promise<Excel.Worksheet | false> {
     try {
       const officeTable = excelContext.workbook.tables.getItem(bindId);
       await excelContext.sync();
@@ -225,22 +245,24 @@ class OfficeApiHelper {
     } catch (error) {
       return false;
     }
-  };
+  }
 
   /**
    * Returns current excel sheet.
    *
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   * @param excelContext Reference to Excel Context used by Excel API functions
    */
-  getCurrentExcelSheet = excelContext => excelContext.workbook.worksheets.getActiveWorksheet();
+  getCurrentExcelSheet(excelContext: Excel.RequestContext): Excel.Worksheet {
+    return excelContext.workbook.worksheets.getActiveWorksheet();
+  }
 
   /**
    * Converts number of column to Excel column name.
    *
-   * @param {Number} headerCount Number of rows
-   * @return {String} Excel column indicator
+   * @param headerCount Number of rows
+   * @return Excel column indicator
    */
-  numberToLetters = headerCount => {
+  numberToLetters(headerCount: number): string {
     let result = '';
     let firstNumber = ALPHABET_RANGE_START;
     let secondNumber = ALPHABET_RANGE_END;
@@ -249,7 +271,7 @@ class OfficeApiHelper {
     while (headerCount >= 0) {
       result =
         String.fromCharCode(
-          parseInt((headerCount % secondNumber) / firstNumber, 10) + ASCII_CAPITAL_LETTER_INDEX
+          (headerCount % secondNumber) / firstNumber + ASCII_CAPITAL_LETTER_INDEX
         ) + result;
 
       firstNumber = secondNumber;
@@ -258,50 +280,47 @@ class OfficeApiHelper {
     }
 
     return result;
-  };
+  }
 
   /**
    * Converts Excel column name to index of the column.
    *
-   * @param {String} letters Name of the Excel column
-   * @return {Number} Index of the Excel column
+   * @param letters Name of the Excel column
+   * @return Index of the Excel column
    */
-  lettersToNumber = letters => {
+  lettersToNumber(letters: string): number {
     if (!letters.match(/^[A-Z]*[A-Z]$/)) {
       throw new IncorrectInputTypeError();
     }
     return letters.split('').reduce((r, a) => r * ALPHABET_RANGE_END + parseInt(a, 36) - 9, 0);
-  };
+  }
 
   /**
    * Offsets Excel address by passed row and column offset.
    *
-   * @param {String} cell Address of the cell in Excel spreadsheet
-   * @param {Number} rowOffset Number of rows
-   * @param {Number} colOffset Number of column
-   * @return {String} Address of Excel cell
+   * @param cell Address of the cell in Excel spreadsheet
+   * @param rowOffset Number of rows
+   * @param colOffset Number of column
+   * @return Address of Excel cell
    */
-  offsetCellBy = (cell, rowOffset, colOffset) => {
+  offsetCellBy(cell: string, rowOffset: number, colOffset: number): string {
     const cellArray = cell.split(/(\d+)/);
     const [column, row] = cellArray;
-    const endRow = parseInt(row, 10) + parseInt(rowOffset, 10);
-    const endColumn = this.numberToLetters(parseInt(this.lettersToNumber(column) + colOffset, 10));
+    const endRow = parseInt(row, 10) + rowOffset;
+    const endColumn = this.numberToLetters(this.lettersToNumber(column) + colOffset);
     return `${endColumn}${endRow}`;
-  };
+  }
 
   /**
    * Highlights imported object in Excel worksheet.
    *
    * Throws error if object no longer exists in Excel or if Excel or MSTR session expired.
    *
-   * @param {String} bindId Id of the Office table created on import used for referencing the Excel table
-   * @param {Boolean} [shouldSelect=true] Specify if the Object on Worksheet should be highlighted
-   * @param {Function} deleteObject Function for removing imported object
-   * @param {String} chosenObjectName Name of the imported object
-   * @param {Boolean} isCrosstab Specify if object is a crosstab
-   * @param {Object} crosstabHeaderDimensions Contains information about crosstab headers dimensions
+   * @param ObjectData.bindId Id of the Office table created on import used for referencing the Excel table
+   * @param ObjectData.isCrosstab Specify if object is a crosstab
+   * @param ObjectData.crosstabHeaderDimensions Contains information about crosstab headers dimensions
    */
-  onBindingObjectClick = async ObjectData => {
+  async onBindingObjectClick(ObjectData: any): Promise<void> {
     let crosstabRange;
     const { bindId, isCrosstab, crosstabHeaderDimensions } = ObjectData;
 
@@ -324,21 +343,21 @@ class OfficeApiHelper {
       tableRange.select();
     }
     await excelContext.sync();
-  };
+  }
 
   /**
    * Adds binding to the Excel table.
    *
-   * @param {Office} namedItem Excel Table
-   * @param {String} bindId Id of the Office table created on import used for referencing the Excel table
+   * @param namedItem Excel Table
+   * @param bindId Id of the Office table created on import used for referencing the Excel table
    */
-  bindNamedItem = (namedItem, bindId) =>
-    new Promise((resolve, reject) => {
+  bindNamedItem(namedItem: Excel.Table, bindId: string): Promise<void> {
+    return new Promise((resolve, reject) => {
       window.Office.context.document.bindings.addFromNamedItemAsync(
         namedItem,
         'table',
         { id: bindId },
-        result => {
+        (result: { status: string; value: { type: any; id: any }; error: { message: any } }) => {
           if (result.status === 'succeeded') {
             console.log(
               `Added new binding with type: ${result.value.type} and id: ${result.value.id}`
@@ -351,18 +370,27 @@ class OfficeApiHelper {
         }
       );
     });
+  }
 
   /**
    * Returns the new initial cell considering crosstabs.
    *
    * For crosstab initial cell is offsetted.
    *
-   * @param {Office} cell Starting table body cell
-   * @param {Array} headers Headers object from OfficeConverterServiceV2.getHeaders
-   * @param {Boolean} isCrosstab Indicates if it's a crosstab
-   * @return {Object}
+   * @param cell Starting table body cell
+   * @param headers Headers object from OfficeConverterServiceV2.getHeaders
+   * @param isCrosstab Indicates if it's a crosstab
+   * @return
    */
-  getTableStartCell = ({ startCell, instanceDefinition, prevOfficeTable }) => {
+  getTableStartCell({
+    startCell,
+    instanceDefinition,
+    prevOfficeTable,
+  }: {
+    startCell: string;
+    instanceDefinition: any;
+    prevOfficeTable: any;
+  }): string {
     const {
       mstrTable: {
         isCrosstab,
@@ -388,34 +416,40 @@ class OfficeApiHelper {
     const rowOffset = crosstabHeaderDimensions.columnsY;
     const colOffset = crosstabHeaderDimensions.rowsX;
     return this.offsetCellBy(startCell, rowOffset, colOffset);
-  };
+  }
 
   /**
    * Attaches a event listener to onSelectionChanged on workbook.
    * As event handler, resets the active cell value via callback and then updates it with new value.
    *
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {Function} setActiveCellAddress Callback to save the active cell address value.
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param setActiveCellAddress Callback to save the active cell address value.
    */
-  addOnSelectionChangedListener = async (excelContext, setActiveCellAddress) => {
+  async addOnSelectionChangedListener(
+    excelContext: Excel.RequestContext,
+    setActiveCellAddress: Function
+  ): Promise<void> {
     excelContext.workbook.onSelectionChanged.add(async () => {
       const activeCellAddress = await this.getSelectedCell(excelContext);
       setActiveCellAddress(activeCellAddress);
     });
     await excelContext.sync();
-  };
+  }
 
   /**
    * Takes cell address. Extracts and removes worksheet name.
    * Splits rest into part with chars and part with numbers.
    * Appends $ beetwen chars and numbers and at the begginig of address.
    *
-   * @param {String} cellAddress Excel address of seleted cell, e.g 'Sheet1!AB21'
-   * @returns {String} cellAddres with $ at the begginig and beetwen row and column indicator, e.g. '$AB$21'
+   * @param cellAddress Excel address of seleted cell, e.g 'Sheet1!AB21'
+   * @returns cellAddres with $ at the begginig and beetwen row and column indicator, e.g. '$AB$21'
    */
-  getCellAddressWithDollars = cellAddress => {
+  getCellAddressWithDollars(cellAddress: string): string {
     try {
-      const splitAt = (string, index) => [string.slice(0, index), string.slice(index)];
+      const splitAt = (string: string, index: number): string[] => [
+        string.slice(0, index),
+        string.slice(index),
+      ];
       const [cell] = cellAddress.split('!').reverse();
       const indexOfRowAddress = cell.search(/\d+/);
       const [column, row] = splitAt(cell, indexOfRowAddress);
@@ -424,17 +458,21 @@ class OfficeApiHelper {
       console.error(error);
       return '';
     }
-  };
+  }
 
   /**
    * Adds the geometric shape into the worksheet with given shape properties.
    *
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {Object} shapeProps Properties of the shape
-   * @param {String} visualizationName Name of the shape
-   * @returns {Object} Shape imported into worksheet
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param shapeProps Properties of the shape
+   * @param visualizationName Name of the shape
+   * @return Shape imported into worksheet
    */
-  addGeometricShape = async (excelContext, shapeProps, visualizationName) => {
+  async addGeometricShape(
+    excelContext: Excel.RequestContext,
+    shapeProps: any,
+    visualizationName: string
+  ): Promise<any> {
     const sheet = excelContext.workbook.worksheets.getItem(shapeProps?.worksheetId);
     const shape = sheet?.shapes?.addGeometricShape(Excel.GeometricShapeType.rectangle);
 
@@ -454,7 +492,7 @@ class OfficeApiHelper {
     }
 
     return shape;
-  };
+  }
 }
 
 export const officeApiHelper = new OfficeApiHelper();
