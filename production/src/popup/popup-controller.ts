@@ -20,6 +20,7 @@ import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/repro
 const URL = `${window.location.href}`;
 
 class PopupController {
+  // TODO: Fix any types
   reduxStore: any;
 
   sessionActions: any;
