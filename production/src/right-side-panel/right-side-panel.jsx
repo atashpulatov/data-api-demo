@@ -31,6 +31,7 @@ import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 
 import './right-side-panel.scss';
+import { objectImportType } from '../mstr-object/constants';
 
 export const RightSidePanelNotConnected = ({
   loadedObjects,
@@ -54,6 +55,7 @@ export const RightSidePanelNotConnected = ({
   activeCellAddress,
   popupType,
   isDataOverviewOpen,
+  isShapeAPISupported,
 }) => {
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
   const [duplicatedObjectId, setDuplicatedObjectId] = React.useState(null);
@@ -220,11 +222,16 @@ export const RightSidePanelNotConnected = ({
     popupType,
   ]);
 
+  // DE288915: Filter out the image objects if the shape api is not supported instead of
+  // doing it when mapping state properties which will cause sending extra notifications.
+  const sidePanelLoadedObjects = isShapeAPISupported ? loadedObjectsWrapped
+    : loadedObjectsWrapped.filter(object => object?.importType !== objectImportType.IMAGE);
+
   return (
     <>
       {toggleCurtain && <div className='block-side-panel-ui' />}
       <SidePanel
-        loadedObjects={loadedObjectsWrapped}
+        loadedObjects={sidePanelLoadedObjects}
         onAddData={addDataWrapper}
         onTileClick={highlightObjectWrapper}
         onDuplicateClick={duplicateWrapper}
@@ -262,6 +269,7 @@ export const mapStateToProps = state => {
   // sending more messages conflicting with Re-prompt and Edit workflows.
   // const objects = officeReducerHelper.getObjectsListFromObjectReducer();
   const { objects } = state.objectReducer;
+  const { isShapeAPISupported } = state.officeReducer;
 
   const {
     isConfirm,
@@ -296,6 +304,7 @@ export const mapStateToProps = state => {
     activeCellAddress,
     popupType,
     isDataOverviewOpen,
+    isShapeAPISupported,
   };
 };
 
@@ -394,4 +403,5 @@ RightSidePanelNotConnected.propTypes = {
   activeCellAddress: PropTypes.string,
   popupType: PropTypes.oneOf(Object.values(PopupTypeEnum)),
   isDataOverviewOpen: PropTypes.bool,
+  isShapeAPISupported: PropTypes.bool,
 };
