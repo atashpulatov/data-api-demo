@@ -185,10 +185,13 @@ describe('Notification reducer', () => {
           },
         };
 
+        const spyFilter = jest.spyOn(Array.prototype, 'filter');
+
         // when
         const resultState = notificationReducer(initialState.empty, action);
 
         // then
+        expect(spyFilter).toHaveBeenCalled();
         const { children, ...resultChunk } = resultState.notifications[0];
         expect(children).toBeDefined();
         expect(resultChunk).toEqual({
