@@ -269,7 +269,12 @@ export const mapStateToProps = state => {
   // TODO: Discuss with team to filter the objects based on images to avoid
   // re-rendering of the side panel when the images are loaded and notifications
   // sending more messages conflicting with Re-prompt and Edit workflows.
-  //
+  // Calling getObjectsListFromObjectReducer() in mapStateToProps is not recommended
+  // because object returned by this function is a new copy instance of the original objects in state,
+  // and even if remains unfiltered, it still represents a new reference in memory.
+  // Consequently, React seems to interpret it as either new or updated,
+  // thereby triggering the useEffect hook to listen for changes in the objects' state value.
+
   // const objects = officeReducerHelper.getObjectsListFromObjectReducer();
   const { objects } = state.objectReducer;
   const { isShapeAPISupported } = state.officeReducer;
