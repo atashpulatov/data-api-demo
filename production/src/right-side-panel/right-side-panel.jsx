@@ -222,8 +222,10 @@ export const RightSidePanelNotConnected = ({
     popupType,
   ]);
 
-  // DE288915: Filter out the image objects if the shape api is not supported instead of
-  // doing it when mapping state properties which will cause sending extra notifications.
+  // DE288915: Before rendering SidePanel, determine whether or not to filter out
+  // the image objects if the shape api is not supported instead of
+  // doing it in mapStateToProps when mapping state properties as it could cause sending
+  // extra notifications.
   const sidePanelLoadedObjects = isShapeAPISupported ? loadedObjectsWrapped
     : loadedObjectsWrapped.filter(object => object?.importType !== objectImportType.IMAGE);
 
@@ -267,6 +269,7 @@ export const mapStateToProps = state => {
   // TODO: Discuss with team to filter the objects based on images to avoid
   // re-rendering of the side panel when the images are loaded and notifications
   // sending more messages conflicting with Re-prompt and Edit workflows.
+  //
   // const objects = officeReducerHelper.getObjectsListFromObjectReducer();
   const { objects } = state.objectReducer;
   const { isShapeAPISupported } = state.officeReducer;

@@ -92,7 +92,8 @@ const createProgressNotification = (state, payload) => {
   
   // Avoid duplicate notifications, specifically derived from Edit and Reprompt operations
   // since none of these operations will trigger or dispatch actions to dismiss notifications
-  // when user clicks on either "Edit" or "Reprompt" buttons.
+  // when user clicks on either "Edit" or "Reprompt" buttons after updating logic in
+  // methid handleOverviewActionCommand in OverviewHelper
   state.notifications = state.notifications?.filter(item => item.objectWorkingId !== objectWorkingId);
 
   const newNotification = {
@@ -104,7 +105,8 @@ const createProgressNotification = (state, payload) => {
   };
 
   // Changed order of how notifications are displayed by reversing the order of the array
-  // to display the most recent notification on top of the list.
+  // to display the most recent notification on top of the list and ignored lingering notifications
+  // associated to given objectWorkingId.
   return { ...state, notifications: [newNotification, ...state.notifications] };
 };
 
@@ -282,8 +284,8 @@ function getIsIndeterminate(notificationToUpdate) {
 }
 
 function getNotificationIndex(state, payload) {
-  const notificationToUpdateIndex = state.notifications?.findIndex(
-    notification => notification?.objectWorkingId === payload?.objectWorkingId
+  const notificationToUpdateIndex = state.notifications.findIndex(
+    notification => notification.objectWorkingId === payload.objectWorkingId
   );
   if (notificationToUpdateIndex === -1) {
     throw new Error();
