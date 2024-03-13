@@ -26,7 +26,6 @@ import stepBindOfficeTable from '../office/table/step-bind-office-table';
 import stepGetOfficeTableEditRefresh from '../office/table/step-get-office-table-edit-refresh';
 import stepGetOfficeTableImport from '../office/table/step-get-office-table-import';
 import stepModifyObject from '../popup/step-modify-object';
-import stepExecuteNextReprompt from '../prompts/step-execute-next-reprompt';
 import {
   ADD_VISUALIZATION_PLACEHOLDER,
   BACKUP_OBJECT_DATA,
@@ -36,7 +35,6 @@ import {
   CLEAR_TABLE_DATA,
   COMPLETE_CLEAR_DATA,
   DISPLAY_NOTIFICATION_COMPLETED,
-  EXECUTE_NEXT_REPROMPT,
   FETCH_INSERT_DATA,
   FORMAT_DATA,
   FORMAT_OFFICE_TABLE,
@@ -95,8 +93,6 @@ class SubscribeSteps {
     operationBus.subscribe(BIND_OFFICE_TABLE, stepBindOfficeTable.bindOfficeTable);
 
     operationBus.subscribe(SAVE_OBJECT_IN_EXCEL, stepSaveObjectInExcel.saveObject);
-
-    operationBus.subscribe(EXECUTE_NEXT_REPROMPT, stepExecuteNextReprompt.executeNextReprompt);
 
     operationBus.subscribe(GET_DUPLICATE_NAME, stepGetDuplicateName.getDuplicateName);
 

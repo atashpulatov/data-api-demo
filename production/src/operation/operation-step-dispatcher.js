@@ -13,7 +13,6 @@ import {
   CLEAR_TABLE_DATA,
   COMPLETE_CLEAR_DATA,
   DISPLAY_NOTIFICATION_COMPLETED,
-  EXECUTE_NEXT_REPROMPT,
   FETCH_INSERT_DATA,
   FORMAT_DATA,
   FORMAT_OFFICE_TABLE,
@@ -177,10 +176,6 @@ class OperationStepDispatcher {
 
   completeSaveImageDetails = objectWorkingId => {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, SAVE_IMAGE_DETAILS));
-  };
-
-  completeExecuteNextReprompt = objectWorkingId => {
-    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, EXECUTE_NEXT_REPROMPT));
   };
 }
 

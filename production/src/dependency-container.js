@@ -26,7 +26,6 @@ import operationErrorHandler from './operation/operation-error-handler';
 import operationStepDispatcher from './operation/operation-step-dispatcher';
 import subscribeSteps from './operation/operation-subscribe-steps';
 import { popupController } from './popup/popup-controller';
-import stepExecuteNextReprompt from './prompts/step-execute-next-reprompt';
 import { popupActions } from './redux-reducer/popup-reducer/popup-actions';
 import { sessionActions } from './redux-reducer/session-reducer/session-actions';
 
@@ -140,10 +139,7 @@ class DIContainer {
 
     this.operationErrorHandler = operationErrorHandler;
     this.operationErrorHandler.init(reduxStore);
-
-    this.stepExecuteNextReprompt = stepExecuteNextReprompt;
-    this.stepExecuteNextReprompt.init(reduxStore);
- }
+  }
 }
 
 export const diContainer = new DIContainer(false);
