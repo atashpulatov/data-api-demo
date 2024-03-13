@@ -256,7 +256,12 @@ export const mapStateToProps = state => {
   const { globalNotification, notifications } = state.notificationReducer;
   const { repromptsQueue } = state.repromptsQueueReducer;
   const { popupType, isDataOverviewOpen } = state.popupStateReducer;
-  const objects = officeReducerHelper.getObjectsListFromObjectReducer();
+
+  // TODO: Discuss with team to filter the objects based on images to avoid
+  // re-rendering of the side panel when the images are loaded and notifications
+  // sending more messages conflicting with Re-prompt and Edit workflows.
+  // const objects = officeReducerHelper.getObjectsListFromObjectReducer();
+  const { objects } = state.objectReducer;
 
   const {
     isConfirm,

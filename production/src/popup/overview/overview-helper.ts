@@ -228,17 +228,22 @@ class OverviewHelper {
     withEdit?: boolean;
     newName?: string;
   }): Promise<void> {
-    this.handleDismissNotifications(response.objectWorkingIds);
+    // Only trigger dismiss notifications if the command is not edit or reprompt
+    // Taken care in the norification reducer itself.
+    if (response.command !== OverviewActionCommands.EDIT && response.command !== OverviewActionCommands.REPROMPT) {
+      this.handleDismissNotifications(response.objectWorkingIds);
+    }
 
     switch (response.command) {
       case OverviewActionCommands.IMPORT:
         await this.sidePanelService.addData();
         break;
       case OverviewActionCommands.EDIT:
-        this.notificationService.removeExistingNotification(response.objectWorkingId);
+        // Edit should not dissmiss the notifications from here.
         await this.sidePanelService.edit(response.objectWorkingId);
         break;
       case OverviewActionCommands.REPROMPT:
+        // Nor Edit or Reprompt should dissmiss the notifications from here.       
         await this.sidePanelService.reprompt(response.objectWorkingIds, true);
         break;
       case OverviewActionCommands.REFRESH:

@@ -89,6 +89,12 @@ const createProgressNotification = (state, payload) => {
   if (operationType !== CLEAR_DATA_OPERATION) {
     notificationButtons = getNotificationButtons(getCancelButton(objectWorkingId, operationType));
   }
+  
+  // Avoid duplicate notifications, specifically derived from Edit and Reprompt operations
+  // since none of these operations will trigger or dispatch actions to dismiss notifications
+  // when user clicks on either "Edit" or "Reprompt" buttons.
+  state.notifications = state.notifications?.filter(item => item.objectWorkingId !== objectWorkingId);
+
   const newNotification = {
     objectWorkingId,
     title: customT(titleOperationInProgressMap.PENDING_OPERATION),
@@ -96,7 +102,10 @@ const createProgressNotification = (state, payload) => {
     operationType,
     children: notificationButtons,
   };
-  return { ...state, notifications: [...state.notifications, newNotification] };
+
+  // Changed order of how notifications are displayed by reversing the order of the array
+  // to display the most recent notification on top of the list.
+  return { ...state, notifications: [newNotification, ...state.notifications] };
 };
 
 const moveNotificationToInProgress = (state, payload) => {
@@ -273,8 +282,8 @@ function getIsIndeterminate(notificationToUpdate) {
 }
 
 function getNotificationIndex(state, payload) {
-  const notificationToUpdateIndex = state.notifications.findIndex(
-    notification => notification.objectWorkingId === payload.objectWorkingId
+  const notificationToUpdateIndex = state.notifications?.findIndex(
+    notification => notification?.objectWorkingId === payload?.objectWorkingId
   );
   if (notificationToUpdateIndex === -1) {
     throw new Error();
