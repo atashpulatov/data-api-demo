@@ -1,6 +1,6 @@
 // issue with proptype import
 // eslint-disable-next-line simple-import-sort/imports
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { PopupTypes, SidePanel } from '@mstr/connector-components';
 
@@ -57,6 +57,16 @@ export const RightSidePanelNotConnected = ({
   isDataOverviewOpen,
   isShapeAPISupported,
 }) => {
+  loadedObjects = useMemo(() => {
+    // DE288915: Before rendering the SidePanel, determine whether to filter out the image objects
+    // if the shape API is not supported, instead of handling it in mapStateToProps when mapping
+    // state properties, as this could result in sending extra notifications by triggering useEffects.
+    if (!isShapeAPISupported) {
+      return loadedObjects?.filter(object => object?.importType !== objectImportType.IMAGE);
+    }
+    return loadedObjects;
+  }, [loadedObjects, isShapeAPISupported]);
+
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
   const [duplicatedObjectId, setDuplicatedObjectId] = React.useState(null);
   const [loadedObjectsWrapped, setLoadedObjectsWrapped] = React.useState(loadedObjects);
@@ -222,17 +232,11 @@ export const RightSidePanelNotConnected = ({
     popupType,
   ]);
 
-  // DE288915: Before rendering the SidePanel, determine whether to filter out the image objects
-  // if the shape API is not supported, instead of handling it in mapStateToProps when mapping
-  // state properties, as this could result in sending extra notifications by triggering useEffects.
-  const sidePanelLoadedObjects = isShapeAPISupported ? loadedObjectsWrapped
-    : loadedObjectsWrapped.filter(object => object?.importType !== objectImportType.IMAGE);
-
   return (
     <>
       {toggleCurtain && <div className='block-side-panel-ui' />}
       <SidePanel
-        loadedObjects={sidePanelLoadedObjects}
+        loadedObjects={loadedObjectsWrapped}
         onAddData={addDataWrapper}
         onTileClick={highlightObjectWrapper}
         onDuplicateClick={duplicateWrapper}
