@@ -222,10 +222,9 @@ export const RightSidePanelNotConnected = ({
     popupType,
   ]);
 
-  // DE288915: Before rendering SidePanel, determine whether or not to filter out
-  // the image objects if the shape api is not supported instead of
-  // doing it in mapStateToProps when mapping state properties as it could cause sending
-  // extra notifications.
+  // DE288915: Before rendering the SidePanel, determine whether to filter out the image objects
+  // if the shape API is not supported, instead of handling it in mapStateToProps when mapping
+  // state properties, as this could result in sending extra notifications by triggering useEffects.
   const sidePanelLoadedObjects = isShapeAPISupported ? loadedObjectsWrapped
     : loadedObjectsWrapped.filter(object => object?.importType !== objectImportType.IMAGE);
 
@@ -266,7 +265,7 @@ export const mapStateToProps = state => {
   const { repromptsQueue } = state.repromptsQueueReducer;
   const { popupType, isDataOverviewOpen } = state.popupStateReducer;
 
-  // TODO: Discuss with team to filter the objects based on images to avoid
+  // DE288915: Don't filter the objects based on images to avoid
   // re-rendering of the side panel when the images are loaded and notifications
   // sending more messages conflicting with Re-prompt and Edit workflows.
   // Calling getObjectsListFromObjectReducer() in mapStateToProps is not recommended
