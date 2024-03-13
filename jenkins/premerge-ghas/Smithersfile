@@ -21,7 +21,7 @@ export WORKSPACE_SETTING=aws_dev
 source .ecosystem
 
 rake pre_pipeline
-rake ghas_code_scan_start
+rake ghas_code_scan_start['javascript,ruby']
 source $PATHS_PROJECT_HOME/start-tracing
 rake build
 rake ghas_code_scan_end
