@@ -31,6 +31,9 @@ describe('StepClearCrosstabHeaders', () => {
       const mockedGetTable = jest
         .spyOn(officeApiHelper, 'getTable')
         .mockReturnValue({ getHeaderRowRange: mockedGetHeaderRowRange });
+      const mockedClearCrosstabRange = jest
+        .spyOn(officeApiCrosstabHelper, 'clearCrosstabRange')
+        .mockImplementation();
       const mockedCheckObject = jest
         .spyOn(officeApiCrosstabHelper, 'clearCrosstabRowForTableHeader')
         .mockImplementation();
@@ -44,6 +47,7 @@ describe('StepClearCrosstabHeaders', () => {
       // then
       expect(mockedGetTable).toBeCalledTimes(calledClearHeaders);
       expect(mockedCheckObject).toBeCalledTimes(calledClearHeaders);
+      expect(mockedClearCrosstabRange).toBeCalledTimes(calledClearHeaders);
       expect(mockedCompleteStep).toBeCalledTimes(1);
       expect(mockedCompleteStep).toBeCalledWith(operationData.objectWorkingId);
     }
