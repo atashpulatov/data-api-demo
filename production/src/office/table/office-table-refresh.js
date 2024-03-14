@@ -81,13 +81,13 @@ class OfficeTableRefresh {
 
   /**
    * Clears the empty row in Crosstab Report if exists,
-   * by calling function officeApiCrosstabHelper.clearEmptyCrosstabRow.
+   * by calling function officeApiCrosstabHelper.clearCrosstabRowForTableHeader.
    *
    * @param {Object} mstrTable Contains information about mstr object
    * @param {Object} prevOfficeTable Reference to previous Excel table
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    */
-  clearEmptyCrosstabRow = async (mstrTable, prevOfficeTable, excelContext) => {
+  clearCrosstabRowForTableHeader = async (mstrTable, prevOfficeTable, excelContext) => {
     const { isCrosstab, toCrosstabChange, prevCrosstabDimensions } = mstrTable;
 
     if (isCrosstab && !toCrosstabChange) {
@@ -99,7 +99,7 @@ class OfficeTableRefresh {
       );
 
       if (crosstabEmptyRowExist) {
-        await officeApiCrosstabHelper.clearEmptyCrosstabRow(prevOfficeTable, excelContext);
+        officeApiCrosstabHelper.clearCrosstabRowForTableHeader(prevOfficeTable);
       }
     }
   };

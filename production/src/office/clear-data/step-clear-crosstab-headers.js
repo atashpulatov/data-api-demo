@@ -23,10 +23,22 @@ class StepClearCrosstabHeaders {
 
     try {
       if (objectExist) {
-        const { isCrosstab, bindId } = objectData;
+        const { isCrosstab, bindId, crosstabHeaderDimensions } = objectData;
         if (isCrosstab) {
-          const officeTable = await officeApiHelper.getTable(excelContext, bindId);
-          await officeApiCrosstabHelper.clearEmptyCrosstabRow(officeTable, excelContext);
+          const officeTable = officeApiHelper.getTable(excelContext, bindId);
+
+          await officeApiCrosstabHelper.clearCrosstabRange(
+            officeTable,
+            {
+              crosstabHeaderDimensions: {},
+              isCrosstab,
+              prevCrosstabDimensions: crosstabHeaderDimensions,
+            },
+            excelContext,
+            true
+          );
+
+          officeApiCrosstabHelper.clearCrosstabRowForTableHeader(officeTable);
           officeTable.showHeaders = true;
           officeTable.showFilterButton = false;
 

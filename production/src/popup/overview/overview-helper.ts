@@ -11,7 +11,7 @@ import { popupHelper } from '../popup-helper';
 
 import { DialogPopup } from './overview-types';
 
-import { customT } from '../../customTranslation';
+import i18n from '../../i18n';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { executeNextRepromptTask } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import {
@@ -418,6 +418,9 @@ class OverviewHelper {
     notifications?: any[];
     globalNotification?: any;
   }): any => {
+    const { t } = i18n;
+
+    const isGlobalWarning = globalNotification?.type === GlobalNotificationTypes.GLOBAL_WARNING;
     const warningNotifications = notifications?.filter(
       notification => notification.type === ObjectNotificationTypes.WARNING
     );
@@ -426,7 +429,7 @@ class OverviewHelper {
       const buttonProps = {
         buttons: [
           {
-            label: customT('OK'),
+            label: t('OK'),
             onClick: () => this.sendDismissNotificationRequest([warning.objectWorkingId]),
           },
         ],
@@ -437,11 +440,10 @@ class OverviewHelper {
       };
     });
 
-    const isGlobalWarning = globalNotification?.type === GlobalNotificationTypes.GLOBAL_WARNING;
     const globalNotificationButtons = {
       buttons: [
         {
-          label: customT('OK'),
+          label: t('OK'),
           onClick: () => this.sendDismissGlobalNotificationRequest(),
         },
       ],

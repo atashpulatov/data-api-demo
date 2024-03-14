@@ -4,28 +4,21 @@ import { Spinner } from '@mstr/rc';
 
 import { HomeHelper } from './home/home-helper';
 import officeReducerHelper from './office/store/office-reducer-helper';
-import * as serviceWorker from './serviceWorker';
 import { sessionHelper } from './storage/session-helper';
 
 import { reduxStore } from './store';
 
 import 'core-js/stable';
-import 'focus-visible/dist/focus-visible';
 import { diContainer } from './dependency-container';
 import i18next from './i18n';
 
 import './index.css';
 
-// Code splitting https://reactjs.org/docs/code-splitting.html
 const LazySidebar = lazy(() => import('./entry-point/sidebar-entry-point'));
 const LazyDialog = lazy(() => import('./entry-point/dialog-entry-point'));
 
 function goReact() {
   i18next.changeLanguage(window.Office.context.displayLanguage || 'en-US');
-
-  console.log(
-    `Running react in ${sessionHelper.isDevelopment() ? 'development' : 'production'} mode`
-  );
 
   const container = document.getElementById('root');
   const root = createRoot(container);
@@ -79,8 +72,3 @@ function officeInitialize() {
 }
 
 officeInitialize();
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.unregister();

@@ -1,5 +1,4 @@
 import { homeHelper } from '../../home/home-helper';
-import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 
 import officeStoreObject from '../store/office-store-object';
@@ -15,15 +14,8 @@ class OfficeRemoveHelper {
    * @param {Boolean} isClear specify if object should be cleared or deleted
    */
   removeOfficeTableBody = async (excelContext, object, isClear) => {
-    const { isCrosstab, crosstabHeaderDimensions } = object;
     const officeTable = excelContext.workbook.tables.getItem(object.bindId);
-    await this.removeExcelTable(
-      officeTable,
-      excelContext,
-      isCrosstab,
-      crosstabHeaderDimensions,
-      isClear
-    );
+    await this.removeExcelTable(officeTable, excelContext, isClear);
   };
 
   /**
@@ -31,33 +23,11 @@ class OfficeRemoveHelper {
    *
    * @param {Office} officeTable Address of the first cell in report (top left)
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {Boolean} isCrosstab Specify if object is a crosstab
-   * @param {Object} crosstabHeaderDimensions Contains dimensions of crosstab report headers
    * @param {Boolean} isClear Specify if object should be cleared or deleted. False by default
    */
-  removeExcelTable = async (
-    officeTable,
-    excelContext,
-    isCrosstab,
-    crosstabHeaderDimensions = {},
-    isClear = false
-  ) => {
+  async removeExcelTable(officeTable, excelContext, isClear = false) {
     const tableRange = officeTable.getDataBodyRange();
     excelContext.trackedObjects.add(tableRange);
-
-    if (isCrosstab) {
-      await officeApiCrosstabHelper.clearCrosstabRange(
-        officeTable,
-        {
-          crosstabHeaderDimensions: {},
-          isCrosstab,
-          prevCrosstabDimensions: crosstabHeaderDimensions,
-        },
-        excelContext,
-        isClear
-      );
-      await excelContext.sync();
-    }
 
     if (!isClear) {
       excelContext.runtime.enableEvents = false;
@@ -75,7 +45,7 @@ class OfficeRemoveHelper {
 
     excelContext.trackedObjects.remove(tableRange);
     await excelContext.sync();
-  };
+  }
 
   deleteTableInChunks = async (excelContext, officeTable) => {
     const deleteChunkSize = 10000;

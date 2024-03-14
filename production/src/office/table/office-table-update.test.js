@@ -122,9 +122,8 @@ describe('OfficeTableUpdate', () => {
     if (isCrosstabParam) {
       expect(officeTableUpdate.createHeadersForCrosstab).toBeCalledTimes(1);
       expect(officeTableUpdate.createHeadersForCrosstab).toBeCalledWith(
-        'worksheetTest',
-        instanceDefinitionMock,
-        'startCellTest'
+        { worksheet: 'worksheetTest' },
+        instanceDefinitionMock
       );
     } else {
       expect(officeTableUpdate.setHeaderValuesNoCrosstab).toBeCalledTimes(1);
@@ -292,9 +291,8 @@ describe('OfficeTableUpdate', () => {
 
     expect(officeApiCrosstabHelper.createCrosstabHeaders).toBeCalledTimes(1);
     expect(officeApiCrosstabHelper.createCrosstabHeaders).toBeCalledWith(
-      'startCellTest',
-      'mstrTableTest',
       'sheetTest',
+      'mstrTableTest',
       'crosstabHeaderDimensionsTest'
     );
   });
