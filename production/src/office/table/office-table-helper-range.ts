@@ -75,11 +75,11 @@ class OfficeTableHelperRange {
 
   /**
    *
-   * @param excelContext
-   * @param mstrTable
-   * @param prevOfficeTable
-   * @param rows
-   * @param columns
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param mstrTable contains informations about mstr object
+   * @param prevOfficeTable previous office table
+   * @param rows number of rows in the table
+   * @param columns number of columns in the table
    * @returns
    */
   async calculateRowsAndColumnsSize(
@@ -124,6 +124,7 @@ class OfficeTableHelperRange {
    * @param mstrTable contains informations about mstr object
    * @param addedColumns excelContext
    * @param addedRows shows the number of added rows to the table
+   * @returns Object containing differnce in crosstab headers rows and columns
    *
    * @throws {OverlappingTablesError} when range is not empty.
    */
@@ -186,10 +187,10 @@ class OfficeTableHelperRange {
   /**
    * Extends the Excel table range for columns added during import/refresh.
    *
-   * @param {Office} prevOfficeTable Reference to previously imported Excel table
-   * @param {Number} addedColumns Number of added columns to the table
+   * @param prevOfficeTable Reference to previously imported Excel table
+   * @param addedColumns Number of added columns to the table
    *
-   * @returns {Office} Reference to Excel range object
+   * @returns Reference to Excel range object
    */
   prepareRangeColumns(prevOfficeTable: Excel.Table, addedColumns: number): Excel.Range {
     return prevOfficeTable.getRange().getColumnsAfter(addedColumns);

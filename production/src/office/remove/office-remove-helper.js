@@ -23,8 +23,6 @@ class OfficeRemoveHelper {
    *
    * @param {Office} officeTable Address of the first cell in report (top left)
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {Boolean} isCrosstab Specify if object is a crosstab
-   * @param {Object} crosstabHeaderDimensions Contains dimensions of crosstab report headers
    * @param {Boolean} isClear Specify if object should be cleared or deleted. False by default
    */
   async removeExcelTable(officeTable, excelContext, isClear = false) {

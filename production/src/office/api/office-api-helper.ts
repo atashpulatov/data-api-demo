@@ -262,7 +262,7 @@ class OfficeApiHelper {
    * Converts number of column to Excel column name.
    *
    * @param headerCount Number of rows
-   * @return Excel column indicator
+   * @returns Excel column indicator
    */
   numberToLetters(headerCount: number): string {
     let result = '';
@@ -288,7 +288,7 @@ class OfficeApiHelper {
    * Converts Excel column name to index of the column.
    *
    * @param letters Name of the Excel column
-   * @return Index of the Excel column
+   * @returns Index of the Excel column
    */
   lettersToNumber(letters: string): number {
     if (!letters.match(/^[A-Z]*[A-Z]$/)) {
@@ -303,7 +303,7 @@ class OfficeApiHelper {
    * @param cell Address of the cell in Excel spreadsheet
    * @param rowOffset Number of rows
    * @param colOffset Number of column
-   * @return Address of Excel cell
+   * @returns Address of Excel cell
    */
   offsetCellBy(cell: string, rowOffset: number, colOffset: number): string {
     const cellArray = cell.split(/(\d+)/);
@@ -382,7 +382,7 @@ class OfficeApiHelper {
    * @param cell Starting table body cell
    * @param headers Headers object from OfficeConverterServiceV2.getHeaders
    * @param isCrosstab Indicates if it's a crosstab
-   * @return Address of Excel table start cell
+   * @returns Address of Excel table start cell
    */
   getTableStartCell({
     startCell,
@@ -468,7 +468,7 @@ class OfficeApiHelper {
    * @param excelContext Reference to Excel Context used by Excel API functions
    * @param shapeProps Properties of the shape
    * @param visualizationName Name of the shape
-   * @return Shape imported into worksheet
+   * @returns Shape imported into worksheet
    */
   async addGeometricShape(
     excelContext: Excel.RequestContext,

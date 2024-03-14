@@ -245,7 +245,7 @@ class OfficeApiCrosstabHelper {
 
     const columnsTitlesRange = titlesBottomCell
       .getOffsetRange(-1, 0)
-      .getResizedRange(-(crosstabHeaderDimensions.columnsY - 2), 0); // this is bad
+      .getResizedRange(-(crosstabHeaderDimensions.columnsY - 2), 0); // TODO -2 is bad
 
     const headerTitlesRange = columnsTitlesRange.getBoundingRect(rowsTitlesRange);
     headerTitlesRange.format.verticalAlignment = window.Excel.VerticalAlignment.bottom;

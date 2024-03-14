@@ -112,8 +112,9 @@ class OfficeTableCreate {
    * Get excel worksheet of previous office table or acxtive if no table was passed.
    *
    * @param prevOfficeTable previous office table
+   * @param insertNewWorksheet Specify if new worksheet has to be created before creating the table
    * @param excelContext Reference to Excel Context used by Excel API functions
-   *
+   * @returns Excel worksheet
    */
   getExcelWorksheet(
     prevOfficeTable: Excel.Table,
@@ -129,10 +130,11 @@ class OfficeTableCreate {
   /**
    * Get range of the table. For crosstabs range is extended by headers.
    *
-   * @param tableStartCell  Top left corner cell
-   * @param crosstabHeaderDimensions contains dimension of crosstab headers (columnsY, cloumnsX, RowsY, RowsX)
+   * @param tableStartCell  Top left corner cell address
    * @param sheet  excel worksheet
-   * @param tableRange range of the table
+   * @param tableRange address of range of the table
+   * @param mstrTable  contains informations about mstr object
+   * @returns Excel Range
    *
    */
   getObjectRange(
@@ -159,7 +161,7 @@ class OfficeTableCreate {
    * @param instanceDefinition
    * @param prevOfficeTable previous office table
    * @param tableChanged Specify if table columns has been changed.
-   *
+   * @returns Table start cell address
    */
   getTableStartCell(
     startCell: string,
@@ -204,12 +206,12 @@ class OfficeTableCreate {
   /**
    * Set name of the table and format office table headers
    *
-   * @param {Object} officeTable previous office table
-   * @param {Object} officeTableId office table name
-   * @param {Object} mstrTable  contains informations about mstr object
-   * @param {Object} worksheet  excel worksheet
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   *
+   * @param officeTable previous office table
+   * @param newOfficeTableName office table name
+   * @param mstrTable  contains informations about mstr object
+   * @param worksheet  excel worksheet
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @returns Object containing office table properties
    */
   async setOfficeTableProperties({
     officeTable,
