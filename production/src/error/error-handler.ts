@@ -24,22 +24,43 @@ const COLUMN_EXCEL_API_LIMIT = 5000;
 const TIMEOUT = 3000;
 
 class ErrorService {
-  init = (sessionActions, sessionHelper, notificationService, popupController, reduxStore) => {
+  sessionActions: any;
+
+  sessionHelper: any;
+
+  notificationService: any;
+
+  popupController: any;
+
+  reduxStore: any;
+
+  init(
+    sessionActions: any,
+    sessionHelper: any,
+    notificationService: any,
+    popupController: any,
+    reduxStore: any
+  ): void {
     this.sessionActions = sessionActions;
     this.sessionHelper = sessionHelper;
     this.notificationService = notificationService;
     this.popupController = popupController;
     this.reduxStore = reduxStore;
-  };
+  }
 
-  handleObjectBasedError = async (objectWorkingId, error, callback, operationData) => {
+  async handleObjectBasedError(
+    objectWorkingId: number,
+    error: any,
+    callback: Function,
+    operationData: any
+  ): Promise<void> {
     const errorType = this.getErrorType(error, operationData);
     if (error.Code === 5012) {
       this.handleError(error);
     }
 
     const errorMessage = errorMessageFactory(errorType)({ error });
-    const details = this.getErrorDetails(error, errorMessage, errorType);
+    const details = this.getErrorDetails(error, errorMessage);
 
     if (errorType === ErrorType.OVERLAPPING_TABLES_ERR) {
       const popupData = {
@@ -68,19 +89,18 @@ class ErrorService {
         callback,
       });
     }
-  };
+  }
 
   // TODO combine with handleObjectBasedError
-  handleError = async (
-    error,
+  async handleError(
+    error: any,
     options = {
       chosenObjectName: 'Report',
-      onConfirm: null,
       isLogout: false,
-      dialogType: null,
+      dialogType: null as any,
     }
-  ) => {
-    const { onConfirm, isLogout, dialogType, ...parameters } = options;
+  ): Promise<void> {
+    const { isLogout, dialogType, ...parameters } = options;
     const errorType = this.getErrorType(error);
     const errorMessage = errorMessageFactory(errorType)({
       error,
@@ -89,22 +109,24 @@ class ErrorService {
 
     const shouldClosePopup =
       dialogType === PopupTypeEnum.importedDataOverview &&
-      [ErrorType.UNAUTHORIZED_ERR, ErrorType.CONNECTION_BROKEN_ERR].includes(errorType);
+      [ErrorType.UNAUTHORIZED_ERR, ErrorType.CONNECTION_BROKEN_ERR].includes(
+        errorType as ErrorType
+      );
 
     await this.closePopupIfOpen(shouldClosePopup);
 
-    this.displayErrorNotification(error, errorType, errorMessage, onConfirm);
+    this.displayErrorNotification(error, errorType, errorMessage);
     this.checkForLogout(errorType, isLogout);
-  };
+  }
 
-  getErrorType = (error, operationData) => {
+  getErrorType(error: any, operationData?: any): ErrorType {
     const updateError = this.getExcelError(error, operationData);
     return (
       updateError.type || this.getOfficeErrorType(updateError) || this.getRestErrorType(updateError)
     );
-  };
+  }
 
-  getErrorDetails = (error, errorMessage) => {
+  getErrorDetails(error: any, errorMessage: string): string {
     const errorDetails = (error.response && error.response.text) || error.message || '';
     let details;
     const {
@@ -129,9 +151,9 @@ class ErrorService {
         break;
     }
     return details;
-  };
+  }
 
-  displayErrorNotification = (error, type, message = '') => {
+  displayErrorNotification(error: any, type: ErrorType, message = ''): void {
     const errorDetails = (error.response && error.response.text) || error.message || '';
     const details = message !== errorDetails ? errorDetails : '';
     if (type === ErrorType.UNAUTHORIZED_ERR) {
@@ -141,26 +163,27 @@ class ErrorService {
     const payload = this.createNotificationPayload(message, details);
     payload.children = this.getChildrenButtons();
     this.notificationService.globalWarningAppeared(payload);
-  };
+  }
 
-  getChildrenButtons = () =>
-    getNotificationButtons([
+  getChildrenButtons(): any {
+    return getNotificationButtons([
       {
         type: 'basic',
         label: i18n.t('OK'),
         onClick: () => this.notificationService.globalNotificationDissapear(),
       },
     ]);
+  }
 
-  checkForLogout = (errorType, isLogout = false) => {
+  checkForLogout(errorType: ErrorType, isLogout = false): void {
     if (!isLogout && [ErrorType.UNAUTHORIZED_ERR].includes(errorType)) {
       setTimeout(() => {
         this.fullLogOut();
       }, TIMEOUT);
     }
-  };
+  }
 
-  getOfficeErrorType = error => {
+  getOfficeErrorType(error: any): string {
     console.warn({ error });
     console.warn(error.message);
 
@@ -168,16 +191,16 @@ class ErrorService {
       return stringMessageToErrorType(error.message);
     }
     return null;
-  };
+  }
 
   /**
    * Function getting errors that occurs in types of operations.
    * Transform the error that happens when import too many columns and fail in context.sync.
    *
-   * @param {Object} operationData Contains informatons about current operation
    * @param {Error} error Error thrown during the operation execution
+   * @param {Object} operationData Contains informatons about current operation
    */
-  getExcelError(error, operationData) {
+  getExcelError(error: any, operationData: any): any {
     const { name, code, debugInfo } = error;
     const isExcelApiError =
       name === 'RichApi.Error' &&
@@ -206,7 +229,7 @@ class ErrorService {
     return updateError;
   }
 
-  getRestErrorType = error => {
+  getRestErrorType(error: any): string {
     if (!error.status && !error.response) {
       if (error.message && error.message.includes(IncomingErrorStrings.CONNECTION_BROKEN)) {
         return ErrorType.CONNECTION_BROKEN_ERR;
@@ -215,21 +238,21 @@ class ErrorService {
     }
     const status = error.status || (error.response ? error.response.status : null);
     return httpStatusToErrorType(status);
-  };
+  }
 
-  getErrorMessage = (error, options = { chosenObjectName: 'Report' }) => {
+  getErrorMessage(error: any, options = { chosenObjectName: 'Report' }): string {
     const errorType = this.getErrorType(error);
     return errorMessageFactory(errorType)({ error, ...options });
-  };
+  }
 
-  fullLogOut = async () => {
+  async fullLogOut(): Promise<void> {
     this.notificationService.dismissNotifications();
     await this.sessionHelper.logOutRest();
     this.sessionActions.logOut();
     this.sessionHelper.logOutRedirect();
-  };
+  }
 
-  createNotificationPayload(message, details) {
+  createNotificationPayload(message: string, details: string): any {
     const buttons = [
       {
         title: 'Ok',
@@ -251,9 +274,9 @@ class ErrorService {
   /**
    * Function checking if the dialog is open and closing it if it is.
    * Also clearing Reprompt task queue if dialog was open for Reprompt workflow.
-   * * @param {Boolean} shouldClose flag indicated whether to close the dialog or not
+   * * @param shouldClose flag indicated whether to close the dialog or not
    */
-  closePopupIfOpen = async shouldClose => {
+  async closePopupIfOpen(shouldClose: boolean): Promise<void> {
     const storeState = this.reduxStore.getState();
 
     const { isDialogOpen } = storeState.officeReducer;
@@ -266,7 +289,7 @@ class ErrorService {
       // clear Reprompt task queue if in Reprompt All workflow
       isDialogOpenForReprompt && this.reduxStore.dispatch(clearRepromptTask());
     }
-  };
+  }
 
   /**
    * Close/hide Reprompt dialog only in Overview window if an error has occured
@@ -274,7 +297,7 @@ class ErrorService {
    * and user interacts with Prompts' dialog or cube is not published or dossier/report is not
    * available in the environment as it was deleted at the time of reprompting.
    */
-  closePromptsDialogInOverview = () => {
+  closePromptsDialogInOverview(): void {
     const { repromptsQueueReducer, popupStateReducer } = this.reduxStore.getState();
 
     // Verify if there are any reprompts in queue to determine whether it's multiple re-prompt
@@ -286,18 +309,14 @@ class ErrorService {
 
       // Show Overview table if there are any reprompts in queue if error occured
       // while reprompting dossier/report in Overview window only.
-      if (
-        total > 0 &&
-        (popupType === PopupTypeEnum.repromptDossierDataOverview ||
-          popupType === PopupTypeEnum.repromptReportDataOverviewDataOverview)
-      ) {
+      if (total > 0 && popupType === PopupTypeEnum.repromptDossierDataOverview) {
         this.reduxStore.dispatch(
           popupStateActions.setPopupType(PopupTypeEnum.importedDataOverview)
         );
         this.popupController.runImportedDataOverviewPopup();
       }
     }
-  };
+  }
 }
 
 export const errorService = new ErrorService();
