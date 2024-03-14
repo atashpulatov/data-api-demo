@@ -116,9 +116,9 @@ class OfficeRemoveHelper {
   /**
    * Checks if the object existing in Excel workbook
    *
-   * @param {Object} object Contains information obout the object
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @return {Boolean}
+   * @param object Contains information obout the object
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @return True if object exists, false otherwise
    */
   async checkIfObjectExist(object: any, excelContext: Excel.RequestContext): Promise<boolean> {
     try {
@@ -133,8 +133,8 @@ class OfficeRemoveHelper {
   /**
    * Remove objects that no longer exists in the Excel workbook from the store
    *
-   * @param {Object} object Contains information obout the object
-   * @param {Office} officeContext Excel context
+   * @param object Contains information obout the object
+   * @param officeContext Excel context
    */
   async removeObjectNotExistingInExcel(object: any, officeContext: Office.Context): Promise<void> {
     officeStoreObject.removeObjectFromStore(object.objectWorkingId);

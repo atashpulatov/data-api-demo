@@ -48,6 +48,14 @@ class ErrorService {
     this.reduxStore = reduxStore;
   }
 
+  /**
+   * Handles error that is related to specific object on side panel
+   *
+   * @param objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param error Error object that was thrown
+   * @param callback Function to be called after clikc on warning notification
+   * @param operationData Data about the operation that was performed
+   */
   async handleObjectBasedError(
     objectWorkingId: number,
     error: any,
@@ -91,6 +99,12 @@ class ErrorService {
     }
   }
 
+  /**
+   * Maion function to handle errors
+   *
+   * @param error Error object that was thrown
+   * @param options Object with additional options
+   */
   // TODO combine with handleObjectBasedError
   async handleError(
     error: any,
@@ -109,9 +123,7 @@ class ErrorService {
 
     const shouldClosePopup =
       dialogType === PopupTypeEnum.importedDataOverview &&
-      [ErrorType.UNAUTHORIZED_ERR, ErrorType.CONNECTION_BROKEN_ERR].includes(
-        errorType as ErrorType
-      );
+      [ErrorType.UNAUTHORIZED_ERR, ErrorType.CONNECTION_BROKEN_ERR].includes(errorType);
 
     await this.closePopupIfOpen(shouldClosePopup);
 
@@ -119,6 +131,13 @@ class ErrorService {
     this.checkForLogout(errorType, isLogout);
   }
 
+  /**
+   * Return ErrorType based on the error
+   *
+   * @param error Error object that was thrown
+   * @param operationData Data about the operation that was performed
+   * @returns ErrorType
+   */
   getErrorType(error: any, operationData?: any): ErrorType {
     const updateError = this.getExcelError(error, operationData);
     return (
@@ -126,6 +145,13 @@ class ErrorService {
     );
   }
 
+  /**
+   * Extracts error details from the error object
+   *
+   * @param error Error object that was thrown
+   * @params errorMessage Error message
+   * @returns error details to display
+   */
   getErrorDetails(error: any, errorMessage: string): string {
     const errorDetails = (error.response && error.response.text) || error.message || '';
     let details;
@@ -153,18 +179,29 @@ class ErrorService {
     return details;
   }
 
-  displayErrorNotification(error: any, type: ErrorType, message = ''): void {
+  /**
+   * dsiaply global notifiacation with error message
+   *
+   * @param error Error object that was thrown
+   * @param type Type of the error
+   * @param errorMessage Error message
+   */
+  displayErrorNotification(error: any, type: ErrorType, errorMessage = ''): void {
     const errorDetails = (error.response && error.response.text) || error.message || '';
-    const details = message !== errorDetails ? errorDetails : '';
+    const details = errorMessage !== errorDetails ? errorDetails : '';
     if (type === ErrorType.UNAUTHORIZED_ERR) {
       this.notificationService.sessionExpired();
       return;
     }
-    const payload = this.createNotificationPayload(message, details);
+    const payload = this.createNotificationPayload(errorMessage, details);
     payload.children = this.getChildrenButtons();
     this.notificationService.globalWarningAppeared(payload);
   }
 
+  /**
+   * Creates object containing buttons for the notification
+   * @returns Object with notification button data
+   */
   getChildrenButtons(): any {
     return getNotificationButtons([
       {
@@ -175,6 +212,12 @@ class ErrorService {
     ]);
   }
 
+  /**
+   * Trigger logout based on error type
+   *
+   * @param errorType type of error
+   * @param isLogout Flag indicating whether to log out user
+   */
   checkForLogout(errorType: ErrorType, isLogout = false): void {
     if (!isLogout && [ErrorType.UNAUTHORIZED_ERR].includes(errorType)) {
       setTimeout(() => {
@@ -183,6 +226,11 @@ class ErrorService {
     }
   }
 
+  /**
+   * Function getting errors that occurs in Office operations.
+   *
+   * @param error Error object that was thrown
+   */
   getOfficeErrorType(error: any): string {
     console.warn({ error });
     console.warn(error.message);
@@ -197,8 +245,8 @@ class ErrorService {
    * Function getting errors that occurs in types of operations.
    * Transform the error that happens when import too many columns and fail in context.sync.
    *
-   * @param {Error} error Error thrown during the operation execution
-   * @param {Object} operationData Contains informatons about current operation
+   * @param error Error thrown during the operation execution
+   * @param operationData Contains informatons about current operation
    */
   getExcelError(error: any, operationData: any): any {
     const { name, code, debugInfo } = error;
@@ -229,7 +277,13 @@ class ErrorService {
     return updateError;
   }
 
-  getRestErrorType(error: any): string {
+  /**
+   * Function getting errors that occurs in REST requests.
+   *
+   * @param error Error object that was thrown
+   * @returns ErrorType
+   */
+  getRestErrorType(error: any): ErrorType {
     if (!error.status && !error.response) {
       if (error.message && error.message.includes(IncomingErrorStrings.CONNECTION_BROKEN)) {
         return ErrorType.CONNECTION_BROKEN_ERR;
@@ -240,11 +294,21 @@ class ErrorService {
     return httpStatusToErrorType(status);
   }
 
-  getErrorMessage(error: any, options = { chosenObjectName: 'Report' }): string {
+  /**
+   * Function getting error message based on the error type
+   *
+   * @param error Error object that was thrown
+   * @param options Object with additional options
+   * @returns Error message
+   */
+  getErrorMessage(error: any, options = { chosenObjectName: 'Report' }): ErrorMessages {
     const errorType = this.getErrorType(error);
     return errorMessageFactory(errorType)({ error, ...options });
   }
 
+  /**
+   * Function logging out user from the application
+   */
   async fullLogOut(): Promise<void> {
     this.notificationService.dismissNotifications();
     await this.sessionHelper.logOutRest();
@@ -252,6 +316,13 @@ class ErrorService {
     this.sessionHelper.logOutRedirect();
   }
 
+  /**
+   * Function creating payload for the notification
+   *
+   * @param message Title of the notification
+   * @param details Details of the notification
+   * @returns Object with notification payload
+   */
   createNotificationPayload(message: string, details: string): any {
     const buttons = [
       {
