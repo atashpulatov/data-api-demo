@@ -90,11 +90,8 @@ const createProgressNotification = (state, payload) => {
     notificationButtons = getNotificationButtons(getCancelButton(objectWorkingId, operationType));
   }
   
-  // DE288915: Avoid duplicate notifications, specifically derived from Edit and Reprompt operations
-  // since none of these operations will trigger or dispatch actions to dismiss notifications
-  // when user clicks on either "Edit" or "Reprompt" buttons after updating logic in
-  // methid handleOverviewActionCommand in OverviewHelper
-  state.notifications = state.notifications?.filter(item => item.objectWorkingId !== objectWorkingId);
+  // DE288915: Avoid duplicate notifications, particularly those originating from Edit and Reprompt operations. 
+  const stateNotifications = state.notifications?.filter(item => item.objectWorkingId !== objectWorkingId);
 
   const newNotification = {
     objectWorkingId,
@@ -107,7 +104,7 @@ const createProgressNotification = (state, payload) => {
   // DE288915: Changed order of how notifications are displayed by reversing the order of the array
   // to display the most recent notification on top of the list and ignored lingering notifications
   // associated to given objectWorkingId.
-  return { ...state, notifications: [newNotification, ...state.notifications] };
+  return { ...state, notifications: [newNotification, ...stateNotifications] };
 };
 
 const moveNotificationToInProgress = (state, payload) => {
