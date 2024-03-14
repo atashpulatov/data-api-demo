@@ -58,7 +58,7 @@ const loadingStateEnumWeights = {
       FORMAT_SUBTOTALS: 35,
       BIND_OFFICE_TABLE: 40,
       SAVE_OBJECT_IN_EXCEL: 40,
-      DISPLAY_NOTIFICATION_COMPLETED: 100,
+      DISPLAY_NOTIFICATION_COMPLETED: 40,
     },
   },
   [objectImportType.IMAGE]: {
