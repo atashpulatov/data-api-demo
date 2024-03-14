@@ -91,7 +91,8 @@ const createProgressNotification = (state, payload) => {
   }
   
   // DE288915: Avoid duplicate notifications, particularly those originating from Edit and Reprompt operations. 
-  const stateNotifications = state.notifications?.filter(item => item.objectWorkingId !== objectWorkingId);
+  const stateNotifications = state?.notifications && Array.isArray(state.notifications) ?
+    state.notifications.filter(item => item.objectWorkingId !== objectWorkingId) : [];
 
   const newNotification = {
     objectWorkingId,
