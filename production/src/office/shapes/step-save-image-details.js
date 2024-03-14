@@ -3,7 +3,7 @@ import { officeShapeApiHelper } from './office-shape-api-helper';
 
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
-import { errorMessages } from '../../error/constants';
+import { ErrorMessages } from '../../error/constants';
 
 class StepSaveImageDetails {
   /**
@@ -24,7 +24,7 @@ class StepSaveImageDetails {
         bindId && (await officeShapeApiHelper.getShape(excelContext, bindId));
 
       if (!shapeInWorksheet) {
-        throw new Error(errorMessages.VISUALIZATION_REMOVED_FROM_EXCEL);
+        throw new Error(ErrorMessages.VISUALIZATION_REMOVED_FROM_EXCEL);
       }
 
       if (shapeInWorksheet) {

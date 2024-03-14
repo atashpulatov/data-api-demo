@@ -14,7 +14,7 @@ import {
   EDIT_OPERATION,
   REFRESH_OPERATION,
 } from '../../operation/operation-type-names';
-import { errorMessages } from '../../error/constants';
+import { ErrorMessages } from '../../error/constants';
 
 class StepManipulateVisualizationImage {
   /**
@@ -154,7 +154,7 @@ class StepManipulateVisualizationImage {
       operationType === DUPLICATE_OPERATION && !shapeToBeDuplicated;
 
     if (isInValidDuplicateOperation || isInValidEditOperation || isInValidRefreshOperation) {
-      throw new Error(errorMessages.VISUALIZATION_REMOVED_FROM_EXCEL);
+      throw new Error(ErrorMessages.VISUALIZATION_REMOVED_FROM_EXCEL);
     }
   };
 }

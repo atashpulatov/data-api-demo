@@ -10,7 +10,7 @@ import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { GET_OFFICE_TABLE_IMPORT } from '../../operation/operation-steps';
 import mstrObjectEnum from '../mstr-object-type-enum';
 import dossierInstanceDefinition from './dossier-instance-definition';
-import { errorMessages } from '../../error/constants';
+import { ErrorMessages } from '../../error/constants';
 import { importOperationStepDict, objectImportType } from '../constants';
 
 class StepGetInstanceDefinition {
@@ -138,7 +138,7 @@ class StepGetInstanceDefinition {
 
       if (mstrTable.rows.length === 0) {
         throw new Error(
-          isPrompted ? errorMessages.ALL_DATA_FILTERED_OUT : errorMessages.NO_DATA_RETURNED
+          isPrompted ? ErrorMessages.ALL_DATA_FILTERED_OUT : ErrorMessages.NO_DATA_RETURNED
         );
       }
 

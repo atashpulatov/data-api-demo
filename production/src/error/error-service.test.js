@@ -9,7 +9,7 @@ import { popupController } from '../popup/popup-controller';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import { errorService } from './error-handler';
 import { OutsideOfRangeError } from './outside-of-range-error';
-import { errorTypes } from './constants';
+import { ErrorType } from './constants';
 import * as Constants from './constants';
 
 jest.mock('../storage/session-helper');
@@ -39,7 +39,7 @@ describe('ErrorService', () => {
       // when
       const result = errorService.getRestErrorType(error);
       // then
-      expect(result).toBe(errorTypes.UNKNOWN_ERR);
+      expect(result).toBe(ErrorType.UNKNOWN_ERR);
     });
 
     it('should return ENV_NOT_FOUND_ERR type due to response with 404 code', () => {
@@ -49,7 +49,7 @@ describe('ErrorService', () => {
       // when
       const resultType = errorService.getRestErrorType(error);
       // then
-      expect(resultType).toBe(errorTypes.ENV_NOT_FOUND_ERR);
+      expect(resultType).toBe(ErrorType.ENV_NOT_FOUND_ERR);
     });
 
     it('should return CONNECTION_BROKEN_ERR type due to response 404 code', () => {
@@ -58,7 +58,7 @@ describe('ErrorService', () => {
       // when
       const resultType = errorService.getRestErrorType(error);
       // then
-      expect(resultType).toBe(errorTypes.CONNECTION_BROKEN_ERR);
+      expect(resultType).toBe(ErrorType.CONNECTION_BROKEN_ERR);
     });
 
     it('should return BAD_REQUEST_ERR type due to response 400 code', () => {
@@ -67,7 +67,7 @@ describe('ErrorService', () => {
       // when
       const resultType = errorService.getRestErrorType(error);
       // then
-      expect(resultType).toBe(errorTypes.BAD_REQUEST_ERR);
+      expect(resultType).toBe(ErrorType.BAD_REQUEST_ERR);
     });
 
     it('should return UNAUTHORIZED_ERR type due to response 401 code', () => {
@@ -77,7 +77,7 @@ describe('ErrorService', () => {
       // when
       const resultType = errorService.getRestErrorType(error);
       // then
-      expect(resultType).toBe(errorTypes.UNAUTHORIZED_ERR);
+      expect(resultType).toBe(ErrorType.UNAUTHORIZED_ERR);
     });
 
     it('should return INTERNAL_SERVER_ERR type due to response 403 code', () => {
@@ -87,7 +87,7 @@ describe('ErrorService', () => {
       // when
       const resultType = errorService.getRestErrorType(error);
       // then
-      expect(resultType).toBe(errorTypes.INTERNAL_SERVER_ERR);
+      expect(resultType).toBe(ErrorType.INTERNAL_SERVER_ERR);
     });
 
     it('should return ENV_NOT_FOUND_ERR type due to response 404 code', () => {
@@ -97,7 +97,7 @@ describe('ErrorService', () => {
       // when
       const resultType = errorService.getRestErrorType(error);
       // then
-      expect(resultType).toBe(errorTypes.ENV_NOT_FOUND_ERR);
+      expect(resultType).toBe(ErrorType.ENV_NOT_FOUND_ERR);
     });
 
     it('should return INTERNAL_SERVER_ERR type due to response 500 code', () => {
@@ -107,7 +107,7 @@ describe('ErrorService', () => {
       // when
       const resultType = errorService.getRestErrorType(error);
       // then
-      expect(resultType).toBe(errorTypes.INTERNAL_SERVER_ERR);
+      expect(resultType).toBe(ErrorType.INTERNAL_SERVER_ERR);
     });
 
     it('should return INTERNAL_SERVER_ERR type due to status 500 code', () => {
@@ -117,7 +117,7 @@ describe('ErrorService', () => {
       // when
       const resultType = errorService.getRestErrorType(error);
       // then
-      expect(resultType).toBe(errorTypes.INTERNAL_SERVER_ERR);
+      expect(resultType).toBe(ErrorType.INTERNAL_SERVER_ERR);
     });
 
     it('should return INTERNAL_SERVER_ERR type due to status 501 code', () => {
@@ -127,7 +127,7 @@ describe('ErrorService', () => {
       // when
       const resultType = errorService.getRestErrorType(error);
       // then
-      expect(resultType).toBe(errorTypes.INTERNAL_SERVER_ERR);
+      expect(resultType).toBe(ErrorType.INTERNAL_SERVER_ERR);
     });
 
     it('should return CONNECTION_BROKEN_ERR type due to status 502 code', () => {
@@ -137,7 +137,7 @@ describe('ErrorService', () => {
       // when
       const resultType = errorService.getRestErrorType(error);
       // then
-      expect(resultType).toBe(errorTypes.CONNECTION_BROKEN_ERR);
+      expect(resultType).toBe(ErrorType.CONNECTION_BROKEN_ERR);
     });
 
     it('should return CONNECTION_BROKEN_ERR type due to status 503 code', () => {
@@ -147,7 +147,7 @@ describe('ErrorService', () => {
       // when
       const resultType = errorService.getRestErrorType(error);
       // then
-      expect(resultType).toBe(errorTypes.CONNECTION_BROKEN_ERR);
+      expect(resultType).toBe(ErrorType.CONNECTION_BROKEN_ERR);
     });
 
     it('should return CONNECTION_BROKEN_ERR type due to status 504 code', () => {
@@ -157,7 +157,7 @@ describe('ErrorService', () => {
       // when
       const resultType = errorService.getRestErrorType(error);
       // then
-      expect(resultType).toBe(errorTypes.CONNECTION_BROKEN_ERR);
+      expect(resultType).toBe(ErrorType.CONNECTION_BROKEN_ERR);
     });
 
     it('should return UNKNOWN_ERR type due to unhandled status code', () => {
@@ -167,7 +167,7 @@ describe('ErrorService', () => {
       // when
       const resultType = errorService.getRestErrorType(error);
       // then
-      expect(resultType).toBe(errorTypes.UNKNOWN_ERR);
+      expect(resultType).toBe(ErrorType.UNKNOWN_ERR);
     });
   });
   describe('handleError for rest error', () => {
@@ -404,7 +404,7 @@ describe('ErrorService', () => {
       // given
       const error = {
         response: { status: 404 },
-        type: errorTypes.INVALID_VIZ_KEY,
+        type: ErrorType.INVALID_VIZ_KEY,
       };
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       // when
@@ -424,7 +424,7 @@ describe('ErrorService', () => {
       // when
       const returnedError = errorService.getOfficeErrorType(error);
       // then
-      expect(returnedError).toBe(errorTypes.RUN_OUTSIDE_OFFICE_ERR);
+      expect(returnedError).toBe(ErrorType.RUN_OUTSIDE_OFFICE_ERR);
     });
     it('should return OVERLAPPING_TABLES_ERR type in a proper case', () => {
       // given
@@ -435,7 +435,7 @@ describe('ErrorService', () => {
       // when
       const returnedError = errorService.getOfficeErrorType(error);
       // then
-      expect(returnedError).toBe(errorTypes.OVERLAPPING_TABLES_ERR);
+      expect(returnedError).toBe(ErrorType.OVERLAPPING_TABLES_ERR);
     });
 
     it('should return TABLE_REMOVED_FROM_EXCEL_ERR type in a proper case', () => {
@@ -447,7 +447,7 @@ describe('ErrorService', () => {
       // when
       const returnedError = errorService.getOfficeErrorType(error);
       // then
-      expect(returnedError).toBe(errorTypes.TABLE_REMOVED_FROM_EXCEL_ERR);
+      expect(returnedError).toBe(ErrorType.TABLE_REMOVED_FROM_EXCEL_ERR);
     });
 
     it('should display message when we do not handle error', () => {
@@ -460,7 +460,7 @@ describe('ErrorService', () => {
       // when
       const returnedError = errorService.getOfficeErrorType(error);
       // then
-      expect(returnedError).toBe(errorTypes.GENERIC_OFFICE_ERR);
+      expect(returnedError).toBe(ErrorType.GENERIC_OFFICE_ERR);
     });
   });
 
@@ -520,7 +520,7 @@ describe('ErrorService', () => {
       const error = {
         message: 'error',
         status: 401,
-        type: errorTypes.UNAUTHORIZED_ERR,
+        type: ErrorType.UNAUTHORIZED_ERR,
       };
 
       const closePopupMock = jest.spyOn(errorService, 'closePopupIfOpen').mockImplementation();

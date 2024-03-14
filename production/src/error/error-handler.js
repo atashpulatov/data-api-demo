@@ -13,10 +13,10 @@ import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-st
 import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import {
   errorMessageFactory,
-  errorMessages,
-  errorTypes,
+  ErrorMessages,
+  ErrorType,
   httpStatusToErrorType,
-  incomingErrorStrings,
+  IncomingErrorStrings,
   stringMessageToErrorType,
 } from './constants';
 
@@ -41,7 +41,7 @@ class ErrorService {
     const errorMessage = errorMessageFactory(errorType)({ error });
     const details = this.getErrorDetails(error, errorMessage, errorType);
 
-    if (errorType === errorTypes.OVERLAPPING_TABLES_ERR) {
+    if (errorType === ErrorType.OVERLAPPING_TABLES_ERR) {
       const popupData = {
         objectWorkingId,
         title: errorMessage,
@@ -89,7 +89,7 @@ class ErrorService {
 
     const shouldClosePopup =
       dialogType === PopupTypeEnum.importedDataOverview &&
-      [errorTypes.UNAUTHORIZED_ERR, errorTypes.CONNECTION_BROKEN_ERR].includes(errorType);
+      [ErrorType.UNAUTHORIZED_ERR, ErrorType.CONNECTION_BROKEN_ERR].includes(errorType);
 
     await this.closePopupIfOpen(shouldClosePopup);
 
@@ -114,7 +114,7 @@ class ErrorService {
       INVALID_VIZ_KEY_MESSAGE,
       NOT_IN_METADATA,
       EMPTY_REPORT,
-    } = errorMessages;
+    } = ErrorMessages;
     switch (errorMessage) {
       case EXCEEDS_EXCEL_API_LIMITS:
       case SHEET_HIDDEN:
@@ -134,7 +134,7 @@ class ErrorService {
   displayErrorNotification = (error, type, message = '') => {
     const errorDetails = (error.response && error.response.text) || error.message || '';
     const details = message !== errorDetails ? errorDetails : '';
-    if (type === errorTypes.UNAUTHORIZED_ERR) {
+    if (type === ErrorType.UNAUTHORIZED_ERR) {
       this.notificationService.sessionExpired();
       return;
     }
@@ -153,7 +153,7 @@ class ErrorService {
     ]);
 
   checkForLogout = (errorType, isLogout = false) => {
-    if (!isLogout && [errorTypes.UNAUTHORIZED_ERR].includes(errorType)) {
+    if (!isLogout && [ErrorType.UNAUTHORIZED_ERR].includes(errorType)) {
       setTimeout(() => {
         this.fullLogOut();
       }, TIMEOUT);
@@ -208,8 +208,8 @@ class ErrorService {
 
   getRestErrorType = error => {
     if (!error.status && !error.response) {
-      if (error.message && error.message.includes(incomingErrorStrings.CONNECTION_BROKEN)) {
-        return errorTypes.CONNECTION_BROKEN_ERR;
+      if (error.message && error.message.includes(IncomingErrorStrings.CONNECTION_BROKEN)) {
+        return ErrorType.CONNECTION_BROKEN_ERR;
       }
       return null;
     }

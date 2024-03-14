@@ -13,7 +13,7 @@ import {
 import dossierInstanceDefinition from './instance/dossier-instance-definition';
 import stepGetInstanceDefinition from './instance/step-get-instance-definition';
 import mstrObjectEnum from './mstr-object-type-enum';
-import { errorMessages } from '../error/constants';
+import { ErrorMessages } from '../error/constants';
 
 describe('StepGetInstanceDefinition', () => {
   afterEach(() => {
@@ -51,10 +51,10 @@ describe('StepGetInstanceDefinition', () => {
 
   it.each`
     handleOperationErrorCallNo | expectedErrorMsg                       | rowsParam | isPromptedParam
-    ${1}                       | ${errorMessages.ALL_DATA_FILTERED_OUT} | ${[]}     | ${true}
-    ${0}                       | ${errorMessages.ALL_DATA_FILTERED_OUT} | ${[42]}   | ${true}
-    ${1}                       | ${errorMessages.NO_DATA_RETURNED}      | ${[]}     | ${false}
-    ${0}                       | ${errorMessages.NO_DATA_RETURNED}      | ${[42]}   | ${false}
+    ${1}                       | ${ErrorMessages.ALL_DATA_FILTERED_OUT} | ${[]}     | ${true}
+    ${0}                       | ${ErrorMessages.ALL_DATA_FILTERED_OUT} | ${[42]}   | ${true}
+    ${1}                       | ${ErrorMessages.NO_DATA_RETURNED}      | ${[]}     | ${false}
+    ${0}                       | ${ErrorMessages.NO_DATA_RETURNED}      | ${[42]}   | ${false}
   `(
     'getInstanceDefinition works as expected when mstrTable.rows.length is 0',
     async ({ handleOperationErrorCallNo, expectedErrorMsg, rowsParam, isPromptedParam }) => {
