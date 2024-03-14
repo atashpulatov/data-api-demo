@@ -342,12 +342,7 @@ export const PromptsWindowNotConnected = props => {
   const handleRun = async () => {
     try {
       await authenticationHelper.validateAuthToken();
-      console.log('embeddedDocument', embeddedDocument);
       if (embeddedDocument) {
-        console.log(
-          'embeddedDocument.getElementsByClassName("mstrPromptEditorButtonRun")',
-          embeddedDocument.getElementsByClassName('mstrPromptEditorButtonRun')
-        );
         const runButton = embeddedDocument.getElementsByClassName('mstrPromptEditorButtonRun')[0];
         if (runButton) {
           runButton.click();
@@ -362,7 +357,6 @@ export const PromptsWindowNotConnected = props => {
    * This function is called after a child (iframe) is added into mbedded dossier container
    */
   const onIframeLoad = iframe => {
-    console.log('iframe', iframe);
     iframe.addEventListener('load', () => {
       const { contentDocument } = iframe;
       if (iframe.focusEventListenerAdded === false) {
@@ -370,7 +364,6 @@ export const PromptsWindowNotConnected = props => {
         iframe.addEventListener('focus', scriptInjectionHelper.switchFocusToElementOnWindowFocus);
       }
       setEmbeddedDocument(contentDocument);
-      console.log('contentDocument', contentDocument);
       if (!scriptInjectionHelper.isLoginPage(contentDocument)) {
         scriptInjectionHelper.applyStyle(contentDocument, 'promptsWindow.css');
         scriptInjectionHelper.applyFile(contentDocument, 'javascript/embeddingsessionlib.js');
