@@ -9,8 +9,8 @@ class MstrAttributeFormHelper {
    * @param {Boolean} supportForms user's privilege to use attribute forms
    * @returns {Array} column information including attribute forms
    */
-  splitAttributeForms = (columns, supportForms) => {
-    const fullColumnInformation = [];
+  splitAttributeForms = (columns: any[], supportForms: boolean): any[] => {
+    const fullColumnInformation: any[] = [];
     columns.forEach(column => {
       const type = column.type ? column.type.toLowerCase() : null;
       switch (type) {
@@ -54,39 +54,39 @@ class MstrAttributeFormHelper {
   /**
    * Get attribute title names with attribute forms
    *
-   * @param {JSON} e Object definition element from response
-   * @param {String} attrforms Dispay attribute form names setting inside office-properties.js
-   * @return {Object} Contains arrays of columns and rows attributes forms names
+   * @param element Object definition element from response
+   * @param attrforms Dispay attribute form names setting inside office-properties.js
+   * @returns Contains arrays of columns and rows attributes forms names
    */
-  getAttributesTitleWithForms = (e, attrforms) => {
+  getAttributesTitleWithForms = (element: any, attrforms: any): any | false => {
     const supportForms = attrforms ? attrforms.supportForms : false;
     const nameSet = attrforms && attrforms.displayAttrFormNames;
     const { displayAttrFormNames } = officeProperties;
     const titles = [];
 
-    if (supportForms && e.type === 'attribute' && e.forms.length >= 0) {
-      const singleForm = e.forms.length === 1;
+    if (supportForms && element.type === 'attribute' && element.forms.length >= 0) {
+      const singleForm = element.forms.length === 1;
 
-      for (let index = 0; index < e.forms.length; index++) {
-        const formName = e.forms[index].name;
+      for (let index = 0; index < element.forms.length; index++) {
+        const formName = element.forms[index].name;
         let title;
 
         switch (nameSet) {
           case displayAttrFormNames.on:
-            titles.push(`${e.name} ${formName}`);
+            titles.push(`${element.name} ${formName}`);
             break;
           case displayAttrFormNames.off:
-            titles.push(`${e.name}`);
+            titles.push(`${element.name}`);
             break;
           case displayAttrFormNames.formNameOnly:
             titles.push(`${formName}`);
             break;
           case displayAttrFormNames.showAttrNameOnce:
-            title = index === 0 ? `${e.name} ${formName}` : `${formName}`;
+            title = index === 0 ? `${element.name} ${formName}` : `${formName}`;
             titles.push(title);
             break;
           default:
-            title = singleForm ? `${e.name}` : `${e.name} ${formName}`;
+            title = singleForm ? `${element.name}` : `${element.name} ${formName}`;
             titles.push(title);
             break;
         }
@@ -96,21 +96,23 @@ class MstrAttributeFormHelper {
     return false;
   };
 
-  getAttributeWithForms = (elements, attrforms) => {
+  getAttributeWithForms = (elements: any, attrforms: any): string[] => {
     if (!elements) {
       return [];
     }
 
-    let names = [];
+    let names: string[] = [];
     for (const element of elements) {
       const headerCount = element.headerCount || 1;
 
       for (let headerIndex = 0; headerIndex < headerCount; headerIndex++) {
-        const forms = this.getAttributesTitleWithForms(element, attrforms);
-        names = forms ? [...names, ...forms] : [...names, `${element.name}`];
+        if (element.type !== 'templateMetrics') {
+          const forms = this.getAttributesTitleWithForms(element, attrforms);
+
+          names = forms ? [...names, ...forms] : [...names, `${element.name}`];
+        }
       }
     }
-
     return names;
   };
 }

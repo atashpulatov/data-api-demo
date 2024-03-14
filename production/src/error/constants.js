@@ -1,6 +1,6 @@
 import { GlobalNotificationTypes } from '@mstr/connector-components';
 
-import { customT } from '../customTranslation';
+import i18n from '../i18n';
 
 const withDefaultValue = (obj, defaultValue) => value => {
   if (value in obj) {
@@ -226,7 +226,7 @@ export const errorMessageFactory = withDefaultValue(
     [errorTypes.IMAGE_REMOVED_FROM_EXCEL_ERR]: () => errorMessages.VISUALIZATION_REMOVED_FROM_EXCEL,
     [errorTypes.SHEET_HIDDEN_ERR]: ({ error }) => handleWrongRange(error),
     [errorTypes.GENERIC_OFFICE_ERR]: ({ error }) =>
-      `${customT('An error has occurred in Excel.')} ${error.message}`,
+      `${i18n.t('An error has occurred in Excel.')} ${error.message}`,
     [errorTypes.PROTECTED_SHEET_ERR]: () => errorMessages.PROTECTED_SHEET,
     [errorTypes.INVALID_VIZ_KEY]: () => errorMessages.INVALID_VIZ_KEY_MESSAGE,
     [errorTypes.EXCEEDS_EXCEL_API_LIMITS]: () => errorMessages.EXCEEDS_EXCEL_API_LIMITS,

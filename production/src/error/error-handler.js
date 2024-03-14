@@ -1,7 +1,7 @@
 import officeReducerHelper from '../office/store/office-reducer-helper';
 
-import { customT } from '../customTranslation';
 import { PopupTypeEnum } from '../home/popup-type-enum';
+import i18n from '../i18n';
 import { getNotificationButtons } from '../notification/notification-buttons';
 import {
   DUPLICATE_OPERATION,
@@ -147,7 +147,7 @@ class ErrorService {
     getNotificationButtons([
       {
         type: 'basic',
-        label: customT('OK'),
+        label: i18n.t('OK'),
         onClick: () => this.notificationService.globalNotificationDissapear(),
       },
     ]);
