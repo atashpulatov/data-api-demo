@@ -240,11 +240,11 @@ class OverviewHelper {
         await this.sidePanelService.addData();
         break;
       case OverviewActionCommands.EDIT:
-        // Edit should not dissmiss the notifications from here.
+        // Edit should not dismiss the notifications from here.
         await this.sidePanelService.edit(response.objectWorkingId);
         break;
       case OverviewActionCommands.REPROMPT:
-        // Reprompt should not dissmiss the notifications from here either.       
+        // Reprompt should not dismiss the notifications from here either.       
         await this.sidePanelService.reprompt(response.objectWorkingIds, true);
         break;
       case OverviewActionCommands.REFRESH:
