@@ -25,6 +25,10 @@ import {
 } from '../../../__mocks__/mockDataV2';
 
 describe('overview-helper', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   const objectWorkingIds = [1, 2];
 
   it('should send refresh request to side panel', () => {
@@ -99,7 +103,7 @@ describe('overview-helper', () => {
     // Then
     expect(officeMessageParentMock).toHaveBeenCalledWith({
       command: OverviewActionCommands.DUPLICATE,
-      objectWorkingId: objectWorkingIds[0],
+      objectWorkingIds,
       insertNewWorksheet: true,
       withEdit: false,
     });
