@@ -133,11 +133,11 @@ class OverviewHelper {
    * @param insertNewWorksheet Flag indicating whether new worksheet should be inserted
    * @param withEdit Flag indicating whether duplicate should be performed with edit
    */
-  async sendDuplicateRequest(
-    objectWorkingIds: number[],
+  sendDuplicateRequest(
+    objectWorkingIds: number,
     insertNewWorksheet: boolean,
     withEdit: boolean
-  ): Promise<void> {
+  ): void {
     popupHelper.officeMessageParent({
       command: OverviewActionCommands.DUPLICATE,
       objectWorkingIds,

@@ -1,9 +1,6 @@
-// issue with proptype import
-// eslint-disable-next-line simple-import-sort/imports
 import React from 'react';
 import { connect } from 'react-redux';
 
-import PropTypes from 'prop-types';
 import { ObtainInstanceHelper } from './obtain-instance-helper';
 import overviewHelper from './overview/overview-helper';
 import { popupHelper } from './popup-helper';
@@ -20,12 +17,19 @@ import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import { MultipleRepromptTransitionPage } from './multiple-reprompt-transition-page/multiple-reprompt-transition-page';
 import { OverviewWindow } from './overview/overview-window';
 
-const renderProperComponent = popupType => {
+interface PopupViewSelectorProps {
+  authToken?: string;
+  popupType?: PopupTypeEnum;
+}
+
+const renderProperComponent = (popupType: PopupTypeEnum): any => {
   switch (popupType) {
     case PopupTypeEnum.dataPreparation:
     case PopupTypeEnum.editFilters:
+      // @ts-expect-error
       return <AttributeSelectorWindow />;
     case PopupTypeEnum.libraryWindow:
+      // @ts-expect-error
       return <LibraryWindow />;
     case PopupTypeEnum.promptsWindow:
     case PopupTypeEnum.repromptingWindow:
@@ -58,7 +62,7 @@ const renderProperComponent = popupType => {
   }
 };
 
-export const PopupViewSelectorNotConnected = props => {
+export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = props => {
   const { authToken, popupType: popupTypeProps } = props;
   if (!authToken) {
     console.log('Waiting for token to be passed');
@@ -68,7 +72,7 @@ export const PopupViewSelectorNotConnected = props => {
   return renderProperComponent(popupType);
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state: any): any {
   const {
     navigationTree,
     popupReducer: { editedObject, preparedInstance },
@@ -100,11 +104,6 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   ...navigationTreeActions,
   preparePromptedReport: popupActions.preparePromptedReport,
-};
-
-PopupViewSelectorNotConnected.propTypes = {
-  authToken: PropTypes.string,
-  popupType: PropTypes.oneOf(Object.values(PopupTypeEnum)),
 };
 
 export const PopupViewSelector = connect(

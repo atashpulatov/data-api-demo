@@ -94,12 +94,12 @@ describe('overview-helper', () => {
       .mockImplementation();
 
     // When
-    overviewHelper.sendDuplicateRequest(objectWorkingIds, true, false);
+    overviewHelper.sendDuplicateRequest(objectWorkingIds[0], true, false);
 
     // Then
     expect(officeMessageParentMock).toHaveBeenCalledWith({
       command: OverviewActionCommands.DUPLICATE,
-      objectWorkingIds,
+      objectWorkingId: objectWorkingIds[0],
       insertNewWorksheet: true,
       withEdit: false,
     });
