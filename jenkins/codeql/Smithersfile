@@ -3,7 +3,7 @@ job 'stage-2-codeql' do
 
   configure_common_items{}
 
-  assigned_node_string 'amazon_linux'
+  assigned_node_string 'rhel8_vra'
 
   builders do
     bash do

@@ -15,7 +15,7 @@ produces and publishes a versioned deployment package'
     end
   end
 
-  assigned_node_string 'amazon_linux'
+  assigned_node_string 'rhel8_vra'
 
   triggers do
     github_push do

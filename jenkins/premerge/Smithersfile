@@ -5,7 +5,7 @@ produces and publishes a versioned deployment package'
 
   configure_common_items{}
 
-  assigned_node_string 'amazon_linux'
+  assigned_node_string 'rhel8_vra'
 
   triggers do
       pull_request_builder do
