@@ -20,7 +20,7 @@ import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 
 import './dossier.css';
-import { errorMessages } from '../../error/constants';
+import { ErrorMessages } from '../../error/constants';
 
 const { microstrategy, Office } = window;
 
@@ -53,7 +53,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
 
     // Do not embed the dossier if the Microstrategy API is not available
     if (!microstrategy?.dossier) {
-      console.warn(errorMessages.MICROSTRATEGY_API_MISSING);
+      console.warn(ErrorMessages.MICROSTRATEGY_API_MISSING);
       return;
     }
 
@@ -439,7 +439,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
 
       handleEmbeddedDossierLoad();
     } else {
-      console.warn(errorMessages.MICROSTRATEGY_API_MISSING);
+      console.warn(ErrorMessages.MICROSTRATEGY_API_MISSING);
     }
   };
 

@@ -43,7 +43,6 @@ describe('OfficeTableUpdate', () => {
       await officeTableUpdate.updateOfficeTable(
         instanceDefinitionMock,
         excelContextMock,
-        undefined,
         undefined
       );
     } catch (error) {
@@ -99,7 +98,6 @@ describe('OfficeTableUpdate', () => {
     const result = await officeTableUpdate.updateOfficeTable(
       instanceDefinitionMock,
       excelContextMock,
-      'startCellTest',
       prevOfficeTableMock
     );
 

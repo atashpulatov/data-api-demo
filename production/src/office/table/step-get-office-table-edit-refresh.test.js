@@ -214,7 +214,6 @@ describe('StepGetOfficeTableEditRefresh', () => {
       expect(officeTableUpdate.updateOfficeTable).toBeCalledWith(
         { mstrTable: 'mstrTableTest' },
         excelContextMock,
-        'startCellTest',
         mockedOfficeTable
       );
 
