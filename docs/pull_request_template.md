@@ -1,18 +1,22 @@
-# Description
-
-_Please give a brief description on what the pull request is about. If it is a defect fix explain what causes the issue, if it's a user story summarize what the code change is._
-
+# Rally [US/DE ID](https://rally1.rallydev.com/#/search/?keywords=)
+ 
+## Root Cause/Solution Discussion
+ 
+Please summarize what the code change is. If there're alternative ways to address the issue, please provide the reasoning why we picked current approach.
+ 
+## Additional Info
+ 
+If there's a need, please put extra information here including links to documentation, screenshots etc.
+ 
 ## Type of change
 - [ ] Feature Development
 - [ ] Defect Fix
 - [ ] Test Automation
-- [ ] UX/UI change (changes to user interface or style)
-- [ ] Update dependencies (changes to package.json)
-
+- [ ] Dependencies update (changes to package.json)
+ 
 ## Checklist
 - [ ] The PR has an assignee, label, code reviewers and Rally US/DE
 - [ ] My code is commented and follows our coding standards and [guidelines](https://github.microstrategy.com/pages/kiai/developers-guide/)
 - [ ] New and existing unit tests pass locally with my changes
-- [ ] All affected TC pass on the CMD environment
 - [ ] New strings have been added to [Product Strings](http://productstrings.internal.microstrategy.com/)
-- [ ] UX/UI has been reviewed by UX Designer
+- [ ] Posted a screenshot of before/after on UI/UX change
