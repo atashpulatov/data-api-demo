@@ -134,7 +134,7 @@ class OverviewHelper {
    * @param withEdit Flag indicating whether duplicate should be performed with edit
    */
   sendDuplicateRequest(
-    objectWorkingIds: number,
+    objectWorkingIds: number[],
     insertNewWorksheet: boolean,
     withEdit: boolean
   ): void {
@@ -357,7 +357,7 @@ class OverviewHelper {
    * @param setDialogPopup Function used as a callback for seting Overview dialog popup
    */
   setDuplicatePopup({
-    objectWorkingId,
+    objectWorkingIds,
     activeCellAddress,
     onDuplicate,
     setDialogPopup,
@@ -366,11 +366,11 @@ class OverviewHelper {
       type: PopupTypes.DUPLICATE,
       activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
       onImport: isActiveCellOptionSelected => {
-        onDuplicate(objectWorkingId, !isActiveCellOptionSelected, false);
+        onDuplicate(objectWorkingIds, !isActiveCellOptionSelected, false);
         setDialogPopup(null);
       },
       onEdit: isActiveCellOptionSelected => {
-        onDuplicate(objectWorkingId, !isActiveCellOptionSelected, true);
+        onDuplicate(objectWorkingIds, !isActiveCellOptionSelected, true);
         setDialogPopup(null);
       },
       onClose: () => setDialogPopup(null),
@@ -383,15 +383,15 @@ class OverviewHelper {
    * @param objectWorkingId Unique Id of the object allowing to reference specific object
    * @param setDialogPopup Function used as a callback for seting Overview dialog popup
    */
-  setRangeTakenPopup({ objectWorkingId, setDialogPopup }: DialogPopup): void {
+  setRangeTakenPopup({ objectWorkingIds, setDialogPopup }: DialogPopup): void {
     setDialogPopup({
       type: PopupTypes.RANGE_TAKEN_OVERVIEW,
       onOk: () => {
-        this.handleRangeTakenOk(objectWorkingId);
+        this.handleRangeTakenOk(objectWorkingIds[0]);
         officeReducerHelper.clearPopupData();
       },
       onClose: () => {
-        this.handleRangeTakenClose(objectWorkingId);
+        this.handleRangeTakenClose(objectWorkingIds[0]);
         officeReducerHelper.clearPopupData();
       },
     });

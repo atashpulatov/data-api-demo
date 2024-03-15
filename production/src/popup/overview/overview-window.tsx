@@ -31,7 +31,11 @@ interface OverviewWindowProps {
   onEdit?: (objectWorkingId: number) => Promise<void>;
   onReprompt?: (objectWorkingIds: number[]) => Promise<void>;
   onDelete?: (objectWorkingIds: number[]) => Promise<void>;
-  onDuplicate?: (objectWorkingIds: number, insertNewWorksheet: boolean, withEdit: boolean) => void;
+  onDuplicate?: (
+    objectWorkingIds: number[],
+    insertNewWorksheet: boolean,
+    withEdit: boolean
+  ) => void;
   onRename?: (objectWorkingId: number, newName: string) => Promise<void>;
   onGoToWorksheet?: (objectWorkingId: number) => Promise<void>;
   onDismissNotification?: (objectWorkingIds: number[]) => Promise<void>;
@@ -95,7 +99,7 @@ export const OverviewWindowNotConnected: React.FC<OverviewWindowProps> = props =
     new Promise((resolve, reject) => {
       try {
         overviewHelper.setDuplicatePopup({
-          objectWorkingId: objectWorkingIds[0],
+          objectWorkingIds,
           activeCellAddress,
           onDuplicate,
           setDialogPopup,
@@ -110,7 +114,7 @@ export const OverviewWindowNotConnected: React.FC<OverviewWindowProps> = props =
   useEffect(() => {
     if (popupData) {
       overviewHelper.setRangeTakenPopup({
-        objectWorkingId: popupData.objectWorkingId,
+        objectWorkingIds: [popupData.objectWorkingId],
         setDialogPopup,
       });
     } else {

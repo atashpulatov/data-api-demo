@@ -94,7 +94,7 @@ describe('overview-helper', () => {
       .mockImplementation();
 
     // When
-    overviewHelper.sendDuplicateRequest(objectWorkingIds[0], true, false);
+    overviewHelper.sendDuplicateRequest(objectWorkingIds, true, false);
 
     // Then
     expect(officeMessageParentMock).toHaveBeenCalledWith({
