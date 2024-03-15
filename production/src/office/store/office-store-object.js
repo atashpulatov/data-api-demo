@@ -54,7 +54,7 @@ class OfficeStoreObject {
     const { objects } = this.reduxStore.getState().objectReducer;
     const isShapeAPISupported = officeContext.isShapeAPISupported();
 
-    if (!isShapeAPISupported && objects?.length > 0) {
+    if (!isShapeAPISupported) {
       // Restore objects from Office Store that contain image objects.
       const settings = officeStoreHelper.getOfficeSettings();
       const objectsInOfficeStore = settings.get(officeProperties.storedObjects);
