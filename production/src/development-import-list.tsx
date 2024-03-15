@@ -67,9 +67,12 @@ const objectList = {
               {
                 type: 'elements',
                 elements: [
-                  { id: '8D679D4411D3E4981000E787EC6DE8A4:201401' },
-                  { id: '8D679D4411D3E4981000E787EC6DE8A4:201402' },
-                  { id: '8D679D4411D3E4981000E787EC6DE8A4:201403' },
+                  {
+                    id: '8D679D4411D3E4981000E787EC6DE8A4:202001',
+                  },
+                  {
+                    id: '8D679D4411D3E4981000E787EC6DE8A4:202002',
+                  },
                 ],
               },
             ],
@@ -84,13 +87,20 @@ const objectList = {
               {
                 type: 'elements',
                 elements: [
-                  { id: '8D679D4F11D3E4981000E787EC6DE8A4:11' },
-                  { id: '8D679D4F11D3E4981000E787EC6DE8A4:12' },
+                  {
+                    id: '8D679D4F11D3E4981000E787EC6DE8A4:12',
+                  },
+                  {
+                    id: '8D679D4F11D3E4981000E787EC6DE8A4:13',
+                  },
                 ],
               },
             ],
           },
         ],
+      },
+      subtotals: {
+        visible: true,
       },
     },
   },
@@ -100,7 +110,7 @@ export const DevelopmentImportList = (): React.ReactElement => (
   <div className='refresh-button-container'>
     <button
       type='button'
-      onClick={() => sessionHelper.importObjectWithouPopup(objectList.Crosstab123)}
+      onClick={() => sessionHelper.importObjectWithouPopup(objectList.CrosstabSubtotal)}
     >
       Quick Import
     </button>

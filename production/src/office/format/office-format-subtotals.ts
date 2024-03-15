@@ -74,7 +74,7 @@ class OfficeFormatSubtotals {
       };
     } else if (axis === 'columns') {
       offsets = {
-        verticalFirstCell: -(headers.columns.length - cell.attributeIndex + 1),
+        verticalFirstCell: -(headers.columns.length - cell.attributeIndex),
         horizontalFirstCell: cell.colIndex,
         verticalLastCell: mstrTable.tableSize.rows,
         horizontalLastCell: cell.colIndex,
