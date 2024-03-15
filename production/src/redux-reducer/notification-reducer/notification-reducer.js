@@ -33,7 +33,7 @@ import {
   titleOperationFailedMap,
   titleOperationInProgressMap,
 } from './notification-title-maps';
-import { errorMessages } from '../../error/constants';
+import { ErrorMessages } from '../../error/constants';
 
 const initialState = { notifications: [], globalNotification: { type: '' } };
 
@@ -242,7 +242,7 @@ const getCancelButton = (objectWorkingId, operationType) => [
 ];
 
 function getTitle(payload, notificationToUpdate) {
-  return payload.notification.title === errorMessages.GENERIC_SERVER_ERR
+  return payload.notification.title === ErrorMessages.GENERIC_SERVER_ERR
     ? titleOperationFailedMap[notificationToUpdate.operationType]
     : payload.notification.title;
 }

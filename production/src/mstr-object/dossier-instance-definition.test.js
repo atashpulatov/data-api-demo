@@ -3,7 +3,7 @@ import { visualizationInfoService } from './visualization-info-service';
 
 import dossierInstanceDefinition from './instance/dossier-instance-definition';
 import mstrObjectEnum from './mstr-object-type-enum';
-import { errorTypes, incomingErrorStrings } from '../error/constants';
+import { ErrorType, IncomingErrorStrings } from '../error/constants';
 
 describe('DossierInstanceDefinition', () => {
   afterEach(() => {
@@ -226,24 +226,24 @@ describe('DossierInstanceDefinition', () => {
   );
 
   it.each`
-    expectedErrorType             | error
-    ${undefined}                  | ${undefined}
-    ${undefined}                  | ${{ sth: 'sth' }}
-    ${'typeTest'}                 | ${{ type: 'typeTest' }}
-    ${undefined}                  | ${{ message: '' }}
-    ${undefined}                  | ${{ message: 'messageTest' }}
-    ${'typeTest'}                 | ${{ type: 'typeTest', message: '' }}
-    ${'typeTest'}                 | ${{ type: 'typeTest', message: 'messageTest' }}
-    ${errorTypes.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: `test1 ${incomingErrorStrings.INVALID_VIZ_KEY} test1` }}
-    ${'typeTest'}                 | ${{ type: 'typeTest', response: 'test' }}
-    ${'typeTest'}                 | ${{ type: 'typeTest', response: { body: 'test' } }}
-    ${'typeTest'}                 | ${{ type: 'typeTest', response: { body: { message: 'test' } } }}
-    ${errorTypes.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: 'testMessage', response: { body: { message: `test2 ${incomingErrorStrings.INVALID_VIZ_KEY} test2` } } }}
-    ${errorTypes.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: 'testMessage', response: { body: { message: `test2 ${incomingErrorStrings.INVALID_VIZ_KEY} test2` } } }}
-    ${errorTypes.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: `test1 ${incomingErrorStrings.INVALID_VIZ_KEY} test1`, response: 'test' }}
-    ${errorTypes.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: `test1 ${incomingErrorStrings.INVALID_VIZ_KEY} test1`, response: { body: 'test' } }}
-    ${errorTypes.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: `test1 ${incomingErrorStrings.INVALID_VIZ_KEY} test1`, response: { body: { message: 'test' } } }}
-    ${errorTypes.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: `test1 ${incomingErrorStrings.INVALID_VIZ_KEY} test1`, response: { body: { message: `test2 ${incomingErrorStrings.INVALID_VIZ_KEY} test2` } } }}
+    expectedErrorType            | error
+    ${undefined}                 | ${undefined}
+    ${undefined}                 | ${{ sth: 'sth' }}
+    ${'typeTest'}                | ${{ type: 'typeTest' }}
+    ${undefined}                 | ${{ message: '' }}
+    ${undefined}                 | ${{ message: 'messageTest' }}
+    ${'typeTest'}                | ${{ type: 'typeTest', message: '' }}
+    ${'typeTest'}                | ${{ type: 'typeTest', message: 'messageTest' }}
+    ${ErrorType.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: `test1 ${IncomingErrorStrings.INVALID_VIZ_KEY} test1` }}
+    ${'typeTest'}                | ${{ type: 'typeTest', response: 'test' }}
+    ${'typeTest'}                | ${{ type: 'typeTest', response: { body: 'test' } }}
+    ${'typeTest'}                | ${{ type: 'typeTest', response: { body: { message: 'test' } } }}
+    ${ErrorType.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: 'testMessage', response: { body: { message: `test2 ${IncomingErrorStrings.INVALID_VIZ_KEY} test2` } } }}
+    ${ErrorType.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: 'testMessage', response: { body: { message: `test2 ${IncomingErrorStrings.INVALID_VIZ_KEY} test2` } } }}
+    ${ErrorType.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: `test1 ${IncomingErrorStrings.INVALID_VIZ_KEY} test1`, response: 'test' }}
+    ${ErrorType.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: `test1 ${IncomingErrorStrings.INVALID_VIZ_KEY} test1`, response: { body: 'test' } }}
+    ${ErrorType.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: `test1 ${IncomingErrorStrings.INVALID_VIZ_KEY} test1`, response: { body: { message: 'test' } } }}
+    ${ErrorType.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: `test1 ${IncomingErrorStrings.INVALID_VIZ_KEY} test1`, response: { body: { message: `test2 ${IncomingErrorStrings.INVALID_VIZ_KEY} test2` } } }}
   `('getVisualizationErrorType work as expected', ({ expectedErrorType, error }) => {
     // when
     const result = dossierInstanceDefinition.getVisualizationErrorType(error);

@@ -4,7 +4,7 @@ import { visualizationInfoService } from '../visualization-info-service';
 import { errorService } from '../../error/error-handler';
 import { IMPORT_OPERATION } from '../../operation/operation-type-names';
 import mstrObjectEnum from '../mstr-object-type-enum';
-import { errorMessages, errorTypes, incomingErrorStrings } from '../../error/constants';
+import { ErrorMessages, ErrorType, IncomingErrorStrings } from '../../error/constants';
 
 class DossierInstanceDefinition {
   async getDossierInstanceDefinition({
@@ -85,7 +85,7 @@ class DossierInstanceDefinition {
    * Returns new visualization info object.
    *
    * If creating the visualization info fails and if the error is due to changed dossier structure,
-   * throws the error that dossier removed has changed (errorMessages.DOSSIER_HAS_CHANGED).
+   * throws the error that dossier removed has changed (ErrorMessages.DOSSIER_HAS_CHANGED).
    *
    * If there is no visualization for a given key, throws error that dossier doesn't exist (INVALID_VIZ_KEY_MESSAGE).
    *
@@ -95,8 +95,8 @@ class DossierInstanceDefinition {
    * @param {Object} instanceId Id of the created instance
    * @returns {Object} Contains info for visualization.
    *
-   * @throws {Error} errorMessages.DOSSIER_HAS_CHANGED when dossier has changed.
-   * @throws {Error} errorMessages.INVALID_VIZ_KEY_MESSAGE when dossier is not supported.
+   * @throws {Error} ErrorMessages.DOSSIER_HAS_CHANGED when dossier has changed.
+   * @throws {Error} ErrorMessages.INVALID_VIZ_KEY_MESSAGE when dossier is not supported.
    */
   getUpdatedVisualizationInfo = async (projectId, objectId, visualizationKey, instanceId) => {
     try {
@@ -109,12 +109,12 @@ class DossierInstanceDefinition {
       if (visualizationInfo) {
         return visualizationInfo;
       }
-      throw new Error(errorMessages.DOSSIER_HAS_CHANGED);
+      throw new Error(ErrorMessages.DOSSIER_HAS_CHANGED);
     } catch (error) {
-      if (errorService.getErrorMessage(error) === errorMessages.DOSSIER_HAS_CHANGED) {
-        throw new Error(errorMessages.DOSSIER_HAS_CHANGED);
+      if (errorService.getErrorMessage(error) === ErrorMessages.DOSSIER_HAS_CHANGED) {
+        throw new Error(ErrorMessages.DOSSIER_HAS_CHANGED);
       }
-      throw new Error(errorMessages.INVALID_VIZ_KEY_MESSAGE);
+      throw new Error(ErrorMessages.INVALID_VIZ_KEY_MESSAGE);
     }
   };
 
@@ -145,13 +145,13 @@ class DossierInstanceDefinition {
 
     let errorType = error.type;
     if (
-      (error.message && error.message.includes(incomingErrorStrings.INVALID_VIZ_KEY)) ||
+      (error.message && error.message.includes(IncomingErrorStrings.INVALID_VIZ_KEY)) ||
       (error.response &&
         error.response.body &&
         error.response.body.message &&
-        error.response.body.message.includes(incomingErrorStrings.INVALID_VIZ_KEY))
+        error.response.body.message.includes(IncomingErrorStrings.INVALID_VIZ_KEY))
     ) {
-      errorType = errorTypes.INVALID_VIZ_KEY;
+      errorType = ErrorType.INVALID_VIZ_KEY;
     }
 
     return errorType;

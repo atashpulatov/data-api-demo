@@ -1,10 +1,10 @@
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { officeApiCrosstabHelper } from './office-api-crosstab-helper';
 
+import { IncorrectInputTypeError } from '../../error/incorrect-input-type';
 import { OutsideOfRangeError } from '../../error/outside-of-range-error';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
-import { IncorrectInputTypeError } from '../incorrect-input-type';
 import { DEFAULT_CELL_POSITION, DEFAULT_RANGE_POSITION } from '../../mstr-object/constants';
 
 const ALPHABET_RANGE_START = 1;

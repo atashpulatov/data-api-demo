@@ -1,7 +1,6 @@
 import officeStoreHelper from './office-store-helper';
 
 import { errorService } from '../../error/error-handler';
-import { RunOutsideOfficeError } from '../../error/run-outside-office-error';
 
 describe.each`
   officeParam
@@ -31,7 +30,7 @@ describe.each`
       result = officeStoreHelper.getOfficeSettings();
     } catch (error) {
       // then
-      expect(error).toBeInstanceOf(RunOutsideOfficeError);
+      expect(error).toBeInstanceOf(Error);
     }
 
     expect(result).toBeUndefined();

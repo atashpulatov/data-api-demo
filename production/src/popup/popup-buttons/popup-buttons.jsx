@@ -11,7 +11,7 @@ import { CancelButton } from './cancel-button';
 import { DataPreviewButton } from './data-preview-button';
 import { ImportButton } from './import-button';
 import { PrepareDataButton } from './prepare-data-button';
-import { errorMessages } from '../../error/constants';
+import { ErrorMessages } from '../../error/constants';
 import { objectImportType } from '../../mstr-object/constants';
 import { importActionTypes, importButtonIds } from './import-btn-constants';
 
@@ -25,21 +25,21 @@ const getDisableReasonImport = (
 ) => {
   if (!isPublished && isPublished !== undefined) {
     if (disableSecondary) {
-      return errorMessages.NOT_SUPPORTED_VIZ;
+      return ErrorMessages.NOT_SUPPORTED_VIZ;
     }
-    return errorMessages.NOT_PUBLISHED_CUBE;
+    return ErrorMessages.NOT_PUBLISHED_CUBE;
   }
   if (disableActiveActions) {
-    return errorMessages.NO_DATA_SELECTED;
+    return ErrorMessages.NO_DATA_SELECTED;
   }
   if (checkingSelection !== undefined && checkingSelection) {
-    return errorMessages.CHECKING_SELECTION;
+    return ErrorMessages.CHECKING_SELECTION;
   }
 };
 
 const getDisableReason = (isPublished, disableSecondary, disableActiveActions) => {
   const disableReasonForImport = getDisableReasonImport(isPublished, disableActiveActions);
-  return disableSecondary ? errorMessages.NOT_AVAILABLE_FOR_DOSSIER : disableReasonForImport;
+  return disableSecondary ? ErrorMessages.NOT_AVAILABLE_FOR_DOSSIER : disableReasonForImport;
 };
 
 export const PopupButtonsNotConnected = ({
