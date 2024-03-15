@@ -66,7 +66,7 @@ describe('Constants', () => {
     });
   });
   describe('handleUnauthorizedError', () => {
-    it('should return ErrorMessages.ErrorMessages.WRONG_CREDENTIALS due to error code "ERR003" and iServerCode "-2147216959"', () => {
+    it('should return ErrorMessages.WRONG_CREDENTIALS due to error code "ERR003" and iServerCode "-2147216959"', () => {
       // given
       const response = {
         status: 400,
