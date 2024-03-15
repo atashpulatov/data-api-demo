@@ -63,10 +63,10 @@ describe('OfficeStoreObject', () => {
     officeStoreObject.removeObjectInExcelStore('objectWorkingIdTest');
 
     // then
-    expect(officeStoreHelper.getOfficeSettings).toBeCalledTimes(1);
+    expect(officeStoreHelper.getOfficeSettings).toHaveBeenCalledTimes(1);
 
-    expect(errorService.handleError).toBeCalledTimes(1);
-    expect(errorService.handleError).toBeCalledWith(new Error('errorTest'));
+    expect(errorService.handleError).toHaveBeenCalledTimes(1);
+    expect(errorService.handleError).toHaveBeenCalledWith(new Error('errorTest'));
   });
 
   it('removeObjectInExcelStore should work as expected when no objectWorkingId specified', () => {
@@ -82,7 +82,7 @@ describe('OfficeStoreObject', () => {
     // then
     expect(storedObjectMock.findIndex).not.toBeCalled();
 
-    expect(settingsMock.saveAsync).toBeCalledTimes(1);
+    expect(settingsMock.saveAsync).toHaveBeenCalledTimes(1);
   });
 
   it.each`
@@ -109,7 +109,7 @@ describe('OfficeStoreObject', () => {
       // then
       expect(settingsMock.get('storedObjects')).toEqual(expectedStoredObjects);
 
-      expect(settingsMock.saveAsync).toBeCalledTimes(1);
+      expect(settingsMock.saveAsync).toHaveBeenCalledTimes(1);
     }
   );
 
@@ -123,14 +123,14 @@ describe('OfficeStoreObject', () => {
     officeStoreObject.removeObjectFromStore('objectWorkingIdTest');
 
     // then
-    expect(objectActions.removeObject).toBeCalledTimes(1);
-    expect(objectActions.removeObject).toBeCalledWith('objectWorkingIdTest');
+    expect(objectActions.removeObject).toHaveBeenCalledTimes(1);
+    expect(objectActions.removeObject).toHaveBeenCalledWith('objectWorkingIdTest');
 
-    expect(reduxStore.dispatch).toBeCalledTimes(1);
-    expect(reduxStore.dispatch).toBeCalledWith('removeObjectTest');
+    expect(reduxStore.dispatch).toHaveBeenCalledTimes(1);
+    expect(reduxStore.dispatch).toHaveBeenCalledWith('removeObjectTest');
 
-    expect(officeStoreObject.removeObjectInExcelStore).toBeCalledTimes(1);
-    expect(officeStoreObject.removeObjectInExcelStore).toBeCalledWith('objectWorkingIdTest');
+    expect(officeStoreObject.removeObjectInExcelStore).toHaveBeenCalledTimes(1);
+    expect(officeStoreObject.removeObjectInExcelStore).toHaveBeenCalledWith('objectWorkingIdTest');
   });
 
   it('saveObjectsInExcelStore should work as expected', async () => {
@@ -145,10 +145,10 @@ describe('OfficeStoreObject', () => {
     await officeStoreObject.saveObjectsInExcelStore();
 
     // then
-    expect(officeStoreHelper.getOfficeSettings).toBeCalledTimes(1);
+    expect(officeStoreHelper.getOfficeSettings).toHaveBeenCalledTimes(2);
 
     expect(settingsMock.get('storedObjects')).toEqual('objectsTest');
 
-    expect(settingsMock.saveAsync).toBeCalledTimes(1);
+    expect(settingsMock.saveAsync).toHaveBeenCalledTimes(1);
   });
 });

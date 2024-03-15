@@ -1,6 +1,5 @@
 import { HIGHLIGHT_OPERATION } from '../../operation/operation-type-names';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
-import { objectImportType } from '../../mstr-object/constants';
 
 class OfficeReducerHelper {
   init = reduxStore => {
@@ -14,18 +13,9 @@ class OfficeReducerHelper {
    */
   getObjectsListFromObjectReducer = () => {
     const state = this.reduxStore.getState();
-
-    const { isShapeAPISupported } = state.officeReducer;
     const { objects } = state.objectReducer;
 
-    let loadedObjects = [...objects];
-    // Filter out the image objects if the shape api is not supported
-    // in current version in order to maintain the backward compatibility.
-    if (!isShapeAPISupported) {
-      loadedObjects = loadedObjects.filter(object => object?.importType !== objectImportType.IMAGE);
-    }
-
-    return loadedObjects;
+    return objects;
   };
 
   /**

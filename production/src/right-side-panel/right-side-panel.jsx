@@ -1,6 +1,6 @@
 // issue with proptype import
 // eslint-disable-next-line simple-import-sort/imports
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { PopupTypes, SidePanel } from '@mstr/connector-components';
 
@@ -31,7 +31,6 @@ import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 
 import './right-side-panel.scss';
-import { objectImportType } from '../mstr-object/constants';
 
 export const RightSidePanelNotConnected = ({
   loadedObjects,
@@ -55,18 +54,7 @@ export const RightSidePanelNotConnected = ({
   activeCellAddress,
   popupType,
   isDataOverviewOpen,
-  isShapeAPISupported,
 }) => {
-  loadedObjects = useMemo(() => {
-    // DE288915: Before rendering the SidePanel, determine whether to filter out the image objects
-    // if the shape API is not supported, instead of handling it in mapStateToProps when mapping
-    // state properties, as this could result in sending extra notifications by triggering useEffects.
-    if (!isShapeAPISupported && loadedObjects?.length > 0) {
-      return loadedObjects.filter(object => object?.importType !== objectImportType.IMAGE);
-    }
-    return loadedObjects;
-  }, [loadedObjects, isShapeAPISupported]);
-
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
   const [duplicatedObjectId, setDuplicatedObjectId] = React.useState(null);
   const [loadedObjectsWrapped, setLoadedObjectsWrapped] = React.useState(loadedObjects);
@@ -268,17 +256,7 @@ export const mapStateToProps = state => {
   const { globalNotification, notifications } = state.notificationReducer;
   const { repromptsQueue } = state.repromptsQueueReducer;
   const { popupType, isDataOverviewOpen } = state.popupStateReducer;
-
-  // DE288915: Don't filter the objects based on images to avoid
-  // re-rendering of the side panel when the images are loaded and notifications
-  // sending more messages conflicting with Re-prompt and Edit workflows.
-  // Calling getObjectsListFromObjectReducer() in mapStateToProps is not recommended
-  // because object returned by this function is a new copy instance of the original objects in state,
-  // and even if remains unfiltered, it still represents a new reference in memory.
-  // Consequently, React seems to interpret it as either new or updated,
-  // thereby triggering the useEffect hook to listen for changes in the objects' state value.
   const { objects } = state.objectReducer;
-  const { isShapeAPISupported } = state.officeReducer;
 
   const {
     isConfirm,
@@ -313,7 +291,6 @@ export const mapStateToProps = state => {
     activeCellAddress,
     popupType,
     isDataOverviewOpen,
-    isShapeAPISupported,
   };
 };
 
@@ -412,5 +389,4 @@ RightSidePanelNotConnected.propTypes = {
   activeCellAddress: PropTypes.string,
   popupType: PropTypes.oneOf(Object.values(PopupTypeEnum)),
   isDataOverviewOpen: PropTypes.bool,
-  isShapeAPISupported: PropTypes.bool,
 };
