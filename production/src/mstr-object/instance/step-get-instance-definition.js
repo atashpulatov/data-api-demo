@@ -268,6 +268,25 @@ class StepGetInstanceDefinition {
   };
 
   /**
+   * Creates instance of a report and modifies it with given prompt answer.
+   *
+   * @param {Object} objectData Contains information about MSTR object
+   * @returns {Object} instanceDefinition Object containing information about MSTR object
+   */
+  createInstanceForReport = async objectData => {
+    if (objectData.mstrObjectType !== mstrObjectEnum.mstrObjectType.report) {
+      return;
+    }
+
+    const instanceDefinition = await mstrObjectRestService.createInstance(objectData);
+
+    return this.modifyInstanceWithPrompt({
+      instanceDefinition,
+      ...objectData,
+    });
+  };
+
+  /**
    * Answers prompts and modify instance of the object.
    *
    * @param {Object} instanceDefinition Object containing information about MSTR object

@@ -351,8 +351,6 @@ class PopupController {
 
   handleOkCommand = async (response: DialogResponse): Promise<void> => {
     if (response.chosenObject) {
-      const objectWorkingId = Date.now();
-
       const objectData = {
         name: response.chosenObjectName,
         dossierData: response.dossierData,
@@ -368,25 +366,31 @@ class PopupController {
         displayAttrFormNames: response.displayAttrFormNames,
       };
 
-      const instanceDefinition = await this.createInstanceForReport(objectData);
-      const validPageByCombinations = await this.getPageByElements(objectData, instanceDefinition);
+      const instanceDefinition =
+        await stepGetInstanceDefinition.createInstanceForReport(objectData);
 
-      if (!validPageByCombinations?.length) {
+      const validPageByData = await this.getValidPageByData(objectData, instanceDefinition);
+
+      if (!validPageByData?.length) {
         return this.reduxStore.dispatch(importRequested({ ...objectData, instanceDefinition }));
       }
 
-      validPageByCombinations.forEach((combination, index) => {
+      validPageByData.forEach((validCombination, pageByIndex) => {
+        const pageByData = {
+          // pageByLink
+          // numberOfSiblings
+          numberOfAllValidCombinations: validPageByData.length,
+          elements: validCombination,
+        };
+
         this.reduxStore.dispatch(
           importRequested(
             {
               ...objectData,
               instanceDefinition,
-              pageByData: {
-                numberOfAllValidCombinations: validPageByCombinations.length,
-                elements: combination,
-              },
+              pageByData,
             },
-            objectWorkingId + index
+            pageByIndex
           )
         );
       });
@@ -485,20 +489,7 @@ class PopupController {
     }
   };
 
-  createInstanceForReport = async (objectData: any): Promise<void> => {
-    if (objectData.mstrObjectType !== mstrObjectEnum.mstrObjectType.report) {
-      return;
-    }
-
-    const instanceDefinition = await mstrObjectRestService.createInstance(objectData);
-
-    return stepGetInstanceDefinition.modifyInstanceWithPrompt({
-      instanceDefinition,
-      ...objectData,
-    });
-  };
-
-  getPageByElements = async (
+  getValidPageByData = async (
     objectData: any,
     instanceDefinition: any
   ): Promise<PageByDataElement[][]> => {
@@ -512,12 +503,12 @@ class PopupController {
       instanceDefinition.instanceId
     );
 
-    const validPageByCombinations = this.getValidPageByCombinations(pageByElements);
+    const validPageByData = this.parseValidPageByElements(pageByElements);
 
-    return validPageByCombinations;
+    return validPageByData;
   };
 
-  getValidPageByCombinations = (pageByElements: PageByResponse): PageByDataElement[][] => {
+  parseValidPageByElements = (pageByElements: PageByResponse): PageByDataElement[][] => {
     const { pageBy, validPageByElements } = pageByElements;
 
     const validPageByData: PageByDataElement[][] = [];

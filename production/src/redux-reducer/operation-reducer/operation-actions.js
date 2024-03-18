@@ -36,8 +36,8 @@ function createOperation(
   };
 }
 
-export const importRequested = (object, pageByObjectWorkingId) => {
-  const objectWorkingId = pageByObjectWorkingId ?? Date.now();
+export const importRequested = (object, pageByIndex = 0) => {
+  const objectWorkingId = Date.now() + pageByIndex;
   object.objectWorkingId = objectWorkingId;
   return {
     type: IMPORT_OPERATION,
