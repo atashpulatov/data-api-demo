@@ -367,7 +367,7 @@ class PopupController {
       };
 
       const preparedInstanceDefinition =
-        await stepGetInstanceDefinition.createInstanceForReport(objectData);
+        await stepGetInstanceDefinition.createReportInstance(objectData);
 
       const validPageByData = await this.getValidPageByData(objectData, preparedInstanceDefinition);
 
@@ -381,7 +381,6 @@ class PopupController {
         const pageByData = {
           // pageByLink
           // numberOfSiblings
-          numberOfAllValidCombinations: validPageByData.length,
           elements: validCombination,
         };
 

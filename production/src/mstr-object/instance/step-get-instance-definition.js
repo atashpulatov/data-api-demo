@@ -280,7 +280,7 @@ class StepGetInstanceDefinition {
    * @param {Object} objectData Contains information about MSTR object
    * @returns {Object} instanceDefinition Object containing information about MSTR object
    */
-  createInstanceForReport = async objectData => {
+  createReportInstance = async objectData => {
     if (objectData.mstrObjectType !== mstrObjectEnum.mstrObjectType.report) {
       return;
     }
