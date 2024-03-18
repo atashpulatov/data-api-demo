@@ -248,7 +248,6 @@ export const RightSidePanelNotConnected = ({
 
 export const mapStateToProps = state => {
   const { importRequested, dossierOpenRequested } = state.navigationTree;
-  const { operations } = state.operationReducer;
   const { globalNotification, notifications } = state.notificationReducer;
   const { repromptsQueue } = state.repromptsQueueReducer;
   const { popupType, isDataOverviewOpen } = state.popupStateReducer;
@@ -269,7 +268,6 @@ export const mapStateToProps = state => {
 
   return {
     loadedObjects: objects,
-    operations,
     importRequested,
     dossierOpenRequested,
     isConfirm,
