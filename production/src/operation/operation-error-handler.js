@@ -1,3 +1,4 @@
+import { officeApiCrosstabHelper } from '../office/api/office-api-crosstab-helper';
 import { officeRemoveHelper } from '../office/remove/office-remove-helper';
 import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
@@ -56,14 +57,20 @@ class OperationErrorHandler {
     const { officeTable, excelContext } = operationData;
 
     if (officeTable) {
-      officeTable.showHeaders = true;
-      await officeRemoveHelper.removeExcelTable(
+      await officeApiCrosstabHelper.clearCrosstabRange(
         officeTable,
+        {
+          crosstabHeaderDimensions: {},
+          isCrosstab,
+          prevCrosstabDimensions: crosstabHeaderDimensions,
+        },
         excelContext,
-        isCrosstab,
-        crosstabHeaderDimensions,
         false
       );
+
+      officeTable.showHeaders = true; // check if needed
+
+      await officeRemoveHelper.removeExcelTable(officeTable, excelContext, false);
     }
 
     // delete image if it was created

@@ -1,5 +1,4 @@
 import { homeHelper } from '../../home/home-helper';
-import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 
 import officeStoreObject from '../store/office-store-object';
@@ -10,54 +9,33 @@ class OfficeRemoveHelper {
   /**
    * Get object from store based on bindId and remove it from workbook
    *
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {Object} object Contains information obout the object
-   * @param {Boolean} isClear specify if object should be cleared or deleted
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param object Contains information obout the object
+   * @param isClear specify if object should be cleared or deleted
    */
-  removeOfficeTableBody = async (excelContext, object, isClear) => {
-    const { isCrosstab, crosstabHeaderDimensions } = object;
+  async removeOfficeTableBody(
+    excelContext: Excel.RequestContext,
+    object: any,
+    isClear: boolean
+  ): Promise<void> {
     const officeTable = excelContext.workbook.tables.getItem(object.bindId);
-    await this.removeExcelTable(
-      officeTable,
-      excelContext,
-      isCrosstab,
-      crosstabHeaderDimensions,
-      isClear
-    );
-  };
+    await this.removeExcelTable(officeTable, excelContext, isClear);
+  }
 
   /**
    * Remove Excel table object from workbook. For crosstab reports will also clear the headers
    *
-   * @param {Office} officeTable Address of the first cell in report (top left)
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {Boolean} isCrosstab Specify if object is a crosstab
-   * @param {Object} crosstabHeaderDimensions Contains dimensions of crosstab report headers
-   * @param {Boolean} isClear Specify if object should be cleared or deleted. False by default
+   * @param officeTable Address of the first cell in report (top left)
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param isClear Specify if object should be cleared or deleted. False by default
    */
-  removeExcelTable = async (
-    officeTable,
-    excelContext,
-    isCrosstab,
-    crosstabHeaderDimensions = {},
+  async removeExcelTable(
+    officeTable: Excel.Table,
+    excelContext: Excel.RequestContext,
     isClear = false
-  ) => {
+  ): Promise<void> {
     const tableRange = officeTable.getDataBodyRange();
     excelContext.trackedObjects.add(tableRange);
-
-    if (isCrosstab) {
-      await officeApiCrosstabHelper.clearCrosstabRange(
-        officeTable,
-        {
-          crosstabHeaderDimensions: {},
-          isCrosstab,
-          prevCrosstabDimensions: crosstabHeaderDimensions,
-        },
-        excelContext,
-        isClear
-      );
-      await excelContext.sync();
-    }
 
     if (!isClear) {
       excelContext.runtime.enableEvents = false;
@@ -70,31 +48,39 @@ class OfficeRemoveHelper {
 
       excelContext.runtime.enableEvents = true;
     } else {
-      tableRange.clear('contents');
+      tableRange.clear('Contents');
     }
 
     excelContext.trackedObjects.remove(tableRange);
     await excelContext.sync();
-  };
+  }
 
-  deleteTableInChunks = async (excelContext, officeTable) => {
+  async deleteTableInChunks(
+    excelContext: Excel.RequestContext,
+    officeTable: Excel.Table
+  ): Promise<void> {
     const deleteChunkSize = 10000;
     this.deleteRowsInChunks(excelContext, officeTable, deleteChunkSize, deleteChunkSize);
 
     officeTable.delete();
     await excelContext.sync();
-  };
+  }
 
   /**
    * Deletes redundant rows in office table.
    *
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {Object} officeTable Previous office table to refresh
-   * @param {number} chunkSize Number of rows to delete in one chunk
-   * @param {number} rowsToPreserveCount Number of rows to preserve
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param officeTable Previous office table to refresh
+   * @param chunkSize Number of rows to delete in one chunk
+   * @param rowsToPreserveCount Number of rows to preserve
    *
    */
-  deleteRowsInChunks = async (excelContext, officeTable, chunkSize, rowsToPreserveCount) => {
+  async deleteRowsInChunks(
+    excelContext: Excel.RequestContext,
+    officeTable: Excel.Table,
+    chunkSize: number,
+    rowsToPreserveCount: number
+  ): Promise<void> {
     const tableRows = officeTable.rows;
 
     let tableRowCount = await officeApiDataLoader.loadSingleExcelData(
@@ -125,38 +111,37 @@ class OfficeRemoveHelper {
       );
       excelContext.workbook.application.suspendApiCalculationUntilNextSync();
     }
-  };
+  }
 
   /**
    * Checks if the object existing in Excel workbook
    *
-   * @param {Function} t i18n translating function
-   * @param {Object} object Contains information obout the object
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @return {Boolean}
+   * @param object Contains information obout the object
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @return True if object exists, false otherwise
    */
-  checkIfObjectExist = async (object, excelContext) => {
+  async checkIfObjectExist(object: any, excelContext: Excel.RequestContext): Promise<boolean> {
     try {
-      await officeApiHelper.getTable(excelContext, object.bindId);
+      officeApiHelper.getTable(excelContext, object.bindId);
       await excelContext.sync();
       return true;
     } catch (error) {
       return false;
     }
-  };
+  }
 
   /**
    * Remove objects that no longer exists in the Excel workbook from the store
    *
-   * @param {Object} object Contains information obout the object
-   * @param {Office} officeContext Excel context
+   * @param object Contains information obout the object
+   * @param officeContext Excel context
    */
-  removeObjectNotExistingInExcel = async (object, officeContext) => {
+  async removeObjectNotExistingInExcel(object: any, officeContext: Office.Context): Promise<void> {
     officeStoreObject.removeObjectFromStore(object.objectWorkingId);
     await officeContext.document.bindings.releaseByIdAsync(object.bindId, () => {
       console.log('released binding');
     });
-  };
+  }
 }
 
 export const officeRemoveHelper = new OfficeRemoveHelper();

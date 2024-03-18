@@ -24,42 +24,27 @@ const objectList = {
     projectId: 'B7CA92F04B9FAE8D941C3E9B7E0CD754',
     body: {
       viewFilter: {
-        operator: 'And',
         operands: [
           {
-            operator: 'In',
             operands: [
-              {
-                type: 'attribute',
-                id: '8D679D4411D3E4981000E787EC6DE8A4',
-              },
+              { type: 'attribute', id: '8D679D4411D3E4981000E787EC6DE8A4' },
               {
                 type: 'elements',
                 elements: [
-                  { id: '8D679D4411D3E4981000E787EC6DE8A4:201401' },
-                  { id: '8D679D4411D3E4981000E787EC6DE8A4:201402' },
-                  { id: '8D679D4411D3E4981000E787EC6DE8A4:201403' },
+                  { id: '8D679D4411D3E4981000E787EC6DE8A4:202002' },
+                  { id: '8D679D4411D3E4981000E787EC6DE8A4:202004' },
+                  { id: '8D679D4411D3E4981000E787EC6DE8A4:202006' },
+                  { id: '8D679D4411D3E4981000E787EC6DE8A4:202008' },
+                  { id: '8D679D4411D3E4981000E787EC6DE8A4:202010' },
+                  { id: '8D679D4411D3E4981000E787EC6DE8A4:202012' },
+                  { id: '8D679D4411D3E4981000E787EC6DE8A4:202102' },
                 ],
               },
             ],
-          },
-          {
             operator: 'In',
-            operands: [
-              {
-                type: 'attribute',
-                id: '8D679D4F11D3E4981000E787EC6DE8A4',
-              },
-              {
-                type: 'elements',
-                elements: [
-                  { id: '8D679D4F11D3E4981000E787EC6DE8A4:11' },
-                  { id: '8D679D4F11D3E4981000E787EC6DE8A4:12' },
-                ],
-              },
-            ],
           },
         ],
+        operator: 'And',
       },
     },
   },
@@ -115,7 +100,7 @@ export const DevelopmentImportList = (): React.ReactElement => (
   <div className='refresh-button-container'>
     <button
       type='button'
-      onClick={() => sessionHelper.importObjectWithouPopup(objectList.SeasonalReport)}
+      onClick={() => sessionHelper.importObjectWithouPopup(objectList.Crosstab123)}
     >
       Quick Import
     </button>

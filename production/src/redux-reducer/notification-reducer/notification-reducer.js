@@ -3,7 +3,7 @@ import { ObjectNotificationTypes } from '@mstr/connector-components';
 
 import { notificationService } from '../../notification/notification-service';
 
-import { customT } from '../../customTranslation';
+import i18n from '../../i18n';
 import { getNotificationButtons } from '../../notification/notification-buttons';
 import {
   DISPLAY_NOTIFICATION_COMPLETED,
@@ -33,7 +33,7 @@ import {
   titleOperationFailedMap,
   titleOperationInProgressMap,
 } from './notification-title-maps';
-import { errorMessages } from '../../error/constants';
+import { ErrorMessages } from '../../error/constants';
 
 const initialState = { notifications: [], globalNotification: { type: '' } };
 
@@ -91,7 +91,7 @@ const createProgressNotification = (state, payload) => {
   }
   const newNotification = {
     objectWorkingId,
-    title: customT(titleOperationInProgressMap.PENDING_OPERATION),
+    title: i18n.t(titleOperationInProgressMap.PENDING_OPERATION),
     type: ObjectNotificationTypes.PROGRESS,
     operationType,
     children: notificationButtons,
@@ -106,7 +106,7 @@ const moveNotificationToInProgress = (state, payload) => {
   );
   const updatedNotification = {
     ...notificationToUpdate,
-    title: customT(titleOperationInProgressMap[notificationToUpdate.operationType]),
+    title: i18n.t(titleOperationInProgressMap[notificationToUpdate.operationType]),
     isIndeterminate: getIsIndeterminate(notificationToUpdate),
   };
   delete updatedNotification.children;
@@ -121,7 +121,7 @@ const displayNotificationCompleted = (state, payload) => {
   const updatedNotification = {
     ...notificationToUpdate,
     type: ObjectNotificationTypes.SUCCESS,
-    title: customT(titleOperationCompletedMap[notificationToUpdate.operationType]),
+    title: i18n.t(titleOperationCompletedMap[notificationToUpdate.operationType]),
     dismissNotification:
       notificationToUpdate.operationType === REMOVE_OPERATION
         ? () =>
@@ -156,8 +156,8 @@ const displayNotificationWarning = (state, payload) => {
   const updatedNotification = {
     objectWorkingId: payload.objectWorkingId,
     type: ObjectNotificationTypes.WARNING,
-    title: customT(title),
-    details: customT(payload.notification.message),
+    title: i18n.t(title),
+    details: i18n.t(payload.notification.message),
     children: getNotificationButtons(buttons),
     callback: payload.notification.callback,
     operationType: notificationToUpdate.operationType,
@@ -182,10 +182,10 @@ const markFetchingComplete = (state, payload) => {
 };
 
 const createGlobalNotification = (state, payload) => {
-  payload.title = customT(payload.title);
+  payload.title = i18n.t(payload.title);
 
   if (payload.details) {
-    payload.details = customT(payload.details);
+    payload.details = i18n.t(payload.details);
   }
 
   return { ...state, globalNotification: payload };
@@ -213,7 +213,7 @@ const restoreAllNotifications = (state, payload) => ({
 const getOkButton = payload => [
   {
     type: 'basic',
-    label: customT('OK'),
+    label: i18n.t('OK'),
     onClick: payload.notification.callback,
   },
 ];
@@ -221,7 +221,7 @@ const getOkButton = payload => [
 const getCancelButton = (objectWorkingId, operationType) => [
   {
     type: 'basic',
-    label: customT('Cancel'),
+    label: i18n.t('Cancel'),
     onClick: () => {
       if (operationType === IMPORT_OPERATION) {
         notificationService.removeObjectFromNotification(objectWorkingId);
@@ -233,7 +233,7 @@ const getCancelButton = (objectWorkingId, operationType) => [
 ];
 
 function getTitle(payload, notificationToUpdate) {
-  return payload.notification.title === errorMessages.GENERIC_SERVER_ERR
+  return payload.notification.title === ErrorMessages.GENERIC_SERVER_ERR
     ? titleOperationFailedMap[notificationToUpdate.operationType]
     : payload.notification.title;
 }

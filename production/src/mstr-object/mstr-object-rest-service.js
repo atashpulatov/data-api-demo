@@ -6,7 +6,7 @@ import mstrAttributeMetricHelper from './helper/mstr-attribute-metric-helper';
 
 import { OutsideOfRangeError } from '../error/outside-of-range-error';
 import mstrObjectEnum from './mstr-object-type-enum';
-import { errorMessages } from '../error/constants';
+import { ErrorMessages } from '../error/constants';
 
 const reportObjectType = mstrObjectEnum.mstrObjectType.report;
 
@@ -34,7 +34,7 @@ function parseInstanceDefinition(res, attrforms) {
   const { instanceId, data, internal } = body;
   body.attrforms = attrforms;
   if (data.paging.total === 0) {
-    throw new Error(errorMessages.NO_DATA_RETURNED);
+    throw new Error(ErrorMessages.NO_DATA_RETURNED);
   }
   const mstrTable = officeConverterServiceV2.createTable(body);
   const { rows, columns } = checkTableDimensions(mstrTable.tableSize);
@@ -95,7 +95,7 @@ function fetchObjectContent(
   limit = -1
 ) {
   if (limit > IMPORT_ROW_LIMIT || offset > EXCEL_ROW_LIMIT) {
-    throw new Error(errorMessages.PROBLEM_WITH_REQUEST);
+    throw new Error(ErrorMessages.PROBLEM_WITH_REQUEST);
   }
   const contentFields = getFetchObjectContentFields(visualizationType);
   const validPath = encodeURI(
@@ -130,7 +130,7 @@ async function fetchContentPart(fullPath, authToken, projectId, offset, limit, v
     limit
   );
   if (!fetchedBody.data || !fetchedBody.data.paging) {
-    throw new Error(errorMessages.NO_DATA_RETURNED);
+    throw new Error(ErrorMessages.NO_DATA_RETURNED);
   }
   return fetchedBody;
 }

@@ -1,5 +1,4 @@
 import { homeHelper } from '../../home/home-helper';
-import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 import { officeRemoveHelper } from './office-remove-helper';
 
@@ -33,13 +32,7 @@ describe('OfficeRemoveHelper', () => {
 
     // then
     expect(removeTableMock).toBeCalledTimes(1);
-    expect(removeTableMock).toBeCalledWith(
-      officeTable,
-      excelContextMock,
-      object.isCrosstab,
-      object.crosstabHeaderDimensions,
-      isClear
-    );
+    expect(removeTableMock).toBeCalledWith(officeTable, excelContextMock, object.isCrosstab);
     expect(getItemMock).toBeCalledTimes(1);
   });
 
@@ -211,15 +204,15 @@ describe('OfficeRemoveHelper', () => {
   );
 
   it.each`
-    isCrosstab | isClear      | isSafari
-    ${true}    | ${true}      | ${false}
-    ${true}    | ${false}     | ${true}
-    ${true}    | ${false}     | ${false}
-    ${false}   | ${true}      | ${false}
-    ${false}   | ${false}     | ${true}
-    ${false}   | ${false}     | ${false}
-    ${false}   | ${undefined} | ${false}
-  `('removeExcelTable should work as expected', async ({ isCrosstab, isClear, isSafari }) => {
+    isClear      | isSafari
+    ${true}      | ${false}
+    ${false}     | ${true}
+    ${false}     | ${false}
+    ${true}      | ${false}
+    ${false}     | ${true}
+    ${false}     | ${false}
+    ${undefined} | ${false}
+  `('removeExcelTable should work as expected', async ({ isClear, isSafari }) => {
     const deleteMock = jest.fn().mockImplementation();
     const excelContextSyncMock = jest.fn().mockReturnValue();
     const getDataBodyRangeMock = jest.fn().mockReturnValue({ clear: jest.fn() });
@@ -235,7 +228,6 @@ describe('OfficeRemoveHelper', () => {
       runtime: {},
     };
 
-    const crosstabHeaderDimensions = isCrosstab ? {} : undefined;
     const officeTable = {
       getDataBodyRange: getDataBodyRangeMock,
       delete: deleteMock,
@@ -244,30 +236,19 @@ describe('OfficeRemoveHelper', () => {
     const deleteTableInChunksMock = jest
       .spyOn(officeRemoveHelper, 'deleteTableInChunks')
       .mockReturnValue(0);
-    const clearCrosstabRangeMock = jest
-      .spyOn(officeApiCrosstabHelper, 'clearCrosstabRange')
-      .mockReturnValue(0);
     const isMacAndSafariBasedMock = jest
       .spyOn(homeHelper, 'isMacAndSafariBased')
       .mockReturnValue(isSafari);
 
     // when
-    await officeRemoveHelper.removeExcelTable(
-      officeTable,
-      excelContextMock,
-      isCrosstab,
-      crosstabHeaderDimensions,
-      isClear
-    );
+    await officeRemoveHelper.removeExcelTable(officeTable, excelContextMock, isClear);
 
     // then
-    const isCrosstabCalledTimes = isCrosstab ? 1 : 0;
     const isnotClearCalledTimes = !isClear ? 1 : 0;
     const deleteMockCalledTimes = !isClear && !isSafari ? 1 : 0;
     const deleteTableInChunksMockCalledTimes = !isClear && isSafari ? 1 : 0;
 
     expect(getDataBodyRangeMock).toBeCalledTimes(1);
-    expect(clearCrosstabRangeMock).toBeCalledTimes(isCrosstabCalledTimes);
     expect(isMacAndSafariBasedMock).toBeCalledTimes(isnotClearCalledTimes);
     expect(deleteMock).toBeCalledTimes(deleteMockCalledTimes);
     expect(deleteTableInChunksMock).toBeCalledTimes(deleteTableInChunksMockCalledTimes);

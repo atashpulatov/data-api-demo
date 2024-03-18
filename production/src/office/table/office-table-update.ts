@@ -10,13 +10,16 @@ class OfficeTableUpdate {
   /**
    * Updates office table if the number of columns or rows of an existing table changes.
    *
-   * @param {Object} instanceDefinition
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {string} startCell  Top left corner cell
-   * @param {Object} prevOfficeTable Previous office table to refresh
+   * @param instanceDefinition
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param prevOfficeTable Previous office table to refresh
    *
    */
-  updateOfficeTable = async (instanceDefinition, excelContext, startCell, prevOfficeTable) => {
+  async updateOfficeTable(
+    instanceDefinition: any,
+    excelContext: Excel.RequestContext,
+    prevOfficeTable: Excel.Table
+  ): Promise<any> {
     console.time('Validate existing table');
 
     const {
@@ -39,7 +42,7 @@ class OfficeTableUpdate {
       await this.validateAddedRowsRange(excelContext, rows, prevOfficeTable);
 
       if (isCrosstab) {
-        this.createHeadersForCrosstab(prevOfficeTable.worksheet, instanceDefinition, startCell);
+        this.createHeadersForCrosstab(prevOfficeTable, instanceDefinition);
       } else {
         this.setHeaderValuesNoCrosstab(excelContext, prevOfficeTable, mstrTable.headers.columns);
       }
@@ -60,14 +63,14 @@ class OfficeTableUpdate {
     } finally {
       console.timeEnd('Validate existing table');
     }
-  };
+  }
 
-  handleSubtotalsFormatting = async (
-    excelContext,
-    prevOfficeTable,
-    mstrTable,
-    subtotalsAddresses
-  ) => {
+  async handleSubtotalsFormatting(
+    excelContext: Excel.RequestContext,
+    prevOfficeTable: Excel.Table,
+    mstrTable: any,
+    subtotalsAddresses: string[]
+  ): Promise<void> {
     if (subtotalsAddresses && subtotalsAddresses.length) {
       await officeFormatSubtotals.applySubtotalFormatting(
         prevOfficeTable,
@@ -76,9 +79,13 @@ class OfficeTableUpdate {
         false
       );
     }
-  };
+  }
 
-  validateAddedRowsRange = async (excelContext, newRowsCount, prevOfficeTable) => {
+  async validateAddedRowsRange(
+    excelContext: Excel.RequestContext,
+    newRowsCount: number,
+    prevOfficeTable: Excel.Table
+  ): Promise<void> {
     const addedRowsCount = await this.getAddedRowsCount(
       excelContext,
       newRowsCount,
@@ -90,9 +97,13 @@ class OfficeTableUpdate {
       const bottomRange = prevOfficeTable.getRange().getRowsBelow(addedRowsCount);
       await officeTableHelperRange.checkRangeValidity(excelContext, bottomRange);
     }
-  };
+  }
 
-  getAddedRowsCount = async (excelContext, newRowsCount, prevOfficeTableRows) => {
+  async getAddedRowsCount(
+    excelContext: Excel.RequestContext,
+    newRowsCount: number,
+    prevOfficeTableRows: Excel.TableRowCollection
+  ): Promise<number> {
     const prevRowsCount = await officeApiDataLoader.loadSingleExcelData(
       excelContext,
       prevOfficeTableRows,
@@ -100,26 +111,29 @@ class OfficeTableUpdate {
     );
 
     return Math.max(0, newRowsCount - prevRowsCount);
-  };
+  }
 
-  createHeadersForCrosstab = (sheet, instanceDefinition, startCell) => {
+  createHeadersForCrosstab(prevOfficeTable: Excel.Table, instanceDefinition: any): void {
     const crosstabHeaderDimensions =
       officeApiCrosstabHelper.getCrosstabHeaderDimensions(instanceDefinition);
 
     const { mstrTable } = instanceDefinition;
     officeApiCrosstabHelper.createCrosstabHeaders(
-      startCell,
+      prevOfficeTable,
       mstrTable,
-      sheet,
       crosstabHeaderDimensions
     );
-  };
+  }
 
-  setHeaderValuesNoCrosstab = (excelContext, prevOfficeTable, headerColumns) => {
+  setHeaderValuesNoCrosstab(
+    excelContext: Excel.RequestContext,
+    prevOfficeTable: Excel.Table,
+    headerColumns: string[][]
+  ): void {
     excelContext.workbook.application.suspendApiCalculationUntilNextSync();
 
     prevOfficeTable.getHeaderRowRange().values = [headerColumns[headerColumns.length - 1]];
-  };
+  }
 }
 
 const officeTableUpdate = new OfficeTableUpdate();

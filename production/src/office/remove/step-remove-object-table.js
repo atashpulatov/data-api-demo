@@ -29,7 +29,6 @@ class StepRemoveObjectTable {
 
     let excelContext;
     let objectExist;
-    let clearEmptyCrosstabRowError;
 
     try {
       excelContext = await officeApiHelper.getExcelContext();
@@ -40,6 +39,7 @@ class StepRemoveObjectTable {
       } else {
         const officeTable = excelContext.workbook.tables.getItem(bindId);
 
+        // Move crosstab logic to separete step
         const { validColumnsY, validRowsX } =
           await officeApiCrosstabHelper.getCrosstabHeadersSafely(
             crosstabHeaderDimensions,
@@ -49,25 +49,30 @@ class StepRemoveObjectTable {
 
         const validCrosstabHeaderDimnesions = {
           ...crosstabHeaderDimensions,
-          columnsY: validColumnsY - 1,
+          columnsY: validColumnsY,
           rowsX: validRowsX,
         };
 
-        await officeRemoveHelper.removeExcelTable(
+        await officeApiCrosstabHelper.clearCrosstabRange(
           officeTable,
+          {
+            crosstabHeaderDimensions: {},
+            isCrosstab,
+            prevCrosstabDimensions: validCrosstabHeaderDimnesions,
+          },
           excelContext,
-          isCrosstab,
-          validCrosstabHeaderDimnesions
+          false
         );
+
+        await officeRemoveHelper.removeExcelTable(officeTable, excelContext, false);
 
         operationStepDispatcher.completeRemoveObjectTable(objectWorkingId);
       }
     } catch (error) {
-      const errorToHandle = clearEmptyCrosstabRowError || error;
       if (objectExist) {
-        operationErrorHandler.handleOperationError(objectData, operationData, errorToHandle);
+        operationErrorHandler.handleOperationError(objectData, operationData, error);
       } else {
-        console.error(errorToHandle);
+        console.error(error);
         operationStepDispatcher.completeRemoveObjectTable(objectWorkingId);
       }
     }

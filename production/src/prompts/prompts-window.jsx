@@ -25,7 +25,7 @@ import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { PromptsContainer } from './prompts-container';
-import { errorMessages } from '../error/constants';
+import { ErrorMessages } from '../error/constants';
 import { objectImportType } from '../mstr-object/constants';
 
 import '../home/home.css';
@@ -376,7 +376,7 @@ export const PromptsWindowNotConnected = props => {
       scriptInjectionHelper.watchForIframeAddition(localContainer, onIframeLoad);
 
       if (!microstrategy?.dossier) {
-        console.warn(errorMessages.MICROSTRATEGY_API_MISSING);
+        console.warn(ErrorMessages.MICROSTRATEGY_API_MISSING);
         return;
       }
 
