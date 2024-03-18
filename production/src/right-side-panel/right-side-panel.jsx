@@ -1,10 +1,14 @@
 // issue with proptype import
 // eslint-disable-next-line simple-import-sort/imports
-import React, { useEffect } from 'react';
+import { useEffect, useState, useReducer } from 'react';
 import { connect } from 'react-redux';
 import { PopupTypes, SidePanel } from '@mstr/connector-components';
-
 import PropTypes from 'prop-types';
+import {
+  operationReducer,
+  initialState as operationState,
+} from '../redux-reducer/operation-reducer/operation-reducer';
+
 import { notificationService } from '../notification/notification-service';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
@@ -17,15 +21,6 @@ import { Confirmation } from '../home/confirmation';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import { SettingsMenu } from '../home/settings-menu';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import {
-  CLEAR_DATA_OPERATION,
-  DUPLICATE_OPERATION,
-  EDIT_OPERATION,
-  HIGHLIGHT_OPERATION,
-  IMPORT_OPERATION,
-  REFRESH_OPERATION,
-  REMOVE_OPERATION,
-} from '../operation/operation-type-names';
 import { popupController } from '../popup/popup-controller';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
@@ -46,7 +41,6 @@ export const RightSidePanelNotConnected = ({
   updateActiveCellAddress,
   globalNotification,
   notifications,
-  operations,
   popupData,
   isDialogRendered,
   isDialogLoaded,
@@ -55,9 +49,11 @@ export const RightSidePanelNotConnected = ({
   popupType,
   isDataOverviewOpen,
 }) => {
-  const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
-  const [duplicatedObjectId, setDuplicatedObjectId] = React.useState(null);
-  const [loadedObjectsWrapped, setLoadedObjectsWrapped] = React.useState(loadedObjects);
+  const [sidePanelPopup, setSidePanelPopup] = useState(null);
+  const [duplicatedObjectId, setDuplicatedObjectId] = useState(null);
+  const [loadedObjectsWrapped, setLoadedObjectsWrapped] = useState(loadedObjects);
+
+  const [{ operations }] = useReducer(operationReducer, operationState);
 
   const duplicatePopupParams = {
     activeCellAddress,
@@ -65,7 +61,7 @@ export const RightSidePanelNotConnected = ({
     setSidePanelPopup,
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     async function initializeSidePanel() {
       try {
         await sidePanelEventHelper.addRemoveObjectListener();
@@ -79,17 +75,17 @@ export const RightSidePanelNotConnected = ({
     sidePanelService.clearRepromptTask();
   }, [updateActiveCellAddress]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     officeStoreHelper.isFileSecured() && toggleSecuredFlag(true);
     officeStoreHelper.isClearDataFailed() && toggleIsClearDataFailedFlag(true);
   }, [toggleSecuredFlag, toggleIsClearDataFailedFlag]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setSidePanelPopup(sidePanelNotificationHelper.setClearDataPopups());
   }, [isSecured, isClearDataFailed]);
 
   // Updates the activeCellAddress in duplicate popup if this popup is opened.
-  React.useEffect(() => {
+  useEffect(() => {
     if (
       sidePanelPopup !== null &&
       sidePanelPopup.type === PopupTypes.DUPLICATE &&
@@ -126,7 +122,7 @@ export const RightSidePanelNotConnected = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeCellAddress, popupData]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setLoadedObjectsWrapped(() =>
       sidePanelNotificationHelper.injectNotificationsToObjects(
         loadedObjects,
@@ -346,31 +342,6 @@ RightSidePanelNotConnected.propTypes = {
       details: PropTypes.string,
       percentage: PropTypes.number,
       dismissNotification: PropTypes.func,
-    })
-  ),
-  operations: PropTypes.arrayOf(
-    PropTypes.shape({
-      operationType: PropTypes.oneOf([
-        IMPORT_OPERATION,
-        REFRESH_OPERATION,
-        EDIT_OPERATION,
-        DUPLICATE_OPERATION,
-        CLEAR_DATA_OPERATION,
-        HIGHLIGHT_OPERATION,
-        REMOVE_OPERATION,
-      ]),
-      objectWorkingId: PropTypes.number,
-      stepsQueue: PropTypes.arrayOf(PropTypes.string),
-      backupObjectData: PropTypes.shape({}),
-      objectEditedData: PropTypes.shape({}),
-      instanceDefinition: PropTypes.shape({}),
-      startCell: PropTypes.string,
-      excelContext: PropTypes.shape({}),
-      officeTable: PropTypes.shape({}),
-      tableChanged: PropTypes.boolean,
-      totalRows: PropTypes.number,
-      loadedRows: PropTypes.number,
-      shouldFormat: PropTypes.bool,
     })
   ),
   isConfirm: PropTypes.bool,

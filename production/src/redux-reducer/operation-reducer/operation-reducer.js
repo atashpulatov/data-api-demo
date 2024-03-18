@@ -12,7 +12,7 @@ import {
   UPDATE_OPERATION,
 } from '../../operation/operation-type-names';
 
-const initialState = { operations: [] };
+export const initialState = { operations: [] };
 
 export const operationReducer = (state = initialState, action = {}) => {
   switch (action.type) {
