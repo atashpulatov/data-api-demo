@@ -254,8 +254,13 @@ class StepGetInstanceDefinition {
    * @param {Object} pageByData Contains information about page-by elements
    * @param {Object} instanceDefinition Object containing information about MSTR object
    * @param {Object} body Contains requested objects and filters.
+   * @returns {Object} instanceDefinition Object containing information about MSTR object
    */
   modifyInstanceForPageBy = async (objectData, pageByData, instanceDefinition, body) => {
+    if (!pageByData) {
+      return instanceDefinition;
+    }
+
     const currentPageBy = pageByData?.elements.map(value => ({ id: value.valueId }));
 
     const configInstance = {
