@@ -101,11 +101,7 @@ const createProgressNotification = (state, payload) => {
     operationType,
     children: notificationButtons,
   };
-
-  // DE288915: Changed order of how notifications are displayed by reversing the order of the array
-  // to display the most recent notification on top of the list and ignored lingering notifications
-  // associated to given objectWorkingId.
-  return { ...state, notifications: [newNotification, ...stateNotifications] };
+  return { ...state, notifications: [...stateNotifications, newNotification] };
 };
 
 const moveNotificationToInProgress = (state, payload) => {
