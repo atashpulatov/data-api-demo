@@ -2,7 +2,12 @@ import { authenticationHelper } from '../authentication/authentication-helper';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { officeApiHelper } from '../office/api/office-api-helper';
 
-import { DialogResponse, ReportParams } from './popup-controller-types';
+import {
+  DialogResponse,
+  PageByDataElement,
+  PageByResponse,
+  ReportParams,
+} from './popup-controller-types';
 
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { errorService } from '../error/error-handler';
@@ -480,7 +485,7 @@ class PopupController {
     }
   };
 
-  createInstanceForReport = async objectData => {
+  createInstanceForReport = async (objectData: any): Promise<void> => {
     if (objectData.mstrObjectType !== mstrObjectEnum.mstrObjectType.report) {
       return;
     }
@@ -493,7 +498,10 @@ class PopupController {
     });
   };
 
-  getPageByElements = async (objectData, instanceDefinition) => {
+  getPageByElements = async (
+    objectData: any,
+    instanceDefinition: any
+  ): Promise<PageByDataElement[][]> => {
     if (objectData.mstrObjectType !== mstrObjectEnum.mstrObjectType.report) {
       return;
     }
@@ -504,28 +512,27 @@ class PopupController {
       instanceDefinition.instanceId
     );
 
-    const validPageByCombinations = this.getValidPageByCombinations(
-      pageByElements.pageBy,
-      pageByElements.validPageByElements?.items
-    );
+    const validPageByCombinations = this.getValidPageByCombinations(pageByElements);
 
     return validPageByCombinations;
   };
 
-  getValidPageByCombinations = (elementList, validCombinations) => {
-    const validPageByIds = [];
+  getValidPageByCombinations = (pageByElements: PageByResponse): PageByDataElement[][] => {
+    const { pageBy, validPageByElements } = pageByElements;
 
-    validCombinations?.forEach(combination => {
-      const ids = combination.map((value, index) => ({
-        name: elementList[index].name,
-        value: elementList[index].elements[value].formValues[0],
-        valueId: elementList[index].elements[value].id,
+    const validPageByData: PageByDataElement[][] = [];
+
+    validPageByElements?.items?.forEach(combination => {
+      const pageByDataElement: PageByDataElement[] = combination.map((value, index) => ({
+        name: pageBy[index].name,
+        value: pageBy[index].elements[value].formValues[0],
+        valueId: pageBy[index].elements[value].id,
       }));
 
-      validPageByIds.push(ids);
+      validPageByData.push(pageByDataElement);
     });
 
-    return validPageByIds;
+    return validPageByData;
   };
 }
 
