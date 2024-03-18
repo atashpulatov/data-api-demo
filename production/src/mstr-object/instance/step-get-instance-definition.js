@@ -48,7 +48,7 @@ class StepGetInstanceDefinition {
         isPrompted,
         definition,
         importType,
-        instanceDefinition: reportDefinition,
+        preparedInstanceDefinition,
         pageByData,
       } = objectData;
       let { visualizationInfo, body, name } = objectData;
@@ -58,7 +58,7 @@ class StepGetInstanceDefinition {
       this.setupBodyTemplate(body);
 
       let startCell;
-      let instanceDefinition = reportDefinition;
+      let instanceDefinition = preparedInstanceDefinition;
       let shouldRenameExcelWorksheet = false;
 
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
@@ -73,12 +73,12 @@ class StepGetInstanceDefinition {
           name,
           instanceDefinition
         );
-      } else if (!reportDefinition) {
+      } else if (!preparedInstanceDefinition) {
         instanceDefinition = await mstrObjectRestService.createInstance(objectData);
       }
 
       // TODO check if dossierData is still needed
-      if (!reportDefinition) {
+      if (!preparedInstanceDefinition) {
         instanceDefinition = await this.modifyInstanceWithPrompt({
           ...objectData,
           instanceDefinition,
@@ -154,6 +154,8 @@ class StepGetInstanceDefinition {
           isPrompted ? ErrorMessages.ALL_DATA_FILTERED_OUT : ErrorMessages.NO_DATA_RETURNED
         );
       }
+
+      delete objectData.preparedInstanceDefinition;
 
       operationStepDispatcher.updateOperation(updatedOperation);
       operationStepDispatcher.updateObject(updatedObject);

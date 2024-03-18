@@ -366,13 +366,15 @@ class PopupController {
         displayAttrFormNames: response.displayAttrFormNames,
       };
 
-      const instanceDefinition =
+      const preparedInstanceDefinition =
         await stepGetInstanceDefinition.createInstanceForReport(objectData);
 
-      const validPageByData = await this.getValidPageByData(objectData, instanceDefinition);
+      const validPageByData = await this.getValidPageByData(objectData, preparedInstanceDefinition);
 
       if (!validPageByData?.length) {
-        return this.reduxStore.dispatch(importRequested({ ...objectData, instanceDefinition }));
+        return this.reduxStore.dispatch(
+          importRequested({ ...objectData, preparedInstanceDefinition })
+        );
       }
 
       validPageByData.forEach((validCombination, pageByIndex) => {
@@ -387,7 +389,7 @@ class PopupController {
           importRequested(
             {
               ...objectData,
-              instanceDefinition,
+              preparedInstanceDefinition,
               pageByData,
             },
             pageByIndex
