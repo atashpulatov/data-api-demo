@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
+// @ts-expect-error mstr-react-library is a js codebase
 import { libraryErrorController } from '@mstr/mstr-react-library';
 
 import { popupHelper } from './popup-helper';
@@ -9,7 +10,7 @@ import InternetConnectionError from './internet-connection-error';
 import { PopupViewSelector } from './popup-view-selector';
 import { SessionExtendingWrapper } from './session-extending-wrapper';
 
-export const Popup = () => {
+export const Popup: React.FC = () => {
   useEffect(() => {
     libraryErrorController.initializeHttpErrorsHandling(popupHelper.handlePopupErrors);
   }, []);

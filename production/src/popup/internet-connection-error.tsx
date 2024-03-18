@@ -3,18 +3,20 @@ import { ConnectionError } from '@mstr/connector-components';
 
 import './internet-connection.scss';
 
-const InternetConnectionError = () => {
+const InternetConnectionError: React.FC = () => {
   const [status, setStatus] = useState(window.navigator.onLine);
 
   useEffect(() => {
-    const handleConnectionChange = () =>
+    const handleConnectionChange = (): void =>
       window.navigator.onLine ? setStatus(true) : setStatus(false);
+
     window.addEventListener('online', handleConnectionChange);
     window.addEventListener('offline', handleConnectionChange);
-    return (
-      () => window.removeEventListener('online', handleConnectionChange),
-      () => window.removeEventListener('offline', handleConnectionChange)
-    );
+
+    return () => {
+      window.removeEventListener('online', handleConnectionChange);
+      window.removeEventListener('offline', handleConnectionChange);
+    };
   }, [status]);
 
   return status ? null : (
