@@ -1,16 +1,13 @@
-// issue with proptype import
-// eslint-disable-next-line simple-import-sort/imports
 import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import {
   DataOverview,
-  OfficeApplicationType,
   ObjectNotificationTypes,
+  OfficeApplicationType,
 } from '@mstr/connector-components';
 import { Button } from '@mstr/rc';
 
-import PropTypes from 'prop-types';
 import useStateSyncOnDialogMessage from './use-state-sync-on-dialog-message';
 
 import { popupHelper } from '../popup-helper';
@@ -28,7 +25,28 @@ import {
 
 import './overview-window.scss';
 
-export const OverviewWindowNotConnected = props => {
+interface OverviewWindowProps {
+  onImport?: () => void;
+  onRefresh?: (objectWorkingIds: number[]) => Promise<void>;
+  onEdit?: (objectWorkingId: number) => Promise<void>;
+  onReprompt?: (objectWorkingIds: number[]) => Promise<void>;
+  onDelete?: (objectWorkingIds: number[]) => Promise<void>;
+  onDuplicate?: (
+    objectWorkingIds: number[],
+    insertNewWorksheet: boolean,
+    withEdit: boolean
+  ) => void;
+  onRename?: (objectWorkingId: number, newName: string) => Promise<void>;
+  onGoToWorksheet?: (objectWorkingId: number) => Promise<void>;
+  onDismissNotification?: (objectWorkingIds: number[]) => Promise<void>;
+  objects?: Array<Record<string, unknown>>;
+  notifications?: Array<Record<string, unknown>>;
+  globalNotification?: Record<string, unknown>;
+  popupData?: { objectWorkingId: number };
+  activeCellAddress?: string;
+}
+
+export const OverviewWindowNotConnected: React.FC<OverviewWindowProps> = props => {
   const {
     objects,
     notifications,
@@ -71,25 +89,32 @@ export const OverviewWindowNotConnected = props => {
     [notifications, globalNotification]
   );
 
-  const handleCloseDialog = () => {
+  const handleCloseDialog = (): void => {
     const { commandCloseDialog } = selectorProperties;
     const message = { command: commandCloseDialog };
     popupHelper.officeMessageParent(message);
   };
 
-  const handleDuplicate = objectWorkingId =>
-    overviewHelper.setDuplicatePopup({
-      objectWorkingId,
-      activeCellAddress,
-      onDuplicate,
-      setDialogPopup,
+  const handleDuplicate = async (objectWorkingIds: number[]): Promise<void> =>
+    new Promise((resolve, reject) => {
+      try {
+        overviewHelper.setDuplicatePopup({
+          objectWorkingIds,
+          activeCellAddress,
+          onDuplicate,
+          setDialogPopup,
+        });
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
     });
 
   // TODO: Move logic for controlling popup visibility to Redux
   useEffect(() => {
     if (popupData) {
       overviewHelper.setRangeTakenPopup({
-        objectWorkingId: popupData.objectWorkingId,
+        objectWorkingIds: [popupData.objectWorkingId],
         setDialogPopup,
       });
     } else {
@@ -104,9 +129,9 @@ export const OverviewWindowNotConnected = props => {
           notification.type === ObjectNotificationTypes.SUCCESS &&
           notification.operationType === REMOVE_OPERATION
         ) {
-          onDismissNotification([notification.objectWorkingId]);
+          onDismissNotification([notification.objectWorkingId as number]);
         }
-      }, [500]);
+      }, 500);
     });
   }, [notifications, objects, onDismissNotification]);
 
@@ -134,24 +159,11 @@ export const OverviewWindowNotConnected = props => {
   );
 };
 
-OverviewWindowNotConnected.propTypes = {
-  onImport: PropTypes.func,
-  onRefresh: PropTypes.func,
-  onEdit: PropTypes.func,
-  onReprompt: PropTypes.func,
-  onDelete: PropTypes.func,
-  onDuplicate: PropTypes.func,
-  onRename: PropTypes.func,
-  onGoToWorksheet: PropTypes.func,
-  onDismissNotification: PropTypes.func,
-  objects: PropTypes.arrayOf(PropTypes.shape({})),
-  notifications: PropTypes.arrayOf(PropTypes.shape({})),
-  globalNotification: PropTypes.shape({}),
-  popupData: PropTypes.shape({ objectWorkingId: PropTypes.number }),
-  activeCellAddress: PropTypes.string,
-};
-
-export const mapStateToProps = ({ objectReducer, notificationReducer, officeReducer }) => {
+export const mapStateToProps = ({
+  objectReducer,
+  notificationReducer,
+  officeReducer,
+}: any): any => {
   const { objects } = objectReducer;
   const { notifications, globalNotification } = notificationReducer;
   const { popupData, activeCellAddress } = officeReducer;

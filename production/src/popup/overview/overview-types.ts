@@ -15,8 +15,12 @@ export interface RangeTakenPopup {
 }
 
 export interface DialogPopup {
-  objectWorkingId: number;
+  objectWorkingIds: number[];
   setDialogPopup: (dialogPopup: DuplicatePopup | RangeTakenPopup) => void;
   activeCellAddress?: string;
-  onDuplicate?: (objectWorkingId: number, insertNewWorksheet: boolean, withEdit: boolean) => void;
+  onDuplicate?: (
+    objectWorkingIds: number[],
+    insertNewWorksheet: boolean,
+    withEdit: boolean
+  ) => void;
 }
