@@ -1,9 +1,11 @@
 import { authenticationHelper } from '../authentication/authentication-helper';
+import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { officeApiHelper } from '../office/api/office-api-helper';
 
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { errorService } from '../error/error-handler';
 import { PopupTypeEnum } from '../home/popup-type-enum';
+import stepGetInstanceDefinition from '../mstr-object/instance/step-get-instance-definition';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
@@ -323,6 +325,8 @@ class PopupController {
 
   handleOkCommand = async (response, bindId) => {
     if (response.chosenObject) {
+      const objectWorkingId = Date.now();
+
       const objectData = {
         name: response.chosenObjectName,
         dossierData: response.dossierData,
@@ -338,7 +342,29 @@ class PopupController {
         definition: { filters: response.filterDetails },
         displayAttrFormNames: response.displayAttrFormNames,
       };
-      this.reduxStore.dispatch(importRequested(objectData));
+
+      const instanceDefinition = await this.createInstanceForReport(objectData);
+      const validPageByCombinations = await this.getPageByElements(objectData, instanceDefinition);
+
+      if (!validPageByCombinations?.length) {
+        return this.reduxStore.dispatch(importRequested({ ...objectData, instanceDefinition }));
+      }
+
+      validPageByCombinations.forEach((combination, index) => {
+        this.reduxStore.dispatch(
+          importRequested(
+            {
+              ...objectData,
+              instanceDefinition,
+              pageByData: {
+                numberOfAllValidCombinations: validPageByCombinations.length,
+                elements: combination,
+              },
+            },
+            objectWorkingId + index
+          )
+        );
+      });
     }
   };
 
@@ -432,6 +458,54 @@ class PopupController {
       // Show overview table if cancel was triggered during Multiple Reprompt workflow.
       this.runImportedDataOverviewPopup(true);
     }
+  };
+
+  createInstanceForReport = async objectData => {
+    if (objectData.mstrObjectType !== mstrObjectEnum.mstrObjectType.report) {
+      return;
+    }
+
+    const instanceDefinition = await mstrObjectRestService.createInstance(objectData);
+
+    return stepGetInstanceDefinition.modifyInstanceWithPrompt({
+      instanceDefinition,
+      ...objectData,
+    });
+  };
+
+  getPageByElements = async (objectData, instanceDefinition) => {
+    if (objectData.mstrObjectType !== mstrObjectEnum.mstrObjectType.report) {
+      return;
+    }
+
+    const pageByElements = await mstrObjectRestService.getPageByElements(
+      objectData.objectId,
+      objectData.projectId,
+      instanceDefinition.instanceId
+    );
+
+    const validPageByCombinations = this.getValidPageByCombinations(
+      pageByElements.pageBy,
+      pageByElements.validPageByElements?.items
+    );
+
+    return validPageByCombinations;
+  };
+
+  getValidPageByCombinations = (elementList, validCombinations) => {
+    const validPageByIds = [];
+
+    validCombinations?.forEach(combination => {
+      const ids = combination.map((value, index) => ({
+        name: elementList[index].name,
+        value: elementList[index].elements[value].formValues[0],
+        valueId: elementList[index].elements[value].id,
+      }));
+
+      validPageByIds.push(ids);
+    });
+
+    return validPageByIds;
   };
 }
 

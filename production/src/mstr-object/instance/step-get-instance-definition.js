@@ -48,6 +48,8 @@ class StepGetInstanceDefinition {
         isPrompted,
         definition,
         importType,
+        instanceDefinition: reportDefinition,
+        pageByData,
       } = objectData;
       let { visualizationInfo, body, name } = objectData;
 
@@ -56,7 +58,7 @@ class StepGetInstanceDefinition {
       this.setupBodyTemplate(body);
 
       let startCell;
-      let instanceDefinition;
+      let instanceDefinition = reportDefinition;
       let shouldRenameExcelWorksheet = false;
 
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
@@ -71,15 +73,24 @@ class StepGetInstanceDefinition {
           name,
           instanceDefinition
         );
-      } else {
+      } else if (!reportDefinition) {
         instanceDefinition = await mstrObjectRestService.createInstance(objectData);
       }
 
       // TODO check if dossierData is still needed
-      instanceDefinition = await this.modifyInstanceWithPrompt({
-        instanceDefinition,
-        ...objectData,
-      });
+      if (!reportDefinition) {
+        instanceDefinition = await this.modifyInstanceWithPrompt({
+          ...objectData,
+          instanceDefinition,
+        });
+      } else {
+        instanceDefinition = await this.modifyInstanceForPageBy(
+          objectData,
+          pageByData,
+          instanceDefinition,
+          body
+        );
+      }
 
       this.savePreviousObjectData(
         instanceDefinition,
@@ -89,15 +100,17 @@ class StepGetInstanceDefinition {
         importType
       );
 
+      const shouldInsertNewWorksheet = insertNewWorksheet || !!objectData.pageByData;
+
       // FIXME: below flow should not be part of this step
       if (futureStep in importOperationStepDict) {
         startCell = await officeApiWorksheetHelper.getStartCell(
-          insertNewWorksheet,
+          shouldInsertNewWorksheet,
           excelContext,
           name
         );
       }
-      if (insertNewWorksheet) {
+      if (shouldInsertNewWorksheet) {
         delete objectData.insertNewWorksheet;
       } else {
         shouldRenameExcelWorksheet =
@@ -232,6 +245,26 @@ class StepGetInstanceDefinition {
       console.error(error);
       throw error;
     }
+  };
+
+  /**
+   * Gets page-by elements ids and modifies instance of the object.
+   *
+   * @param {Object} objectData Contains information about MSTR object
+   * @param {Object} pageByData Contains information about page-by elements
+   * @param {Object} instanceDefinition Object containing information about MSTR object
+   * @param {Object} body Contains requested objects and filters.
+   */
+  modifyInstanceForPageBy = async (objectData, pageByData, instanceDefinition, body) => {
+    const currentPageBy = pageByData?.elements.map(value => ({ id: value.valueId }));
+
+    const configInstance = {
+      ...objectData,
+      instanceId: instanceDefinition.instanceId,
+      body: { ...body, currentPageBy },
+    };
+
+    return mstrObjectRestService.modifyInstance(configInstance);
   };
 
   /**
