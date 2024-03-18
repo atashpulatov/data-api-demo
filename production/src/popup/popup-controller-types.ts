@@ -73,6 +73,7 @@ interface PageByElement {
   id: string;
   formValues: string[];
 }
+
 interface PageBy {
   id: string;
   name: string;
@@ -87,13 +88,15 @@ interface PageByPaging {
   offset: number;
   limit: number;
 }
-interface ValidPageByElement {
+
+interface ValidPageByElements {
   paging: PageByPaging;
   items: number[][];
 }
+
 export interface PageByResponse {
   pageBy: PageBy[];
-  validPageByElements: ValidPageByElement;
+  validPageByElements: ValidPageByElements;
 }
 
 export interface PageByDataElement {
@@ -101,9 +104,9 @@ export interface PageByDataElement {
   value: string;
   valueId: string;
 }
+
 export interface PageByData {
   pageByLink: string;
   numberOfSiblings: number;
-  numberOfAllValidCombinations: number;
   elements: PageByDataElement[];
 }
