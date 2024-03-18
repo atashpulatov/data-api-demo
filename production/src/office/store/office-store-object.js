@@ -50,7 +50,7 @@ class OfficeStoreObject {
    *
    * @returns {Array} Contains objects definitions from excel document
    */
-  mergeReduxAndExcelStoreObjectsIfNoShapeAPI = () => {
+  mergeReduxToExcelStoreObjectsIfShapeApiNotSupported = () => {
     const { objects } = this.reduxStore.getState().objectReducer;
     const isShapeAPISupported = officeContext.isShapeAPISupported();
 
@@ -80,7 +80,7 @@ class OfficeStoreObject {
   saveObjectsInExcelStore = async () => {
     // Make sure that objects are merged before saving in Office Settings
     // to maintain backward compatibility and include image objects if Shape API is not supported.
-    const objects = this.mergeReduxAndExcelStoreObjectsIfNoShapeAPI();
+    const objects = this.mergeReduxToExcelStoreObjectsIfShapeApiNotSupported();
     const settings = officeStoreHelper.getOfficeSettings();
     settings.set(officeProperties.storedObjects, objects);
     await settings.saveAsync();
