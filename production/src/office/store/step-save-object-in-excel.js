@@ -24,24 +24,20 @@ class StepSaveObjectInExcel {
    */
   prepareObjectData(objectData, instanceDefinition) {
     if (objectData.importType === objectImportType.TABLE) {
-      objectData.previousTableDimensions = {
-        rows: instanceDefinition.rows,
-        columns: instanceDefinition.columns,
-      };
-      objectData.details.excelTableSize = {
-        rows: objectData.previousTableDimensions.rows + 1,
-        columns: objectData.previousTableDimensions.columns,
-      };
-      if (instanceDefinition.mstrTable.crosstabHeaderDimensions) {
+      const { rows, columns, mstrTable } = instanceDefinition;
+      const { crosstabHeaderDimensions } = mstrTable;
+
+      objectData.previousTableDimensions = { rows, columns };
+      objectData.details.excelTableSize = { rows: rows + 1, columns };
+
+      if (crosstabHeaderDimensions) {
+        const { columnsY, rowsX } = crosstabHeaderDimensions;
         const {
           details: { excelTableSize },
         } = objectData;
-        const {
-          mstrTable: {
-            crosstabHeaderDimensions: { columnsY, rowsX },
-          },
-        } = instanceDefinition;
-        excelTableSize.rows += columnsY;
+
+        // -1 because table header and first row of column headers occupy the same row
+        excelTableSize.rows += columnsY - 1;
         excelTableSize.columns += rowsX;
       }
     }

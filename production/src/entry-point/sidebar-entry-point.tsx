@@ -3,12 +3,13 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
+// @ts-ignore
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import { reduxPersistor, reduxStore } from '../store';
 
 import { Home } from '../home/home';
 
-const SidebarEntryPoint = () => (
+const SidebarEntryPoint: React.FC = () => (
   <Provider store={reduxStore}>
     <PersistGate persistor={reduxPersistor}>
       <Home loading={false} />
