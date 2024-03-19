@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
 
-import PropTypes from 'prop-types';
+interface PromptsContainerProps {
+  postMount: (container: HTMLElement) => void;
+}
 
-export const PromptsContainer = props => {
+export const PromptsContainer: React.FC<PromptsContainerProps> = props => {
   const container = React.useRef();
 
   const { postMount } = props;
@@ -19,5 +21,3 @@ export const PromptsContainer = props => {
     />
   );
 };
-
-PromptsContainer.propTypes = { postMount: PropTypes.func };

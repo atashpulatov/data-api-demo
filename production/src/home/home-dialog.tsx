@@ -1,10 +1,15 @@
 import React from 'react';
 
-import PropTypes from 'prop-types';
-
+// TODO replace with mstr-icon
+// @ts-expect-error
 import { ReactComponent as InfoIcon } from './assets/icon-info.svg';
 
-export const HomeDialog = ({ show = false, text }) =>
+interface HomeDialogProps {
+  show: boolean;
+  text: string;
+}
+
+export const HomeDialog: React.FC<HomeDialogProps> = ({ show = false, text }) =>
   show ? (
     <div className='dialog-container'>
       <dialog open>
@@ -13,8 +18,3 @@ export const HomeDialog = ({ show = false, text }) =>
       </dialog>
     </div>
   ) : null;
-
-HomeDialog.propTypes = {
-  show: PropTypes.bool,
-  text: PropTypes.string,
-};
