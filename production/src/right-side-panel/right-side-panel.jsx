@@ -1,14 +1,9 @@
 // issue with proptype import
 // eslint-disable-next-line simple-import-sort/imports
-import { useEffect, useState, useReducer } from 'react';
-import { connect } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { connect, useSelector } from 'react-redux';
 import { PopupTypes, SidePanel } from '@mstr/connector-components';
 import PropTypes from 'prop-types';
-import {
-  operationReducer,
-  initialState as operationState,
-} from '../redux-reducer/operation-reducer/operation-reducer';
-
 import { notificationService } from '../notification/notification-service';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
@@ -39,8 +34,6 @@ export const RightSidePanelNotConnected = ({
   toggleSecuredFlag,
   toggleIsClearDataFailedFlag,
   updateActiveCellAddress,
-  globalNotification,
-  notifications,
   popupData,
   isDialogRendered,
   isDialogLoaded,
@@ -52,8 +45,8 @@ export const RightSidePanelNotConnected = ({
   const [sidePanelPopup, setSidePanelPopup] = useState(null);
   const [duplicatedObjectId, setDuplicatedObjectId] = useState(null);
   const [loadedObjectsWrapped, setLoadedObjectsWrapped] = useState(loadedObjects);
-
-  const [{ operations }] = useReducer(operationReducer, operationState);
+  const { operations } = useSelector(state => state.operationReducer);
+  const { globalNotification, notifications } = useSelector(state => state.notificationReducer);
 
   const duplicatePopupParams = {
     activeCellAddress,
@@ -248,7 +241,6 @@ export const RightSidePanelNotConnected = ({
 
 export const mapStateToProps = state => {
   const { importRequested, dossierOpenRequested } = state.navigationTree;
-  const { globalNotification, notifications } = state.notificationReducer;
   const { repromptsQueue } = state.repromptsQueueReducer;
   const { popupType, isDataOverviewOpen } = state.popupStateReducer;
   const objects = officeReducerHelper.getObjectsListFromObjectReducer();
@@ -272,8 +264,6 @@ export const mapStateToProps = state => {
     dossierOpenRequested,
     isConfirm,
     isSettings,
-    globalNotification,
-    notifications,
     isSecured,
     isClearDataFailed,
     settingsPanelLoaded,
@@ -333,15 +323,6 @@ RightSidePanelNotConnected.propTypes = {
       isSelected: PropTypes.bool,
     })
   ).isRequired,
-  notifications: PropTypes.arrayOf(
-    PropTypes.shape({
-      type: PropTypes.string,
-      title: PropTypes.string,
-      details: PropTypes.string,
-      percentage: PropTypes.number,
-      dismissNotification: PropTypes.func,
-    })
-  ),
   isConfirm: PropTypes.bool,
   isSettings: PropTypes.bool,
   isSecured: PropTypes.bool,
