@@ -11,6 +11,11 @@ import officeStoreHelper from '../office/store/office-store-helper';
 import { sidePanelEventHelper } from './side-panel-event-helper';
 import { sidePanelNotificationHelper } from './side-panel-notification-helper';
 import { sidePanelService } from './side-panel-service';
+import {
+  selectGlobalNotification,
+  selectNotifications,
+  selectOperations,
+} from '../redux-reducer/operation-reducer/operation-reducer-selectors';
 
 import { Confirmation } from '../home/confirmation';
 import { PopupTypeEnum } from '../home/popup-type-enum';
@@ -45,8 +50,10 @@ export const RightSidePanelNotConnected = ({
   const [sidePanelPopup, setSidePanelPopup] = useState(null);
   const [duplicatedObjectId, setDuplicatedObjectId] = useState(null);
   const [loadedObjectsWrapped, setLoadedObjectsWrapped] = useState(loadedObjects);
-  const { operations } = useSelector(state => state.operationReducer);
-  const { globalNotification, notifications } = useSelector(state => state.notificationReducer);
+
+  const operations = useSelector(selectOperations);
+  const globalNotification = useSelector(selectGlobalNotification);
+  const notifications = useSelector(selectNotifications);
 
   const duplicatePopupParams = {
     activeCellAddress,
