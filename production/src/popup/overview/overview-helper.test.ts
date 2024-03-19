@@ -7,7 +7,7 @@ import { sidePanelService } from '../../right-side-panel/side-panel-service';
 import { popupHelper } from '../popup-helper';
 import overviewHelper, { OverviewActionCommands } from './overview-helper';
 
-import { reduxStore } from '../../store';
+import { reduxStore, RootState } from '../../store';
 
 import {
   DUPLICATE_OPERATION,
@@ -335,7 +335,7 @@ describe('overview-helper', () => {
 
     const mockedStore = {
       officeReducer: { popupData: { callback: jest.fn() } },
-    };
+    } as RootState;
     const { callback } = mockedStore.officeReducer.popupData;
 
     jest.spyOn(reduxStore, 'getState').mockReturnValueOnce(mockedStore);
