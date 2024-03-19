@@ -36,6 +36,7 @@ describe('Office converter service v2', () => {
       'attributes',
       'metrics',
       'subtotalsInfo',
+      'metricsPosition',
     ];
     // when
     const table = officeConverter.createTable(crosstabsResponse);
