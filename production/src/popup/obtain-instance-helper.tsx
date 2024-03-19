@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Spinner } from '@mstr/rc';
 
@@ -9,23 +9,21 @@ import i18n from '../i18n';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 
-class ObtainInstanceHelperNotConnected extends React.Component {
-  componentDidMount() {
-    popupViewSelectorHelper.obtainInstanceWithPromptsAnswers(this.props);
-  }
+const ObtainInstanceHelperNotConnected: React.FC = props => {
+  useEffect(() => {
+    popupViewSelectorHelper.obtainInstanceWithPromptsAnswers(props);
+  }, [props]);
 
-  render() {
-    return (
-      <div className='obtain-instance-helper'>
-        <Spinner className='loading-spinner' type='large'>
-          {i18n.t('Loading...')}
-        </Spinner>
-      </div>
-    );
-  }
-}
+  return (
+    <div className='obtain-instance-helper'>
+      <Spinner className='loading-spinner' type='large'>
+        {i18n.t('Loading...')}
+      </Spinner>
+    </div>
+  );
+};
 
-function mapStateToProps(state) {
+function mapStateToProps(state: any): any {
   const {
     navigationTree,
     popupReducer: { editedObject },

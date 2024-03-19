@@ -10,11 +10,11 @@ import { officeProperties } from '../redux-reducer/office-reducer/office-propert
 const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
 class PopupViewSelectorHelper {
-  setPopupType = (props, popupType) => {
+  setPopupType(props: any, popupType: PopupTypeEnum): PopupTypeEnum {
     const { importRequested, dossierOpenRequested, isPrompted } = props;
     const arePromptsAnswered = this.arePromptsAnswered(props);
     const shouldProceedToImport = importRequested && (!isPrompted || arePromptsAnswered);
-    const getPromptedReportPopupType = () =>
+    const getPromptedReportPopupType = (): PopupTypeEnum =>
       // If we are in Multiple Reprompt workflow and get to this point, we are in
       // the transition period waiting for the next object to be reprompted.
       // Otherwise, we are in the final step of Prepare Data or Edit workflow.
@@ -43,12 +43,12 @@ class PopupViewSelectorHelper {
       return PopupTypeEnum.dossierWindow;
     }
     return popupType;
-  };
+  }
 
-  wasReportJustImported = props => {
-    const isNullOrEmpty = obj => {
-      const stringifiedObj = JSON.stringify(obj);
-      return !obj || stringifiedObj === '{}' || stringifiedObj === '[]';
+  wasReportJustImported(props: any): boolean {
+    const isNullOrEmpty = (object: any): boolean => {
+      const stringifiedObj = JSON.stringify(object);
+      return !object || stringifiedObj === '{}' || stringifiedObj === '[]';
     };
     return (
       !!props.editedObject &&
@@ -56,9 +56,9 @@ class PopupViewSelectorHelper {
       isNullOrEmpty(props.editedObject.selectedMetrics) &&
       isNullOrEmpty(props.editedObject.selectedFilters)
     );
-  };
+  }
 
-  promptedReportSubmitted = props => {
+  promptedReportSubmitted(props: any): boolean {
     if (!props) {
       return false;
     }
@@ -72,26 +72,34 @@ class PopupViewSelectorHelper {
       (props.importRequested || props.popupType === PopupTypeEnum.dataPreparation);
 
     return isPromptedReportSubmitted;
-  };
+  }
 
-  isInstanceWithPromptsAnswered = props =>
-    !!props.editedObject &&
-    !!props.editedObject.instanceId &&
-    props.preparedInstance === props.editedObject.instanceId;
+  isInstanceWithPromptsAnswered(props: any): boolean {
+    return (
+      !!props.editedObject &&
+      !!props.editedObject.instanceId &&
+      props.preparedInstance === props.editedObject.instanceId
+    );
+  }
 
-  arePromptsAnswered = props => !!props.dossierData && !!props.dossierData.instanceId;
+  arePromptsAnswered(props: any): boolean {
+    return !!props.dossierData && !!props.dossierData.instanceId;
+  }
 
-  isMultipleReprompt = props => props.repromptsQueueProps?.total > 1;
+  isMultipleReprompt(props: any): boolean {
+    return props.repromptsQueueProps?.total > 1;
+  }
 
-  obtainInstanceWithPromptsAnswers = async props => {
+  async obtainInstanceWithPromptsAnswers(props: any): Promise<void> {
     const { editedObject, chosenProjectId, chosenObjectId } = props;
-    const projectId = chosenProjectId || editedObject.chosenProjectId || editedObject.projectId;
-    const objectId = chosenObjectId || editedObject.chosenObjectId;
+    const projectId =
+      chosenProjectId || editedObject.chosenProjectId || (editedObject.projectId as string);
+    const objectId = chosenObjectId || (editedObject.chosenObjectId as string);
     const defaultAttrFormNames = officeProperties.displayAttrFormNames.automatic;
     const displayAttrFormNames =
       (editedObject && editedObject.displayAttrFormNames) || defaultAttrFormNames;
     const configInstace = { objectId, projectId };
-    let instanceDefinition = await createInstance(configInstace);
+    let instanceDefinition = await createInstance(configInstace as any);
     let count = 0;
     while (instanceDefinition.status === ObjectExecutionStatus.PROMPTED) {
       const configPrompts = {
@@ -108,7 +116,7 @@ class PopupViewSelectorHelper {
         displayAttrFormNames,
       };
       try {
-        instanceDefinition = await getInstance(configAnsPrompts);
+        instanceDefinition = await getInstance(configAnsPrompts as any);
       } catch (error) {
         popupHelper.handlePopupErrors(error);
       }
@@ -129,15 +137,14 @@ class PopupViewSelectorHelper {
       body,
     };
     props.preparePromptedReport(instanceDefinition.instanceId, preparedReport);
-  };
+  }
 
   // TODO: get this method from library
-  createBody = (attributes, metrics, filters, instanceId) => {
-    // temporary line below.
+  createBody(attributes: any[], metrics: any[], filters: any, instanceId?: boolean): any {
     // Once the rest structure is unified for both endpoints,
     // this conditional won't be needed anymore.
     const restObjectType = !instanceId ? 'requestedObjects' : 'template';
-    const body = {
+    const body: any = {
       [restObjectType]: {
         attributes: [],
         metrics: [],
@@ -157,16 +164,16 @@ class PopupViewSelectorHelper {
       body.viewFilter = this.composeFilter(filters);
     }
     return body;
-  };
+  }
 
   // TODO: remove once create body is from library
-  composeFilter = selectedFilters => {
+  composeFilter(selectedFilters: any): any {
     const filterOperands = [];
     for (const [key, value] of Object.entries(selectedFilters)) {
-      if (value.length) {
+      if ((value as any[]).length) {
         const branch = {
           operator: 'In',
-          operands: [],
+          operands: [] as any[],
         };
         branch.operands.push({
           type: 'attribute',
@@ -176,7 +183,7 @@ class PopupViewSelectorHelper {
           type: 'elements',
           elements: [],
         });
-        value.forEach(item => {
+        (value as any[]).forEach(item => {
           branch.operands[1].elements.push({ id: item });
         });
         filterOperands.push(branch);
@@ -187,9 +194,9 @@ class PopupViewSelectorHelper {
       return;
     }
     return operandsLength === 1 ? filterOperands[0] : { operator: 'And', operands: filterOperands };
-  };
+  }
 
-  proceedToImport = props => {
+  proceedToImport(props: any): void {
     let visualizationInfo;
     if (props.chosenChapterKey) {
       visualizationInfo = {
@@ -198,6 +205,7 @@ class PopupViewSelectorHelper {
         vizDimensions: props.chosenVizDimensions,
       };
     }
+
     const message = {
       command: selectorProperties.commandOk,
       chosenObject: props.chosenObjectId,
@@ -211,6 +219,8 @@ class PopupViewSelectorHelper {
       isEdit: props.isEdit,
       displayAttrFormNames:
         props.displayAttrFormNames || officeProperties.displayAttrFormNames.automatic,
+      dossierData: null as any,
+      body: null as any,
     };
     if (props.dossierData) {
       message.dossierData = {
@@ -227,7 +237,7 @@ class PopupViewSelectorHelper {
     }
     props.startImport();
     popupHelper.officeMessageParent(message);
-  };
+  }
 }
 
 export const popupViewSelectorHelper = new PopupViewSelectorHelper();

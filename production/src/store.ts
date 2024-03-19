@@ -2,7 +2,7 @@
 // eslint-disable-next-line simple-import-sort/imports
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import { persistReducer, persistStore } from 'redux-persist';
-import thunk from 'redux-thunk';
+import { thunk } from 'redux-thunk';
 
 import storage from 'redux-persist/lib/storage';
 import packageJson from '../package.json';
@@ -40,13 +40,15 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 let middleWare;
 if (process.env.NODE_ENV === 'development') {
-  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+  const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
   middleWare = composeEnhancers(applyMiddleware(thunk));
 } else {
   middleWare = applyMiddleware(thunk);
 }
 export const reduxStore = createStore(persistedReducer, middleWare);
 export const reduxPersistor = persistStore(reduxStore);
+
+export type RootState = ReturnType<typeof reduxStore.getState>;
 
 if (localStorage) {
   const version = localStorage.getItem('version');
