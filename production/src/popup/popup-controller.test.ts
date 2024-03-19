@@ -7,7 +7,7 @@ import { officeApiHelper } from '../office/api/office-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import overviewHelper, { OverviewActionCommands } from './overview/overview-helper';
 
-import { RootState, reduxStore } from '../store';
+import { reduxStore, RootState } from '../store';
 
 import { ReportParams } from './popup-controller-types';
 
