@@ -79,7 +79,6 @@ class StepGetOfficeTableEditRefresh {
         officeTable = await officeTableUpdate.updateOfficeTable(
           instanceDefinition,
           excelContext,
-          startCell,
           prevOfficeTable
         );
       }

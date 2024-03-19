@@ -4,7 +4,7 @@ import { render } from '@testing-library/react';
 
 import { OverviewWindowNotConnected } from './overview-window';
 
-import { mockedObjectsFromStore } from '../../_tests_/mockDataV2';
+import { mockedObjectsFromStore } from '../../../__mocks__/mockDataV2';
 
 describe('OverviewWindowNotConnected', () => {
   it('should render DataOverview component', () => {

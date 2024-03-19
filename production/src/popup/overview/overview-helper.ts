@@ -11,7 +11,7 @@ import { popupHelper } from '../popup-helper';
 
 import { DialogPopup } from './overview-types';
 
-import { customT } from '../../customTranslation';
+import i18n from '../../i18n';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { executeNextRepromptTask } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import {
@@ -133,11 +133,11 @@ class OverviewHelper {
    * @param insertNewWorksheet Flag indicating whether new worksheet should be inserted
    * @param withEdit Flag indicating whether duplicate should be performed with edit
    */
-  async sendDuplicateRequest(
+  sendDuplicateRequest(
     objectWorkingIds: number[],
     insertNewWorksheet: boolean,
     withEdit: boolean
-  ): Promise<void> {
+  ): void {
     popupHelper.officeMessageParent({
       command: OverviewActionCommands.DUPLICATE,
       objectWorkingIds,
@@ -357,7 +357,7 @@ class OverviewHelper {
    * @param setDialogPopup Function used as a callback for seting Overview dialog popup
    */
   setDuplicatePopup({
-    objectWorkingId,
+    objectWorkingIds,
     activeCellAddress,
     onDuplicate,
     setDialogPopup,
@@ -366,11 +366,11 @@ class OverviewHelper {
       type: PopupTypes.DUPLICATE,
       activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
       onImport: isActiveCellOptionSelected => {
-        onDuplicate(objectWorkingId, !isActiveCellOptionSelected, false);
+        onDuplicate(objectWorkingIds, !isActiveCellOptionSelected, false);
         setDialogPopup(null);
       },
       onEdit: isActiveCellOptionSelected => {
-        onDuplicate(objectWorkingId, !isActiveCellOptionSelected, true);
+        onDuplicate(objectWorkingIds, !isActiveCellOptionSelected, true);
         setDialogPopup(null);
       },
       onClose: () => setDialogPopup(null),
@@ -383,15 +383,15 @@ class OverviewHelper {
    * @param objectWorkingId Unique Id of the object allowing to reference specific object
    * @param setDialogPopup Function used as a callback for seting Overview dialog popup
    */
-  setRangeTakenPopup({ objectWorkingId, setDialogPopup }: DialogPopup): void {
+  setRangeTakenPopup({ objectWorkingIds, setDialogPopup }: DialogPopup): void {
     setDialogPopup({
       type: PopupTypes.RANGE_TAKEN_OVERVIEW,
       onOk: () => {
-        this.handleRangeTakenOk(objectWorkingId);
+        this.handleRangeTakenOk(objectWorkingIds[0]);
         officeReducerHelper.clearPopupData();
       },
       onClose: () => {
-        this.handleRangeTakenClose(objectWorkingId);
+        this.handleRangeTakenClose(objectWorkingIds[0]);
         officeReducerHelper.clearPopupData();
       },
     });
@@ -412,6 +412,9 @@ class OverviewHelper {
     notifications?: any[];
     globalNotification?: any;
   }): any => {
+    const { t } = i18n;
+
+    const isGlobalWarning = globalNotification?.type === GlobalNotificationTypes.GLOBAL_WARNING;
     const warningNotifications = notifications?.filter(
       notification => notification.type === ObjectNotificationTypes.WARNING
     );
@@ -420,7 +423,7 @@ class OverviewHelper {
       const buttonProps = {
         buttons: [
           {
-            label: customT('OK'),
+            label: t('OK'),
             onClick: () => this.sendDismissNotificationRequest([warning.objectWorkingId]),
           },
         ],
@@ -431,11 +434,10 @@ class OverviewHelper {
       };
     });
 
-    const isGlobalWarning = globalNotification?.type === GlobalNotificationTypes.GLOBAL_WARNING;
     const globalNotificationButtons = {
       buttons: [
         {
-          label: customT('OK'),
+          label: t('OK'),
           onClick: () => this.sendDismissGlobalNotificationRequest(),
         },
       ],

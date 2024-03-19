@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 
 import PropTypes from 'prop-types';
-import { notificationService } from '../notification-v2/notification-service';
+import { notificationService } from '../notification/notification-service';
 import { homeHelper } from './home-helper';
 
 import i18n from '../i18n';

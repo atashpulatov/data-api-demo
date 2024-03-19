@@ -38,7 +38,7 @@ export const MultipleRepromptTransitionPageNotConnected: FC<
   useEffect(() => {
     if (popupData) {
       overviewHelper.setRangeTakenPopup({
-        objectWorkingId: popupData.objectWorkingId,
+        objectWorkingIds: [popupData.objectWorkingId],
         setDialogPopup,
       });
     } else {

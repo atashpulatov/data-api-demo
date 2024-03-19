@@ -1,0 +1,33 @@
+job 'stage-0-premerge-codeql' do
+  description 'premerge with ghas codeql scan'
+
+  configure_common_items{}
+
+  assigned_node_string 'rhel8_vra'
+
+  triggers do
+    pull_request_builder do
+      onlyTriggerPhrase "true"
+    end
+  end
+
+  builders do
+    bash do
+      script '#!/usr/bin/env bash
+set +xe
+
+export PATH=/usr/local/sbin:/usr/local/bin:$PATH
+export WORKSPACE_SETTING=aws_dev
+source .ecosystem
+
+rake pre_pipeline
+rake ghas_code_scan_start[\'javascript,ruby\']
+source $PATHS_PROJECT_HOME/start-tracing
+rake build
+rake ghas_code_scan_end
+rake post_pipeline
+'
+    end
+  end
+end
+

@@ -19,7 +19,7 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
-import { errorCodes, errorMessages } from '../error/constants';
+import { errorCodes, ErrorMessages } from '../error/constants';
 
 import './attribute-selector.css';
 
@@ -83,9 +83,9 @@ export const AttributeSelectorNotConnected: React.FC<
         ...e.response,
         body: {
           code: ERR009,
-          message: errorMessages.SESSION_EXTENSION_FAILURE_MESSAGE,
+          message: ErrorMessages.SESSION_EXTENSION_FAILURE_MESSAGE,
         },
-        text: `{code: ${ERR009}, message: ${errorMessages.SESSION_EXTENSION_FAILURE_MESSAGE}}`,
+        text: `{code: ${ERR009}, message: ${ErrorMessages.SESSION_EXTENSION_FAILURE_MESSAGE}}`,
       },
     };
     handlePopupErrors(newErrorObject);

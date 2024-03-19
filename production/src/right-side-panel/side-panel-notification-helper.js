@@ -2,7 +2,7 @@ import { PopupTypes } from '@mstr/connector-components';
 
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { homeHelper } from '../home/home-helper';
-import { notificationService } from '../notification-v2/notification-service';
+import { notificationService } from '../notification/notification-service';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { sidePanelService } from './side-panel-service';
@@ -16,7 +16,7 @@ import {
 } from '../operation/operation-type-names';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { updateOperation } from '../redux-reducer/operation-reducer/operation-actions';
-import { incomingErrorStrings } from '../error/constants';
+import { IncomingErrorStrings } from '../error/constants';
 import { objectImportType } from '../mstr-object/constants';
 
 const CONNECTION_CHECK_TIMEOUT = 3000;
@@ -215,7 +215,7 @@ class SidePanelNotificationHelper {
    */
   handleSidePanelActionError = error => {
     const castedError = String(error);
-    const { CONNECTION_BROKEN } = incomingErrorStrings;
+    const { CONNECTION_BROKEN } = IncomingErrorStrings;
     if (castedError.includes(CONNECTION_BROKEN)) {
       if (homeHelper.isMacAndSafariBased()) {
         notificationService.connectionLost();

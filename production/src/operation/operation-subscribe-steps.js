@@ -2,8 +2,8 @@ import stepSaveObjectInExcel from '../office/store/step-save-object-in-excel';
 
 import stepGetInstanceDefinition from '../mstr-object/instance/step-get-instance-definition';
 import stepGetObjectDetails from '../mstr-object/step-get-object-details';
-import stepDisplayNotificationCompleted from '../notification-v2/step-display-notification-completed';
-import stepNotificationInProgress from '../notification-v2/step-notification-in-progress';
+import stepDisplayNotificationCompleted from '../notification/step-display-notification-completed';
+import stepNotificationInProgress from '../notification/step-notification-in-progress';
 import stepBackupObjectData from '../office/backup-object-data/step-backup-object-data';
 import stepCheckObjectStatus from '../office/clear-data/step-check-object-status';
 import stepClearCrosstabHeaders from '../office/clear-data/step-clear-crosstab-headers';

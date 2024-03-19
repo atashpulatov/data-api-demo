@@ -20,7 +20,7 @@ import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reduc
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
 import { EmbeddedLibrary } from './embedded-library';
 import { objectImportType } from '../../mstr-object/constants';
-import { importActionTypes, importButtonIds } from '../../popup/popup-buttons/import-btn-constants';
+import { ImportActionTypes, ImportButtonIds } from '../../popup/popup-buttons/import-btn-constants';
 
 import './library.css';
 
@@ -238,8 +238,8 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
         disableSecondary={
           !!mstrObjectType && mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name
         }
-        primaryImportBtnString={importActionTypes.IMPORT}
-        primaryImportBtnId={importButtonIds.IMPORT}
+        primaryImportBtnString={ImportActionTypes.IMPORT}
+        primaryImportBtnId={ImportButtonIds.IMPORT}
         isPublished={isPublished}
         isImportReport={
           mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype)?.type ===

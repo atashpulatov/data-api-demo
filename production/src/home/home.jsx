@@ -8,7 +8,7 @@ import { Spinner } from '@mstr/rc';
 import PropTypes from 'prop-types';
 import useOfficePrivilege from '../hooks/use-office-privilege';
 
-import { notificationService } from '../notification-v2/notification-service';
+import { notificationService } from '../notification/notification-service';
 import { sessionHelper } from '../storage/session-helper';
 import { homeHelper } from './home-helper';
 
