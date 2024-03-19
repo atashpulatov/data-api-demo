@@ -8,6 +8,8 @@ import {
   REMOVE_OPERATION,
 } from '../../operation/operation-type-names';
 
+// TODO: refactor.
+// this is a temporary initial version. it should be improved
 type Operation = {
   operationType:
     | typeof IMPORT_OPERATION
