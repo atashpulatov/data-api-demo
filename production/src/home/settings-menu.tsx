@@ -1,11 +1,8 @@
-// issue with proptype import
-// eslint-disable-next-line simple-import-sort/imports
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { OverflowTooltip } from '@mstr/rc';
 
-import PropTypes from 'prop-types';
 import getDocumentationLocale from '../helpers/get-documentation-locale';
 import { notificationService } from '../notification/notification-service';
 import officeReducerHelper from '../office/store/office-reducer-helper';
@@ -19,13 +16,27 @@ import { popupController } from '../popup/popup-controller';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
+// @ts-expect-error
 import logo from './assets/mstr_logo.png';
 
 import './settings-menu.scss';
 
+interface SettingsMenuProps {
+  userFullName: string;
+  userInitials: string;
+  isSecured: boolean;
+  settingsPanelLoaded: boolean;
+  objects: any[];
+  toggleIsSettingsFlag: (flag: boolean) => void;
+  toggleIsConfirmFlag: (flag: boolean) => void;
+  toggleSettingsPanelLoadedFlag: (flag: boolean) => void;
+  isSettings: boolean;
+  setIsDataOverviewOpen: (flag: boolean) => void;
+}
+
 const APP_VERSION = packageJson.build;
 
-async function logout(hideSettingsPopup) {
+async function logout(hideSettingsPopup: () => void): Promise<void> {
   try {
     hideSettingsPopup();
     notificationService.dismissNotifications();
@@ -39,7 +50,7 @@ async function logout(hideSettingsPopup) {
 }
 
 const { Office } = window;
-export const SettingsMenuNotConnected = ({
+export const SettingsMenuNotConnected: React.FC<SettingsMenuProps> = ({
   userFullName,
   userInitials,
   isSecured,
@@ -56,7 +67,7 @@ export const SettingsMenuNotConnected = ({
   const userNameDisplay = userFullName || 'MicroStrategy user';
   const isSecuredActive =
     !isSecured && objects && objects.length > 0 && officeReducerHelper.noOperationInProgress();
-  const prepareEmail = () => {
+  const prepareEmail = (): string => {
     if (!Office) {
       return '#';
     } // If no Office return anchor url
@@ -81,7 +92,7 @@ export const SettingsMenuNotConnected = ({
     return encodeURI(`mailto:${email.address}?subject=${email.title}&body=${email.body}`);
   };
 
-  const showImportedDataOverviewPopup = () => {
+  const showImportedDataOverviewPopup = (): void => {
     if (isSecured) {
       return;
     }
@@ -91,16 +102,16 @@ export const SettingsMenuNotConnected = ({
     setIsDataOverviewOpen(true);
   };
 
-  const showConfirmationPopup = () => {
+  const showConfirmationPopup = (): void => {
     toggleIsConfirmFlag(true);
     toggleIsSettingsFlag(false);
   };
 
-  const hideSettingsPopup = () => {
+  const hideSettingsPopup = (): void => {
     toggleIsSettingsFlag(false); // close settings window
   };
 
-  const onSelectSettingsOption = () => {
+  const onSelectSettingsOption = (): void => {
     hideSettingsPopup();
     toggleSettingsPanelLoadedFlag(settingsPanelLoaded);
   };
@@ -108,10 +119,10 @@ export const SettingsMenuNotConnected = ({
   const settingsMenuRef = React.useRef(null);
 
   React.useEffect(() => {
-    const closeSettingsOnEsc = ({ keyCode }) => {
+    const closeSettingsOnEsc = ({ keyCode }: KeyboardEvent): void => {
       keyCode === 27 && toggleIsSettingsFlag(false);
     };
-    const closeSettingsOnClick = event => {
+    const closeSettingsOnClick = (event: MouseEvent): void => {
       const { target } = event;
 
       if (settingsMenuRef.current && !settingsMenuRef.current.contains(target)) {
@@ -136,25 +147,19 @@ export const SettingsMenuNotConnected = ({
     <ul className='settings-list' ref={settingsMenuRef}>
       <li id='testid' className='user-data no-trigger-close not-linked-list'>
         {userInitials !== null ? (
-          <span className='no-trigger-close' id='initials' alt={t('User profile')}>
+          <span className='no-trigger-close' id='initials'>
             {userInitials}
           </span>
         ) : (
           <img className='no-trigger-close' id='profile-image' src={logo} alt={t('User profile')} />
         )}
-        <OverflowTooltip
-          placement='bottom'
-          content={userNameDisplay}
-          mouseEnterDelay={1}
-          containerClassName='user-name-tooltip'
-          sourceClassName='user-name'
-        >
+        <OverflowTooltip placement='bottom' content={userNameDisplay}>
           <div className='user-name'>{userNameDisplay}</div>
         </OverflowTooltip>
       </li>
       <li
         className={`no-trigger-close imported-data-overview not-linked-list ${isSecured ? 'imported-data-overview-inactive' : ''}`}
-        tabIndex='0'
+        tabIndex={0}
         role='menuitem'
         onClick={showImportedDataOverviewPopup}
         onKeyUp={e => e.key === 'Enter' && showImportedDataOverviewPopup()}
@@ -164,7 +169,7 @@ export const SettingsMenuNotConnected = ({
       <div className='separate-line' />
       <li
         className={`no-trigger-close clear-data not-linked-list ${!isSecuredActive ? 'clear-data-inactive' : ''}`}
-        tabIndex='0'
+        tabIndex={0}
         role='menuitem'
         onClick={isSecuredActive ? showConfirmationPopup : null}
         onKeyUp={isSecuredActive ? e => e.key === 'Enter' && showConfirmationPopup() : null}
@@ -173,7 +178,7 @@ export const SettingsMenuNotConnected = ({
       </li>
       <li
         className='no-trigger-close settings not-linked-list'
-        tabIndex='0'
+        tabIndex={0}
         role='menuitem'
         onClick={onSelectSettingsOption}
         onKeyUp={e => e.key === 'Enter' && onSelectSettingsOption()}
@@ -183,7 +188,7 @@ export const SettingsMenuNotConnected = ({
       <div className='separate-line' />
       <li className='privacy-policy'>
         <a
-          tabIndex='0'
+          tabIndex={0}
           href='https://www.microstrategy.com/legal-folder/privacy-policy'
           target='_blank'
           rel='noopener noreferrer'
@@ -193,7 +198,7 @@ export const SettingsMenuNotConnected = ({
       </li>
       <li>
         <a
-          tabIndex='0'
+          tabIndex={0}
           href='https://www.microstrategy.com/legal-folder/legal-policies/terms-of-use'
           target='_blank'
           rel='noopener noreferrer'
@@ -203,7 +208,7 @@ export const SettingsMenuNotConnected = ({
       </li>
       <li>
         <a
-          tabIndex='0'
+          tabIndex={0}
           href={`https://www2.microstrategy.com/producthelp/Current/Office/${getDocumentationLocale(i18n.language)}/index.htm`}
           target='_blank'
           rel='noopener noreferrer'
@@ -212,15 +217,14 @@ export const SettingsMenuNotConnected = ({
         </a>
       </li>
       <li>
-        <a tabIndex='0' href={prepareEmail()} target='_blank' rel='noopener noreferrer'>
+        <a tabIndex={0} href={prepareEmail()} target='_blank' rel='noopener noreferrer'>
           {t('Contact Us')}
         </a>
       </li>
       <li
         className='not-linked-list'
-        tabIndex='0'
+        tabIndex={0}
         id='logOut'
-        size='small'
         role='menuitem'
         onClick={() => logout(hideSettingsPopup)}
         onKeyPress={() => logout(hideSettingsPopup)}
@@ -234,7 +238,8 @@ export const SettingsMenuNotConnected = ({
   );
 };
 
-function mapStateToProps({ sessionReducer, officeReducer, objectReducer }) {
+function mapStateToProps(state: any): any {
+  const { sessionReducer, officeReducer, objectReducer } = state;
   const { userFullName, userInitials, userID } = sessionReducer;
   const { isSecured, isSettings, settingsPanelLoaded } = officeReducer;
   const { objects } = objectReducer;
@@ -256,16 +261,3 @@ const mapDispatchToProps = {
   setIsDataOverviewOpen: popupStateActions.setIsDataOverviewOpen,
 };
 export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(SettingsMenuNotConnected);
-
-SettingsMenuNotConnected.propTypes = {
-  userFullName: PropTypes.string,
-  userInitials: PropTypes.string,
-  isSecured: PropTypes.bool,
-  settingsPanelLoaded: PropTypes.bool,
-  objects: PropTypes.arrayOf(PropTypes.shape({})),
-  toggleIsSettingsFlag: PropTypes.func,
-  toggleIsConfirmFlag: PropTypes.func,
-  toggleSettingsPanelLoadedFlag: PropTypes.func,
-  isSettings: PropTypes.bool,
-  setIsDataOverviewOpen: PropTypes.func,
-};
