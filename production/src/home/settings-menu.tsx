@@ -153,7 +153,11 @@ export const SettingsMenuNotConnected: React.FC<SettingsMenuProps> = ({
         ) : (
           <img className='no-trigger-close' id='profile-image' src={logo} alt={t('User profile')} />
         )}
-        <OverflowTooltip placement='bottom' content={userNameDisplay}>
+        <OverflowTooltip
+          placement='bottom'
+          portalProps={{ root: settingsMenuRef }}
+          content={userNameDisplay}
+        >
           <div className='user-name'>{userNameDisplay}</div>
         </OverflowTooltip>
       </li>
