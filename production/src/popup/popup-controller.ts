@@ -1,13 +1,8 @@
 import { authenticationHelper } from '../authentication/authentication-helper';
-import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { officeApiHelper } from '../office/api/office-api-helper';
+import { pageByHelper } from '../page-by/page-by-helper';
 
-import {
-  DialogResponse,
-  PageByDataElement,
-  PageByResponse,
-  ReportParams,
-} from './popup-controller-types';
+import { DialogResponse, ReportParams } from './popup-controller-types';
 
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { errorService } from '../error/error-handler';
@@ -366,36 +361,43 @@ class PopupController {
         displayAttrFormNames: response.displayAttrFormNames,
       };
 
-      const preparedInstanceDefinition =
-        await stepGetInstanceDefinition.createReportInstance(objectData);
-
-      const validPageByData = await this.getValidPageByData(objectData, preparedInstanceDefinition);
-
-      if (!validPageByData?.length) {
-        return this.reduxStore.dispatch(
-          importRequested({ ...objectData, preparedInstanceDefinition })
-        );
-      }
-
-      validPageByData.forEach((validCombination, pageByIndex) => {
-        const pageByData = {
-          // pageByLink
-          // numberOfSiblings
-          elements: validCombination,
-        };
-
-        this.reduxStore.dispatch(
-          importRequested(
-            {
-              ...objectData,
-              preparedInstanceDefinition,
-              pageByData,
-            },
-            pageByIndex
-          )
-        );
-      });
+      await this.handleImport(objectData);
     }
+  };
+
+  handleImport = async (objectData: any): Promise<void> => {
+    const preparedInstanceDefinition =
+      await stepGetInstanceDefinition.createReportInstance(objectData);
+
+    const validPageByData = await pageByHelper.getValidPageByData(
+      objectData,
+      preparedInstanceDefinition
+    );
+
+    if (!validPageByData?.length) {
+      return this.reduxStore.dispatch(
+        importRequested({ ...objectData, preparedInstanceDefinition })
+      );
+    }
+
+    validPageByData.forEach((validCombination, pageByIndex) => {
+      const pageByData = {
+        // pageByLink
+        // numberOfSiblings
+        elements: validCombination,
+      };
+
+      this.reduxStore.dispatch(
+        importRequested(
+          {
+            ...objectData,
+            preparedInstanceDefinition,
+            pageByData,
+          },
+          pageByIndex
+        )
+      );
+    });
   };
 
   loadPending =
@@ -488,43 +490,6 @@ class PopupController {
       // Show overview table if cancel was triggered during Multiple Reprompt workflow.
       this.runImportedDataOverviewPopup();
     }
-  };
-
-  getValidPageByData = async (
-    objectData: any,
-    instanceDefinition: any
-  ): Promise<PageByDataElement[][]> => {
-    if (objectData.mstrObjectType !== mstrObjectEnum.mstrObjectType.report) {
-      return;
-    }
-
-    const pageByElements = await mstrObjectRestService.getPageByElements(
-      objectData.objectId,
-      objectData.projectId,
-      instanceDefinition.instanceId
-    );
-
-    const validPageByData = this.parseValidPageByElements(pageByElements);
-
-    return validPageByData;
-  };
-
-  parseValidPageByElements = (pageByElements: PageByResponse): PageByDataElement[][] => {
-    const { pageBy, validPageByElements } = pageByElements;
-
-    const validPageByData: PageByDataElement[][] = [];
-
-    validPageByElements?.items?.forEach(combination => {
-      const pageByDataElement: PageByDataElement[] = combination.map((value, index) => ({
-        name: pageBy[index].name,
-        value: pageBy[index].elements[value].formValues[0],
-        valueId: pageBy[index].elements[value].id,
-      }));
-
-      validPageByData.push(pageByDataElement);
-    });
-
-    return validPageByData;
   };
 }
 
