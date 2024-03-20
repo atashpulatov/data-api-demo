@@ -5,7 +5,7 @@ import officeStoreObject from '../store/office-store-object';
 
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
-import { CLEAR_DATA_OPERATION } from '../../operation/operation-type-names';
+import { OperationTypes } from '../../operation/operation-type-names';
 
 class StepRemoveVisualizationImage {
   /**
@@ -32,7 +32,7 @@ class StepRemoveVisualizationImage {
       // If the operation is not CLEAR_DATA_OPERATION, remove the object from the store
       // We preserve the objects in the store for CLEAR_OPERATION to be restored to the workbook
       // in the event of a VIEW_DATA operation
-      if (operationType !== CLEAR_DATA_OPERATION) {
+      if (operationType !== OperationTypes.CLEAR_DATA_OPERATION) {
         operationStepDispatcher.updateObject({
           objectWorkingId,
           doNotPersist: true,

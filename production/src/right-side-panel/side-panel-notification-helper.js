@@ -9,15 +9,11 @@ import { sidePanelService } from './side-panel-service';
 
 import { errorService } from '../error/error-handler';
 import { calculateLoadingProgress } from '../operation/operation-loading-progress';
-import {
-  CLEAR_DATA_OPERATION,
-  HIGHLIGHT_OPERATION,
-  REMOVE_OPERATION,
-} from '../operation/operation-type-names';
+import { OperationTypes } from '../operation/operation-type-names';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { updateOperation } from '../redux-reducer/operation-reducer/operation-actions';
 import { IncomingErrorStrings } from '../error/constants';
-import { objectImportType } from '../mstr-object/constants';
+import { ObjectImportType } from '../mstr-object/constants';
 
 const CONNECTION_CHECK_TIMEOUT = 3000;
 
@@ -169,7 +165,7 @@ class SidePanelNotificationHelper {
       const operationBasedNotificationData = this.shouldGenerateProgressPercentage(objectOperation)
         ? {
             percentageComplete:
-              objectOperation.totalRows || object.importType === objectImportType.IMAGE
+              objectOperation.totalRows || object.importType === ObjectImportType.IMAGE
                 ? calculateLoadingProgress(objectOperation, object.importType)
                 : 0,
             itemsTotal: !objectNotificationData?.isFetchingComplete ? objectOperation.totalRows : 0,
@@ -201,9 +197,9 @@ class SidePanelNotificationHelper {
    */
   shouldGenerateProgressPercentage = objectOperation =>
     objectOperation &&
-    objectOperation.operationType !== REMOVE_OPERATION &&
-    objectOperation.operationType !== CLEAR_DATA_OPERATION &&
-    objectOperation.operationType !== HIGHLIGHT_OPERATION;
+    objectOperation.operationType !== OperationTypes.REMOVE_OPERATION &&
+    objectOperation.operationType !== OperationTypes.CLEAR_DATA_OPERATION &&
+    objectOperation.operationType !== OperationTypes.HIGHLIGHT_OPERATION;
 
   /**
    * Handles error thrown during invoking side panel actions like refresh, edit etc.

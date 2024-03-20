@@ -17,15 +17,7 @@ import { Confirmation } from '../home/confirmation';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import { SettingsMenu } from '../home/settings-menu';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import {
-  CLEAR_DATA_OPERATION,
-  DUPLICATE_OPERATION,
-  EDIT_OPERATION,
-  HIGHLIGHT_OPERATION,
-  IMPORT_OPERATION,
-  REFRESH_OPERATION,
-  REMOVE_OPERATION,
-} from '../operation/operation-type-names';
+import { OperationTypes } from '../operation/operation-type-names';
 import { popupController } from '../popup/popup-controller';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
@@ -351,13 +343,13 @@ RightSidePanelNotConnected.propTypes = {
   operations: PropTypes.arrayOf(
     PropTypes.shape({
       operationType: PropTypes.oneOf([
-        IMPORT_OPERATION,
-        REFRESH_OPERATION,
-        EDIT_OPERATION,
-        DUPLICATE_OPERATION,
-        CLEAR_DATA_OPERATION,
-        HIGHLIGHT_OPERATION,
-        REMOVE_OPERATION,
+        OperationTypes.IMPORT_OPERATION,
+        OperationTypes.REFRESH_OPERATION,
+        OperationTypes.EDIT_OPERATION,
+        OperationTypes.DUPLICATE_OPERATION,
+        OperationTypes.CLEAR_DATA_OPERATION,
+        OperationTypes.HIGHLIGHT_OPERATION,
+        OperationTypes.REMOVE_OPERATION,
       ]),
       objectWorkingId: PropTypes.number,
       stepsQueue: PropTypes.arrayOf(PropTypes.string),

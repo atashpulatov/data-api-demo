@@ -1,6 +1,6 @@
 import { createStore } from 'redux';
 
-import { EDIT_OPERATION, IMPORT_OPERATION } from '../../operation/operation-type-names';
+import { OperationTypes } from '../../operation/operation-type-names';
 import { CLEAR_ANSWERS, RESTORE_ALL_ANSWERS } from './answers-actions';
 import { answersReducer } from './answers-reducer';
 
@@ -18,7 +18,7 @@ describe('answersReducer', () => {
     // given
     const prevState = { answers: [] };
     const action = {
-      type: IMPORT_OPERATION,
+      type: OperationTypes.IMPORT_OPERATION,
       payload: {
         object: {
           isPrompted: true,
@@ -41,7 +41,7 @@ describe('answersReducer', () => {
     // given
     const prevState = { answers: [] };
     const action = {
-      type: IMPORT_OPERATION,
+      type: OperationTypes.IMPORT_OPERATION,
       payload: {
         object: {
           mstrObjectType: {
@@ -77,7 +77,7 @@ describe('answersReducer', () => {
     // given
     const prevState = { answers: [{ key: '1', values: ['1'] }] };
     const action = {
-      type: EDIT_OPERATION,
+      type: OperationTypes.EDIT_OPERATION,
       payload: {
         operation: {
           objectEditedData: {
@@ -102,7 +102,7 @@ describe('answersReducer', () => {
     // given
     const prevState = { answers: [{ key: '1', values: ['1'] }] };
     const action = {
-      type: EDIT_OPERATION,
+      type: OperationTypes.EDIT_OPERATION,
       payload: {
         operation: {
           objectEditedData: {

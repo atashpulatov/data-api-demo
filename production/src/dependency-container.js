@@ -126,7 +126,7 @@ class DIContainer {
 
   initializeOperationSteps() {
     this.subscribeSteps = subscribeSteps;
-    this.subscribeSteps.init(reduxStore, operationBus);
+    this.subscribeSteps.init(operationBus);
 
     this.operationStepDispatcher = operationStepDispatcher;
     this.operationStepDispatcher.init(reduxStore);

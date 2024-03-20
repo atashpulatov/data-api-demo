@@ -10,7 +10,7 @@ import { reduxStore } from '../store';
 import { officeContext } from '../office/office-context';
 import { configActions } from '../redux-reducer/config-reducer/config-actions';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
-import { objectImportType } from '../mstr-object/constants';
+import { ObjectImportType } from '../mstr-object/constants';
 
 jest.mock('../storage/session-helper');
 jest.mock('../redux-reducer/session-reducer/session-actions');
@@ -200,12 +200,12 @@ describe('HomeHelper', () => {
 
       const objects = [
         {
-          importType: objectImportType.IMAGE,
+          importType: ObjectImportType.IMAGE,
           bindId: '{778543A2-0A92-DBB4-E471-1C55D2C48DFF}',
           objectWorkingId: 1709325494755,
         },
         {
-          importType: objectImportType.TABLE,
+          importType: ObjectImportType.TABLE,
           bindId: '{45E0499F-6C8A-4909-AF68-40C7A293ACA1}',
           objectWorkingId: 1709325744657,
         },

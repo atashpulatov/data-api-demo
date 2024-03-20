@@ -26,7 +26,7 @@ import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { PromptsContainer } from './prompts-container';
 import { ErrorMessages } from '../error/constants';
-import { objectImportType } from '../mstr-object/constants';
+import { ObjectImportType } from '../mstr-object/constants';
 
 import '../home/home.css';
 import '../index.css';
@@ -411,7 +411,7 @@ export const PromptsWindowNotConnected = props => {
         handleCancel={closePopup}
         hideSecondary
         handleBack={!isReprompt && handleBack}
-        primaryImportType={objectImportType.TABLE}
+        primaryImportType={ObjectImportType.TABLE}
         useImportAsRunButton
         disableActiveActions={isPromptLoading}
       />
