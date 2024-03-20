@@ -21,7 +21,6 @@ import { Confirmation } from '../home/confirmation';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import { SettingsMenu } from '../home/settings-menu';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { OperationTypes } from '../operation/operation-type-names';
 import { popupController } from '../popup/popup-controller';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
