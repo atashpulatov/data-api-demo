@@ -1,34 +1,43 @@
 /* eslint-disable react/no-danger */
-// issue with proptype import
-// eslint-disable-next-line simple-import-sort/imports
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 
-import PropTypes from 'prop-types';
 import { notificationService } from '../notification/notification-service';
 import { homeHelper } from './home-helper';
 
 import i18n from '../i18n';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
+// TODO replace with mstr-icon
+// @ts-expect-error
 import warningIcon from './assets/icon_conflict.svg';
 
-function clearData(objects) {
+interface ConfirmationProps {
+  objects?: any[];
+  isConfirm?: boolean;
+  toggleIsConfirmFlag?: (flag?: boolean) => void;
+}
+
+function clearData(objects: any[]): void {
   notificationService.dismissNotifications();
   homeHelper.secureData(objects);
 }
 
-export const ConfirmationNotConnected = ({ objects, isConfirm, toggleIsConfirmFlag }) => {
+export const ConfirmationNotConnected: React.FC<ConfirmationProps> = ({
+  objects,
+  isConfirm,
+  toggleIsConfirmFlag,
+}) => {
   const [t] = useTranslation('common', { i18n });
 
   useEffect(() => {
     const ua = window.navigator.userAgent;
     // this is fix IE11 - it didn't handle z-index properties correctly
     if (ua.indexOf('MSIE') > 0 || !!navigator.userAgent.match(/Trident.*rv:11\./)) {
-      const elm = document.querySelector('.confirm-container');
-      elm.style.zIndex = -1;
+      const element = document.querySelector('.confirm-container') as HTMLElement;
+      element.style.zIndex = '-1';
       setTimeout(() => {
-        elm.style.zIndex = 3000;
+        element.style.zIndex = '3000';
       }, 100);
     }
   });
@@ -36,10 +45,10 @@ export const ConfirmationNotConnected = ({ objects, isConfirm, toggleIsConfirmFl
   const confirmationRef = React.useRef(null);
 
   React.useEffect(() => {
-    const closeSettingsOnEsc = ({ keyCode }) => {
+    const closeSettingsOnEsc = ({ keyCode }: KeyboardEvent): void => {
       keyCode === 27 && toggleIsConfirmFlag();
     };
-    const closeSettingsOnClick = ({ target }) => {
+    const closeSettingsOnClick = ({ target }: { target: EventTarget }): void => {
       confirmationRef.current && !confirmationRef.current.contains(target) && toggleIsConfirmFlag();
     };
 
@@ -106,14 +115,8 @@ export const ConfirmationNotConnected = ({ objects, isConfirm, toggleIsConfirmFl
     </>
   );
 };
-
-ConfirmationNotConnected.propTypes = {
-  objects: PropTypes.arrayOf(PropTypes.shape({})),
-  isConfirm: PropTypes.bool,
-  toggleIsConfirmFlag: PropTypes.func,
-};
-
-function mapStateToProps({ officeReducer, objectReducer }) {
+function mapStateToProps(state: any): any {
+  const { officeReducer, objectReducer } = state;
   const { objects } = objectReducer;
   const { isConfirm } = officeReducer;
   return { objects, isConfirm };

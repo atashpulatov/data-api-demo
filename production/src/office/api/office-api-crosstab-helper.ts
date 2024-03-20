@@ -190,13 +190,19 @@ class OfficeApiCrosstabHelper {
     const {
       attributesNames,
       headers: { columns },
+      metricsPosition,
     } = mstrTable;
 
     officeTable.showHeaders = false;
 
     this.createColumnsHeaders(officeTable, columns);
 
-    this.createCrosstabHeadersTitles(officeTable, attributesNames, crosstabHeaderDimensions);
+    this.createCrosstabHeadersTitles(
+      officeTable,
+      attributesNames,
+      crosstabHeaderDimensions,
+      metricsPosition
+    );
   }
 
   /**
@@ -232,9 +238,11 @@ class OfficeApiCrosstabHelper {
   createCrosstabHeadersTitles(
     officeTable: Excel.Table,
     attributesNames: any,
-    crosstabHeaderDimensions: any
+    crosstabHeaderDimensions: any,
+    metricsPosition: any
   ): void {
     const { rowsAttributes, columnsAttributes } = attributesNames;
+    const isMetricPositionRow = metricsPosition?.axis === 'rows';
 
     const reportStartingCell = officeTable.getDataBodyRange().getCell(0, 0);
     const titlesBottomCell = reportStartingCell.getOffsetRange(-1, -1);
@@ -243,9 +251,13 @@ class OfficeApiCrosstabHelper {
       -(crosstabHeaderDimensions.rowsX - 1)
     );
 
-    const columnsTitlesRange = titlesBottomCell
-      .getOffsetRange(-1, 0)
-      .getResizedRange(-(crosstabHeaderDimensions.columnsY - 2), 0); // TODO -2 is bad
+    // TODO Support metric position in compound grid, support for metrics places in rows/columns different than index 0
+    // if metricPosition.axis is row we dont want to -2 just -1 from crosstabHeaderDimensions.columnsY
+    const columnsTitlesOffset = crosstabHeaderDimensions.columnsY + (isMetricPositionRow ? -1 : -2);
+
+    const columnsTitlesRange = isMetricPositionRow
+      ? titlesBottomCell.getResizedRange(-columnsTitlesOffset, 0)
+      : titlesBottomCell.getResizedRange(-columnsTitlesOffset, 0).getOffsetRange(-1, 0);
 
     const headerTitlesRange = columnsTitlesRange.getBoundingRect(rowsTitlesRange);
     headerTitlesRange.format.verticalAlignment = window.Excel.VerticalAlignment.bottom;

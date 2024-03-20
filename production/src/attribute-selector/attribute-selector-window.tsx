@@ -94,6 +94,7 @@ export const AttributeSelectorWindowNotConnected: React.FC<
       typeOfObject.mstrObjectType.name.substring(1)
     : 'Data';
   const isEdit = chosenObjectName === DEFAULT_PROJECT_NAME;
+
   return (
     <div className='attribute-selector-window'>
       {/* @ts-expect-error */}
@@ -112,7 +113,7 @@ export const AttributeSelectorWindowNotConnected: React.FC<
       />
       <PopupButtons
         disableActiveActions={!attributesSelected}
-        handleBack={(!isEdit || isPrompted) && handleBack}
+        handleBack={(!isEdit || isPrompted) && (handleBack as () => void)}
         handleOk={handleOk}
         handleCancel={handleCancel}
         primaryImportType={objectImportType.TABLE}

@@ -21,6 +21,7 @@ class OfficeConverterServiceV2 {
     const mstrTable = handler.createTable(response);
 
     mstrTable.subtotalsInfo = {};
+    mstrTable.metricsPosition = response.definition.grid.metricsPosition;
     const subtotals = this.getSubtotalsInformation(response);
     if (subtotals) {
       mstrTable.subtotalsInfo = {

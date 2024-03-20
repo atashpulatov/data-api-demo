@@ -14,7 +14,7 @@ import {
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 
-const useStateSyncOnDialogMessage = () => {
+const useStateSyncOnDialogMessage = (): void => {
   useEffect(() => {
     // Get Message from Right side panel
     Office.context.ui.addHandlerAsync(Office.EventType.DialogParentMessageReceived, msg => {

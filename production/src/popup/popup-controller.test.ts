@@ -7,7 +7,7 @@ import { officeApiHelper } from '../office/api/office-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import overviewHelper, { OverviewActionCommands } from './overview/overview-helper';
 
-import { reduxStore } from '../store';
+import { reduxStore, RootState } from '../store';
 
 import { ReportParams } from './popup-controller-types';
 
@@ -333,7 +333,7 @@ describe('PopupController', () => {
       .mockImplementation(() => false);
     jest
       .spyOn(reduxStore, 'getState')
-      .mockReturnValue({ popupStateReducer: { isDataOverviewOpen: false } });
+      .mockReturnValue({ popupStateReducer: { isDataOverviewOpen: false } } as RootState);
 
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
@@ -370,7 +370,7 @@ describe('PopupController', () => {
       .mockImplementation(() => true);
     jest
       .spyOn(reduxStore, 'getState')
-      .mockReturnValue({ popupStateReducer: { isDataOverviewOpen: false } });
+      .mockReturnValue({ popupStateReducer: { isDataOverviewOpen: false } } as RootState);
     const resetDialogStatesSpy = jest
       .spyOn(popupController, 'getIsMultipleRepromptQueueEmpty')
       .mockImplementation(() => true);
@@ -480,7 +480,7 @@ describe('PopupController', () => {
 
     jest.spyOn(reduxStore, 'getState').mockReturnValue({
       popupStateReducer: { popupType: PopupTypeEnum.importedDataOverview },
-    });
+    } as RootState);
     jest.spyOn(popupController, 'getIsMultipleRepromptQueueEmpty').mockReturnValue(true);
     jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementation(async () => true);
     jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementation(async () => {});
@@ -560,7 +560,7 @@ describe('PopupController', () => {
         popupType: PopupTypeEnum.repromptDossierDataOverview,
         isDataOverviewOpen: true,
       },
-    });
+    } as RootState);
 
     // when
     await popupController.onMessageFromPopup(dialog, reportParams, arg);
@@ -611,7 +611,7 @@ describe('PopupController', () => {
         popupType: PopupTypeEnum.repromptDossierDataOverview,
         isDataOverviewOpen: true,
       },
-    });
+    } as RootState);
 
     // when
     await popupController.onMessageFromPopup(dialog, reportParams, arg);

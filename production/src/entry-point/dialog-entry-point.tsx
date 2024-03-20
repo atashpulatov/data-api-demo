@@ -5,7 +5,7 @@ import { reduxStore } from '../store';
 
 import { Popup } from '../popup/popup';
 
-const DialogEntryPoint = () => (
+const DialogEntryPoint: React.FC = () => (
   <Provider store={reduxStore}>
     <Popup />
   </Provider>
