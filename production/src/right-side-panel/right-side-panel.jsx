@@ -1,6 +1,6 @@
 // issue with proptype import
 // eslint-disable-next-line simple-import-sort/imports
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { PopupTypes, SidePanel } from '@mstr/connector-components';
 import PropTypes from 'prop-types';
