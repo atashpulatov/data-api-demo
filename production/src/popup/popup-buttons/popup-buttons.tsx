@@ -8,7 +8,7 @@ import { CancelButton } from './cancel-button';
 import { DataPreviewButton } from './data-preview-button';
 import { ImportButton } from './import-button';
 import { PrepareDataButton } from './prepare-data-button';
-import { objectImportType } from '../../mstr-object/constants';
+import { ObjectImportType } from '../../mstr-object/constants';
 import { ImportActionTypes, ImportButtonIds } from './import-btn-constants';
 
 import './popup-buttons.css';
@@ -39,7 +39,7 @@ export const PopupButtonsNotConnected: React.FC<PopupButtonsProps> = ({
   handleCancel,
   handleBack,
   shouldShowImportImage,
-  primaryImportType = objectImportType.TABLE,
+  primaryImportType = ObjectImportType.TABLE,
   disableActiveActions,
   onPreviewClick,
   hideSecondary,
@@ -71,7 +71,7 @@ export const PopupButtonsNotConnected: React.FC<PopupButtonsProps> = ({
         <DataPreviewButton onPreviewClick={onPreviewClick} disableReason={disableReason} />
       )}
       {!hideOk &&
-        (primaryImportType === objectImportType.TABLE ? (
+        (primaryImportType === ObjectImportType.TABLE ? (
           <ImportButton
             id={useImportAsRunButton ? ImportButtonIds.RUN : primaryImportBtnId}
             handleOk={handleOk}

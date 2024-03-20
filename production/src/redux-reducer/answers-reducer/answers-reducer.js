@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-import { EDIT_OPERATION, IMPORT_OPERATION } from '../../operation/operation-type-names';
+import { OperationTypes } from '../../operation/operation-type-names';
 import { CLEAR_ANSWERS, RESTORE_ALL_ANSWERS } from './answers-actions';
 
 const initialState = { answers: [] };
 export const answersReducer = (state = initialState, action = {}) => {
   switch (action.type) {
-    case IMPORT_OPERATION:
+    case OperationTypes.IMPORT_OPERATION:
       return importRequested(state, action.payload);
 
     case RESTORE_ALL_ANSWERS:
       return restoreAllAnswers(action.payload);
 
-    case EDIT_OPERATION:
+    case OperationTypes.EDIT_OPERATION:
       return updateAnswers(state, action.payload);
 
     case CLEAR_ANSWERS:

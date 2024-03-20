@@ -1,11 +1,6 @@
 import { officeApiHelper } from '../api/office-api-helper';
 
-import {
-  DUPLICATE_OPERATION,
-  EDIT_OPERATION,
-  IMPORT_OPERATION,
-  REFRESH_OPERATION,
-} from '../../operation/operation-type-names';
+import { OperationTypes } from '../../operation/operation-type-names';
 
 /**
  * IMPORT_OPERATION & DEFAULT
@@ -86,13 +81,13 @@ export const determineImagePropsToBeAddedToBook = ({
   };
 
   switch (operationType) {
-    case EDIT_OPERATION:
+    case OperationTypes.EDIT_OPERATION:
       return imageInWorkSheetProps || defaultImageProps;
-    case REFRESH_OPERATION:
+    case OperationTypes.REFRESH_OPERATION:
       return cachedImageProps || imageInWorkSheetProps || defaultImageProps;
-    case DUPLICATE_OPERATION:
+    case OperationTypes.DUPLICATE_OPERATION:
       return imagePropsForDuplicateOp || defaultImageProps;
-    case IMPORT_OPERATION:
+    case OperationTypes.IMPORT_OPERATION:
     default:
       return defaultImageProps;
   }

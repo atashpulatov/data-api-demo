@@ -7,11 +7,11 @@ import { mstrObjectRestService } from '../mstr-object-rest-service';
 
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
-import { GET_OFFICE_TABLE_IMPORT } from '../../operation/operation-steps';
+import { OperationSteps } from '../../operation/operation-steps';
 import mstrObjectEnum from '../mstr-object-type-enum';
 import dossierInstanceDefinition from './dossier-instance-definition';
 import { ErrorMessages } from '../../error/constants';
-import { importOperationStepDict, objectImportType } from '../constants';
+import { ImportOperationStepDict, ObjectImportType } from '../constants';
 
 class StepGetInstanceDefinition {
   /**
@@ -90,7 +90,7 @@ class StepGetInstanceDefinition {
       );
 
       // FIXME: below flow should not be part of this step
-      if (futureStep in importOperationStepDict) {
+      if (futureStep in ImportOperationStepDict) {
         startCell = await officeApiWorksheetHelper.getStartCell(
           insertNewWorksheet,
           excelContext,
@@ -126,7 +126,7 @@ class StepGetInstanceDefinition {
         shouldRenameExcelWorksheet,
       };
 
-      if (importType === objectImportType.TABLE) {
+      if (importType === ObjectImportType.TABLE) {
         // update table specific props
         updatedObject.crosstabHeaderDimensions = mstrTable.crosstabHeaderDimensions;
         updatedObject.isCrosstab = mstrTable.isCrosstab;
@@ -247,15 +247,15 @@ class StepGetInstanceDefinition {
     crosstabHeaderDimensions,
     subtotalsAddresses,
     futureStep,
-    importType = objectImportType.TABLE
+    importType = ObjectImportType.TABLE
   ) => {
     // We do not need to set prevCrosstabDimensions, crosstabHeaderDimensions and subtotalsInfo for images
-    if (importType === objectImportType.IMAGE) {
+    if (importType === ObjectImportType.IMAGE) {
       return;
     }
     const { mstrTable } = instanceDefinition;
 
-    if (crosstabHeaderDimensions && futureStep !== GET_OFFICE_TABLE_IMPORT) {
+    if (crosstabHeaderDimensions && futureStep !== OperationSteps.GET_OFFICE_TABLE_IMPORT) {
       mstrTable.prevCrosstabDimensions = crosstabHeaderDimensions;
     } else {
       mstrTable.prevCrosstabDimensions = false;

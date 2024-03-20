@@ -1,6 +1,6 @@
-import { HIGHLIGHT_OPERATION } from '../../operation/operation-type-names';
+import { OperationTypes } from '../../operation/operation-type-names';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
-import { objectImportType } from '../../mstr-object/constants';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 class OfficeReducerHelper {
   init = reduxStore => {
@@ -22,7 +22,7 @@ class OfficeReducerHelper {
     // Filter out the image objects if the shape api is not supported
     // in current version in order to maintain the backward compatibility.
     if (!isShapeAPISupported) {
-      loadedObjects = loadedObjects.filter(object => object?.importType !== objectImportType.IMAGE);
+      loadedObjects = loadedObjects.filter(object => object?.importType !== ObjectImportType.IMAGE);
     }
 
     return loadedObjects;
@@ -37,7 +37,7 @@ class OfficeReducerHelper {
     this.reduxStore
       .getState()
       .operationReducer.operations.filter(
-        operation => operation.operationType !== HIGHLIGHT_OPERATION
+        operation => operation.operationType !== OperationTypes.HIGHLIGHT_OPERATION
       );
 
   /**

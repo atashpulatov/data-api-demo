@@ -19,7 +19,7 @@ import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
 import { EmbeddedLibrary } from './embedded-library';
-import { objectImportType } from '../../mstr-object/constants';
+import { ObjectImportType } from '../../mstr-object/constants';
 import { ImportActionTypes, ImportButtonIds } from '../../popup/popup-buttons/import-btn-constants';
 
 import './library.css';
@@ -234,7 +234,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
         handleOk={handleOk}
         handleSecondary={handleSecondary}
         handleCancel={handleCancel}
-        primaryImportType={objectImportType.TABLE}
+        primaryImportType={ObjectImportType.TABLE}
         disableSecondary={
           !!mstrObjectType && mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name
         }

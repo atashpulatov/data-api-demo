@@ -22,7 +22,7 @@ import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reduce
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
 import { EmbeddedDossier } from './embedded-dossier';
 import { errorCodes } from '../../error/constants';
-import { objectImportType } from '../../mstr-object/constants';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 import './dossier.css';
 
@@ -69,7 +69,7 @@ export const DossierWindowNotConnected = props => {
   const isSupported = !!(isSelected && vizData && vizData.isSupported);
   const isChecking = !!(isSelected && (!vizData || (vizData && vizData.isSupported === undefined)));
   const isSecondaryActionDisabled = !isShapeAPISupported || isEdit;
-  const primaryImportType = importType || objectImportType.TABLE;
+  const primaryImportType = importType || ObjectImportType.TABLE;
 
   const handleCancel = () => {
     const { commandCancel } = selectorProperties;
@@ -176,7 +176,7 @@ export const DossierWindowNotConnected = props => {
   );
 
   const handleOk = useCallback(
-    (impType = objectImportType.TABLE) => {
+    (impType = ObjectImportType.TABLE) => {
       const message = {
         command: selectorProperties.commandOk,
         chosenObjectName,
@@ -333,7 +333,7 @@ export const DossierWindowNotConnected = props => {
           </div>
           <PopupButtons
             handleOk={() => handleOk(primaryImportType)}
-            handleSecondary={() => handleOk(objectImportType.IMAGE)}
+            handleSecondary={() => handleOk(ObjectImportType.IMAGE)}
             hideSecondary={isSecondaryActionDisabled}
             primaryImportType={primaryImportType}
             shouldShowImportImage
@@ -400,7 +400,7 @@ DossierWindowNotConnected.defaultProps = {
       messageName: '',
     },
     selectedViz: '',
-    importType: objectImportType.TABLE,
+    importType: ObjectImportType.TABLE,
   },
   isReprompt: false,
   repromptsQueue: {
