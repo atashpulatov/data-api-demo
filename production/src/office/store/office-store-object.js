@@ -4,7 +4,7 @@ import { errorService } from '../../error/error-handler';
 import { removeObject } from '../../redux-reducer/object-reducer/object-actions';
 import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 import { officeContext } from '../office-context';
-import { objectImportType } from '../../mstr-object/constants';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 class OfficeStoreObject {
   init = reduxStore => {
@@ -61,7 +61,7 @@ class OfficeStoreObject {
 
       if (objectsInOfficeStore?.length > 0) {
         // Grab image objects from Office Store
-        const imageObjects = objectsInOfficeStore.filter(object => object?.importType === objectImportType.IMAGE);
+        const imageObjects = objectsInOfficeStore.filter(object => object?.importType === ObjectImportType.IMAGE);
 
         // Merge imageObjects with objects from redux based and sort descendng on objectWorkingId property in object.
         if (imageObjects?.length > 0) {

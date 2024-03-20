@@ -150,7 +150,7 @@ export class HomeHelper {
    * and updates the redux store with the API support status
    */
   initIsShapeAPISupported(): void {
-    const isShapeAPISupported = officeContext.isShapeAPISupported());
+    const isShapeAPISupported = officeContext.isShapeAPISupported();
     this.reduxStore.dispatch(officeActions.setIsShapeAPISupported(isShapeAPISupported));
   }
 }

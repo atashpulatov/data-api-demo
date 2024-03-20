@@ -5,7 +5,7 @@ import { restoreAllAnswers } from '../../redux-reducer/answers-reducer/answers-a
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
 import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 import { officeContext } from '../office-context';
-import { objectImportType } from '../../mstr-object/constants';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 class OfficeStoreRestoreObject {
   init = reduxStore => {
@@ -46,7 +46,7 @@ class OfficeStoreRestoreObject {
     const isShapeAPISupported = officeContext.isShapeAPISupported();
 
     if (!isShapeAPISupported && objects?.filter) {
-      return objects.filter(object => object?.importType !== objectImportType.IMAGE);
+      return objects.filter(object => object?.importType !== ObjectImportType.IMAGE);
     }
 
     return objects;
