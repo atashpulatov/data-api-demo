@@ -246,7 +246,7 @@ class OfficeTableRefresh {
     if (isCrosstab && crosstabHeaderDimensions && prevCrosstabDimensions) {
       if (
         validRowsX !== crosstabHeaderDimensions.rowsX ||
-        validColumnsY - 1 !== crosstabHeaderDimensions.columnsY
+        validColumnsY !== crosstabHeaderDimensions.columnsY
       ) {
         tableChanged = true;
         prevCrosstabDimensions.rowsX = validRowsX;
