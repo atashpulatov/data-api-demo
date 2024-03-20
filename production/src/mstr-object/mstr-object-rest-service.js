@@ -750,6 +750,27 @@ class MstrObjectRestService {
 
     return response;
   };
+
+  /**
+   * Fetches information about Page-by elements of given Report instance
+   *
+   * @param {string} reportId unique identifier of the mstr report
+   * @param {string} projectId unique identifier of the mstr project
+   * @param {string} instanceId unique identifier of the Report instance
+   * @returns {Promise} object containing Page-by elements and valid Page-by combinations
+   */
+  getPageByElements = async (reportId, projectId, instanceId) => {
+    const storeState = this.reduxStore.getState();
+    const { envUrl, authToken } = storeState.sessionReducer;
+    const fullPath = `${envUrl}/v2/reports/${reportId}/instances/${instanceId}/pageBy/elements`;
+
+    return request
+      .get(fullPath)
+      .set('x-mstr-authtoken', authToken)
+      .set('x-mstr-projectid', projectId)
+      .withCredentials()
+      .then(res => res.body);
+  };
 }
 
 export const mstrObjectRestService = new MstrObjectRestService();

@@ -1,9 +1,9 @@
 import { authenticationHelper } from '../../authentication/authentication-helper';
-import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
 import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-helper';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
 import { mstrObjectRestService } from '../mstr-object-rest-service';
+import instanceDefinitionHelper from './instance-definition-helper';
 
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
@@ -48,15 +48,17 @@ class StepGetInstanceDefinition {
         isPrompted,
         definition,
         importType,
+        pageByData,
       } = objectData;
       let { visualizationInfo, body, name } = objectData;
+      const { preparedInstanceDefinition } = operationData;
 
       const excelContext = await officeApiHelper.getExcelContext();
 
       this.setupBodyTemplate(body);
 
       let startCell;
-      let instanceDefinition;
+      let instanceDefinition = preparedInstanceDefinition;
       let shouldRenameExcelWorksheet = false;
 
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
@@ -71,15 +73,24 @@ class StepGetInstanceDefinition {
           name,
           instanceDefinition
         );
-      } else {
+      } else if (!instanceDefinition) {
         instanceDefinition = await mstrObjectRestService.createInstance(objectData);
       }
 
       // TODO check if dossierData is still needed
-      instanceDefinition = await this.modifyInstanceWithPrompt({
-        instanceDefinition,
-        ...objectData,
-      });
+      if (!preparedInstanceDefinition) {
+        instanceDefinition = await instanceDefinitionHelper.modifyInstanceWithPrompt({
+          ...objectData,
+          instanceDefinition,
+        });
+      } else {
+        instanceDefinition = await instanceDefinitionHelper.modifyInstanceForPageBy(
+          objectData,
+          pageByData,
+          instanceDefinition,
+          body
+        );
+      }
 
       this.savePreviousObjectData(
         instanceDefinition,
@@ -170,67 +181,6 @@ class StepGetInstanceDefinition {
         delete body.requestedObjects;
       }
       body.template = body.requestedObjects;
-    }
-  };
-
-  /**
-   * Answers prompts and modify instance of the object.
-   *
-   * @param {Object} instanceDefinition Object containing information about MSTR object
-   * @param {String} objectId Id object neing currentrly imported
-   * @param {String} projectId Id of the Mstr project which object is part of
-   * @param {Object} promptsAnswers Stored prompt answers
-   * @param {Object} dossierData
-   * @param {Object} body Contains requested objects and filters.
-   */
-  modifyInstanceWithPrompt = async ({
-    instanceDefinition,
-    objectId,
-    projectId,
-    promptsAnswers,
-    dossierData,
-    body,
-    displayAttrFormNames,
-  }) => {
-    // Status 2 = report has open prompts to be answered before data can be returned
-    if (instanceDefinition.status !== ObjectExecutionStatus.PROMPTED) {
-      return instanceDefinition;
-    }
-
-    try {
-      let count = 0;
-
-      while (
-        instanceDefinition.status === ObjectExecutionStatus.PROMPTED &&
-        count < promptsAnswers.length
-      ) {
-        const config = {
-          objectId,
-          projectId,
-          instanceId: instanceDefinition.instanceId,
-          promptsAnswers: promptsAnswers[count],
-        };
-
-        await mstrObjectRestService.answerPrompts(config);
-
-        const configInstance = {
-          ...config,
-          dossierData,
-          body,
-          displayAttrFormNames,
-        };
-
-        if (count === promptsAnswers.length - 1) {
-          instanceDefinition = await mstrObjectRestService.modifyInstance(configInstance);
-        }
-
-        count += 1;
-      }
-
-      return instanceDefinition;
-    } catch (error) {
-      console.error(error);
-      throw error;
     }
   };
 

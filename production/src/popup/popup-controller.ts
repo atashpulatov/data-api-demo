@@ -1,5 +1,9 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import { authenticationHelper } from '../authentication/authentication-helper';
+import instanceDefinitionHelper from '../mstr-object/instance/instance-definition-helper';
 import { officeApiHelper } from '../office/api/office-api-helper';
+import { pageByHelper } from '../page-by/page-by-helper';
 
 import { DialogResponse, ReportParams } from './popup-controller-types';
 
@@ -358,8 +362,52 @@ class PopupController {
         definition: { filters: response.filterDetails },
         displayAttrFormNames: response.displayAttrFormNames,
       };
-      this.reduxStore.dispatch(importRequested(objectData));
+
+      await this.handleImport(objectData);
     }
+  };
+
+  /**
+   * Method used for handling import of the object selected by the user.
+   * For Page-by Reports, it will loop through all valid combinations of Page-by elements, creating new import request for each.
+   *
+   * @param objectData Contains information about the MSTR object
+   */
+  handleImport = async (objectData: any): Promise<void> => {
+    const pageByLinkId = uuidv4();
+
+    const preparedInstanceDefinition =
+      await instanceDefinitionHelper.createReportInstance(objectData);
+
+    const validPageByData = await pageByHelper.getValidPageByData(
+      objectData,
+      preparedInstanceDefinition
+    );
+
+    if (!validPageByData?.length) {
+      return this.reduxStore.dispatch(
+        importRequested({ ...objectData }, preparedInstanceDefinition)
+      );
+    }
+
+    validPageByData.forEach((validCombination, pageByIndex) => {
+      const pageByData = {
+        pageByLinkId,
+        elements: validCombination,
+      };
+
+      this.reduxStore.dispatch(
+        importRequested(
+          {
+            ...objectData,
+            pageByData,
+            insertNewWorksheet: true,
+          },
+          preparedInstanceDefinition,
+          pageByIndex
+        )
+      );
+    });
   };
 
   loadPending =
