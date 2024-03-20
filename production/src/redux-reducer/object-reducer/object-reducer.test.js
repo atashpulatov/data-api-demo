@@ -1,11 +1,6 @@
-/* eslint-disable object-curly-newline, indent */
-import {
-  REMOVE_OBJECT,
-  RESTORE_ALL_OBJECTS,
-  UPDATE_OBJECT,
-} from '../redux-reducer/object-reducer/object-actions';
-import { objectReducer } from '../redux-reducer/object-reducer/object-reducer';
-import { DUPLICATE_OPERATION, IMPORT_OPERATION } from './operation-type-names';
+import { OperationTypes } from '../../operation/operation-type-names';
+import { REMOVE_OBJECT, RESTORE_ALL_OBJECTS, UPDATE_OBJECT } from './object-actions';
+import { objectReducer } from './object-reducer';
 
 describe('objectReducer', () => {
   const initialObject = {
@@ -72,7 +67,7 @@ describe('objectReducer', () => {
     it('should add first object to array and return new array', () => {
       // given
       const action = {
-        type: IMPORT_OPERATION,
+        type: OperationTypes.IMPORT_OPERATION,
         payload: { object: initialObject },
       };
 
@@ -85,8 +80,8 @@ describe('objectReducer', () => {
 
     it.each`
       actionType
-      ${IMPORT_OPERATION}
-      ${DUPLICATE_OPERATION}
+      ${OperationTypes.IMPORT_OPERATION}
+      ${OperationTypes.DUPLICATE_OPERATION}
     `('should add object to array and return new array', ({ actionType }) => {
       // given
       const action = {

@@ -25,7 +25,7 @@ import {
   clearRepromptTask,
   executeNextRepromptTask,
 } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
-import { objectImportType } from '../mstr-object/constants';
+import { ObjectImportType } from '../mstr-object/constants';
 
 const EXCEL_REUSE_PROMPT_ANSWERS = 'excelReusePromptAnswers';
 class SidePanelService {
@@ -120,7 +120,7 @@ class SidePanelService {
     object.insertNewWorksheet = insertNewWorksheet;
     object.objectWorkingId = Date.now();
 
-    if (object.importType === objectImportType.IMAGE) {
+    if (object.importType === ObjectImportType.IMAGE) {
       object.bindIdToBeDuplicated = object.bindId;
     }
 

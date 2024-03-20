@@ -9,19 +9,15 @@ import { removeObject, restoreObjectBackup } from '../redux-reducer/object-reduc
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { cancelOperation } from '../redux-reducer/operation-reducer/operation-actions';
 import { executeNextRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
-import {
-  CLEAR_DATA_OPERATION,
-  DUPLICATE_OPERATION,
-  EDIT_OPERATION,
-  IMPORT_OPERATION,
-  REFRESH_OPERATION,
-} from './operation-type-names';
-import { objectImportType } from '../mstr-object/constants';
+import { OperationTypes } from './operation-type-names';
+import { ObjectImportType } from '../mstr-object/constants';
 
 class OperationErrorHandler {
-  init = reduxStore => {
+  reduxStore: any;
+
+  init(reduxStore: any): void {
     this.reduxStore = reduxStore;
-  };
+  }
 
   /**
    * Main function responsible for error handling in operations.
@@ -31,7 +27,7 @@ class OperationErrorHandler {
    * @param {Object} operationData Contains informatons about current operation
    * @param {Error} error Error thrown during the operation execution
    */
-  handleOperationError = async (objectData, operationData, error) => {
+  async handleOperationError(objectData: any, operationData: any, error: any): Promise<void> {
     const callback = this.getCallback(objectData, operationData);
     if (callback) {
       await errorService.handleObjectBasedError(
@@ -41,17 +37,17 @@ class OperationErrorHandler {
         operationData
       );
     }
-  };
+  }
 
   /**
    * Function handling erros that occured during Import and Duplicate operation.
    * Error will be displayed and the operation will be canceled
    * If the Excel table was already created it will be removed.
    *
-   * @param {Object} objectData Unique Id of the object allowing to reference specific object
-   * @param {Object} operationData Contains informatons about current operation
+   * @param objectData Unique Id of the object allowing to reference specific object
+   * @param operationData Contains informatons about current operation
    */
-  handleImportOperationError = async (objectData, operationData) => {
+  async handleImportOperationError(objectData: any, operationData: any): Promise<void> {
     const { objectWorkingId, isCrosstab, crosstabHeaderDimensions, bindId, importType } =
       objectData;
     const { officeTable, excelContext } = operationData;
@@ -74,20 +70,20 @@ class OperationErrorHandler {
     }
 
     // delete image if it was created
-    if (importType === objectImportType.IMAGE && bindId) {
+    if (importType === ObjectImportType.IMAGE && bindId) {
       await officeShapeApiHelper.deleteImage(excelContext, bindId);
     }
 
     this.clearFailedObjectFromRedux(objectWorkingId);
-  };
+  }
 
   /**
    * Function removing object, operation and notification.
    * Called after encountering error that occured during Import and Duplicate operation.
    *
-   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param objectWorkingId Unique Id of the object allowing to reference specific object
    */
-  clearFailedObjectFromRedux = objectWorkingId => {
+  clearFailedObjectFromRedux(objectWorkingId: number): void {
     // Make sure that object isn't removed from redux if it's still in reprompt queue
     const { total = 0 } = this.reduxStore.getState().repromptsQueueReducer;
     if (total === 0) {
@@ -96,7 +92,7 @@ class OperationErrorHandler {
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
     this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
     this.reduxStore.dispatch(executeNextRepromptTask());
-  };
+  }
 
   /**
    * Function handling erros that occured during Refresh and Edit operation.
@@ -106,7 +102,7 @@ class OperationErrorHandler {
    * @param {Object} objectData Unique Id of the object allowing to reference specific object
    * @param {Object} operationData Contains informatons about current operation
    */
-  handleRefreshOperationError = async (objectData, operationData) => {
+  async handleRefreshOperationError(objectData: any, operationData: any): Promise<void> {
     const { objectWorkingId, isCrosstab } = objectData;
     const { officeTable, backupObjectData, isTotalsRowVisible = false } = operationData;
     if (officeTable) {
@@ -122,7 +118,7 @@ class OperationErrorHandler {
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
 
     this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
-  };
+  }
 
   /**
    * Function handling erros that occured during Clear Data operation.
@@ -130,10 +126,10 @@ class OperationErrorHandler {
    * Additionaly all other Clear Data operation will also be canceled and
    * the isClearDataFailed flag will be changed to false.
    */
-  handleClearDataOperationError = async () => {
+  async handleClearDataOperationError(): Promise<void> {
     const operationsList = officeReducerHelper.getOperationsListFromOperationReducer();
     const clearDataOperations = operationsList.filter(
-      operation => operation.operationType === CLEAR_DATA_OPERATION
+      operation => operation.operationType === OperationTypes.CLEAR_DATA_OPERATION
     );
 
     for (let index = clearDataOperations.length - 1; index >= 0; index--) {
@@ -143,43 +139,43 @@ class OperationErrorHandler {
     }
 
     officeActions.toggleIsClearDataFailedFlag(true)(this.reduxStore.dispatch);
-  };
+  }
 
   /**
    * Function handling erros that occurs in other types of operations.
    * Error will be displayed and the operation will be canceled.
    *
-   * @param {Object} objectData Unique Id of the object allowing to reference specific object
+   * @param objectData Unique Id of the object allowing to reference specific object
    */
-  handleGenericOperationError = async objectData => {
+  async handleGenericOperationError(objectData: any): Promise<void> {
     const { objectWorkingId } = objectData;
 
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
 
     this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
-  };
+  }
 
   /**
    * Function geting callback that occurs in all types of operations.
    * Error will be displayed and the operation will be canceled.
    *
-   * @param {Object} objectData Unique Id of the object allowing to reference specific object
-   * @param {Object} operationData Contains informatons about current operation
+   * @param objectData Unique Id of the object allowing to reference specific object
+   * @param operationData Contains informatons about current operation
    */
-  getCallback(objectData, operationData) {
+  getCallback(objectData: any, operationData: any): Function {
     const { operationType } = operationData;
 
     let callback;
     switch (operationType) {
-      case IMPORT_OPERATION:
-      case DUPLICATE_OPERATION:
+      case OperationTypes.IMPORT_OPERATION:
+      case OperationTypes.DUPLICATE_OPERATION:
         callback = () => this.handleImportOperationError(objectData, operationData);
         break;
-      case REFRESH_OPERATION:
-      case EDIT_OPERATION:
+      case OperationTypes.REFRESH_OPERATION:
+      case OperationTypes.EDIT_OPERATION:
         callback = () => this.handleRefreshOperationError(objectData, operationData);
         break;
-      case CLEAR_DATA_OPERATION:
+      case OperationTypes.CLEAR_DATA_OPERATION:
         callback = () => this.handleClearDataOperationError();
         break;
       default:

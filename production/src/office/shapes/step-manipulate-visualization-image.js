@@ -9,11 +9,7 @@ import { determineImagePropsToBeAddedToBook } from './shape-helper-util';
 
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
-import {
-  DUPLICATE_OPERATION,
-  EDIT_OPERATION,
-  REFRESH_OPERATION,
-} from '../../operation/operation-type-names';
+import { OperationTypes } from '../../operation/operation-type-names';
 import { ErrorMessages } from '../../error/constants';
 
 class StepManipulateVisualizationImage {
@@ -146,12 +142,14 @@ class StepManipulateVisualizationImage {
    * @throws {Error} VISUALIZATION_REMOVED_FROM_EXCEL error if the image was manually removed from sheet
    */
   validateOperation = (shapeInWorksheet, shapeToBeDuplicated, operationType) => {
-    const isInValidEditOperation = operationType === EDIT_OPERATION && !shapeInWorksheet;
+    const isInValidEditOperation =
+      operationType === OperationTypes.EDIT_OPERATION && !shapeInWorksheet;
 
-    const isInValidRefreshOperation = operationType === REFRESH_OPERATION && !shapeInWorksheet;
+    const isInValidRefreshOperation =
+      operationType === OperationTypes.REFRESH_OPERATION && !shapeInWorksheet;
 
     const isInValidDuplicateOperation =
-      operationType === DUPLICATE_OPERATION && !shapeToBeDuplicated;
+      operationType === OperationTypes.DUPLICATE_OPERATION && !shapeToBeDuplicated;
 
     if (isInValidDuplicateOperation || isInValidEditOperation || isInValidRefreshOperation) {
       throw new Error(ErrorMessages.VISUALIZATION_REMOVED_FROM_EXCEL);

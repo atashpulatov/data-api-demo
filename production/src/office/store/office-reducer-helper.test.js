@@ -1,7 +1,7 @@
 import officeReducerHelper from './office-reducer-helper';
 
-import { HIGHLIGHT_OPERATION, REFRESH_OPERATION } from '../../operation/operation-type-names';
-import { objectImportType } from '../../mstr-object/constants';
+import { OperationTypes } from '../../operation/operation-type-names';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 describe('OfficeReducerHelper init', () => {
   it('init work as expected', () => {
@@ -20,8 +20,8 @@ describe('OfficeReducerHelper', () => {
   });
 
   const mockObjects = [
-    { importType: objectImportType.TABLE },
-    { importType: objectImportType.IMAGE },
+    { importType: ObjectImportType.TABLE },
+    { importType: ObjectImportType.IMAGE },
   ];
   const reduxStoreMock = {
     getState: () => ({
@@ -30,8 +30,8 @@ describe('OfficeReducerHelper', () => {
       },
       operationReducer: {
         operations: [
-          { operationType: HIGHLIGHT_OPERATION, objectWorkingId: 42 },
-          { operationType: REFRESH_OPERATION, objectWorkingId: 69 },
+          { operationType: OperationTypes.HIGHLIGHT_OPERATION, objectWorkingId: 42 },
+          { operationType: OperationTypes.REFRESH_OPERATION, objectWorkingId: 69 },
         ],
       },
       officeReducer: {
@@ -54,7 +54,9 @@ describe('OfficeReducerHelper', () => {
   it('getOperationsListFromOperationReducer works as expected', () => {
     // given
     officeReducerHelper.init(reduxStoreMock);
-    const expectedOperations = [{ operationType: REFRESH_OPERATION, objectWorkingId: 69 }];
+    const expectedOperations = [
+      { operationType: OperationTypes.REFRESH_OPERATION, objectWorkingId: 69 },
+    ];
 
     // when
     const result = officeReducerHelper.getOperationsListFromOperationReducer();

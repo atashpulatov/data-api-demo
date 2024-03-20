@@ -26,113 +26,116 @@ import stepBindOfficeTable from '../office/table/step-bind-office-table';
 import stepGetOfficeTableEditRefresh from '../office/table/step-get-office-table-edit-refresh';
 import stepGetOfficeTableImport from '../office/table/step-get-office-table-import';
 import stepModifyObject from '../popup/step-modify-object';
-import {
-  ADD_VISUALIZATION_PLACEHOLDER,
-  BACKUP_OBJECT_DATA,
-  BIND_OFFICE_TABLE,
-  CHECK_OBJECT_STATUS,
-  CLEAR_CROSSTAB_HEADERS,
-  CLEAR_TABLE_DATA,
-  COMPLETE_CLEAR_DATA,
-  DISPLAY_NOTIFICATION_COMPLETED,
-  FETCH_INSERT_DATA,
-  FORMAT_DATA,
-  FORMAT_OFFICE_TABLE,
-  FORMAT_SUBTOTALS,
-  GET_DUPLICATE_NAME,
-  GET_INSTANCE_DEFINITION,
-  GET_OBJECT_DETAILS,
-  GET_OFFICE_TABLE_EDIT_REFRESH,
-  GET_OFFICE_TABLE_IMPORT,
-  HIGHLIGHT_OBJECT,
-  MANIPULATE_VISUALIZATION_IMAGE,
-  MODIFY_OBJECT,
-  MOVE_NOTIFICATION_TO_IN_PROGRESS,
-  REMOVE_OBJECT_BINDING,
-  REMOVE_OBJECT_TABLE,
-  REMOVE_VISUALIZATION_IMAGE,
-  RENAME_EXCEL_WORKSHEET,
-  SAVE_IMAGE_DETAILS,
-  SAVE_OBJECT_IN_EXCEL,
-} from './operation-steps';
+import { OperationSteps } from './operation-steps';
 
 class SubscribeSteps {
-  init = (reduxStore, operationBus) => {
-    this.reduxStore = reduxStore;
-
-    operationBus.subscribe(MODIFY_OBJECT, stepModifyObject.modifyObject);
-
-    operationBus.subscribe(BACKUP_OBJECT_DATA, stepBackupObjectData.backupObjectData);
+  init = (operationBus: any): void => {
+    operationBus.subscribe(OperationSteps.MODIFY_OBJECT, stepModifyObject.modifyObject);
 
     operationBus.subscribe(
-      GET_INSTANCE_DEFINITION,
+      OperationSteps.BACKUP_OBJECT_DATA,
+      stepBackupObjectData.backupObjectData
+    );
+
+    operationBus.subscribe(
+      OperationSteps.GET_INSTANCE_DEFINITION,
       stepGetInstanceDefinition.getInstanceDefinition
     );
-    operationBus.subscribe(GET_OBJECT_DETAILS, stepGetObjectDetails.getObjectDetails);
-
-    operationBus.subscribe(GET_OFFICE_TABLE_IMPORT, stepGetOfficeTableImport.getOfficeTableImport);
     operationBus.subscribe(
-      GET_OFFICE_TABLE_EDIT_REFRESH,
+      OperationSteps.GET_OBJECT_DETAILS,
+      stepGetObjectDetails.getObjectDetails
+    );
+
+    operationBus.subscribe(
+      OperationSteps.GET_OFFICE_TABLE_IMPORT,
+      stepGetOfficeTableImport.getOfficeTableImport
+    );
+    operationBus.subscribe(
+      OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH,
       stepGetOfficeTableEditRefresh.getOfficeTableEditRefresh
     );
 
-    operationBus.subscribe(FORMAT_DATA, stepApplyFormatting.applyFormatting);
+    operationBus.subscribe(OperationSteps.FORMAT_DATA, stepApplyFormatting.applyFormatting);
 
-    operationBus.subscribe(FORMAT_OFFICE_TABLE, stepFormatTable.formatTable);
+    operationBus.subscribe(OperationSteps.FORMAT_OFFICE_TABLE, stepFormatTable.formatTable);
 
     operationBus.subscribe(
-      FETCH_INSERT_DATA,
+      OperationSteps.FETCH_INSERT_DATA,
       stepFetchInsertDataIntoExcel.fetchInsertDataIntoExcel
     );
 
     operationBus.subscribe(
-      FORMAT_SUBTOTALS,
+      OperationSteps.FORMAT_SUBTOTALS,
       stepApplySubtotalFormatting.applySubtotalFormattingRedux
     );
 
-    operationBus.subscribe(BIND_OFFICE_TABLE, stepBindOfficeTable.bindOfficeTable);
+    operationBus.subscribe(OperationSteps.BIND_OFFICE_TABLE, stepBindOfficeTable.bindOfficeTable);
 
-    operationBus.subscribe(SAVE_OBJECT_IN_EXCEL, stepSaveObjectInExcel.saveObject);
-
-    operationBus.subscribe(GET_DUPLICATE_NAME, stepGetDuplicateName.getDuplicateName);
-
-    operationBus.subscribe(REMOVE_OBJECT_BINDING, stepRemoveObjectBinding.removeObjectBinding);
-    operationBus.subscribe(REMOVE_OBJECT_TABLE, stepRemoveObjectTable.removeObjectTable);
-
-    operationBus.subscribe(HIGHLIGHT_OBJECT, stepHighlightObject.highlightObject);
-
-    operationBus.subscribe(CHECK_OBJECT_STATUS, stepCheckObjectStatus.checkObjectStatus);
-    operationBus.subscribe(CLEAR_CROSSTAB_HEADERS, stepClearCrosstabHeaders.clearCrosstabHeaders);
-    operationBus.subscribe(CLEAR_TABLE_DATA, stepClearTableData.clearTableData);
-    operationBus.subscribe(COMPLETE_CLEAR_DATA, stepCompleteClearData.completeClearData);
+    operationBus.subscribe(OperationSteps.SAVE_OBJECT_IN_EXCEL, stepSaveObjectInExcel.saveObject);
 
     operationBus.subscribe(
-      MOVE_NOTIFICATION_TO_IN_PROGRESS,
+      OperationSteps.GET_DUPLICATE_NAME,
+      stepGetDuplicateName.getDuplicateName
+    );
+
+    operationBus.subscribe(
+      OperationSteps.REMOVE_OBJECT_BINDING,
+      stepRemoveObjectBinding.removeObjectBinding
+    );
+    operationBus.subscribe(
+      OperationSteps.REMOVE_OBJECT_TABLE,
+      stepRemoveObjectTable.removeObjectTable
+    );
+
+    operationBus.subscribe(OperationSteps.HIGHLIGHT_OBJECT, stepHighlightObject.highlightObject);
+
+    operationBus.subscribe(
+      OperationSteps.CHECK_OBJECT_STATUS,
+      stepCheckObjectStatus.checkObjectStatus
+    );
+    operationBus.subscribe(
+      OperationSteps.CLEAR_CROSSTAB_HEADERS,
+      stepClearCrosstabHeaders.clearCrosstabHeaders
+    );
+    operationBus.subscribe(OperationSteps.CLEAR_TABLE_DATA, stepClearTableData.clearTableData);
+    operationBus.subscribe(
+      OperationSteps.COMPLETE_CLEAR_DATA,
+      stepCompleteClearData.completeClearData
+    );
+
+    operationBus.subscribe(
+      OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
       stepNotificationInProgress.moveNotificationToInProgress
     );
     operationBus.subscribe(
-      DISPLAY_NOTIFICATION_COMPLETED,
+      OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
       stepDisplayNotificationCompleted.displayNotificationCompleted
     );
 
-    operationBus.subscribe(RENAME_EXCEL_WORKSHEET, stepRenameExcelWorksheet.renameExcelWorksheet);
+    operationBus.subscribe(
+      OperationSteps.RENAME_EXCEL_WORKSHEET,
+      stepRenameExcelWorksheet.renameExcelWorksheet
+    );
 
     // shape steps
     operationBus.subscribe(
-      MANIPULATE_VISUALIZATION_IMAGE,
+      OperationSteps.MANIPULATE_VISUALIZATION_IMAGE,
       stepManipulateVisualizationImage.manipulateVisualizationImage
     );
     operationBus.subscribe(
-      REMOVE_VISUALIZATION_IMAGE,
+      OperationSteps.REMOVE_VISUALIZATION_IMAGE,
       stepRemoveVisualizationImage.removeVisualizationImage
     );
 
     operationBus.subscribe(
-      ADD_VISUALIZATION_PLACEHOLDER,
+      OperationSteps.ADD_VISUALIZATION_PLACEHOLDER,
       stepAddVisualizationPlaceholder.addVisualizationPlaceholder
     );
 
-    operationBus.subscribe(SAVE_IMAGE_DETAILS, stepSaveImageDetails.saveImageDetails);
+    operationBus.subscribe(
+      OperationSteps.SAVE_IMAGE_DETAILS,
+      stepSaveImageDetails.saveImageDetails
+    );
   };
 }
 

@@ -2,7 +2,7 @@ import { officeApiHelper } from '../api/office-api-helper';
 
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
-import { DUPLICATE_OPERATION, IMPORT_OPERATION } from '../../operation/operation-type-names';
+import { OperationTypes } from '../../operation/operation-type-names';
 import officeApiDataLoader from '../api/office-api-data-loader';
 
 class StepBindOfficeTable {
@@ -34,8 +34,8 @@ class StepBindOfficeTable {
 
       if (
         tableChanged ||
-        operationType === DUPLICATE_OPERATION ||
-        operationType === IMPORT_OPERATION
+        operationType === OperationTypes.DUPLICATE_OPERATION ||
+        operationType === OperationTypes.IMPORT_OPERATION
       ) {
         const tableName = await officeApiDataLoader.loadSingleExcelData(
           excelContext,
