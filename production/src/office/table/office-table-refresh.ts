@@ -250,12 +250,12 @@ class OfficeTableRefresh {
       ) {
         tableChanged = true;
         prevCrosstabDimensions.rowsX = validRowsX;
-        prevCrosstabDimensions.columnsY = validColumnsY - 1;
+        prevCrosstabDimensions.columnsY = validColumnsY;
       }
       if (tableChanged) {
         startCellAddress = officeApiHelper.offsetCellBy(
           startCellAddress,
-          -prevCrosstabDimensions.columnsY,
+          -(prevCrosstabDimensions.columnsY - 1),
           -prevCrosstabDimensions.rowsX
         );
       }

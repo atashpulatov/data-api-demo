@@ -102,7 +102,8 @@ class MstrAttributeFormHelper {
     }
 
     let names: string[] = [];
-    for (const [elementIndex, element] of elements.entries()) {
+    for (let elementIndex = 0; elementIndex < elements.length; elementIndex++) {
+      const element = elements[elementIndex];
       const headerCount = element.headerCount || 1;
 
       for (let headerIndex = 0; headerIndex < headerCount; headerIndex++) {
