@@ -375,7 +375,7 @@ class ErrorService {
 
       // Show Overview table if there are any reprompts in queue if error occured
       // while reprompting dossier/report in Overview window only.
-      if (total > 0 && popupType === PopupTypeEnum.repromptDossierDataOverview) {
+      if (total > 0 && (popupType === PopupTypeEnum.repromptDossierDataOverview || popupType === PopupTypeEnum.repromptReportDataOverview)) {
         this.reduxStore.dispatch(
           popupStateActions.setPopupType(PopupTypeEnum.importedDataOverview)
         );
