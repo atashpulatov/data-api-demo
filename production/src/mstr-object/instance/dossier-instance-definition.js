@@ -2,7 +2,7 @@ import { mstrObjectRestService } from '../mstr-object-rest-service';
 import { visualizationInfoService } from '../visualization-info-service';
 
 import { errorService } from '../../error/error-handler';
-import { IMPORT_OPERATION } from '../../operation/operation-type-names';
+import { OperationTypes } from '../../operation/operation-type-names';
 import mstrObjectEnum from '../mstr-object-type-enum';
 import { ErrorMessages, ErrorType, IncomingErrorStrings } from '../../error/constants';
 
@@ -122,7 +122,7 @@ class DossierInstanceDefinition {
     const { objectEditedData, operationType } = operationData;
 
     if (
-      operationType === IMPORT_OPERATION ||
+      operationType === OperationTypes.IMPORT_OPERATION ||
       (objectEditedData &&
         objectEditedData.visualizationInfo &&
         objectEditedData.visualizationInfo.nameAndFormatShouldUpdate)

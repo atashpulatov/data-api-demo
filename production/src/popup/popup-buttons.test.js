@@ -2,7 +2,7 @@ import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 
 import { PopupButtonsNotConnected } from './popup-buttons/popup-buttons';
-import { objectImportType } from '../mstr-object/constants';
+import { ObjectImportType } from '../mstr-object/constants';
 
 describe('PopupButtons', () => {
   it('should NOT display prepare data when secondary action NOT provided', () => {
@@ -103,7 +103,7 @@ describe('PopupButtons', () => {
     // given
     // when
     const { getByText } = render(
-      <PopupButtonsNotConnected primaryImportType={objectImportType.TABLE} />
+      <PopupButtonsNotConnected primaryImportType={ObjectImportType.TABLE} />
     );
     // then
     expect(getByText('Import Data')).toBeInTheDocument();
@@ -114,7 +114,7 @@ describe('PopupButtons', () => {
     // given
     // when
     const { getByText } = render(
-      <PopupButtonsNotConnected primaryImportType={objectImportType.IMAGE} />
+      <PopupButtonsNotConnected primaryImportType={ObjectImportType.IMAGE} />
     );
     // then
     expect(getByText('Import Image')).toBeInTheDocument();
@@ -126,7 +126,7 @@ describe('PopupButtons', () => {
     // when
     const { getByText } = render(
       <PopupButtonsNotConnected
-        primaryImportType={objectImportType.TABLE}
+        primaryImportType={ObjectImportType.TABLE}
         shouldShowImportImage
         handleSecondary={jest.fn()}
       />

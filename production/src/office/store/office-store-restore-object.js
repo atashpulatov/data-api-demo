@@ -60,7 +60,7 @@ class OfficeStoreRestoreObject {
   restoreLegacyObjectsWithImportType = objects => {
     objects?.forEach(object => {
       if (object && !object.importType) {
-        object.importType = objectImportType.TABLE;
+        object.importType = ObjectImportType.TABLE;
       }
     });
   };

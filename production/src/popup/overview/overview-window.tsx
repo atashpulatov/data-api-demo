@@ -15,7 +15,7 @@ import overviewHelper from './overview-helper';
 
 import { selectorProperties } from '../../attribute-selector/selector-properties';
 import i18n from '../../i18n';
-import { REMOVE_OPERATION } from '../../operation/operation-type-names';
+import { OperationTypes } from '../../operation/operation-type-names';
 import { restoreAllNotifications } from '../../redux-reducer/notification-reducer/notification-action-creators';
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
 import {
@@ -127,7 +127,7 @@ export const OverviewWindowNotConnected: React.FC<OverviewWindowProps> = props =
       setTimeout(() => {
         if (
           notification.type === ObjectNotificationTypes.SUCCESS &&
-          notification.operationType === REMOVE_OPERATION
+          notification.operationType === OperationTypes.REMOVE_OPERATION
         ) {
           onDismissNotification([notification.objectWorkingId as number]);
         }

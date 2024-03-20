@@ -5,20 +5,8 @@ import { notificationService } from '../../notification/notification-service';
 
 import i18n from '../../i18n';
 import { getNotificationButtons } from '../../notification/notification-buttons';
-import {
-  DISPLAY_NOTIFICATION_COMPLETED,
-  FETCH_INSERT_DATA,
-  MOVE_NOTIFICATION_TO_IN_PROGRESS,
-} from '../../operation/operation-steps';
-import {
-  CLEAR_DATA_OPERATION,
-  DUPLICATE_OPERATION,
-  EDIT_OPERATION,
-  IMPORT_OPERATION,
-  MARK_STEP_COMPLETED,
-  REFRESH_OPERATION,
-  REMOVE_OPERATION,
-} from '../../operation/operation-type-names';
+import { OperationSteps } from '../../operation/operation-steps';
+import { MARK_STEP_COMPLETED, OperationTypes } from '../../operation/operation-type-names';
 import { officeProperties } from '../office-reducer/office-properties';
 import {
   CLEAR_NOTIFICATIONS,
@@ -40,18 +28,18 @@ const initialState = { notifications: [], globalNotification: { type: '' } };
 export const notificationReducer = (state = initialState, action = {}) => {
   const { payload } = action;
   switch (action.type) {
-    case IMPORT_OPERATION:
-    case REFRESH_OPERATION:
-    case REMOVE_OPERATION:
-    case DUPLICATE_OPERATION:
-    case CLEAR_DATA_OPERATION:
-    case EDIT_OPERATION:
+    case OperationTypes.IMPORT_OPERATION:
+    case OperationTypes.REFRESH_OPERATION:
+    case OperationTypes.REMOVE_OPERATION:
+    case OperationTypes.DUPLICATE_OPERATION:
+    case OperationTypes.CLEAR_DATA_OPERATION:
+    case OperationTypes.EDIT_OPERATION:
       return createProgressNotification(state, payload);
 
-    case MOVE_NOTIFICATION_TO_IN_PROGRESS:
+    case OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS:
       return moveNotificationToInProgress(state, payload);
 
-    case DISPLAY_NOTIFICATION_COMPLETED:
+    case OperationSteps.DISPLAY_NOTIFICATION_COMPLETED:
       return displayNotificationCompleted(state, payload);
 
     case DISPLAY_NOTIFICATION_WARNING:
@@ -86,7 +74,7 @@ export const notificationReducer = (state = initialState, action = {}) => {
 const createProgressNotification = (state, payload) => {
   const { objectWorkingId, operationType } = payload.operation;
   let notificationButtons;
-  if (operationType !== CLEAR_DATA_OPERATION) {
+  if (operationType !== OperationTypes.CLEAR_DATA_OPERATION) {
     notificationButtons = getNotificationButtons(getCancelButton(objectWorkingId, operationType));
   }
   
@@ -128,7 +116,7 @@ const displayNotificationCompleted = (state, payload) => {
     type: ObjectNotificationTypes.SUCCESS,
     title: i18n.t(titleOperationCompletedMap[notificationToUpdate.operationType]),
     dismissNotification:
-      notificationToUpdate.operationType === REMOVE_OPERATION
+      notificationToUpdate.operationType === OperationTypes.REMOVE_OPERATION
         ? () =>
             notificationService.dismissSuccessfulRemoveNotification(
               notificationToUpdate.objectWorkingId
@@ -172,7 +160,7 @@ const displayNotificationWarning = (state, payload) => {
 };
 
 const markFetchingComplete = (state, payload) => {
-  if (payload.completedStep === FETCH_INSERT_DATA) {
+  if (payload.completedStep === OperationSteps.FETCH_INSERT_DATA) {
     const { notificationToUpdate, notificationToUpdateIndex } = getNotificationToUpdate(
       state,
       payload
@@ -228,7 +216,7 @@ const getCancelButton = (objectWorkingId, operationType) => [
     type: 'basic',
     label: i18n.t('Cancel'),
     onClick: () => {
-      if (operationType === IMPORT_OPERATION) {
+      if (operationType === OperationTypes.IMPORT_OPERATION) {
         notificationService.removeObjectFromNotification(objectWorkingId);
       }
       notificationService.cancelOperationFromNotification(objectWorkingId);
@@ -272,8 +260,8 @@ function getNotificationToUpdate(state, payload) {
 
 function getIsIndeterminate(notificationToUpdate) {
   return !!(
-    notificationToUpdate.operationType === REMOVE_OPERATION ||
-    notificationToUpdate.operationType === CLEAR_DATA_OPERATION
+    notificationToUpdate.operationType === OperationTypes.REMOVE_OPERATION ||
+    notificationToUpdate.operationType === OperationTypes.CLEAR_DATA_OPERATION
   );
 }
 

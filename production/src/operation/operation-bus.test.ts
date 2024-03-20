@@ -1,6 +1,7 @@
 import { fakeStore } from '../../__mocks__/fake-store';
 
 import { operationBus } from './operation-bus';
+import { OperationSteps } from './operation-steps';
 
 describe('OperationBus', () => {
   beforeAll(() => {
@@ -16,7 +17,7 @@ describe('OperationBus', () => {
     fakeStore.addStep('justSomeStep');
     operationBus.init(fakeStore);
     const subscriber = jest.fn();
-    const subscribedStep = 'subscribed';
+    const subscribedStep = 'subscribed' as OperationSteps;
     operationBus.subscribe(subscribedStep, subscriber);
 
     // when
@@ -30,7 +31,7 @@ describe('OperationBus', () => {
     // given
     operationBus.init(fakeStore);
     const subscriber = jest.fn();
-    const subscribedStep = 'subscribed';
+    const subscribedStep = 'subscribed' as OperationSteps;
     const postedStep = 'posted';
     operationBus.subscribe(subscribedStep, subscriber);
 
@@ -45,7 +46,7 @@ describe('OperationBus', () => {
     // given
     operationBus.init(fakeStore);
     const subscriber = jest.fn();
-    const subscribedStep = 'subscribed';
+    const subscribedStep = 'subscribed' as OperationSteps;
     operationBus.subscribe(subscribedStep, subscriber);
 
     // when
@@ -60,7 +61,7 @@ describe('OperationBus', () => {
     fakeStore.addStep('justSomeStep');
     operationBus.init(fakeStore);
     const subscriber = jest.fn();
-    const subscribedStep = 'subscribed';
+    const subscribedStep = 'subscribed' as OperationSteps;
     operationBus.subscribe(subscribedStep, subscriber);
     fakeStore.addStep(subscribedStep);
 

@@ -1,4 +1,4 @@
-import { HIGHLIGHT_OPERATION } from '../../operation/operation-type-names';
+import { OperationTypes } from '../../operation/operation-type-names';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 
 class OfficeReducerHelper {
@@ -27,7 +27,7 @@ class OfficeReducerHelper {
     this.reduxStore
       .getState()
       .operationReducer.operations.filter(
-        operation => operation.operationType !== HIGHLIGHT_OPERATION
+        operation => operation.operationType !== OperationTypes.HIGHLIGHT_OPERATION
       );
 
   /**

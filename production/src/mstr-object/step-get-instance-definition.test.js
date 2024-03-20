@@ -6,10 +6,7 @@ import { mstrObjectRestService } from './mstr-object-rest-service';
 
 import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
-import {
-  GET_OFFICE_TABLE_EDIT_REFRESH,
-  GET_OFFICE_TABLE_IMPORT,
-} from '../operation/operation-steps';
+import { OperationSteps } from '../operation/operation-steps';
 import dossierInstanceDefinition from './instance/dossier-instance-definition';
 import stepGetInstanceDefinition from './instance/step-get-instance-definition';
 import mstrObjectEnum from './mstr-object-type-enum';
@@ -117,19 +114,19 @@ describe('StepGetInstanceDefinition', () => {
   );
 
   it.each`
-    expectedVisualizationInfo         | expectedStartCell  | expectedGetStartCellCallsNo | visualizationInfoParam            | nextStepParam                    | manipulationsXMLParam
-    ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
-    ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
-    ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
-    ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${GET_OFFICE_TABLE_IMPORT}       | ${undefined}
-    ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${GET_OFFICE_TABLE_IMPORT}       | ${undefined}
-    ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_IMPORT}       | ${undefined}
-    ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
-    ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
-    ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
-    ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
-    ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
-    ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
+    expectedVisualizationInfo         | expectedStartCell  | expectedGetStartCellCallsNo | visualizationInfoParam            | nextStepParam                                   | manipulationsXMLParam
+    ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
+    ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
+    ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
+    ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}       | ${undefined}
+    ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}       | ${undefined}
+    ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}       | ${undefined}
+    ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
+    ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
+    ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
+    ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
+    ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
+    ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
   `(
     'getInstanceDefinition should work as expected for visualization',
     async ({
@@ -352,12 +349,12 @@ describe('StepGetInstanceDefinition', () => {
 
   it.each`
     expectedVisualizationInfo         | expectedStartCell  | expectedGetStartCellCallsNo | visualizationInfoParam            | nextStepParam
-    ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${GET_OFFICE_TABLE_EDIT_REFRESH}
-    ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${GET_OFFICE_TABLE_EDIT_REFRESH}
-    ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_EDIT_REFRESH}
-    ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${GET_OFFICE_TABLE_IMPORT}
-    ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${GET_OFFICE_TABLE_IMPORT}
-    ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_IMPORT}
+    ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH}
+    ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH}
+    ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH}
+    ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}
+    ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}
+    ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}
   `(
     'getInstanceDefinition should work as expected for NO visualization',
     async ({

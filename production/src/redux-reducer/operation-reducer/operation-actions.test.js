@@ -1,18 +1,16 @@
+import { operationsMap } from '../../operation/operation-steps';
+import {
+  CANCEL_OPERATION,
+  MARK_STEP_COMPLETED,
+  OperationTypes,
+} from '../../operation/operation-type-names';
 import {
   cancelOperation,
   clearDataRequested,
   duplicateRequested,
   importRequested,
   markStepCompleted,
-} from '../redux-reducer/operation-reducer/operation-actions';
-import { operationsMap } from './operation-steps';
-import {
-  CANCEL_OPERATION,
-  CLEAR_DATA_OPERATION,
-  DUPLICATE_OPERATION,
-  IMPORT_OPERATION,
-  MARK_STEP_COMPLETED,
-} from './operation-type-names';
+} from './operation-actions';
 
 describe('OperationActions', () => {
   it('returns IMPORT_OPERATION action on importRequested call', () => {
@@ -23,7 +21,7 @@ describe('OperationActions', () => {
     const importAction = importRequested(exampleObject);
 
     // then
-    expect(importAction.type).toEqual(IMPORT_OPERATION);
+    expect(importAction.type).toEqual(OperationTypes.IMPORT_OPERATION);
     expect(importAction.payload.object).toBe(exampleObject);
     expect(importAction.payload.operation.objectWorkingId).toEqual(exampleObject.objectWorkingId);
     expect(importAction.payload.operation.operationType).toEqual('IMPORT_OPERATION');
@@ -37,12 +35,14 @@ describe('OperationActions', () => {
     const importAction = clearDataRequested(objectWorkingId);
 
     // then
-    expect(importAction.type).toEqual(CLEAR_DATA_OPERATION);
+    expect(importAction.type).toEqual(OperationTypes.CLEAR_DATA_OPERATION);
     expect(importAction.payload.objectWorkingId).toBe(objectWorkingId);
     expect(importAction.payload.operation.objectWorkingId).toEqual(objectWorkingId);
-    expect(importAction.payload.operation.operationType).toEqual(CLEAR_DATA_OPERATION);
+    expect(importAction.payload.operation.operationType).toEqual(
+      OperationTypes.CLEAR_DATA_OPERATION
+    );
     expect(importAction.payload.operation.stepsQueue).toEqual(
-      operationsMap.table[CLEAR_DATA_OPERATION]
+      operationsMap.table[OperationTypes.CLEAR_DATA_OPERATION]
     );
   });
 
@@ -79,7 +79,7 @@ describe('OperationActions', () => {
     // when
     const duplicateAction = duplicateRequested(exampleObject);
     // then
-    expect(duplicateAction.type).toEqual(DUPLICATE_OPERATION);
+    expect(duplicateAction.type).toEqual(OperationTypes.DUPLICATE_OPERATION);
     expect(duplicateAction.payload.operation.objectWorkingId).toEqual(
       exampleObject.objectWorkingId
     );
