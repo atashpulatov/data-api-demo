@@ -77,6 +77,11 @@ const createProgressNotification = (state, payload) => {
   if (operationType !== OperationTypes.CLEAR_DATA_OPERATION) {
     notificationButtons = getNotificationButtons(getCancelButton(objectWorkingId, operationType));
   }
+  
+  // DE288915: Avoid duplicate notifications, particularly those originating from Edit and Reprompt operations. 
+  const stateNotifications = state?.notifications && Array.isArray(state.notifications) ?
+    state.notifications.filter(item => item.objectWorkingId !== objectWorkingId) : [];
+
   const newNotification = {
     objectWorkingId,
     title: i18n.t(titleOperationInProgressMap.PENDING_OPERATION),
@@ -84,7 +89,7 @@ const createProgressNotification = (state, payload) => {
     operationType,
     children: notificationButtons,
   };
-  return { ...state, notifications: [...state.notifications, newNotification] };
+  return { ...state, notifications: [...stateNotifications, newNotification] };
 };
 
 const moveNotificationToInProgress = (state, payload) => {

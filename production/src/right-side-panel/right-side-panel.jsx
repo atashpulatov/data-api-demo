@@ -250,7 +250,7 @@ export const mapStateToProps = state => {
   const { importRequested, dossierOpenRequested } = state.navigationTree;
   const { repromptsQueue } = state.repromptsQueueReducer;
   const { popupType, isDataOverviewOpen } = state.popupStateReducer;
-  const objects = officeReducerHelper.getObjectsListFromObjectReducer();
+  const { objects } = state.objectReducer;
 
   const {
     isConfirm,

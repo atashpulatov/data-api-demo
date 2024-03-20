@@ -12,7 +12,6 @@ import { clearDataRequested } from '../redux-reducer/operation-reducer/operation
 import { ObjectImportType } from '../mstr-object/constants';
 
 const SHOW_HIDDEN_KEY = 'showHidden';
-const EXCEL_SHAPE_API_VERSION = 1.9;
 
 export class HomeHelper {
   reduxStore: any;
@@ -151,7 +150,7 @@ export class HomeHelper {
    * and updates the redux store with the API support status
    */
   initIsShapeAPISupported(): void {
-    const isShapeAPISupported = officeContext.isSetSupported(EXCEL_SHAPE_API_VERSION);
+    const isShapeAPISupported = officeContext.isShapeAPISupported();
     this.reduxStore.dispatch(officeActions.setIsShapeAPISupported(isShapeAPISupported));
   }
 }
