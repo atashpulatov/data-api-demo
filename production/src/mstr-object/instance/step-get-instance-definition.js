@@ -1,9 +1,9 @@
 import { authenticationHelper } from '../../authentication/authentication-helper';
-import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
 import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-helper';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
 import { mstrObjectRestService } from '../mstr-object-rest-service';
+import instanceDefinitionHelper from './instance-definition-helper';
 
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
@@ -48,10 +48,10 @@ class StepGetInstanceDefinition {
         isPrompted,
         definition,
         importType,
-        preparedInstanceDefinition,
         pageByData,
       } = objectData;
       let { visualizationInfo, body, name } = objectData;
+      const { preparedInstanceDefinition } = operationData;
 
       const excelContext = await officeApiHelper.getExcelContext();
 
@@ -79,12 +79,12 @@ class StepGetInstanceDefinition {
 
       // TODO check if dossierData is still needed
       if (!preparedInstanceDefinition) {
-        instanceDefinition = await this.modifyInstanceWithPrompt({
+        instanceDefinition = await instanceDefinitionHelper.modifyInstanceWithPrompt({
           ...objectData,
           instanceDefinition,
         });
       } else {
-        instanceDefinition = await this.modifyInstanceForPageBy(
+        instanceDefinition = await instanceDefinitionHelper.modifyInstanceForPageBy(
           objectData,
           pageByData,
           instanceDefinition,
@@ -100,17 +100,15 @@ class StepGetInstanceDefinition {
         importType
       );
 
-      const shouldInsertNewWorksheet = insertNewWorksheet || !!objectData.pageByData;
-
       // FIXME: below flow should not be part of this step
       if (futureStep in importOperationStepDict) {
         startCell = await officeApiWorksheetHelper.getStartCell(
-          shouldInsertNewWorksheet,
+          insertNewWorksheet,
           excelContext,
           name
         );
       }
-      if (shouldInsertNewWorksheet) {
+      if (insertNewWorksheet) {
         delete objectData.insertNewWorksheet;
       } else {
         shouldRenameExcelWorksheet =
@@ -155,8 +153,6 @@ class StepGetInstanceDefinition {
         );
       }
 
-      delete objectData.preparedInstanceDefinition;
-
       operationStepDispatcher.updateOperation(updatedOperation);
       operationStepDispatcher.updateObject(updatedObject);
       operationStepDispatcher.completeGetInstanceDefinition(objectWorkingId);
@@ -186,111 +182,6 @@ class StepGetInstanceDefinition {
       }
       body.template = body.requestedObjects;
     }
-  };
-
-  /**
-   * Answers prompts and modify instance of the object.
-   *
-   * @param {Object} instanceDefinition Object containing information about MSTR object
-   * @param {String} objectId Id object neing currentrly imported
-   * @param {String} projectId Id of the Mstr project which object is part of
-   * @param {Object} promptsAnswers Stored prompt answers
-   * @param {Object} dossierData
-   * @param {Object} body Contains requested objects and filters.
-   */
-  modifyInstanceWithPrompt = async ({
-    instanceDefinition,
-    objectId,
-    projectId,
-    promptsAnswers,
-    dossierData,
-    body,
-    displayAttrFormNames,
-  }) => {
-    // Status 2 = report has open prompts to be answered before data can be returned
-    if (instanceDefinition.status !== ObjectExecutionStatus.PROMPTED) {
-      return instanceDefinition;
-    }
-
-    try {
-      let count = 0;
-
-      while (
-        instanceDefinition.status === ObjectExecutionStatus.PROMPTED &&
-        count < promptsAnswers.length
-      ) {
-        const config = {
-          objectId,
-          projectId,
-          instanceId: instanceDefinition.instanceId,
-          promptsAnswers: promptsAnswers[count],
-        };
-
-        await mstrObjectRestService.answerPrompts(config);
-
-        const configInstance = {
-          ...config,
-          dossierData,
-          body,
-          displayAttrFormNames,
-        };
-
-        if (count === promptsAnswers.length - 1) {
-          instanceDefinition = await mstrObjectRestService.modifyInstance(configInstance);
-        }
-
-        count += 1;
-      }
-
-      return instanceDefinition;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  };
-
-  /**
-   * Gets page-by elements ids and modifies instance of the object.
-   *
-   * @param {Object} objectData Contains information about MSTR object
-   * @param {Object} pageByData Contains information about page-by elements
-   * @param {Object} instanceDefinition Object containing information about MSTR object
-   * @param {Object} body Contains requested objects and filters.
-   * @returns {Object} instanceDefinition Object containing information about MSTR object
-   */
-  modifyInstanceForPageBy = async (objectData, pageByData, instanceDefinition, body) => {
-    if (!pageByData) {
-      return instanceDefinition;
-    }
-
-    const currentPageBy = pageByData?.elements.map(value => ({ id: value.valueId }));
-
-    const configInstance = {
-      ...objectData,
-      instanceId: instanceDefinition.instanceId,
-      body: { ...body, currentPageBy },
-    };
-
-    return mstrObjectRestService.modifyInstance(configInstance);
-  };
-
-  /**
-   * Creates instance of a report and modifies it with given prompt answer.
-   *
-   * @param {Object} objectData Contains information about MSTR object
-   * @returns {Object} instanceDefinition Object containing information about MSTR object
-   */
-  createReportInstance = async objectData => {
-    if (objectData.mstrObjectType !== mstrObjectEnum.mstrObjectType.report) {
-      return;
-    }
-
-    const instanceDefinition = await mstrObjectRestService.createInstance(objectData);
-
-    return this.modifyInstanceWithPrompt({
-      instanceDefinition,
-      ...objectData,
-    });
   };
 
   /**
