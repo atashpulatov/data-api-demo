@@ -2,6 +2,7 @@ import { authenticationHelper } from '../authentication/authentication-helper';
 import { officeApiCrosstabHelper } from '../office/api/office-api-crosstab-helper';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
+import instanceDefinitionHelper from './instance/instance-definition-helper';
 import { mstrObjectRestService } from './mstr-object-rest-service';
 
 import operationErrorHandler from '../operation/operation-error-handler';
@@ -30,7 +31,7 @@ describe('StepGetInstanceDefinition', () => {
 
     // when
     try {
-      await stepGetInstanceDefinition.modifyInstanceWithPrompt({
+      await instanceDefinitionHelper.modifyInstanceWithPrompt({
         instanceDefinition: {
           status: 2,
         },
@@ -65,7 +66,7 @@ describe('StepGetInstanceDefinition', () => {
       jest.spyOn(officeApiWorksheetHelper, 'isActiveWorksheetEmpty').mockImplementation();
       jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation();
       jest
-        .spyOn(stepGetInstanceDefinition, 'modifyInstanceWithPrompt')
+        .spyOn(instanceDefinitionHelper, 'modifyInstanceWithPrompt')
         .mockReturnValue({ mstrTable: { rows: rowsParam } });
       jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
 
@@ -183,7 +184,7 @@ describe('StepGetInstanceDefinition', () => {
 
       jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation();
 
-      jest.spyOn(stepGetInstanceDefinition, 'modifyInstanceWithPrompt').mockReturnValue({
+      jest.spyOn(instanceDefinitionHelper, 'modifyInstanceWithPrompt').mockReturnValue({
         mstrTable: {
           name: 'nameModifyInstanceWithPromptTest',
           rows: 'rowsModifyInstanceWithPromptTest',
@@ -261,8 +262,8 @@ describe('StepGetInstanceDefinition', () => {
 
       expect(mstrObjectRestService.createInstance).not.toBeCalled();
 
-      expect(stepGetInstanceDefinition.modifyInstanceWithPrompt).toBeCalledTimes(1);
-      expect(stepGetInstanceDefinition.modifyInstanceWithPrompt).toBeCalledWith({
+      expect(instanceDefinitionHelper.modifyInstanceWithPrompt).toBeCalledTimes(1);
+      expect(instanceDefinitionHelper.modifyInstanceWithPrompt).toBeCalledWith({
         instanceDefinition: {
           mstrTable: {
             name: 'mstrTableNameDossierTest',
@@ -406,7 +407,7 @@ describe('StepGetInstanceDefinition', () => {
         },
       });
 
-      jest.spyOn(stepGetInstanceDefinition, 'modifyInstanceWithPrompt').mockReturnValue({
+      jest.spyOn(instanceDefinitionHelper, 'modifyInstanceWithPrompt').mockReturnValue({
         mstrTable: {
           name: 'nameModifyInstanceWithPromptTest',
           rows: 'rowsModifyInstanceWithPromptTest',
@@ -443,8 +444,8 @@ describe('StepGetInstanceDefinition', () => {
 
       expect(mstrObjectRestService.createInstance).toBeCalledTimes(1);
 
-      expect(stepGetInstanceDefinition.modifyInstanceWithPrompt).toBeCalledTimes(1);
-      expect(stepGetInstanceDefinition.modifyInstanceWithPrompt).toBeCalledWith({
+      expect(instanceDefinitionHelper.modifyInstanceWithPrompt).toBeCalledTimes(1);
+      expect(instanceDefinitionHelper.modifyInstanceWithPrompt).toBeCalledWith({
         bindId: 'bindIdTest',
         body: 'bodyTest',
         crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
@@ -579,7 +580,7 @@ describe('StepGetInstanceDefinition', () => {
     jest.spyOn(mstrObjectRestService, 'answerPrompts').mockImplementation();
 
     // when
-    const result = await stepGetInstanceDefinition.modifyInstanceWithPrompt({
+    const result = await instanceDefinitionHelper.modifyInstanceWithPrompt({
       instanceDefinition: instanceDefinitionMock,
     });
 
@@ -596,7 +597,7 @@ describe('StepGetInstanceDefinition', () => {
     jest.spyOn(mstrObjectRestService, 'answerPrompts').mockImplementation();
 
     // when
-    const result = await stepGetInstanceDefinition.modifyInstanceWithPrompt({
+    const result = await instanceDefinitionHelper.modifyInstanceWithPrompt({
       instanceDefinition: instanceDefinitionMock,
       objectId: 'objectIdTest',
       projectId: 'projectIdTest',
@@ -622,7 +623,7 @@ describe('StepGetInstanceDefinition', () => {
     });
 
     // when
-    const result = await stepGetInstanceDefinition.modifyInstanceWithPrompt({
+    const result = await instanceDefinitionHelper.modifyInstanceWithPrompt({
       instanceDefinition: {
         status: 2,
         instanceId: 'instanceIdTest',
@@ -671,7 +672,7 @@ describe('StepGetInstanceDefinition', () => {
     });
 
     // when
-    const result = await stepGetInstanceDefinition.modifyInstanceWithPrompt({
+    const result = await instanceDefinitionHelper.modifyInstanceWithPrompt({
       instanceDefinition: {
         status: 2,
         instanceId: 'instanceIdTest',
