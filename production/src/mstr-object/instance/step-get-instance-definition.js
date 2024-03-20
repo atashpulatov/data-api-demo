@@ -73,7 +73,7 @@ class StepGetInstanceDefinition {
           name,
           instanceDefinition
         );
-      } else if (!preparedInstanceDefinition) {
+      } else if (!instanceDefinition) {
         instanceDefinition = await mstrObjectRestService.createInstance(objectData);
       }
 

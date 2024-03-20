@@ -44,6 +44,5 @@ export interface PageByDataElement {
 
 export interface PageByData {
   pageByLink: string;
-  numberOfSiblings: number;
   elements: PageByDataElement[];
 }

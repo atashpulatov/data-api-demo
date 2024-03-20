@@ -367,6 +367,12 @@ class PopupController {
     }
   };
 
+  /**
+   * Method used for handling import of the object selected by the user.
+   * For Page-by Reports, it will loop through all valid combinations of Page-by elements, creating new import request for each.
+   *
+   * @param objectData Contains information about the MSTR object
+   */
   handleImport = async (objectData: any): Promise<void> => {
     const pageByLinkId = uuidv4();
 
@@ -387,7 +393,6 @@ class PopupController {
     validPageByData.forEach((validCombination, pageByIndex) => {
       const pageByData = {
         pageByLinkId,
-        // numberOfSiblings
         elements: validCombination,
       };
 
