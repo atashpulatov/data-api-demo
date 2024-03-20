@@ -18,7 +18,7 @@ function createOperation(
   objectData = {},
   importType = ObjectImportType.TABLE
 ) {
-  const { backupObjectData, objectEditedData } = objectData;
+  const { backupObjectData, objectEditedData, preparedInstanceDefinition } = objectData;
   return {
     operationType,
     objectWorkingId,
@@ -27,11 +27,13 @@ function createOperation(
     totalRows: 0,
     backupObjectData,
     objectEditedData,
+    preparedInstanceDefinition,
   };
 }
 
-export const importRequested = object => {
-  const objectWorkingId = Date.now();
+export const importRequested = (object, preparedInstanceDefinition, pageByIndex = 0) => {
+  // TODO find better way for unique Id
+  const objectWorkingId = Date.now() + pageByIndex;
   object.objectWorkingId = objectWorkingId;
   return {
     type: OperationTypes.IMPORT_OPERATION,
@@ -39,7 +41,7 @@ export const importRequested = object => {
       operation: createOperation(
         OperationTypes.IMPORT_OPERATION,
         objectWorkingId,
-        {},
+        { preparedInstanceDefinition },
         object.importType
       ),
       object,
