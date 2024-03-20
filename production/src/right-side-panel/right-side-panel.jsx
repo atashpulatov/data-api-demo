@@ -1,9 +1,8 @@
 // issue with proptype import
 // eslint-disable-next-line simple-import-sort/imports
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { connect, useSelector } from 'react-redux';
 import { PopupTypes, SidePanel } from '@mstr/connector-components';
-
 import PropTypes from 'prop-types';
 import { notificationService } from '../notification/notification-service';
 import { officeApiHelper } from '../office/api/office-api-helper';
@@ -12,12 +11,16 @@ import officeStoreHelper from '../office/store/office-store-helper';
 import { sidePanelEventHelper } from './side-panel-event-helper';
 import { sidePanelNotificationHelper } from './side-panel-notification-helper';
 import { sidePanelService } from './side-panel-service';
+import { selectOperations } from '../redux-reducer/operation-reducer/operation-reducer-selectors';
+import {
+  selectNotifications,
+  selectGlobalNotification,
+} from '../redux-reducer/notification-reducer/notification-reducer-selectors';
 
 import { Confirmation } from '../home/confirmation';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import { SettingsMenu } from '../home/settings-menu';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { OperationTypes } from '../operation/operation-type-names';
 import { popupController } from '../popup/popup-controller';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
@@ -36,9 +39,6 @@ export const RightSidePanelNotConnected = ({
   toggleSecuredFlag,
   toggleIsClearDataFailedFlag,
   updateActiveCellAddress,
-  globalNotification,
-  notifications,
-  operations,
   popupData,
   isDialogRendered,
   isDialogLoaded,
@@ -47,9 +47,13 @@ export const RightSidePanelNotConnected = ({
   popupType,
   isDataOverviewOpen,
 }) => {
-  const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
-  const [duplicatedObjectId, setDuplicatedObjectId] = React.useState(null);
-  const [loadedObjectsWrapped, setLoadedObjectsWrapped] = React.useState(loadedObjects);
+  const [sidePanelPopup, setSidePanelPopup] = useState(null);
+  const [duplicatedObjectId, setDuplicatedObjectId] = useState(null);
+  const [loadedObjectsWrapped, setLoadedObjectsWrapped] = useState(loadedObjects);
+
+  const operations = useSelector(selectOperations);
+  const globalNotification = useSelector(selectGlobalNotification);
+  const notifications = useSelector(selectNotifications);
 
   const duplicatePopupParams = {
     activeCellAddress,
@@ -57,7 +61,7 @@ export const RightSidePanelNotConnected = ({
     setSidePanelPopup,
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     async function initializeSidePanel() {
       try {
         await sidePanelEventHelper.addRemoveObjectListener();
@@ -71,17 +75,17 @@ export const RightSidePanelNotConnected = ({
     sidePanelService.clearRepromptTask();
   }, [updateActiveCellAddress]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     officeStoreHelper.isFileSecured() && toggleSecuredFlag(true);
     officeStoreHelper.isClearDataFailed() && toggleIsClearDataFailedFlag(true);
   }, [toggleSecuredFlag, toggleIsClearDataFailedFlag]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setSidePanelPopup(sidePanelNotificationHelper.setClearDataPopups());
   }, [isSecured, isClearDataFailed]);
 
   // Updates the activeCellAddress in duplicate popup if this popup is opened.
-  React.useEffect(() => {
+  useEffect(() => {
     if (
       sidePanelPopup !== null &&
       sidePanelPopup.type === PopupTypes.DUPLICATE &&
@@ -118,7 +122,7 @@ export const RightSidePanelNotConnected = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeCellAddress, popupData]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setLoadedObjectsWrapped(() =>
       sidePanelNotificationHelper.injectNotificationsToObjects(
         loadedObjects,
@@ -244,8 +248,6 @@ export const RightSidePanelNotConnected = ({
 
 export const mapStateToProps = state => {
   const { importRequested, dossierOpenRequested } = state.navigationTree;
-  const { operations } = state.operationReducer;
-  const { globalNotification, notifications } = state.notificationReducer;
   const { repromptsQueue } = state.repromptsQueueReducer;
   const { popupType, isDataOverviewOpen } = state.popupStateReducer;
   const objects = officeReducerHelper.getObjectsListFromObjectReducer();
@@ -265,13 +267,10 @@ export const mapStateToProps = state => {
 
   return {
     loadedObjects: objects,
-    operations,
     importRequested,
     dossierOpenRequested,
     isConfirm,
     isSettings,
-    globalNotification,
-    notifications,
     isSecured,
     isClearDataFailed,
     settingsPanelLoaded,
@@ -331,40 +330,6 @@ RightSidePanelNotConnected.propTypes = {
       isSelected: PropTypes.bool,
     })
   ).isRequired,
-  notifications: PropTypes.arrayOf(
-    PropTypes.shape({
-      type: PropTypes.string,
-      title: PropTypes.string,
-      details: PropTypes.string,
-      percentage: PropTypes.number,
-      dismissNotification: PropTypes.func,
-    })
-  ),
-  operations: PropTypes.arrayOf(
-    PropTypes.shape({
-      operationType: PropTypes.oneOf([
-        OperationTypes.IMPORT_OPERATION,
-        OperationTypes.REFRESH_OPERATION,
-        OperationTypes.EDIT_OPERATION,
-        OperationTypes.DUPLICATE_OPERATION,
-        OperationTypes.CLEAR_DATA_OPERATION,
-        OperationTypes.HIGHLIGHT_OPERATION,
-        OperationTypes.REMOVE_OPERATION,
-      ]),
-      objectWorkingId: PropTypes.number,
-      stepsQueue: PropTypes.arrayOf(PropTypes.string),
-      backupObjectData: PropTypes.shape({}),
-      objectEditedData: PropTypes.shape({}),
-      instanceDefinition: PropTypes.shape({}),
-      startCell: PropTypes.string,
-      excelContext: PropTypes.shape({}),
-      officeTable: PropTypes.shape({}),
-      tableChanged: PropTypes.boolean,
-      totalRows: PropTypes.number,
-      loadedRows: PropTypes.number,
-      shouldFormat: PropTypes.bool,
-    })
-  ),
   isConfirm: PropTypes.bool,
   isSettings: PropTypes.bool,
   isSecured: PropTypes.bool,
