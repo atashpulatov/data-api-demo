@@ -1,14 +1,6 @@
 import { createSelector } from 'reselect';
 
-const getOperationsState = state => state.operationReducer;
-
-const getNotificationsState = state => state.notificationReducer;
-
-// Selectors
-export const selectOperations = createSelector(
-  [getOperationsState],
-  operationState => operationState.operations
-);
+const getNotificationsState = (state: any): any => state.notificationReducer;
 
 export const selectGlobalNotification = createSelector(
   [getNotificationsState],

@@ -11,11 +11,11 @@ import officeStoreHelper from '../office/store/office-store-helper';
 import { sidePanelEventHelper } from './side-panel-event-helper';
 import { sidePanelNotificationHelper } from './side-panel-notification-helper';
 import { sidePanelService } from './side-panel-service';
+import { selectOperations } from '../redux-reducer/operation-reducer/operation-reducer-selectors';
 import {
-  selectGlobalNotification,
   selectNotifications,
-  selectOperations,
-} from '../redux-reducer/operation-reducer/operation-reducer-selectors';
+  selectGlobalNotification,
+} from '../redux-reducer/notification-reducer/notification-reducer-selectors';
 
 import { Confirmation } from '../home/confirmation';
 import { PopupTypeEnum } from '../home/popup-type-enum';
