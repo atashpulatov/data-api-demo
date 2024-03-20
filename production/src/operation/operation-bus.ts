@@ -17,6 +17,7 @@ class OperationBus {
   previousOperationCopy: any;
 
   init(store: any): void {
+    this.listener = this.listener.bind(this);
     this.store = store;
     this.subscribedCallbacksMap = {};
 
@@ -59,7 +60,6 @@ class OperationBus {
    * @param stepName Name of the operation step to be listened for.
    * @param callback Function to be called when the subscribed step is next.
    *
-   * @memberof OperationBus
    */
   subscribe(stepName: OperationSteps, callback: Function): void {
     this.subscribedCallbacksMap[stepName] = callback;

@@ -105,7 +105,7 @@ class OperationStepDispatcher {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.CLEAR_TABLE_DATA));
   }
 
-  completeClearData = (objectWorkingId: number, nextOperation: any, objectList: any[]): void => {
+  completeClearData(objectWorkingId: number, nextOperation: any, objectList: any[]): void {
     if (
       !(nextOperation?.operationType === OperationTypes.CLEAR_DATA_OPERATION) &&
       objectList.length !== 0
@@ -116,7 +116,7 @@ class OperationStepDispatcher {
     this.reduxStore.dispatch(
       markStepCompleted(objectWorkingId, OperationSteps.COMPLETE_CLEAR_DATA)
     );
-  };
+  }
 
   completeHighlightObject(objectWorkingId: number): void {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.HIGHLIGHT_OBJECT));
