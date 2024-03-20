@@ -4,7 +4,7 @@ import { errorService } from '../../error/error-handler';
 import { restoreAllAnswers } from '../../redux-reducer/answers-reducer/answers-actions';
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
 import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
-import { objectImportType } from '../../mstr-object/constants';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 class OfficeStoreRestoreObject {
   init = reduxStore => {
@@ -40,7 +40,7 @@ class OfficeStoreRestoreObject {
   restoreLegacyObjectsWithImportType = objects => {
     objects?.forEach(object => {
       if (object && !object.importType) {
-        object.importType = objectImportType.TABLE;
+        object.importType = ObjectImportType.TABLE;
       }
     });
   };

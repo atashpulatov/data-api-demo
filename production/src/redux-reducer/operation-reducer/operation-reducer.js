@@ -1,14 +1,8 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import {
   CANCEL_OPERATION,
-  CLEAR_DATA_OPERATION,
-  DUPLICATE_OPERATION,
-  EDIT_OPERATION,
-  HIGHLIGHT_OPERATION,
-  IMPORT_OPERATION,
   MARK_STEP_COMPLETED,
-  REFRESH_OPERATION,
-  REMOVE_OPERATION,
+  OperationTypes,
   UPDATE_OPERATION,
 } from '../../operation/operation-type-names';
 
@@ -16,13 +10,13 @@ const initialState = { operations: [] };
 
 export const operationReducer = (state = initialState, action = {}) => {
   switch (action.type) {
-    case IMPORT_OPERATION:
-    case REFRESH_OPERATION:
-    case EDIT_OPERATION:
-    case DUPLICATE_OPERATION:
-    case REMOVE_OPERATION:
-    case HIGHLIGHT_OPERATION:
-    case CLEAR_DATA_OPERATION:
+    case OperationTypes.IMPORT_OPERATION:
+    case OperationTypes.REFRESH_OPERATION:
+    case OperationTypes.EDIT_OPERATION:
+    case OperationTypes.DUPLICATE_OPERATION:
+    case OperationTypes.REMOVE_OPERATION:
+    case OperationTypes.HIGHLIGHT_OPERATION:
+    case OperationTypes.CLEAR_DATA_OPERATION:
       return operationRequested(state, action.payload);
 
     case MARK_STEP_COMPLETED:

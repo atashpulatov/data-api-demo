@@ -1,14 +1,9 @@
-import {
-  DUPLICATE_OPERATION,
-  EDIT_OPERATION,
-  IMPORT_OPERATION,
-  REFRESH_OPERATION,
-} from './operation-type-names';
-import { objectImportType } from '../mstr-object/constants';
+import { OperationTypes } from './operation-type-names';
+import { ObjectImportType } from '../mstr-object/constants';
 
 const loadingStateEnumWeights = {
-  [objectImportType.TABLE]: {
-    [IMPORT_OPERATION]: {
+  [ObjectImportType.TABLE]: {
+    [OperationTypes.IMPORT_OPERATION]: {
       GET_INSTANCE_DEFINITION: 5,
       GET_OBJECT_DETAILS: 10,
       GET_OFFICE_TABLE_IMPORT: 15,
@@ -21,7 +16,7 @@ const loadingStateEnumWeights = {
       SAVE_OBJECT_IN_EXCEL: 40,
       DISPLAY_NOTIFICATION_COMPLETED: 40,
     },
-    [REFRESH_OPERATION]: {
+    [OperationTypes.REFRESH_OPERATION]: {
       GET_INSTANCE_DEFINITION: 5,
       GET_OBJECT_DETAILS: 10,
       GET_OFFICE_TABLE_EDIT_REFRESH: 15,
@@ -33,7 +28,7 @@ const loadingStateEnumWeights = {
       SAVE_OBJECT_IN_EXCEL: 40,
       DISPLAY_NOTIFICATION_COMPLETED: 40,
     },
-    [EDIT_OPERATION]: {
+    [OperationTypes.EDIT_OPERATION]: {
       MODIFY_OBJECT: 0,
       GET_INSTANCE_DEFINITION: 5,
       GET_OBJECT_DETAILS: 10,
@@ -46,7 +41,7 @@ const loadingStateEnumWeights = {
       SAVE_OBJECT_IN_EXCEL: 40,
       DISPLAY_NOTIFICATION_COMPLETED: 40,
     },
-    [DUPLICATE_OPERATION]: {
+    [OperationTypes.DUPLICATE_OPERATION]: {
       MODIFY_OBJECT: 0,
       GET_DUPLICATE_NAME: 3,
       GET_INSTANCE_DEFINITION: 5,
@@ -61,8 +56,8 @@ const loadingStateEnumWeights = {
       DISPLAY_NOTIFICATION_COMPLETED: 40,
     },
   },
-  [objectImportType.IMAGE]: {
-    [IMPORT_OPERATION]: {
+  [ObjectImportType.IMAGE]: {
+    [OperationTypes.IMPORT_OPERATION]: {
       GET_INSTANCE_DEFINITION: 5,
       GET_OBJECT_DETAILS: 10,
       GET_OFFICE_TABLE_IMPORT: 15,
@@ -70,7 +65,7 @@ const loadingStateEnumWeights = {
       SAVE_OBJECT_IN_EXCEL: 85,
       DISPLAY_NOTIFICATION_COMPLETED: 100,
     },
-    [REFRESH_OPERATION]: {
+    [OperationTypes.REFRESH_OPERATION]: {
       BACKUP_OBJECT_DATA: 5,
       GET_INSTANCE_DEFINITION: 15,
       GET_OBJECT_DETAILS: 30,
@@ -78,7 +73,7 @@ const loadingStateEnumWeights = {
       SAVE_OBJECT_IN_EXCEL: 90,
       DISPLAY_NOTIFICATION_COMPLETED: 100,
     },
-    [EDIT_OPERATION]: {
+    [OperationTypes.EDIT_OPERATION]: {
       MODIFY_OBJECT: 10,
       GET_INSTANCE_DEFINITION: 25,
       GET_OBJECT_DETAILS: 35,
@@ -86,7 +81,7 @@ const loadingStateEnumWeights = {
       SAVE_OBJECT_IN_EXCEL: 90,
       DISPLAY_NOTIFICATION_COMPLETED: 100,
     },
-    [DUPLICATE_OPERATION]: {
+    [OperationTypes.DUPLICATE_OPERATION]: {
       MODIFY_OBJECT: 10,
       GET_DUPLICATE_NAME: 20,
       GET_INSTANCE_DEFINITION: 25,
@@ -98,16 +93,21 @@ const loadingStateEnumWeights = {
   },
 };
 
-export const calculateLoadingProgress = (objectOperation, importType = objectImportType.TABLE) => {
+export const calculateLoadingProgress = (
+  objectOperation: any,
+  importType = ObjectImportType.TABLE
+): number => {
   const { operationType, stepsQueue, loadedRows, totalRows } = objectOperation;
 
   const step = stepsQueue[0];
 
   // return the base progress directly for image imports
-  if (importType === objectImportType.IMAGE && step) {
-    return loadingStateEnumWeights[importType][operationType][step];
+  if (importType === ObjectImportType.IMAGE && step) {
+    // @ts-expect-error
+    return loadingStateEnumWeights[importType][operationType as OperationTypes][step];
   }
 
+  // @ts-expect-error
   const baseProgress = loadingStateEnumWeights[importType][operationType][step];
   const fetchProgress = Math.round((6 / 10) * (loadedRows / totalRows) * 100);
   const loadingProgress = fetchProgress + baseProgress;

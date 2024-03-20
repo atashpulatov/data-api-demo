@@ -1,12 +1,7 @@
 import { officeApiHelper } from '../api/office-api-helper';
 import { determineImagePropsToBeAddedToBook } from './shape-helper-util';
 
-import {
-  DUPLICATE_OPERATION,
-  EDIT_OPERATION,
-  IMPORT_OPERATION,
-  REFRESH_OPERATION,
-} from '../../operation/operation-type-names';
+import { OperationTypes } from '../../operation/operation-type-names';
 
 describe('shape-helper-util', () => {
   const mockFn = jest.fn();
@@ -85,7 +80,7 @@ describe('shape-helper-util', () => {
       .mockImplementation(() => mockSheet);
 
     const args = {
-      operationType: IMPORT_OPERATION,
+      operationType: OperationTypes.IMPORT_OPERATION,
       shapeProps: undefined,
       shapeInWorksheet: undefined,
       shapeDimensionsForDuplicateOp: undefined,
@@ -111,7 +106,7 @@ describe('shape-helper-util', () => {
       .spyOn(officeApiHelper, 'getCurrentExcelSheet')
       .mockImplementation(() => mockSheet);
     const args = {
-      operationType: DUPLICATE_OPERATION,
+      operationType: OperationTypes.DUPLICATE_OPERATION,
       shapeProps: undefined,
       shapeInWorksheet: undefined,
       shapeDimensionsForDuplicateOp: mockDuplicateShapeDimensions,
@@ -160,7 +155,7 @@ describe('shape-helper-util', () => {
       .spyOn(officeApiHelper, 'getCurrentExcelSheet')
       .mockImplementation(() => mockSheet);
     const args = {
-      operationType: EDIT_OPERATION,
+      operationType: OperationTypes.EDIT_OPERATION,
       shapeProps: undefined,
       shapeInWorksheet: mockShapeInWorksheet,
       shapeDimensionsForDuplicateOp: undefined,
@@ -198,7 +193,7 @@ describe('shape-helper-util', () => {
       .mockImplementation(() => mockSheet);
 
     const args = {
-      operationType: REFRESH_OPERATION,
+      operationType: OperationTypes.REFRESH_OPERATION,
       shapeProps: mockShapeProps,
       shapeInWorksheet: undefined,
       shapeDimensionsForDuplicateOp: undefined,

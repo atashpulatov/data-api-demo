@@ -5,7 +5,7 @@ class OfficeShapeApiHelper {
    * Gets the excel shape referenced by shapeId from the workbook.
    * If the shape is found returns the shape object otherwise returns undefined.
    *
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   * @param {Excel.RequestContext} excelContext Reference to Excel Context used by Excel API functions
    * @param {String} shapeId Id of the Office shape created on import used for referencing the Excel shape
    *
    * @return {Office} Reference to Excel Shape

@@ -1,14 +1,7 @@
 import { notificationService } from './notification-service';
 
-import {
-  DISPLAY_NOTIFICATION_COMPLETED,
-  MOVE_NOTIFICATION_TO_IN_PROGRESS,
-} from '../operation/operation-steps';
-import {
-  CLEAR_DATA_OPERATION,
-  IMPORT_OPERATION,
-  REMOVE_OPERATION,
-} from '../operation/operation-type-names';
+import { OperationSteps } from '../operation/operation-steps';
+import { OperationTypes } from '../operation/operation-type-names';
 import {
   CREATE_GLOBAL_NOTIFICATION,
   DELETE_NOTIFICATION,
@@ -134,19 +127,19 @@ describe('Notification reducer', () => {
       notifications: [
         {
           objectWorkingId: 12,
-          operationType: IMPORT_OPERATION,
+          operationType: OperationTypes.IMPORT_OPERATION,
           title: 'Pending',
           type: 'PROGRESS',
         },
         {
           objectWorkingId: 123,
-          operationType: REMOVE_OPERATION,
+          operationType: OperationTypes.REMOVE_OPERATION,
           title: 'Pending',
           type: 'PROGRESS',
         },
         {
           objectWorkingId: 1234,
-          operationType: CLEAR_DATA_OPERATION,
+          operationType: OperationTypes.CLEAR_DATA_OPERATION,
           title: 'Pending',
           type: 'PROGRESS',
         },
@@ -158,13 +151,13 @@ describe('Notification reducer', () => {
       notifications: [
         {
           objectWorkingId: 101,
-          operationType: IMPORT_OPERATION,
+          operationType: OperationTypes.IMPORT_OPERATION,
           title: 'Completed',
           type: 'PROGRESS',
         },
         {
           objectWorkingId: 102,
-          operationType: REMOVE_OPERATION,
+          operationType: OperationTypes.REMOVE_OPERATION,
           title: 'Pending',
           type: 'PROGRESS',
         },
@@ -176,11 +169,11 @@ describe('Notification reducer', () => {
       it('should add new pending notification to empty array', () => {
         // given
         const action = {
-          type: IMPORT_OPERATION,
+          type: OperationTypes.IMPORT_OPERATION,
           payload: {
             operation: {
               objectWorkingId: 123,
-              operationType: IMPORT_OPERATION,
+              operationType: OperationTypes.IMPORT_OPERATION,
             },
           },
         };
@@ -193,7 +186,7 @@ describe('Notification reducer', () => {
         expect(children).toBeDefined();
         expect(resultChunk).toEqual({
           objectWorkingId: 123,
-          operationType: IMPORT_OPERATION,
+          operationType: OperationTypes.IMPORT_OPERATION,
           title: 'Pending',
           type: 'progress',
         });
@@ -202,11 +195,11 @@ describe('Notification reducer', () => {
       it('should add new pending notification to existing ones', () => {
         // given
         const action = {
-          type: IMPORT_OPERATION,
+          type: OperationTypes.IMPORT_OPERATION,
           payload: {
             operation: {
               objectWorkingId: 123,
-              operationType: IMPORT_OPERATION,
+              operationType: OperationTypes.IMPORT_OPERATION,
             },
           },
         };
@@ -218,7 +211,7 @@ describe('Notification reducer', () => {
         const { children: _, ...resultChunk } = resultState.notifications[1];
         expect(resultChunk).toEqual({
           objectWorkingId: 123,
-          operationType: IMPORT_OPERATION,
+          operationType: OperationTypes.IMPORT_OPERATION,
           title: 'Pending',
           type: 'progress',
         });
@@ -227,11 +220,11 @@ describe('Notification reducer', () => {
       it('should have cancel button on Pending', () => {
         // given
         const action = {
-          type: IMPORT_OPERATION,
+          type: OperationTypes.IMPORT_OPERATION,
           payload: {
             operation: {
               objectWorkingId: 123,
-              operationType: IMPORT_OPERATION,
+              operationType: OperationTypes.IMPORT_OPERATION,
             },
           },
         };
@@ -247,11 +240,11 @@ describe('Notification reducer', () => {
       it('should not have cancel button on Pending for Clear data', () => {
         // given
         const action = {
-          type: IMPORT_OPERATION,
+          type: OperationTypes.IMPORT_OPERATION,
           payload: {
             operation: {
               objectWorkingId: 123,
-              operationType: CLEAR_DATA_OPERATION,
+              operationType: OperationTypes.CLEAR_DATA_OPERATION,
             },
           },
         };
@@ -269,7 +262,7 @@ describe('Notification reducer', () => {
       it('should update notification to in progress for single import notification', () => {
         // given
         const action = {
-          type: MOVE_NOTIFICATION_TO_IN_PROGRESS,
+          type: OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
           payload: { objectWorkingId: 12 },
         };
 
@@ -284,11 +277,11 @@ describe('Notification reducer', () => {
       it('should update notification to in progress and set indeterminate for remove and clear operation', () => {
         // given
         const actionForRemove = {
-          type: MOVE_NOTIFICATION_TO_IN_PROGRESS,
+          type: OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
           payload: { objectWorkingId: 123 },
         };
         const actionForClear = {
-          type: MOVE_NOTIFICATION_TO_IN_PROGRESS,
+          type: OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
           payload: { objectWorkingId: 1234 },
         };
 
@@ -320,7 +313,7 @@ describe('Notification reducer', () => {
       it('should update notification to type SUCCESS', () => {
         // given
         const actionForImport = {
-          type: DISPLAY_NOTIFICATION_COMPLETED,
+          type: OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
           payload: { objectWorkingId: 12 },
         };
 
@@ -336,7 +329,7 @@ describe('Notification reducer', () => {
       it('should assign proper method for operation other than remove', () => {
         // given
         const actionForImport = {
-          type: DISPLAY_NOTIFICATION_COMPLETED,
+          type: OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
           payload: { objectWorkingId: 12 },
         };
         const resultState = notificationReducer(initialStateProgress, actionForImport);
@@ -351,7 +344,7 @@ describe('Notification reducer', () => {
       it('should assign proper method for remove operation', () => {
         // given
         const actionForRemove = {
-          type: DISPLAY_NOTIFICATION_COMPLETED,
+          type: OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
           payload: { objectWorkingId: 123 },
         };
         const resultState = notificationReducer(initialStateProgress, actionForRemove);

@@ -1,25 +1,21 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import {
-  DUPLICATE_OPERATION,
-  EDIT_OPERATION,
-  IMPORT_OPERATION,
-} from '../../operation/operation-type-names';
+import { OperationTypes } from '../../operation/operation-type-names';
 import {
   REMOVE_OBJECT,
   RESTORE_ALL_OBJECTS,
   RESTORE_OBJECT_BACKUP,
   UPDATE_OBJECT,
 } from './object-actions';
-import { objectImportType } from '../../mstr-object/constants';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 const initialState = { objects: [] };
 export const objectReducer = (state = initialState, action = {}) => {
   switch (action.type) {
-    case IMPORT_OPERATION:
-    case DUPLICATE_OPERATION:
+    case OperationTypes.IMPORT_OPERATION:
+    case OperationTypes.DUPLICATE_OPERATION:
       return importRequested(state, action.payload);
 
-    case EDIT_OPERATION:
+    case OperationTypes.EDIT_OPERATION:
       return editRequested(state, action.payload);
 
     case UPDATE_OBJECT:
@@ -41,7 +37,7 @@ export const objectReducer = (state = initialState, action = {}) => {
 
 function importRequested(state, payload) {
   const objectToBeImported = { ...payload.object };
-  objectToBeImported.importType = payload.object.importType || objectImportType.TABLE;
+  objectToBeImported.importType = payload.object.importType || ObjectImportType.TABLE;
   return {
     objects: [objectToBeImported, ...state.objects],
   };
