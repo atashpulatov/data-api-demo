@@ -25,8 +25,8 @@ import {
   selectNotifications,
 } from '../redux-reducer/notification-reducer/notification-reducer-selectors';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
-import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { selectOperations } from '../redux-reducer/operation-reducer/operation-reducer-selectors';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 
 import './right-side-panel.scss';
 
