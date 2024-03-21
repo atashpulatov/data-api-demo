@@ -2,7 +2,7 @@ import { officeApiHelper } from '../api/office-api-helper';
 
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
-import { EDIT_OPERATION, REFRESH_OPERATION } from '../../operation/operation-type-names';
+import { OperationTypes } from '../../operation/operation-type-names';
 import officeApiDataLoader from '../api/office-api-data-loader';
 import stepBindOfficeTable from './step-bind-office-table';
 
@@ -78,8 +78,8 @@ describe('StepBindOfficeTable', () => {
 
   it.each`
     operationType
-    ${EDIT_OPERATION}
-    ${REFRESH_OPERATION}
+    ${OperationTypes.EDIT_OPERATION}
+    ${OperationTypes.REFRESH_OPERATION}
   `('should skip bindOfficeTable if no new table created', async ({ operationType }) => {
     // given
     const objectData = {

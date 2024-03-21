@@ -10,7 +10,7 @@ import { officeProperties } from '../redux-reducer/office-reducer/office-propert
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { AttributeSelector } from './attribute-selector';
 import { selectorProperties } from './selector-properties';
-import { objectImportType } from '../mstr-object/constants';
+import { ObjectImportType } from '../mstr-object/constants';
 
 import '../home/home.css';
 
@@ -116,7 +116,7 @@ export const AttributeSelectorWindowNotConnected: React.FC<
         handleBack={(!isEdit || isPrompted) && (handleBack as () => void)}
         handleOk={handleOk}
         handleCancel={handleCancel}
-        primaryImportType={objectImportType.TABLE}
+        primaryImportType={ObjectImportType.TABLE}
         onPreviewClick={() => setIsModalOpen(true)}
       />
     </div>

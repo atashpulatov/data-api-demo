@@ -4,7 +4,8 @@ import { errorService } from '../../error/error-handler';
 import { restoreAllAnswers } from '../../redux-reducer/answers-reducer/answers-actions';
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
 import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
-import { objectImportType } from '../../mstr-object/constants';
+import { officeContext } from '../office-context';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 class OfficeStoreRestoreObject {
   init = reduxStore => {
@@ -27,9 +28,28 @@ class OfficeStoreRestoreObject {
     this.resetIsPromptedForDossiersWithAnswers(objects);
     this.restoreLegacyObjectsWithImportType(objects);
 
-    objects && this.reduxStore.dispatch(restoreAllObjects(objects));
-
     settings.set(officeProperties.storedObjects, objects);
+
+    // Do filter image objects if the shape api is not supported
+    // and only reflect udated objects in redux store and not back into office store.
+    objects = this.filterImageObjectsIfNoShapeAPI(objects);
+    objects && this.reduxStore.dispatch(restoreAllObjects(objects));
+  };
+
+  /**
+   * Filters out image objects if the shape api is not supported in current version in order to maintain the backward compatibility.
+   *
+   * @param {*} objects
+   * @returns objects object definitions from excel document
+   */
+  filterImageObjectsIfNoShapeAPI = objects => {
+    const isShapeAPISupported = officeContext.isShapeAPISupported();
+
+    if (!isShapeAPISupported && objects?.filter) {
+      return objects.filter(object => object?.importType !== ObjectImportType.IMAGE);
+    }
+
+    return objects;
   };
 
   /**
@@ -40,7 +60,7 @@ class OfficeStoreRestoreObject {
   restoreLegacyObjectsWithImportType = objects => {
     objects?.forEach(object => {
       if (object && !object.importType) {
-        object.importType = objectImportType.TABLE;
+        object.importType = ObjectImportType.TABLE;
       }
     });
   };

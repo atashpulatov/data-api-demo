@@ -3,12 +3,7 @@ import officeReducerHelper from '../office/store/office-reducer-helper';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import i18n from '../i18n';
 import { getNotificationButtons } from '../notification/notification-buttons';
-import {
-  DUPLICATE_OPERATION,
-  EDIT_OPERATION,
-  IMPORT_OPERATION,
-  REFRESH_OPERATION,
-} from '../operation/operation-type-names';
+import { OperationTypes } from '../operation/operation-type-names';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import {
@@ -260,10 +255,10 @@ class ErrorService {
       operationData.instanceDefinition.columns > COLUMN_EXCEL_API_LIMIT;
     let updateError;
     switch (operationData && operationData.operationType) {
-      case IMPORT_OPERATION:
-      case DUPLICATE_OPERATION:
-      case REFRESH_OPERATION:
-      case EDIT_OPERATION:
+      case OperationTypes.IMPORT_OPERATION:
+      case OperationTypes.DUPLICATE_OPERATION:
+      case OperationTypes.REFRESH_OPERATION:
+      case OperationTypes.EDIT_OPERATION:
         if (isExcelApiError && exceedLimit) {
           updateError = { ...error, type: 'exceedExcelApiLimit', message: '' };
         } else {
@@ -380,7 +375,7 @@ class ErrorService {
 
       // Show Overview table if there are any reprompts in queue if error occured
       // while reprompting dossier/report in Overview window only.
-      if (total > 0 && popupType === PopupTypeEnum.repromptDossierDataOverview) {
+      if (total > 0 && (popupType === PopupTypeEnum.repromptDossierDataOverview || popupType === PopupTypeEnum.repromptReportDataOverview)) {
         this.reduxStore.dispatch(
           popupStateActions.setPopupType(PopupTypeEnum.importedDataOverview)
         );

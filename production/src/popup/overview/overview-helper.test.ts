@@ -7,15 +7,9 @@ import { sidePanelService } from '../../right-side-panel/side-panel-service';
 import { popupHelper } from '../popup-helper';
 import overviewHelper, { OverviewActionCommands } from './overview-helper';
 
-import { reduxStore } from '../../store';
+import { reduxStore, RootState } from '../../store';
 
-import {
-  DUPLICATE_OPERATION,
-  EDIT_OPERATION,
-  IMPORT_OPERATION,
-  REFRESH_OPERATION,
-  REMOVE_OPERATION,
-} from '../../operation/operation-type-names';
+import { OperationTypes } from '../../operation/operation-type-names';
 
 import {
   mockedGlobalWarningNotification,
@@ -335,7 +329,7 @@ describe('overview-helper', () => {
 
     const mockedStore = {
       officeReducer: { popupData: { callback: jest.fn() } },
-    };
+    } as RootState;
     const { callback } = mockedStore.officeReducer.popupData;
 
     jest.spyOn(reduxStore, 'getState').mockReturnValueOnce(mockedStore);
@@ -451,13 +445,13 @@ describe('overview-helper', () => {
   });
 
   it.each`
-    operationType          | notificationType                    | expectedResultLength
-    ${IMPORT_OPERATION}    | ${ObjectNotificationTypes.WARNING}  | ${1}
-    ${IMPORT_OPERATION}    | ${ObjectNotificationTypes.PROGRESS} | ${0}
-    ${REMOVE_OPERATION}    | ${ObjectNotificationTypes.WARNING}  | ${1}
-    ${DUPLICATE_OPERATION} | ${ObjectNotificationTypes.WARNING}  | ${1}
-    ${REFRESH_OPERATION}   | ${ObjectNotificationTypes.WARNING}  | ${1}
-    ${EDIT_OPERATION}      | ${ObjectNotificationTypes.WARNING}  | ${1}
+    operationType                         | notificationType                    | expectedResultLength
+    ${OperationTypes.IMPORT_OPERATION}    | ${ObjectNotificationTypes.WARNING}  | ${1}
+    ${OperationTypes.IMPORT_OPERATION}    | ${ObjectNotificationTypes.PROGRESS} | ${0}
+    ${OperationTypes.REMOVE_OPERATION}    | ${ObjectNotificationTypes.WARNING}  | ${1}
+    ${OperationTypes.DUPLICATE_OPERATION} | ${ObjectNotificationTypes.WARNING}  | ${1}
+    ${OperationTypes.REFRESH_OPERATION}   | ${ObjectNotificationTypes.WARNING}  | ${1}
+    ${OperationTypes.EDIT_OPERATION}      | ${ObjectNotificationTypes.WARNING}  | ${1}
   `(
     'getWarningsToDisplay should correctly determine whether to display notification as global notification in overview',
     ({ operationType, notificationType, expectedResultLength }) => {

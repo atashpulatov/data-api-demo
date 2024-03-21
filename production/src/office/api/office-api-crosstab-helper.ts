@@ -190,13 +190,19 @@ class OfficeApiCrosstabHelper {
     const {
       attributesNames,
       headers: { columns },
+      metricsPosition,
     } = mstrTable;
 
     officeTable.showHeaders = false;
 
     this.createColumnsHeaders(officeTable, columns);
 
-    this.createCrosstabHeadersTitles(officeTable, attributesNames, crosstabHeaderDimensions);
+    this.createCrosstabHeadersTitles(
+      officeTable,
+      attributesNames,
+      crosstabHeaderDimensions,
+      metricsPosition
+    );
   }
 
   /**
@@ -232,9 +238,12 @@ class OfficeApiCrosstabHelper {
   createCrosstabHeadersTitles(
     officeTable: Excel.Table,
     attributesNames: any,
-    crosstabHeaderDimensions: any
+    crosstabHeaderDimensions: any,
+    metricsPosition: any
   ): void {
     const { rowsAttributes, columnsAttributes } = attributesNames;
+    const isMetrisFirstRowInColumns =
+      metricsPosition?.axis === 'rows' || columnsAttributes?.length > 1;
 
     const reportStartingCell = officeTable.getDataBodyRange().getCell(0, 0);
     const titlesBottomCell = reportStartingCell.getOffsetRange(-1, -1);
@@ -243,24 +252,28 @@ class OfficeApiCrosstabHelper {
       -(crosstabHeaderDimensions.rowsX - 1)
     );
 
-    const columnsTitlesRange = titlesBottomCell
-      .getOffsetRange(-1, 0)
-      .getResizedRange(-(crosstabHeaderDimensions.columnsY - 2), 0); // TODO -2 is bad
+    // If metrics are on first row in column we want to skipp one more row to not display metric Title
+    const columnsTitlesOffset =
+      crosstabHeaderDimensions.columnsY + (isMetrisFirstRowInColumns ? -1 : -2);
+
+    const columnsTitlesRange = isMetrisFirstRowInColumns
+      ? titlesBottomCell.getResizedRange(-columnsTitlesOffset, 0)
+      : titlesBottomCell.getResizedRange(-columnsTitlesOffset, 0).getOffsetRange(-1, 0);
 
     const headerTitlesRange = columnsTitlesRange.getBoundingRect(rowsTitlesRange);
     headerTitlesRange.format.verticalAlignment = window.Excel.VerticalAlignment.bottom;
     this.formatCrosstabRange(headerTitlesRange);
     headerTitlesRange.values = '  ' as unknown as any[][];
 
-    // we are not inserting row attributes names if they do not exist
-    if (rowsAttributes && rowsAttributes.length) {
-      rowsTitlesRange.values = [rowsAttributes];
-      officeApiHeaderMergeHelper.mergeHeaderRows(rowsAttributes, rowsTitlesRange);
-    }
-
+    // we are not inserting attributes names if they do not exist
     if (columnsAttributes && columnsAttributes.length) {
       columnsTitlesRange.values = mstrNormalizedJsonHandler.transposeMatrix([columnsAttributes]);
       officeApiHeaderMergeHelper.mergeHeaderColumns(columnsAttributes, columnsTitlesRange);
+    }
+
+    if (rowsAttributes && rowsAttributes.length) {
+      rowsTitlesRange.values = [rowsAttributes];
+      officeApiHeaderMergeHelper.mergeHeaderRows(rowsAttributes, rowsTitlesRange);
     }
   }
 

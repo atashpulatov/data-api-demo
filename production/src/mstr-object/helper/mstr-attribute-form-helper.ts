@@ -102,11 +102,13 @@ class MstrAttributeFormHelper {
     }
 
     let names: string[] = [];
-    for (const element of elements) {
+    for (let elementIndex = 0; elementIndex < elements.length; elementIndex++) {
+      const element = elements[elementIndex];
       const headerCount = element.headerCount || 1;
 
       for (let headerIndex = 0; headerIndex < headerCount; headerIndex++) {
-        if (element.type !== 'templateMetrics') {
+        // Skip metric headers if its the only element on headers
+        if (element.type !== 'templateMetrics' || (elementIndex === 0 && elements.length > 1)) {
           const forms = this.getAttributesTitleWithForms(element, attrforms);
 
           names = forms ? [...names, ...forms] : [...names, `${element.name}`];

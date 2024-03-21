@@ -1,17 +1,17 @@
 import { authenticationHelper } from '../../authentication/authentication-helper';
-import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
 import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-helper';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
 import { mstrObjectRestService } from '../mstr-object-rest-service';
+import instanceDefinitionHelper from './instance-definition-helper';
 
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
-import { GET_OFFICE_TABLE_IMPORT } from '../../operation/operation-steps';
+import { OperationSteps } from '../../operation/operation-steps';
 import mstrObjectEnum from '../mstr-object-type-enum';
 import dossierInstanceDefinition from './dossier-instance-definition';
 import { ErrorMessages } from '../../error/constants';
-import { importOperationStepDict, objectImportType } from '../constants';
+import { ImportOperationStepDict, ObjectImportType } from '../constants';
 
 class StepGetInstanceDefinition {
   /**
@@ -48,15 +48,17 @@ class StepGetInstanceDefinition {
         isPrompted,
         definition,
         importType,
+        pageByData,
       } = objectData;
       let { visualizationInfo, body, name } = objectData;
+      const { preparedInstanceDefinition } = operationData;
 
       const excelContext = await officeApiHelper.getExcelContext();
 
       this.setupBodyTemplate(body);
 
       let startCell;
-      let instanceDefinition;
+      let instanceDefinition = preparedInstanceDefinition;
       let shouldRenameExcelWorksheet = false;
 
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
@@ -71,15 +73,24 @@ class StepGetInstanceDefinition {
           name,
           instanceDefinition
         );
-      } else {
+      } else if (!instanceDefinition) {
         instanceDefinition = await mstrObjectRestService.createInstance(objectData);
       }
 
       // TODO check if dossierData is still needed
-      instanceDefinition = await this.modifyInstanceWithPrompt({
-        instanceDefinition,
-        ...objectData,
-      });
+      if (!preparedInstanceDefinition) {
+        instanceDefinition = await instanceDefinitionHelper.modifyInstanceWithPrompt({
+          ...objectData,
+          instanceDefinition,
+        });
+      } else {
+        instanceDefinition = await instanceDefinitionHelper.modifyInstanceForPageBy(
+          objectData,
+          pageByData,
+          instanceDefinition,
+          body
+        );
+      }
 
       this.savePreviousObjectData(
         instanceDefinition,
@@ -90,7 +101,7 @@ class StepGetInstanceDefinition {
       );
 
       // FIXME: below flow should not be part of this step
-      if (futureStep in importOperationStepDict) {
+      if (futureStep in ImportOperationStepDict) {
         startCell = await officeApiWorksheetHelper.getStartCell(
           insertNewWorksheet,
           excelContext,
@@ -126,7 +137,7 @@ class StepGetInstanceDefinition {
         shouldRenameExcelWorksheet,
       };
 
-      if (importType === objectImportType.TABLE) {
+      if (importType === ObjectImportType.TABLE) {
         // update table specific props
         updatedObject.crosstabHeaderDimensions = mstrTable.crosstabHeaderDimensions;
         updatedObject.isCrosstab = mstrTable.isCrosstab;
@@ -189,67 +200,6 @@ class StepGetInstanceDefinition {
    * Answers prompts and modify instance of the object.
    *
    * @param {Object} instanceDefinition Object containing information about MSTR object
-   * @param {String} objectId Id object neing currentrly imported
-   * @param {String} projectId Id of the Mstr project which object is part of
-   * @param {Object} promptsAnswers Stored prompt answers
-   * @param {Object} dossierData
-   * @param {Object} body Contains requested objects and filters.
-   */
-  modifyInstanceWithPrompt = async ({
-    instanceDefinition,
-    objectId,
-    projectId,
-    promptsAnswers,
-    dossierData,
-    body,
-    displayAttrFormNames,
-  }) => {
-    // Status 2 = report has open prompts to be answered before data can be returned
-    if (instanceDefinition.status !== ObjectExecutionStatus.PROMPTED) {
-      return instanceDefinition;
-    }
-
-    try {
-      let count = 0;
-
-      while (
-        instanceDefinition.status === ObjectExecutionStatus.PROMPTED &&
-        count < promptsAnswers.length
-      ) {
-        const config = {
-          objectId,
-          projectId,
-          instanceId: instanceDefinition.instanceId,
-          promptsAnswers: promptsAnswers[count],
-        };
-
-        await mstrObjectRestService.answerPrompts(config);
-
-        const configInstance = {
-          ...config,
-          dossierData,
-          body,
-          displayAttrFormNames,
-        };
-
-        if (count === promptsAnswers.length - 1) {
-          instanceDefinition = await mstrObjectRestService.modifyInstance(configInstance);
-        }
-
-        count += 1;
-      }
-
-      return instanceDefinition;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  };
-
-  /**
-   * Answers prompts and modify instance of the object.
-   *
-   * @param {Object} instanceDefinition Object containing information about MSTR object
    * @param {Object} crosstabHeaderDimensions Contains information about crosstab headers dimensions
    * @param {Object[]} subtotalsAddresses Contains adresses of subtotals from first import
    * @param {String} futureStep Specifies which step wuill be used to create Excel table
@@ -259,15 +209,15 @@ class StepGetInstanceDefinition {
     crosstabHeaderDimensions,
     subtotalsAddresses,
     futureStep,
-    importType = objectImportType.TABLE
+    importType = ObjectImportType.TABLE
   ) => {
     // We do not need to set prevCrosstabDimensions, crosstabHeaderDimensions and subtotalsInfo for images
-    if (importType === objectImportType.IMAGE) {
+    if (importType === ObjectImportType.IMAGE) {
       return;
     }
     const { mstrTable } = instanceDefinition;
 
-    if (crosstabHeaderDimensions && futureStep !== GET_OFFICE_TABLE_IMPORT) {
+    if (crosstabHeaderDimensions && futureStep !== OperationSteps.GET_OFFICE_TABLE_IMPORT) {
       mstrTable.prevCrosstabDimensions = crosstabHeaderDimensions;
     } else {
       mstrTable.prevCrosstabDimensions = false;

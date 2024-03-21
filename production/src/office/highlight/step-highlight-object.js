@@ -3,7 +3,7 @@ import { officeApiHelper } from '../api/office-api-helper';
 
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
-import { objectImportType } from '../../mstr-object/constants';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 class StepHighlightObject {
   /**
@@ -17,7 +17,7 @@ class StepHighlightObject {
   highlightObject = async (objectData, operationData) => {
     try {
       // Highlight operation is not supported for images as Excel API does not support shape selection as of now
-      if (objectData?.importType === objectImportType.IMAGE) {
+      if (objectData?.importType === ObjectImportType.IMAGE) {
         sidePanelService.highlightImageObject(objectData);
       } else {
         await officeApiHelper.onBindingObjectClick(objectData);

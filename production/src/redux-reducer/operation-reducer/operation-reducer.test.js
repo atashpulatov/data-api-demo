@@ -1,15 +1,10 @@
 /* eslint-disable object-curly-newline, indent */
-import { operationReducer } from '../redux-reducer/operation-reducer/operation-reducer';
 import {
   CANCEL_OPERATION,
-  CLEAR_DATA_OPERATION,
-  DUPLICATE_OPERATION,
-  EDIT_OPERATION,
-  IMPORT_OPERATION,
   MARK_STEP_COMPLETED,
-  REFRESH_OPERATION,
-  REMOVE_OPERATION,
-} from './operation-type-names';
+  OperationTypes,
+} from '../../operation/operation-type-names';
+import { operationReducer } from './operation-reducer';
 
 describe('operation reducer', () => {
   let initialState;
@@ -83,12 +78,12 @@ describe('operation reducer', () => {
   describe('importRequested and other types of actions', () => {
     it.each`
       actionType
-      ${IMPORT_OPERATION}
-      ${REFRESH_OPERATION}
-      ${EDIT_OPERATION}
-      ${DUPLICATE_OPERATION}
-      ${REMOVE_OPERATION}
-      ${CLEAR_DATA_OPERATION}
+      ${OperationTypes.IMPORT_OPERATION}
+      ${OperationTypes.REFRESH_OPERATION}
+      ${OperationTypes.EDIT_OPERATION}
+      ${OperationTypes.DUPLICATE_OPERATION}
+      ${OperationTypes.REMOVE_OPERATION}
+      ${OperationTypes.CLEAR_DATA_OPERATION}
     `('should add operation when operations are empty', ({ actionType }) => {
       // given
       const someOperation = {};
@@ -107,12 +102,12 @@ describe('operation reducer', () => {
 
     it.each`
       actionType
-      ${IMPORT_OPERATION}
-      ${REFRESH_OPERATION}
-      ${EDIT_OPERATION}
-      ${DUPLICATE_OPERATION}
-      ${REMOVE_OPERATION}
-      ${CLEAR_DATA_OPERATION}
+      ${OperationTypes.IMPORT_OPERATION}
+      ${OperationTypes.REFRESH_OPERATION}
+      ${OperationTypes.EDIT_OPERATION}
+      ${OperationTypes.DUPLICATE_OPERATION}
+      ${OperationTypes.REMOVE_OPERATION}
+      ${OperationTypes.CLEAR_DATA_OPERATION}
     `('should add operation to existing operations', ({ actionType }) => {
       // given
       const someOperation = {};

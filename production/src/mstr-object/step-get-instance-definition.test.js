@@ -2,14 +2,12 @@ import { authenticationHelper } from '../authentication/authentication-helper';
 import { officeApiCrosstabHelper } from '../office/api/office-api-crosstab-helper';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
+import instanceDefinitionHelper from './instance/instance-definition-helper';
 import { mstrObjectRestService } from './mstr-object-rest-service';
 
 import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
-import {
-  GET_OFFICE_TABLE_EDIT_REFRESH,
-  GET_OFFICE_TABLE_IMPORT,
-} from '../operation/operation-steps';
+import { OperationSteps } from '../operation/operation-steps';
 import dossierInstanceDefinition from './instance/dossier-instance-definition';
 import stepGetInstanceDefinition from './instance/step-get-instance-definition';
 import mstrObjectEnum from './mstr-object-type-enum';
@@ -30,7 +28,7 @@ describe('StepGetInstanceDefinition', () => {
 
     // when
     try {
-      await stepGetInstanceDefinition.modifyInstanceWithPrompt({
+      await instanceDefinitionHelper.modifyInstanceWithPrompt({
         instanceDefinition: {
           status: 2,
         },
@@ -65,7 +63,7 @@ describe('StepGetInstanceDefinition', () => {
       jest.spyOn(officeApiWorksheetHelper, 'isActiveWorksheetEmpty').mockImplementation();
       jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation();
       jest
-        .spyOn(stepGetInstanceDefinition, 'modifyInstanceWithPrompt')
+        .spyOn(instanceDefinitionHelper, 'modifyInstanceWithPrompt')
         .mockReturnValue({ mstrTable: { rows: rowsParam } });
       jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
 
@@ -117,19 +115,19 @@ describe('StepGetInstanceDefinition', () => {
   );
 
   it.each`
-    expectedVisualizationInfo         | expectedStartCell  | expectedGetStartCellCallsNo | visualizationInfoParam            | nextStepParam                    | manipulationsXMLParam
-    ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
-    ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
-    ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
-    ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${GET_OFFICE_TABLE_IMPORT}       | ${undefined}
-    ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${GET_OFFICE_TABLE_IMPORT}       | ${undefined}
-    ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_IMPORT}       | ${undefined}
-    ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
-    ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
-    ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
-    ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
-    ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
-    ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
+    expectedVisualizationInfo         | expectedStartCell  | expectedGetStartCellCallsNo | visualizationInfoParam            | nextStepParam                                   | manipulationsXMLParam
+    ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
+    ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
+    ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
+    ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}       | ${undefined}
+    ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}       | ${undefined}
+    ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}       | ${undefined}
+    ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
+    ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
+    ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
+    ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
+    ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
+    ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
   `(
     'getInstanceDefinition should work as expected for visualization',
     async ({
@@ -183,7 +181,7 @@ describe('StepGetInstanceDefinition', () => {
 
       jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation();
 
-      jest.spyOn(stepGetInstanceDefinition, 'modifyInstanceWithPrompt').mockReturnValue({
+      jest.spyOn(instanceDefinitionHelper, 'modifyInstanceWithPrompt').mockReturnValue({
         mstrTable: {
           name: 'nameModifyInstanceWithPromptTest',
           rows: 'rowsModifyInstanceWithPromptTest',
@@ -261,8 +259,8 @@ describe('StepGetInstanceDefinition', () => {
 
       expect(mstrObjectRestService.createInstance).not.toBeCalled();
 
-      expect(stepGetInstanceDefinition.modifyInstanceWithPrompt).toBeCalledTimes(1);
-      expect(stepGetInstanceDefinition.modifyInstanceWithPrompt).toBeCalledWith({
+      expect(instanceDefinitionHelper.modifyInstanceWithPrompt).toBeCalledTimes(1);
+      expect(instanceDefinitionHelper.modifyInstanceWithPrompt).toBeCalledWith({
         instanceDefinition: {
           mstrTable: {
             name: 'mstrTableNameDossierTest',
@@ -352,12 +350,12 @@ describe('StepGetInstanceDefinition', () => {
 
   it.each`
     expectedVisualizationInfo         | expectedStartCell  | expectedGetStartCellCallsNo | visualizationInfoParam            | nextStepParam
-    ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${GET_OFFICE_TABLE_EDIT_REFRESH}
-    ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${GET_OFFICE_TABLE_EDIT_REFRESH}
-    ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_EDIT_REFRESH}
-    ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${GET_OFFICE_TABLE_IMPORT}
-    ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${GET_OFFICE_TABLE_IMPORT}
-    ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_IMPORT}
+    ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH}
+    ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH}
+    ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH}
+    ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}
+    ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}
+    ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}
   `(
     'getInstanceDefinition should work as expected for NO visualization',
     async ({
@@ -406,7 +404,7 @@ describe('StepGetInstanceDefinition', () => {
         },
       });
 
-      jest.spyOn(stepGetInstanceDefinition, 'modifyInstanceWithPrompt').mockReturnValue({
+      jest.spyOn(instanceDefinitionHelper, 'modifyInstanceWithPrompt').mockReturnValue({
         mstrTable: {
           name: 'nameModifyInstanceWithPromptTest',
           rows: 'rowsModifyInstanceWithPromptTest',
@@ -443,8 +441,8 @@ describe('StepGetInstanceDefinition', () => {
 
       expect(mstrObjectRestService.createInstance).toBeCalledTimes(1);
 
-      expect(stepGetInstanceDefinition.modifyInstanceWithPrompt).toBeCalledTimes(1);
-      expect(stepGetInstanceDefinition.modifyInstanceWithPrompt).toBeCalledWith({
+      expect(instanceDefinitionHelper.modifyInstanceWithPrompt).toBeCalledTimes(1);
+      expect(instanceDefinitionHelper.modifyInstanceWithPrompt).toBeCalledWith({
         bindId: 'bindIdTest',
         body: 'bodyTest',
         crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
@@ -579,7 +577,7 @@ describe('StepGetInstanceDefinition', () => {
     jest.spyOn(mstrObjectRestService, 'answerPrompts').mockImplementation();
 
     // when
-    const result = await stepGetInstanceDefinition.modifyInstanceWithPrompt({
+    const result = await instanceDefinitionHelper.modifyInstanceWithPrompt({
       instanceDefinition: instanceDefinitionMock,
     });
 
@@ -596,7 +594,7 @@ describe('StepGetInstanceDefinition', () => {
     jest.spyOn(mstrObjectRestService, 'answerPrompts').mockImplementation();
 
     // when
-    const result = await stepGetInstanceDefinition.modifyInstanceWithPrompt({
+    const result = await instanceDefinitionHelper.modifyInstanceWithPrompt({
       instanceDefinition: instanceDefinitionMock,
       objectId: 'objectIdTest',
       projectId: 'projectIdTest',
@@ -622,7 +620,7 @@ describe('StepGetInstanceDefinition', () => {
     });
 
     // when
-    const result = await stepGetInstanceDefinition.modifyInstanceWithPrompt({
+    const result = await instanceDefinitionHelper.modifyInstanceWithPrompt({
       instanceDefinition: {
         status: 2,
         instanceId: 'instanceIdTest',
@@ -671,7 +669,7 @@ describe('StepGetInstanceDefinition', () => {
     });
 
     // when
-    const result = await stepGetInstanceDefinition.modifyInstanceWithPrompt({
+    const result = await instanceDefinitionHelper.modifyInstanceWithPrompt({
       instanceDefinition: {
         status: 2,
         instanceId: 'instanceIdTest',

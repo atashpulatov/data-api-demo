@@ -1,3 +1,4 @@
+const EXCEL_SHAPE_API_VERSION = 1.9;
 class OfficeContext {
   getOffice = () => window.Office;
 
@@ -34,6 +35,14 @@ class OfficeContext {
     }
     return false;
   };
+
+  /**
+  * Checks whether the Excel Shape API is supported in the current office environment
+  * and updates the redux store with the API support status
+  *
+  * @returns {Boolean} true if the Excel Shape API is supported
+  */
+  isShapeAPISupported = () => this.isSetSupported(EXCEL_SHAPE_API_VERSION);
 }
 
 export const officeContext = new OfficeContext();

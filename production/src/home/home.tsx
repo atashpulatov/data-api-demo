@@ -1,11 +1,8 @@
-// issue with proptype import
-// eslint-disable-next-line simple-import-sort/imports
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Spinner } from '@mstr/rc';
 
-import PropTypes from 'prop-types';
 import useOfficePrivilege from '../hooks/use-office-privilege';
 
 import { notificationService } from '../notification/notification-service';
@@ -27,9 +24,18 @@ import { HomeDialog } from './home-dialog';
 
 import './home.css';
 
+interface HomeProps {
+  loading?: boolean;
+  isDialogOpen?: boolean;
+  authToken?: string | boolean;
+  hideDialog?: () => void;
+  toggleIsSettingsFlag?: (flag: boolean) => void;
+  clearDialogState?: () => void;
+}
+
 const IS_DEVELOPMENT = sessionHelper.isDevelopment();
 
-async function getUserData(authToken) {
+async function getUserData(authToken: string | boolean): Promise<void> {
   if (authToken) {
     homeHelper.getTokenFromStorage();
     await sessionHelper.getUserInfo();
@@ -37,18 +43,18 @@ async function getUserData(authToken) {
   }
 }
 
-export const HomeNotConnected = props => {
+export const HomeNotConnected: React.FC<HomeProps> = props => {
   const { loading, isDialogOpen, authToken, hideDialog, toggleIsSettingsFlag, clearDialogState } =
     props;
 
-  const canUseOffice = useOfficePrivilege(authToken);
+  const canUseOffice = useOfficePrivilege(authToken as string);
 
   const [t] = useTranslation('common', { i18n });
 
-  const handleConnectionRestored = () => {
+  const handleConnectionRestored = (): void => {
     notificationService.connectionRestored();
   };
-  const handleConnectionLost = () => {
+  const handleConnectionLost = (): void => {
     if (!isDialogOpen) {
       notificationService.connectionLost();
     }
@@ -57,10 +63,10 @@ export const HomeNotConnected = props => {
   useEffect(() => {
     window.addEventListener('online', handleConnectionRestored);
     window.addEventListener('offline', handleConnectionLost);
-    return (
-      () => window.removeEventListener('online', handleConnectionRestored),
-      () => window.removeEventListener('offline', handleConnectionLost)
-    );
+    return () => {
+      window.removeEventListener('online', handleConnectionRestored);
+      window.removeEventListener('offline', handleConnectionLost);
+    };
   });
 
   useEffect(() => {
@@ -76,7 +82,7 @@ export const HomeNotConnected = props => {
   });
 
   useEffect(() => {
-    function initializeHome() {
+    function initializeHome(): void {
       try {
         // initialize shape API support status in store
         homeHelper.initIsShapeAPISupported();
@@ -99,10 +105,11 @@ export const HomeNotConnected = props => {
     getUserData(authToken);
   }, [authToken]);
 
-  const renderAuthenticatePage = () =>
+  const renderAuthenticatePage = (): React.JSX.Element =>
+    // @ts-expect-error resolve issue in Spinner types
     loading ? <Spinner text='Loading' textPosition='RIGHT' /> : IS_DEVELOPMENT && <Authenticate />;
 
-  const sidePanelToRender = () => {
+  const sidePanelToRender = (): React.JSX.Element => {
     if (authToken) {
       if (canUseOffice) {
         return <RightSidePanel />;
@@ -124,7 +131,7 @@ export const HomeNotConnected = props => {
   );
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state: any): any {
   return {
     loading: state.sessionReducer.loading,
     isDialogOpen: state.officeReducer.isDialogOpen,
@@ -139,15 +146,6 @@ const mapDispatchToProps = {
   hideDialog: officeActions.hideDialog,
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
   clearDialogState: popupStateActions.onClearPopupState,
-};
-
-HomeNotConnected.propTypes = {
-  loading: PropTypes.bool,
-  isDialogOpen: PropTypes.bool,
-  authToken: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  hideDialog: PropTypes.func,
-  toggleIsSettingsFlag: PropTypes.func,
-  clearDialogState: PropTypes.func,
 };
 
 export const Home = connect(mapStateToProps, mapDispatchToProps)(HomeNotConnected);

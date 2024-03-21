@@ -246,16 +246,16 @@ class OfficeTableRefresh {
     if (isCrosstab && crosstabHeaderDimensions && prevCrosstabDimensions) {
       if (
         validRowsX !== crosstabHeaderDimensions.rowsX ||
-        validColumnsY - 1 !== crosstabHeaderDimensions.columnsY
+        validColumnsY !== crosstabHeaderDimensions.columnsY
       ) {
         tableChanged = true;
         prevCrosstabDimensions.rowsX = validRowsX;
-        prevCrosstabDimensions.columnsY = validColumnsY - 1;
+        prevCrosstabDimensions.columnsY = validColumnsY;
       }
       if (tableChanged) {
         startCellAddress = officeApiHelper.offsetCellBy(
           startCellAddress,
-          -prevCrosstabDimensions.columnsY,
+          -(prevCrosstabDimensions.columnsY - 1),
           -prevCrosstabDimensions.rowsX
         );
       }
