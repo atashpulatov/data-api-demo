@@ -35,6 +35,21 @@ class SidePanelService {
 
   init = (reduxStore: any): void => {
     this.reduxStore = reduxStore;
+
+    this.clearRepromptTask = this.clearRepromptTask.bind(this);
+    this.addData = this.addData.bind(this);
+    this.highlightObject = this.highlightObject.bind(this);
+    this.rename = this.rename.bind(this);
+    this.refresh = this.refresh.bind(this);
+    this.remove = this.remove.bind(this);
+    this.duplicate = this.duplicate.bind(this);
+    this.edit = this.edit.bind(this);
+    this.createRepromptTask = this.createRepromptTask.bind(this);
+    this.reprompt = this.reprompt.bind(this);
+    this.initReusePromptAnswers = this.initReusePromptAnswers.bind(this);
+    this.toggleReusePromptAnswers = this.toggleReusePromptAnswers.bind(this);
+    this.toggleSettingsPanel = this.toggleSettingsPanel.bind(this);
+    this.highlightImageObject = this.highlightImageObject.bind(this);
   };
 
   /**
