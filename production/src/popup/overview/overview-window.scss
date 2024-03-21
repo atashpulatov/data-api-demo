@@ -12,8 +12,8 @@ $margin-data-overview: 20px;
     height: calc(100vh - $title-height - $footer-height);
 
     .notification-overlay {
-      width: calc(100% - $margin-data-overview);
-      height: calc(100% - $margin-data-overview);
+      width: calc(100% - (2 * $margin-data-overview));
+      height: calc(100% - (2 * $margin-data-overview));
     }
   }
 
