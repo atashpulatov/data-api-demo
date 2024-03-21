@@ -450,7 +450,7 @@ class PopupController {
     };
   };
 
-  getObjectPreviousState = (reportParams: ReportParams): void => {
+  getObjectPreviousState = (reportParams: ReportParams): any => {
     const { objects } = this.reduxStore.getState().objectReducer;
     const indexOfOriginalValues = objects.findIndex(
       (report: any) => report.bindId === reportParams.bindId
