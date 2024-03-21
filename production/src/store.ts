@@ -37,6 +37,8 @@ const persistConfig = {
   storage,
   blacklist: ['navigationTree', 'operationReducer', 'notificationReducer'],
 };
+
+// @ts-expect-error
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 let middleWare;
 if (process.env.NODE_ENV === 'development') {
@@ -46,6 +48,7 @@ if (process.env.NODE_ENV === 'development') {
   middleWare = applyMiddleware(thunk);
 }
 export const reduxStore = createStore(persistedReducer, middleWare);
+// @ts-expect-error
 export const reduxPersistor = persistStore(reduxStore);
 
 export type RootState = ReturnType<typeof reduxStore.getState>;

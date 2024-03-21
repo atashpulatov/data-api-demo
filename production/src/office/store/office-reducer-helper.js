@@ -1,3 +1,7 @@
+// TODO remove when changed to TS
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { ObjectData } from '../../redux-reducer/object-reducer/object-reducer-types';
+
 import { OperationTypes } from '../../operation/operation-type-names';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 
@@ -43,7 +47,7 @@ class OfficeReducerHelper {
    * Return object from object Reducer correspongin to passed bindId
    *
    * @param {String} bindId Id of the Office table created on import used for referencing the Excel table
-   * @return {Object}
+   * @return {ObjectData}
    */
   getObjectFromObjectReducerByBindId = bindId => {
     const { objects } = this.reduxStore.getState().objectReducer;
@@ -54,7 +58,7 @@ class OfficeReducerHelper {
    * Return object from object Reducer corresponding to passed objectWorkingId
    *
    * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
-   * @return {Object}
+   * @return {ObjectData}
    */
   getObjectFromObjectReducerByObjectWorkingId = objectWorkingId => {
     const { objects } = this.reduxStore.getState().objectReducer;
