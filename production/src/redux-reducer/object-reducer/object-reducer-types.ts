@@ -3,6 +3,7 @@
 
 export interface VisualizationInfo {
   chapterKey?: string;
+  pageKey?: string;
   visualizationKey?: string;
   dossierStructure?: {
     chapterName: string;

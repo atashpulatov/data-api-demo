@@ -1,12 +1,9 @@
-// TODO fix after removing proptypes
-// eslint-disable-next-line simple-import-sort/imports
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { ObjectWindowTitle } from '@mstr/connector-components';
 import { Spinner } from '@mstr/rc';
 
-import PropTypes from 'prop-types';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import scriptInjectionHelper from '../embedded/utils/script-injection-helper';
 import {
@@ -17,6 +14,16 @@ import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { popupHelper } from '../popup/popup-helper';
 import { popupViewSelectorHelper } from '../popup/popup-view-selector-helper';
 import { EXTEND_SESSION, sessionHelper } from '../storage/session-helper';
+
+import { RootState } from '../store';
+
+import {
+  EditedObject,
+  MstrData,
+  PopupState,
+} from '../redux-reducer/popup-reducer/popup-reducer-types';
+import { RepromptsQueueState } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer-types';
+import { SessionState } from '../redux-reducer/session-reducer/session-reducer-types';
 
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import i18n from '../i18n';
@@ -32,10 +39,27 @@ import '../home/home.css';
 import '../index.css';
 import './prompts-window.scss';
 
+interface PromptsWindowProps {
+  promptsAnswered?: (...args: any) => void;
+  cancelImportRequest?: () => void;
+  onPopupBack?: () => void;
+  mstrData?: MstrData;
+  popupState?: PopupState;
+  session?: SessionState;
+  editedObject?: EditedObject;
+  reusePromptAnswers?: boolean;
+  previousPromptsAnswers?: any[]; // Replace 'any' with the appropriate type
+  importRequested?: boolean;
+  isPreparedDataRequested?: boolean;
+  promptObjects?: any[]; // Replace 'any' with the appropriate type
+  repromptsQueue?: RepromptsQueueState;
+  isMultipleRepromptWithReuse?: boolean;
+}
+
 const { microstrategy } = window;
 const { deleteDossierInstance } = mstrObjectRestService;
 
-export const PromptsWindowNotConnected = props => {
+export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => {
   const {
     mstrData,
     popupState,
@@ -65,7 +89,7 @@ export const PromptsWindowNotConnected = props => {
 
   const [t] = useTranslation('common', { i18n });
 
-  const closePopup = () => {
+  const closePopup = (): void => {
     const { commandCancel } = selectorProperties;
     const message = { command: commandCancel };
     popupHelper.officeMessageParent(message);
@@ -74,7 +98,7 @@ export const PromptsWindowNotConnected = props => {
   const prolongSession = installSessionProlongingHandler(closePopup);
 
   const messageReceived = useCallback(
-    (message = {}) => {
+    (message: any = {}) => {
       if (message.data && message.data.value && message.data.value.iServerErrorCode) {
         const newErrorObject = {
           status: message.data.value.statusCode,
@@ -108,7 +132,7 @@ export const PromptsWindowNotConnected = props => {
     return () => window.removeEventListener('message', messageReceived);
   }, [messageReceived]);
 
-  const promptAnsweredHandler = newAnswer => {
+  const promptAnsweredHandler = (newAnswer: any): void => {
     setIsPromptLoading(true);
     if (newPromptsAnswers.current.length > 0) {
       const newArray = [...newPromptsAnswers.current, newAnswer];
@@ -118,7 +142,7 @@ export const PromptsWindowNotConnected = props => {
     }
   };
 
-  const promptLoadedHandler = () => {
+  const promptLoadedHandler = (): void => {
     setIsPromptLoading(false);
   };
 
@@ -127,9 +151,9 @@ export const PromptsWindowNotConnected = props => {
    * Retrives the error type (based on title).
    * If error type is not a notification - handles it by closing the window
    *
-   * @param {Object} error - payload thrown by embedded.api after the error occured
+   * @param error - payload thrown by embedded.api after the error occured
    */
-  const onEmbeddedError = error => {
+  const onEmbeddedError = (error: any): void => {
     if (error.title !== 'Notification') {
       // TODO: improve this, so it doesn't depend on i18n
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
@@ -147,7 +171,7 @@ export const PromptsWindowNotConnected = props => {
    * @returns {void}
    */
   const finishRepromptWithoutEditFilters = useCallback(
-    (chosenObjectIdLocal, projectId) => {
+    (chosenObjectIdLocal: string, projectId: string) => {
       // for the Reprompt workflow only, skip edit filter screen.
       if (!isReprompt || isEdit) {
         return;
@@ -162,6 +186,7 @@ export const PromptsWindowNotConnected = props => {
           editedObject.selectedAttributes,
           editedObject.selectedMetrics,
           editedObject.selectedFilters,
+          // @ts-expect-error
           editedObject.instanceId
         ),
         chosenObjectName: editedObject.chosenObjectName,
@@ -188,13 +213,13 @@ export const PromptsWindowNotConnected = props => {
 
   /**
    *
-   * @param {*} promptObjs
-   * @param {*} previousAnswers
-   * @param {*} shouldUseSavedPromptAnswers
+   * @param promptObjs
+   * @param previousAnswers
+   * @param shouldUseSavedPromptAnswers
    * @returns
    */
   const prepareAndHandlePromptAnswers = useCallback(
-    (promptObjs, previousAnswers, shouldUseSavedPromptAnswers) => {
+    (promptObjs: any, previousAnswers: any, shouldUseSavedPromptAnswers: boolean) => {
       if (shouldUseSavedPromptAnswers) {
         return prepareGivenPromptAnswers(promptObjs, previousAnswers);
       }
@@ -205,7 +230,7 @@ export const PromptsWindowNotConnected = props => {
   );
 
   const loadEmbeddedDossier = useCallback(
-    async localContainer => {
+    async (localContainer: any) => {
       const chosenObjectIdLocal = chosenObjectId || editedObject.chosenObjectId;
       const projectId = mstrData.chosenProjectId || editedObject.projectId; // FIXME: potential problem with projectId
       const { envUrl, authToken } = session;
@@ -225,13 +250,13 @@ export const PromptsWindowNotConnected = props => {
         reusePromptAnswers && isImportOrPrepateWithPrevAnswers;
 
       try {
-        let msgRouter = null;
+        let msgRouter: any = null;
         const serverURL = envUrl.slice(0, envUrl.lastIndexOf('/api'));
         // delete last occurence of '/api' from the enviroment url
         const { CustomAuthenticationType } = microstrategy.dossier;
         const { EventType } = microstrategy.dossier;
 
-        const documentProps = {
+        const documentProps: any = {
           serverURL,
           applicationID: projectId,
           objectID: chosenObjectIdLocal,
@@ -244,7 +269,7 @@ export const PromptsWindowNotConnected = props => {
             return Promise.resolve(authToken);
           },
           placeholder: localContainer,
-          onMsgRouterReadyHandler: ({ MsgRouter }) => {
+          onMsgRouterReadyHandler: ({ MsgRouter }: any) => {
             msgRouter = MsgRouter;
             msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, promptAnsweredHandler);
             msgRouter.registerEventHandler(EventType.ON_PROMPT_LOADED, promptLoadedHandler);
@@ -278,7 +303,7 @@ export const PromptsWindowNotConnected = props => {
           );
         }
 
-        microstrategy.dossier.create(documentProps).then(async dossierPage => {
+        microstrategy.dossier.create(documentProps).then(async (dossierPage: any) => {
           const [chapter, objectId, instanceId, visualizations] = await Promise.all([
             dossierPage?.getCurrentChapter(),
             dossierPage?.getDossierId(),
@@ -339,7 +364,7 @@ export const PromptsWindowNotConnected = props => {
    * This should run the embedded dossier and pass instance ID to the plugin
    * Session status is checked, and log out is performed if session expired.
    */
-  const handleRun = async () => {
+  const handleRun = async (): Promise<void> => {
     try {
       await authenticationHelper.validateAuthToken();
       if (embeddedDocument) {
@@ -356,7 +381,7 @@ export const PromptsWindowNotConnected = props => {
   /**
    * This function is called after a child (iframe) is added into mbedded dossier container
    */
-  const onIframeLoad = iframe => {
+  const onIframeLoad = (iframe: any): void => {
     iframe.addEventListener('load', () => {
       const { contentDocument } = iframe;
       if (iframe.focusEventListenerAdded === false) {
@@ -372,7 +397,7 @@ export const PromptsWindowNotConnected = props => {
   };
 
   const onPromptsContainerMount = useCallback(
-    async localContainer => {
+    async (localContainer: any) => {
       scriptInjectionHelper.watchForIframeAddition(localContainer, onIframeLoad);
 
       if (!microstrategy?.dossier) {
@@ -385,7 +410,7 @@ export const PromptsWindowNotConnected = props => {
     [loadEmbeddedDossier]
   );
 
-  const handleBack = () => {
+  const handleBack = (): void => {
     cancelImportRequest();
     onPopupBack();
   };
@@ -419,55 +444,7 @@ export const PromptsWindowNotConnected = props => {
   );
 };
 
-PromptsWindowNotConnected.propTypes = {
-  promptsAnswered: PropTypes.func,
-  cancelImportRequest: PropTypes.func,
-  onPopupBack: PropTypes.func,
-  mstrData: PropTypes.shape({
-    chosenObjectId: PropTypes.string,
-    chosenObjectName: PropTypes.string,
-    chosenProjectId: PropTypes.string,
-    promptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
-  }),
-  popupState: PropTypes.shape({
-    chosenObjectId: PropTypes.string,
-    isReprompt: PropTypes.bool,
-    isEdit: PropTypes.bool,
-  }),
-  session: PropTypes.shape({
-    envUrl: PropTypes.string,
-    authToken: PropTypes.string,
-  }),
-  editedObject: PropTypes.shape({
-    chosenObjectId: PropTypes.string,
-    projectId: PropTypes.string,
-    promptsAnswers: PropTypes.arrayOf(
-      PropTypes.shape({ answers: PropTypes.arrayOf(PropTypes.shape({})) })
-    ),
-    chosenObjectSubtype: PropTypes.number,
-    chosenObjectName: PropTypes.string,
-    instanceId: PropTypes.string,
-    subtotalsInfo: PropTypes.shape({
-      subtotalsAddresses: PropTypes.arrayOf(PropTypes.shape({})),
-    }),
-    displayAttrFormNames: PropTypes.string,
-    selectedAttributes: PropTypes.arrayOf(PropTypes.string),
-    selectedMetrics: PropTypes.arrayOf(PropTypes.string),
-    selectedFilters: PropTypes.shape({}) || PropTypes.arrayOf(PropTypes.shape({})),
-  }),
-  reusePromptAnswers: PropTypes.bool,
-  previousPromptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
-  importRequested: PropTypes.bool,
-  isPreparedDataRequested: PropTypes.bool,
-  promptObjects: PropTypes.arrayOf(PropTypes.shape({})),
-  repromptsQueue: PropTypes.shape({
-    total: PropTypes.number,
-    index: PropTypes.number,
-  }),
-  isMultipleRepromptWithReuse: PropTypes.bool,
-};
-
-export const mapStateToProps = state => {
+export const mapStateToProps = (state: RootState): any => {
   const {
     navigationTree,
     popupStateReducer,
@@ -477,6 +454,7 @@ export const mapStateToProps = state => {
     answersReducer,
     repromptsQueueReducer,
   } = state;
+  // @ts-expect-error
   const popupState = popupReducer.editedObject;
   const {
     promptsAnswers,
@@ -505,6 +483,7 @@ export const mapStateToProps = state => {
     (hasPreparedRequestPromptObjects ? popupStateReducer.isPrompted.promptObjects : []);
 
   return {
+    // @ts-expect-error
     ...state.promptsPopup,
     mstrData,
     importSubtotal,

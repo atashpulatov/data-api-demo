@@ -1,18 +1,21 @@
-// issue with proptype import
-// eslint-disable-next-line simple-import-sort/imports
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { ObjectWindowTitle, Popup } from '@mstr/connector-components';
+// @ts-expect-error
 import { MSTRIcon } from '@mstr/mstr-react-library';
 import { Spinner } from '@mstr/rc';
 
-import PropTypes from 'prop-types';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import overviewHelper from '../../popup/overview/overview-helper';
 import { popupHelper } from '../../popup/popup-helper';
 import { EXTEND_SESSION, sessionHelper } from '../../storage/session-helper';
+
+import { RootState } from '../../store';
+
+import { EditedObject } from '../../redux-reducer/popup-reducer/popup-reducer-types';
+import { RepromptsQueueState } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer-types';
 
 import { selectorProperties } from '../../attribute-selector/selector-properties';
 import i18n from '../../i18n';
@@ -26,12 +29,24 @@ import { ObjectImportType } from '../../mstr-object/constants';
 
 import './dossier.css';
 
-export const DossierWindowNotConnected = props => {
+interface DossierWindowProps {
+  chosenObjectId: string;
+  chosenObjectName: string;
+  chosenProjectId: string;
+  isShapeAPISupported: boolean;
+  handleBack: () => void;
+  editedObject: EditedObject;
+  isReprompt: boolean;
+  repromptsQueue: RepromptsQueueState;
+  popupData: { objectWorkingId: number };
+}
+
+export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => {
   const [t] = useTranslation('common', { i18n });
   const [promptsAnswers, setPromptsAnswers] = useState([]);
   const instanceId = useRef('');
   const [vizualizationsData, setVizualizationsData] = useState([]);
-  const [lastSelectedViz, setLastSelectedViz] = useState({});
+  const [lastSelectedViz, setLastSelectedViz] = useState<any>({});
   const [isEmbeddedDossierLoaded, setIsEmbeddedDossierLoaded] = useState(false);
   const previousSelectionBackup = useRef([]);
 
@@ -41,19 +56,20 @@ export const DossierWindowNotConnected = props => {
   const [showLoading, setShowLoading] = useState(false);
   const [visibleEmbeddedDossier, setVisibleEmbeddedDossier] = useState(true);
 
+  // TODO check if default values are needed
   const {
-    chosenObjectName,
+    chosenObjectName = DEFAULT_PROJECT_NAME,
     handleBack,
-    editedObject,
-    chosenObjectId,
-    chosenProjectId,
-    isReprompt,
-    repromptsQueue,
-    isShapeAPISupported,
+    editedObject = {} as EditedObject,
+    chosenObjectId = 'default id',
+    chosenProjectId = 'default id',
+    isReprompt = false,
+    repromptsQueue = { total: 0, index: 0 },
+    isShapeAPISupported = false,
     popupData,
   } = props;
 
-  const { isEdit, importType } = editedObject;
+  const { isEdit, importType = ObjectImportType.TABLE } = editedObject;
   const { chapterKey, visualizationKey, vizDimensions } = lastSelectedViz;
   const [dialogPopup, setDialogPopup] = React.useState(null);
 
@@ -71,7 +87,7 @@ export const DossierWindowNotConnected = props => {
   const isSecondaryActionDisabled = !isShapeAPISupported || isEdit;
   const primaryImportType = importType || ObjectImportType.TABLE;
 
-  const handleCancel = () => {
+  const handleCancel = (): void => {
     const { commandCancel } = selectorProperties;
     const message = { command: commandCancel };
     popupHelper.officeMessageParent(message);
@@ -82,7 +98,7 @@ export const DossierWindowNotConnected = props => {
   const prolongSession = installSessionProlongingHandler(handleCancel);
 
   const extendSession = useCallback(
-    (message = {}) => {
+    (message: any = {}) => {
       const { data: postMessage, origin } = message;
       const { origin: targetOrigin } = window;
       if (origin === targetOrigin && postMessage === EXTEND_SESSION) {
@@ -101,7 +117,7 @@ export const DossierWindowNotConnected = props => {
   useEffect(() => {
     if (popupData) {
       overviewHelper.setRangeTakenPopup({
-        objectWorkingId: popupData.objectWorkingId,
+        objectWorkingIds: [popupData.objectWorkingId],
         setDialogPopup,
       });
     } else {
@@ -110,7 +126,7 @@ export const DossierWindowNotConnected = props => {
   }, [popupData]);
 
   const handleSelection = useCallback(
-    async dossierData => {
+    async (dossierData: any) => {
       const {
         chapterKey: chosenVizchapterKey,
         visualizationKey: chosenVizKey,
@@ -135,7 +151,8 @@ export const DossierWindowNotConnected = props => {
         ) {
           let isVizSupported = true;
 
-          const checkIfVizDataCanBeImported = async () => {
+          const checkIfVizDataCanBeImported = async (): Promise<any> => {
+            // @ts-expect-error
             await mstrObjectRestService.fetchVisualizationDefinition({
               projectId: chosenProjectId,
               objectId: chosenObjectId,
@@ -183,6 +200,7 @@ export const DossierWindowNotConnected = props => {
         chosenObject: chosenObjectId,
         chosenProject: chosenProjectId,
         chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
+        // @ts-expect-error
         isPrompted: promptsAnswers?.answers?.length > 0,
         promptsAnswers,
         importType: impType,
@@ -229,7 +247,7 @@ export const DossierWindowNotConnected = props => {
    * @param {String} newInstanceId
    */
   const handleInstanceIdChange = useCallback(
-    newInstanceId => {
+    (newInstanceId: string) => {
       const backup = previousSelectionBackup.current.find(el => el.instanceId === newInstanceId);
 
       if (instanceId.current !== newInstanceId && !backup) {
@@ -262,7 +280,7 @@ export const DossierWindowNotConnected = props => {
    * @param {Array} newAnswers
    */
   const handlePromptAnswer = useCallback(
-    newAnswers => {
+    (newAnswers: any) => {
       setPromptsAnswers(newAnswers);
       vizualizationsData?.length > 0 && setVizualizationsData([]);
     },
@@ -290,7 +308,7 @@ export const DossierWindowNotConnected = props => {
    *
    * @param {Boolean} enableVisibility true to show the embedded dossier, false to hide it
    */
-  const handleEmbeddedDossierVisibility = useCallback(enableVisibility => {
+  const handleEmbeddedDossierVisibility = useCallback((enableVisibility: boolean) => {
     setVisibleEmbeddedDossier(enableVisibility);
   }, []);
 
@@ -323,6 +341,7 @@ export const DossierWindowNotConnected = props => {
             className={`${visibleEmbeddedDossier ? 'dossier-window-embedded' : 'dossier-window-embedded-empty'}`}
           >
             <EmbeddedDossier
+              // @ts-expect-error
               handleSelection={handleSelection}
               handlePromptAnswer={handlePromptAnswer}
               handleInstanceIdChange={handleInstanceIdChange}
@@ -356,60 +375,7 @@ export const DossierWindowNotConnected = props => {
   );
 };
 
-DossierWindowNotConnected.propTypes = {
-  chosenObjectId: PropTypes.string,
-  chosenObjectName: PropTypes.string,
-  chosenProjectId: PropTypes.string,
-  isShapeAPISupported: PropTypes.bool,
-  handleBack: PropTypes.func,
-  editedObject: PropTypes.shape({
-    chosenObjectId: PropTypes.string,
-    projectId: PropTypes.string,
-    isEdit: PropTypes.bool,
-    instanceId: PropTypes.string,
-    dossierName: PropTypes.string,
-    promptsAnswers: PropTypes.shape({
-      answers: PropTypes.arrayOf(PropTypes.shape({})),
-      messageName: PropTypes.string,
-    }),
-    selectedViz: PropTypes.string,
-    importType: PropTypes.string,
-  }),
-  isReprompt: PropTypes.bool,
-  repromptsQueue: PropTypes.shape({
-    total: PropTypes.number,
-    index: PropTypes.number,
-  }),
-  popupData: PropTypes.shape({ objectWorkingId: PropTypes.number }),
-};
-
-DossierWindowNotConnected.defaultProps = {
-  chosenObjectId: 'default id',
-  chosenObjectName: DEFAULT_PROJECT_NAME,
-  chosenProjectId: 'default id',
-  isShapeAPISupported: false,
-  handleBack: () => {},
-  editedObject: {
-    chosenObjectId: undefined,
-    projectId: undefined,
-    isEdit: false,
-    instanceId: undefined,
-    dossierName: undefined,
-    promptsAnswers: {
-      answers: [],
-      messageName: '',
-    },
-    selectedViz: '',
-    importType: ObjectImportType.TABLE,
-  },
-  isReprompt: false,
-  repromptsQueue: {
-    total: 0,
-    index: 0,
-  },
-};
-
-function mapStateToProps(state) {
+function mapStateToProps(state: RootState): any {
   const {
     navigationTree,
     popupReducer,
@@ -427,6 +393,7 @@ function mapStateToProps(state) {
     promptObjects,
     importRequested,
   } = navigationTree;
+  // @ts-expect-error
   const { editedObject } = popupReducer;
   const { supportForms, isShapeAPISupported, popupData } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;

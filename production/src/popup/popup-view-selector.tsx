@@ -37,13 +37,13 @@ const renderProperComponent = (popupType: PopupTypeEnum): any => {
       return <PromptsWindow />;
     case PopupTypeEnum.dossierWindow:
     case PopupTypeEnum.repromptDossierDataOverview:
-      return <DossierWindow />; // TODO: Might be missing {t}
+      // @ts-expect-error
+      return <DossierWindow />;
     case PopupTypeEnum.obtainInstanceHelper:
       return <ObtainInstanceHelper />;
     case PopupTypeEnum.multipleRepromptTransitionPage:
       return <MultipleRepromptTransitionPage />;
     case PopupTypeEnum.importedDataOverview:
-      // TODO: Replace with ImportedDataOverview component once developed
       return (
         <OverviewWindow
           onImport={overviewHelper.sendImportRequest}
