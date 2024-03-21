@@ -4,23 +4,30 @@ import { ObjectNotificationTypes } from '@mstr/connector-components';
 import { render } from '@testing-library/react';
 
 import { reduxStore } from '../../store';
-// eslint-disable-next-line import/order
 import configureMockStore from 'redux-mock-store';
 
 import { OverviewWindowNotConnected } from './overview-window';
 
 import { mockedObjectsFromStore } from '../../../__mocks__/mockDataV2';
 
+const setupStore =(initialState) => {
+  const mockStore = configureMockStore();
+  return mockStore(initialState);
+}
+
 describe('OverviewWindowNotConnected', () => {
-  it('should render DataOverview component', () => {
-    // Given
-    const props = {
+  let props;
+
+  beforeEach(() => {
+    props = {
       objects: [],
       onRefresh: jest.fn(),
       onDelete: jest.fn(),
       onDuplicate: jest.fn(),
     };
+  });
 
+  beforeAll(() => {
     window.Office = {
       EventType: {
         DialogParentMessageReceived: 'DialogParentMessageReceived',
@@ -31,7 +38,11 @@ describe('OverviewWindowNotConnected', () => {
           addHandlerAsync: () => {},
         },
       },
-    };
+    };  
+  });
+
+  it('should render DataOverview component', () => {
+    // Given
     // When
     const { getByText } = render(
       <Provider store={reduxStore}>
@@ -46,34 +57,26 @@ describe('OverviewWindowNotConnected', () => {
 
   it('should render DataOverview component with blocked actions when there is operation in progress', () => {
     // Given
-    const mockStore = configureMockStore();
-    const mockedNotifications = [
+    const mockedProgressingNotification = 
       {
         objectWorkingId: 1707383886748,
         title: 'Duplicating',
         type: ObjectNotificationTypes.PROGRESS,
         operationType: 'DUPLICATE_OPERATION',
         isIndeterminate: false,
-      },
-    ];
+      }
+    ;
 
     const initialState = {
-      notificationReducer: { notifications: mockedNotifications, globalNotification: { type: '' } },
+      notificationReducer: { notifications: [mockedProgressingNotification], globalNotification: { type: '' } },
     };
-    const store = mockStore(initialState);
+    const store = setupStore(initialState);
 
-    const props = {
-      objects: mockedObjectsFromStore,
-      onRefresh: jest.fn(),
-      onDelete: jest.fn(),
-      onDuplicate: jest.fn(),
-      notifications: mockedNotifications,
-    };
 
     // When
     const { getByText, container } = render(
       <Provider store={store}>
-        <OverviewWindowNotConnected {...props} />
+        <OverviewWindowNotConnected {...props, {objects:mockedObjectsFromStore}} />
       </Provider>
     );
 
@@ -87,8 +90,7 @@ describe('OverviewWindowNotConnected', () => {
 
   it('should render DataOverview component with enabled actions when there is operation completed succesfully', () => {
     // Given
-    const mockStore = configureMockStore();
-    const mockedNotifications = [
+    const mockedSuccesfulNotification = [
       {
         objectWorkingId: 1707383886748,
         title: 'Duplicating',
@@ -98,17 +100,9 @@ describe('OverviewWindowNotConnected', () => {
       },
     ];
 
-    const initialState = {
-      notificationReducer: { notifications: mockedNotifications, globalNotification: { type: '' } },
-    };
-    const store = mockStore(initialState);
-
-    const props = {
-      objects: mockedObjectsFromStore,
-      onRefresh: jest.fn(),
-      onDelete: jest.fn(),
-      onDuplicate: jest.fn(),
-    };
+    const store = setupStore({
+      notificationReducer: { notifications: [mockedSuccesfulNotification], globalNotification: { type: '' } },
+    });
 
     // When
     const { getByText, container } = render(
