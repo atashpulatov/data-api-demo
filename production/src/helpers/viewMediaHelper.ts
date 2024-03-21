@@ -38,7 +38,7 @@ const DOCUMENT_TYPES = Object.freeze({
 /**
  * Get default mode from given viewMedia
  */
-function getDefaultViewMode(viewMedia) {
+function getDefaultViewMode(viewMedia: number): number {
   const defModePosition = viewMedia >> 27;
 
   if (defModePosition === 0) {
@@ -50,7 +50,7 @@ function getDefaultViewMode(viewMedia) {
 /**
  * Map the documents default view media to the type of document, which can be Dossier or RSD.
  */
-function getTypeFromViewMedia(viewMedia) {
+function getTypeFromViewMedia(viewMedia: number): number | null {
   const defaultViewMedia = getDefaultViewMode(viewMedia);
   if (!defaultViewMedia) {
     return null;
@@ -72,6 +72,6 @@ function getTypeFromViewMedia(viewMedia) {
  * @param viewMedia
  * @returns {boolean}
  */
-export default function isDossier(viewMedia) {
+export default function isDossier(viewMedia: number): boolean {
   return getTypeFromViewMedia(viewMedia) === DOCUMENT_TYPES.DOSSIER;
 }

@@ -2,11 +2,11 @@ class ScriptInjectionHelper {
   /**
    * Applies an external script file to a embedded document.
    *
-   * @param {Document} contentDocument is a document of iframe
-   * @param {String} fileLocationRelativePath is a path to file,
+   * @param contentDocument is a document of iframe
+   * @param fileLocationRelativePath is a path to file,
    * that will be injected to iframe.
    */
-  applyFile = (contentDocument, fileLocationRelativePath) => {
+  applyFile = (contentDocument: Document, fileLocationRelativePath: string): void => {
     if (contentDocument) {
       const fileLocation = this.createFileLocation(fileLocationRelativePath);
       const script = contentDocument.createElement('script');
@@ -19,11 +19,11 @@ class ScriptInjectionHelper {
   /**
    * Applies an external css file to a document.
    *
-   * @param {Document} contentDocument is a document of iframe
-   * @param {String} styleSheetRelativePath is a path to file,
+   * @param contentDocument is a document of iframe
+   * @param styleSheetRelativePath is a path to file,
    * that will be injected to iframe.
    */
-  applyStyle = (contentDocument, styleSheetRelativePath) => {
+  applyStyle = (contentDocument: Document, styleSheetRelativePath: string): void => {
     if (contentDocument) {
       const styleSheetLocation = this.createFileLocation(styleSheetRelativePath);
       const cssLink = document.createElement('link');
@@ -37,28 +37,34 @@ class ScriptInjectionHelper {
   /**
    * Creates location of the file.
    *
-   * @param {String} relativePath is a path to file,
+   * @param relativePath is a path to file,
    * that will be injected to iframe.
    */
-  createFileLocation = relativePath =>
-    window.location.origin + window.location.pathname.replace('index.html', relativePath);
+  createFileLocation(relativePath: string): string {
+    return window.location.origin + window.location.pathname.replace('index.html', relativePath);
+  }
 
   /**
    * Checks if document is login page of embedded library.
    *
-   * @param {Document} document content document of embedded dossier iframe.
-   * @returns {Boolean} True if document is login page, false otherwise.
+   * @param document content document of embedded dossier iframe.
+   * @return True if document is login page, false otherwise.
    */
-  isLoginPage = document => document && document.URL.includes('embeddedLogin.jsp');
+  isLoginPage(document: Document): boolean {
+    return document?.URL.includes('embeddedLogin.jsp');
+  }
 
   /**
    * Watches container for child addition and runs callback in case an iframe was added
-   * @param {*} container
-   * @param {*} callback
+   * @param container
+   * @param callback
    */
-  watchForIframeAddition = (container, callback) => {
+  watchForIframeAddition(
+    container: HTMLElement,
+    callback: (iframe: HTMLIFrameElement) => void
+  ): void {
     const config = { childList: true };
-    const onMutation = mutationList => {
+    const onMutation = (mutationList: any): void => {
       for (const mutation of mutationList) {
         if (
           mutation.addedNodes &&
@@ -74,7 +80,7 @@ class ScriptInjectionHelper {
     };
     const observer = new MutationObserver(onMutation);
     observer.observe(container, config);
-  };
+  }
 
   /**
    * When focused on window switch focus to different element in this window.
@@ -82,23 +88,25 @@ class ScriptInjectionHelper {
    * For non-prompted dossiers it will be the Table of Content button.
    * Focusing on the window itself is not visible for the user therefore should be skipped.
    *
-   * @param {FocusEvent} focusEvent
+   * @param  focusEvent
    */
-  switchFocusToElementOnWindowFocus = focusEvent => {
-    const iframeDocument = focusEvent.target.contentDocument;
+  switchFocusToElementOnWindowFocus(focusEvent: FocusEvent): void {
+    const iframeDocument = (focusEvent.target as HTMLIFrameElement).contentDocument;
     const overlay = iframeDocument.getElementsByClassName(
       'mstrd-PromptEditorContainer-overlay'
     ).length;
     let elementToFocusOn;
     if (overlay) {
+      // @ts-expect-error
       [elementToFocusOn] = iframeDocument.getElementsByTagName('TD');
     } else {
+      // @ts-expect-error
       [elementToFocusOn] = iframeDocument.getElementsByClassName('icon-tb_toc_n');
     }
     if (elementToFocusOn) {
       elementToFocusOn.focus();
     }
-  };
+  }
 }
 
 const scriptInjectionHelper = new ScriptInjectionHelper();

@@ -1,4 +1,8 @@
-const documentationLanguages = {
+interface IDocumentationLanguages {
+  [key: string]: string;
+}
+
+const documentationLanguages: IDocumentationLanguages = {
   da: 'en-us',
   de: 'de',
   en: 'en-us',
@@ -14,7 +18,7 @@ const documentationLanguages = {
   zh: 'zh-cn',
 };
 
-const languageString = (languageCode = 'en') => {
+const languageString = (languageCode = 'en'): string => {
   const shortCode = languageCode.substring(0, 2).toLowerCase();
   return documentationLanguages[shortCode] || 'en-us';
 };
