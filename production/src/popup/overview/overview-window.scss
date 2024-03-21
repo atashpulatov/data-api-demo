@@ -1,6 +1,10 @@
 $footer-height: 50px;
 $title-height: 40px;
 
+html {
+  overflow : hidden;
+}
+
 .data-overview-wrapper {
   margin: 20px;
   user-select: none;
