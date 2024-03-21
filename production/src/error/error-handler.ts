@@ -1,5 +1,7 @@
 import officeReducerHelper from '../office/store/office-reducer-helper';
 
+import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
+
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import i18n from '../i18n';
 import { getNotificationButtons } from '../notification/notification-buttons';
@@ -55,7 +57,7 @@ class ErrorService {
     objectWorkingId: number,
     error: any,
     callback: Function,
-    operationData: any
+    operationData: OperationData
   ): Promise<void> {
     const errorType = this.getErrorType(error, operationData);
     if (error.Code === 5012) {
@@ -133,7 +135,7 @@ class ErrorService {
    * @param operationData Data about the operation that was performed
    * @returns ErrorType
    */
-  getErrorType(error: any, operationData?: any): ErrorType {
+  getErrorType(error: any, operationData?: OperationData): ErrorType {
     const updateError = this.getExcelError(error, operationData);
     return (
       updateError.type || this.getOfficeErrorType(updateError) || this.getRestErrorType(updateError)
@@ -243,7 +245,7 @@ class ErrorService {
    * @param error Error thrown during the operation execution
    * @param operationData Contains informatons about current operation
    */
-  getExcelError(error: any, operationData: any): any {
+  getExcelError(error: any, operationData: OperationData): any {
     const { name, code, debugInfo } = error;
     const isExcelApiError =
       name === 'RichApi.Error' &&

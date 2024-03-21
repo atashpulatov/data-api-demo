@@ -1,4 +1,12 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
+
+import {
+  OperationAction,
+  OperationData,
+  OperationPayload,
+  OperationState,
+} from './operation-reducer-types';
+
 import {
   CANCEL_OPERATION,
   MARK_STEP_COMPLETED,
@@ -6,9 +14,13 @@ import {
   UPDATE_OPERATION,
 } from '../../operation/operation-type-names';
 
-const initialState = { operations: [] };
+const initialState: OperationState = { operations: [] };
 
-export const operationReducer = (state = initialState, action = {}) => {
+export const operationReducer = (
+  // eslint-disable-next-line default-param-last
+  state = initialState,
+  action: OperationAction
+): OperationState => {
   switch (action.type) {
     case OperationTypes.IMPORT_OPERATION:
     case OperationTypes.REFRESH_OPERATION:
@@ -33,13 +45,16 @@ export const operationReducer = (state = initialState, action = {}) => {
   }
 };
 
-function operationRequested(state, payload) {
+function operationRequested(state: OperationState, payload: OperationPayload): OperationState {
   return {
     operations: [...state.operations, payload.operation],
   };
 }
 
-function markStepCompleted(state, { objectWorkingId, completedStep }) {
+function markStepCompleted(
+  state: OperationState,
+  { objectWorkingId, completedStep }: OperationPayload
+): OperationState {
   const processedOperationIndex = getProcessedOperationIndex(state.operations, objectWorkingId);
   const processedOperation = state.operations[processedOperationIndex];
   const { stepsQueue } = processedOperation;
@@ -55,7 +70,10 @@ function markStepCompleted(state, { objectWorkingId, completedStep }) {
   return { ...state, operations: [...state.operations] };
 }
 
-function updateOperation(state, updatedOperationProps) {
+function updateOperation(
+  state: OperationState,
+  updatedOperationProps: Partial<OperationData>
+): OperationState {
   const processedOperationIndex = getProcessedOperationIndex(
     state.operations,
     updatedOperationProps.objectWorkingId
@@ -69,13 +87,16 @@ function updateOperation(state, updatedOperationProps) {
   return { operations: newOperations };
 }
 
-function cancelOperation(state, { objectWorkingId }) {
+function cancelOperation(
+  state: OperationState,
+  { objectWorkingId }: OperationPayload
+): OperationState {
   const processedOperationIndex = getProcessedOperationIndex(state.operations, objectWorkingId);
   state.operations.splice(processedOperationIndex, 1);
   return { ...state };
 }
 
-function getProcessedOperationIndex(operations, objectWorkingId) {
+function getProcessedOperationIndex(operations: OperationData[], objectWorkingId: number): number {
   const processedOperationIndex = operations.findIndex(
     operation => operation.objectWorkingId === objectWorkingId
   );
