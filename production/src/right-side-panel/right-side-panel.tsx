@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
-import { PopupTypes, SidePanel } from '@mstr/connector-components';
+import { OfficeApplicationType, PopupTypes, SidePanel } from '@mstr/connector-components';
 
 import { notificationService } from '../notification/notification-service';
 import { officeApiHelper } from '../office/api/office-api-helper';
@@ -275,6 +275,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
           setFilteredPageByLinkId(pageByLinkId);
           setIsDataOverviewOpen(true);
         }}
+        applicationType={OfficeApplicationType.EXCEL}
       />
     </>
   );
