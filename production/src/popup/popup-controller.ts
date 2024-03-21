@@ -435,26 +435,10 @@ class PopupController {
     this.dialog = {} as unknown as Office.Dialog;
   };
 
-  getReportsPreviousState = (reportParams: ReportParams): void => {
-    const currentReportArray = this.reduxStore.getState().officeReducer.reportArray;
-    const indexOfOriginalValues = currentReportArray.findIndex(
-      (report: any) => report.bindId === reportParams.bindId
-    );
-    const originalValues = currentReportArray[indexOfOriginalValues];
-    const { displayAttrFormNames } = officeProperties;
-    if (originalValues.displayAttrFormNames) {
-      return { ...originalValues };
-    }
-    return {
-      ...originalValues,
-      displayAttrFormNames: displayAttrFormNames.automatic,
-    };
-  };
-
   getObjectPreviousState = (reportParams: ReportParams): ObjectData => {
     const { objects } = this.reduxStore.getState().objectReducer;
     const indexOfOriginalValues = objects.findIndex(
-      (report: any) => report.bindId === reportParams.bindId
+      (report: ObjectData) => report.bindId === reportParams.bindId
     );
     const originalValues = objects[indexOfOriginalValues];
     const { displayAttrFormNames } = officeProperties;
