@@ -5,6 +5,7 @@ import instanceDefinitionHelper from '../mstr-object/instance/instance-definitio
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { pageByHelper } from '../page-by/page-by-helper';
 
+import { ObjectData } from '../redux-reducer/object-reducer/object-reducer-types';
 import { DialogResponse, ReportParams } from './popup-controller-types';
 
 import { selectorProperties } from '../attribute-selector/selector-properties';
@@ -450,7 +451,7 @@ class PopupController {
     };
   };
 
-  getObjectPreviousState = (reportParams: ReportParams): any => {
+  getObjectPreviousState = (reportParams: ReportParams): ObjectData => {
     const { objects } = this.reduxStore.getState().objectReducer;
     const indexOfOriginalValues = objects.findIndex(
       (report: any) => report.bindId === reportParams.bindId
