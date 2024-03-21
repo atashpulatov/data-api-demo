@@ -493,8 +493,6 @@ describe('overview-helper', () => {
         manipulationsXML: { promptAnswers: 'Answer 1' },
         pageByData: {
           pageByLink: '324535767821234',
-          numberOfSiblings: 3,
-          numberOfAllValidCombinations: 45,
           elements: [
             {
               name: 'Category',
