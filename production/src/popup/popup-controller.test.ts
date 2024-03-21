@@ -9,6 +9,7 @@ import overviewHelper, { OverviewActionCommands } from './overview/overview-help
 
 import { reduxStore, RootState } from '../store';
 
+import { ObjectData } from '../redux-reducer/object-reducer/object-reducer-types';
 import { ReportParams } from './popup-controller-types';
 
 import { selectorProperties } from '../attribute-selector/selector-properties';
@@ -472,7 +473,7 @@ describe('PopupController', () => {
       command: actionCommand,
       objectWorkingIds: [1],
       importType: 'table',
-    };
+    } as ObjectData;
 
     const handleOverviewActionCommandMock = jest
       .spyOn(overviewHelper, 'handleOverviewActionCommand')

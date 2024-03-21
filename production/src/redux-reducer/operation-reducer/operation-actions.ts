@@ -1,4 +1,6 @@
-import { operationsMap } from '../../operation/operation-steps';
+import { OperationAction, OperationData } from './operation-reducer-types';
+
+import { operationsMap, OperationSteps } from '../../operation/operation-steps';
 import {
   CANCEL_OPERATION,
   MARK_STEP_COMPLETED,
@@ -7,17 +9,20 @@ import {
 } from '../../operation/operation-type-names';
 import { ObjectImportType } from '../../mstr-object/constants';
 
-function getStepsQueue(operationType, importType) {
+function getStepsQueue(
+  operationType: OperationTypes,
+  importType: ObjectImportType
+): OperationSteps[] {
   const operationsStepsMap = JSON.parse(JSON.stringify(operationsMap[importType]));
   return operationsStepsMap[operationType];
 }
 
 function createOperation(
-  operationType,
-  objectWorkingId,
-  objectData = {},
+  operationType: OperationTypes,
+  objectWorkingId: number,
+  objectData: any = {},
   importType = ObjectImportType.TABLE
-) {
+): OperationData {
   const { backupObjectData, objectEditedData, preparedInstanceDefinition } = objectData;
   return {
     operationType,
@@ -31,7 +36,11 @@ function createOperation(
   };
 }
 
-export const importRequested = (object, preparedInstanceDefinition, pageByIndex = 0) => {
+export const importRequested = (
+  object: any,
+  preparedInstanceDefinition?: any,
+  pageByIndex = 0
+): OperationAction => {
   // TODO find better way for unique Id
   const objectWorkingId = Date.now() + pageByIndex;
   object.objectWorkingId = objectWorkingId;
@@ -49,7 +58,10 @@ export const importRequested = (object, preparedInstanceDefinition, pageByIndex 
   };
 };
 
-export const refreshRequested = (objectWorkingId, importType) => ({
+export const refreshRequested = (
+  objectWorkingId: number,
+  importType: ObjectImportType
+): OperationAction => ({
   type: OperationTypes.REFRESH_OPERATION,
   payload: {
     operation: createOperation(OperationTypes.REFRESH_OPERATION, objectWorkingId, {}, importType),
@@ -57,7 +69,7 @@ export const refreshRequested = (objectWorkingId, importType) => ({
   },
 });
 
-export const editRequested = (objectData, objectEditedData) => {
+export const editRequested = (objectData: any, objectEditedData: any): OperationAction => {
   const backupObjectData = JSON.parse(JSON.stringify(objectData));
   const { objectWorkingId } = backupObjectData;
   // Refer to objectData to get importType as objectEditedData.importType does not
@@ -76,7 +88,7 @@ export const editRequested = (objectData, objectEditedData) => {
   };
 };
 
-export const duplicateRequested = (object, objectEditedData) => {
+export const duplicateRequested = (object: any, objectEditedData?: any): OperationAction => {
   const { objectWorkingId, importType } = object;
   return {
     type: OperationTypes.DUPLICATE_OPERATION,
@@ -92,7 +104,10 @@ export const duplicateRequested = (object, objectEditedData) => {
   };
 };
 
-export const removeRequested = (objectWorkingId, importType) => ({
+export const removeRequested = (
+  objectWorkingId: number,
+  importType: ObjectImportType
+): OperationAction => ({
   type: OperationTypes.REMOVE_OPERATION,
   payload: {
     operation: createOperation(OperationTypes.REMOVE_OPERATION, objectWorkingId, {}, importType),
@@ -100,7 +115,7 @@ export const removeRequested = (objectWorkingId, importType) => ({
   },
 });
 
-export const highlightRequested = objectWorkingId => ({
+export const highlightRequested = (objectWorkingId: number): OperationAction => ({
   type: OperationTypes.HIGHLIGHT_OPERATION,
   payload: {
     operation: createOperation(OperationTypes.HIGHLIGHT_OPERATION, objectWorkingId),
@@ -108,7 +123,10 @@ export const highlightRequested = objectWorkingId => ({
   },
 });
 
-export const clearDataRequested = (objectWorkingId, importType) => ({
+export const clearDataRequested = (
+  objectWorkingId: number,
+  importType: ObjectImportType
+): OperationAction => ({
   type: OperationTypes.CLEAR_DATA_OPERATION,
   payload: {
     operation: createOperation(
@@ -121,7 +139,10 @@ export const clearDataRequested = (objectWorkingId, importType) => ({
   },
 });
 
-export const markStepCompleted = (objectWorkingId, completedStep) => ({
+export const markStepCompleted = (
+  objectWorkingId: number,
+  completedStep: OperationSteps
+): OperationAction => ({
   type: MARK_STEP_COMPLETED,
   payload: {
     objectWorkingId,
@@ -129,12 +150,14 @@ export const markStepCompleted = (objectWorkingId, completedStep) => ({
   },
 });
 
-export const updateOperation = updatedOperationProps => ({
+export const updateOperation = (
+  updatedOperationProps: Partial<OperationData>
+): OperationAction => ({
   type: UPDATE_OPERATION,
   payload: updatedOperationProps,
 });
 
-export const cancelOperation = objectWorkingId => ({
+export const cancelOperation = (objectWorkingId: number): OperationAction => ({
   type: CANCEL_OPERATION,
   payload: { objectWorkingId },
 });

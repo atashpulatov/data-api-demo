@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
+import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
+
 import { OperationSteps } from './operation-steps';
 
 /**
@@ -22,7 +24,7 @@ class OperationBus {
     this.subscribedCallbacksMap = {};
 
     const { operationReducer } = this.store.getState();
-    const currentOperation =
+    const currentOperation: OperationData =
       operationReducer && operationReducer.operations && operationReducer.operations[0];
     this.previousOperationCopy = this.copyOperationInfo(currentOperation);
     this.store.subscribe(this.listener);

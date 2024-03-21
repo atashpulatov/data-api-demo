@@ -3,6 +3,8 @@ import { officeRemoveHelper } from '../office/remove/office-remove-helper';
 import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 
+import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
+
 import { errorService } from '../error/error-handler';
 import { deleteObjectNotification } from '../redux-reducer/notification-reducer/notification-action-creators';
 import { removeObject, restoreObjectBackup } from '../redux-reducer/object-reducer/object-actions';
@@ -27,7 +29,11 @@ class OperationErrorHandler {
    * @param {Object} operationData Contains informatons about current operation
    * @param {Error} error Error thrown during the operation execution
    */
-  async handleOperationError(objectData: any, operationData: any, error: any): Promise<void> {
+  async handleOperationError(
+    objectData: any,
+    operationData: OperationData,
+    error: any
+  ): Promise<void> {
     const callback = this.getCallback(objectData, operationData);
     if (callback) {
       await errorService.handleObjectBasedError(
@@ -47,7 +53,7 @@ class OperationErrorHandler {
    * @param objectData Unique Id of the object allowing to reference specific object
    * @param operationData Contains informatons about current operation
    */
-  async handleImportOperationError(objectData: any, operationData: any): Promise<void> {
+  async handleImportOperationError(objectData: any, operationData: OperationData): Promise<void> {
     const { objectWorkingId, isCrosstab, crosstabHeaderDimensions, bindId, importType } =
       objectData;
     const { officeTable, excelContext } = operationData;
@@ -102,7 +108,7 @@ class OperationErrorHandler {
    * @param {Object} objectData Unique Id of the object allowing to reference specific object
    * @param {Object} operationData Contains informatons about current operation
    */
-  async handleRefreshOperationError(objectData: any, operationData: any): Promise<void> {
+  async handleRefreshOperationError(objectData: any, operationData: OperationData): Promise<void> {
     const { objectWorkingId, isCrosstab } = objectData;
     const { officeTable, backupObjectData, isTotalsRowVisible = false } = operationData;
     if (officeTable) {
@@ -162,7 +168,7 @@ class OperationErrorHandler {
    * @param objectData Unique Id of the object allowing to reference specific object
    * @param operationData Contains informatons about current operation
    */
-  getCallback(objectData: any, operationData: any): Function {
+  getCallback(objectData: any, operationData: OperationData): Function {
     const { operationType } = operationData;
 
     let callback;

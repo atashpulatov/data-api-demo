@@ -49,7 +49,7 @@ class OfficeApiWorksheetHelper {
   async isCurrentReportSheetProtected(
     excelContext: Excel.RequestContext,
     bindId: string,
-    sheet: Excel.Worksheet
+    sheet?: Excel.Worksheet
   ): Promise<void> {
     let isProtected = false;
     if (bindId) {

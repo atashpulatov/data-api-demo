@@ -1,9 +1,7 @@
-// issue with proptype import
-// eslint-disable-next-line simple-import-sort/imports
 import React, { useEffect, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { PopupTypes, SidePanel } from '@mstr/connector-components';
-import PropTypes from 'prop-types';
+
 import { notificationService } from '../notification/notification-service';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
@@ -11,11 +9,10 @@ import officeStoreHelper from '../office/store/office-store-helper';
 import { sidePanelEventHelper } from './side-panel-event-helper';
 import { sidePanelNotificationHelper } from './side-panel-notification-helper';
 import { sidePanelService } from './side-panel-service';
-import { selectOperations } from '../redux-reducer/operation-reducer/operation-reducer-selectors';
-import {
-  selectNotifications,
-  selectGlobalNotification,
-} from '../redux-reducer/notification-reducer/notification-reducer-selectors';
+
+import { RootState } from '../store';
+
+import { ObjectData } from '../redux-reducer/object-reducer/object-reducer-types';
 
 import { Confirmation } from '../home/confirmation';
 import { PopupTypeEnum } from '../home/popup-type-enum';
@@ -23,11 +20,37 @@ import { SettingsMenu } from '../home/settings-menu';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupController } from '../popup/popup-controller';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import {
+  selectGlobalNotification,
+  selectNotifications,
+} from '../redux-reducer/notification-reducer/notification-reducer-selectors';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
+import { selectOperations } from '../redux-reducer/operation-reducer/operation-reducer-selectors';
 
 import './right-side-panel.scss';
 
-export const RightSidePanelNotConnected = ({
+interface RightSidePanelProps {
+  popupData?: { objectWorkingId: number; callback: Function };
+  loadedObjects: ObjectData[];
+  isConfirm?: boolean;
+  isSettings?: boolean;
+  isSecured?: boolean;
+  isClearDataFailed?: boolean;
+  settingsPanelLoaded?: boolean;
+  reusePromptAnswers?: boolean;
+  toggleIsSettingsFlag?: (flag?: boolean) => void;
+  toggleSecuredFlag?: (flag?: boolean) => void;
+  toggleIsClearDataFailedFlag?: (flag?: boolean) => void;
+  updateActiveCellAddress?: (flag?: boolean) => void;
+  isDialogRendered?: boolean;
+  isDialogLoaded?: boolean;
+  toggleCurtain?: boolean;
+  activeCellAddress?: string;
+  popupType?: PopupTypeEnum;
+  isDataOverviewOpen?: boolean;
+}
+
+export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   loadedObjects,
   isConfirm,
   isSettings,
@@ -62,7 +85,7 @@ export const RightSidePanelNotConnected = ({
   };
 
   useEffect(() => {
-    async function initializeSidePanel() {
+    async function initializeSidePanel(): Promise<void> {
       try {
         await sidePanelEventHelper.addRemoveObjectListener();
         await sidePanelEventHelper.initializeActiveCellChangedListener(updateActiveCellAddress);
@@ -140,11 +163,11 @@ export const RightSidePanelNotConnected = ({
    * - session is valid,
    * - no operation is in progress.
    *
-   * @param {Function} func Function to be wrapped
-   * @param {*} params Parameters to wrapped function
-   * @param {String} name Optional new name of an object
+   * @param func Function to be wrapped
+   * @param params Parameters to wrapped function
+   * @param name Optional new name of an object
    */
-  const wrapper = async (func, params, name) => {
+  const wrapper = async (func: Function, params: any, name?: string): Promise<void> => {
     try {
       const { onLine } = window.navigator;
       if (onLine) {
@@ -158,38 +181,38 @@ export const RightSidePanelNotConnected = ({
     }
   };
 
-  const addDataWrapper = async params => {
+  const addDataWrapper = async (params: any): Promise<void> => {
     await wrapper(sidePanelService.addData, params);
   };
-  const highlightObjectWrapper = async params => {
+  const highlightObjectWrapper = async (params: any): Promise<void> => {
     await wrapper(sidePanelService.highlightObject, params);
   };
-  const duplicateWrapper = async objectWorkingId => {
+  const duplicateWrapper = async (objectWorkingId: number): Promise<void> => {
     await wrapper(sidePanelNotificationHelper.setDuplicatePopup, {
       objectWorkingId,
       ...duplicatePopupParams,
     });
   };
-  const editWrapper = async params => {
+  const editWrapper = async (params: any): Promise<void> => {
     await wrapper(sidePanelService.edit, params);
   };
-  const repromptWrapper = async (...params) => {
+  const repromptWrapper = async (...params: any): Promise<void> => {
     await wrapper(sidePanelService.reprompt, params);
   };
-  const refreshWrapper = async (...params) => {
+  const refreshWrapper = async (...params: any): Promise<void> => {
     await wrapper(sidePanelService.refresh, params);
   };
-  const removeWrapper = async (...params) => {
+  const removeWrapper = async (...params: any): Promise<void> => {
     await wrapper(sidePanelService.remove, params);
   };
-  const renameWrapper = async (params, name) => {
+  const renameWrapper = async (params: any, name: string): Promise<void> => {
     await wrapper(sidePanelService.rename, params, name);
   };
-  const handleReusePromptAnswers = async () => {
+  const handleReusePromptAnswers = async (): Promise<void> => {
     await wrapper(sidePanelService.toggleReusePromptAnswers, reusePromptAnswers);
   };
 
-  const handleToggleSettingsPanel = () => {
+  const handleToggleSettingsPanel = (): void => {
     sidePanelService.toggleSettingsPanel(settingsPanelLoaded);
   };
 
@@ -220,7 +243,7 @@ export const RightSidePanelNotConnected = ({
     <>
       {toggleCurtain && <div className='block-side-panel-ui' />}
       <SidePanel
-        loadedObjects={loadedObjectsWrapped}
+        loadedObjects={loadedObjectsWrapped as any}
         onAddData={addDataWrapper}
         onTileClick={highlightObjectWrapper}
         onDuplicateClick={duplicateWrapper}
@@ -229,6 +252,7 @@ export const RightSidePanelNotConnected = ({
         onRemoveClick={removeWrapper}
         onRename={renameWrapper}
         popup={!isDialogRendered && sidePanelPopup}
+        // @ts-expect-error
         settingsMenu={isSettings && <SettingsMenu />}
         onSettingsClick={() => toggleIsSettingsFlag(!isSettings)}
         confirmationWindow={isConfirm && <Confirmation />}
@@ -246,7 +270,7 @@ export const RightSidePanelNotConnected = ({
   );
 };
 
-export const mapStateToProps = state => {
+export const mapStateToProps = (state: RootState): any => {
   const { importRequested, dossierOpenRequested } = state.navigationTree;
   const { repromptsQueue } = state.repromptsQueueReducer;
   const { popupType, isDataOverviewOpen } = state.popupStateReducer;
@@ -297,53 +321,3 @@ export const RightSidePanel = connect(
   mapStateToProps,
   mapDispatchToProps
 )(RightSidePanelNotConnected);
-
-RightSidePanelNotConnected.propTypes = {
-  popupData: PropTypes.shape({ objectWorkingId: PropTypes.number }),
-  globalNotification: PropTypes.shape({ type: PropTypes.string }),
-  loadedObjects: PropTypes.arrayOf(
-    PropTypes.shape({
-      body: PropTypes.shape({}),
-      objectWorkingId: PropTypes.number,
-      bindId: PropTypes.string,
-      id: PropTypes.string,
-      name: PropTypes.string,
-      mstrObjectType: PropTypes.shape({
-        name: PropTypes.string,
-        request: PropTypes.string,
-        subtypes: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.number)]),
-        type: PropTypes.number || PropTypes.string,
-      }),
-      refreshDate: PropTypes.number,
-      visualizationInfo: PropTypes.oneOfType([
-        PropTypes.bool,
-        PropTypes.shape({
-          chapterKey: PropTypes.string,
-          visualizationKey: PropTypes.string,
-          dossierStructure: PropTypes.shape({
-            chapterName: PropTypes.string,
-            dossierName: PropTypes.string,
-            pageName: PropTypes.string,
-          }),
-        }),
-      ]),
-      isSelected: PropTypes.bool,
-    })
-  ).isRequired,
-  isConfirm: PropTypes.bool,
-  isSettings: PropTypes.bool,
-  isSecured: PropTypes.bool,
-  isClearDataFailed: PropTypes.bool,
-  settingsPanelLoaded: PropTypes.bool,
-  reusePromptAnswers: PropTypes.bool,
-  toggleIsSettingsFlag: PropTypes.func,
-  toggleSecuredFlag: PropTypes.func,
-  toggleIsClearDataFailedFlag: PropTypes.func,
-  updateActiveCellAddress: PropTypes.func,
-  isDialogRendered: PropTypes.bool,
-  isDialogLoaded: PropTypes.bool,
-  toggleCurtain: PropTypes.bool,
-  activeCellAddress: PropTypes.string,
-  popupType: PropTypes.oneOf(Object.values(PopupTypeEnum)),
-  isDataOverviewOpen: PropTypes.bool,
-};
