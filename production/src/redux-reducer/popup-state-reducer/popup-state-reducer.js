@@ -2,6 +2,7 @@ import { PopupTypeEnum } from '../../home/popup-type-enum';
 import {
   CLEAR_POPUP_STATE,
   ON_POPUP_BACK,
+  SET_FILTERED_PAGE_BY_LINK_ID,
   SET_IS_DATA_OVERVIEW_OPEN,
   SET_MSTR_DATA,
   SET_OBJECT_DATA,
@@ -39,6 +40,12 @@ export const popupStateReducer = (state = initialState, action = {}) => {
       return {
         ...state,
         isDataOverviewOpen: action.payload,
+      };
+    }
+    case SET_FILTERED_PAGE_BY_LINK_ID: {
+      return {
+        ...state,
+        filteredPageByLinkId: action.payload,
       };
     }
 

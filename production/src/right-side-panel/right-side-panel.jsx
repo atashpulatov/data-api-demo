@@ -29,6 +29,7 @@ import {
 import { popupController } from '../popup/popup-controller';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 
 import './right-side-panel.scss';
 
@@ -54,6 +55,8 @@ export const RightSidePanelNotConnected = ({
   activeCellAddress,
   popupType,
   isDataOverviewOpen,
+  setIsDataOverviewOpen,
+  setFilteredPageByLinkId,
 }) => {
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
   const [duplicatedObjectId, setDuplicatedObjectId] = React.useState(null);
@@ -245,6 +248,11 @@ export const RightSidePanelNotConnected = ({
         handleReusePromptAnswers={handleReusePromptAnswers}
         handleToggleSettingsPanel={handleToggleSettingsPanel}
         onRepromptClick={repromptWrapper}
+        onPageByClick={pageByLinkId => {
+          popupController.runImportedDataOverviewPopup();
+          setFilteredPageByLinkId(pageByLinkId);
+          setIsDataOverviewOpen(true);
+        }}
       />
     </>
   );
@@ -300,6 +308,8 @@ const mapDispatchToProps = {
   toggleSecuredFlag: officeActions.toggleSecuredFlag,
   toggleIsClearDataFailedFlag: officeActions.toggleIsClearDataFailedFlag,
   updateActiveCellAddress: officeActions.updateActiveCellAddress,
+  setIsDataOverviewOpen: popupStateActions.setIsDataOverviewOpen,
+  setFilteredPageByLinkId: popupStateActions.setFilteredPageByLinkId,
 };
 
 export const RightSidePanel = connect(
@@ -389,4 +399,6 @@ RightSidePanelNotConnected.propTypes = {
   activeCellAddress: PropTypes.string,
   popupType: PropTypes.oneOf(Object.values(PopupTypeEnum)),
   isDataOverviewOpen: PropTypes.bool,
+  setIsDataOverviewOpen: PropTypes.func,
+  setFilteredPageByLinkId: PropTypes.func,
 };

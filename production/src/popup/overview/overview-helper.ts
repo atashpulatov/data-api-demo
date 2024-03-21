@@ -306,6 +306,7 @@ class OverviewHelper {
         importType,
         startCell,
         worksheet,
+        pageByData,
       } = object;
 
       const objectNotification = notifications.find(
@@ -323,12 +324,16 @@ class OverviewHelper {
         isPrompted = object.isPrompted;
       }
 
+      const page = pageByData?.elements
+        ?.map((element: any) => `${element.name}: ${element.value}`)
+        .join(', ');
+
       return {
         objectWorkingId,
         mstrObjectType,
         name,
-        // Uncomment during F38416 Page-by feature development
-        // pageLayout: object.pageBy,
+        page,
+        pageByLinkId: pageByData.pageByLinkId,
         worksheet: worksheet?.name,
         cell: startCell,
         rows: details?.excelTableSize?.rows,
