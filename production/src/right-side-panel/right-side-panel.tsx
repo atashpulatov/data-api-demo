@@ -41,7 +41,7 @@ interface RightSidePanelProps {
   toggleIsSettingsFlag?: (flag?: boolean) => void;
   toggleSecuredFlag?: (flag?: boolean) => void;
   toggleIsClearDataFailedFlag?: (flag?: boolean) => void;
-  updateActiveCellAddress?: (flag?: boolean) => void;
+  updateActiveCellAddress?: (cellAddress?: string) => void;
   isDialogRendered?: boolean;
   isDialogLoaded?: boolean;
   toggleCurtain?: boolean;

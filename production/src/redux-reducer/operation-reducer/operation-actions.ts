@@ -1,3 +1,4 @@
+import { ObjectData } from '../object-reducer/object-reducer-types';
 import { OperationAction, OperationData } from './operation-reducer-types';
 
 import { operationsMap, OperationSteps } from '../../operation/operation-steps';
@@ -20,7 +21,7 @@ function getStepsQueue(
 function createOperation(
   operationType: OperationTypes,
   objectWorkingId: number,
-  objectData: any = {},
+  objectData: ObjectData = {},
   importType = ObjectImportType.TABLE
 ): OperationData {
   const { backupObjectData, objectEditedData, preparedInstanceDefinition } = objectData;
@@ -69,7 +70,10 @@ export const refreshRequested = (
   },
 });
 
-export const editRequested = (objectData: any, objectEditedData: any): OperationAction => {
+export const editRequested = (
+  objectData: ObjectData,
+  objectEditedData: ObjectData
+): OperationAction => {
   const backupObjectData = JSON.parse(JSON.stringify(objectData));
   const { objectWorkingId } = backupObjectData;
   // Refer to objectData to get importType as objectEditedData.importType does not
@@ -88,7 +92,10 @@ export const editRequested = (objectData: any, objectEditedData: any): Operation
   };
 };
 
-export const duplicateRequested = (object: any, objectEditedData?: any): OperationAction => {
+export const duplicateRequested = (
+  object: ObjectData,
+  objectEditedData?: ObjectData
+): OperationAction => {
   const { objectWorkingId, importType } = object;
   return {
     type: OperationTypes.DUPLICATE_OPERATION,

@@ -1,5 +1,7 @@
 import { Action } from 'redux';
 
+import { ObjectData } from '../object-reducer/object-reducer-types';
+
 import { OperationSteps } from '../../operation/operation-steps';
 import { OperationTypes } from '../../operation/operation-type-names';
 
@@ -9,8 +11,8 @@ export interface OperationData {
   operationType: OperationTypes;
   objectWorkingId: number;
   stepsQueue: OperationSteps[];
-  backupObjectData?: any;
-  objectEditedData?: any;
+  backupObjectData?: ObjectData;
+  objectEditedData?: ObjectData;
   instanceDefinition?: any;
   startCell?: string;
   excelContext?: Excel.RequestContext;
