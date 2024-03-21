@@ -19,6 +19,20 @@ class SessionHelper {
 
   init = (reduxStore: any): void => {
     this.reduxStore = reduxStore;
+
+    // bind methods
+    this.logOutRest = this.logOutRest.bind(this);
+    this.handleLogoutForPrivilegeMissing = this.handleLogoutForPrivilegeMissing.bind(this);
+    this.logOutRedirect = this.logOutRedirect.bind(this);
+    this.getSession = this.getSession.bind(this);
+    this.keepSessionAlive = this.keepSessionAlive.bind(this);
+    this.installSessionProlongingHandler = this.installSessionProlongingHandler.bind(this);
+    this.getUserInfo = this.getUserInfo.bind(this);
+    this.getUserAttributeFormPrivilege = this.getUserAttributeFormPrivilege.bind(this);
+    this.getCanUseOfficePrivilege = this.getCanUseOfficePrivilege.bind(this);
+    this.getUrl = this.getUrl.bind(this);
+    this.isDevelopment = this.isDevelopment.bind(this);
+    this.importObjectWithouPopup = this.importObjectWithouPopup.bind(this);
   };
 
   /**
