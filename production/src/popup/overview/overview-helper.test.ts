@@ -566,7 +566,7 @@ describe('overview-helper', () => {
         owner: 'Owner 1',
         importedBy: 'User 1',
         isPrompted: true,
-        pageLayout: 'Category: Music, Subcategory: Pop',
+        page: 'Category: Music, Subcategory: Pop',
       },
       {
         objectWorkingId: 2,
