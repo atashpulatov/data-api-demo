@@ -6,27 +6,29 @@ import { sidePanelService } from './side-panel-service';
 import { officeContext } from '../office/office-context';
 
 class SidePanelEventHelper {
+  eventRemove: any;
+
   /**
    * Depending of the version of supported Excel Api creates an event listener,
    * allowing us to detect and handle removal of the Excel table
    *
    */
-  addRemoveObjectListener = async () => {
+  async addRemoveObjectListener(): Promise<void> {
     try {
       const excelContext = await officeApiHelper.getExcelContext();
 
       if (officeContext.isSetSupported(1.9)) {
         this.eventRemove = excelContext.workbook.tables.onDeleted.add(this.setOnDeletedTablesEvent);
       } else if (officeContext.isSetSupported(1.7)) {
-        this.eventRemove = excelContext.workbook.worksheets.onDeleted.add(
+        this.eventRemove = excelContext.workbook.worksheets.onDeleted.add(() =>
           this.setOnDeletedWorksheetEvent(excelContext)
         );
       }
       await excelContext.sync();
     } catch (error) {
-      console.log('Cannot add onDeleted event listener');
+      console.warn('Cannot add onDeleted event listener');
     }
-  };
+  }
 
   /**
    * Gets initial active cell address and stores it state of RightSidePanel via callback.
@@ -34,31 +36,31 @@ class SidePanelEventHelper {
    *
    * @param {Function} setActiveCellAddress Callback to modify the activeCellAddress in state of RightSidePanel
    */
-  initializeActiveCellChangedListener = async setActiveCellAddress => {
+  async initializeActiveCellChangedListener(setActiveCellAddress: Function): Promise<void> {
     const excelContext = await officeApiHelper.getExcelContext();
     const initialCellAddress = await officeApiHelper.getSelectedCell(excelContext);
     setActiveCellAddress(initialCellAddress);
     await officeApiHelper.addOnSelectionChangedListener(excelContext, setActiveCellAddress);
-  };
+  }
 
   /**
    * Removed an object connected to removed Excel table
    *
-   * @param {Object} e Contains information about deleted object
+   * @param event Contains information about deleted object
    */
-  setOnDeletedTablesEvent = async e => {
-    const ObjectToDelete = officeReducerHelper.getObjectFromObjectReducerByBindId(e.tableId);
+  async setOnDeletedTablesEvent(event: Excel.TableDeletedEventArgs): Promise<void> {
+    const ObjectToDelete = officeReducerHelper.getObjectFromObjectReducerByBindId(event.tableId);
     notificationService.removeExistingNotification(ObjectToDelete.objectWorkingId);
     await officeApiHelper.checkStatusOfSessions();
     sidePanelService.remove([ObjectToDelete.objectWorkingId]);
-  };
+  }
 
   /**
    * Removes all objects which were imported on deleted worksheet
    *
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   * @param excelContext Reference to Excel Context used by Excel API functions
    */
-  setOnDeletedWorksheetEvent = async excelContext => {
+  async setOnDeletedWorksheetEvent(excelContext: Excel.RequestContext): Promise<void> {
     await officeApiHelper.checkStatusOfSessions();
     excelContext.workbook.tables.load('items');
     await excelContext.sync();
@@ -75,7 +77,7 @@ class SidePanelEventHelper {
 
     const objectWorkingIds = objectsToDelete.map(object => object.objectWorkingId);
     sidePanelService.remove(objectWorkingIds);
-  };
+  }
 }
 
 export const sidePanelEventHelper = new SidePanelEventHelper();

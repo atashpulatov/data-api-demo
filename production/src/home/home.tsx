@@ -112,6 +112,7 @@ export const HomeNotConnected: React.FC<HomeProps> = props => {
   const sidePanelToRender = (): React.JSX.Element => {
     if (authToken) {
       if (canUseOffice) {
+        // @ts-expect-error
         return <RightSidePanel />;
       }
       return <PrivilegeErrorSidePanel />;

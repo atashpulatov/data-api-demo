@@ -57,7 +57,7 @@ class StepGetOfficeTableEditRefresh {
       }
 
       if (tableChanged) {
-        console.log('Instance definition changed, creating new table');
+        console.warn('Instance definition changed, creating new table');
 
         ({ officeTable, bindId } = await officeTableCreate.createOfficeTable({
           instanceDefinition,

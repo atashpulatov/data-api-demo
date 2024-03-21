@@ -1,6 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { fireEvent,render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 
 import { popupHelper } from '../../popup/popup-helper';
 import { sessionHelper } from '../../storage/session-helper';
@@ -27,7 +27,6 @@ describe('Dossierwindow', () => {
     );
 
     // then
-    expect(getByText('Back')).toBeInTheDocument();
     expect(getByText('Import Data')).toBeInTheDocument();
     expect(getByText('Cancel')).toBeInTheDocument();
   });

@@ -242,7 +242,8 @@ class OfficeApiCrosstabHelper {
     metricsPosition: any
   ): void {
     const { rowsAttributes, columnsAttributes } = attributesNames;
-    const isMetricPositionRow = metricsPosition?.axis === 'rows';
+    const isMetrisFirstRowInColumns =
+      metricsPosition?.axis === 'rows' || columnsAttributes?.length > 1;
 
     const reportStartingCell = officeTable.getDataBodyRange().getCell(0, 0);
     const titlesBottomCell = reportStartingCell.getOffsetRange(-1, -1);
@@ -251,11 +252,11 @@ class OfficeApiCrosstabHelper {
       -(crosstabHeaderDimensions.rowsX - 1)
     );
 
-    // TODO Support metric position in compound grid, support for metrics places in rows/columns different than index 0
-    // if metricPosition.axis is row we dont want to -2 just -1 from crosstabHeaderDimensions.columnsY
-    const columnsTitlesOffset = crosstabHeaderDimensions.columnsY + (isMetricPositionRow ? -1 : -2);
+    // If metrics are on first row in column we want to skipp one more row to not display metric Title
+    const columnsTitlesOffset =
+      crosstabHeaderDimensions.columnsY + (isMetrisFirstRowInColumns ? -1 : -2);
 
-    const columnsTitlesRange = isMetricPositionRow
+    const columnsTitlesRange = isMetrisFirstRowInColumns
       ? titlesBottomCell.getResizedRange(-columnsTitlesOffset, 0)
       : titlesBottomCell.getResizedRange(-columnsTitlesOffset, 0).getOffsetRange(-1, 0);
 
@@ -264,15 +265,15 @@ class OfficeApiCrosstabHelper {
     this.formatCrosstabRange(headerTitlesRange);
     headerTitlesRange.values = '  ' as unknown as any[][];
 
-    // we are not inserting row attributes names if they do not exist
-    if (rowsAttributes && rowsAttributes.length) {
-      rowsTitlesRange.values = [rowsAttributes];
-      officeApiHeaderMergeHelper.mergeHeaderRows(rowsAttributes, rowsTitlesRange);
-    }
-
+    // we are not inserting attributes names if they do not exist
     if (columnsAttributes && columnsAttributes.length) {
       columnsTitlesRange.values = mstrNormalizedJsonHandler.transposeMatrix([columnsAttributes]);
       officeApiHeaderMergeHelper.mergeHeaderColumns(columnsAttributes, columnsTitlesRange);
+    }
+
+    if (rowsAttributes && rowsAttributes.length) {
+      rowsTitlesRange.values = [rowsAttributes];
+      officeApiHeaderMergeHelper.mergeHeaderRows(rowsAttributes, rowsTitlesRange);
     }
   }
 
