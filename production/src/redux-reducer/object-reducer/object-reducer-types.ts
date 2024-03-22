@@ -5,6 +5,7 @@ export interface VisualizationInfo {
   chapterKey?: string;
   pageKey?: string;
   visualizationKey?: string;
+  nameAndFormatShouldUpdate?: boolean;
   dossierStructure?: {
     chapterName: string;
     dossierName: string;
@@ -25,7 +26,7 @@ export interface ObjectData {
     type: number | string;
   };
   refreshDate?: number;
-  visualizationInfo?: boolean | VisualizationInfo;
+  visualizationInfo?: false | VisualizationInfo;
   isSelected?: boolean;
   // TODO remove when type is finalized
   [key: string]: any;

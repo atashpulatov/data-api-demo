@@ -1,14 +1,20 @@
 $footer-height: 50px;
 $title-height: 40px;
+$margin-data-overview: 20px;
 
 .data-overview-wrapper {
-  margin: 20px;
+  margin: $margin-data-overview;
   user-select: none;
   -webkit-user-select: none;
 
   .data-overview-container {
     width: 100%;
     height: calc(100vh - $title-height - $footer-height);
+
+    .notification-overlay {
+      width: calc(100% - (2 * $margin-data-overview));
+      height: calc(100% - (2 * $margin-data-overview));
+    }
   }
 
   .overview-close-button {
