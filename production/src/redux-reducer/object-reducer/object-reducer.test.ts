@@ -1,5 +1,11 @@
+import {
+  ObjectActionTypes,
+  ObjectState,
+  RemoveObjectAction,
+  UpdateObjectAction,
+} from './object-reducer-types';
+
 import { OperationTypes } from '../../operation/operation-type-names';
-import { REMOVE_OBJECT, RESTORE_ALL_OBJECTS, UPDATE_OBJECT } from './object-actions';
 import { objectReducer } from './object-reducer';
 
 describe('objectReducer', () => {
@@ -9,12 +15,12 @@ describe('objectReducer', () => {
     objectId: 'someId',
     importType: 'table',
   };
-  const initialState = {
+  const initialState: any = {
     empty: { objects: [] },
     singleObject: {
       objects: [
         {
-          objectWorkingId: 'someOtherString234',
+          objectWorkingId: 2137,
           envUrl: 'someURL24',
           objectId: 'someDiffId',
         },
@@ -23,17 +29,17 @@ describe('objectReducer', () => {
     multipleObjects: {
       objects: [
         {
-          objectWorkingId: 'someOtherString2',
+          objectWorkingId: 1,
           envUrl: 'someURL24',
           objectId: 'someDiffId',
         },
         {
-          objectWorkingId: 'someOtherString23',
+          objectWorkingId: 2,
           envUrl: 'someURL24',
           objectId: 'someDiffId',
         },
         {
-          objectWorkingId: 'someOtherString234',
+          objectWorkingId: 2137,
           envUrl: 'someURL24',
           objectId: 'someDiffId',
         },
@@ -43,7 +49,7 @@ describe('objectReducer', () => {
 
   it('should have default state if provided undefined', () => {
     // given
-    const unhandledAction = { type: 'some action' };
+    const unhandledAction: any = { type: 'some action' };
 
     // when
     const resultState = objectReducer(undefined, unhandledAction);
@@ -54,7 +60,7 @@ describe('objectReducer', () => {
 
   it('should return the same state if action not handled by reducer', () => {
     // given
-    const unhandledAction = { type: 'some action' };
+    const unhandledAction: any = { type: 'some action' };
 
     // when
     const resultState = objectReducer(initialState.multipleObjects, unhandledAction);
@@ -66,7 +72,7 @@ describe('objectReducer', () => {
   describe('importRequested and duplicateRequested', () => {
     it('should add first object to array and return new array', () => {
       // given
-      const action = {
+      const action: any = {
         type: OperationTypes.IMPORT_OPERATION,
         payload: { object: initialObject },
       };
@@ -84,7 +90,7 @@ describe('objectReducer', () => {
       ${OperationTypes.DUPLICATE_OPERATION}
     `('should add object to array and return new array', ({ actionType }) => {
       // given
-      const action = {
+      const action: any = {
         type: actionType,
         payload: { object: initialObject },
       };
@@ -103,13 +109,13 @@ describe('objectReducer', () => {
     it('should throw error if element with id does not exist', () => {
       // given
       const objectName = 'someName';
-      const action = {
-        type: UPDATE_OBJECT,
-        payload: { objectWorkingId: 'nonExistingId', objectName },
+      const action: UpdateObjectAction = {
+        type: ObjectActionTypes.UPDATE_OBJECT,
+        payload: { objectWorkingId: 123, objectName },
       };
 
       // when
-      const throwingCall = () => objectReducer(initialState.singleObject, action);
+      const throwingCall = (): ObjectState => objectReducer(initialState.singleObject, action);
 
       // then
       expect(throwingCall).toThrow();
@@ -118,9 +124,9 @@ describe('objectReducer', () => {
     it('should add one property to object on single element array', () => {
       // given
       const objectName = 'someName';
-      const action = {
-        type: UPDATE_OBJECT,
-        payload: { objectWorkingId: 'someOtherString234', objectName },
+      const action: UpdateObjectAction = {
+        type: ObjectActionTypes.UPDATE_OBJECT,
+        payload: { objectWorkingId: 2137, objectName },
       };
 
       // when
@@ -137,10 +143,10 @@ describe('objectReducer', () => {
       // given
       const objectName = 'someName';
       const someProp = 'someProp';
-      const action = {
-        type: UPDATE_OBJECT,
+      const action: UpdateObjectAction = {
+        type: ObjectActionTypes.UPDATE_OBJECT,
         payload: {
-          objectWorkingId: 'someOtherString234',
+          objectWorkingId: 2137,
           objectName,
           someProp,
         },
@@ -160,9 +166,9 @@ describe('objectReducer', () => {
     it('should add one property to object on multi element array', () => {
       // given
       const objectName = 'someName';
-      const action = {
-        type: UPDATE_OBJECT,
-        payload: { objectWorkingId: 'someOtherString23', objectName },
+      const action: UpdateObjectAction = {
+        type: ObjectActionTypes.UPDATE_OBJECT,
+        payload: { objectWorkingId: 2, objectName },
       };
 
       // when
@@ -179,9 +185,9 @@ describe('objectReducer', () => {
       // given
       const objectName = 'someName';
       const someProp = 'someProp';
-      const action = {
-        type: UPDATE_OBJECT,
-        payload: { objectWorkingId: 'someOtherString23', objectName, someProp },
+      const action: UpdateObjectAction = {
+        type: ObjectActionTypes.UPDATE_OBJECT,
+        payload: { objectWorkingId: 2, objectName, someProp },
       };
 
       // when
@@ -199,14 +205,14 @@ describe('objectReducer', () => {
   describe('deleteObject', () => {
     it('should throw error if object does not exist in array', () => {
       // given
-      const someId = 'some id';
-      const action = {
-        type: REMOVE_OBJECT,
+      const someId = 123;
+      const action: RemoveObjectAction = {
+        type: ObjectActionTypes.REMOVE_OBJECT,
         payload: someId,
       };
 
       // when
-      const throwingCall = () => objectReducer(initialState.empty, action);
+      const throwingCall = (): ObjectState => objectReducer(initialState.empty, action);
 
       // then
       expect(throwingCall).toThrow();
@@ -214,9 +220,9 @@ describe('objectReducer', () => {
 
     it('should remove object if id exists in array', () => {
       // given
-      const someId = 'someOtherString23';
-      const action = {
-        type: REMOVE_OBJECT,
+      const someId = 2;
+      const action: RemoveObjectAction = {
+        type: ObjectActionTypes.REMOVE_OBJECT,
         payload: someId,
       };
 
@@ -229,9 +235,9 @@ describe('objectReducer', () => {
 
     it('should remove last object if id exists in array', () => {
       // given
-      const someId = 'someOtherString234';
-      const action = {
-        type: REMOVE_OBJECT,
+      const someId = 2137;
+      const action: any = {
+        type: ObjectActionTypes.REMOVE_OBJECT,
         payload: someId,
       };
 
@@ -247,8 +253,8 @@ describe('objectReducer', () => {
     it('replaces objects in state on RESTORE_ALL_OBJECTS', () => {
       // given
       const payload = ['test'];
-      const action = {
-        type: RESTORE_ALL_OBJECTS,
+      const action: any = {
+        type: ObjectActionTypes.RESTORE_ALL_OBJECTS,
         payload,
       };
 

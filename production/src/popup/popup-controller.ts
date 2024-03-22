@@ -5,7 +5,7 @@ import instanceDefinitionHelper from '../mstr-object/instance/instance-definitio
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { pageByHelper } from '../page-by/page-by-helper';
 
-import { ObjectData } from '../redux-reducer/object-reducer/object-reducer-types';
+import { ObjectData } from '../types/object-types';
 import { DialogResponse, ReportParams } from './popup-controller-types';
 
 import { selectorProperties } from '../attribute-selector/selector-properties';

@@ -9,7 +9,7 @@ import overviewHelper, { OverviewActionCommands } from './overview/overview-help
 
 import { reduxStore, RootState } from '../store';
 
-import { ObjectData } from '../redux-reducer/object-reducer/object-reducer-types';
+import { ObjectData } from '../types/object-types';
 import { ReportParams } from './popup-controller-types';
 
 import { selectorProperties } from '../attribute-selector/selector-properties';

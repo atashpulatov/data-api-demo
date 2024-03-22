@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { ObjectData } from '../object-reducer/object-reducer-types';
+import { ObjectData } from '../../types/object-types';
 
 import { OperationSteps } from '../../operation/operation-steps';
 import { OperationTypes } from '../../operation/operation-type-names';

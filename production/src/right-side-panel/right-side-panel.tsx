@@ -12,7 +12,7 @@ import { sidePanelService } from './side-panel-service';
 
 import { RootState } from '../store';
 
-import { ObjectData } from '../redux-reducer/object-reducer/object-reducer-types';
+import { ObjectData } from '../types/object-types';
 
 import { Confirmation } from '../home/confirmation';
 import { PopupTypeEnum } from '../home/popup-type-enum';

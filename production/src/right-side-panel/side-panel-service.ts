@@ -6,7 +6,7 @@ import officeReducerHelper from '../office/store/office-reducer-helper';
 
 import officeStoreObject from '../office/store/office-store-object';
 
-import { ObjectData } from '../redux-reducer/object-reducer/object-reducer-types';
+import { ObjectData } from '../types/object-types';
 
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';

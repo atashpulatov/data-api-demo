@@ -1,18 +1,13 @@
-import {
-  REMOVE_OBJECT,
-  removeObject,
-  RESTORE_ALL_OBJECTS,
-  restoreAllObjects,
-  UPDATE_OBJECT,
-  updateObject,
-} from './object-actions';
+import { ObjectActionTypes } from './object-reducer-types';
+
+import { removeObject, restoreAllObjects, updateObject } from './object-actions';
 
 describe('updateObject', () => {
   it('should populate action with proper fields', () => {
     // given
     const exampleObject = {};
     const expectedAction = {
-      type: UPDATE_OBJECT,
+      type: ObjectActionTypes.UPDATE_OBJECT,
       payload: exampleObject,
     };
 
@@ -27,9 +22,9 @@ describe('updateObject', () => {
 describe('removeObject', () => {
   it('should populate action with proper fields', () => {
     // given
-    const exampleObjectWorkingId = 'someId';
+    const exampleObjectWorkingId = 2137;
     const expectedAction = {
-      type: REMOVE_OBJECT,
+      type: ObjectActionTypes.REMOVE_OBJECT,
       payload: exampleObjectWorkingId,
     };
 
@@ -44,9 +39,9 @@ describe('removeObject', () => {
 describe('restoreAllObjects', () => {
   it('populates action with proper fields', () => {
     // given
-    const objects = ['test'];
+    const objects: any = ['test'];
     const expectedAction = {
-      type: RESTORE_ALL_OBJECTS,
+      type: ObjectActionTypes.RESTORE_ALL_OBJECTS,
       payload: objects,
     };
 

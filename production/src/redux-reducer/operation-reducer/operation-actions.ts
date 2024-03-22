@@ -1,4 +1,4 @@
-import { ObjectData } from '../object-reducer/object-reducer-types';
+import { ObjectData } from '../../types/object-types';
 import {
   CancelOperationAction,
   ClearDataOperationAction,

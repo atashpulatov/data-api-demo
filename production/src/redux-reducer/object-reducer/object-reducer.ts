@@ -1,33 +1,38 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { OperationTypes } from '../../operation/operation-type-names';
+import { ObjectData } from '../../types/object-types';
+import { OperationActionTypes } from '../operation-reducer/operation-reducer-types';
 import {
-  REMOVE_OBJECT,
-  RESTORE_ALL_OBJECTS,
-  RESTORE_OBJECT_BACKUP,
-  UPDATE_OBJECT,
-} from './object-actions';
+  EditRequestedPayload,
+  ImportRequestedPayload,
+  ObjectActions,
+  ObjectActionTypes,
+  ObjectState,
+} from './object-reducer-types';
+
 import { ObjectImportType } from '../../mstr-object/constants';
 
-const initialState = { objects: [] };
-export const objectReducer = (state = initialState, action = {}) => {
+const initialState: ObjectState = { objects: [] };
+
+// eslint-disable-next-line default-param-last
+export const objectReducer = (state = initialState, action: ObjectActions): ObjectState => {
   switch (action.type) {
-    case OperationTypes.IMPORT_OPERATION:
-    case OperationTypes.DUPLICATE_OPERATION:
+    case OperationActionTypes.IMPORT_OPERATION:
+    case OperationActionTypes.DUPLICATE_OPERATION:
       return importRequested(state, action.payload);
 
-    case OperationTypes.EDIT_OPERATION:
+    case OperationActionTypes.EDIT_OPERATION:
       return editRequested(state, action.payload);
 
-    case UPDATE_OBJECT:
+    case ObjectActionTypes.UPDATE_OBJECT:
       return updateObject(state, action.payload);
 
-    case REMOVE_OBJECT:
+    case ObjectActionTypes.REMOVE_OBJECT:
       return removeObject(state, action.payload);
 
-    case RESTORE_ALL_OBJECTS:
+    case ObjectActionTypes.RESTORE_ALL_OBJECTS:
       return restoreAllObjects(action.payload);
 
-    case RESTORE_OBJECT_BACKUP:
+    case ObjectActionTypes.RESTORE_OBJECT_BACKUP:
       return restoreObjectBackup(state, action.payload);
 
     default:
@@ -35,7 +40,7 @@ export const objectReducer = (state = initialState, action = {}) => {
   }
 };
 
-function importRequested(state, payload) {
+function importRequested(state: ObjectState, payload: ImportRequestedPayload): ObjectState {
   const objectToBeImported = { ...payload.object };
   objectToBeImported.importType = payload.object.importType || ObjectImportType.TABLE;
   return {
@@ -43,7 +48,7 @@ function importRequested(state, payload) {
   };
 }
 
-function editRequested(state, payload) {
+function editRequested(state: ObjectState, payload: EditRequestedPayload): ObjectState {
   const props = {
     objectWorkingId: payload.objectWorkingId,
     response: payload.response,
@@ -51,7 +56,7 @@ function editRequested(state, payload) {
   return updateObject(state, props);
 }
 
-function updateObject(state, updatedObjectProps) {
+function updateObject(state: ObjectState, updatedObjectProps: Partial<ObjectData>): ObjectState {
   const objectToUpdateIndex = getObjectIndex(state.objects, updatedObjectProps.objectWorkingId);
   const newObjects = [...state.objects];
 
@@ -72,7 +77,7 @@ function updateObject(state, updatedObjectProps) {
   return { objects: newObjects };
 }
 
-function removeObject(state, objectWorkingId) {
+function removeObject(state: ObjectState, objectWorkingId: number): ObjectState {
   const objectToRemoveIndex = getObjectIndex(state.objects, objectWorkingId);
   if (objectToRemoveIndex !== -1) {
     const newObjects = [...state.objects];
@@ -81,18 +86,18 @@ function removeObject(state, objectWorkingId) {
   }
 }
 
-function restoreAllObjects(payload) {
-  return { objects: [...payload] };
+function restoreAllObjects(objects: ObjectData[]): ObjectState {
+  return { objects: [...objects] };
 }
 
-function restoreObjectBackup(state, backupObjectData) {
+function restoreObjectBackup(state: ObjectState, backupObjectData: ObjectData): ObjectState {
   const objectToUpdateIndex = getObjectIndex(state.objects, backupObjectData.objectWorkingId);
   const newObjects = [...state.objects];
   newObjects.splice(objectToUpdateIndex, 1, backupObjectData);
   return { objects: newObjects };
 }
 
-function getObjectIndex(objects, objectWorkingId) {
+function getObjectIndex(objects: ObjectData[], objectWorkingId: number): number {
   const objectToUpdateIndex = objects.findIndex(
     object => object.objectWorkingId === objectWorkingId
   );
