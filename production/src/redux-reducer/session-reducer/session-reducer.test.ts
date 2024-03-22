@@ -83,7 +83,7 @@ describe('sessionReducer', () => {
     // then
     expect(newState.userFullName).toBe(null);
     expect(newState.userInitials).toBe(null);
-    expect(newState.authToken).toBe(false);
+    expect(newState.authToken).toBe('');
   });
 
   it('should save authToken on logged in action', () => {

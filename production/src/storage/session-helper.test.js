@@ -99,7 +99,7 @@ describe('sessionHelper', () => {
     // then
     expect(dispatchSpy).toHaveBeenCalledWith({
       type: SessionActionTypes.LOG_IN,
-      values: { envUrl: givenValues.envUrl },
+      logInValues: { envUrl: givenValues.envUrl },
     });
   });
 

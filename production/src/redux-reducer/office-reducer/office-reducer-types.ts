@@ -1,7 +1,6 @@
 import { Action } from 'redux';
 
 export type OfficeState = {
-  loadedReportProperties: any;
   isSecured: boolean;
   shouldRenderSettings: boolean;
   isClearDataFailed: boolean;

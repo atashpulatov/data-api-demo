@@ -34,6 +34,8 @@ describe('officeReducer', () => {
       settingsPanelLoaded: false,
       isShapeAPISupported: false,
       reusePromptAnswers: false,
+      isClearDataFailed: false,
+      'isSecured': false,
     });
   });
 

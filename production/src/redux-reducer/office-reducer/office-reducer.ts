@@ -26,7 +26,6 @@ const initialState: OfficeState = {
   settingsPanelLoaded: false,
   reusePromptAnswers: false,
   isShapeAPISupported: false,
-  loadedReportProperties: false,
   isSecured: false,
   isClearDataFailed: false,
 };
