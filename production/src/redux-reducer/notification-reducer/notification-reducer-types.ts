@@ -1,4 +1,8 @@
-// TODO: refactor this type.
+import { ObjectNotificationTypes } from '@mstr/connector-components';
+
+import { OperationTypes } from '../../operation/operation-type-names';
+
+// TODO: check and refactor this type if needed.
 // example notification from the console:
 // {
 //     'objectWorkingId': 1710849226424,
@@ -9,10 +13,12 @@
 //     'isFetchingComplete': true,
 // };
 export interface Notification {
-  type: string;
+  objectWorkingId: number; // number?
   title: string;
-  details: string;
+  type: ObjectNotificationTypes;
+  operationType: OperationTypes;
   percentage: number;
+  details: string;
   callback?: () => void;
   dismissNotification: () => void;
 }

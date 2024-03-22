@@ -15,7 +15,6 @@ import { RootState } from '../store';
 import { ObjectData } from '../redux-reducer/object-reducer/object-reducer-types';
 
 import { Confirmation } from '../home/confirmation';
-import { PopupTypeEnum } from '../home/popup-type-enum';
 import { SettingsMenu } from '../home/settings-menu';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupController } from '../popup/popup-controller';
@@ -27,6 +26,10 @@ import {
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { selectOperations } from '../redux-reducer/operation-reducer/operation-reducer-selectors';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
+import {
+  selectIsDataOverviewOpen,
+  selectPopupType,
+} from '../redux-reducer/popup-state-reducer/popup-state-reducer-selectors';
 
 import './right-side-panel.scss';
 
@@ -47,8 +50,6 @@ interface RightSidePanelProps {
   isDialogLoaded?: boolean;
   toggleCurtain?: boolean;
   activeCellAddress?: string;
-  popupType?: PopupTypeEnum;
-  isDataOverviewOpen?: boolean;
   setIsDataOverviewOpen: (isDataOverviewOpen: boolean) => void;
   setFilteredPageByLinkId: (filteredPageByLinkId: string) => void;
 }
@@ -70,8 +71,6 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   isDialogLoaded,
   toggleCurtain,
   activeCellAddress,
-  popupType,
-  isDataOverviewOpen,
   setIsDataOverviewOpen,
   setFilteredPageByLinkId,
 }) => {
@@ -82,6 +81,8 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   const operations = useSelector(selectOperations);
   const globalNotification = useSelector(selectGlobalNotification);
   const notifications = useSelector(selectNotifications);
+  const popupType = useSelector(selectPopupType);
+  const isDataOverviewOpen = useSelector(selectIsDataOverviewOpen);
 
   const duplicatePopupParams = {
     activeCellAddress,
@@ -284,7 +285,6 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
 export const mapStateToProps = (state: RootState): any => {
   const { importRequested, dossierOpenRequested } = state.navigationTree;
   const { repromptsQueue } = state.repromptsQueueReducer;
-  const { popupType, isDataOverviewOpen } = state.popupStateReducer;
   const { objects } = state.objectReducer;
 
   const {
@@ -315,8 +315,6 @@ export const mapStateToProps = (state: RootState): any => {
     isDialogLoaded,
     toggleCurtain: repromptsQueue?.length > 0,
     activeCellAddress,
-    popupType,
-    isDataOverviewOpen,
   };
 };
 
