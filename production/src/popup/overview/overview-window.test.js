@@ -4,16 +4,17 @@ import { ObjectNotificationTypes } from '@mstr/connector-components';
 import { render } from '@testing-library/react';
 
 import { reduxStore } from '../../store';
+// eslint-disable-next-line import/order
 import configureMockStore from 'redux-mock-store';
 
 import { OverviewWindowNotConnected } from './overview-window';
 
 import { mockedObjectsFromStore } from '../../../__mocks__/mockDataV2';
 
-const setupStore =(initialState) => {
+const setupStore = initialState => {
   const mockStore = configureMockStore();
   return mockStore(initialState);
-}
+};
 
 describe('OverviewWindowNotConnected', () => {
   let props;
@@ -38,7 +39,7 @@ describe('OverviewWindowNotConnected', () => {
           addHandlerAsync: () => {},
         },
       },
-    };  
+    };
   });
 
   it('should render DataOverview component', () => {
@@ -57,26 +58,29 @@ describe('OverviewWindowNotConnected', () => {
 
   it('should render DataOverview component with blocked actions when there is operation in progress', () => {
     // Given
-    const mockedProgressingNotification = 
-      {
-        objectWorkingId: 1707383886748,
-        title: 'Duplicating',
-        type: ObjectNotificationTypes.PROGRESS,
-        operationType: 'DUPLICATE_OPERATION',
-        isIndeterminate: false,
-      }
-    ;
-
+    const mockedProgressingNotification = {
+      objectWorkingId: 1707383886748,
+      title: 'Duplicating',
+      type: ObjectNotificationTypes.PROGRESS,
+      operationType: 'DUPLICATE_OPERATION',
+      isIndeterminate: false,
+    };
     const initialState = {
-      notificationReducer: { notifications: [mockedProgressingNotification], globalNotification: { type: '' } },
+      notificationReducer: {
+        notifications: [mockedProgressingNotification],
+        globalNotification: { type: '' },
+      },
     };
     const store = setupStore(initialState);
-
+    const modifiedProps = {
+      ...props,
+      objects: mockedObjectsFromStore,
+    };
 
     // When
     const { getByText, container } = render(
       <Provider store={store}>
-        <OverviewWindowNotConnected {...props, {objects:mockedObjectsFromStore}} />
+        <OverviewWindowNotConnected {...modifiedProps} />
       </Provider>
     );
 
@@ -101,7 +105,10 @@ describe('OverviewWindowNotConnected', () => {
     ];
 
     const store = setupStore({
-      notificationReducer: { notifications: [mockedSuccesfulNotification], globalNotification: { type: '' } },
+      notificationReducer: {
+        notifications: [mockedSuccesfulNotification],
+        globalNotification: { type: '' },
+      },
     });
 
     // When
