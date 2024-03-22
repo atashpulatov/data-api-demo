@@ -1,22 +1,27 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 import { ObjectNotificationTypes } from '@mstr/connector-components';
 import { render } from '@testing-library/react';
+
+import { reduxStore } from '../../store';
 
 import { OverviewWindowNotConnected } from './overview-window';
 
 import { mockedObjectsFromStore } from '../../../__mocks__/mockDataV2';
 
 describe('OverviewWindowNotConnected', () => {
-  it('should render DataOverview component', () => {
-    // Given
-    const props = {
+  let props;
+
+  beforeEach(() => {
+    props = {
       objects: [],
       onRefresh: jest.fn(),
       onDelete: jest.fn(),
       onDuplicate: jest.fn(),
-      notifications: [],
     };
+  });
 
+  beforeAll(() => {
     window.Office = {
       EventType: {
         DialogParentMessageReceived: 'DialogParentMessageReceived',
@@ -28,8 +33,16 @@ describe('OverviewWindowNotConnected', () => {
         },
       },
     };
+  });
+
+  it('should render DataOverview component', () => {
+    // Given
     // When
-    const { getByText } = render(<OverviewWindowNotConnected {...props} />);
+    const { getByText } = render(
+      <Provider store={reduxStore}>
+        <OverviewWindowNotConnected {...props} />
+      </Provider>
+    );
 
     // Then
     const dataOverviewWindowTitle = getByText('Overview');
@@ -38,26 +51,32 @@ describe('OverviewWindowNotConnected', () => {
 
   it('should render DataOverview component with blocked actions when there is operation in progress', () => {
     // Given
-    const mockedNotifications = [
-      {
-        objectWorkingId: 1707383886748,
-        title: 'Duplicating',
-        type: ObjectNotificationTypes.PROGRESS,
-        operationType: 'DUPLICATE_OPERATION',
-        isIndeterminate: false,
-      },
-    ];
+    const mockedProgressingNotification = {
+      objectWorkingId: 1707383886748,
+      title: 'Duplicating',
+      type: ObjectNotificationTypes.PROGRESS,
+      operationType: 'DUPLICATE_OPERATION',
+      isIndeterminate: false,
+    };
 
-    const props = {
+    reduxStore.getState = jest.fn().mockReturnValue({
+      ...reduxStore.getState(),
+      notificationReducer: {
+        notifications: [mockedProgressingNotification],
+        globalNotification: { type: '' },
+      },
+    });
+    const modifiedProps = {
+      ...props,
       objects: mockedObjectsFromStore,
-      onRefresh: jest.fn(),
-      onDelete: jest.fn(),
-      onDuplicate: jest.fn(),
-      notifications: mockedNotifications,
     };
 
     // When
-    const { getByText, container } = render(<OverviewWindowNotConnected {...props} />);
+    const { getByText, container } = render(
+      <Provider store={reduxStore}>
+        <OverviewWindowNotConnected {...modifiedProps} />
+      </Provider>
+    );
 
     const rowCheckbox = container.querySelector('.ag-checkbox-input-wrapper.ag-disabled');
 
@@ -67,9 +86,9 @@ describe('OverviewWindowNotConnected', () => {
     expect(rowCheckbox).toBeInTheDocument();
   });
 
-  it('should render DataOverview component with enabled actions when there is operation in progress', () => {
+  it('should render DataOverview component with enabled actions when there is operation completed successfully', () => {
     // Given
-    const mockedNotifications = [
+    const mockedSuccesfulNotification = [
       {
         objectWorkingId: 1707383886748,
         title: 'Duplicating',
@@ -79,16 +98,20 @@ describe('OverviewWindowNotConnected', () => {
       },
     ];
 
-    const props = {
-      objects: mockedObjectsFromStore,
-      onRefresh: jest.fn(),
-      onDelete: jest.fn(),
-      onDuplicate: jest.fn(),
-      notifications: mockedNotifications,
-    };
+    reduxStore.getState = jest.fn().mockReturnValue({
+      ...reduxStore.getState(),
+      notificationReducer: {
+        notifications: [mockedSuccesfulNotification],
+        globalNotification: { type: '' },
+      },
+    });
 
     // When
-    const { getByText, container } = render(<OverviewWindowNotConnected {...props} />);
+    const { getByText, container } = render(
+      <Provider store={reduxStore}>
+        <OverviewWindowNotConnected {...props} />
+      </Provider>
+    );
 
     const rowCheckbox = container.querySelector('.ag-checkbox-input-wrapper.ag-disabled');
 
