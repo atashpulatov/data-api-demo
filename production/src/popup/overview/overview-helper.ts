@@ -231,7 +231,10 @@ class OverviewHelper {
     // DE288915: Only trigger dismiss notifications if the command is not edit or reprompt
     // For Edit and Re-prompt, dismissal is taken care in the notification reducer itself.
     // This is to avoid dispatching notification dismissals and avoid conflicts.
-    if (response.command !== OverviewActionCommands.EDIT && response.command !== OverviewActionCommands.REPROMPT) {
+    if (
+      response.command !== OverviewActionCommands.EDIT &&
+      response.command !== OverviewActionCommands.REPROMPT
+    ) {
       this.handleDismissNotifications(response.objectWorkingIds);
     }
 
@@ -311,6 +314,7 @@ class OverviewHelper {
         importType,
         startCell,
         worksheet,
+        pageByData,
       } = object;
 
       const objectNotification = notifications.find(
@@ -328,12 +332,14 @@ class OverviewHelper {
         isPrompted = object.isPrompted;
       }
 
+      const page = pageByData?.elements
+        ?.map((element: any) => `${element.name}: ${element.value}`)
+        .join(', ');
+
       return {
         objectWorkingId,
         mstrObjectType,
         name,
-        // Uncomment during F38416 Page-by feature development
-        // pageLayout: object.pageBy,
         worksheet: worksheet?.name,
         cell: startCell,
         rows: details?.excelTableSize?.rows,
@@ -349,6 +355,7 @@ class OverviewHelper {
         owner: details?.owner.name,
         importedBy: details?.importedBy,
         isPrompted,
+        ...(pageByData && { page, pageByLinkId: pageByData?.pageByLinkId }),
       };
     });
   }

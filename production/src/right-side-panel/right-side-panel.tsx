@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
-import { PopupTypes, SidePanel } from '@mstr/connector-components';
+import { OfficeApplicationType, PopupTypes, SidePanel } from '@mstr/connector-components';
 
 import { notificationService } from '../notification/notification-service';
 import { officeApiHelper } from '../office/api/office-api-helper';
@@ -25,6 +25,7 @@ import {
 } from '../redux-reducer/notification-reducer/notification-reducer-selectors';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { selectOperations } from '../redux-reducer/operation-reducer/operation-reducer-selectors';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import {
   selectIsDataOverviewOpen,
   selectPopupType,
@@ -49,6 +50,8 @@ interface RightSidePanelProps {
   isDialogLoaded?: boolean;
   toggleCurtain?: boolean;
   activeCellAddress?: string;
+  setIsDataOverviewOpen: (isDataOverviewOpen: boolean) => void;
+  setFilteredPageByLinkId: (filteredPageByLinkId: string) => void;
 }
 
 export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
@@ -68,6 +71,8 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   isDialogLoaded,
   toggleCurtain,
   activeCellAddress,
+  setIsDataOverviewOpen,
+  setFilteredPageByLinkId,
 }) => {
   const [sidePanelPopup, setSidePanelPopup] = useState(null);
   const [duplicatedObjectId, setDuplicatedObjectId] = useState(null);
@@ -266,6 +271,12 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
         handleReusePromptAnswers={handleReusePromptAnswers}
         handleToggleSettingsPanel={handleToggleSettingsPanel}
         onRepromptClick={repromptWrapper}
+        onPageByClick={pageByLinkId => {
+          popupController.runImportedDataOverviewPopup();
+          setFilteredPageByLinkId(pageByLinkId);
+          setIsDataOverviewOpen(true);
+        }}
+        applicationType={OfficeApplicationType.EXCEL}
       />
     </>
   );
@@ -313,6 +324,8 @@ const mapDispatchToProps = {
   toggleSecuredFlag: officeActions.toggleSecuredFlag,
   toggleIsClearDataFailedFlag: officeActions.toggleIsClearDataFailedFlag,
   updateActiveCellAddress: officeActions.updateActiveCellAddress,
+  setIsDataOverviewOpen: popupStateActions.setIsDataOverviewOpen,
+  setFilteredPageByLinkId: popupStateActions.setFilteredPageByLinkId,
 };
 
 export const RightSidePanel = connect(

@@ -48,6 +48,7 @@ interface OverviewWindowProps {
   objects?: Array<Record<string, unknown>>;
   popupData?: { objectWorkingId: number };
   activeCellAddress?: string;
+  filteredPageByLinkId?: string;
 }
 
 export const OverviewWindowNotConnected: React.FC<OverviewWindowProps> = props => {
@@ -64,6 +65,7 @@ export const OverviewWindowNotConnected: React.FC<OverviewWindowProps> = props =
     onDismissNotification,
     popupData,
     activeCellAddress,
+    filteredPageByLinkId,
   } = props;
 
   useStateSyncOnDialogMessage();
@@ -156,6 +158,7 @@ export const OverviewWindowNotConnected: React.FC<OverviewWindowProps> = props =
         onGoTo={onGoToWorksheet}
         shouldDisableActions={shouldDisableActions}
         globalNotifications={notificationsToDisplay}
+        filteredPageByLinkId={filteredPageByLinkId}
       />
       <Button className='overview-close-button' onClick={handleCloseDialog}>
         {t('Close')}
@@ -164,14 +167,16 @@ export const OverviewWindowNotConnected: React.FC<OverviewWindowProps> = props =
   );
 };
 
-export const mapStateToProps = ({ objectReducer, officeReducer }: any): any => {
+export const mapStateToProps = ({ objectReducer, officeReducer, popupStateReducer }: any): any => {
   const { objects } = objectReducer;
   const { popupData, activeCellAddress } = officeReducer;
+  const { filteredPageByLinkId } = popupStateReducer;
 
   return {
     objects,
     popupData,
     activeCellAddress,
+    filteredPageByLinkId,
   };
 };
 
