@@ -31,6 +31,9 @@ If there's a need, please put extra information here including links to document
 
 ### Self Test &#9888;
 
+- [ ] I have run Test for Windows platform
+- [ ] I have run Test for Mac platform
+
 Please list your self test cases(if any) here since SET also need them.
 
 ## Test Suggestions
@@ -39,8 +42,6 @@ Please list the affected scenarios and components here, and give test suggestion
 
 ### Automation Test &#9888;
 
-- [ ] I have run Test for Windows platform
-- [ ] I have run Test for Mac platform
 - [ ] I have run Automation Test for my changes.
 
 ## Checklist
