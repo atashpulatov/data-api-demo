@@ -4,17 +4,10 @@ import { ObjectNotificationTypes } from '@mstr/connector-components';
 import { render } from '@testing-library/react';
 
 import { reduxStore } from '../../store';
-// eslint-disable-next-line import/order
-import configureMockStore from 'redux-mock-store';
 
 import { OverviewWindowNotConnected } from './overview-window';
 
 import { mockedObjectsFromStore } from '../../../__mocks__/mockDataV2';
-
-const setupStore = initialState => {
-  const mockStore = configureMockStore();
-  return mockStore(initialState);
-};
 
 describe('OverviewWindowNotConnected', () => {
   let props;
@@ -65,13 +58,14 @@ describe('OverviewWindowNotConnected', () => {
       operationType: 'DUPLICATE_OPERATION',
       isIndeterminate: false,
     };
-    const initialState = {
+
+    reduxStore.getState = jest.fn().mockReturnValue({
+      ...reduxStore.getState(),
       notificationReducer: {
         notifications: [mockedProgressingNotification],
         globalNotification: { type: '' },
       },
-    };
-    const store = setupStore(initialState);
+    });
     const modifiedProps = {
       ...props,
       objects: mockedObjectsFromStore,
@@ -79,7 +73,7 @@ describe('OverviewWindowNotConnected', () => {
 
     // When
     const { getByText, container } = render(
-      <Provider store={store}>
+      <Provider store={reduxStore}>
         <OverviewWindowNotConnected {...modifiedProps} />
       </Provider>
     );
@@ -92,7 +86,7 @@ describe('OverviewWindowNotConnected', () => {
     expect(rowCheckbox).toBeInTheDocument();
   });
 
-  it('should render DataOverview component with enabled actions when there is operation completed succesfully', () => {
+  it('should render DataOverview component with enabled actions when there is operation completed successfully', () => {
     // Given
     const mockedSuccesfulNotification = [
       {
@@ -104,7 +98,8 @@ describe('OverviewWindowNotConnected', () => {
       },
     ];
 
-    const store = setupStore({
+    reduxStore.getState = jest.fn().mockReturnValue({
+      ...reduxStore.getState(),
       notificationReducer: {
         notifications: [mockedSuccesfulNotification],
         globalNotification: { type: '' },
@@ -113,7 +108,7 @@ describe('OverviewWindowNotConnected', () => {
 
     // When
     const { getByText, container } = render(
-      <Provider store={store}>
+      <Provider store={reduxStore}>
         <OverviewWindowNotConnected {...props} />
       </Provider>
     );
