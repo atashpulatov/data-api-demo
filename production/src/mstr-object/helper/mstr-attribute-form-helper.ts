@@ -1,4 +1,4 @@
-import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
+import { DisplayAttrFormNames } from '../../redux-reducer/office-reducer/office-reducer-types';
 
 class MstrAttributeFormHelper {
   /**
@@ -61,7 +61,6 @@ class MstrAttributeFormHelper {
   getAttributesTitleWithForms = (element: any, attrforms: any): any | false => {
     const supportForms = attrforms ? attrforms.supportForms : false;
     const nameSet = attrforms && attrforms.displayAttrFormNames;
-    const { displayAttrFormNames } = officeProperties;
     const titles = [];
 
     if (supportForms && element.type === 'attribute' && element.forms.length >= 0) {
@@ -72,16 +71,16 @@ class MstrAttributeFormHelper {
         let title;
 
         switch (nameSet) {
-          case displayAttrFormNames.on:
+          case DisplayAttrFormNames.ON:
             titles.push(`${element.name} ${formName}`);
             break;
-          case displayAttrFormNames.off:
+          case DisplayAttrFormNames.OFF:
             titles.push(`${element.name}`);
             break;
-          case displayAttrFormNames.formNameOnly:
+          case DisplayAttrFormNames.FORM_NAME_ONLY:
             titles.push(`${formName}`);
             break;
-          case displayAttrFormNames.showAttrNameOnce:
+          case DisplayAttrFormNames.SHOW_ATTR_NAME_ONCE:
             title = index === 0 ? `${element.name} ${formName}` : `${formName}`;
             titles.push(title);
             break;

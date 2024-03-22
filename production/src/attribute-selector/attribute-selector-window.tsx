@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 
 import { popupHelper } from '../popup/popup-helper';
 
+import { DisplayAttrFormNames } from '../redux-reducer/office-reducer/office-reducer-types';
 import { AttributeSelectorWindowNotConnectedProps } from './attribute-selector-types';
 
 import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
-import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { AttributeSelector } from './attribute-selector';
 import { selectorProperties } from './selector-properties';
@@ -58,7 +58,7 @@ export const AttributeSelectorWindowNotConnected: React.FC<
     const displayAttrFormNamesSet =
       (editedObject && editedObject.displayAttrFormNames) ||
       displayAttrFormNames ||
-      officeProperties.displayAttrFormNames.automatic;
+      DisplayAttrFormNames.AUTOMATIC;
 
     const message = {
       command: selectorProperties.commandOnUpdate,

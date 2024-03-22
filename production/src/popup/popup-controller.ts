@@ -5,6 +5,7 @@ import instanceDefinitionHelper from '../mstr-object/instance/instance-definitio
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { pageByHelper } from '../page-by/page-by-helper';
 
+import { DisplayAttrFormNames } from '../redux-reducer/office-reducer/office-reducer-types';
 import { ObjectData } from '../types/object-types';
 import { DialogResponse, ReportParams } from './popup-controller-types';
 
@@ -13,7 +14,6 @@ import { errorService } from '../error/error-handler';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
-import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 import {
   duplicateRequested,
   editRequested,
@@ -441,13 +441,13 @@ class PopupController {
       (report: ObjectData) => report.bindId === reportParams.bindId
     );
     const originalValues = objects[indexOfOriginalValues];
-    const { displayAttrFormNames } = officeProperties;
+
     if (originalValues.displayAttrFormNames) {
       return { ...originalValues };
     }
     return {
       ...originalValues,
-      displayAttrFormNames: displayAttrFormNames.automatic,
+      displayAttrFormNames: DisplayAttrFormNames.AUTOMATIC,
     };
   };
 

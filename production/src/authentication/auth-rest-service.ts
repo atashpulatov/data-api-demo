@@ -1,6 +1,6 @@
 import { moduleProxy } from '../module-proxy';
 
-import { PrivilegeIds } from '../office-constants';
+import { PrivilegeIds } from '../constants/office-constants';
 
 class AuthenticationService {
   moduleProxy: {

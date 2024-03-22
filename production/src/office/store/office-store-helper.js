@@ -1,5 +1,5 @@
 import { RunOutsideOfficeError } from '../../error/run-outside-office-error';
-import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
+import { OfficeSettingsEnum } from '../../constants/office-constants';
 
 class OfficeStoreHelper {
   init = errorService => {
@@ -29,28 +29,29 @@ class OfficeStoreHelper {
    *
    * @param {String} value Key used by Office Api to determine value from settings
    */
-  setFileSecuredFlag = value => this.setPropertyValue(officeProperties.isSecured, value);
+  setFileSecuredFlag = value => this.setPropertyValue(OfficeSettingsEnum.isSecured, value);
 
   /**
    * Set value of isClearDataFailed flag in Office settings
    *
    * @param {String} propertyName Key used by Office Api to determine value from settings
    */
-  setIsClearDataFailed = value => this.setPropertyValue(officeProperties.isClearDataFailed, value);
+  setIsClearDataFailed = value =>
+    this.setPropertyValue(OfficeSettingsEnum.isClearDataFailed, value);
 
   /**
    * Return value from Office settings specifying value of isFileSecured flag
    *
    * @return {Boolean} isFileSecured flag
    */
-  isFileSecured = () => this.getPropertyValue(officeProperties.isSecured);
+  isFileSecured = () => this.getPropertyValue(OfficeSettingsEnum.isSecured);
 
   /**
    * Return value from Office settings specifying value of isClearDataFailed flag
    *
    * @return {Boolean} isClearDataFailed flag
    */
-  isClearDataFailed = () => this.getPropertyValue(officeProperties.isClearDataFailed);
+  isClearDataFailed = () => this.getPropertyValue(OfficeSettingsEnum.isClearDataFailed);
 
   /**
    * Set value in Office settings corresponding to passed key

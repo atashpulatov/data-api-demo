@@ -1,7 +1,8 @@
-import officeStoreHelper from './store/office-store-helper';
+import officeStoreHelper from '../../office/store/office-store-helper';
 
-import { officeActions } from '../redux-reducer/office-reducer/office-actions';
-import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
+import { OfficeActionsTypes } from './office-reducer-types';
+
+import { officeActions } from './office-actions';
 
 describe('Office Actions', () => {
   it('should dispatch proper toggleStoreSecuredFlag action', () => {
@@ -14,7 +15,7 @@ describe('Office Actions', () => {
 
     // then
     expect(listener).toHaveBeenCalledWith({
-      type: officeProperties.actions.toggleSecuredFlag,
+      type: OfficeActionsTypes.TOGGLE_SECURED_FLAG,
       isSecured: true,
     });
 
@@ -31,7 +32,7 @@ describe('Office Actions', () => {
 
     // then
     expect(listener).toHaveBeenCalledWith({
-      type: officeProperties.actions.toggleIsSettingsFlag,
+      type: OfficeActionsTypes.TOGGLE_IS_SETTINGS_FLAG,
       isSettings: true,
     });
   });
@@ -45,7 +46,7 @@ describe('Office Actions', () => {
 
     // then
     expect(listener).toHaveBeenCalledWith({
-      type: officeProperties.actions.toggleIsConfirmFlag,
+      type: OfficeActionsTypes.TOGGLE_IS_CONFIRM_FLAG,
       isConfirm: true,
     });
   });
@@ -59,7 +60,7 @@ describe('Office Actions', () => {
 
     // then
     expect(listener).toHaveBeenCalledWith({
-      type: officeProperties.actions.toggleSettingsPanelLoadedFlag,
+      type: OfficeActionsTypes.TOGGLE_SETTINGS_PANEL_LOADED_FLAG,
       settingsPanelLoded: true,
     });
   });
@@ -73,7 +74,7 @@ describe('Office Actions', () => {
 
     // then
     expect(listener).toHaveBeenCalledWith({
-      type: officeProperties.actions.toggleReusePromptAnswersFlag,
+      type: OfficeActionsTypes.TOGGLE_REUSE_PROMPT_ANSWERS_FLAG,
       reusePromptAnswers: false,
     });
   });
@@ -87,7 +88,7 @@ describe('Office Actions', () => {
 
     // then
     expect(listener).toHaveBeenCalledWith({
-      type: officeProperties.actions.toggleRenderSettingsFlag,
+      type: OfficeActionsTypes.TOGGLE_RENDER_SETTINGS_FLAG,
     });
   });
 
@@ -101,7 +102,7 @@ describe('Office Actions', () => {
 
     // then
     expect(listener).toHaveBeenCalledWith({
-      type: officeProperties.actions.toggleIsClearDataFailedFlag,
+      type: OfficeActionsTypes.TOGGLE_IS_CLEAR_DATA_FAILED_FLAG,
       isClearDataFailed: true,
     });
 

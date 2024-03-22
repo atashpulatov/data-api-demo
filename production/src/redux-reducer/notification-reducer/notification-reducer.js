@@ -3,11 +3,12 @@ import { ObjectNotificationTypes } from '@mstr/connector-components';
 
 import { notificationService } from '../../notification/notification-service';
 
+import { OfficeActionsTypes } from '../office-reducer/office-reducer-types';
+
 import i18n from '../../i18n';
 import { getNotificationButtons } from '../../notification/notification-buttons';
 import { OperationSteps } from '../../operation/operation-steps';
 import { MARK_STEP_COMPLETED, OperationTypes } from '../../operation/operation-type-names';
-import { officeProperties } from '../office-reducer/office-properties';
 import {
   CLEAR_NOTIFICATIONS,
   CREATE_GLOBAL_NOTIFICATION,
@@ -57,7 +58,7 @@ export const notificationReducer = (state = initialState, action = {}) => {
     case REMOVE_GLOBAL_NOTIFICATION:
       return removeGlobalNotification(state);
 
-    case officeProperties.actions.toggleSecuredFlag:
+    case OfficeActionsTypes.TOGGLE_SECURED_FLAG:
       return deleteAllNotifications(action, state);
 
     case CLEAR_NOTIFICATIONS:
@@ -77,10 +78,12 @@ const createProgressNotification = (state, payload) => {
   if (operationType !== OperationTypes.CLEAR_DATA_OPERATION) {
     notificationButtons = getNotificationButtons(getCancelButton(objectWorkingId, operationType));
   }
-  
-  // DE288915: Avoid duplicate notifications, particularly those originating from Edit and Reprompt operations. 
-  const stateNotifications = state?.notifications && Array.isArray(state.notifications) ?
-    state.notifications.filter(item => item.objectWorkingId !== objectWorkingId) : [];
+
+  // DE288915: Avoid duplicate notifications, particularly those originating from Edit and Reprompt operations.
+  const stateNotifications =
+    state?.notifications && Array.isArray(state.notifications)
+      ? state.notifications.filter(item => item.objectWorkingId !== objectWorkingId)
+      : [];
 
   const newNotification = {
     objectWorkingId,

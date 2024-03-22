@@ -17,8 +17,8 @@ import { embeddedDossierHelper } from './embedded-dossier-helper';
 import { RootState } from '../../store';
 
 import { PromptsAnswer } from '../../redux-reducer/answers-reducer/answers-reducer-types';
-import { VisualizationInfo } from '../../redux-reducer/object-reducer/object-reducer-types';
 import { RepromptsQueueState } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer-types';
+import { VisualizationInfo } from '../../types/object-types';
 
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';

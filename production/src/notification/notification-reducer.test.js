@@ -1,5 +1,7 @@
 import { notificationService } from './notification-service';
 
+import { OfficeActionsTypes } from '../redux-reducer/office-reducer/office-reducer-types';
+
 import { OperationSteps } from '../operation/operation-steps';
 import { OperationTypes } from '../operation/operation-type-names';
 import {
@@ -9,7 +11,6 @@ import {
   REMOVE_GLOBAL_NOTIFICATION,
 } from '../redux-reducer/notification-reducer/notification-actions';
 import { notificationReducer } from '../redux-reducer/notification-reducer/notification-reducer';
-import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 
 describe('Notification reducer', () => {
   it('should get default state if one is not provided', () => {
@@ -428,7 +429,7 @@ describe('Notification reducer', () => {
         it('should delete all notifications if isSecured is true', () => {
           // given
           const action = {
-            type: officeProperties.actions.toggleSecuredFlag,
+            type: OfficeActionsTypes.TOGGLE_SECURED_FLAG,
             isSecured: true,
           };
 
@@ -443,7 +444,7 @@ describe('Notification reducer', () => {
         it('should return state if isSecured is false', () => {
           // given
           const action = {
-            type: officeProperties.actions.toggleSecuredFlag,
+            type: OfficeActionsTypes.TOGGLE_SECURED_FLAG,
             isSecured: false,
           };
 

@@ -2,10 +2,11 @@ import { ObjectExecutionStatus } from '../helpers/prompts-handling-helper';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { popupHelper } from './popup-helper';
 
+import { DisplayAttrFormNames } from '../redux-reducer/office-reducer/office-reducer-types';
+
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 
 const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
@@ -95,7 +96,7 @@ class PopupViewSelectorHelper {
     const projectId =
       chosenProjectId || editedObject.chosenProjectId || (editedObject.projectId as string);
     const objectId = chosenObjectId || (editedObject.chosenObjectId as string);
-    const defaultAttrFormNames = officeProperties.displayAttrFormNames.automatic;
+    const defaultAttrFormNames = DisplayAttrFormNames.AUTOMATIC;
     const displayAttrFormNames =
       (editedObject && editedObject.displayAttrFormNames) || defaultAttrFormNames;
     const configInstace = { objectId, projectId };
@@ -217,8 +218,7 @@ class PopupViewSelectorHelper {
       visualizationInfo,
       preparedInstanceId: props.preparedInstanceId,
       isEdit: props.isEdit,
-      displayAttrFormNames:
-        props.displayAttrFormNames || officeProperties.displayAttrFormNames.automatic,
+      displayAttrFormNames: props.displayAttrFormNames || DisplayAttrFormNames.AUTOMATIC,
       dossierData: null as any,
       body: null as any,
     };
