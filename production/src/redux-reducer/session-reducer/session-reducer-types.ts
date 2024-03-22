@@ -57,7 +57,7 @@ export interface SetLoadingAction extends Action {
 
 export interface GetUserInfoAction extends Action {
   type: SessionActionTypes.GET_USER_INFO;
-  userID: string;
+  userID?: string;
   userFullName: string;
   userInitials: string;
 }

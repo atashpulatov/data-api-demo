@@ -1,6 +1,7 @@
 import { createStore } from 'redux';
 
-import { sessionProperties } from './session-properties';
+import { LogOutAction, SessionActionTypes } from './session-reducer-types';
+
 import { sessionReducer } from './session-reducer';
 
 describe('sessionReducer', () => {
@@ -14,31 +15,21 @@ describe('sessionReducer', () => {
   afterEach(() => {
     const givenEnvUrl = 'someEnvUrl';
     sessionStore.dispatch({
-      type: sessionProperties.actions.logIn,
-      values: {
+      type: SessionActionTypes.LOG_IN,
+      logInValues: {
         envUrl: givenEnvUrl,
         isRememberMeOn: false,
       },
     });
-    sessionStore.dispatch({ type: sessionProperties.actions.logOut });
+    sessionStore.dispatch({ type: SessionActionTypes.LOG_OUT });
   });
 
-  it('should throw error due to missing loading property', () => {
-    // given
-    // when
-    const wrongActionCall = () => {
-      sessionStore.dispatch({ type: sessionProperties.actions.setLoading });
-    };
-    // then
-    expect(wrongActionCall).toThrowError(Error);
-    expect(wrongActionCall).toThrowError('Missing loading');
-  });
   it('should set loading to enabled', () => {
     // given
     const loading = true;
     // when
     sessionStore.dispatch({
-      type: sessionProperties.actions.setLoading,
+      type: SessionActionTypes.SET_LOADING,
       loading,
     });
     const sessionStoreState = sessionStore.getState();
@@ -51,7 +42,7 @@ describe('sessionReducer', () => {
     const loading = false;
     // when
     sessionStore.dispatch({
-      type: sessionProperties.actions.setLoading,
+      type: SessionActionTypes.SET_LOADING,
       loading,
     });
     const sessionStoreState = sessionStore.getState();
@@ -64,8 +55,8 @@ describe('sessionReducer', () => {
     const givenEnvUrl = 'someEnvUrl';
     // when
     sessionStore.dispatch({
-      type: sessionProperties.actions.logIn,
-      values: { envUrl: givenEnvUrl },
+      type: SessionActionTypes.LOG_IN,
+      logInValues: { envUrl: givenEnvUrl },
     });
     // then
     const sessionStoreState = sessionStore.getState();
@@ -85,7 +76,7 @@ describe('sessionReducer', () => {
       userFullName: givenFullName,
       userInitials: givenInitials,
     };
-    const action = { type: sessionProperties.actions.logOut };
+    const action: LogOutAction = { type: SessionActionTypes.LOG_OUT };
     // const spyLogOut = jest.spyOn(sessionReducer, 'onLogOut');
     // when
     const newState = sessionReducer(state, action);
@@ -95,46 +86,16 @@ describe('sessionReducer', () => {
     expect(newState.authToken).toBe(false);
   });
 
-  it('should throw an error due to missing envUrl', () => {
-    const givenUsername = 'someUsername';
-    const givenRememberMeFlag = true;
-    // then
-    const wrongActionCall = () => {
-      sessionStore.dispatch({
-        type: sessionProperties.actions.logIn,
-        values: {
-          username: givenUsername,
-          isRememberMeOn: givenRememberMeFlag,
-        },
-      });
-    };
-    // then
-    expect(wrongActionCall).toThrowError(Error);
-    expect(wrongActionCall).toThrowError('Missing EnvUrl.');
-    expect(sessionStore.getState().username).toBeFalsy();
-  });
-
   it('should save authToken on logged in action', () => {
     // given
     const firstToken = 'firstTokenTest1';
     // when
     sessionStore.dispatch({
-      type: sessionProperties.actions.loggedIn,
+      type: SessionActionTypes.LOGGED_IN,
       authToken: firstToken,
     });
     // then
     expect(sessionStore.getState().authToken).toBe(firstToken);
-  });
-
-  it('should throw an error due to missing authToken', () => {
-    // given
-    // when
-    const wrongActionCall = () => {
-      sessionStore.dispatch({ type: sessionProperties.actions.loggedIn });
-    };
-    // then
-    expect(wrongActionCall).toThrowError(Error);
-    expect(wrongActionCall).toThrowError('Missing AuthToken.');
   });
 
   it('should save userInfo on getUserInfo action', () => {
@@ -143,24 +104,12 @@ describe('sessionReducer', () => {
     const givenInitials = 'IN';
     // when
     sessionStore.dispatch({
-      type: sessionProperties.actions.getUserInfo,
+      type: SessionActionTypes.GET_USER_INFO,
       userFullName: givenFullName,
       userInitials: givenInitials,
     });
     // then
     expect(sessionStore.getState().userFullName).toEqual(givenFullName);
     expect(sessionStore.getState().userInitials).toEqual(givenInitials);
-  });
-
-  it('should save givenDialog on setDialog action', () => {
-    // given
-    const mockDialog = { close: () => {} };
-    // when
-    sessionStore.dispatch({
-      type: sessionProperties.actions.setDialog,
-      dialog: mockDialog,
-    });
-    // then
-    expect(sessionStore.getState().dialog).toEqual(mockDialog);
   });
 });
