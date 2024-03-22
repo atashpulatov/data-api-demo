@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import {
   DataOverview,
   ObjectNotificationTypes,
@@ -13,10 +13,16 @@ import useStateSyncOnDialogMessage from './use-state-sync-on-dialog-message';
 import { popupHelper } from '../popup-helper';
 import overviewHelper from './overview-helper';
 
+import { Notification } from '../../redux-reducer/notification-reducer/notification-reducer-types';
+
 import { selectorProperties } from '../../attribute-selector/selector-properties';
 import i18n from '../../i18n';
 import { OperationTypes } from '../../operation/operation-type-names';
 import { restoreAllNotifications } from '../../redux-reducer/notification-reducer/notification-action-creators';
+import {
+  selectGlobalNotification,
+  selectNotifications,
+} from '../../redux-reducer/notification-reducer/notification-reducer-selectors';
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
 import {
   refreshRequested,
@@ -40,17 +46,14 @@ interface OverviewWindowProps {
   onGoToWorksheet?: (objectWorkingId: number) => Promise<void>;
   onDismissNotification?: (objectWorkingIds: number[]) => Promise<void>;
   objects?: Array<Record<string, unknown>>;
-  notifications?: Array<Record<string, unknown>>;
-  globalNotification?: Record<string, unknown>;
   popupData?: { objectWorkingId: number };
   activeCellAddress?: string;
+  filteredPageByLinkId?: string;
 }
 
 export const OverviewWindowNotConnected: React.FC<OverviewWindowProps> = props => {
   const {
     objects,
-    notifications,
-    globalNotification,
     onImport,
     onRefresh,
     onDelete,
@@ -62,12 +65,16 @@ export const OverviewWindowNotConnected: React.FC<OverviewWindowProps> = props =
     onDismissNotification,
     popupData,
     activeCellAddress,
+    filteredPageByLinkId,
   } = props;
 
   useStateSyncOnDialogMessage();
 
   const [t] = useTranslation('common', { i18n });
   const [dialogPopup, setDialogPopup] = React.useState(null);
+
+  const globalNotification = useSelector(selectGlobalNotification);
+  const notifications: Notification[] = useSelector(selectNotifications);
 
   const shouldDisableActions = useMemo(
     () =>
@@ -151,6 +158,7 @@ export const OverviewWindowNotConnected: React.FC<OverviewWindowProps> = props =
         onGoTo={onGoToWorksheet}
         shouldDisableActions={shouldDisableActions}
         globalNotifications={notificationsToDisplay}
+        filteredPageByLinkId={filteredPageByLinkId}
       />
       <Button className='overview-close-button' onClick={handleCloseDialog}>
         {t('Close')}
@@ -159,21 +167,16 @@ export const OverviewWindowNotConnected: React.FC<OverviewWindowProps> = props =
   );
 };
 
-export const mapStateToProps = ({
-  objectReducer,
-  notificationReducer,
-  officeReducer,
-}: any): any => {
+export const mapStateToProps = ({ objectReducer, officeReducer, popupStateReducer }: any): any => {
   const { objects } = objectReducer;
-  const { notifications, globalNotification } = notificationReducer;
   const { popupData, activeCellAddress } = officeReducer;
+  const { filteredPageByLinkId } = popupStateReducer;
 
   return {
     objects,
-    notifications,
-    globalNotification,
     popupData,
     activeCellAddress,
+    filteredPageByLinkId,
   };
 };
 

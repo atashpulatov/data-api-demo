@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
-import { PopupTypes, SidePanel } from '@mstr/connector-components';
+import { OfficeApplicationType, PopupTypes, SidePanel } from '@mstr/connector-components';
 
 import { notificationService } from '../notification/notification-service';
 import { officeApiHelper } from '../office/api/office-api-helper';
@@ -15,7 +15,6 @@ import { RootState } from '../store';
 import { ObjectData } from '../types/object-types';
 
 import { Confirmation } from '../home/confirmation';
-import { PopupTypeEnum } from '../home/popup-type-enum';
 import { SettingsMenu } from '../home/settings-menu';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupController } from '../popup/popup-controller';
@@ -26,6 +25,11 @@ import {
 } from '../redux-reducer/notification-reducer/notification-reducer-selectors';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { selectOperations } from '../redux-reducer/operation-reducer/operation-reducer-selectors';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
+import {
+  selectIsDataOverviewOpen,
+  selectPopupType,
+} from '../redux-reducer/popup-state-reducer/popup-state-reducer-selectors';
 
 import './right-side-panel.scss';
 
@@ -46,8 +50,8 @@ interface RightSidePanelProps {
   isDialogLoaded?: boolean;
   toggleCurtain?: boolean;
   activeCellAddress?: string;
-  popupType?: PopupTypeEnum;
-  isDataOverviewOpen?: boolean;
+  setIsDataOverviewOpen: (isDataOverviewOpen: boolean) => void;
+  setFilteredPageByLinkId: (filteredPageByLinkId: string) => void;
 }
 
 export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
@@ -67,8 +71,8 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   isDialogLoaded,
   toggleCurtain,
   activeCellAddress,
-  popupType,
-  isDataOverviewOpen,
+  setIsDataOverviewOpen,
+  setFilteredPageByLinkId,
 }) => {
   const [sidePanelPopup, setSidePanelPopup] = useState(null);
   const [duplicatedObjectId, setDuplicatedObjectId] = useState(null);
@@ -77,6 +81,8 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   const operations = useSelector(selectOperations);
   const globalNotification = useSelector(selectGlobalNotification);
   const notifications = useSelector(selectNotifications);
+  const popupType = useSelector(selectPopupType);
+  const isDataOverviewOpen = useSelector(selectIsDataOverviewOpen);
 
   const duplicatePopupParams = {
     activeCellAddress,
@@ -265,6 +271,12 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
         handleReusePromptAnswers={handleReusePromptAnswers}
         handleToggleSettingsPanel={handleToggleSettingsPanel}
         onRepromptClick={repromptWrapper}
+        onPageByClick={pageByLinkId => {
+          popupController.runImportedDataOverviewPopup();
+          setFilteredPageByLinkId(pageByLinkId);
+          setIsDataOverviewOpen(true);
+        }}
+        applicationType={OfficeApplicationType.EXCEL}
       />
     </>
   );
@@ -273,7 +285,6 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
 export const mapStateToProps = (state: RootState): any => {
   const { importRequested, dossierOpenRequested } = state.navigationTree;
   const { repromptsQueue } = state.repromptsQueueReducer;
-  const { popupType, isDataOverviewOpen } = state.popupStateReducer;
   const { objects } = state.objectReducer;
 
   const {
@@ -304,8 +315,6 @@ export const mapStateToProps = (state: RootState): any => {
     isDialogLoaded,
     toggleCurtain: repromptsQueue?.length > 0,
     activeCellAddress,
-    popupType,
-    isDataOverviewOpen,
   };
 };
 
@@ -315,6 +324,8 @@ const mapDispatchToProps = {
   toggleSecuredFlag: officeActions.toggleSecuredFlag,
   toggleIsClearDataFailedFlag: officeActions.toggleIsClearDataFailedFlag,
   updateActiveCellAddress: officeActions.updateActiveCellAddress,
+  setIsDataOverviewOpen: popupStateActions.setIsDataOverviewOpen,
+  setFilteredPageByLinkId: popupStateActions.setFilteredPageByLinkId,
 };
 
 export const RightSidePanel = connect(
