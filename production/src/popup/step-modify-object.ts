@@ -1,3 +1,6 @@
+import { ObjectData } from '../redux-reducer/object-reducer/object-reducer-types';
+import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
+
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 
 class StepModifyObject {
@@ -7,17 +10,17 @@ class StepModifyObject {
    * This function is subscribed as one of the operation steps with the key MODIFY_OBJECT,
    * therefore should be called only via operation bus.
    *
-   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
-   * @param {Object} objectData.subtotalsInfo Determines if subtotals will be displayed and stores subtotal addresses
-   * @param {Object} objectData.body Contains information about location of visualization in dossier
-   * @param {String} objectData.bindId Unique id of the Office table used for referencing the table in Excel
-   * @param {Office} operationData.objectEditedData Contains new data for edit workflow
+   * @param objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param objectData.subtotalsInfo Determines if subtotals will be displayed and stores subtotal addresses
+   * @param objectData.body Contains information about location of visualization in dossier
+   * @param objectData.bindId Unique id of the Office table used for referencing the table in Excel
+   * @param operationData.objectEditedData Contains new data for edit workflow
    */
-  modifyObject = (objectData, { objectEditedData }) => {
+  modifyObject = (objectData: ObjectData, { objectEditedData }: OperationData): void => {
     const { objectWorkingId, subtotalsInfo } = objectData;
 
     if (objectEditedData) {
-      const updatedObject = {
+      const updatedObject: ObjectData = {
         objectWorkingId,
         body: objectEditedData.body,
       };
@@ -41,8 +44,10 @@ class StepModifyObject {
 
       if (objectEditedData.isEdit) {
         if (
+          objectData.visualizationInfo &&
+          objectEditedData.visualizationInfo &&
           objectData.visualizationInfo.visualizationKey !==
-          objectEditedData.visualizationInfo.visualizationKey
+            objectEditedData.visualizationInfo.visualizationKey
         ) {
           objectEditedData.visualizationInfo.nameAndFormatShouldUpdate = true;
           updatedObject.visualizationInfo = objectEditedData.visualizationInfo;

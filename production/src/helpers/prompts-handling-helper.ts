@@ -1,6 +1,8 @@
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 
-const sleep = milliseconds =>
+import { PromptsAnswer } from '../redux-reducer/answers-reducer/answers-reducer-types';
+
+const sleep = (milliseconds: number): Promise<void> =>
   new Promise(resolve => {
     setTimeout(resolve, milliseconds);
   });
@@ -14,12 +16,15 @@ export const ObjectExecutionStatus = {
  * This function is used to prepare the prompts answers to be used in answering the prompted Dossier's instance.
  * It will loop through both the prompts objects (instance) and previously given answers (persisted)
  * to prepare final collection of prompt answers.
- * @param {*} promptObjects
- * @param {*} previousPromptsAnswers
+ * @param promptObjects
+ * @param previousPromptsAnswers
  * @returns
  */
-export function prepareGivenPromptAnswers(promptObjects, previousPromptsAnswers) {
-  const givenPromptsAnswers = [{ messageName: 'New Dossier', answers: [] }];
+export function prepareGivenPromptAnswers(
+  promptObjects: any[],
+  previousPromptsAnswers: PromptsAnswer[]
+): any[] {
+  const givenPromptsAnswers: any[] = [{ messageName: 'New Dossier', answers: [] }];
 
   // Loop through the prompts objects and find the corresponding answer from the persisted answers.
   // and assign the 'type' property to the answer. Also, mark the answer as 'useDefault'
@@ -53,11 +58,11 @@ export function prepareGivenPromptAnswers(promptObjects, previousPromptsAnswers)
  * @returns
  */
 export async function answerDossierPromptsHelper(
-  instanceDefinition,
-  objectId,
-  projectId,
-  promptsAnswers
-) {
+  instanceDefinition: any,
+  objectId: string,
+  projectId: string,
+  promptsAnswers: PromptsAnswer[]
+): Promise<any> {
   const currentInstanceDefinition = { ...instanceDefinition };
   let count = 0;
 
@@ -67,7 +72,7 @@ export async function answerDossierPromptsHelper(
       objectId,
       projectId,
       instanceId: currentInstanceDefinition.mid,
-      promptsAnswers: promptsAnswers[count] ? promptsAnswers[count] : { answers: [] },
+      promptsAnswers: promptsAnswers[count] ? promptsAnswers[count] : ({ answers: [] } as any),
       ignoreValidateRequiredCheck: true,
     };
 
@@ -107,19 +112,24 @@ export async function answerDossierPromptsHelper(
  * This method is used to prepare the Dossier's instance to apply previous answers.
  * It will validated instance is prompted prior to applying prompts.
  * If prompted, it will answer the prompts and return the updated instance definition.
- * @param {*} instanceDef
- * @param {*} objectId
- * @param {*} projectId
- * @param {*} promptsAnswers
+ * @param instanceDefinition
+ * @param objectId
+ * @param projectId
+ * @param promptsAnswers
  * @returns
  */
-export async function preparePromptedDossier(instanceDef, objectId, projectId, promptsAnswers) {
-  let dossierInstanceDefinition = { ...instanceDef };
+export async function preparePromptedDossier(
+  instanceDefinition: any,
+  objectId: string,
+  projectId: string,
+  promptsAnswers: PromptsAnswer[]
+): Promise<any> {
+  let dossierInstanceDefinition = { ...instanceDefinition };
   if (dossierInstanceDefinition?.status === ObjectExecutionStatus.PROMPTED) {
     // Re-prompt the Dossier's instance to apply previous answers. Get new instance definition.
     const rePromptResponse = await mstrObjectRestService.rePromptDossier(
       objectId,
-      instanceDef.mid,
+      instanceDefinition.mid,
       projectId
     );
     dossierInstanceDefinition.mid = rePromptResponse.mid;
@@ -140,13 +150,17 @@ export async function preparePromptedDossier(instanceDef, objectId, projectId, p
  * This function is used to prepare the prompted report to apply previously saved ir given answers
  * if applicable. It will create an instance of the report and then create a Dossier based on that instance.
  * And it will apply the answers to the prompts of the Dossier's instance, including nested prompts.
- * @param {*} chosenObjectIdLocal
- * @param {*} projectId
- * @param {*} promptsAnswers
+ * @param chosenObjectIdLocal
+ * @param projectId
+ * @param promptsAnswers
  * @returns
  */
-export async function preparePromptedReport(chosenObjectIdLocal, projectId, promptsAnswers) {
-  const config = { objectId: chosenObjectIdLocal, projectId };
+export async function preparePromptedReport(
+  chosenObjectIdLocal: string,
+  projectId: string,
+  promptsAnswers: any[]
+): Promise<any> {
+  const config: any = { objectId: chosenObjectIdLocal, projectId };
   const instanceDefinition = await mstrObjectRestService.createInstance(config);
   const { instanceId } = instanceDefinition;
 

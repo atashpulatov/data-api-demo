@@ -13,7 +13,7 @@ import useStateSyncOnDialogMessage from './use-state-sync-on-dialog-message';
 import { popupHelper } from '../popup-helper';
 import overviewHelper from './overview-helper';
 
-import { Notifications } from '../../redux-reducer/notification-reducer/notification-reducer-types';
+import { Notification } from '../../redux-reducer/notification-reducer/notification-reducer-types';
 
 import { selectorProperties } from '../../attribute-selector/selector-properties';
 import i18n from '../../i18n';
@@ -72,7 +72,7 @@ export const OverviewWindowNotConnected: React.FC<OverviewWindowProps> = props =
   const [dialogPopup, setDialogPopup] = React.useState(null);
 
   const globalNotification = useSelector(selectGlobalNotification);
-  const notifications: Notifications = useSelector(selectNotifications);
+  const notifications: Notification[] = useSelector(selectNotifications);
 
   const shouldDisableActions = useMemo(
     () =>

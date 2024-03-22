@@ -12,14 +12,13 @@ import { OperationTypes } from '../../operation/operation-type-names';
 //     'isIndeterminate': false,
 //     'isFetchingComplete': true,
 // };
-interface Notification {
+export interface Notification {
   objectWorkingId: number; // number?
   title: string;
   type: ObjectNotificationTypes;
   operationType: OperationTypes;
   percentage: number;
   details: string;
+  callback?: () => void;
   dismissNotification: () => void;
 }
-
-export type Notifications = Notification[];
