@@ -23,13 +23,13 @@ If there's a need, please put extra information here including links to document
 - [ ] Test Automation
 - [ ] Dependencies update (changes to package.json)
 
-### Risk introduced by the fix
+## Risk introduced by the fix
 
 - [ ] Low
 - [ ] Medium
 - [ ] High
 
-### Self Test &#9888;
+## Self Test &#9888;
 
 - [ ] I have run Test for Windows platform
 - [ ] I have run Test for Mac platform
@@ -40,7 +40,7 @@ Please list your self test cases(if any) here since SET also need them.
 
 Please list the affected scenarios and components here, and give test suggestions to SETs.
 
-### Automation Test &#9888;
+## Automation Test CheckList &#9888;
 
 - [ ] I have run Automation Test for my changes.
 
