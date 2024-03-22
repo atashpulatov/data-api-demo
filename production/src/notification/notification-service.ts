@@ -1,5 +1,7 @@
 import officeReducerHelper from '../office/store/office-reducer-helper';
 
+import { Notification } from '../redux-reducer/notification-reducer/notification-reducer-types';
+
 import {
   clearGlobalNotification,
   createConnectionLostNotification,
@@ -12,62 +14,64 @@ import { removeObject } from '../redux-reducer/object-reducer/object-actions';
 import { cancelOperation } from '../redux-reducer/operation-reducer/operation-actions';
 
 class NotificationService {
-  init = reduxStore => {
+  reduxStore: any;
+
+  init = (reduxStore: any): void => {
     this.reduxStore = reduxStore;
   };
 
-  connectionLost = () => {
+  connectionLost = (): void => {
     this.reduxStore.dispatch(createConnectionLostNotification());
   };
 
-  sessionExpired = () => {
+  sessionExpired = (): void => {
     this.reduxStore.dispatch(createSessionExpiredNotification());
   };
 
-  connectionRestored = () => {
+  connectionRestored = (): void => {
     this.reduxStore.dispatch(clearGlobalNotification());
   };
 
-  sessionRestored = () => {
+  sessionRestored = (): void => {
     this.reduxStore.dispatch(clearGlobalNotification());
   };
 
-  globalWarningAppeared = payload => {
+  globalWarningAppeared = (payload: any): void => {
     this.reduxStore.dispatch(displayGlobalNotification(payload));
   };
 
-  globalNotificationDissapear = () => {
+  globalNotificationDissapear = (): void => {
     this.reduxStore.dispatch(clearGlobalNotification());
   };
 
-  showObjectWarning = (objectWorkingId, notification) => {
+  showObjectWarning = (objectWorkingId: number, notification: Notification): void => {
     this.reduxStore.dispatch(displayObjectWarning(objectWorkingId, notification));
   };
 
-  dismissNotification = objectWorkingId => {
+  dismissNotification = (objectWorkingId: number): void => {
     this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
   };
 
-  dismissSuccessfulRemoveNotification = objectWorkingId => {
+  dismissSuccessfulRemoveNotification = (objectWorkingId: number): void => {
     this.reduxStore.dispatch(removeObject(objectWorkingId));
     this.dismissNotification(objectWorkingId);
   };
 
-  removeObjectFromNotification = objectWorkingId => {
+  removeObjectFromNotification = (objectWorkingId: number): void => {
     this.reduxStore.dispatch(removeObject(objectWorkingId));
   };
 
-  cancelOperationFromNotification = objectWorkingId => {
+  cancelOperationFromNotification = (objectWorkingId: number): void => {
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
   };
 
   /**
    * Removes the notification on rightside panel if exist
    *
-   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param objectWorkingId Unique Id of the object allowing to reference specific object
    */
-  removeExistingNotification = objectWorkingId => {
-    const notification =
+  removeExistingNotification = (objectWorkingId: number): void => {
+    const notification: any =
       officeReducerHelper.getNotificationFromNotificationReducer(objectWorkingId);
     if (notification) {
       this.callDismissNotification(notification);
@@ -80,12 +84,12 @@ class NotificationService {
    * Works for notifications concerning finished operations.
    * For others it doesn't bring any effect.
    *
-   * @param {Object[]} notifications
+   * @param {} notifications
    */
-  dismissNotifications = () => {
+  dismissNotifications = (): void => {
     const currentState = this.reduxStore.getState();
     const { notifications } = currentState.notificationReducer;
-    notifications.forEach(notification => {
+    notifications.forEach((notification: Notification) => {
       this.callDismissNotification(notification);
     });
   };
@@ -94,9 +98,9 @@ class NotificationService {
    * Manually calls dismissNotification and callback methods from single notification.
    * This way, it dismisses notification of provided object
    *
-   * @param {Object} notification
+   * @param notification
    */
-  callDismissNotification = notification => {
+  callDismissNotification = (notification: Notification): void => {
     notification.dismissNotification && notification.dismissNotification();
     notification.callback && notification.callback();
   };

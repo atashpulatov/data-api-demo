@@ -1,12 +1,14 @@
+import { PromptsAnswer } from '../../redux-reducer/answers-reducer/answers-reducer-types';
+
 class EmbeddedDossierHelper {
   /**
    * Have 2 arrays, A and B, that needs to be combined; however, if there are items in B that
    * are also in A, then I want items from B to replace the ones in A.
-   * @param {*} A - array containing prompt answers
-   * @param {*} B - array with answers to be added to A
+   * @param A - array containing prompt answers
+   * @param B - array with answers to be added to A
    * @returns consolidated array
    */
-  combineArraysByObjectKey = (A, B) => {
+  combineArraysByObjectKey = (A: PromptsAnswer[], B: PromptsAnswer[]): PromptsAnswer[] => {
     // Create a Map to store objects from array A with keys as the map keys
     const combinedMap = new Map(A.map(obj => [obj.key, obj]));
 

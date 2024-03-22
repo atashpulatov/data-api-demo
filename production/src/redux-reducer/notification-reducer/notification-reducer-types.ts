@@ -8,12 +8,11 @@
 //     'isIndeterminate': false,
 //     'isFetchingComplete': true,
 // };
-interface Notification {
+export interface Notification {
   type: string;
   title: string;
   details: string;
   percentage: number;
+  callback?: () => void;
   dismissNotification: () => void;
 }
-
-export type Notifications = Notification[];
