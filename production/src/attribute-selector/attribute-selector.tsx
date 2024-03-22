@@ -6,7 +6,6 @@ import { AttributeMetricFilter, ErrorBoundary } from '@mstr/mstr-react-library';
 
 import { popupHelper } from '../popup/popup-helper';
 
-import { DisplayAttrFormNames } from '../redux-reducer/office-reducer/office-reducer-types';
 import {
   AttributeSelectorNotConnectedProps,
   EditedObjectProps,
@@ -19,8 +18,8 @@ import i18n from '../i18n';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
-import { displayAttrFormNamesOptions } from '../constants/office-constants';
 import { errorCodes, ErrorMessages } from '../error/constants';
+import { DisplayAttrFormNames, displayAttrFormNamesOptions } from '../mstr-object/constants';
 
 import './attribute-selector.css';
 

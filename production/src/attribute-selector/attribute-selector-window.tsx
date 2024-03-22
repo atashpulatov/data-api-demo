@@ -3,14 +3,13 @@ import { connect } from 'react-redux';
 
 import { popupHelper } from '../popup/popup-helper';
 
-import { DisplayAttrFormNames } from '../redux-reducer/office-reducer/office-reducer-types';
 import { AttributeSelectorWindowNotConnectedProps } from './attribute-selector-types';
 
 import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { AttributeSelector } from './attribute-selector';
 import { selectorProperties } from './selector-properties';
-import { ObjectImportType } from '../mstr-object/constants';
+import { DisplayAttrFormNames, ObjectImportType } from '../mstr-object/constants';
 
 import '../home/home.css';
 

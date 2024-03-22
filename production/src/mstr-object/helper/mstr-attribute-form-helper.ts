@@ -1,4 +1,4 @@
-import { DisplayAttrFormNames } from '../../redux-reducer/office-reducer/office-reducer-types';
+import { DisplayAttrFormNames } from '../constants';
 
 class MstrAttributeFormHelper {
   /**

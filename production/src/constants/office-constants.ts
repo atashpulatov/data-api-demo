@@ -12,26 +12,3 @@ export enum OfficeSettingsEnum {
   isSecured = 'isSecured',
   isClearDataFailed = 'isClearDataFailed',
 }
-
-export const displayAttrFormNamesOptions = [
-  {
-    value: 'AUTOMATIC',
-    displayName: 'Automatic',
-  },
-  {
-    value: 'SHOW_ATTR_NAME_ONCE',
-    displayName: 'Show attribute name once',
-  },
-  {
-    value: 'FORM_NAME_ONLY',
-    displayName: 'Form name only',
-  },
-  {
-    value: 'ON',
-    displayName: 'On',
-  },
-  {
-    value: 'OFF',
-    displayName: 'Off',
-  },
-];

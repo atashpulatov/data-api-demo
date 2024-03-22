@@ -5,7 +5,6 @@ import instanceDefinitionHelper from '../mstr-object/instance/instance-definitio
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { pageByHelper } from '../page-by/page-by-helper';
 
-import { DisplayAttrFormNames } from '../redux-reducer/office-reducer/office-reducer-types';
 import { ObjectData } from '../types/object-types';
 import { DialogResponse, ReportParams } from './popup-controller-types';
 
@@ -21,6 +20,7 @@ import {
 } from '../redux-reducer/operation-reducer/operation-actions';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
+import { DisplayAttrFormNames } from '../mstr-object/constants';
 
 const URL = `${window.location.href}`;
 

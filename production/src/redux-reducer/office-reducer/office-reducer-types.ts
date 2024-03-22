@@ -1,13 +1,5 @@
 import { Action } from 'redux';
 
-export enum DisplayAttrFormNames {
-  AUTOMATIC = 'AUTOMATIC',
-  SHOW_ATTR_NAME_ONCE = 'SHOW_ATTR_NAME_ONCE',
-  FORM_NAME_ONLY = 'FORM_NAME_ONLY',
-  ON = 'ON',
-  OFF = 'OFF',
-}
-
 export type OfficeState = {
   loadedReportProperties: any;
   isSecured: boolean;
