@@ -1,43 +1,38 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
 import {
-  OperationAction,
+  MarkStepCompletedPayload,
+  OperationActions,
+  OperationActionTypes,
   OperationData,
   OperationPayload,
   OperationState,
 } from './operation-reducer-types';
-
-import {
-  CANCEL_OPERATION,
-  MARK_STEP_COMPLETED,
-  OperationTypes,
-  UPDATE_OPERATION,
-} from '../../operation/operation-type-names';
 
 const initialState: OperationState = { operations: [] };
 
 export const operationReducer = (
   // eslint-disable-next-line default-param-last
   state = initialState,
-  action: OperationAction
+  action: OperationActions
 ): OperationState => {
   switch (action.type) {
-    case OperationTypes.IMPORT_OPERATION:
-    case OperationTypes.REFRESH_OPERATION:
-    case OperationTypes.EDIT_OPERATION:
-    case OperationTypes.DUPLICATE_OPERATION:
-    case OperationTypes.REMOVE_OPERATION:
-    case OperationTypes.HIGHLIGHT_OPERATION:
-    case OperationTypes.CLEAR_DATA_OPERATION:
+    case OperationActionTypes.IMPORT_OPERATION:
+    case OperationActionTypes.REFRESH_OPERATION:
+    case OperationActionTypes.EDIT_OPERATION:
+    case OperationActionTypes.DUPLICATE_OPERATION:
+    case OperationActionTypes.REMOVE_OPERATION:
+    case OperationActionTypes.HIGHLIGHT_OPERATION:
+    case OperationActionTypes.CLEAR_DATA_OPERATION:
       return operationRequested(state, action.payload);
 
-    case MARK_STEP_COMPLETED:
+    case OperationActionTypes.MARK_STEP_COMPLETED:
       return markStepCompleted(state, action.payload);
 
-    case UPDATE_OPERATION:
+    case OperationActionTypes.UPDATE_OPERATION:
       return updateOperation(state, action.payload);
 
-    case CANCEL_OPERATION:
+    case OperationActionTypes.CANCEL_OPERATION:
       return cancelOperation(state, action.payload);
 
     default:
@@ -53,7 +48,7 @@ function operationRequested(state: OperationState, payload: OperationPayload): O
 
 function markStepCompleted(
   state: OperationState,
-  { objectWorkingId, completedStep }: OperationPayload
+  { objectWorkingId, completedStep }: MarkStepCompletedPayload
 ): OperationState {
   const processedOperationIndex = getProcessedOperationIndex(state.operations, objectWorkingId);
   const processedOperation = state.operations[processedOperationIndex];
@@ -89,7 +84,7 @@ function updateOperation(
 
 function cancelOperation(
   state: OperationState,
-  { objectWorkingId }: OperationPayload
+  { objectWorkingId }: { objectWorkingId: number }
 ): OperationState {
   const processedOperationIndex = getProcessedOperationIndex(state.operations, objectWorkingId);
   state.operations.splice(processedOperationIndex, 1);

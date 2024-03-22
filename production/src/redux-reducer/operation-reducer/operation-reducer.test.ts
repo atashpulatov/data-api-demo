@@ -1,4 +1,5 @@
-/* eslint-disable object-curly-newline, indent */
+import { OperationData, OperationState } from './operation-reducer-types';
+
 import {
   CANCEL_OPERATION,
   MARK_STEP_COMPLETED,
@@ -7,14 +8,14 @@ import {
 import { operationReducer } from './operation-reducer';
 
 describe('operation reducer', () => {
-  let initialState;
-  // eslint-disable-next-line no-underscore-dangle
-  const _initialState = {
-    empty: { operations: [] },
+  let initialState: any;
+
+  const initialStateMock = {
+    empty: { operations: [] as OperationData[] },
     singleOperation: {
       operations: [
         {
-          objectWorkingId: 'someOtherString234',
+          objectWorkingId: 2137,
           operationType: 'someType24',
           stepsQueue: ['step1', 'step2', 'step3'],
           totalRows: 100000,
@@ -25,21 +26,21 @@ describe('operation reducer', () => {
     multipleOperations: {
       operations: [
         {
-          objectWorkingId: 'someOtherString2',
+          objectWorkingId: 1,
           operationType: 'someType',
           stepsQueue: ['step1', 'step2', 'step3'],
           totalRows: 100000,
           loadedRows: 0,
         },
         {
-          objectWorkingId: 'someOtherString23',
+          objectWorkingId: 2,
           operationType: 'someOtherType',
           stepsQueue: ['step2a', 'step3a', 'step4'],
           totalRows: 100000,
           loadedRows: 2000,
         },
         {
-          objectWorkingId: 'someOtherString234',
+          objectWorkingId: 2137,
           operationType: 'someNextType',
           stepsQueue: ['step1', 'step2', 'step3'],
           totalRows: 100000,
@@ -50,12 +51,12 @@ describe('operation reducer', () => {
   };
 
   beforeEach(() => {
-    initialState = JSON.parse(JSON.stringify(_initialState));
+    initialState = JSON.parse(JSON.stringify(initialStateMock));
   });
 
   it('should have default state', () => {
     // given
-    const unhandledAction = { type: 'someType' };
+    const unhandledAction = { type: 'someType' } as any;
 
     // when
     const resultState = operationReducer(undefined, unhandledAction);
@@ -66,7 +67,7 @@ describe('operation reducer', () => {
 
   it('should return state if no action is matched', () => {
     // given
-    const unhandledAction = { type: 'someType' };
+    const unhandledAction = { type: 'someType' } as any;
 
     // when
     const resultState = operationReducer(initialState.multipleOperations, unhandledAction);
@@ -87,7 +88,7 @@ describe('operation reducer', () => {
     `('should add operation when operations are empty', ({ actionType }) => {
       // given
       const someOperation = {};
-      const action = {
+      const action: any = {
         type: actionType,
         payload: { operation: someOperation },
       };
@@ -111,7 +112,7 @@ describe('operation reducer', () => {
     `('should add operation to existing operations', ({ actionType }) => {
       // given
       const someOperation = {};
-      const action = {
+      const action: any = {
         type: actionType,
         payload: { operation: someOperation },
       };
@@ -131,16 +132,17 @@ describe('operation reducer', () => {
     it('should throw error if the current operation is not the completed step', () => {
       // given
       const stepCompleted = 'step2';
-      const action = {
+      const action: any = {
         type: MARK_STEP_COMPLETED,
         payload: {
-          objectWorkingId: 'someOtherString2',
+          objectWorkingId: 1,
           completedStep: stepCompleted,
         },
       };
 
       // when
-      const throwingCall = () => operationReducer(initialState.multipleOperations, action);
+      const throwingCall = (): OperationState =>
+        operationReducer(initialState.multipleOperations, action);
 
       // then
       expect(throwingCall).toThrow();
@@ -149,7 +151,7 @@ describe('operation reducer', () => {
     it('should throw error if the operation object does not exist', () => {
       // given
       const stepCompleted = 'step2';
-      const action = {
+      const action: any = {
         type: MARK_STEP_COMPLETED,
         payload: {
           objectWorkingId: 'someNotExistingOperation',
@@ -158,7 +160,8 @@ describe('operation reducer', () => {
       };
 
       // when
-      const throwingCall = () => operationReducer(initialState.multipleOperations, action);
+      const throwingCall = (): OperationState =>
+        operationReducer(initialState.multipleOperations, action);
 
       // then
       expect(throwingCall).toThrow();
@@ -166,10 +169,10 @@ describe('operation reducer', () => {
 
     it('should remove operation if the last step was completed', () => {
       // given
-      const initialStateLastStep = {
+      const initialStateLastStep: any = {
         operations: [
           {
-            objectWorkingId: 'someOtherString234',
+            objectWorkingId: 2137,
             operationType: 'someType24',
             stepsQueue: ['step3'],
             totalRows: 100000,
@@ -177,10 +180,10 @@ describe('operation reducer', () => {
           },
         ],
       };
-      const action = {
+      const action: any = {
         type: MARK_STEP_COMPLETED,
         payload: {
-          objectWorkingId: 'someOtherString234',
+          objectWorkingId: 2137,
           completedStep: 'step3',
         },
       };
@@ -193,10 +196,10 @@ describe('operation reducer', () => {
     });
     it('should remove completed step on single operation queue', () => {
       // given
-      const action = {
+      const action: any = {
         type: MARK_STEP_COMPLETED,
         payload: {
-          objectWorkingId: 'someOtherString234',
+          objectWorkingId: 2137,
           completedStep: 'step1',
         },
       };
@@ -210,10 +213,10 @@ describe('operation reducer', () => {
     });
     it('should remove completed step on multi operation queue', () => {
       // given
-      const action = {
+      const action: any = {
         type: MARK_STEP_COMPLETED,
         payload: {
-          objectWorkingId: 'someOtherString23',
+          objectWorkingId: 2,
           completedStep: 'step2a',
         },
       };
@@ -230,13 +233,14 @@ describe('operation reducer', () => {
   describe('cancelOperation', () => {
     it('throws error if there is no operation with given ID', () => {
       // given
-      const action = {
+      const action: any = {
         type: CANCEL_OPERATION,
         payload: { objectWorkingId: 'wrongId' },
       };
 
       // when
-      const throwingCall = () => operationReducer(initialState.multipleOperations, action);
+      const throwingCall = (): OperationState =>
+        operationReducer(initialState.multipleOperations, action);
 
       // then
       expect(throwingCall).toThrow();
@@ -244,9 +248,9 @@ describe('operation reducer', () => {
 
     it('deletes operation when CANCEL_OPERATION called', () => {
       // given
-      const action = {
+      const action: any = {
         type: CANCEL_OPERATION,
-        payload: { objectWorkingId: 'someOtherString23' },
+        payload: { objectWorkingId: 2 },
       };
 
       // when
