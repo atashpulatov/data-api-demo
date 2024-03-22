@@ -51,9 +51,6 @@ export enum OperationActionTypes {
 export interface OperationPayload {
   operation: OperationData;
 }
-export interface UpdateOperationPayload {
-  updatedOperationProps: Partial<OperationData>;
-}
 
 export interface MarkStepCompletedPayload {
   objectWorkingId: number;
@@ -102,7 +99,7 @@ export interface MarkStepCompletedAction extends Action {
 
 export interface UpdateOperationAction extends Action {
   type: OperationActionTypes.UPDATE_OPERATION;
-  payload: { updatedOperationProps: Partial<OperationData> };
+  payload: Partial<OperationData>;
 }
 
 export interface CancelOperationAction extends Action {

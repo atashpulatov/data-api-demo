@@ -12,7 +12,6 @@ import {
   RefreshOperationAction,
   RemoveOperationAction,
   UpdateOperationAction,
-  UpdateOperationPayload,
 } from './operation-reducer-types';
 
 import { operationsMap, OperationSteps } from '../../operation/operation-steps';
@@ -160,7 +159,7 @@ export const markStepCompleted = (
 });
 
 export const updateOperation = (
-  updatedOperationProps: UpdateOperationPayload
+  updatedOperationProps: Partial<OperationData>
 ): UpdateOperationAction => ({
   type: OperationActionTypes.UPDATE_OPERATION,
   payload: updatedOperationProps,
