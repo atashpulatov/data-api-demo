@@ -1,10 +1,10 @@
 export interface AuthenticateComponent {
-  session: {
+  session?: {
     username: string;
     password: string;
     envUrl: string;
     loginMode: string;
     isRememberMeOn: boolean;
   };
-  resetState: () => void;
+  resetState?: () => void;
 }
