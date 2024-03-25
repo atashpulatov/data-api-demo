@@ -21,7 +21,10 @@ describe('NavigationTree Actions', () => {
     // when
     navigationTreeActions.requestImport({})(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({ type: NavigationTreeActionTypes.REQUEST_IMPORT });
+    expect(listener).toHaveBeenCalledWith({
+      type: NavigationTreeActionTypes.REQUEST_IMPORT,
+      data: {},
+    });
   });
 
   it('should dispatch proper promptsAnswered action', () => {
@@ -63,7 +66,10 @@ describe('NavigationTree Actions', () => {
     // when
     navigationTreeActions.requestDossierOpen({})(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({ type: NavigationTreeActionTypes.REQUEST_DOSSIER_OPEN });
+    expect(listener).toHaveBeenCalledWith({
+      type: NavigationTreeActionTypes.REQUEST_DOSSIER_OPEN,
+      data: {},
+    });
   });
 
   it('should dispatch proper cancelDossierOpen action', () => {

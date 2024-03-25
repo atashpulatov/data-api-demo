@@ -48,7 +48,7 @@ class PopupStateActions {
         mstrObjectType: '',
       })
     );
-    dispatch(navigationTreeActions.cancelDossierOpen());
+    dispatch(navigationTreeActions.cancelDossierOpen({}));
   };
 
   setIsDataOverviewOpen = (payload: boolean) => (dispatch: Dispatch<any>) => {

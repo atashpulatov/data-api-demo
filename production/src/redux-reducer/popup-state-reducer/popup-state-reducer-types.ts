@@ -5,6 +5,7 @@ export interface PopupStateState {
   isDataOverviewOpen?: boolean;
   filteredPageByLinkId?: string;
   isReprompt?: boolean;
+  isPrompted?: boolean | any;
 }
 
 export enum PopupStateActionTypes {

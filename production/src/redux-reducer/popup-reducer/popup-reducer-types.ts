@@ -35,6 +35,8 @@ export interface EditedObject {
 export interface PopupState {
   editedObject?: EditedObject;
   preparedInstance?: any;
+  isReprompt?: boolean;
+  isEdit?: boolean;
 }
 export enum PopupActionTypes {
   RESET_STATE = 'POPUP_RESET_STATE',
