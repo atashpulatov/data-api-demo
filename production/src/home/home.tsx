@@ -106,8 +106,7 @@ export const HomeNotConnected: React.FC<HomeProps> = props => {
   }, [authToken]);
 
   const renderAuthenticatePage = (): React.JSX.Element =>
-    // @ts-expect-error resolve issue in Spinner types
-    loading ? <Spinner text='Loading' textPosition='RIGHT' /> : IS_DEVELOPMENT && <Authenticate />;
+    loading ? <Spinner /> : IS_DEVELOPMENT && <Authenticate />;
 
   const sidePanelToRender = (): React.JSX.Element => {
     if (authToken) {
