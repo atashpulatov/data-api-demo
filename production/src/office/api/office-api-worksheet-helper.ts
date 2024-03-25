@@ -60,7 +60,7 @@ class OfficeApiWorksheetHelper {
     } else if (sheet && excelContext) {
       isProtected = await this.isSheetProtected(excelContext, sheet);
     } else {
-      const currentSheet = await officeApiHelper.getCurrentExcelSheet(excelContext);
+      const currentSheet = officeApiHelper.getCurrentExcelSheet(excelContext);
       isProtected = await this.isSheetProtected(excelContext, currentSheet);
     }
     if (isProtected) {
