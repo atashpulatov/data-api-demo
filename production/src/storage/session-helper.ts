@@ -43,7 +43,7 @@ class SessionHelper {
     const { authToken } = this.reduxStore.getState().sessionReducer;
     const { envUrl } = this.reduxStore.getState().sessionReducer;
     try {
-      await authenticationService.logout(envUrl, authToken);
+      authenticationService.logout(envUrl, authToken);
     } catch (error) {
       errorService.handleError(error, { isLogout: true } as any);
     }
