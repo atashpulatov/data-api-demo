@@ -1,7 +1,15 @@
 import { createStore } from 'redux';
 
-import { OperationTypes } from '../../operation/operation-type-names';
-import { CLEAR_ANSWERS, RESTORE_ALL_ANSWERS } from './answers-actions';
+import {
+  AnswerActionTypes,
+  AnswersState,
+  ClearAnswersAction,
+  EditOperationAction,
+  ImportOperationAction,
+  PromptsAnswer,
+  RestoreAllAnswersAction,
+} from './answers-reducer-types';
+
 import { answersReducer } from './answers-reducer';
 
 describe('answersReducer', () => {
@@ -16,9 +24,9 @@ describe('answersReducer', () => {
 
   it('Import operation for Report should update the state with newly-provided answers', () => {
     // given
-    const prevState = { answers: [] };
-    const action = {
-      type: OperationTypes.IMPORT_OPERATION,
+    const prevState = { answers: [] as PromptsAnswer[] };
+    const action: ImportOperationAction = {
+      type: AnswerActionTypes.IMPORT_OPERATION,
       payload: {
         object: {
           isPrompted: true,
@@ -39,9 +47,9 @@ describe('answersReducer', () => {
 
   it('Import operation for Dossier should update the state with newly-provided answers', () => {
     // given
-    const prevState = { answers: [] };
-    const action = {
-      type: OperationTypes.IMPORT_OPERATION,
+    const prevState = { answers: [] as PromptsAnswer[] };
+    const action: ImportOperationAction = {
+      type: AnswerActionTypes.IMPORT_OPERATION,
       payload: {
         object: {
           mstrObjectType: {
@@ -62,10 +70,10 @@ describe('answersReducer', () => {
 
   it('Restore All Answers operation should populate the state with newly-provided answers', () => {
     // given
-    const prevState = { answers: [] };
-    const action = {
-      type: RESTORE_ALL_ANSWERS,
-      payload: [{ key: '1', values: ['1'] }],
+    const prevState = { answers: [] as PromptsAnswer[] };
+    const action: RestoreAllAnswersAction = {
+      type: AnswerActionTypes.RESTORE_ALL_ANSWERS,
+      payload: [{ key: '1', values: ['1'] }] as PromptsAnswer[],
     };
     // when
     const newState = answersReducer(prevState, action);
@@ -75,9 +83,9 @@ describe('answersReducer', () => {
 
   it('Edit operation for Report should update the state with newly-provided answers', () => {
     // given
-    const prevState = { answers: [{ key: '1', values: ['1'] }] };
-    const action = {
-      type: OperationTypes.EDIT_OPERATION,
+    const prevState = { answers: [{ key: '1', values: ['1'] }] } as AnswersState;
+    const action: EditOperationAction = {
+      type: AnswerActionTypes.EDIT_OPERATION,
       payload: {
         operation: {
           objectEditedData: {
@@ -100,9 +108,9 @@ describe('answersReducer', () => {
 
   it('Edit operation for Dossier should update the state with newly-provided answers', () => {
     // given
-    const prevState = { answers: [{ key: '1', values: ['1'] }] };
-    const action = {
-      type: OperationTypes.EDIT_OPERATION,
+    const prevState = { answers: [{ key: '1', values: ['1'] }] } as AnswersState;
+    const action: EditOperationAction = {
+      type: AnswerActionTypes.EDIT_OPERATION,
       payload: {
         operation: {
           objectEditedData: {
@@ -125,9 +133,9 @@ describe('answersReducer', () => {
 
   it('Clear Answers operation should reset state to initial values', () => {
     // given
-    const prevState = { answers: [{ key: '1', values: ['1'] }] };
-    const action = {
-      type: CLEAR_ANSWERS,
+    const prevState = { answers: [{ key: '1', values: ['1'] }] } as AnswersState;
+    const action: ClearAnswersAction = {
+      type: AnswerActionTypes.CLEAR_ANSWERS,
     };
     // when
     const newState = answersReducer(prevState, action);
