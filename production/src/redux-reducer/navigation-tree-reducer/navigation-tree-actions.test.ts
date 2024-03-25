@@ -1,16 +1,6 @@
-import {
-  CANCEL_DOSSIER_OPEN,
-  CANCEL_REQUEST_IMPORT,
-  CLEAR_PROMPTS_ANSWERS,
-  navigationTreeActions,
-  PROMPTS_ANSWERED,
-  REQUEST_DOSSIER_OPEN,
-  REQUEST_IMPORT,
-  SELECT_OBJECT,
-  START_IMPORT,
-  SWITCH_IMPORT_SUBTOTALS_ON_IMPORT,
-  UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT,
-} from './navigation-tree-actions';
+import { NavigationTreeActionTypes } from './navigation-tree-reducer-types';
+
+import { navigationTreeActions } from './navigation-tree-actions';
 
 describe('NavigationTree Actions', () => {
   it('should dispatch proper selectObject action', () => {
@@ -19,16 +9,19 @@ describe('NavigationTree Actions', () => {
     // when
     navigationTreeActions.selectObject(true)(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({ type: SELECT_OBJECT, data: true });
+    expect(listener).toHaveBeenCalledWith({
+      type: NavigationTreeActionTypes.SELECT_OBJECT,
+      data: true,
+    });
   });
 
   it('should dispatch proper requestImport action', () => {
     // given
     const listener = jest.fn();
     // when
-    navigationTreeActions.requestImport()(listener);
+    navigationTreeActions.requestImport({})(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({ type: REQUEST_IMPORT });
+    expect(listener).toHaveBeenCalledWith({ type: NavigationTreeActionTypes.REQUEST_IMPORT });
   });
 
   it('should dispatch proper promptsAnswered action', () => {
@@ -38,7 +31,10 @@ describe('NavigationTree Actions', () => {
     // when
     navigationTreeActions.promptsAnswered(data)(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({ type: PROMPTS_ANSWERED, data });
+    expect(listener).toHaveBeenCalledWith({
+      type: NavigationTreeActionTypes.PROMPTS_ANSWERED,
+      data,
+    });
   });
 
   it('should dispatch proper cancelImportRequest action', () => {
@@ -47,25 +43,27 @@ describe('NavigationTree Actions', () => {
     // when
     navigationTreeActions.cancelImportRequest()(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({ type: CANCEL_REQUEST_IMPORT });
+    expect(listener).toHaveBeenCalledWith({
+      type: NavigationTreeActionTypes.CANCEL_REQUEST_IMPORT,
+    });
   });
 
   it('should dispatch proper startImport action', () => {
     // given
     const listener = jest.fn();
     // when
-    navigationTreeActions.startImport(true)(listener);
+    navigationTreeActions.startImport()(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({ type: START_IMPORT });
+    expect(listener).toHaveBeenCalledWith({ type: NavigationTreeActionTypes.START_IMPORT });
   });
 
   it('should dispatch proper requestDossierOpen action', () => {
     // given
     const listener = jest.fn();
     // when
-    navigationTreeActions.requestDossierOpen()(listener);
+    navigationTreeActions.requestDossierOpen({})(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({ type: REQUEST_DOSSIER_OPEN });
+    expect(listener).toHaveBeenCalledWith({ type: NavigationTreeActionTypes.REQUEST_DOSSIER_OPEN });
   });
 
   it('should dispatch proper cancelDossierOpen action', () => {
@@ -75,7 +73,10 @@ describe('NavigationTree Actions', () => {
     // when
     navigationTreeActions.cancelDossierOpen(data)(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({ type: CANCEL_DOSSIER_OPEN, data });
+    expect(listener).toHaveBeenCalledWith({
+      type: NavigationTreeActionTypes.CANCEL_DOSSIER_OPEN,
+      data,
+    });
   });
 
   it('should dispatch proper switchImportSubtotalsOnImport action', () => {
@@ -86,7 +87,7 @@ describe('NavigationTree Actions', () => {
     navigationTreeActions.switchImportSubtotalsOnImport(data)(listener);
     // then
     expect(listener).toHaveBeenCalledWith({
-      type: SWITCH_IMPORT_SUBTOTALS_ON_IMPORT,
+      type: NavigationTreeActionTypes.SWITCH_IMPORT_SUBTOTALS_ON_IMPORT,
       data,
     });
   });
@@ -97,7 +98,9 @@ describe('NavigationTree Actions', () => {
     // when
     navigationTreeActions.clearPromptAnswers()(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({ type: CLEAR_PROMPTS_ANSWERS });
+    expect(listener).toHaveBeenCalledWith({
+      type: NavigationTreeActionTypes.CLEAR_PROMPTS_ANSWERS,
+    });
   });
 
   it('should dispatch proper updateDisplayAttrFormOnImport action', () => {
@@ -108,7 +111,7 @@ describe('NavigationTree Actions', () => {
     navigationTreeActions.updateDisplayAttrFormOnImport(data)(listener);
     // then
     expect(listener).toHaveBeenCalledWith({
-      type: UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT,
+      type: NavigationTreeActionTypes.UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT,
       data,
     });
   });

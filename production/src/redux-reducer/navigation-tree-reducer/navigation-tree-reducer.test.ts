@@ -1,28 +1,31 @@
 import {
-  CANCEL_DOSSIER_OPEN,
-  CANCEL_REQUEST_IMPORT,
-  CLEAR_PROMPTS_ANSWERS,
-  PROMPTS_ANSWERED,
-  REQUEST_DOSSIER_OPEN,
-  REQUEST_IMPORT,
-  SELECT_OBJECT,
-  SET_PROMPT_OBJECTS,
-  START_IMPORT,
-  SWITCH_IMPORT_SUBTOTALS_ON_IMPORT,
-  UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT,
-  UPDATE_SELECTED_MENU,
-} from './navigation-tree-actions';
+  CancelDossierOpenAction,
+  CancelRequestImportAction,
+  ClearPromptsAnswersAction,
+  NavigationTreeActionTypes,
+  NavigationTreeState,
+  PromptsAnsweredAction,
+  RequestDossierOpenAction,
+  RequestImportAction,
+  SelectObjectAction,
+  SetPromptObjectsAction,
+  StartImportAction,
+  SwitchImportSubtotalsOnImportAction,
+  UpdateDisplayAttrFormOnImportAction,
+  UpdateSelectedMenuAction,
+} from './navigation-tree-reducer-types';
+
 import { navigationTree } from './navigation-tree-reducer';
 
 describe('NavigationTree Reducer', () => {
   it('should return new proper state in case of SELECT_OBJECT action without proper data', () => {
     // given
-    const action = {
-      type: SELECT_OBJECT,
+    const action: SelectObjectAction = {
+      type: NavigationTreeActionTypes.SELECT_OBJECT,
       data: { chosenObjectId: 'something' },
     };
     // when
-    const newState = navigationTree({}, action);
+    const newState = navigationTree({} as NavigationTreeState, action);
     // then
     expect(newState).toEqual({
       chosenObjectId: 'something',
@@ -40,36 +43,36 @@ describe('NavigationTree Reducer', () => {
 
   it('should set prompt objects data on SET_PROMPT_OBJECTS action', () => {
     // given
-    const action = {
-      type: SET_PROMPT_OBJECTS,
+    const action: SetPromptObjectsAction = {
+      type: NavigationTreeActionTypes.SET_PROMPT_OBJECTS,
       data: { promptObjects: ['whatever'] },
     };
     // when
-    const newState = navigationTree({}, action);
+    const newState = navigationTree({} as NavigationTreeState, action);
     // then
     expect(newState.promptObjects).toBe(action.data.promptObjects);
   });
 
   it('should set request import flag within state on REQUEST_IMPORT action', () => {
     // given
-    const action = {
-      type: REQUEST_IMPORT,
-      data: {},
+    const action: RequestImportAction = {
+      type: NavigationTreeActionTypes.REQUEST_IMPORT,
+      data: {} as any,
     };
     // when
-    const newState = navigationTree({}, action);
+    const newState = navigationTree({} as NavigationTreeState, action);
     // then
     expect(newState.importRequested).toBe(true);
   });
 
   it('should set request import flag on REQUEST_IMPORT action', () => {
     // given
-    const action = {
-      type: REQUEST_IMPORT,
-      data: { dossierData: 'whatever' },
+    const action: RequestImportAction = {
+      type: NavigationTreeActionTypes.REQUEST_IMPORT,
+      data: { dossierData: 'whatever' } as any,
     };
     // when
-    const newState = navigationTree({}, action);
+    const newState = navigationTree({} as NavigationTreeState, action);
     // then
     expect(newState.importRequested).toBe(true);
     expect(newState.dossierData).not.toBeDefined();
@@ -77,12 +80,12 @@ describe('NavigationTree Reducer', () => {
 
   it('should set dossier data on PROMPTS_ANSWERED action', () => {
     // given
-    const action = {
-      type: PROMPTS_ANSWERED,
-      data: { dossierData: 'whatever' },
+    const action: PromptsAnsweredAction = {
+      type: NavigationTreeActionTypes.PROMPTS_ANSWERED,
+      data: { dossierData: 'whatever' } as any,
     };
     // when
-    const newState = navigationTree({}, action);
+    const newState = navigationTree({} as NavigationTreeState, action);
     // then
     expect(newState.importRequested).toBeFalsy();
     expect(newState.dossierData).toBe(action.data.dossierData);
@@ -91,9 +94,14 @@ describe('NavigationTree Reducer', () => {
 
   it('should return new proper state in case of CLEAR_PROMPTS_ANSWERS action', () => {
     // given
-    const action = { type: CLEAR_PROMPTS_ANSWERS };
+    const action: ClearPromptsAnswersAction = {
+      type: NavigationTreeActionTypes.CLEAR_PROMPTS_ANSWERS,
+    };
     // when
-    const newState = navigationTree({ promptsAnswers: ['some', 'some'], dossierData: {} }, action);
+    const newState = navigationTree(
+      { promptsAnswers: ['some', 'some'], dossierData: {} } as NavigationTreeState,
+      action
+    );
     // then
     expect(newState.promptsAnswers).toEqual(null);
     expect(newState.dossierData).toEqual(null);
@@ -101,36 +109,41 @@ describe('NavigationTree Reducer', () => {
 
   it('should return new proper state in case of CANCEL_REQUEST_IMPORT action', () => {
     // given
-    const action = { type: CANCEL_REQUEST_IMPORT };
+    const action: CancelRequestImportAction = {
+      type: NavigationTreeActionTypes.CANCEL_REQUEST_IMPORT,
+    };
     // when
-    const newState = navigationTree({ importRequested: true }, action);
+    const newState = navigationTree({ importRequested: true } as any, action);
     // then
     expect(newState.importRequested).toBeFalsy();
   });
 
   it('should return new proper state in case of START_IMPORT action', () => {
     // given
-    const action = { type: START_IMPORT };
+    const action: StartImportAction = { type: NavigationTreeActionTypes.START_IMPORT };
     // when
-    const newState = navigationTree({}, action);
+    const newState = navigationTree({} as NavigationTreeState, action);
     // then
     expect(newState.importRequested).toBe(false);
   });
 
   it('should return new proper state in case of REQUEST_DOSSIER_OPEN action', () => {
     // given
-    const action = { type: REQUEST_DOSSIER_OPEN };
+    const action: RequestDossierOpenAction = {
+      type: NavigationTreeActionTypes.REQUEST_DOSSIER_OPEN,
+      data: {} as any,
+    };
     // when
-    const newState = navigationTree({}, action);
+    const newState = navigationTree({} as NavigationTreeState, action);
     // then
     expect(newState.dossierOpenRequested).toEqual(true);
   });
 
   it('should return new proper state in case of CANCEL_DOSSIER_OPEN action', () => {
     // given
-    const action = { type: CANCEL_DOSSIER_OPEN };
+    const action: CancelDossierOpenAction = { type: NavigationTreeActionTypes.CANCEL_DOSSIER_OPEN };
     // when
-    const newState = navigationTree({}, action);
+    const newState = navigationTree({} as NavigationTreeState, action);
     // then
     expect(newState.dossierOpenRequested).toEqual(false);
   });
@@ -138,9 +151,12 @@ describe('NavigationTree Reducer', () => {
   it('should return new proper state in case of SWITCH_IMPORT_SUBTOTALS_ON_IMPORT action', () => {
     // given
     const testData = { import: 'true' };
-    const action = { type: SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, data: testData };
+    const action: SwitchImportSubtotalsOnImportAction = {
+      type: NavigationTreeActionTypes.SWITCH_IMPORT_SUBTOTALS_ON_IMPORT,
+      data: testData,
+    };
     // when
-    const newState = navigationTree({}, action);
+    const newState = navigationTree({} as NavigationTreeState, action);
     // then
     expect(newState.importSubtotal).toEqual(testData);
   });
@@ -148,9 +164,12 @@ describe('NavigationTree Reducer', () => {
   it('should return new proper state in case of UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT action', () => {
     // given
     const testData = { import: 'true' };
-    const action = { type: UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT, data: testData };
+    const action: UpdateDisplayAttrFormOnImportAction = {
+      type: NavigationTreeActionTypes.UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT,
+      data: testData,
+    };
     // when
-    const newState = navigationTree({}, action);
+    const newState = navigationTree({} as NavigationTreeState, action);
     // then
     expect(newState.displayAttrFormNames).toEqual(testData);
   });
@@ -158,9 +177,12 @@ describe('NavigationTree Reducer', () => {
   it('should return new proper state in case of UPDATE_SELECTED_MENU action', () => {
     // given
     const testData = { name: 'selectedMenu' };
-    const action = { type: UPDATE_SELECTED_MENU, data: testData };
+    const action: UpdateSelectedMenuAction = {
+      type: NavigationTreeActionTypes.UPDATE_SELECTED_MENU,
+      data: testData,
+    };
     // when
-    const newState = navigationTree({}, action);
+    const newState = navigationTree({} as NavigationTreeState, action);
     // then
     expect(newState).toEqual({
       selectedMenu: { ...testData },
