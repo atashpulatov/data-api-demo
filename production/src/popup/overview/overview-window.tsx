@@ -136,7 +136,7 @@ export const OverviewWindowNotConnected: React.FC<OverviewWindowProps> = props =
           notification.type === ObjectNotificationTypes.SUCCESS &&
           notification.operationType === OperationTypes.REMOVE_OPERATION
         ) {
-          onDismissNotification([notification.objectWorkingId as number]);
+          onDismissNotification([notification.objectWorkingId]);
         }
       }, 500);
     });
