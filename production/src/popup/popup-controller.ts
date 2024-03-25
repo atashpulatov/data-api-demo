@@ -163,7 +163,7 @@ class PopupController {
       } else {
         // Otherwise, open new dialog and assign event handlers
         console.time('Popup load time');
-        await Office.context.ui.displayDialogAsync(
+        Office.context.ui.displayDialogAsync(
           `${splittedUrl[0]}?popupType=${popupType}&source=addin-mstr-excel`,
           { height, width, displayInIframe: true },
           asyncResult => {
