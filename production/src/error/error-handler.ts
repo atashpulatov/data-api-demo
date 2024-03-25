@@ -1,8 +1,8 @@
 import officeReducerHelper from '../office/store/office-reducer-helper';
 
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import { PopupTypeEnum } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 
-import { PopupTypeEnum } from '../home/popup-type-enum';
 import i18n from '../i18n';
 import { getNotificationButtons } from '../notification/notification-buttons';
 import { OperationTypes } from '../operation/operation-type-names';
@@ -377,7 +377,11 @@ class ErrorService {
 
       // Show Overview table if there are any reprompts in queue if error occured
       // while reprompting dossier/report in Overview window only.
-      if (total > 0 && (popupType === PopupTypeEnum.repromptDossierDataOverview || popupType === PopupTypeEnum.repromptReportDataOverview)) {
+      if (
+        total > 0 &&
+        (popupType === PopupTypeEnum.repromptDossierDataOverview ||
+          popupType === PopupTypeEnum.repromptReportDataOverview)
+      ) {
         this.reduxStore.dispatch(
           popupStateActions.setPopupType(PopupTypeEnum.importedDataOverview)
         );

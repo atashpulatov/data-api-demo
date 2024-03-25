@@ -6,10 +6,11 @@ import overviewHelper from './overview/overview-helper';
 import { popupHelper } from './popup-helper';
 import { popupViewSelectorHelper } from './popup-view-selector-helper';
 
+import { PopupTypeEnum } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
+
 import { AttributeSelectorWindow } from '../attribute-selector/attribute-selector-window';
 import { DossierWindow } from '../embedded/dossier/dossier-window';
 import { LibraryWindow } from '../embedded/library/library-window';
-import { PopupTypeEnum } from '../home/popup-type-enum';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { PromptsWindow } from '../prompts/prompts-window';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';

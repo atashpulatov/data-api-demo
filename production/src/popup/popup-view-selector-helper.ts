@@ -2,8 +2,9 @@ import { ObjectExecutionStatus } from '../helpers/prompts-handling-helper';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { popupHelper } from './popup-helper';
 
+import { PopupTypeEnum } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
+
 import { selectorProperties } from '../attribute-selector/selector-properties';
-import { PopupTypeEnum } from '../home/popup-type-enum';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { DisplayAttrFormNames } from '../mstr-object/constants';
 

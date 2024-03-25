@@ -9,12 +9,12 @@ import overviewHelper, { OverviewActionCommands } from './overview/overview-help
 
 import { reduxStore, RootState } from '../store';
 
+import { PopupTypeEnum } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 import { ObjectData } from '../types/object-types';
 import { ReportParams } from './popup-controller-types';
 
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { errorService } from '../error/error-handler';
-import { PopupTypeEnum } from '../home/popup-type-enum';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import * as operationActions from '../redux-reducer/operation-reducer/operation-actions';
 import { popupController } from './popup-controller';

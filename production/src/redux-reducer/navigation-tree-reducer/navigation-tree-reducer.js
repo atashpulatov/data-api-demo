@@ -1,5 +1,8 @@
-import { PopupTypeEnum } from '../../home/popup-type-enum';
-import { SET_POPUP_TYPE } from '../popup-state-reducer/popup-state-actions';
+import {
+  PopupStateActionTypes,
+  PopupTypeEnum,
+} from '../popup-state-reducer/popup-state-reducer-types';
+
 import {
   CANCEL_DOSSIER_OPEN,
   CANCEL_REQUEST_IMPORT,
@@ -150,7 +153,7 @@ export const navigationTree = (state = initialState, action = {}) => {
     // to true when popup type is data preparation type. Action triggered by
     // user after clicking on "Prepare Data" button in the Library's dialog,
     // which dispataches SET_POPUP_TYPE action.
-    case SET_POPUP_TYPE: {
+    case PopupStateActionTypes.SET_POPUP_TYPE: {
       const newState = { ...state };
       newState.isPreparedDataRequested = !!popupType && popupType === PopupTypeEnum.dataPreparation;
       return newState;
