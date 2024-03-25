@@ -107,7 +107,7 @@ class OperationStepDispatcher {
 
   completeClearData(objectWorkingId: number, nextOperation: any, objectList: any[]): void {
     if (
-      !(nextOperation?.operationType === OperationTypes.CLEAR_DATA_OPERATION) &&
+      nextOperation?.operationType !== OperationTypes.CLEAR_DATA_OPERATION &&
       objectList.length !== 0
     ) {
       const { dispatch } = this.reduxStore;
