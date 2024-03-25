@@ -14,7 +14,6 @@ class OfficeInsertService {
       console.time('Waiting for pending context syncs');
       await Promise.all(contextPromises);
       console.timeEnd('Waiting for pending context syncs');
-      contextPromises = [];
     } else if (finalsync) {
       console.time('Context sync');
       await Promise.all(contextPromises);
