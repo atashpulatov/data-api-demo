@@ -1,3 +1,5 @@
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import officeTableCreate from './office-table-create';
@@ -19,7 +21,7 @@ describe('StepGetOfficeTableImport', () => {
     jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
     // when
-    await stepGetOfficeTableImport.getOfficeTableImport({}, {});
+    await stepGetOfficeTableImport.getOfficeTableImport({}, {} as OperationData);
 
     // then
     expect(officeTableCreate.createOfficeTable).toBeCalledTimes(1);
@@ -44,9 +46,9 @@ describe('StepGetOfficeTableImport', () => {
       excelContext: 'excelContextTest',
       instanceDefinition: 'instanceDefinitionTest',
       startCell: 'startCellTest',
-    };
+    } as unknown as OperationData;
 
-    jest.spyOn(officeTableCreate, 'createOfficeTable').mockImplementation(() => ({
+    jest.spyOn(officeTableCreate, 'createOfficeTable').mockImplementation(async () => ({
       officeTable: 'officeTableTest',
       bindId: 'bindIdTest',
       tableName: 'newOfficeTableNameTest',

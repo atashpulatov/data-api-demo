@@ -1,5 +1,8 @@
 import getOfficeTableHelper from './get-office-table-helper';
 
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import officeTableCreate from './office-table-create';
@@ -37,7 +40,9 @@ describe('StepGetOfficeTableEditRefresh', () => {
     jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
     // when
-    await stepGetOfficeTableEditRefresh.getOfficeTableEditRefresh({}, { instanceDefinition: {} });
+    await stepGetOfficeTableEditRefresh.getOfficeTableEditRefresh({}, {
+      instanceDefinition: {},
+    } as OperationData);
 
     // then
     expect(getOfficeTableHelper.checkReportTypeChange).toBeCalledTimes(1);
@@ -60,26 +65,26 @@ describe('StepGetOfficeTableEditRefresh', () => {
       previousTableDimensions: 'previousTableDimensionsTest',
       visualizationInfo: 'visualizationInfoTest',
       objectWorkingId: 'objectWorkingIdTest',
-    };
+    } as unknown as ObjectData;
 
     const operationData = {
       excelContext: excelContextMock,
       instanceDefinition: { mstrTable: 'mstrTableTest' },
       oldBindId: 'oldBindIdTest',
-    };
+    } as unknown as OperationData;
 
     jest.spyOn(getOfficeTableHelper, 'checkReportTypeChange').mockImplementation();
 
     jest
       .spyOn(officeTableRefresh, 'getPreviousOfficeTable')
-      .mockImplementation(() => 'prevOfficeTableTest');
+      .mockImplementation(() => 'prevOfficeTableTest' as any);
 
-    jest.spyOn(officeTableRefresh, 'getExistingOfficeTableData').mockImplementation(() => ({
+    jest.spyOn(officeTableRefresh, 'getExistingOfficeTableData').mockImplementation(async () => ({
       tableChanged: true,
       startCell: 'startCellTest',
     }));
 
-    jest.spyOn(officeTableCreate, 'createOfficeTable').mockImplementation(() => ({
+    jest.spyOn(officeTableCreate, 'createOfficeTable').mockImplementation(async () => ({
       officeTable: mockedOfficeTable,
       bindId: 'bindIdTest',
     }));
@@ -157,7 +162,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
         tableName: 'tableNameTest',
         previousTableDimensions: 'previousTableDimensionsTest',
         objectWorkingId: 'objectWorkingIdTest',
-      };
+      } as unknown as ObjectData;
 
       const operationData = {
         excelContext: excelContextMock,
@@ -168,22 +173,22 @@ describe('StepGetOfficeTableEditRefresh', () => {
             nameAndFormatShouldUpdate: inputNameAndFormatShouldUpdate,
           },
         },
-      };
+      } as unknown as OperationData;
 
       jest.spyOn(getOfficeTableHelper, 'checkReportTypeChange').mockImplementation();
 
       jest
         .spyOn(officeTableRefresh, 'getPreviousOfficeTable')
-        .mockImplementation(() => mockedOfficeTable);
+        .mockImplementation(() => mockedOfficeTable as any);
 
-      jest.spyOn(officeTableRefresh, 'getExistingOfficeTableData').mockImplementation(() => ({
+      jest.spyOn(officeTableRefresh, 'getExistingOfficeTableData').mockImplementation(async () => ({
         tableChanged: false,
         startCell: 'startCellTest',
       }));
 
       jest
         .spyOn(officeTableUpdate, 'updateOfficeTable')
-        .mockImplementation(() => mockedOfficeTable);
+        .mockImplementation(() => mockedOfficeTable as any);
 
       jest
         .spyOn(officeTableRefresh, 'getCrosstabStartCell')

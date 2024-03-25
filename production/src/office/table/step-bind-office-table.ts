@@ -1,5 +1,8 @@
 import { officeApiHelper } from '../api/office-api-helper';
 
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { OperationTypes } from '../../operation/operation-type-names';
@@ -14,14 +17,14 @@ class StepBindOfficeTable {
    * This function is subscribed as one of the operation steps with the key BIND_OFFICE_TABLE,
    * therefore should be called only via operation bus.
    *
-   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
-   * @param {String} objectData.bindId Unique id of the Office table used for referencing the table in Excel
-   * @param {Office} operationData.officeTable Reference to Table created by Excel
-   * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
-   * @param {Boolean} operationData.tableChanged Determines if columns number in Excel table has been changed
-   * @param {Boolean} operationData.isTotalsRowVisible Determines if totalRow should be visible
+   * @param objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param objectData.bindId Unique id of the Office table used for referencing the table in Excel
+   * @param operationData.officeTable Reference to Table created by Excel
+   * @param operationData.excelContext Reference to Excel Context used by Excel API functions
+   * @param operationData.tableChanged Determines if columns number in Excel table has been changed
+   * @param operationData.isTotalsRowVisible Determines if totalRow should be visible
    */
-  bindOfficeTable = async (objectData, operationData) => {
+  async bindOfficeTable(objectData: ObjectData, operationData: OperationData): Promise<void> {
     try {
       const { bindId, objectWorkingId, isCrosstab } = objectData;
       const {
@@ -57,7 +60,7 @@ class StepBindOfficeTable {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
     }
-  };
+  }
 }
 
 const stepBindOfficeTable = new StepBindOfficeTable();

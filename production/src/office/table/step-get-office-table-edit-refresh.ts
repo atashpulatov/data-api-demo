@@ -1,5 +1,8 @@
 import getOfficeTableHelper from './get-office-table-helper';
 
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import officeTableCreate from './office-table-create';
@@ -17,16 +20,19 @@ class StepGetOfficeTableEditRefresh {
    * This function is subscribed as one of the operation steps with the key GET_OFFICE_TABLE_EDIT_REFRESH,
    * therefore should be called only via operation bus.
    *
-   * @param {Number} objectData.tableName Name of Excel table created on import
-   * @param {Object} objectData.previousTableDimensions Contains dimensions of Excel table created on import
-   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
-   * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
-   * @param {String} operationData.instanceDefinition Object containing information about MSTR object
-   * @param {Number} operationData.oldBindId Id of the Office table created on import
-   * @param {Object} [operationData.objectEditedData] Contains information modifications to object data
-   * @param {Boolean} [operationData.insertNewWorksheet] Specify if new worksheet has to be created
+   * @param objectData.tableName Name of Excel table created on import
+   * @param objectData.previousTableDimensions Contains dimensions of Excel table created on import
+   * @param objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param operationData.excelContext Reference to Excel Context used by Excel API functions
+   * @param operationData.instanceDefinition Object containing information about MSTR object
+   * @param operationData.oldBindId Id of the Office table created on import
+   * @param operationData.objectEditedData Contains information modifications to object data
+   * @param operationData.insertNewWorksheet Specify if new worksheet has to be created
    */
-  getOfficeTableEditRefresh = async (objectData, operationData) => {
+  async getOfficeTableEditRefresh(
+    objectData: ObjectData,
+    operationData: OperationData
+  ): Promise<void> {
     try {
       console.time('Create or get table - edit or refresh');
       const { tableName, previousTableDimensions, objectWorkingId } = objectData;
@@ -120,7 +126,7 @@ class StepGetOfficeTableEditRefresh {
     } finally {
       console.timeEnd('Create or get table - edit or refresh');
     }
-  };
+  }
 }
 
 const stepGetOfficeTableEditRefresh = new StepGetOfficeTableEditRefresh();

@@ -10,7 +10,7 @@ import officeTableRefresh from './office-table-refresh';
 import officeTableUpdate from './office-table-update';
 
 describe('OfficeTableUpdate', () => {
-  let contextLimitOriginal;
+  let contextLimitOriginal: any;
   beforeAll(() => {
     contextLimitOriginal = mstrObjectRestService.CONTEXT_LIMIT;
   });
@@ -20,6 +20,7 @@ describe('OfficeTableUpdate', () => {
   });
 
   afterAll(() => {
+    // @ts-expect-error
     mstrObjectRestService.CONTEXT_LIMIT = contextLimitOriginal;
   });
 
@@ -36,7 +37,7 @@ describe('OfficeTableUpdate', () => {
     });
 
     const excelContextSyncMock = jest.fn();
-    const excelContextMock = { sync: excelContextSyncMock };
+    const excelContextMock = { sync: excelContextSyncMock } as unknown as Excel.RequestContext;
 
     // when
     try {
@@ -80,7 +81,7 @@ describe('OfficeTableUpdate', () => {
 
     const prevOfficeTableMock = {
       worksheet: 'worksheetTest',
-    };
+    } as unknown as Excel.Table;
 
     jest.spyOn(officeTableUpdate, 'handleSubtotalsFormatting').mockImplementation();
 
@@ -93,7 +94,7 @@ describe('OfficeTableUpdate', () => {
     jest.spyOn(officeRemoveHelper, 'deleteRowsInChunks').mockImplementation();
 
     const excelContextSyncMock = jest.fn();
-    const excelContextMock = { sync: excelContextSyncMock };
+    const excelContextMock = { sync: excelContextSyncMock } as unknown as Excel.RequestContext;
 
     const result = await officeTableUpdate.updateOfficeTable(
       instanceDefinitionMock,
@@ -157,8 +158,8 @@ describe('OfficeTableUpdate', () => {
 
       // when
       await officeTableUpdate.handleSubtotalsFormatting(
-        'excelContextTest',
-        'prevOfficeTableTest',
+        'excelContextTest' as unknown as Excel.RequestContext,
+        'prevOfficeTableTest' as unknown as Excel.Table,
         'mstrTableTest',
         subtotalsAddressesParam
       );
@@ -180,12 +181,16 @@ describe('OfficeTableUpdate', () => {
 
   it('validateAddedRowsRange should work as expected when addedRowsCount === 0', async () => {
     // given
-    jest.spyOn(officeTableUpdate, 'getAddedRowsCount').mockReturnValue(0);
+    jest.spyOn(officeTableUpdate, 'getAddedRowsCount').mockResolvedValue(0);
 
     // when
-    await officeTableUpdate.validateAddedRowsRange('excelContextTest', 'newRowsCountTest', {
-      rows: 'rowsTest',
-    });
+    await officeTableUpdate.validateAddedRowsRange(
+      'excelContextTest' as unknown as Excel.RequestContext,
+      1,
+      {
+        rows: 'rowsTest',
+      } as unknown as Excel.Table
+    );
 
     // then
     expect(officeTableUpdate.getAddedRowsCount).toBeCalledTimes(1);
@@ -198,7 +203,9 @@ describe('OfficeTableUpdate', () => {
 
   it('validateAddedRowsRange should work as expected when addedRowsCount > 0', async () => {
     // given
-    jest.spyOn(officeTableUpdate, 'getAddedRowsCount').mockReturnValue('getAddedRowsCountTest');
+    jest
+      .spyOn(officeTableUpdate, 'getAddedRowsCount')
+      .mockReturnValue('getAddedRowsCountTest' as any);
 
     const getRowsBelowMock = jest.fn().mockReturnValue('bottomRangeTest');
     const prevOfficeTableMock = {
@@ -206,14 +213,14 @@ describe('OfficeTableUpdate', () => {
       getRange: jest.fn().mockReturnValue({
         getRowsBelow: getRowsBelowMock,
       }),
-    };
+    } as unknown as Excel.Table;
 
     jest.spyOn(officeTableHelperRange, 'checkRangeValidity').mockImplementation();
 
     // when
     await officeTableUpdate.validateAddedRowsRange(
-      'excelContextTest',
-      'newRowsCountTest',
+      'excelContextTest' as unknown as Excel.RequestContext,
+      'newRowsCountTest' as unknown as number,
       prevOfficeTableMock
     );
 
@@ -249,9 +256,9 @@ describe('OfficeTableUpdate', () => {
 
       // when
       const result = await officeTableUpdate.getAddedRowsCount(
-        'excelContextTest',
+        'excelContextTest' as unknown as Excel.RequestContext,
         newRowsCountParam,
-        'prevOfficeTableRowsTest'
+        'prevOfficeTableRowsTest' as unknown as Excel.TableRowCollection
       );
 
       // then
@@ -268,6 +275,8 @@ describe('OfficeTableUpdate', () => {
 
   it('createHeadersForCrosstab should work as expected', () => {
     // given
+    const prevOfficeTableMock = {} as unknown as Excel.Table;
+
     jest
       .spyOn(officeApiCrosstabHelper, 'getCrosstabHeaderDimensions')
       .mockReturnValue('crosstabHeaderDimensionsTest');
@@ -275,11 +284,7 @@ describe('OfficeTableUpdate', () => {
     jest.spyOn(officeApiCrosstabHelper, 'createCrosstabHeaders').mockImplementation();
 
     // when
-    officeTableUpdate.createHeadersForCrosstab(
-      'sheetTest',
-      { mstrTable: 'mstrTableTest' },
-      'startCellTest'
-    );
+    officeTableUpdate.createHeadersForCrosstab(prevOfficeTableMock, { mstrTable: 'mstrTableTest' });
 
     // then
     expect(officeApiCrosstabHelper.getCrosstabHeaderDimensions).toBeCalledTimes(1);
@@ -310,12 +315,12 @@ describe('OfficeTableUpdate', () => {
             suspendApiCalculationUntilNextSync: jest.fn(),
           },
         },
-      };
+      } as unknown as Excel.RequestContext;
 
       const getHeaderRowRangeMock = {};
       const prevOfficeTableMock = {
         getHeaderRowRange: jest.fn().mockReturnValue(getHeaderRowRangeMock),
-      };
+      } as unknown as Excel.Table;
 
       // when
       officeTableUpdate.setHeaderValuesNoCrosstab(
