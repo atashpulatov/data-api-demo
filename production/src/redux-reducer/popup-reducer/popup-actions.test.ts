@@ -1,17 +1,15 @@
-import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
-import { visualizationInfoService } from '../mstr-object/visualization-info-service';
-import { officeApiHelper } from '../office/api/office-api-helper';
-import officeReducerHelper from '../office/store/office-reducer-helper';
-import { popupHelper } from './popup-helper';
+import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
+import { visualizationInfoService } from '../../mstr-object/visualization-info-service';
+import { officeApiHelper } from '../../office/api/office-api-helper';
+import officeReducerHelper from '../../office/store/office-reducer-helper';
+import { popupHelper } from '../../popup/popup-helper';
 
-import { errorService } from '../error/error-handler';
-import {
-  popupActions as actions,
-  RESET_STATE,
-  SET_PREPARED_REPORT,
-  SET_REPORT_N_FILTERS,
-} from '../redux-reducer/popup-reducer/popup-actions';
-import { popupController } from './popup-controller';
+import { errorService } from '../../error/error-handler';
+import { popupActions as actions } from './popup-actions';
+import { popupController } from '../../popup/popup-controller';
+import { PopupActionTypes } from './popup-reducer-types';
+import { ObjectData } from '../../types/object-types';
+import { PromptsAnswer } from '../answers-reducer/answers-reducer-types';
 
 jest.mock('../office/api/office-api-helper');
 jest.mock('../authentication/authentication-helper');
@@ -46,9 +44,9 @@ describe('Popup actions', () => {
       // given
       const listener = jest.fn();
       // when
-      actions.resetState(true)(listener);
+      actions.resetState()(listener);
       // then
-      expect(listener).toHaveBeenCalledWith({ type: RESET_STATE });
+      expect(listener).toHaveBeenCalledWith({ type: PopupActionTypes.RESET_STATE });
     });
   });
 
@@ -57,6 +55,7 @@ describe('Popup actions', () => {
     const bindId = 'bindId';
     const report = { bindId, objectType: 'whatever' };
     const error = new Error('test error');
+    // @ts-expect-error
     officeApiHelper.checkStatusOfSessions.mockImplementationOnce(() => {
       throw error;
     });
@@ -87,6 +86,7 @@ describe('Popup actions', () => {
     };
     const listener = jest.fn();
     const spyPrepareDossierForEdit = jest.spyOn(actions, 'prepareDossierForEdit');
+    // @ts-expect-error
     officeReducerHelper.getObjectFromObjectReducerByBindId.mockReturnValueOnce(returnedValue);
     // when
     await actions.callForEditDossier(report)(listener);
@@ -102,6 +102,7 @@ describe('Popup actions', () => {
     const bindId = 'bindId';
     const report = { bindId, objectType: 'whatever' };
     const error = new Error('test error');
+    // @ts-expect-error
     officeApiHelper.checkStatusOfSessions.mockImplementationOnce(() => {
       throw error;
     });
@@ -132,6 +133,7 @@ describe('Popup actions', () => {
     };
     const listener = jest.fn();
     const spyPrepareDossierForReprompt = jest.spyOn(actions, 'prepareDossierForReprompt');
+    // @ts-expect-error
     officeReducerHelper.getObjectFromObjectReducerByBindId.mockReturnValueOnce(returnedValue);
     // when
     await actions.callForRepromptDossier(report)(listener);
@@ -150,9 +152,11 @@ describe('Popup actions', () => {
       projectId: 'projectId',
       instanceId: 'instanceId',
       body: {},
-      promptsAnswers: [],
+      promptsAnswers: [] as PromptsAnswer[],
       isPrompted: false,
     };
+
+    // @ts-expect-error
     officeReducerHelper.getObjectFromObjectReducerByBindId.mockReturnValueOnce(returnedValue);
     const listener = jest.fn();
     // when
@@ -160,7 +164,7 @@ describe('Popup actions', () => {
     // then
     expect(officeReducerHelper.getObjectFromObjectReducerByBindId).toBeCalledWith(bindId);
     expect(listener).toHaveBeenCalledWith({
-      type: SET_REPORT_N_FILTERS,
+      type: PopupActionTypes.SET_REPORT_N_FILTERS,
       editedObject: returnedValue,
     });
     expect(popupController.runEditFiltersPopup).toBeCalledWith(report);
@@ -175,9 +179,10 @@ describe('Popup actions', () => {
       projectId: 'projectId',
       instanceId: 'instanceId',
       body: {},
-      promptsAnswers: [],
+      promptsAnswers: [] as PromptsAnswer[],
       isPrompted: true,
     };
+    // @ts-expect-error
     officeReducerHelper.getObjectFromObjectReducerByBindId.mockReturnValueOnce(returnedValue);
     const listener = jest.fn();
     // when
@@ -185,7 +190,7 @@ describe('Popup actions', () => {
     // then
     expect(officeReducerHelper.getObjectFromObjectReducerByBindId).toBeCalledWith(bindId);
     expect(listener).toHaveBeenCalledWith({
-      type: SET_REPORT_N_FILTERS,
+      type: PopupActionTypes.SET_REPORT_N_FILTERS,
       editedObject: returnedValue,
     });
     expect(popupController.runRepromptPopup).toBeCalledWith(report);
@@ -200,9 +205,10 @@ describe('Popup actions', () => {
       projectId: 'projectId',
       instanceId: 'instanceId',
       body: {},
-      promptsAnswers: [],
+      promptsAnswers: [] as PromptsAnswer[],
       isPrompted: true,
     };
+    // @ts-expect-error
     officeReducerHelper.getObjectFromObjectReducerByBindId.mockReturnValueOnce(returnedValue);
     const listener = jest.fn();
     // when
@@ -210,7 +216,7 @@ describe('Popup actions', () => {
     // then
     expect(officeReducerHelper.getObjectFromObjectReducerByBindId).toBeCalledWith(bindId);
     expect(listener).toHaveBeenCalledWith({
-      type: SET_REPORT_N_FILTERS,
+      type: PopupActionTypes.SET_REPORT_N_FILTERS,
       editedObject: returnedValue,
     });
     expect(popupController.runRepromptPopup).toBeCalledWith(report, false);
@@ -221,6 +227,7 @@ describe('Popup actions', () => {
     const bindId = 'bindId';
     const report = { bindId, objectType: 'whatever' };
     const error = new Error('test error');
+    // @ts-expect-error
     officeApiHelper.checkStatusOfSessions.mockImplementationOnce(() => {
       throw error;
     });
@@ -240,7 +247,7 @@ describe('Popup actions', () => {
     actions.preparePromptedReport(reportInstance, chosenObjectData)(listener);
     // then
     expect(listener).toHaveBeenCalledWith({
-      type: SET_PREPARED_REPORT,
+      type: PopupActionTypes.SET_PREPARED_REPORT,
       instanceId: reportInstance,
       chosenObjectData,
     });
@@ -262,7 +269,7 @@ describe('Popup actions', () => {
       visualizationInfo: { visualizationKey: oldVisKey },
       mstrObjectType: 'mstrObjectType',
       instanceId,
-    };
+    } as unknown as ObjectData;
     const body = {
       ...manipulationsXML,
       disableManipulationsAutoSaving: true,
@@ -293,8 +300,9 @@ describe('Popup actions', () => {
       projectId,
       visualizationInfo: newVizInfo,
     };
-
+    // @ts-expect-error
     createDossierInstance.mockReturnValueOnce(instanceId);
+    // @ts-expect-error
     getVisualizationInfo.mockReturnValueOnce(newVizInfo);
 
     // when
@@ -320,13 +328,13 @@ describe('Popup actions', () => {
       manipulationsXML,
       visualizationInfo: { visualizationKey: oldVisKey },
       mstrObjectType: 'mstrObjectType',
-    };
+    } as unknown as ObjectData;
     const body = {
       ...manipulationsXML,
       disableManipulationsAutoSaving: true,
       persistViewState: true,
     };
-    const newVizInfo = undefined;
+    const newVizInfo: any = undefined;
 
     const newEditedDossier = {
       instanceId: 'instanceId',
@@ -339,7 +347,9 @@ describe('Popup actions', () => {
       visualizationInfo: { visualizationKey: oldVisKey },
     };
 
+    // @ts-expect-error
     createDossierInstance.mockReturnValueOnce(instanceId);
+    // @ts-expect-error
     getVisualizationInfo.mockReturnValueOnce(newVizInfo);
 
     // when
@@ -353,7 +363,7 @@ describe('Popup actions', () => {
 
   it('should do callForDuplicate for duplication with edit for report', async () => {
     // object
-    const object = { mstrObjectType: { name: 'report' } };
+    const object = { mstrObjectType: { name: 'report' } } as ObjectData;
     const listener = jest.fn();
     const reportParams = {
       duplicateMode: true,
@@ -364,7 +374,7 @@ describe('Popup actions', () => {
     // then
     expect(officeApiHelper.checkStatusOfSessions).toBeCalled();
     expect(listener).toHaveBeenCalledWith({
-      type: SET_REPORT_N_FILTERS,
+      type: PopupActionTypes.SET_REPORT_N_FILTERS,
       editedObject: object,
     });
     expect(popupController.runEditFiltersPopup).toBeCalledWith(reportParams);
@@ -372,7 +382,7 @@ describe('Popup actions', () => {
 
   it('should do callForDuplicate for duplication with edit for prompted report', async () => {
     // object
-    const object = { mstrObjectType: { name: 'report' }, isPrompted: 2 };
+    const object = { mstrObjectType: { name: 'report' }, isPrompted: 2 } as unknown as ObjectData;
     const listener = jest.fn();
     const reportParams = {
       duplicateMode: true,
@@ -383,7 +393,7 @@ describe('Popup actions', () => {
     // then
     expect(officeApiHelper.checkStatusOfSessions).toBeCalled();
     expect(listener).toHaveBeenCalledWith({
-      type: SET_REPORT_N_FILTERS,
+      type: PopupActionTypes.SET_REPORT_N_FILTERS,
       editedObject: object,
     });
     expect(popupController.runRepromptPopup).toBeCalledWith(reportParams);
@@ -405,7 +415,7 @@ describe('Popup actions', () => {
       visualizationInfo: { visualizationKey: oldVisKey },
       mstrObjectType: 'mstrObjectType',
       instanceId,
-    };
+    } as unknown as ObjectData;
     const body = {
       ...manipulationsXML,
       disableManipulationsAutoSaving: true,
@@ -437,7 +447,9 @@ describe('Popup actions', () => {
       visualizationInfo: newVizInfo,
     };
 
+    // @ts-expect-error
     createDossierInstance.mockReturnValueOnce(instanceId);
+    // @ts-expect-error
     getVisualizationInfo.mockReturnValueOnce(newVizInfo);
 
     // when
@@ -451,11 +463,11 @@ describe('Popup actions', () => {
 
   it('should do callForDuplicate for duplication with edit for dossier visualization', async () => {
     // object
-    const object = { mstrObjectType: { name: 'visualization' } };
+    const object = { mstrObjectType: { name: 'visualization' } } as unknown as ObjectData;
     const listener = jest.fn();
     const spyPrepareDossierForEdit = jest
       .spyOn(actions, 'prepareDossierForEdit')
-      .mockImplementationOnce(paramObject => {
+      .mockImplementationOnce(async paramObject => {
         paramObject.test = 'test';
         delete paramObject.mstrObjectType;
         delete paramObject.objectType;
@@ -471,7 +483,7 @@ describe('Popup actions', () => {
     expect(officeApiHelper.checkStatusOfSessions).toBeCalled();
     expect(spyPrepareDossierForEdit).toBeCalledWith(object);
     expect(listener).toHaveBeenCalledWith({
-      type: SET_REPORT_N_FILTERS,
+      type: PopupActionTypes.SET_REPORT_N_FILTERS,
       editedObject: newObject,
     });
     expect(popupController.runEditDossierPopup).toBeCalledWith(reportParams);

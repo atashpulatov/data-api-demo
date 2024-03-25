@@ -591,7 +591,7 @@ const mapStateToProps = (state: RootState): any => {
     dossierOpenRequested,
     isPrompted,
   } = navigationTree;
-  // @ts-expect-error
+
   const popupState = popupReducer.editedObject;
   const { promptsAnswers } = state.navigationTree;
   const { supportForms, reusePromptAnswers } = officeReducer;

@@ -4,6 +4,7 @@ export interface PopupStateState {
   popupType?: PopupTypeEnum;
   isDataOverviewOpen?: boolean;
   filteredPageByLinkId?: string;
+  isReprompt?: boolean;
 }
 
 export enum PopupStateActionTypes {

@@ -1,15 +1,18 @@
 import {
-  RESET_STATE,
-  SET_PREPARED_REPORT,
-  SET_REPORT_N_FILTERS,
-  SWITCH_IMPORT_SUBTOTALS_ON_EDIT,
-} from '../redux-reducer/popup-reducer/popup-actions';
-import { initialState, popupReducer } from '../redux-reducer/popup-reducer/popup-reducer';
+  EditedObject,
+  PopupActionTypes,
+  ResetStateAction,
+  SetPreparedReportAction,
+  SetReportNFiltersAction,
+  SwitchImportSubtotalsOnEditAction,
+} from './popup-reducer-types';
+
+import { initialState, popupReducer } from './popup-reducer';
 
 describe('Popup Reducer', () => {
   it('should return proper state in case of RESET_STATE action', () => {
     // given
-    const action = { type: RESET_STATE };
+    const action: ResetStateAction = { type: PopupActionTypes.RESET_STATE };
     // when
     const newState = popupReducer(initialState, action);
     // then
@@ -19,8 +22,8 @@ describe('Popup Reducer', () => {
   it('should return proper state in case of SET_REPORT_N_FILTERS action', () => {
     // given
     const editedObject = 'editedObject';
-    const action = {
-      type: SET_REPORT_N_FILTERS,
+    const action: SetReportNFiltersAction = {
+      type: PopupActionTypes.SET_REPORT_N_FILTERS,
       editedObject,
     };
     // when
@@ -33,8 +36,8 @@ describe('Popup Reducer', () => {
     // given
     const instanceId = 'id';
     const chosenObjectData = { newData: 'data' };
-    const action = {
-      type: SET_PREPARED_REPORT,
+    const action: SetPreparedReportAction = {
+      type: PopupActionTypes.SET_PREPARED_REPORT,
       instanceId,
       chosenObjectData,
     };
@@ -49,12 +52,12 @@ describe('Popup Reducer', () => {
 
   it('should return proper state in case of SWITCH_IMPORT_SUBTOTALS_ON_EDIT action, no initial subtotalsInfo', () => {
     // given
-    const action = {
-      type: SWITCH_IMPORT_SUBTOTALS_ON_EDIT,
+    const action: SwitchImportSubtotalsOnEditAction = {
+      type: PopupActionTypes.SWITCH_IMPORT_SUBTOTALS_ON_EDIT,
       data: { newSubtotalProperty: 'testNewSubtotalProperty' },
     };
 
-    initialState.editedObject = {};
+    initialState.editedObject = {} as EditedObject;
 
     // when
     const newState = popupReducer(initialState, action);
@@ -65,14 +68,14 @@ describe('Popup Reducer', () => {
 
   it('should return proper state in case of SWITCH_IMPORT_SUBTOTALS_ON_EDIT action', () => {
     // given
-    const action = {
-      type: SWITCH_IMPORT_SUBTOTALS_ON_EDIT,
+    const action: SwitchImportSubtotalsOnEditAction = {
+      type: PopupActionTypes.SWITCH_IMPORT_SUBTOTALS_ON_EDIT,
       data: { newSubtotalProperty: 'testNewSubtotalProperty' },
     };
 
     initialState.editedObject = {
       subtotalsInfo: { initialSubtotalProperty: 'testInitialSubtotalProperty' },
-    };
+    } as unknown as EditedObject;
 
     const resultState = {
       subtotalsInfo: {
@@ -90,13 +93,13 @@ describe('Popup Reducer', () => {
 
   it('should return undefined editedObject after SWITCH_IMPORT_SUBTOTALS_ON_EDIT action was called on undefined editedObject', () => {
     // given
-    const action = {
-      type: SWITCH_IMPORT_SUBTOTALS_ON_EDIT,
+    const action: SwitchImportSubtotalsOnEditAction = {
+      type: PopupActionTypes.SWITCH_IMPORT_SUBTOTALS_ON_EDIT,
       data: { newSubtotalProperty: 'testNewSubtotalProperty' },
     };
 
     initialState.editedObject = undefined;
-    initialState.else = '123';
+    initialState.preparedInstance = 'preparedInstance';
 
     // when
     const newState = popupReducer(initialState, action);

@@ -23,6 +23,7 @@ export interface ObjectData {
     type: number | string;
   };
   refreshDate?: number;
+  // TODO fix type
   visualizationInfo?: false | VisualizationInfo;
   isSelected?: boolean;
   // TODO remove when type is finalized
