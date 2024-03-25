@@ -47,8 +47,8 @@ export const ConfirmationNotConnected: React.FC<ConfirmationProps> = ({
   const confirmationRef = React.useRef(null);
 
   React.useEffect(() => {
-    const closeSettingsOnEsc = ({ keyCode }: KeyboardEvent): void => {
-      keyCode === 27 && toggleIsConfirmFlag();
+    const closeSettingsOnEsc = ({ key }: KeyboardEvent): void => {
+      key === 'Escape' && toggleIsConfirmFlag();
     };
     const closeSettingsOnClick = ({ target }: { target: EventTarget }): void => {
       confirmationRef.current && !confirmationRef.current.contains(target) && toggleIsConfirmFlag();
