@@ -3,8 +3,8 @@ import { officeRemoveHelper } from '../office/remove/office-remove-helper';
 import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 
-import { ObjectData } from '../redux-reducer/object-reducer/object-reducer-types';
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../types/object-types';
 
 import { errorService } from '../error/error-handler';
 import { deleteObjectNotification } from '../redux-reducer/notification-reducer/notification-action-creators';

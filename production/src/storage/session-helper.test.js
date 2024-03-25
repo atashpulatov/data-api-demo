@@ -7,9 +7,10 @@ import { sessionHelper } from './session-helper';
 
 import { reduxStore } from '../store';
 
+import { SessionActionTypes } from '../redux-reducer/session-reducer/session-reducer-types';
+
 import { errorService } from '../error/error-handler';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
-import { sessionProperties } from '../redux-reducer/session-reducer/session-properties';
 import { sessionReducer } from '../redux-reducer/session-reducer/session-reducer';
 import { ErrorMessages } from '../error/constants';
 
@@ -83,7 +84,7 @@ describe('sessionHelper', () => {
     sessionActions.logIn(authToken);
     // then
     expect(dispatchSpy).toHaveBeenCalledWith({
-      type: sessionProperties.actions.loggedIn,
+      type: SessionActionTypes.LOGGED_IN,
       authToken,
     });
   });
@@ -97,8 +98,8 @@ describe('sessionHelper', () => {
 
     // then
     expect(dispatchSpy).toHaveBeenCalledWith({
-      type: sessionProperties.actions.logIn,
-      values: { envUrl: givenValues.envUrl },
+      type: SessionActionTypes.LOG_IN,
+      logInValues: { envUrl: givenValues.envUrl },
     });
   });
 

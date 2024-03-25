@@ -5,15 +5,14 @@ import instanceDefinitionHelper from '../mstr-object/instance/instance-definitio
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { pageByHelper } from '../page-by/page-by-helper';
 
-import { ObjectData } from '../redux-reducer/object-reducer/object-reducer-types';
+import { PopupTypeEnum } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
+import { ObjectData } from '../types/object-types';
 import { DialogResponse, ReportParams } from './popup-controller-types';
 
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { errorService } from '../error/error-handler';
-import { PopupTypeEnum } from '../home/popup-type-enum';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
-import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 import {
   duplicateRequested,
   editRequested,
@@ -21,6 +20,7 @@ import {
 } from '../redux-reducer/operation-reducer/operation-actions';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
+import { DisplayAttrFormNames } from '../mstr-object/constants';
 
 const URL = `${window.location.href}`;
 
@@ -329,10 +329,11 @@ class PopupController {
   };
 
   handleUpdateCommand = async (response: DialogResponse): Promise<void> => {
-    const objectData = {
+    const objectData: ObjectData = {
       name: response.chosenObjectName,
       objectId: response.chosenObjectId,
       projectId: response.projectId,
+      // @ts-expect-error TODO fix type
       mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(response.chosenObjectSubtype),
       body: response.body,
       dossierData: response.dossierData,
@@ -441,13 +442,13 @@ class PopupController {
       (report: ObjectData) => report.bindId === reportParams.bindId
     );
     const originalValues = objects[indexOfOriginalValues];
-    const { displayAttrFormNames } = officeProperties;
+
     if (originalValues.displayAttrFormNames) {
       return { ...originalValues };
     }
     return {
       ...originalValues,
-      displayAttrFormNames: displayAttrFormNames.automatic,
+      displayAttrFormNames: DisplayAttrFormNames.AUTOMATIC,
     };
   };
 
