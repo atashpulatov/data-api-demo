@@ -4,12 +4,13 @@ import { officeApiHelper } from '../../office/api/office-api-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { popupHelper } from '../../popup/popup-helper';
 
-import { errorService } from '../../error/error-handler';
-import { popupActions as actions } from './popup-actions';
-import { popupController } from '../../popup/popup-controller';
-import { PopupActionTypes } from './popup-reducer-types';
 import { ObjectData } from '../../types/object-types';
 import { PromptsAnswer } from '../answers-reducer/answers-reducer-types';
+import { PopupActionTypes } from './popup-reducer-types';
+
+import { errorService } from '../../error/error-handler';
+import { popupController } from '../../popup/popup-controller';
+import { popupActions as actions } from './popup-actions';
 
 jest.mock('../office/api/office-api-helper');
 jest.mock('../authentication/authentication-helper');
