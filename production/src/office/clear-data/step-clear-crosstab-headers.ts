@@ -1,6 +1,9 @@
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
@@ -13,12 +16,12 @@ class StepClearCrosstabHeaders {
    * This function is subscribed as one of the operation steps with the key CLEAR_CROSSTAB_HEADERS,
    * therefore should be called only via operation bus.
    *
-   * @param {Object} objectData Contaisn data about object on which operation was called
-   * @param {Number} operationData.objectWorkingId Unique Id of the object allowing to reference specific object
-   * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
-   * @param {Boolean} operationData.objectExist Specify if the object existed when operation was started
+   * @param objectData Contaisn data about object on which operation was called
+   * @param operationData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param operationData.excelContext Reference to Excel Context used by Excel API functions
+   * @param operationData.objectExist Specify if the object existed when operation was started
    */
-  clearCrosstabHeaders = async (objectData, operationData) => {
+  async clearCrosstabHeaders(objectData: ObjectData, operationData: OperationData): Promise<void> {
     const { objectWorkingId, excelContext, objectExist } = operationData;
 
     try {
@@ -53,7 +56,7 @@ class StepClearCrosstabHeaders {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
     }
-  };
+  }
 }
 
 const stepClearCrosstabHeaders = new StepClearCrosstabHeaders();

@@ -1,6 +1,9 @@
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import stepClearCrosstabHeaders from './step-clear-crosstab-headers';
@@ -20,17 +23,17 @@ describe('StepClearCrosstabHeaders', () => {
     'clearCrosstabHeaders should works correctly',
     async ({ objectExist, isCrosstab, calledClearHeaders }) => {
       // given
-      const objectData = { isCrosstab, bindId: 1 };
+      const objectData = { isCrosstab, bindId: 1 } as unknown as ObjectData;
       const operationData = {
         objectWorkingId: 1,
         excelContext: { sync: jest.fn() },
         objectExist,
-      };
+      } as unknown as OperationData;
       const mockedGetHeaderRowRange = jest.fn().mockReturnValue({ format: { font: {} } });
 
       const mockedGetTable = jest
         .spyOn(officeApiHelper, 'getTable')
-        .mockReturnValue({ getHeaderRowRange: mockedGetHeaderRowRange });
+        .mockReturnValue({ getHeaderRowRange: mockedGetHeaderRowRange } as any);
       const mockedClearCrosstabRange = jest
         .spyOn(officeApiCrosstabHelper, 'clearCrosstabRange')
         .mockImplementation();
@@ -55,12 +58,12 @@ describe('StepClearCrosstabHeaders', () => {
 
   it('should handle error on clearCrosstabHeaders', async () => {
     // given
-    const objectData = { isCrosstab: true, bindId: 1 };
+    const objectData = { isCrosstab: true, bindId: 1 } as unknown as ObjectData;
     const operationData = {
       objectWorkingId: 1,
       excelContext: { sync: jest.fn() },
       objectExist: true,
-    };
+    } as unknown as OperationData;
     const error = new Error('error');
 
     jest.spyOn(console, 'error').mockImplementation();

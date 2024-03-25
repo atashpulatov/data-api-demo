@@ -1,5 +1,8 @@
 import officeReducerHelper from '../store/office-reducer-helper';
 
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
@@ -14,7 +17,7 @@ class StepCompleteClearData {
    * @param {Object} objectData Contaisn data about object on which operation was called
    * @param {Number} operationData.objectWorkingId Unique Id of the object allowing to reference specific object
    */
-  completeClearData = async (objectData, operationData) => {
+  async completeClearData(objectData: ObjectData, operationData: OperationData): Promise<void> {
     const { objectWorkingId } = operationData;
     try {
       const operationsList = officeReducerHelper.getOperationsListFromOperationReducer();
@@ -26,7 +29,7 @@ class StepCompleteClearData {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData);
     }
-  };
+  }
 }
 
 const stepCompleteClearData = new StepCompleteClearData();

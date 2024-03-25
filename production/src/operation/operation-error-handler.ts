@@ -33,7 +33,7 @@ class OperationErrorHandler {
   async handleOperationError(
     objectData: ObjectData,
     operationData: OperationData,
-    error: any
+    error?: any
   ): Promise<void> {
     const callback = this.getCallback(objectData, operationData);
     if (callback) {

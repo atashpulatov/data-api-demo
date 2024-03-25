@@ -1,6 +1,9 @@
 import { officeApiHelper } from '../api/office-api-helper';
 import { officeRemoveHelper } from '../remove/office-remove-helper';
 
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import stepCheckObjectStatus from './step-check-object-status';
@@ -12,8 +15,8 @@ describe('StepCheckObjectStatus', () => {
 
   it('checkObjectStatus should works correctly', async () => {
     // given
-    const objectData = {};
-    const operationData = { objectWorkingId: 1 };
+    const objectData = {} as ObjectData;
+    const operationData = { objectWorkingId: 1 } as unknown as OperationData;
 
     const mockedExcelContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation();
     const mockedCheckObject = jest
@@ -40,7 +43,7 @@ describe('StepCheckObjectStatus', () => {
   it('should handle error on checkObjectStatus', async () => {
     // given
     const objectData = { objectWorkingId: 1 };
-    const operationData = {};
+    const operationData = {} as OperationData;
     const error = new Error('error');
 
     jest.spyOn(console, 'error').mockImplementation();

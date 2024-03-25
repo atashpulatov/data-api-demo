@@ -1,7 +1,9 @@
+import { ObjectData } from '../../types/object-types';
+
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepBackupObjectData {
-  backupObjectData = objectData => {
+  backupObjectData = (objectData: ObjectData): void => {
     const { objectWorkingId } = objectData;
     const backupObjectData = JSON.parse(JSON.stringify(objectData));
     operationStepDispatcher.updateOperation({

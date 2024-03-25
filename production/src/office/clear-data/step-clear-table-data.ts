@@ -1,5 +1,8 @@
 import { officeRemoveHelper } from '../remove/office-remove-helper';
 
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
@@ -17,7 +20,7 @@ class StepClearTableData {
    * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
    * @param {Boolean} operationData.objectExist Specify if the object existed when operation was started
    */
-  clearTableData = async (objectData, operationData) => {
+  async clearTableData(objectData: ObjectData, operationData: OperationData): Promise<void> {
     const { objectWorkingId, excelContext, objectExist } = operationData;
     try {
       if (objectExist) {
@@ -29,7 +32,7 @@ class StepClearTableData {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
     }
-  };
+  }
 }
 
 const stepClearTableData = new StepClearTableData();
