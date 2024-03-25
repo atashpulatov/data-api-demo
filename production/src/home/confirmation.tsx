@@ -34,11 +34,13 @@ export const ConfirmationNotConnected: React.FC<ConfirmationProps> = ({
     const ua = window.navigator.userAgent;
     // this is fix IE11 - it didn't handle z-index properties correctly
     if (ua.indexOf('MSIE') > 0 || !!navigator.userAgent.match(/Trident.*rv:11\./)) {
-      const element = document.querySelector('.confirm-container') as HTMLElement;
-      element.style.zIndex = '-1';
-      setTimeout(() => {
-        element.style.zIndex = '3000';
-      }, 100);
+      const element = document.querySelector('.confirm-container');
+      if (element instanceof HTMLElement) {
+        element.style.zIndex = '-1';
+        setTimeout(() => {
+          element.style.zIndex = '3000';
+        }, 100);
+      }
     }
   });
 
