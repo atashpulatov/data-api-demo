@@ -1,21 +1,28 @@
-import { notificationService } from './notification-service';
+import { ObjectNotificationTypes } from '@mstr/connector-components';
 
-import { OfficeActionsTypes } from '../redux-reducer/office-reducer/office-reducer-types';
+import { notificationService } from '../../notification/notification-service';
 
-import { OperationSteps } from '../operation/operation-steps';
-import { OperationTypes } from '../operation/operation-type-names';
 import {
-  CREATE_GLOBAL_NOTIFICATION,
-  DELETE_NOTIFICATION,
-  DISPLAY_NOTIFICATION_WARNING,
-  REMOVE_GLOBAL_NOTIFICATION,
-} from '../redux-reducer/notification-reducer/notification-actions';
-import { notificationReducer } from '../redux-reducer/notification-reducer/notification-reducer';
+  ClearGlobalNotificationAction,
+  CreateGlobalNotificationAction,
+  DeleteObjectNotificationAction,
+  DisplayNotificationCompletedAction,
+  DisplayObjectWarningAction,
+  ImportOperationAction,
+  MoveNotificationToInProgressAction,
+  NotificationActionTypes,
+  NotificationState,
+  RestoreAllNotificationsAction,
+  ToggleSecuredFlagAction,
+} from './notification-reducer-types';
+
+import { OperationTypes } from '../../operation/operation-type-names';
+import { notificationReducer } from './notification-reducer';
 
 describe('Notification reducer', () => {
   it('should get default state if one is not provided', () => {
     // given
-    const action = {};
+    const action: any = {};
 
     // when
     const resultState = notificationReducer(undefined, action);
@@ -28,10 +35,11 @@ describe('Notification reducer', () => {
   });
 
   describe('global notification', () => {
-    const initialState = {
+    const initialState: NotificationState = {
       notifications: [],
       globalNotification: { type: '' },
     };
+
     describe('createGlobalNotification', () => {
       it('should create global notification if there is none', () => {
         // given
@@ -39,8 +47,8 @@ describe('Notification reducer', () => {
           type: 'some type',
           someProp: 'some value',
         };
-        const action = {
-          type: CREATE_GLOBAL_NOTIFICATION,
+        const action: CreateGlobalNotificationAction = {
+          type: NotificationActionTypes.CREATE_GLOBAL_NOTIFICATION,
           payload: expectedNotification,
         };
         // when
@@ -50,7 +58,7 @@ describe('Notification reducer', () => {
       });
       it('should overwrite existing global notification if there is one', () => {
         // given
-        const initialStateExistingGlobal = {
+        const initialStateExistingGlobal: NotificationState = {
           notifications: [],
           globalNotification: { type: 'some notification' },
         };
@@ -58,10 +66,12 @@ describe('Notification reducer', () => {
           type: 'some type',
           someProp: 'some value',
         };
-        const action = {
-          type: CREATE_GLOBAL_NOTIFICATION,
+
+        const action: CreateGlobalNotificationAction = {
+          type: NotificationActionTypes.CREATE_GLOBAL_NOTIFICATION,
           payload: expectedNotification,
         };
+
         // when
         const resultState = notificationReducer(initialStateExistingGlobal, action);
         // then
@@ -72,11 +82,13 @@ describe('Notification reducer', () => {
     describe('removeGlobalNotification', () => {
       it('should clear existing notification', () => {
         // given
-        const initialStateExistingGlobal = {
+        const initialStateExistingGlobal: NotificationState = {
           notifications: [],
-          globalNotification: { type: 'some type', someProp: 'some value' },
+          globalNotification: { type: 'some type', message: 'some value' },
         };
-        const action = { type: REMOVE_GLOBAL_NOTIFICATION };
+        const action: ClearGlobalNotificationAction = {
+          type: NotificationActionTypes.REMOVE_GLOBAL_NOTIFICATION,
+        };
         // when
         const resultState = notificationReducer(initialStateExistingGlobal, action);
         // then
@@ -86,12 +98,12 @@ describe('Notification reducer', () => {
   });
 
   describe('object based notifications', () => {
-    const initialState = {
+    const initialState: any = {
       empty: { notifications: [], globalNotification: { type: '' } },
       singleWarning: {
         notifications: [
           {
-            objectWorkingId: 'someId1',
+            objectWorkingId: 1,
             type: 'warning',
             details: 'some details',
           },
@@ -100,7 +112,7 @@ describe('Notification reducer', () => {
       singleImport: {
         notifications: [
           {
-            objectWorkingId: 'someId1',
+            objectWorkingId: 1,
             type: 'import',
           },
         ],
@@ -108,41 +120,41 @@ describe('Notification reducer', () => {
       multiple: {
         notifications: [
           {
-            objectWorkingId: 'someId1',
+            objectWorkingId: 1,
             type: 'cleared',
           },
           {
-            objectWorkingId: 'someId2',
+            objectWorkingId: 2,
             type: 'import',
             details: 'some details',
           },
           {
-            objectWorkingId: 'someId3',
+            objectWorkingId: 3,
             type: 'import',
           },
         ],
       },
     };
 
-    const initialStateProgress = {
+    const initialStateProgress: NotificationState = {
       notifications: [
         {
           objectWorkingId: 12,
           operationType: OperationTypes.IMPORT_OPERATION,
           title: 'Pending',
-          type: 'PROGRESS',
+          type: ObjectNotificationTypes.PROGRESS,
         },
         {
           objectWorkingId: 123,
           operationType: OperationTypes.REMOVE_OPERATION,
           title: 'Pending',
-          type: 'PROGRESS',
+          type: ObjectNotificationTypes.PROGRESS,
         },
         {
           objectWorkingId: 1234,
           operationType: OperationTypes.CLEAR_DATA_OPERATION,
           title: 'Pending',
-          type: 'PROGRESS',
+          type: ObjectNotificationTypes.PROGRESS,
         },
       ],
       globalNotification: { type: 'some type' },
@@ -154,13 +166,13 @@ describe('Notification reducer', () => {
           objectWorkingId: 101,
           operationType: OperationTypes.IMPORT_OPERATION,
           title: 'Completed',
-          type: 'PROGRESS',
+          type: ObjectNotificationTypes.PROGRESS,
         },
         {
           objectWorkingId: 102,
           operationType: OperationTypes.REMOVE_OPERATION,
           title: 'Pending',
-          type: 'PROGRESS',
+          type: ObjectNotificationTypes.PROGRESS,
         },
       ],
       globalNotification: { type: 'some other type' },
@@ -169,10 +181,11 @@ describe('Notification reducer', () => {
     describe('createProgressNotification', () => {
       it('should add new pending notification to empty array', () => {
         // given
-        const action = {
-          type: OperationTypes.IMPORT_OPERATION,
+        const action: ImportOperationAction = {
+          type: NotificationActionTypes.IMPORT_OPERATION,
           payload: {
             operation: {
+              stepsQueue: [],
               objectWorkingId: 123,
               operationType: OperationTypes.IMPORT_OPERATION,
             },
@@ -198,10 +211,11 @@ describe('Notification reducer', () => {
 
       it('should add new pending notification to existing ones', () => {
         // given
-        const action = {
-          type: OperationTypes.IMPORT_OPERATION,
+        const action: ImportOperationAction = {
+          type: NotificationActionTypes.IMPORT_OPERATION,
           payload: {
             operation: {
+              stepsQueue: [],
               objectWorkingId: 123,
               operationType: OperationTypes.IMPORT_OPERATION,
             },
@@ -223,10 +237,11 @@ describe('Notification reducer', () => {
 
       it('should have cancel button on Pending', () => {
         // given
-        const action = {
-          type: OperationTypes.IMPORT_OPERATION,
+        const action: ImportOperationAction = {
+          type: NotificationActionTypes.IMPORT_OPERATION,
           payload: {
             operation: {
+              stepsQueue: [],
               objectWorkingId: 123,
               operationType: OperationTypes.IMPORT_OPERATION,
             },
@@ -243,10 +258,11 @@ describe('Notification reducer', () => {
 
       it('should not have cancel button on Pending for Clear data', () => {
         // given
-        const action = {
-          type: OperationTypes.IMPORT_OPERATION,
+        const action: ImportOperationAction = {
+          type: NotificationActionTypes.IMPORT_OPERATION,
           payload: {
             operation: {
+              stepsQueue: [],
               objectWorkingId: 123,
               operationType: OperationTypes.CLEAR_DATA_OPERATION,
             },
@@ -265,8 +281,8 @@ describe('Notification reducer', () => {
     describe('moveNotificationToInProgress', () => {
       it('should update notification to in progress for single import notification', () => {
         // given
-        const action = {
-          type: OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
+        const action: MoveNotificationToInProgressAction = {
+          type: NotificationActionTypes.MOVE_NOTIFICATION_TO_IN_PROGRESS,
           payload: { objectWorkingId: 12 },
         };
 
@@ -280,12 +296,12 @@ describe('Notification reducer', () => {
 
       it('should update notification to in progress and set indeterminate for remove and clear operation', () => {
         // given
-        const actionForRemove = {
-          type: OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
+        const actionForRemove: MoveNotificationToInProgressAction = {
+          type: NotificationActionTypes.MOVE_NOTIFICATION_TO_IN_PROGRESS,
           payload: { objectWorkingId: 123 },
         };
-        const actionForClear = {
-          type: OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
+        const actionForClear: MoveNotificationToInProgressAction = {
+          type: NotificationActionTypes.MOVE_NOTIFICATION_TO_IN_PROGRESS,
           payload: { objectWorkingId: 1234 },
         };
 
@@ -316,8 +332,8 @@ describe('Notification reducer', () => {
 
       it('should update notification to type SUCCESS', () => {
         // given
-        const actionForImport = {
-          type: OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
+        const actionForImport: DisplayNotificationCompletedAction = {
+          type: NotificationActionTypes.DISPLAY_NOTIFICATION_COMPLETED,
           payload: { objectWorkingId: 12 },
         };
 
@@ -332,8 +348,8 @@ describe('Notification reducer', () => {
 
       it('should assign proper method for operation other than remove', () => {
         // given
-        const actionForImport = {
-          type: OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
+        const actionForImport: DisplayNotificationCompletedAction = {
+          type: NotificationActionTypes.DISPLAY_NOTIFICATION_COMPLETED,
           payload: { objectWorkingId: 12 },
         };
         const resultState = notificationReducer(initialStateProgress, actionForImport);
@@ -347,8 +363,8 @@ describe('Notification reducer', () => {
 
       it('should assign proper method for remove operation', () => {
         // given
-        const actionForRemove = {
-          type: OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
+        const actionForRemove: DisplayNotificationCompletedAction = {
+          type: NotificationActionTypes.DISPLAY_NOTIFICATION_COMPLETED,
           payload: { objectWorkingId: 123 },
         };
         const resultState = notificationReducer(initialStateProgress, actionForRemove);
@@ -367,11 +383,14 @@ describe('Notification reducer', () => {
         const mockedCallback = jest.fn();
         const expectedDetails = 'some message';
         const someTitle = 'some title';
-        const actionForImport = {
-          type: DISPLAY_NOTIFICATION_WARNING,
+        const actionForImport: DisplayObjectWarningAction = {
+          type: NotificationActionTypes.DISPLAY_NOTIFICATION_WARNING,
           payload: {
             objectWorkingId: 12,
             notification: {
+              objectWorkingId: 12,
+              operationType: OperationTypes.IMPORT_OPERATION,
+              type: ObjectNotificationTypes.WARNING,
               callback: mockedCallback,
               title: someTitle,
               message: expectedDetails,
@@ -394,9 +413,9 @@ describe('Notification reducer', () => {
       describe('deleteNotification', () => {
         it('should delete one action on single array', () => {
           // given
-          const action = {
-            type: DELETE_NOTIFICATION,
-            payload: { objectWorkingId: 'someId1' },
+          const action: DeleteObjectNotificationAction = {
+            type: NotificationActionTypes.DELETE_NOTIFICATION,
+            payload: { objectWorkingId: 1 },
           };
 
           // when
@@ -408,9 +427,9 @@ describe('Notification reducer', () => {
 
         it('should delete one action on multiple array', () => {
           // given
-          const action = {
-            type: DELETE_NOTIFICATION,
-            payload: { objectWorkingId: 'someId2' },
+          const action: DeleteObjectNotificationAction = {
+            type: NotificationActionTypes.DELETE_NOTIFICATION,
+            payload: { objectWorkingId: 2 },
           };
 
           // when
@@ -428,8 +447,8 @@ describe('Notification reducer', () => {
       describe('deleteAllNotifications', () => {
         it('should delete all notifications if isSecured is true', () => {
           // given
-          const action = {
-            type: OfficeActionsTypes.TOGGLE_SECURED_FLAG,
+          const action: ToggleSecuredFlagAction = {
+            type: NotificationActionTypes.TOGGLE_SECURED_FLAG,
             isSecured: true,
           };
 
@@ -443,8 +462,8 @@ describe('Notification reducer', () => {
 
         it('should return state if isSecured is false', () => {
           // given
-          const action = {
-            type: OfficeActionsTypes.TOGGLE_SECURED_FLAG,
+          const action: ToggleSecuredFlagAction = {
+            type: NotificationActionTypes.TOGGLE_SECURED_FLAG,
             isSecured: false,
           };
 
@@ -460,8 +479,8 @@ describe('Notification reducer', () => {
       describe('restoreAllNotifications', () => {
         it('should restore all notifications', () => {
           // given
-          const action = {
-            type: 'RESTORE_ALL_NOTIFICATIONS',
+          const action: RestoreAllNotificationsAction = {
+            type: NotificationActionTypes.RESTORE_ALL_NOTIFICATIONS,
             payload: updatedStateProgress.notifications,
           };
 

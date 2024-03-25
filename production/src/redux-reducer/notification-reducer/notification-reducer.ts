@@ -3,20 +3,21 @@ import { ObjectNotificationTypes } from '@mstr/connector-components';
 
 import { notificationService } from '../../notification/notification-service';
 
-import { OfficeActionsTypes } from '../office-reducer/office-reducer-types';
+import type { OperationData } from '../operation-reducer/operation-reducer-types';
+import {
+  GlobalNotification,
+  Notification,
+  NotificationActions,
+  NotificationActionTypes,
+  NotificationState,
+  OperationTypesWithNotification,
+  OperationTypesWithProgressNotification,
+} from './notification-reducer-types';
 
 import i18n from '../../i18n';
 import { getNotificationButtons } from '../../notification/notification-buttons';
 import { OperationSteps } from '../../operation/operation-steps';
-import { MARK_STEP_COMPLETED, OperationTypes } from '../../operation/operation-type-names';
-import {
-  CLEAR_NOTIFICATIONS,
-  CREATE_GLOBAL_NOTIFICATION,
-  DELETE_NOTIFICATION,
-  DISPLAY_NOTIFICATION_WARNING,
-  REMOVE_GLOBAL_NOTIFICATION,
-  RESTORE_ALL_NOTIFICATIONS,
-} from './notification-actions';
+import { OperationTypes } from '../../operation/operation-type-names';
 import {
   titleOperationCompletedMap,
   titleOperationFailedMap,
@@ -24,57 +25,64 @@ import {
 } from './notification-title-maps';
 import { ErrorMessages } from '../../error/constants';
 
-const initialState = { notifications: [], globalNotification: { type: '' } };
+const initialState: NotificationState = { notifications: [], globalNotification: { type: '' } };
 
-export const notificationReducer = (state = initialState, action = {}) => {
-  const { payload } = action;
+export const notificationReducer = (
+  // eslint-disable-next-line default-param-last
+  state = initialState,
+  action: NotificationActions
+): NotificationState => {
   switch (action.type) {
-    case OperationTypes.IMPORT_OPERATION:
-    case OperationTypes.REFRESH_OPERATION:
-    case OperationTypes.REMOVE_OPERATION:
-    case OperationTypes.DUPLICATE_OPERATION:
-    case OperationTypes.CLEAR_DATA_OPERATION:
-    case OperationTypes.EDIT_OPERATION:
-      return createProgressNotification(state, payload);
+    case NotificationActionTypes.IMPORT_OPERATION:
+    case NotificationActionTypes.REFRESH_OPERATION:
+    case NotificationActionTypes.REMOVE_OPERATION:
+    case NotificationActionTypes.DUPLICATE_OPERATION:
+    case NotificationActionTypes.CLEAR_DATA_OPERATION:
+    case NotificationActionTypes.EDIT_OPERATION:
+      return createProgressNotification(state, action.payload);
 
-    case OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS:
-      return moveNotificationToInProgress(state, payload);
+    case NotificationActionTypes.MOVE_NOTIFICATION_TO_IN_PROGRESS:
+      return moveNotificationToInProgress(state, action.payload);
 
-    case OperationSteps.DISPLAY_NOTIFICATION_COMPLETED:
-      return displayNotificationCompleted(state, payload);
+    case NotificationActionTypes.DISPLAY_NOTIFICATION_COMPLETED:
+      return displayNotificationCompleted(state, action.payload);
 
-    case DISPLAY_NOTIFICATION_WARNING:
-      return displayNotificationWarning(state, payload);
+    case NotificationActionTypes.DISPLAY_NOTIFICATION_WARNING:
+      return displayNotificationWarning(state, action.payload);
 
-    case DELETE_NOTIFICATION:
-      return deleteNotification(state, payload);
+    case NotificationActionTypes.DELETE_NOTIFICATION:
+      return deleteNotification(state, action.payload);
 
-    case MARK_STEP_COMPLETED:
-      return markFetchingComplete(state, payload);
+    case NotificationActionTypes.MARK_STEP_COMPLETED:
+      return markFetchingComplete(state, action.payload);
 
-    case CREATE_GLOBAL_NOTIFICATION:
-      return createGlobalNotification(state, payload);
+    case NotificationActionTypes.CREATE_GLOBAL_NOTIFICATION:
+      return createGlobalNotification(state, action.payload);
 
-    case REMOVE_GLOBAL_NOTIFICATION:
+    case NotificationActionTypes.REMOVE_GLOBAL_NOTIFICATION:
       return removeGlobalNotification(state);
 
-    case OfficeActionsTypes.TOGGLE_SECURED_FLAG:
-      return deleteAllNotifications(action, state);
+    case NotificationActionTypes.TOGGLE_SECURED_FLAG:
+      return deleteAllNotifications(state, action);
 
-    case CLEAR_NOTIFICATIONS:
+    case NotificationActionTypes.CLEAR_NOTIFICATIONS:
       return clearNotifications(state);
 
-    case RESTORE_ALL_NOTIFICATIONS:
-      return restoreAllNotifications(state, payload);
+    case NotificationActionTypes.RESTORE_ALL_NOTIFICATIONS:
+      return restoreAllNotifications(state, action.payload);
 
     default:
       return state;
   }
 };
 
-const createProgressNotification = (state, payload) => {
-  const { objectWorkingId, operationType } = payload.operation;
+const createProgressNotification = (
+  state: NotificationState,
+  { operation }: { operation: OperationData }
+): NotificationState => {
+  const { objectWorkingId, operationType } = operation;
   let notificationButtons;
+
   if (operationType !== OperationTypes.CLEAR_DATA_OPERATION) {
     notificationButtons = getNotificationButtons(getCancelButton(objectWorkingId, operationType));
   }
@@ -85,7 +93,7 @@ const createProgressNotification = (state, payload) => {
       ? state.notifications.filter(item => item.objectWorkingId !== objectWorkingId)
       : [];
 
-  const newNotification = {
+  const newNotification: Notification = {
     objectWorkingId,
     title: i18n.t(titleOperationInProgressMap.PENDING_OPERATION),
     type: ObjectNotificationTypes.PROGRESS,
@@ -95,29 +103,46 @@ const createProgressNotification = (state, payload) => {
   return { ...state, notifications: [...stateNotifications, newNotification] };
 };
 
-const moveNotificationToInProgress = (state, payload) => {
+const moveNotificationToInProgress = (
+  state: NotificationState,
+  payload: { objectWorkingId: number }
+): NotificationState => {
   const { notificationToUpdate, notificationToUpdateIndex } = getNotificationToUpdate(
     state,
-    payload
+    payload.objectWorkingId
   );
+
   const updatedNotification = {
     ...notificationToUpdate,
-    title: i18n.t(titleOperationInProgressMap[notificationToUpdate.operationType]),
+    title: i18n.t(
+      titleOperationInProgressMap[
+        notificationToUpdate.operationType as OperationTypesWithProgressNotification
+      ]
+    ),
     isIndeterminate: getIsIndeterminate(notificationToUpdate),
   };
+
   delete updatedNotification.children;
   return createNewState(state, notificationToUpdateIndex, updatedNotification);
 };
 
-const displayNotificationCompleted = (state, payload) => {
+const displayNotificationCompleted = (
+  state: NotificationState,
+  payload: { objectWorkingId: number }
+): NotificationState => {
   const { notificationToUpdate, notificationToUpdateIndex } = getNotificationToUpdate(
     state,
-    payload
+    payload.objectWorkingId
   );
+
   const updatedNotification = {
     ...notificationToUpdate,
     type: ObjectNotificationTypes.SUCCESS,
-    title: i18n.t(titleOperationCompletedMap[notificationToUpdate.operationType]),
+    title: i18n.t(
+      titleOperationCompletedMap[
+        notificationToUpdate.operationType as OperationTypesWithNotification
+      ]
+    ),
     dismissNotification:
       notificationToUpdate.operationType === OperationTypes.REMOVE_OPERATION
         ? () =>
@@ -129,7 +154,10 @@ const displayNotificationCompleted = (state, payload) => {
   return createNewState(state, notificationToUpdateIndex, updatedNotification);
 };
 
-const deleteNotification = (state, payload) => {
+const deleteNotification = (
+  state: NotificationState,
+  payload: { objectWorkingId: number }
+): NotificationState => {
   const newState = {
     notifications: [...state.notifications],
     globalNotification: state.globalNotification,
@@ -140,10 +168,13 @@ const deleteNotification = (state, payload) => {
   return newState;
 };
 
-const displayNotificationWarning = (state, payload) => {
+const displayNotificationWarning = (
+  state: NotificationState,
+  payload: { objectWorkingId: number; notification: Notification }
+): NotificationState => {
   const { notificationToUpdate, notificationToUpdateIndex } = getNotificationOrCreateEmpty(
     state,
-    payload
+    payload.objectWorkingId
   );
 
   const buttons = getOkButton(payload);
@@ -162,11 +193,14 @@ const displayNotificationWarning = (state, payload) => {
   return createNewState(state, notificationToUpdateIndex, updatedNotification);
 };
 
-const markFetchingComplete = (state, payload) => {
+const markFetchingComplete = (
+  state: NotificationState,
+  payload: { completedStep: OperationSteps; operation: OperationData }
+): NotificationState => {
   if (payload.completedStep === OperationSteps.FETCH_INSERT_DATA) {
     const { notificationToUpdate, notificationToUpdateIndex } = getNotificationToUpdate(
       state,
-      payload
+      payload.operation.objectWorkingId
     );
     const updatedNotification = {
       ...notificationToUpdate,
@@ -177,7 +211,10 @@ const markFetchingComplete = (state, payload) => {
   return state;
 };
 
-const createGlobalNotification = (state, payload) => {
+const createGlobalNotification = (
+  state: NotificationState,
+  payload: GlobalNotification
+): NotificationState => {
   payload.title = i18n.t(payload.title);
 
   if (payload.details) {
@@ -187,26 +224,32 @@ const createGlobalNotification = (state, payload) => {
   return { ...state, globalNotification: payload };
 };
 
-const removeGlobalNotification = state => ({
+const removeGlobalNotification = (state: NotificationState): NotificationState => ({
   notifications: [...state.notifications],
   globalNotification: { type: '' },
 });
 
-const deleteAllNotifications = (action, state) =>
+const deleteAllNotifications = (
+  state: NotificationState,
+  action: { isSecured: boolean }
+): NotificationState =>
   action.isSecured ? { notifications: [], globalNotification: state.globalNotification } : state;
 
-const clearNotifications = state => ({
+const clearNotifications = (state: NotificationState): NotificationState => ({
   ...state,
   notifications: initialState.notifications,
   globalNotification: initialState.globalNotification,
 });
 
-const restoreAllNotifications = (state, payload) => ({
+const restoreAllNotifications = (
+  state: NotificationState,
+  payload: Notification[]
+): NotificationState => ({
   ...state,
   notifications: payload,
 });
 
-const getOkButton = payload => [
+const getOkButton = (payload: any): any[] => [
   {
     type: 'basic',
     label: i18n.t('OK'),
@@ -214,7 +257,7 @@ const getOkButton = payload => [
   },
 ];
 
-const getCancelButton = (objectWorkingId, operationType) => [
+const getCancelButton = (objectWorkingId: number, operationType: OperationTypes): any[] => [
   {
     type: 'basic',
     label: i18n.t('Cancel'),
@@ -228,13 +271,20 @@ const getCancelButton = (objectWorkingId, operationType) => [
   },
 ];
 
-function getTitle(payload, notificationToUpdate) {
+function getTitle(
+  payload: { objectWorkingId: number; notification: Notification },
+  notificationToUpdate: Notification
+): string {
   return payload.notification.title === ErrorMessages.GENERIC_SERVER_ERR
-    ? titleOperationFailedMap[notificationToUpdate.operationType]
+    ? titleOperationFailedMap[notificationToUpdate.operationType as OperationTypesWithNotification]
     : payload.notification.title;
 }
 
-function createNewState(state, notificationToUpdateIndex, updatedNotification) {
+function createNewState(
+  state: NotificationState,
+  notificationToUpdateIndex: number,
+  updatedNotification: Notification
+): NotificationState {
   const newState = {
     notifications: [...state.notifications],
     globalNotification: state.globalNotification,
@@ -243,34 +293,40 @@ function createNewState(state, notificationToUpdateIndex, updatedNotification) {
   return newState;
 }
 
-function getNotificationOrCreateEmpty(state, payload) {
+function getNotificationOrCreateEmpty(
+  state: NotificationState,
+  objectWorkingId: number
+): { notificationToUpdate: Notification; notificationToUpdateIndex: number } {
   try {
-    return getNotificationToUpdate(state, payload);
+    return getNotificationToUpdate(state, objectWorkingId);
   } catch (error) {
     return {
-      notificationToUpdate: {},
+      notificationToUpdate: {} as Notification,
       notificationToUpdateIndex: state.notifications.length,
     };
   }
 }
 
-function getNotificationToUpdate(state, payload) {
+function getNotificationToUpdate(
+  state: NotificationState,
+  objectWorkingId: number
+): { notificationToUpdate: Notification; notificationToUpdateIndex: number } {
   const { notifications } = state;
-  const notificationToUpdateIndex = getNotificationIndex(state, payload);
+  const notificationToUpdateIndex = getNotificationIndex(state, objectWorkingId);
   const notificationToUpdate = notifications[notificationToUpdateIndex];
   return { notificationToUpdate, notificationToUpdateIndex };
 }
 
-function getIsIndeterminate(notificationToUpdate) {
+function getIsIndeterminate(notificationToUpdate: Notification): boolean {
   return !!(
     notificationToUpdate.operationType === OperationTypes.REMOVE_OPERATION ||
     notificationToUpdate.operationType === OperationTypes.CLEAR_DATA_OPERATION
   );
 }
 
-function getNotificationIndex(state, payload) {
+function getNotificationIndex(state: NotificationState, objectWorkingId: number): number {
   const notificationToUpdateIndex = state.notifications.findIndex(
-    notification => notification.objectWorkingId === payload.objectWorkingId
+    notification => notification.objectWorkingId === objectWorkingId
   );
   if (notificationToUpdateIndex === -1) {
     throw new Error();

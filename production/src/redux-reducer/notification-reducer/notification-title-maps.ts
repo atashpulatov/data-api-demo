@@ -1,4 +1,9 @@
-export const titleOperationInProgressMap = {
+import type {
+  OperationTypesWithNotification,
+  OperationTypesWithProgressNotification,
+} from './notification-reducer-types';
+
+export const titleOperationInProgressMap: Record<OperationTypesWithProgressNotification, string> = {
   PENDING_OPERATION: 'Pending',
   IMPORT_OPERATION: 'Importing',
   REFRESH_OPERATION: 'Refreshing',
@@ -8,7 +13,7 @@ export const titleOperationInProgressMap = {
   CLEAR_DATA_OPERATION: 'Clearing',
 };
 
-export const titleOperationCompletedMap = {
+export const titleOperationCompletedMap: Record<OperationTypesWithNotification, string> = {
   IMPORT_OPERATION: 'Import successful',
   REFRESH_OPERATION: 'Refresh successful',
   EDIT_OPERATION: 'Import successful',
@@ -17,7 +22,7 @@ export const titleOperationCompletedMap = {
   CLEAR_DATA_OPERATION: 'Object cleared successfully',
 };
 
-export const titleOperationFailedMap = {
+export const titleOperationFailedMap: Record<OperationTypesWithNotification, string> = {
   IMPORT_OPERATION: 'Failed to import',
   REFRESH_OPERATION: 'Failed to refresh',
   EDIT_OPERATION: 'Failed to edit',
