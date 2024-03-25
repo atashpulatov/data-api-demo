@@ -1,14 +1,17 @@
 import {
-  PopupState,
   PopupStateActions,
   PopupStateActionTypes,
+  PopupStateState,
   PopupTypeEnum,
 } from './popup-state-reducer-types';
 
-export const initialState: PopupState = {};
+export const initialState: PopupStateState = {};
 
-// eslint-disable-next-line default-param-last
-export const popupStateReducer = (state = initialState, action: PopupStateActions): PopupState => {
+export const popupStateReducer = (
+  // eslint-disable-next-line default-param-last
+  state = initialState,
+  action: PopupStateActions
+): PopupStateState => {
   const { type } = action;
   switch (type) {
     case PopupStateActionTypes.SET_POPUP_TYPE: {

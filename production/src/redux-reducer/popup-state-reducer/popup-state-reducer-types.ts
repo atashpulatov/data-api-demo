@@ -1,4 +1,6 @@
-export interface PopupState {
+import { Action } from 'redux';
+
+export interface PopupStateState {
   popupType?: PopupTypeEnum;
   isDataOverviewOpen?: boolean;
   filteredPageByLinkId?: string;
@@ -28,11 +30,6 @@ export enum PopupTypeEnum {
   importedDataOverview = 'imported-data-overview',
   repromptDossierDataOverview = 'reprompt-dossier-data-overview',
   repromptReportDataOverview = 'reprompt-report-data-overview',
-}
-
-export interface Action {
-  type: string;
-  payload?: any;
 }
 
 interface SetPopupTypeAction extends Action {
