@@ -329,10 +329,11 @@ class PopupController {
   };
 
   handleUpdateCommand = async (response: DialogResponse): Promise<void> => {
-    const objectData = {
+    const objectData: ObjectData = {
       name: response.chosenObjectName,
       objectId: response.chosenObjectId,
       projectId: response.projectId,
+      // @ts-expect-error TODO fix type
       mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(response.chosenObjectSubtype),
       body: response.body,
       dossierData: response.dossierData,

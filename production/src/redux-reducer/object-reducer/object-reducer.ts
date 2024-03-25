@@ -42,6 +42,7 @@ export const objectReducer = (state = initialState, action: ObjectActions): Obje
 
 function importRequested(state: ObjectState, payload: ImportRequestedPayload): ObjectState {
   const objectToBeImported = { ...payload.object };
+
   objectToBeImported.importType = payload.object.importType || ObjectImportType.TABLE;
   return {
     objects: [objectToBeImported, ...state.objects],

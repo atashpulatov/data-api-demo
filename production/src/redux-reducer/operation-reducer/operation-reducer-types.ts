@@ -50,6 +50,7 @@ export enum OperationActionTypes {
 
 export interface OperationPayload {
   operation: OperationData;
+  object?: ObjectData;
 }
 
 export interface MarkStepCompletedPayload {

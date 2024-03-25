@@ -46,7 +46,7 @@ function createOperation(
 }
 
 export const importRequested = (
-  object: any,
+  object: ObjectData,
   preparedInstanceDefinition?: any,
   pageByIndex = 0
 ): ImportOperationAction => {
@@ -62,6 +62,7 @@ export const importRequested = (
         { preparedInstanceDefinition },
         object.importType
       ),
+      object,
     },
   };
 };

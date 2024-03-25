@@ -180,7 +180,7 @@ export interface CreateGlobalNotificationAction extends Action {
 
 export interface MarkStepCompletedAction extends Action {
   type: NotificationActionTypes.MARK_STEP_COMPLETED;
-  payload: { completedStep: OperationSteps; operation: OperationData };
+  payload: { completedStep: OperationSteps; objectWorkingId: number };
 }
 
 export interface ToggleSecuredFlagAction extends Action {

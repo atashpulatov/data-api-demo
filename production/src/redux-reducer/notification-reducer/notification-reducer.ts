@@ -195,12 +195,12 @@ const displayNotificationWarning = (
 
 const markFetchingComplete = (
   state: NotificationState,
-  payload: { completedStep: OperationSteps; operation: OperationData }
+  payload: { completedStep: OperationSteps; objectWorkingId: number }
 ): NotificationState => {
   if (payload.completedStep === OperationSteps.FETCH_INSERT_DATA) {
     const { notificationToUpdate, notificationToUpdateIndex } = getNotificationToUpdate(
       state,
-      payload.operation.objectWorkingId
+      payload.objectWorkingId
     );
     const updatedNotification = {
       ...notificationToUpdate,
