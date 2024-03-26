@@ -45,7 +45,7 @@ describe('shape-helper-util', () => {
         })
       ),
     },
-  };
+  } as unknown as Excel.Worksheet;
 
   const excelContextMock = {
     workbook: {
@@ -81,14 +81,15 @@ describe('shape-helper-util', () => {
 
     const args = {
       operationType: OperationTypes.IMPORT_OPERATION,
-      shapeProps: undefined,
-      shapeInWorksheet: undefined,
-      shapeDimensionsForDuplicateOp: undefined,
+      shapeProps: undefined as any,
+      shapeInWorksheet: undefined as any,
+      shapeDimensionsForDuplicateOp: undefined as any,
       vizDimensions: mockVizDimensions,
       selectedRangePos: mockSelectedRangePos,
       excelContext: excelContextMock,
     };
 
+    // @ts-expect-error
     const imageProps = determineImagePropsToBeAddedToBook(args);
     expect(imageProps).toEqual({
       width: 123,
@@ -107,14 +108,15 @@ describe('shape-helper-util', () => {
       .mockImplementation(() => mockSheet);
     const args = {
       operationType: OperationTypes.DUPLICATE_OPERATION,
-      shapeProps: undefined,
-      shapeInWorksheet: undefined,
+      shapeProps: undefined as any,
+      shapeInWorksheet: undefined as any,
       shapeDimensionsForDuplicateOp: mockDuplicateShapeDimensions,
       vizDimensions: mockVizDimensions,
       selectedRangePos: mockSelectedRangePos,
       excelContext: excelContextMock,
     };
 
+    // @ts-expect-error
     const imageProps = determineImagePropsToBeAddedToBook(args);
     expect(imageProps).toEqual({
       width: 123,
@@ -125,8 +127,10 @@ describe('shape-helper-util', () => {
     });
     expect(getCurrentExcelSheetMock).toBeCalled();
 
+    // @ts-expect-error
     const args1 = { ...args, shapeDimensionsForDuplicateOp: undefined };
 
+    // @ts-expect-error
     const imageProps1 = determineImagePropsToBeAddedToBook(args1);
     expect(imageProps1).toEqual({
       width: 123,
@@ -137,8 +141,10 @@ describe('shape-helper-util', () => {
     });
     expect(getCurrentExcelSheetMock).toBeCalled();
 
+    // @ts-expect-error
     const args2 = { ...args, selectedRangePos: undefined };
 
+    // @ts-expect-error
     const imageProps2 = determineImagePropsToBeAddedToBook(args2);
     expect(imageProps2).toEqual({
       width: 123,
@@ -156,14 +162,15 @@ describe('shape-helper-util', () => {
       .mockImplementation(() => mockSheet);
     const args = {
       operationType: OperationTypes.EDIT_OPERATION,
-      shapeProps: undefined,
+      shapeProps: undefined as any,
       shapeInWorksheet: mockShapeInWorksheet,
-      shapeDimensionsForDuplicateOp: undefined,
+      shapeDimensionsForDuplicateOp: undefined as any,
       vizDimensions: mockVizDimensions,
       selectedRangePos: mockSelectedRangePos,
       excelContext: excelContextMock,
     };
 
+    // @ts-expect-error
     const imageProps = determineImagePropsToBeAddedToBook(args);
     expect(imageProps).toEqual({
       width: 564,
@@ -174,8 +181,10 @@ describe('shape-helper-util', () => {
     });
     expect(getCurrentExcelSheetMock).toBeCalled();
 
+    // @ts-expect-error
     const args1 = { ...args, shapeInWorksheet: undefined };
 
+    // @ts-expect-error
     const imageProps1 = determineImagePropsToBeAddedToBook(args1);
     expect(imageProps1).toEqual({
       width: 123,
@@ -195,13 +204,14 @@ describe('shape-helper-util', () => {
     const args = {
       operationType: OperationTypes.REFRESH_OPERATION,
       shapeProps: mockShapeProps,
-      shapeInWorksheet: undefined,
-      shapeDimensionsForDuplicateOp: undefined,
+      shapeInWorksheet: undefined as any,
+      shapeDimensionsForDuplicateOp: undefined as any,
       vizDimensions: mockVizDimensions,
       selectedRangePos: mockSelectedRangePos,
       excelContext: excelContextMock,
     };
 
+    // @ts-expect-error
     const imageProps = determineImagePropsToBeAddedToBook(args);
     expect(imageProps).toEqual({
       width: 453,
@@ -214,9 +224,11 @@ describe('shape-helper-util', () => {
 
     const args1 = {
       ...args,
-      shapeProps: undefined,
+      shapeProps: undefined as any,
       shapeInWorksheet: mockShapeInWorksheet,
     };
+
+    // @ts-expect-error
     const imageProps1 = determineImagePropsToBeAddedToBook(args1);
     expect(imageProps1).toEqual({
       width: 564,
@@ -227,7 +239,10 @@ describe('shape-helper-util', () => {
     });
     expect(getCurrentExcelSheetMock).toBeCalled();
 
+    // @ts-expect-error
     const args2 = { ...args, shapeProps: undefined };
+
+    // @ts-expect-error
     const imageProps2 = determineImagePropsToBeAddedToBook(args2);
     expect(imageProps2).toEqual({
       width: 123,

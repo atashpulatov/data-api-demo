@@ -1,5 +1,8 @@
 import { officeApiHelper } from '../api/office-api-helper';
 
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
@@ -10,12 +13,15 @@ class StepAddVisualizationPlaceholder {
    * This function is subscribed as one of the operation steps with the key ADD_VISUALIZATION_PLACEHOLDER,
    * therefore should be called only via operation bus.
    *
-   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
-   * @param {Object} objectData.shapeProps Properties of the viz image imported into worksheet
-   * @param {String} objectData.name Name of the visualization image
-   * @param {Object} operationData Reference to the operation data required for error handling
+   * @param objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param objectData.shapeProps Properties of the viz image imported into worksheet
+   * @param objectData.name Name of the visualization image
+   * @param operationData Reference to the operation data required for error handling
    */
-  addVisualizationPlaceholder = async (objectData, operationData) => {
+  async addVisualizationPlaceholder(
+    objectData: ObjectData,
+    operationData: OperationData
+  ): Promise<void> {
     try {
       const { objectWorkingId, shapeProps, name: visualizationName } = objectData;
       const excelContext = await officeApiHelper.getExcelContext();
@@ -38,7 +44,7 @@ class StepAddVisualizationPlaceholder {
     } finally {
       console.timeEnd('Add Visualization Placeholder');
     }
-  };
+  }
 }
 
 const stepAddVisualizationPlaceholder = new StepAddVisualizationPlaceholder();

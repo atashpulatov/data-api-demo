@@ -1,6 +1,9 @@
 import { officeApiHelper } from '../api/office-api-helper';
 import { officeShapeApiHelper } from './office-shape-api-helper';
 
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { ErrorMessages } from '../../error/constants';
@@ -10,11 +13,11 @@ class StepSaveImageDetails {
    * Saves the position (top, left) and dimension (height, width) of the shape object
    * representing the visualization image on the worksheet.
    *
-   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
-   * @param {String} objectData.bindId Unique id of the Office shape used for referencing the viz image in Excel
-   * @param {Object} operationData Reference to the operation data required for error handling
+   * @param objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param objectData.bindId Unique id of the Office shape used for referencing the viz image in Excel
+   * @param operationData Reference to the operation data required for error handling
    */
-  saveImageDetails = async (objectData, operationData) => {
+  async saveImageDetails(objectData: ObjectData, operationData: OperationData): Promise<void> {
     console.time('Save Image Details');
     try {
       const { objectWorkingId, bindId } = objectData;
@@ -28,6 +31,7 @@ class StepSaveImageDetails {
       }
 
       if (shapeInWorksheet) {
+        // @ts-expect-error
         const { top, left, width, height, worksheetId } = shapeInWorksheet;
         operationStepDispatcher.updateObject({
           objectWorkingId,
@@ -48,7 +52,7 @@ class StepSaveImageDetails {
     } finally {
       console.timeEnd('Save Image Details');
     }
-  };
+  }
 }
 
 const stepSaveImageDetails = new StepSaveImageDetails();

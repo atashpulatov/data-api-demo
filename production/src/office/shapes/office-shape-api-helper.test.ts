@@ -30,7 +30,7 @@ describe('officeShapeApiHelper', () => {
           },
         },
         sync: mockSync,
-      };
+      } as unknown as Excel.RequestContext;
 
       const shape = await officeShapeApiHelper.getShape(context, '1234-5678-9012-3456');
       expect(mockLoad).toBeCalled();
@@ -57,7 +57,8 @@ describe('officeShapeApiHelper', () => {
           },
         },
         sync: mockSync,
-      };
+      } as unknown as Excel.RequestContext;
+
       const shape = await officeShapeApiHelper.getShape(context, '1234-5678-9012-3456');
       expect(mockLoad).toBeCalled();
       expect(mockSync).toBeCalled();
@@ -76,10 +77,12 @@ describe('officeShapeApiHelper', () => {
         shapes: {
           addImage: mockAddImage,
         },
-      };
+      } as unknown as Excel.Worksheet;
+
       const context = {
         sync: mockSync,
-      };
+      } as unknown as Excel.RequestContext;
+
       const shapeId = await officeShapeApiHelper.addImage(
         context,
         'base64PngImage',
@@ -117,7 +120,7 @@ describe('officeShapeApiHelper', () => {
           },
         },
         sync: mockSync,
-      };
+      } as unknown as Excel.RequestContext;
       await officeShapeApiHelper.deleteImage(context, '1234-5678-9012-3456');
       expect(mockLoad).toBeCalled();
       expect(mockSync).toBeCalled();
@@ -144,7 +147,7 @@ describe('officeShapeApiHelper', () => {
           },
         },
         sync: mockSync,
-      };
+      } as unknown as Excel.RequestContext;
       await officeShapeApiHelper.deleteImage(context, '1234-5678-9012-3456');
       expect(mockLoad).toBeCalled();
       expect(mockSync).toBeCalled();

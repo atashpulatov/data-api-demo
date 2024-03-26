@@ -3,6 +3,9 @@ import { officeShapeApiHelper } from './office-shape-api-helper';
 
 import officeStoreObject from '../store/office-store-object';
 
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import stepRemoveVisualizationImage from './step-remove-visualization-image';
@@ -25,10 +28,10 @@ describe('StepRemoveVisualizationImage', () => {
       },
     },
     displayAttrFormNames: 'displayAttrFormNamesTest',
-    objectWorkingId: 'objectWorkingIdTest',
+    objectWorkingId: 2137,
     importType: 'image',
     bindId: '{1234-5678-9012-3456}',
-  };
+  } as unknown as ObjectData;
 
   const mockFn = jest.fn();
 
@@ -63,10 +66,10 @@ describe('StepRemoveVisualizationImage', () => {
       ],
       sync: mockFn,
     },
-  };
+  } as unknown as Excel.RequestContext;
 
   const operationDataMock = {
-    objectWorkingId: 'objectWorkingIdTest',
+    objectWorkingId: 2137,
     operationType: 'operationTypeTest',
     tableChanged: 'tableChangedTest',
     officeTable: 'officeTableTest',
@@ -76,7 +79,7 @@ describe('StepRemoveVisualizationImage', () => {
       rows: 'rowsTest',
       mstrTable: {},
     },
-  };
+  } as unknown as OperationData;
 
   afterEach(() => {
     jest.restoreAllMocks();
@@ -86,7 +89,7 @@ describe('StepRemoveVisualizationImage', () => {
     // given
     jest.spyOn(console, 'error');
 
-    jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => excelContextMock);
+    jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(async () => excelContextMock);
 
     jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
@@ -109,10 +112,10 @@ describe('StepRemoveVisualizationImage', () => {
       '{1234-5678-9012-3456}'
     );
     expect(operationStepDispatcher.updateObject).toBeCalledWith({
-      objectWorkingId: 'objectWorkingIdTest',
+      objectWorkingId: 2137,
       doNotPersist: true,
     });
-    expect(officeStoreObject.removeObjectInExcelStore).toBeCalledWith('objectWorkingIdTest');
+    expect(officeStoreObject.removeObjectInExcelStore).toBeCalledWith(2137);
     expect(operationErrorHandler.handleOperationError).toBeCalledTimes(0);
   });
 });

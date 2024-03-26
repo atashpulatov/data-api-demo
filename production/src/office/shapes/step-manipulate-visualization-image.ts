@@ -7,6 +7,9 @@ import { officeApiHelper } from '../api/office-api-helper';
 import { officeShapeApiHelper } from './office-shape-api-helper';
 import { determineImagePropsToBeAddedToBook } from './shape-helper-util';
 
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { OperationTypes } from '../../operation/operation-type-names';
@@ -21,13 +24,16 @@ class StepManipulateVisualizationImage {
    * This function is subscribed as one of the operation steps with the key MANIPULATE_VISUALIZATION_IMAGE,
    * therefore should be called only via operation bus.
    *
-   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
-   * @param {String} objectData.bindId Unique id of the Office shape used for referencing the viz image in Excel
-   * @param {Object} objectData.shapePosition Reference to shape position created by Excel
-   * @param {Object} operationData Reference to the operation data required for error handling
+   * @param objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param objectData.bindId Unique id of the Office shape used for referencing the viz image in Excel
+   * @param objectData.shapePosition Reference to shape position created by Excel
+   * @param operationData Reference to the operation data required for error handling
    *
    */
-  manipulateVisualizationImage = async (objectData, operationData) => {
+  async manipulateVisualizationImage(
+    objectData: ObjectData,
+    operationData: OperationData
+  ): Promise<void> {
     console.time('Refresh Visualization Image');
     try {
       const {
@@ -58,6 +64,7 @@ class StepManipulateVisualizationImage {
       this.validateOperation(shapeInWorksheet, shapeToBeDuplicated, operationType);
 
       // Get the dimensions retrieved via the ON_VIZ_SELECTION_CHANGED listener and cached in the object state
+      // @ts-expect-error
       const { vizDimensions, visualizationKey } = visualizationInfo;
 
       // Get the position of the selected range
@@ -80,6 +87,7 @@ class StepManipulateVisualizationImage {
         projectId,
         instanceId,
         visualizationKey,
+        // @ts-expect-error
         {
           width: convertPointsToPixels(width),
           height: convertPointsToPixels(height),
@@ -113,9 +121,9 @@ class StepManipulateVisualizationImage {
         objectWorkingId,
         bindId: imageShapeId,
         worksheet: { id, name },
-        shapeProps: undefined, // reset the shape props after adding image
-        bindIdToBeDuplicated: undefined, // reset the bindIdToBeDuplicated after adding image
-        instanceId: undefined, // reset the instanceId after adding image
+        shapeProps: undefined as any, // reset the shape props after adding image
+        bindIdToBeDuplicated: undefined as string, // reset the bindIdToBeDuplicated after adding image
+        instanceId: undefined as string, // reset the instanceId after adding image
       };
       operationStepDispatcher.updateObject(updatedObject);
       operationStepDispatcher.completeManipulateVisualizationImage(objectWorkingId);
@@ -125,7 +133,7 @@ class StepManipulateVisualizationImage {
     } finally {
       console.timeEnd('Refresh Visualization Image');
     }
-  };
+  }
 
   /**
    * Checks whether the Edit, Refresh Or Duplicate operations are valid and throws an error
@@ -135,13 +143,17 @@ class StepManipulateVisualizationImage {
    * REFRESH OPERATION - if the shape being refreshed is not defined and the data has not been cleared
    * DUPLICATE OPERATION - if the shape being duplicated is not defined
    *
-   * @param {Object} shapeInWorksheet shape present in the worksheet being edited or refreshed
-   * @param {Object} shapeToBeDuplicated shape present in the worksheet being duplicated
-   * @param {Object} excelContext Excel context.
-   * @param {String} operationType Type of operation
-   * @throws {Error} VISUALIZATION_REMOVED_FROM_EXCEL error if the image was manually removed from sheet
+   * @param shapeInWorksheet shape present in the worksheet being edited or refreshed
+   * @param shapeToBeDuplicated shape present in the worksheet being duplicated
+   * @param excelContext Excel context.
+   * @param operationType Type of operation
+   * @throws VISUALIZATION_REMOVED_FROM_EXCEL error if the image was manually removed from sheet
    */
-  validateOperation = (shapeInWorksheet, shapeToBeDuplicated, operationType) => {
+  validateOperation(
+    shapeInWorksheet: any,
+    shapeToBeDuplicated: any,
+    operationType: OperationTypes
+  ): void {
     const isInValidEditOperation =
       operationType === OperationTypes.EDIT_OPERATION && !shapeInWorksheet;
 
@@ -154,7 +166,7 @@ class StepManipulateVisualizationImage {
     if (isInValidDuplicateOperation || isInValidEditOperation || isInValidRefreshOperation) {
       throw new Error(ErrorMessages.VISUALIZATION_REMOVED_FROM_EXCEL);
     }
-  };
+  }
 }
 
 const stepManipulateVisualizationImage = new StepManipulateVisualizationImage();

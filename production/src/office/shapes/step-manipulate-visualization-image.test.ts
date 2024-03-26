@@ -2,8 +2,12 @@ import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-servic
 import { officeApiHelper } from '../api/office-api-helper';
 import { officeShapeApiHelper } from './office-shape-api-helper';
 
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import { OperationTypes } from '../../operation/operation-type-names';
 import stepManipulateVisualizationImage from './step-manipulate-visualization-image';
 
 describe('stepManipulateVisualizationImage', () => {
@@ -25,9 +29,9 @@ describe('stepManipulateVisualizationImage', () => {
         height: 342,
       },
     },
-    objectWorkingId: 'objectWorkingIdTest',
+    objectWorkingId: 2137,
     importType: 'image',
-  };
+  } as unknown as ObjectData;
 
   const mockFn = jest.fn();
 
@@ -37,7 +41,7 @@ describe('stepManipulateVisualizationImage', () => {
     left: 454,
     width: 123,
     height: 342,
-  };
+  } as unknown as Excel.Shape;
 
   const mockSheet = {
     id: 'mockedSheetId',
@@ -51,7 +55,7 @@ describe('stepManipulateVisualizationImage', () => {
       ),
     },
     load: mockFn,
-  };
+  } as unknown as Excel.Worksheet;
 
   const excelContextMock = {
     workbook: {
@@ -75,10 +79,10 @@ describe('stepManipulateVisualizationImage', () => {
       sync: mockFn,
     },
     sync: mockFn,
-  };
+  } as unknown as Excel.RequestContext;
 
   const operationDataMock = {
-    objectWorkingId: 'objectWorkingIdTest',
+    objectWorkingId: 2137,
     operationType: 'IMPORT_OPERATION',
     tableChanged: 'tableChangedTest',
     officeTable: 'officeTableTest',
@@ -88,17 +92,17 @@ describe('stepManipulateVisualizationImage', () => {
       rows: 'rowsTest',
       mstrTable: {},
     },
-  };
+  } as unknown as OperationData;
 
   const mockedUpdateObject = {
-    objectWorkingId: 'objectWorkingIdTest',
+    objectWorkingId: 2137,
     bindId: '1234-5678-9012-3456',
     shapeProps: undefined,
     worksheet: {
       id: 'mockedSheetId',
       name: 'mockedSheetName',
     },
-  };
+  } as unknown as ObjectData;
 
   afterEach(() => {
     jest.restoreAllMocks();
@@ -108,7 +112,7 @@ describe('stepManipulateVisualizationImage', () => {
     // given
     jest.spyOn(console, 'error');
 
-    jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => excelContextMock);
+    jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(async () => excelContextMock);
 
     const mockImageRes = {
       arrayBuffer: jest.fn().mockImplementation(() => Promise.resolve(new ArrayBuffer(8))),
@@ -116,7 +120,7 @@ describe('stepManipulateVisualizationImage', () => {
 
     jest
       .spyOn(mstrObjectRestService, 'getVisualizationImage')
-      .mockImplementation(() => mockImageRes);
+      .mockImplementation(async () => mockImageRes as any);
 
     jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
@@ -158,7 +162,7 @@ describe('stepManipulateVisualizationImage', () => {
   });
 
   it('manipulateVisualizationImage should work for REFRESH_OPERATION triggered by View Data', async () => {
-    operationDataMock.operationType = 'REFRESH_OPERATION';
+    operationDataMock.operationType = OperationTypes.REFRESH_OPERATION;
     objectDataMock.shapeProps = {
       top: 123,
       left: 234,
@@ -169,7 +173,7 @@ describe('stepManipulateVisualizationImage', () => {
     // given
     jest.spyOn(console, 'error');
 
-    jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => excelContextMock);
+    jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(async () => excelContextMock);
 
     const mockImageRes = {
       arrayBuffer: jest.fn().mockImplementation(() => Promise.resolve(new ArrayBuffer(8))),
@@ -177,7 +181,7 @@ describe('stepManipulateVisualizationImage', () => {
 
     jest
       .spyOn(mstrObjectRestService, 'getVisualizationImage')
-      .mockImplementation(() => mockImageRes);
+      .mockImplementation(async () => mockImageRes as any);
 
     jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
@@ -225,13 +229,13 @@ describe('stepManipulateVisualizationImage', () => {
   it('manipulateVisualizationImage should work for REFRESH_OPERATION', async () => {
     const refreshOperationMock = {
       ...operationDataMock,
-      operationType: 'REFRESH_OPERATION',
+      operationType: OperationTypes.REFRESH_OPERATION,
     };
 
     // given
     jest.spyOn(console, 'error');
 
-    jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => excelContextMock);
+    jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(async () => excelContextMock);
 
     const mockImageRes = {
       arrayBuffer: jest.fn().mockImplementation(() => Promise.resolve(new ArrayBuffer(8))),
@@ -239,7 +243,7 @@ describe('stepManipulateVisualizationImage', () => {
 
     jest
       .spyOn(mstrObjectRestService, 'getVisualizationImage')
-      .mockImplementation(() => mockImageRes);
+      .mockImplementation(() => mockImageRes as any);
 
     jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
@@ -281,11 +285,11 @@ describe('stepManipulateVisualizationImage', () => {
   });
 
   it('manipulateVisualizationImage should work for EDIT_OPERATION', async () => {
-    operationDataMock.operationType = 'EDIT_OPERATION';
+    operationDataMock.operationType = OperationTypes.EDIT_OPERATION;
     // given
     jest.spyOn(console, 'error');
 
-    jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => excelContextMock);
+    jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(async () => excelContextMock);
 
     const mockImageRes = {
       arrayBuffer: jest.fn().mockImplementation(() => Promise.resolve(new ArrayBuffer(8))),
@@ -293,7 +297,7 @@ describe('stepManipulateVisualizationImage', () => {
 
     jest
       .spyOn(mstrObjectRestService, 'getVisualizationImage')
-      .mockImplementation(() => mockImageRes);
+      .mockImplementation(() => mockImageRes as any);
 
     jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
@@ -341,7 +345,7 @@ describe('stepManipulateVisualizationImage', () => {
   it('manipulateVisualizationImage should work for DUPLICATE_OPERATION', async () => {
     const dupOperationDataMock = {
       ...operationDataMock,
-      operationType: 'DUPLICATE_OPERATION',
+      operationType: OperationTypes.DUPLICATE_OPERATION,
     };
     const dupObjectDataMock = {
       ...objectDataMock,
@@ -350,7 +354,7 @@ describe('stepManipulateVisualizationImage', () => {
     // given
     jest.spyOn(console, 'error');
 
-    jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => excelContextMock);
+    jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(async () => excelContextMock);
 
     const mockImageRes = {
       arrayBuffer: jest.fn().mockImplementation(() => Promise.resolve(new ArrayBuffer(8))),
@@ -358,7 +362,7 @@ describe('stepManipulateVisualizationImage', () => {
 
     jest
       .spyOn(mstrObjectRestService, 'getVisualizationImage')
-      .mockImplementation(() => mockImageRes);
+      .mockImplementation(() => mockImageRes as any);
 
     jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
@@ -407,7 +411,7 @@ describe('stepManipulateVisualizationImage', () => {
     // given
     jest.spyOn(console, 'error');
 
-    jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => excelContextMock);
+    jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(async () => excelContextMock);
 
     jest
       .spyOn(officeApiHelper, 'getSelectedRangePosition')

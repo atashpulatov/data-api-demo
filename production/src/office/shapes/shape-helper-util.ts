@@ -2,6 +2,15 @@ import { officeApiHelper } from '../api/office-api-helper';
 
 import { OperationTypes } from '../../operation/operation-type-names';
 
+type ShapeProps = {
+  width: number;
+  height: number;
+  top: number;
+  left: number;
+  sheet?: Excel.Worksheet;
+  worksheetId?: string;
+};
+
 /**
  * IMPORT_OPERATION & DEFAULT
  * Use the viz dimensions cached from ON_VIZ_SELECTION_CHANGED listener to generate the image and the
@@ -26,13 +35,13 @@ import { OperationTypes } from '../../operation/operation-type-names';
  * has been deleted then use the viz dimensions from ON_VIZ_SELECTION_CHANGED listener
  * to generate the image. Use the selected range to position the image.
  *
- * @param {String} operationType Type of operation
- * @param {Object} shapeProps Shape properties saved as part of CLEAR DATA operation
- * @param {Object} shapeInWorksheet Shape present in worksheet
- * @param {Object} shapeToBeDuplicated Shape to be duplicated
- * @param {Object} vizDimensions Dimensions of the visualization saved in redux store
- * @param {Object} selectedRangePos Position of the range selected by user
- * @param {Object} excelContext Excel context
+ * @param operationType Type of operation
+ * @param shapeProps Shape properties saved as part of CLEAR DATA operation
+ * @param shapeInWorksheet Shape present in worksheet
+ * @param shapeToBeDuplicated Shape to be duplicated
+ * @param vizDimensions Dimensions of the visualization saved in redux store
+ * @param selectedRangePos Position of the range selected by user
+ * @param excelContext Excel context
  *
  * @return {Object} Image properties to be added to the workbook
  */
@@ -44,7 +53,15 @@ export const determineImagePropsToBeAddedToBook = ({
   vizDimensions,
   selectedRangePos,
   excelContext,
-}) => {
+}: {
+  operationType: OperationTypes;
+  shapeProps: ShapeProps;
+  shapeInWorksheet: ShapeProps;
+  shapeToBeDuplicated: ShapeProps;
+  vizDimensions: { width: number; height: number };
+  selectedRangePos: { top: number; left: number };
+  excelContext: Excel.RequestContext;
+}): ShapeProps => {
   const sheet = officeApiHelper.getCurrentExcelSheet(excelContext);
 
   const defaultFallbackTop = selectedRangePos?.top || 0;

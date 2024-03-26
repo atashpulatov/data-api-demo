@@ -3,6 +3,9 @@ import { officeShapeApiHelper } from './office-shape-api-helper';
 
 import officeStoreObject from '../store/office-store-object';
 
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { OperationTypes } from '../../operation/operation-type-names';
@@ -14,11 +17,14 @@ class StepRemoveVisualizationImage {
    * This function is subscribed as one of the operation steps with the key REMOVE_VISUALIZATION_IMAGE,
    * therefore should be called only via operation bus.
    *
-   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
-   * @param {String} objectData.bindId Unique id of the Office shape used for referencing the viz image in Excel
-   * @param {Object} operationData Reference to the operation data required for error handling
+   * @param objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param objectData.bindId Unique id of the Office shape used for referencing the viz image in Excel
+   * @param operationData Reference to the operation data required for error handling
    */
-  removeVisualizationImage = async (objectData, operationData) => {
+  async removeVisualizationImage(
+    objectData: ObjectData,
+    operationData: OperationData
+  ): Promise<void> {
     console.time('Remove Visualization Image');
     try {
       const { objectWorkingId, bindId } = objectData;
@@ -45,7 +51,7 @@ class StepRemoveVisualizationImage {
     } finally {
       console.timeEnd('Remove Visualization Image');
     }
-  };
+  }
 }
 
 const stepRemoveVisualizationImage = new StepRemoveVisualizationImage();
