@@ -1,33 +1,67 @@
 // TODO: refactor.
 // this is a temporary initial version. it should be improved
 
-export interface VisualizationInfo {
-  chapterKey?: string;
-  pageKey?: string;
-  visualizationKey?: string;
-  nameAndFormatShouldUpdate?: boolean;
-  dossierStructure?: {
-    chapterName: string;
-    dossierName: string;
-    pageName: string;
-  };
+import { Action } from 'redux';
+
+import { ObjectData } from '../../types/object-types';
+import { OperationActionTypes } from '../operation-reducer/operation-reducer-types';
+
+export interface ObjectState {
+  objects: ObjectData[];
 }
 
-export interface ObjectData {
-  body?: object;
-  objectWorkingId?: number;
-  bindId?: string;
-  id?: string;
-  name?: string;
-  mstrObjectType?: {
-    name: string;
-    request: string;
-    subtypes: number[];
-    type: number | string;
-  };
-  refreshDate?: number;
-  visualizationInfo?: false | VisualizationInfo;
-  isSelected?: boolean;
-  // TODO remove when type is finalized
-  [key: string]: any;
+export enum ObjectActionTypes {
+  UPDATE_OBJECT = 'UPDATE_OBJECT',
+  REMOVE_OBJECT = 'REMOVE_OBJECT',
+  RESTORE_ALL_OBJECTS = 'RESTORE_ALL_OBJECTS',
+  RESTORE_OBJECT_BACKUP = 'RESTORE_OBJECT_BACKUP',
 }
+
+export interface ImportRequestedPayload {
+  object: ObjectData;
+}
+
+export interface EditRequestedPayload {
+  objectWorkingId: number;
+  response: any; // Replace 'any' with the appropriate type
+}
+
+interface RestoreObjectBackupPayload extends ObjectData {}
+
+export interface ImportRequestedAction extends Action {
+  type: OperationActionTypes.IMPORT_OPERATION | OperationActionTypes.DUPLICATE_OPERATION;
+  payload: ImportRequestedPayload;
+}
+
+export interface EditRequestedAction extends Action {
+  type: OperationActionTypes.EDIT_OPERATION;
+  payload: EditRequestedPayload;
+}
+
+export interface UpdateObjectAction extends Action {
+  type: ObjectActionTypes.UPDATE_OBJECT;
+  payload: Partial<ObjectData>;
+}
+
+export interface RemoveObjectAction extends Action {
+  type: ObjectActionTypes.REMOVE_OBJECT;
+  payload: number;
+}
+
+export interface RestoreAllObjectsAction extends Action {
+  type: ObjectActionTypes.RESTORE_ALL_OBJECTS;
+  payload: ObjectData[];
+}
+
+export interface RestoreObjectBackupAction extends Action {
+  type: ObjectActionTypes.RESTORE_OBJECT_BACKUP;
+  payload: RestoreObjectBackupPayload;
+}
+
+export type ObjectActions =
+  | ImportRequestedAction
+  | EditRequestedAction
+  | UpdateObjectAction
+  | RemoveObjectAction
+  | RestoreAllObjectsAction
+  | RestoreObjectBackupAction;

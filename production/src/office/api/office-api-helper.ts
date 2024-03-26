@@ -4,7 +4,7 @@ import { officeApiCrosstabHelper } from './office-api-crosstab-helper';
 import { IncorrectInputTypeError } from '../../error/incorrect-input-type';
 import { OutsideOfRangeError } from '../../error/outside-of-range-error';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
-import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
+import { OfficeSettingsEnum } from '../../constants/office-constants';
 import { DEFAULT_CELL_POSITION, DEFAULT_RANGE_POSITION } from '../../mstr-object/constants';
 
 const ALPHABET_RANGE_START = 1;
@@ -89,7 +89,7 @@ class OfficeApiHelper {
   async getSelectedCell(excelContext: Excel.RequestContext): Promise<string> {
     try {
       const selectedRangeStart = excelContext.workbook.getSelectedRange().getCell(0, 0);
-      selectedRangeStart.load(officeProperties.officeAddress);
+      selectedRangeStart.load(OfficeSettingsEnum.officeAddress);
       await excelContext.sync();
       return this.getStartCellOfRange(selectedRangeStart.address);
     } catch (error) {

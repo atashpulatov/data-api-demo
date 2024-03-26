@@ -393,7 +393,6 @@ function mapStateToProps(state: RootState): any {
     promptObjects,
     importRequested,
   } = navigationTree;
-  // @ts-expect-error
   const { editedObject } = popupReducer;
   const { supportForms, isShapeAPISupported, popupData } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;

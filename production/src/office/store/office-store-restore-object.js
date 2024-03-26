@@ -3,8 +3,8 @@ import officeStoreHelper from './office-store-helper';
 import { errorService } from '../../error/error-handler';
 import { restoreAllAnswers } from '../../redux-reducer/answers-reducer/answers-actions';
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
-import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 import { officeContext } from '../office-context';
+import { OfficeSettingsEnum } from '../../constants/office-constants';
 import { ObjectImportType } from '../../mstr-object/constants';
 
 class OfficeStoreRestoreObject {
@@ -19,7 +19,7 @@ class OfficeStoreRestoreObject {
    */
   restoreObjectsFromExcelStore = () => {
     const settings = officeStoreHelper.getOfficeSettings();
-    let objects = settings.get(officeProperties.storedObjects) || [];
+    let objects = settings.get(OfficeSettingsEnum.storedObjects) || [];
     objects = this.restoreLegacyObjectsFromExcelStore(settings, objects);
     if (objects?.filter) {
       objects = objects.filter(object => !object.doNotPersist);
@@ -28,7 +28,7 @@ class OfficeStoreRestoreObject {
     this.resetIsPromptedForDossiersWithAnswers(objects);
     this.restoreLegacyObjectsWithImportType(objects);
 
-    settings.set(officeProperties.storedObjects, objects);
+    settings.set(OfficeSettingsEnum.storedObjects, objects);
 
     // Do filter image objects if the shape api is not supported
     // and only reflect udated objects in redux store and not back into office store.
@@ -90,7 +90,7 @@ class OfficeStoreRestoreObject {
    */
   restoreAnswersFromExcelStore = () => {
     const settings = officeStoreHelper.getOfficeSettings();
-    const answers = settings.get(officeProperties.storedAnswers) || [];
+    const answers = settings.get(OfficeSettingsEnum.storedAnswers) || [];
     // If answers happens to be an empty array then it is still necessary
     // to dispatch it to clear the answers in Redux store.
     this.reduxStore.dispatch(restoreAllAnswers(answers));
@@ -120,7 +120,7 @@ class OfficeStoreRestoreObject {
           objectsToBeAdded.push(currentObject);
         }
       }
-      settings.set(officeProperties.loadedReportProperties, []);
+      settings.set(OfficeSettingsEnum.loadedReportProperties, []);
       settings.saveAsync(saveAsync =>
         console.log(`Clearing report Array in settings ${saveAsync.status}`)
       );
@@ -151,11 +151,11 @@ class OfficeStoreRestoreObject {
   getLegacyObjectsList = () => {
     try {
       const settings = officeStoreHelper.getOfficeSettings();
-      if (!settings.get(officeProperties.loadedReportProperties)) {
-        settings.set(officeProperties.loadedReportProperties, []);
+      if (!settings.get(OfficeSettingsEnum.loadedReportProperties)) {
+        settings.set(OfficeSettingsEnum.loadedReportProperties, []);
         settings.saveAsync();
       }
-      return settings.get(officeProperties.loadedReportProperties);
+      return settings.get(OfficeSettingsEnum.loadedReportProperties);
     } catch (error) {
       errorService.handleError(error);
     }

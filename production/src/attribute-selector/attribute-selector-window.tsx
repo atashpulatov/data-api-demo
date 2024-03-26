@@ -6,11 +6,10 @@ import { popupHelper } from '../popup/popup-helper';
 import { AttributeSelectorWindowNotConnectedProps } from './attribute-selector-types';
 
 import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
-import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { AttributeSelector } from './attribute-selector';
 import { selectorProperties } from './selector-properties';
-import { ObjectImportType } from '../mstr-object/constants';
+import { DisplayAttrFormNames, ObjectImportType } from '../mstr-object/constants';
 
 import '../home/home.css';
 
@@ -58,7 +57,7 @@ export const AttributeSelectorWindowNotConnected: React.FC<
     const displayAttrFormNamesSet =
       (editedObject && editedObject.displayAttrFormNames) ||
       displayAttrFormNames ||
-      officeProperties.displayAttrFormNames.automatic;
+      DisplayAttrFormNames.AUTOMATIC;
 
     const message = {
       command: selectorProperties.commandOnUpdate,

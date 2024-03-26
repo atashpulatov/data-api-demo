@@ -7,7 +7,7 @@ import officeStoreRestoreObject from './office-store-restore-object';
 import { errorService } from '../../error/error-handler';
 import * as answersActions from '../../redux-reducer/answers-reducer/answers-actions';
 import * as objectActions from '../../redux-reducer/object-reducer/object-actions';
-import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
+import { OfficeSettingsEnum } from '../../constants/office-constants';
 
 const internalData = {};
 
@@ -55,7 +55,7 @@ describe.each`
     beforeEach(() => {
       jest.clearAllMocks();
 
-      internalData[officeProperties.storedObjects] = storedObjectParam;
+      internalData[OfficeSettingsEnum.storedObjects] = storedObjectParam;
 
       officeStoreRestoreObject.init(reduxStore);
     });
@@ -65,7 +65,7 @@ describe.each`
     });
 
     afterAll(() => {
-      delete internalData[officeProperties.storedObjects];
+      delete internalData[OfficeSettingsEnum.storedObjects];
 
       objectActions.restoreAllObjects = objectActionsOriginal;
     });
@@ -111,7 +111,7 @@ describe.each`
         expect(objectActions.restoreAllObjects).toBeCalledWith('restoredObjectFromExcelTest');
       }
 
-      expect(settingsMock.get(officeProperties.storedObjects)).toEqual(restoredFromExcelObject);
+      expect(settingsMock.get(OfficeSettingsEnum.storedObjects)).toEqual(restoredFromExcelObject);
     });
   }
 );
@@ -125,7 +125,7 @@ describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    internalData[officeProperties.storedAnswers] = 'restoredAnswerFromExcelTest';
+    internalData[OfficeSettingsEnum.storedAnswers] = 'restoredAnswerFromExcelTest';
     officeStoreRestoreObject.init(reduxStore);
   });
 
@@ -134,7 +134,7 @@ describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
   });
 
   afterAll(() => {
-    delete internalData[officeProperties.storedAnswers];
+    delete internalData[OfficeSettingsEnum.storedAnswers];
 
     answersActions.restoreAllAnswers = answersActionsOriginal;
   });
@@ -522,7 +522,7 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
   it('getLegacyObjectsList works as expected when officeProperties.loadedReportProperties not exists', () => {
     // given
     settingsMock.saveAsync = jest.fn();
-    settingsMock.remove(officeProperties.loadedReportProperties);
+    settingsMock.remove(OfficeSettingsEnum.loadedReportProperties);
 
     jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
 
@@ -543,7 +543,7 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
   it('getLegacyObjectsList works as expected when officeProperties.loadedReportProperties exists', () => {
     // given
     settingsMock.saveAsync = jest.fn();
-    settingsMock.set(officeProperties.loadedReportProperties, [42]);
+    settingsMock.set(OfficeSettingsEnum.loadedReportProperties, [42]);
 
     jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
 

@@ -2,7 +2,7 @@ import { officeApiHelper } from './api/office-api-helper';
 
 import { reduxStore } from '../store';
 
-import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
+import { OfficeSettingsEnum } from '../constants/office-constants';
 
 const INVALID_SELECTION = 'InvalidSelection';
 // FIXME: these were disabled anyway. Needs to be redone.
@@ -155,7 +155,7 @@ describe('OfficeApiHelper', () => {
       expect(context.workbook.getSelectedRange).toBeCalled();
       expect(getCellMock).toBeCalled();
       expect(loadMock).toBeCalled();
-      expect(loadMock).toBeCalledWith(officeProperties.officeAddress);
+      expect(loadMock).toBeCalledWith(OfficeSettingsEnum.officeAddress);
       expect(result).toEqual('A12');
       expect(mockSync).toBeCalled();
     });
@@ -179,7 +179,7 @@ describe('OfficeApiHelper', () => {
       expect(context.workbook.getSelectedRange).toBeCalled();
       expect(getCellMock).toBeCalled();
       expect(loadMock).toBeCalled();
-      expect(loadMock).toBeCalledWith(officeProperties.officeAddress);
+      expect(loadMock).toBeCalledWith(OfficeSettingsEnum.officeAddress);
       expect(result).toEqual('A12');
       expect(mockSync).toBeCalled();
     });

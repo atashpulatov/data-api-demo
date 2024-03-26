@@ -17,9 +17,9 @@ import {
 import i18n from '../i18n';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
-import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import { errorCodes, ErrorMessages } from '../error/constants';
+import { DisplayAttrFormNames, displayAttrFormNamesOptions } from '../mstr-object/constants';
 
 import './attribute-selector.css';
 
@@ -112,7 +112,7 @@ export const AttributeSelectorNotConnected: React.FC<
     updateDisplayAttrFormOnEdit,
   } = props;
 
-  const defaultAttrFormNames = officeProperties.displayAttrFormNames.automatic;
+  const defaultAttrFormNames = DisplayAttrFormNames.AUTOMATIC;
   const displayAttrFormSet =
     editedObject.displayAttrFormNames || displayAttrFormNames || defaultAttrFormNames;
 
@@ -145,7 +145,7 @@ export const AttributeSelectorNotConnected: React.FC<
           isEdit ? updateDisplayAttrFormOnEdit : updateDisplayAttrFormOnImport
         }
         displayAttrFormNames={displayAttrFormSet}
-        displayAttrFormNamesOptions={officeProperties.displayAttrFormNamesOptions}
+        displayAttrFormNamesOptions={displayAttrFormNamesOptions}
       />
     </ErrorBoundary>
   );
