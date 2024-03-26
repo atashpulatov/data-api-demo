@@ -2,6 +2,8 @@ import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 import { officeRemoveHelper } from './office-remove-helper';
 
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import stepRemoveObjectTable from './step-remove-object-table';
 
@@ -21,7 +23,7 @@ describe('StepRemoveObjectTable', () => {
     jest.spyOn(operationStepDispatcher, 'completeRemoveObjectTable').mockImplementation();
 
     // when
-    await stepRemoveObjectTable.removeObjectTable({ objectWorkingId: 'objectWorkingIdTest' }, {});
+    await stepRemoveObjectTable.removeObjectTable({ objectWorkingId: 2137 }, {} as OperationData);
 
     // then
     expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
@@ -31,7 +33,7 @@ describe('StepRemoveObjectTable', () => {
     expect(console.error).toBeCalledWith(new Error('errorTest'));
 
     expect(operationStepDispatcher.completeRemoveObjectTable).toBeCalledTimes(1);
-    expect(operationStepDispatcher.completeRemoveObjectTable).toBeCalledWith('objectWorkingIdTest');
+    expect(operationStepDispatcher.completeRemoveObjectTable).toBeCalledWith(2137);
   });
 
   it.each`
@@ -54,29 +56,29 @@ describe('StepRemoveObjectTable', () => {
             getItem: getItemMock,
           },
         },
-      };
+      } as unknown as Excel.RequestContext;
 
-      jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue(excelContextMock);
+      jest.spyOn(officeApiHelper, 'getExcelContext').mockResolvedValue(excelContextMock);
 
-      jest.spyOn(officeRemoveHelper, 'checkIfObjectExist').mockReturnValue(true);
+      jest.spyOn(officeRemoveHelper, 'checkIfObjectExist').mockResolvedValue(true);
 
       jest
         .spyOn(officeApiCrosstabHelper, 'getCrosstabHeadersSafely')
-        .mockReturnValue({ validColumnsY: 2, validRowsX: 'validRowsXTest' });
+        .mockResolvedValue({ validColumnsY: 2, validRowsX: 'validRowsXTest' });
 
       jest.spyOn(officeRemoveHelper, 'removeExcelTable').mockImplementation();
       jest.spyOn(officeApiCrosstabHelper, 'clearCrosstabRange').mockImplementation();
       jest.spyOn(operationStepDispatcher, 'completeRemoveObjectTable').mockImplementation();
 
       const objectData = {
-        objectWorkingId: 'objectWorkingIdTest',
+        objectWorkingId: 2137,
         bindId: 'bindIdTest',
         isCrosstab: isCrosstabParam,
         crosstabHeaderDimensions: crosstabHeaderDimensionsParam,
       };
 
       // when
-      await stepRemoveObjectTable.removeObjectTable(objectData, {});
+      await stepRemoveObjectTable.removeObjectTable(objectData, {} as OperationData);
 
       // then
       expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
@@ -100,9 +102,7 @@ describe('StepRemoveObjectTable', () => {
       );
 
       expect(operationStepDispatcher.completeRemoveObjectTable).toBeCalledTimes(1);
-      expect(operationStepDispatcher.completeRemoveObjectTable).toBeCalledWith(
-        'objectWorkingIdTest'
-      );
+      expect(operationStepDispatcher.completeRemoveObjectTable).toBeCalledWith(2137);
     }
   );
 });
