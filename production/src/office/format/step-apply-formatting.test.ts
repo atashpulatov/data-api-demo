@@ -221,14 +221,7 @@ describe('StepApplyFormatting', () => {
 
     // then
     expect(stepApplyFormatting.getColumnRangeForFormatting).toBeCalledTimes(1);
-    expect(stepApplyFormatting.getColumnRangeForFormatting).toBeCalledWith(
-      0,
-      true,
-      1,
-      excelContext,
-      2,
-      true
-    );
+    expect(stepApplyFormatting.getColumnRangeForFormatting).toBeCalledWith(0, true, 1, {}, 2, true);
 
     expect(stepApplyFormatting.getFormat).toBeCalledTimes(1);
 
