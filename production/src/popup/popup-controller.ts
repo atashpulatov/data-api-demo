@@ -5,6 +5,7 @@ import instanceDefinitionHelper from '../mstr-object/instance/instance-definitio
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { pageByHelper } from '../page-by/page-by-helper';
 
+import { PageBy, PageByDataElement, PageBySetting } from '../page-by/page-by-types';
 import { ObjectData } from '../redux-reducer/object-reducer/object-reducer-types';
 import { DialogResponse, ReportParams } from './popup-controller-types';
 
@@ -344,7 +345,8 @@ class PopupController {
       displayAttrFormNames: response.displayAttrFormNames,
       definition: { filters: response.filterDetails },
     };
-    this.reduxStore.dispatch(importRequested(objectData));
+
+    await this.handleImport(objectData);
   };
 
   handleOkCommand = async (response: DialogResponse): Promise<void> => {
@@ -376,24 +378,103 @@ class PopupController {
    */
   handleImport = async (objectData: any): Promise<void> => {
     const pageByLinkId = uuidv4();
+    // TODO: Replace with actual setting from the user when implemented
+    const selectedPageBySetting = PageBySetting.DEFAULT_PAGE as PageBySetting;
 
     const preparedInstanceDefinition =
       await instanceDefinitionHelper.createReportInstance(objectData);
+
+    const { pageBy } = preparedInstanceDefinition?.definition.grid ?? {};
+
+    if (!pageBy?.length) {
+      return this.reduxStore.dispatch(
+        importRequested({ ...objectData }, preparedInstanceDefinition)
+      );
+    }
 
     const validPageByData = await pageByHelper.getValidPageByData(
       objectData,
       preparedInstanceDefinition
     );
 
-    if (!validPageByData?.length) {
-      return this.reduxStore.dispatch(
-        importRequested({ ...objectData }, preparedInstanceDefinition)
-      );
+    switch (selectedPageBySetting) {
+      case PageBySetting.DEFAULT_PAGE:
+        return this.handleDefaultPageImport(
+          pageByLinkId,
+          objectData,
+          preparedInstanceDefinition,
+          pageBy,
+          selectedPageBySetting
+        );
+      case PageBySetting.ALL_PAGES:
+        return this.handleAllPagesImport(
+          pageByLinkId,
+          validPageByData,
+          objectData,
+          preparedInstanceDefinition,
+          selectedPageBySetting
+        );
+      case PageBySetting.SELECT_PAGES:
+        // Set Page-by modal state to open
+        // Logic for parsing data and passing to the Page-by component
+        break;
+      default:
+        break;
     }
+  };
 
+  /**
+   * Method used for handling import of a deafult Page-by attributes combination of the object.
+   *
+   * @param pageByLinkId Unique identifier of the Page-by sibling
+   * @param objectData Contains information about the MSTR object
+   * @param preparedInstanceDefinition Contains information about the object's instance
+   * @param pageBy Contains Page-by elements of the object
+   * @param pageBySetting Contains information about the currently selected Page-by setting
+   */
+  handleDefaultPageImport = (
+    pageByLinkId: string,
+    objectData: ObjectData,
+    preparedInstanceDefinition: any,
+    pageBy: PageBy[],
+    pageBySetting: PageBySetting
+  ): void => {
+    const { currentPageBy } = preparedInstanceDefinition.data;
+
+    const elements = pageByHelper.parseValidPageByElements(pageBy, {
+      items: [currentPageBy],
+    });
+
+    const pageByData = {
+      pageByLinkId,
+      pageBySetting,
+      elements: elements[0],
+    };
+
+    return this.reduxStore.dispatch(
+      importRequested({ ...objectData, pageByData }, preparedInstanceDefinition)
+    );
+  };
+
+  /**
+   * Method used for handling import of a deafult Page-by attributes combination of the object.
+   *
+   * @param pageByLinkId Unique identifier of the Page-by sibling
+   * @param objectData Contains information about the MSTR object
+   * @param preparedInstanceDefinition Contains information about the object's instance
+   * @param pageBySetting Contains information about the currently selected Page-by setting
+   */
+  handleAllPagesImport = (
+    pageByLinkId: string,
+    validPageByData: PageByDataElement[][],
+    objectData: ObjectData,
+    preparedInstanceDefinition: any,
+    pageBySetting: PageBySetting
+  ): void => {
     validPageByData.forEach((validCombination, pageByIndex) => {
       const pageByData = {
         pageByLinkId,
+        pageBySetting,
         elements: validCombination,
       };
 

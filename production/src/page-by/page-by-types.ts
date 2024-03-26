@@ -1,3 +1,9 @@
+export enum PageBySetting {
+  DEFAULT_PAGE = 'defaultPage',
+  ALL_PAGES = 'allPages',
+  SELECT_PAGES = 'selectPages',
+}
+
 interface PageByForm {
   id: string;
   name: string;
@@ -11,7 +17,7 @@ interface PageByElement {
   formValues: string[];
 }
 
-interface PageBy {
+export interface PageBy {
   id: string;
   name: string;
   type: string;
@@ -26,8 +32,8 @@ interface PageByPaging {
   limit: number;
 }
 
-interface ValidPageByElements {
-  paging: PageByPaging;
+export interface ValidPageByElements {
+  paging?: PageByPaging;
   items: number[][];
 }
 
@@ -43,6 +49,7 @@ export interface PageByDataElement {
 }
 
 export interface PageByData {
-  pageByLink: string;
+  pageByLinkId: string;
+  pageBySetting: PageBySetting;
   elements: PageByDataElement[];
 }
