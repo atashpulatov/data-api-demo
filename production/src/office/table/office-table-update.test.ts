@@ -194,11 +194,7 @@ describe('OfficeTableUpdate', () => {
 
     // then
     expect(officeTableUpdate.getAddedRowsCount).toBeCalledTimes(1);
-    expect(officeTableUpdate.getAddedRowsCount).toBeCalledWith(
-      'excelContextTest',
-      'newRowsCountTest',
-      'rowsTest'
-    );
+    expect(officeTableUpdate.getAddedRowsCount).toBeCalledWith('excelContextTest', 1, 'rowsTest');
   });
 
   it('validateAddedRowsRange should work as expected when addedRowsCount > 0', async () => {
@@ -220,17 +216,13 @@ describe('OfficeTableUpdate', () => {
     // when
     await officeTableUpdate.validateAddedRowsRange(
       'excelContextTest' as unknown as Excel.RequestContext,
-      'newRowsCountTest' as unknown as number,
+      1,
       prevOfficeTableMock
     );
 
     // then
     expect(officeTableUpdate.getAddedRowsCount).toBeCalledTimes(1);
-    expect(officeTableUpdate.getAddedRowsCount).toBeCalledWith(
-      'excelContextTest',
-      'newRowsCountTest',
-      'rowsTest'
-    );
+    expect(officeTableUpdate.getAddedRowsCount).toBeCalledWith('excelContextTest', 1, 'rowsTest');
 
     expect(getRowsBelowMock).toBeCalledTimes(1);
     expect(getRowsBelowMock).toBeCalledWith('getAddedRowsCountTest');
@@ -294,7 +286,7 @@ describe('OfficeTableUpdate', () => {
 
     expect(officeApiCrosstabHelper.createCrosstabHeaders).toBeCalledTimes(1);
     expect(officeApiCrosstabHelper.createCrosstabHeaders).toBeCalledWith(
-      'sheetTest',
+      prevOfficeTableMock,
       'mstrTableTest',
       'crosstabHeaderDimensionsTest'
     );

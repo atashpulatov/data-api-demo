@@ -1,5 +1,7 @@
 import officeReducerHelper from '../store/office-reducer-helper';
 
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import stepCompleteClearData from './step-complete-clear-data';
@@ -12,7 +14,7 @@ describe('StepClearCrosstabHeaders', () => {
   it('StepHighlightObject should highligh object', async () => {
     // given
     const objectData = {};
-    const operationData = { objectWorkingId: 1 };
+    const operationData = { objectWorkingId: 1 } as OperationData;
 
     const mockedGetOperations = jest
       .spyOn(officeReducerHelper, 'getOperationsListFromOperationReducer')
@@ -36,7 +38,7 @@ describe('StepClearCrosstabHeaders', () => {
   it('should handle error on clearCrosstabHeaders', async () => {
     // given
     const objectData = {};
-    const operationData = { objectWorkingId: 1 };
+    const operationData = { objectWorkingId: 1 } as OperationData;
     const error = new Error('error');
 
     jest.spyOn(console, 'error').mockImplementation();

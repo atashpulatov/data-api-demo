@@ -4,7 +4,7 @@
 import { Action } from 'redux';
 
 import { ObjectData } from '../../types/object-types';
-import { OperationActionTypes } from '../operation-reducer/operation-reducer-types';
+import { OperationActionTypes, OperationData } from '../operation-reducer/operation-reducer-types';
 
 export interface ObjectState {
   objects: ObjectData[];
@@ -22,8 +22,7 @@ export interface ImportRequestedPayload {
 }
 
 export interface EditRequestedPayload {
-  objectWorkingId: number;
-  response: any; // Replace 'any' with the appropriate type
+  operation: OperationData;
 }
 
 interface RestoreObjectBackupPayload extends ObjectData {}

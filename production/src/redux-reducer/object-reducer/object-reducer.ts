@@ -51,8 +51,8 @@ function importRequested(state: ObjectState, payload: ImportRequestedPayload): O
 
 function editRequested(state: ObjectState, payload: EditRequestedPayload): ObjectState {
   const props = {
-    objectWorkingId: payload.objectWorkingId,
-    response: payload.response,
+    objectWorkingId: payload.operation.objectWorkingId,
+    response: payload.operation.objectEditedData,
   };
   return updateObject(state, props);
 }

@@ -1,5 +1,8 @@
 import { officeApiHelper } from '../api/office-api-helper';
 
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { OperationTypes } from '../../operation/operation-type-names';
@@ -13,7 +16,7 @@ describe('StepBindOfficeTable', () => {
 
   it('bindOfficeTable should handle exception', async () => {
     // given
-    const operationData = { tableChanged: true };
+    const operationData = { tableChanged: true } as unknown as OperationData;
 
     jest.spyOn(console, 'error');
 
@@ -40,9 +43,9 @@ describe('StepBindOfficeTable', () => {
 
   it('bindOfficeTable should work as expected', async () => {
     // given
-    const objectData = {
+    const objectData: ObjectData = {
       bindId: 'bindIdTest',
-      objectWorkingId: 'objectWorkingIdTest',
+      objectWorkingId: 2137,
       isCrosstab: true,
     };
     const excelContext = { sync: jest.fn() };
@@ -50,9 +53,9 @@ describe('StepBindOfficeTable', () => {
       excelContext,
       officeTable: {},
       tableChanged: true,
-    };
+    } as unknown as OperationData;
 
-    jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockReturnValue('tableNameTest');
+    jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockResolvedValue('tableNameTest');
 
     jest.spyOn(officeApiHelper, 'bindNamedItem').mockImplementation();
 
@@ -73,7 +76,7 @@ describe('StepBindOfficeTable', () => {
     expect(officeApiHelper.bindNamedItem).toBeCalledWith('tableNameTest', 'bindIdTest');
 
     expect(operationStepDispatcher.completeBindOfficeTable).toBeCalledTimes(1);
-    expect(operationStepDispatcher.completeBindOfficeTable).toBeCalledWith('objectWorkingIdTest');
+    expect(operationStepDispatcher.completeBindOfficeTable).toBeCalledWith(2137);
   });
 
   it.each`
@@ -82,9 +85,9 @@ describe('StepBindOfficeTable', () => {
     ${OperationTypes.REFRESH_OPERATION}
   `('should skip bindOfficeTable if no new table created', async ({ operationType }) => {
     // given
-    const objectData = {
+    const objectData: ObjectData = {
       bindId: 'bindIdTest',
-      objectWorkingId: 'objectWorkingIdTest',
+      objectWorkingId: 2137,
       isCrosstab: true,
     };
     const excelContext = { sync: jest.fn() };
@@ -93,9 +96,9 @@ describe('StepBindOfficeTable', () => {
       officeTable: {},
       operationType,
       tableChanged: false,
-    };
+    } as unknown as OperationData;
 
-    jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockReturnValue('tableNameTest');
+    jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockResolvedValue('tableNameTest');
 
     jest.spyOn(officeApiHelper, 'bindNamedItem').mockImplementation();
 
@@ -110,6 +113,6 @@ describe('StepBindOfficeTable', () => {
     expect(officeApiHelper.bindNamedItem).toBeCalledTimes(0);
 
     expect(operationStepDispatcher.completeBindOfficeTable).toBeCalledTimes(1);
-    expect(operationStepDispatcher.completeBindOfficeTable).toBeCalledWith('objectWorkingIdTest');
+    expect(operationStepDispatcher.completeBindOfficeTable).toBeCalledWith(2137);
   });
 });

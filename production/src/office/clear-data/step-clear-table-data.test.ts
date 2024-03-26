@@ -1,5 +1,7 @@
 import { officeRemoveHelper } from '../remove/office-remove-helper';
 
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import stepClearTableData from './step-clear-table-data';
@@ -16,7 +18,7 @@ describe('StepclearTableData', () => {
   `('clearTableData should works correctly', async ({ objectExist, calledClearTable }) => {
     // given
     const objectData = {};
-    const operationData = { objectExist };
+    const operationData = { objectExist } as unknown as OperationData;
 
     const mockedRemoveTable = jest
       .spyOn(officeRemoveHelper, 'removeOfficeTableBody')
@@ -37,7 +39,7 @@ describe('StepclearTableData', () => {
   it('should handle error on clearTableData', async () => {
     // given
     const objectData = {};
-    const operationData = { objectExist: true };
+    const operationData = { objectExist: true } as unknown as OperationData;
     const error = new Error('error');
 
     jest.spyOn(console, 'error').mockImplementation();
