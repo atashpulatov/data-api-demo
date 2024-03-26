@@ -6,6 +6,7 @@ import { officeApiHelper } from '../office/api/office-api-helper';
 import { pageByHelper } from '../page-by/page-by-helper';
 
 import { PageBy, PageByDataElement, PageByDisplayType } from '../page-by/page-by-types';
+import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { PopupTypeEnum } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 import { ObjectData } from '../types/object-types';
 import { DialogResponse, ReportParams } from './popup-controller-types';
@@ -436,7 +437,7 @@ class PopupController {
   handleDefaultPageImport = (
     pageByLinkId: string,
     objectData: ObjectData,
-    preparedInstanceDefinition: any,
+    preparedInstanceDefinition: InstanceDefinition,
     pageBy: PageBy[],
     pageByDisplayType: PageByDisplayType
   ): void => {
@@ -469,7 +470,7 @@ class PopupController {
     pageByLinkId: string,
     validPageByData: PageByDataElement[][],
     objectData: ObjectData,
-    preparedInstanceDefinition: any,
+    preparedInstanceDefinition: InstanceDefinition,
     pageByDisplayType: PageByDisplayType
   ): void => {
     validPageByData.forEach((validCombination, pageByIndex) => {
