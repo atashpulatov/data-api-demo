@@ -26,7 +26,7 @@ class StepGetDuplicateName {
    * @param {String} objectData.name Name of the original object.
    * during duplication with edit.
    */
-  getDuplicateName(objectData: ObjectData, operationData: OperationData): void {
+  getDuplicateName = (objectData: ObjectData, operationData: OperationData): void => {
     try {
       const { objectWorkingId, name } = objectData;
       const { objectEditedData } = operationData;
@@ -51,7 +51,7 @@ class StepGetDuplicateName {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData);
     }
-  }
+  };
 
   /**
    * Prepares new name for duplicated object based on original object name.
@@ -62,7 +62,7 @@ class StepGetDuplicateName {
    * @param originalObjectName Name of the original object.
    * @returns Proposed name for new duplicated object.
    */
-  prepareNewNameForDuplicatedObject(originalObjectName: string): string {
+  prepareNewNameForDuplicatedObject = (originalObjectName: string): string => {
     const splitedName = String(originalObjectName).split(' ');
     const nrOfWords = splitedName.length;
 
@@ -85,7 +85,7 @@ class StepGetDuplicateName {
     const nameCandidate = splitedName.join(' ');
 
     return nameCandidate;
-  }
+  };
 
   /**
    * Checks nameCandidate for conflicts with names of other imported objects.

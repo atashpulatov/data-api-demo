@@ -22,7 +22,7 @@ class StepFormatTable {
    * @param operationData.excelContext Reference to Excel Context used by Excel API functions
    * @param operationData.shouldFormat Determines if the table should be format
    */
-  async formatTable(_objectData: ObjectData, operationData: OperationData): Promise<void> {
+  formatTable = async (_objectData: ObjectData, operationData: OperationData): Promise<void> => {
     console.time('Column auto size');
     const { objectWorkingId, excelContext, instanceDefinition, officeTable, shouldFormat } =
       operationData;
@@ -51,7 +51,7 @@ class StepFormatTable {
     operationStepDispatcher.completeFormatOfficeTable(objectWorkingId);
 
     console.timeEnd('Column auto size');
-  }
+  };
 
   /**
    * Calls autofit function from Excel API for range containing all column that are part of row crosstab headers
@@ -61,13 +61,13 @@ class StepFormatTable {
    * @param isCrosstab Indicates if it's a crosstab
    * @param rowsX Number of columns in crosstab row headers
    */
-  formatCrosstabHeaders(officeTable: Excel.Table, isCrosstab: boolean, rowsX: number): void {
+  formatCrosstabHeaders = (officeTable: Excel.Table, isCrosstab: boolean, rowsX: number): void => {
     if (isCrosstab) {
       officeTable.getDataBodyRange().getColumnsBefore(rowsX).format.autofitColumns();
 
       officeTable.showHeaders = false;
     }
-  }
+  };
 
   /**
    * Calls formatSingleColumn function for each column in passed column collection.
@@ -75,10 +75,10 @@ class StepFormatTable {
    * @param excelContext Reference to Excel Context used by Excel API functions
    * @param columns Reference to Excel columns collection
    */
-  async formatColumns(
+  formatColumns = async (
     excelContext: Excel.RequestContext,
     columns: Excel.TableColumnCollection
-  ): Promise<void> {
+  ): Promise<void> => {
     const columnsCount = await officeApiDataLoader.loadSingleExcelData(
       excelContext,
       columns,
@@ -88,7 +88,7 @@ class StepFormatTable {
     for (let i = 0; i < columnsCount; i++) {
       await this.formatSingleColumn(excelContext, columns.getItemAt(i));
     }
-  }
+  };
 
   /**
    * Calls autofit function from Excel API for passed column.

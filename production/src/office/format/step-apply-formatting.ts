@@ -20,7 +20,10 @@ class StepApplyFormatting {
    * @param operationData.instanceDefinition Object containing information about MSTR object
    * @param operationData.excelContext Reference to Excel Context used by Excel API functions
    */
-  async applyFormatting(_objectData: ObjectData, operationData: OperationData): Promise<void> {
+  applyFormatting = async (
+    _objectData: ObjectData,
+    operationData: OperationData
+  ): Promise<void> => {
     console.group('Apply formatting');
     console.time('Total');
 
@@ -54,7 +57,7 @@ class StepApplyFormatting {
       console.timeEnd('Total');
       console.groupEnd();
     }
-  }
+  };
 
   /**
    * Returns the position of the table for crosstabs (equals to index of first metric)
@@ -166,9 +169,8 @@ class StepApplyFormatting {
    * @param columnInformation Columns data
    * @return filteredColumnInformation Filtered columnInformation
    */
-  filterColumnInformation(columnInformation: any[]): any[] {
-    return columnInformation.filter(col => Object.keys(col).length !== 0);
-  }
+  filterColumnInformation = (columnInformation: any[]): any[] =>
+    columnInformation.filter(col => Object.keys(col).length !== 0);
 
   /**
    * Returns Excel format string based on MicroStrategy format string.

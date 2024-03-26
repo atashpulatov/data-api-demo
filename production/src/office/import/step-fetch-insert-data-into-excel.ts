@@ -35,10 +35,10 @@ class StepFetchInsertDataIntoExcel {
    * @param operationData.officeTable Reference to Table created by Excel
    * @param operationData.instanceDefinition Object containing information about MSTR object
    */
-  async fetchInsertDataIntoExcel(
+  fetchInsertDataIntoExcel = async (
     objectData: ObjectData,
     operationData: OperationData
-  ): Promise<void> {
+  ): Promise<void> => {
     console.group('Fetch and insert data into Excel');
     console.time('Total');
     try {
@@ -148,7 +148,7 @@ class StepFetchInsertDataIntoExcel {
       console.timeEnd('Total');
       console.groupEnd();
     }
-  }
+  };
 
   /**
    * Appends rows with data to Excel table only.
@@ -156,7 +156,7 @@ class StepFetchInsertDataIntoExcel {
    * @param subtotalAddress Array containing object with coordinates of subtotals in rows currently processed
    * @param subtotalsAddresses Array containing object with coordinates of subtotals of object.
    */
-  getSubtotalCoordinates(subtotalAddress: any[], subtotalsAddresses: any[]): void {
+  getSubtotalCoordinates = (subtotalAddress: any[], subtotalsAddresses: any[]): void => {
     console.time('Get subtotals coordinates');
     for (const address of subtotalAddress) {
       // eslint removed Boolean(address)
@@ -165,7 +165,7 @@ class StepFetchInsertDataIntoExcel {
       }
     }
     console.timeEnd('Get subtotals coordinates');
-  }
+  };
 }
 
 const stepFetchInsertDataIntoExcel = new StepFetchInsertDataIntoExcel();
