@@ -145,7 +145,7 @@ describe('Confirmation', () => {
     });
     render(<ConfirmationNotConnected isConfirm toggleIsConfirmFlag={toggleIsConfirmFlagMock} />);
     // when
-    map.keyup({ keyCode: 27 });
+    map.keyup({ key: 'Escape' });
     // then
     expect(toggleIsConfirmFlagMock).toHaveBeenCalled();
   });

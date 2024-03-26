@@ -77,7 +77,6 @@ class StepGetInstanceDefinition {
         instanceDefinition = await mstrObjectRestService.createInstance(objectData);
       }
 
-      // TODO check if dossierData is still needed
       if (!preparedInstanceDefinition) {
         instanceDefinition = await instanceDefinitionHelper.modifyInstanceWithPrompt({
           ...objectData,

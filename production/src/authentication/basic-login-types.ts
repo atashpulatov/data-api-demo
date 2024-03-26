@@ -1,4 +1,4 @@
-import React, { ReactChild } from 'react';
+import React, { ReactNode } from 'react';
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -8,7 +8,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 export interface SelectInputProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   name: string;
   label: string;
-  children: ReactChild | ReactChild[];
+  children: ReactNode | ReactNode[];
 }
 
 export interface LoginProps {
