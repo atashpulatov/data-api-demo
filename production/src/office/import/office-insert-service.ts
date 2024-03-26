@@ -6,10 +6,10 @@ class OfficeInsertService {
   /**
    * Synchronise all changes to Excel up to this point. Clears stored promises after sync.
    *
-   * @param {Array} contextPromises Array excel context sync promises.
-   * @param {Boolean} finalsync Specify whether this will be last sync after inserting data into table.
+   * @param contextPromises Array excel context sync promises.
+   * @param finalsync Specify whether this will be last sync after inserting data into table.
    */
-  syncChangesToExcel = async (contextPromises, finalsync) => {
+  async syncChangesToExcel(contextPromises: any[], finalsync: boolean): Promise<void> {
     if (contextPromises.length % PROMISE_LIMIT === 0) {
       console.time('Waiting for pending context syncs');
       await Promise.all(contextPromises);
@@ -20,21 +20,21 @@ class OfficeInsertService {
       await Promise.all(contextPromises);
       console.timeEnd('Context sync');
     }
-  };
+  }
 
   /**
    * Appends rows with data and attributes to object in Excel.
    *
-   * @param {Office} officeData Contains Excel context and Excel table reference.
-   * @param {Array} excelRows Array of table data
-   * @param {Number} rowIndex Specify from row we should append rows
-   * @param {Boolean} isRefresh
-   * @param {Boolean} tableChanged Specify if table columns has been changed
-   * @param {Array} contextPromises Array excel context sync promises.
-   * @param {Object} header Contains data for crosstab headers.
-   * @param {Object} mstrTable Contains informations about mstr object
+   * @param officeData Contains Excel context and Excel table reference.
+   * @param excelRows Array of table data
+   * @param rowIndex Specify from row we should append rows
+   * @param isRefresh
+   * @param tableChanged Specify if table columns has been changed
+   * @param contextPromises Array excel context sync promises.
+   * @param header Contains data for crosstab headers.
+   * @param mstrTable Contains informations about mstr object
    */
-  appendRows = async ({
+  async appendRows({
     officeTable,
     excelContext,
     excelRows,
@@ -42,26 +42,39 @@ class OfficeInsertService {
     contextPromises,
     header,
     mstrTable,
-  }) => {
+  }: {
+    officeTable: Excel.Table;
+    excelContext: Excel.RequestContext;
+    excelRows: any[];
+    rowIndex: number;
+    contextPromises: any[];
+    header: any;
+    mstrTable: any;
+  }): Promise<void> {
     await this.appendRowsToTable(excelRows, excelContext, officeTable, rowIndex);
 
     if (mstrTable.isCrosstab) {
       this.appendCrosstabRowsToRange(officeTable, header.rows, rowIndex);
     }
     contextPromises.push(excelContext.sync());
-  };
+  }
 
   /**
    * Appends rows with data to Excel table only.
    *
-   * @param {Array} excelRows Array of table data
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {Office} officeTable Reference to Excel table
-   * @param {Number} rowIndex Specify from row we should append rows
-   * @param {Boolean} tableChanged Specify if table columns has been changed
-   * @param {Boolean} isRefresh
+   * @param excelRows Array of table data
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param officeTable Reference to Excel table
+   * @param rowIndex Specify from row we should append rows
+   * @param tableChanged Specify if table columns has been changed
+   * @param isRefresh
    */
-  appendRowsToTable = async (excelRows, excelContext, officeTable, rowIndex) => {
+  async appendRowsToTable(
+    excelRows: any[],
+    excelContext: Excel.RequestContext,
+    officeTable: Excel.Table,
+    rowIndex: number
+  ): Promise<void> {
     console.group('Append rows');
     const isOverLimit = officeInsertSplitHelper.checkIfSizeOverLimit(excelRows);
     const splitExcelRows = officeInsertSplitHelper.getExcelRows(excelRows, isOverLimit);
@@ -82,17 +95,17 @@ class OfficeInsertService {
       }
     }
 
-    console.groupEnd('Append rows');
-  };
+    console.groupEnd();
+  }
 
   /**
    * Appends crosstab row headers to imported object.
    *
-   * @param {Office} officeTable Reference to Ecxcel table.
-   * @param {Array} header Contains data for crosstab row headers.
-   * @param {Number} rowIndex Specify from row we should append rows
+   * @param officeTable Reference to Ecxcel table.
+   * @param header Contains data for crosstab row headers.
+   * @param rowIndex Specify from row we should append rows
    */
-  appendCrosstabRowsToRange = (officeTable, headerRows, rowIndex) => {
+  appendCrosstabRowsToRange(officeTable: Excel.Table, headerRows: any[], rowIndex: number): void {
     console.time('Append crosstab rows');
     const startCell = officeTable
       .getDataBodyRange()
@@ -101,7 +114,7 @@ class OfficeInsertService {
       .getOffsetRange(rowIndex, 0);
     officeApiCrosstabHelper.createRowsHeaders(startCell, headerRows);
     console.timeEnd('Append crosstab rows');
-  };
+  }
 }
 
 const officeInsertService = new OfficeInsertService();

@@ -1,5 +1,7 @@
 import { officeApiHelper } from '../api/office-api-helper';
 
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import stepHighlightObject from './step-highlight-object';
@@ -21,7 +23,7 @@ describe('StepHighlightObject', () => {
       .mockImplementation();
 
     // when
-    await stepHighlightObject.highlightObject(objectData);
+    await stepHighlightObject.highlightObject(objectData, {} as OperationData);
 
     // then
     expect(mockedOnObjectClick).toBeCalledTimes(1);
@@ -33,7 +35,7 @@ describe('StepHighlightObject', () => {
   it('should handle error on highligh object', async () => {
     // given
     const objectData = { objectWorkingId: 1 };
-    const operationData = {};
+    const operationData = {} as OperationData;
     const error = new Error('error');
 
     jest.spyOn(console, 'error').mockImplementation();

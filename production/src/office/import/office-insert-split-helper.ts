@@ -2,11 +2,11 @@ class OfficeInsertSplitHelper {
   /**
    * Return Excel Rows that will be added to table if needed rows will be splitted into chunks that meets limit of 5MB
    *
-   * @param {Array} excelRows Array of table data
-   * @param {Boolean} isOverLimit Specify if the passed Excel rows are over 5MB limit
-   * @returns {Array} Array with sub-arrays with size not more than 5MB
+   * @param excelRows Array of table data
+   * @param isOverLimit Specify if the passed Excel rows are over 5MB limit
+   * @returns Array with sub-arrays with size not more than 5MB
    */
-  getExcelRows(excelRows, isOverLimit) {
+  getExcelRows(excelRows: any[], isOverLimit: boolean): any[] {
     let splitExcelRows = [excelRows];
     if (isOverLimit) {
       splitExcelRows = this.splitExcelRows(excelRows);
@@ -17,10 +17,10 @@ class OfficeInsertSplitHelper {
   /**
    * Split Excel Rows into chunks that meets limit of 5MB
    *
-   * @param {Array} excelRows Array of table data
-   * @returns {Array} Array with sub-arrays with size not more than 5MB
+   * @param excelRows Array of table data
+   * @returns Array with sub-arrays with size not more than 5MB
    */
-  splitExcelRows = excelRows => {
+  splitExcelRows(excelRows: any[]): any[] {
     let splitRows = [excelRows];
     let isFitSize = false;
     console.time('Split Rows');
@@ -45,15 +45,15 @@ class OfficeInsertSplitHelper {
     } while (!isFitSize);
     console.timeEnd('Split Rows');
     return splitRows;
-  };
+  }
 
   /**
    * Check size of passed object in MB
    *
-   * @param {Object} object Item to check size of
-   * @returns {Boolean} information whether the size of passed object is bigger than 5MB
+   * @param object Item to check size of
+   * @returns information whether the size of passed object is bigger than 5MB
    */
-  checkIfSizeOverLimit = chunk => {
+  checkIfSizeOverLimit(chunk: any[]): boolean {
     let bytes = 0;
     for (let i = 0; i < chunk.length; i++) {
       for (let j = 0; j < chunk[0].length; j++) {
@@ -70,7 +70,7 @@ class OfficeInsertSplitHelper {
       }
     }
     return false;
-  };
+  }
 }
 
 const officeInsertSplitHelper = new OfficeInsertSplitHelper();

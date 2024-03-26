@@ -5,6 +5,9 @@ import {
 } from '../../mstr-object/mstr-object-rest-service';
 import officeInsertService from './office-insert-service';
 
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
@@ -19,20 +22,23 @@ class StepFetchInsertDataIntoExcel {
    * This function is subscribed as one of the operation steps with the key FETCH_INSERT_DATA,
    * therefore should be called only via operation bus.
    *
-   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
-   * @param {Object} objectData.subtotalsInfo Determines if subtotals will be displayed and stores subtotal addresses
-   * @param {Number} objectData.objectId Id of the MSTR object being currently processed
-   * @param {Number} objectData.projectId Id of the MSTR project from which we fetch data
-   * @param {Object} objectData.dossierData Data of dossier used for answering prompts
-   * @param {Object} objectData.mstrObjectType Information about MSTR object type
-   * @param {Object} [objectData.visualizationInfo] Information about location of visualization in dossier
-   * @param {Object} objectData.displayAttrFormNames The style in which attribute form will be displayed
-   * @param {Office} operationData.operationType The type of the operation that called this function
-   * @param {Boolean} operationData.tableChanged Determines if columns number in Excel table has been changed
-   * @param {Office} operationData.officeTable Reference to Table created by Excel
-   * @param {String} operationData.instanceDefinition Object containing information about MSTR object
+   * @param objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param objectData.subtotalsInfo Determines if subtotals will be displayed and stores subtotal addresses
+   * @param objectData.objectId Id of the MSTR object being currently processed
+   * @param objectData.projectId Id of the MSTR project from which we fetch data
+   * @param objectData.dossierData Data of dossier used for answering prompts
+   * @param objectData.mstrObjectType Information about MSTR object type
+   * @param objectData.visualizationInfo Information about location of visualization in dossier
+   * @param objectData.displayAttrFormNames The style in which attribute form will be displayed
+   * @param operationData.operationType The type of the operation that called this function
+   * @param operationData.tableChanged Determines if columns number in Excel table has been changed
+   * @param operationData.officeTable Reference to Table created by Excel
+   * @param operationData.instanceDefinition Object containing information about MSTR object
    */
-  fetchInsertDataIntoExcel = async (objectData, operationData) => {
+  async fetchInsertDataIntoExcel(
+    objectData: ObjectData,
+    operationData: OperationData
+  ): Promise<void> {
     console.group('Fetch and insert data into Excel');
     console.time('Total');
     try {
@@ -47,6 +53,7 @@ class StepFetchInsertDataIntoExcel {
       const { columns, rows, mstrTable } = instanceDefinition;
       const limit = Math.min(Math.floor(DATA_LIMIT / columns), IMPORT_ROW_LIMIT);
 
+      // @ts-expect-error
       const rowGenerator = mstrObjectRestService.fetchContentGenerator({
         ...objectData,
         limit,
@@ -54,8 +61,8 @@ class StepFetchInsertDataIntoExcel {
       });
 
       let rowIndex = 0;
-      const contextPromises = [];
-      const subtotalsAddresses = [];
+      const contextPromises = [] as any[];
+      const subtotalsAddresses = [] as any[];
       let newDefinition = null;
       let newInstance = null;
 
@@ -88,6 +95,7 @@ class StepFetchInsertDataIntoExcel {
         }
 
         if (metricsInRows.length) {
+          // @ts-expect-error
           const columnInformation = newInstance?.mstrTable?.columnInformation || [];
           newDefinition = {
             ...definition,
@@ -140,15 +148,15 @@ class StepFetchInsertDataIntoExcel {
       console.timeEnd('Total');
       console.groupEnd();
     }
-  };
+  }
 
   /**
    * Appends rows with data to Excel table only.
    *
-   * @param {Array} subtotalAddress Array containing object with coordinates of subtotals in rows currently processed
-   * @param {Array} subtotalsAddresses Array containing object with coordinates of subtotals of object.
+   * @param subtotalAddress Array containing object with coordinates of subtotals in rows currently processed
+   * @param subtotalsAddresses Array containing object with coordinates of subtotals of object.
    */
-  getSubtotalCoordinates = (subtotalAddress, subtotalsAddresses) => {
+  getSubtotalCoordinates(subtotalAddress: any[], subtotalsAddresses: any[]): void {
     console.time('Get subtotals coordinates');
     for (const address of subtotalAddress) {
       // eslint removed Boolean(address)
@@ -157,7 +165,7 @@ class StepFetchInsertDataIntoExcel {
       }
     }
     console.timeEnd('Get subtotals coordinates');
-  };
+  }
 }
 
 const stepFetchInsertDataIntoExcel = new StepFetchInsertDataIntoExcel();
