@@ -1,6 +1,6 @@
 // issue with storage import
 // eslint-disable-next-line simple-import-sort/imports
-import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
+import { Store, applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import { persistReducer, persistStore } from 'redux-persist';
 import { thunk } from 'redux-thunk';
 
@@ -52,6 +52,7 @@ export const reduxStore = createStore(persistedReducer, middleWare);
 export const reduxPersistor = persistStore(reduxStore);
 
 export type RootState = ReturnType<typeof reduxStore.getState>;
+export type ReduxStore = Store<RootState>;
 
 if (localStorage) {
   const version = localStorage.getItem('version');

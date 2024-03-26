@@ -20,7 +20,7 @@ describe('Office Actions', () => {
     });
 
     expect(officeStoreHelper.setFileSecuredFlag).toBeCalledTimes(1);
-    expect(officeStoreHelper.setFileSecuredFlag).toBeCalledWith('true');
+    expect(officeStoreHelper.setFileSecuredFlag).toBeCalledWith(true);
   });
 
   it('should dispatch proper toggleIsSettingsFlag action', () => {

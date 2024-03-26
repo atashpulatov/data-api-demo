@@ -112,6 +112,7 @@ export const duplicateRequested = (
         { objectEditedData },
         importType
       ),
+      object,
     },
   };
 };

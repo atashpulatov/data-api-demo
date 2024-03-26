@@ -11,14 +11,14 @@ class OfficeTableCreate {
    * Creates an office table if it's a new import or if the number of columns of an existing table changes.
    * If we are refreshing a table and the new definiton range is not empty we keep the original table.
    *
-   * @param {Object} instanceDefinition
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {string} startCell  Top left corner cell
-   * @param {string} tableName Name of the Excel Table
-   * @param {Object} prevOfficeTable Previous office table to refresh
-   * @param {Boolean} tableChanged Specify if table columns has been changed. False by default
-   * @param {Boolean} isRepeatStep Specify if repeat creating of the table
-   * @param {Boolean} insertNewWorksheet Specify if new worksheet has to be created before creating the table
+   * @param instanceDefinition
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param startCell  Top left corner cell
+   * @param tableName Name of the Excel Table
+   * @param prevOfficeTable Previous office table to refresh
+   * @param tableChanged Specify if table columns has been changed. False by default
+   * @param isRepeatStep Specify if repeat creating of the table
+   * @param insertNewWorksheet Specify if new worksheet has to be created before creating the table
    *
    */
   async createOfficeTable({
@@ -34,10 +34,10 @@ class OfficeTableCreate {
     instanceDefinition: any;
     excelContext: Excel.RequestContext;
     startCell: string;
-    tableName: string;
-    prevOfficeTable: Excel.Table;
-    tableChanged: boolean;
-    isRepeatStep: boolean;
+    tableName?: string;
+    prevOfficeTable?: Excel.Table;
+    tableChanged?: boolean;
+    isRepeatStep?: boolean;
     insertNewWorksheet: boolean;
   }): Promise<any> {
     const {

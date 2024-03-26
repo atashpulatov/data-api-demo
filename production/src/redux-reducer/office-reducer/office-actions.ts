@@ -24,7 +24,7 @@ const hideDialog = () => (dispatch: Dispatch<any>) => {
 };
 
 const toggleSecuredFlag = (isSecured: boolean) => (dispatch: Dispatch<any>) => {
-  officeStoreHelper.setFileSecuredFlag(isSecured.toString());
+  officeStoreHelper.setFileSecuredFlag(isSecured);
   dispatch({
     type: OfficeActionsTypes.TOGGLE_SECURED_FLAG,
     isSecured,
