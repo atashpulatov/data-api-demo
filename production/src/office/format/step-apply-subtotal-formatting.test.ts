@@ -1,3 +1,5 @@
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import officeFormatSubtotals from './office-format-subtotals';
 import stepApplySubtotalFormatting from './step-apply-subtotal-formatting';
@@ -18,7 +20,7 @@ describe('StepApplySubtotalFormatting', () => {
       const objectData = {};
 
       const operationData = {
-        objectWorkingId: 'objectWorkingIdTest',
+        objectWorkingId: 2137,
         instanceDefinition: {
           mstrTable: {
             subtotalsInfo: {
@@ -28,7 +30,7 @@ describe('StepApplySubtotalFormatting', () => {
             },
           },
         },
-      };
+      } as unknown as OperationData;
 
       jest.spyOn(officeFormatSubtotals, 'applySubtotalFormatting').mockImplementation();
 
@@ -41,7 +43,7 @@ describe('StepApplySubtotalFormatting', () => {
       expect(officeFormatSubtotals.applySubtotalFormatting).not.toBeCalled();
 
       expect(operationStepDispatcher.completeFormatSubtotals).toBeCalledTimes(1);
-      expect(operationStepDispatcher.completeFormatSubtotals).toBeCalledWith('objectWorkingIdTest');
+      expect(operationStepDispatcher.completeFormatSubtotals).toBeCalledWith(2137);
     }
   );
 
@@ -50,7 +52,7 @@ describe('StepApplySubtotalFormatting', () => {
     const objectData = {};
 
     const operationData = {
-      objectWorkingId: 'objectWorkingIdTest',
+      objectWorkingId: 2137,
       excelContext: 'excelContextTest',
       instanceDefinition: {
         mstrTable: {
@@ -62,7 +64,7 @@ describe('StepApplySubtotalFormatting', () => {
         },
       },
       officeTable: 'officeTableTest',
-    };
+    } as unknown as OperationData;
 
     jest.spyOn(officeFormatSubtotals, 'applySubtotalFormatting').mockImplementation();
 
@@ -86,6 +88,6 @@ describe('StepApplySubtotalFormatting', () => {
     );
 
     expect(operationStepDispatcher.completeFormatSubtotals).toBeCalledTimes(1);
-    expect(operationStepDispatcher.completeFormatSubtotals).toBeCalledWith('objectWorkingIdTest');
+    expect(operationStepDispatcher.completeFormatSubtotals).toBeCalledWith(2137);
   });
 });

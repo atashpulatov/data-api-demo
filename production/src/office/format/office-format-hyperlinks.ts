@@ -10,11 +10,11 @@ class OfficeFormatHyperlinks {
    * @param {String} str a url string
    * @returns {Boolean} is valid url
    */
-  isValidUrl = str => {
+  isValidUrl(str: string): boolean {
     const urlRegExp =
       /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
     return urlRegExp.test(str);
-  };
+  }
 
   /**
    * Create Excel hyperlink object from HTMLTag or url attributes
@@ -22,11 +22,14 @@ class OfficeFormatHyperlinks {
    * HTMLTag: <a data="textToDisplay" href="address">textToDisplay</a>
    * url: http://example.com
    *
-   * @param {String} string HTMLTag attribute form
-   * @param {String} baseFormType MSTR Base form HTMLTag or URL
-   * @returns {Object} Object { address, textToDisplay } or null if not a valid HTMLTag
+   * @param string HTMLTag attribute form
+   * @param baseFormType MSTR Base form HTMLTag or URL
+   * @returns Object { address, textToDisplay } or null if not a valid HTMLTag
    */
-  parseHTMLTag = (string, baseFormType) => {
+  parseHTMLTag(
+    string: string,
+    baseFormType: string
+  ): { address: string; textToDisplay: string } | null {
     // Some users don't use properly baseFormType, check if valid URL for both url and HTMLTag
     // if(baseFormType === FORM_TYPE_URL)
     if (this.isValidUrl(string)) {
@@ -67,18 +70,22 @@ class OfficeFormatHyperlinks {
     }
 
     return null;
-  };
+  }
 
   /**
    * Iterates through a range of cells with hyperlinks and
    * replaces the content with a valid ExcelAPI hyperlink object
    *
-   * @param {String} baseFormType MSTR Base form HTMLTag or URL
-   * @param {Office} range Reference to Excel range
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @returns {Promise} contextSync
+   * @param baseFormType MSTR Base form HTMLTag or URL
+   * @param range Reference to Excel range
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @returns contextSync
    */
-  convertToHyperlink = async (baseFormType, range, excelContext) => {
+  async convertToHyperlink(
+    baseFormType: string,
+    range: Excel.Range,
+    excelContext: Excel.RequestContext
+  ): Promise<void> {
     try {
       range.load('values');
       await excelContext.sync();
@@ -104,25 +111,29 @@ class OfficeFormatHyperlinks {
     }
 
     return excelContext.sync();
-  };
+  }
 
   /**
    * Formats a column consisting of HTMLTag or URL to Excel hyperlinks
    * Requires ExcelAPI 1.7
    *
-   * @param {Object} object Column information and object definition
-   * @param {Office} columnRange Reference to Excel range
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @returns {Promise} contextSync
+   * @param object Column information and object definition
+   * @param columnRange Reference to Excel range
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @returns contextSync
    */
-  formatColumnAsHyperlinks = async (object, columnRange, excelContext) => {
+  async formatColumnAsHyperlinks(
+    object: any,
+    columnRange: Excel.Range,
+    excelContext: Excel.RequestContext
+  ): Promise<void> {
     // https://docs.microsoft.com/en-us/javascript/api/excel/excel.rangehyperlink
     if (officeContext.isSetSupported(1.7)) {
       try {
         excelContext.trackedObjects.add(columnRange);
         const { attributeName, forms } = object;
-        const hyperlinkIndex = forms.findIndex(e =>
-          [FORM_TYPE_HTML, FORM_TYPE_URL].includes(e.baseFormType)
+        const hyperlinkIndex = forms.findIndex((element: any) =>
+          [FORM_TYPE_HTML, FORM_TYPE_URL].includes(element.baseFormType)
         );
         if (hyperlinkIndex !== -1) {
           const { baseFormType } = forms[hyperlinkIndex];
@@ -135,7 +146,7 @@ class OfficeFormatHyperlinks {
         console.warn('Error while creating hyperlinks, skipping...');
       }
     }
-  };
+  }
 }
 
 const officeFormatHyperlinks = new OfficeFormatHyperlinks();

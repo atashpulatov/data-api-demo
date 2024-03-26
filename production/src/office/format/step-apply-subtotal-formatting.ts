@@ -1,3 +1,6 @@
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
+
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import officeFormatSubtotals from './office-format-subtotals';
 
@@ -8,12 +11,15 @@ class StepApplySubtotalFormatting {
    * This function is subscribed as one of the operation steps with the key FORMAT_SUBTOTALS,
    * therefore should be called only via operation bus.
    *
-   * @param {Number} operationData.objectWorkingId Unique Id of the object allowing to reference specific object
-   * @param {Office} operationData.officeTable Reference to Table created by Excel
-   * @param {Object} operationData.instanceDefinition Object containing information about MSTR object
-   * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
+   * @param operationData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param operationData.officeTable Reference to Table created by Excel
+   * @param operationData.instanceDefinition Object containing information about MSTR object
+   * @param operationData.excelContext Reference to Excel Context used by Excel API functions
    */
-  applySubtotalFormattingRedux = async (objectData, operationData) => {
+  async applySubtotalFormattingRedux(
+    _objectData: ObjectData,
+    operationData: OperationData
+  ): Promise<void> {
     const { objectWorkingId, excelContext, instanceDefinition, officeTable } = operationData;
     const { mstrTable } = instanceDefinition;
 
@@ -23,7 +29,7 @@ class StepApplySubtotalFormatting {
     }
 
     operationStepDispatcher.completeFormatSubtotals(objectWorkingId);
-  };
+  }
 }
 
 const stepApplySubtotalFormatting = new StepApplySubtotalFormatting();
