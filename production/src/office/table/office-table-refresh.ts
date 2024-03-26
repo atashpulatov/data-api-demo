@@ -315,7 +315,7 @@ class OfficeTableRefresh {
     const { rowsX, columnsY } = crosstabHeaderDimensions || prevCrosstabDimensions;
 
     if ((isCrosstab && !tableChanged) || fromCrosstabChange) {
-      return officeApiHelper.offsetCellBy(startCellAddress, -columnsY, -rowsX);
+      return officeApiHelper.offsetCellBy(startCellAddress, -columnsY + 1, -rowsX);
     }
 
     return startCellAddress;
