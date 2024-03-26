@@ -380,7 +380,7 @@ class PopupController {
   handleImport = async (objectData: any): Promise<void> => {
     const pageByLinkId = uuidv4();
     // TODO: Replace with actual setting from the user when implemented
-    const selectedPageBySetting = PageBySetting.DEFAULT_PAGE as PageBySetting;
+    const selectedPageBySetting = PageBySetting.ALL_PAGES as PageBySetting;
 
     const preparedInstanceDefinition =
       await instanceDefinitionHelper.createReportInstance(objectData);
