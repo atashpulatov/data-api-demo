@@ -5,7 +5,7 @@ import instanceDefinitionHelper from '../mstr-object/instance/instance-definitio
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { pageByHelper } from '../page-by/page-by-helper';
 
-import { PageBy, PageByDataElement, PageByDisplay } from '../page-by/page-by-types';
+import { PageBy, PageByDataElement, PageByDisplayType } from '../page-by/page-by-types';
 import { PopupTypeEnum } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 import { ObjectData } from '../types/object-types';
 import { DialogResponse, ReportParams } from './popup-controller-types';
@@ -380,7 +380,7 @@ class PopupController {
   handleImport = async (objectData: any): Promise<void> => {
     const pageByLinkId = uuidv4();
     // TODO: Replace with actual setting from the user when implemented
-    const selectedPageByDisplay = PageByDisplay.ALL_PAGES as PageByDisplay;
+    const selectedPageByDisplayType = PageByDisplayType.DEFAULT_PAGE as PageByDisplayType;
 
     const preparedInstanceDefinition =
       await instanceDefinitionHelper.createReportInstance(objectData);
@@ -398,24 +398,24 @@ class PopupController {
       preparedInstanceDefinition
     );
 
-    switch (selectedPageByDisplay) {
-      case PageByDisplay.DEFAULT_PAGE:
+    switch (selectedPageByDisplayType) {
+      case PageByDisplayType.DEFAULT_PAGE:
         return this.handleDefaultPageImport(
           pageByLinkId,
           objectData,
           preparedInstanceDefinition,
           pageBy,
-          selectedPageByDisplay
+          selectedPageByDisplayType
         );
-      case PageByDisplay.ALL_PAGES:
+      case PageByDisplayType.ALL_PAGES:
         return this.handleAllPagesImport(
           pageByLinkId,
           validPageByData,
           objectData,
           preparedInstanceDefinition,
-          selectedPageByDisplay
+          selectedPageByDisplayType
         );
-      case PageByDisplay.SELECT_PAGES:
+      case PageByDisplayType.SELECT_PAGES:
         // Set Page-by modal state to open
         // Logic for parsing data and passing to the Page-by component
         break;
@@ -431,14 +431,14 @@ class PopupController {
    * @param objectData Contains information about the MSTR object
    * @param preparedInstanceDefinition Contains information about the object's instance
    * @param pageBy Contains Page-by elements of the object
-   * @param pageByDisplay Contains information about the currently selected Page-by display setting
+   * @param pageByDisplayType Contains information about the currently selected Page-by display setting
    */
   handleDefaultPageImport = (
     pageByLinkId: string,
     objectData: ObjectData,
     preparedInstanceDefinition: any,
     pageBy: PageBy[],
-    pageByDisplay: PageByDisplay
+    pageByDisplayType: PageByDisplayType
   ): void => {
     const { currentPageBy } = preparedInstanceDefinition.data;
 
@@ -448,7 +448,7 @@ class PopupController {
 
     const pageByData = {
       pageByLinkId,
-      pageByDisplay,
+      pageByDisplayType,
       elements: elements[0],
     };
 
@@ -463,19 +463,19 @@ class PopupController {
    * @param pageByLinkId Unique identifier of the Page-by sibling
    * @param objectData Contains information about the MSTR object
    * @param preparedInstanceDefinition Contains information about the object's instance
-   * @param pageByDisplay Contains information about the currently selected Page-by display setting
+   * @param pageByDisplayType Contains information about the currently selected Page-by display setting
    */
   handleAllPagesImport = (
     pageByLinkId: string,
     validPageByData: PageByDataElement[][],
     objectData: ObjectData,
     preparedInstanceDefinition: any,
-    pageByDisplay: PageByDisplay
+    pageByDisplayType: PageByDisplayType
   ): void => {
     validPageByData.forEach((validCombination, pageByIndex) => {
       const pageByData = {
         pageByLinkId,
-        pageByDisplay,
+        pageByDisplayType,
         elements: validCombination,
       };
 

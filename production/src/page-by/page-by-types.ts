@@ -1,4 +1,4 @@
-export enum PageByDisplay {
+export enum PageByDisplayType {
   DEFAULT_PAGE = 'defaultPage',
   ALL_PAGES = 'allPages',
   SELECT_PAGES = 'selectPages',
@@ -50,6 +50,6 @@ export interface PageByDataElement {
 
 export interface PageByData {
   pageByLinkId: string;
-  pageByDisplay: PageByDisplay;
+  pageByDisplayType: PageByDisplayType;
   elements: PageByDataElement[];
 }
