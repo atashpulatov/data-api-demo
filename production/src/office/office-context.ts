@@ -1,11 +1,11 @@
 const EXCEL_SHAPE_API_VERSION = 1.9;
 
 class OfficeContext {
-  getOffice(): any {
+  getOffice(): typeof Office {
     return window.Office;
   }
 
-  getExcel(): any {
+  getExcel(): typeof Excel {
     return window.Excel;
   }
 

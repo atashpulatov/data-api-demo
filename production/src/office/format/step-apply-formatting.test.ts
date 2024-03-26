@@ -207,7 +207,6 @@ describe('StepApplyFormatting', () => {
 
     const filteredColumnInformation = [{ isAttribute: false }];
 
-    true;
     // when
     stepApplyFormatting.setupFormatting(
       filteredColumnInformation,

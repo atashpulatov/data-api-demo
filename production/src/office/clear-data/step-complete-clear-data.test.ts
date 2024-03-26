@@ -57,6 +57,6 @@ describe('StepClearCrosstabHeaders', () => {
     // then
     expect(mockedGetOperations).toBeCalledTimes(1);
     expect(mockedHandleError).toBeCalledTimes(1);
-    expect(mockedHandleError).toBeCalledWith(objectData, operationData);
+    expect(mockedHandleError).toBeCalledWith(objectData, operationData, error);
   });
 });

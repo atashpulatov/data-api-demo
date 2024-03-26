@@ -8,7 +8,7 @@ import { officeShapeApiHelper } from './office-shape-api-helper';
 import { determineImagePropsToBeAddedToBook } from './shape-helper-util';
 
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
-import { ObjectData } from '../../types/object-types';
+import { ObjectData, VisualizationInfo } from '../../types/object-types';
 
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
@@ -64,8 +64,8 @@ class StepManipulateVisualizationImage {
       this.validateOperation(shapeInWorksheet, shapeToBeDuplicated, operationType);
 
       // Get the dimensions retrieved via the ON_VIZ_SELECTION_CHANGED listener and cached in the object state
-      // @ts-expect-error
-      const { vizDimensions, visualizationKey } = visualizationInfo;
+
+      const { vizDimensions, visualizationKey } = visualizationInfo as VisualizationInfo;
 
       // Get the position of the selected range
       const selectedRangePos = await officeApiHelper.getSelectedRangePosition(excelContext);

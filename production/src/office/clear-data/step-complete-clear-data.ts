@@ -27,7 +27,7 @@ class StepCompleteClearData {
       operationStepDispatcher.completeClearData(objectWorkingId, nextOperation, objectList);
     } catch (error) {
       console.error(error);
-      operationErrorHandler.handleOperationError(objectData, operationData);
+      operationErrorHandler.handleOperationError(objectData, operationData, error);
     }
   }
 }
