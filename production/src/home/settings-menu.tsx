@@ -119,8 +119,8 @@ export const SettingsMenuNotConnected: React.FC<SettingsMenuProps> = ({
   const settingsMenuRef = React.useRef(null);
 
   React.useEffect(() => {
-    const closeSettingsOnEsc = ({ keyCode }: KeyboardEvent): void => {
-      keyCode === 27 && toggleIsSettingsFlag(false);
+    const closeSettingsOnEsc = ({ key }: KeyboardEvent): void => {
+      key === 'Escape' && toggleIsSettingsFlag(false);
     };
     const closeSettingsOnClick = (event: MouseEvent): void => {
       const { target } = event;

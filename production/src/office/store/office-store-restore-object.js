@@ -116,7 +116,6 @@ class OfficeStoreRestoreObject {
           this.mapLegacyObjectValue(currentObject, 'previousTableDimensions', 'tableDimensions');
           this.mapLegacyObjectValue(currentObject, 'subtotalsInfo', 'subtotalInfo');
 
-          // TODO find better way for unique Id
           currentObject.objectWorkingId = Date.now() + index * reportArray.length;
           objectsToBeAdded.push(currentObject);
         }

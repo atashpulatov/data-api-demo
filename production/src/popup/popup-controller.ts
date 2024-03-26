@@ -163,7 +163,7 @@ class PopupController {
       } else {
         // Otherwise, open new dialog and assign event handlers
         console.time('Popup load time');
-        await Office.context.ui.displayDialogAsync(
+        Office.context.ui.displayDialogAsync(
           `${splittedUrl[0]}?popupType=${popupType}&source=addin-mstr-excel`,
           { height, width, displayInIframe: true },
           asyncResult => {
@@ -234,7 +234,7 @@ class PopupController {
     }
 
     if (command === commandCloseDialog) {
-      await this.closeDialog(dialog);
+      this.closeDialog(dialog);
       this.resetDialogStates();
     }
 
@@ -242,7 +242,7 @@ class PopupController {
       if (isMultipleRepromptQueueEmpty && !isDataOverviewOpen) {
         // We will only close dialog if not in Multiple Reprompt workflow
         // or if the Multiple Reprompt queue has been cleared up.
-        await this.closeDialog(dialog);
+        this.closeDialog(dialog);
       }
       if (command !== commandError) {
         await officeApiHelper.getExcelSessionStatus(); // checking excel session status
@@ -475,7 +475,7 @@ class PopupController {
       // Close dialog when user cancels or an error occurs, but only if there are objects left to Multiple Reprompt,
       // since we were previously keeping the dialog open in between objects.
       // Otherwise, the dialog will close and reset popup state anyway, so no need to do it here.
-      await this.closeDialog(dialog);
+      this.closeDialog(dialog);
       this.resetDialogStates();
     } else if (
       isDataOverviewOpen &&
