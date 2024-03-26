@@ -1,4 +1,4 @@
-import { officeApiWorksheetHelper } from './api/office-api-worksheet-helper';
+import { officeApiWorksheetHelper } from './office-api-worksheet-helper';
 
 describe('OfficeApiWorksheetHelper', () => {
   afterEach(() => {

@@ -1,4 +1,4 @@
-const { officeApiHeaderMergeHelper } = require('./api/office-api-header-merge-helper');
+const { officeApiHeaderMergeHelper } = require('./office-api-header-merge-helper');
 
 describe('OfficeApiHeaderMergeHelper', () => {
   let offsetRange;

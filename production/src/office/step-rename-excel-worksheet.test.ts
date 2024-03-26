@@ -1,5 +1,8 @@
 import { officeApiWorksheetHelper } from './api/office-api-worksheet-helper';
 
+import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../types/object-types';
+
 import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 import stepRenameExcelWorksheet from './step-rename-excel-worksheet';
@@ -11,7 +14,7 @@ describe('StepRenameExcelWorksheet', () => {
 
   it('renameExcelWorksheet should handle exception', async () => {
     // given
-    const operationData = { shouldRenameExcelWorksheet: true };
+    const operationData = { shouldRenameExcelWorksheet: true } as unknown as OperationData;
 
     jest.spyOn(console, 'error');
 
@@ -42,12 +45,12 @@ describe('StepRenameExcelWorksheet', () => {
       objectWorkingId: 'objectWorkingIdTest',
       name: 'test',
       worksheet: { id: '1', name: 'Sheet 1' },
-    };
+    } as unknown as ObjectData;
     const excelContext = { sync: jest.fn() };
     const operationData = {
       excelContext,
       shouldRenameExcelWorksheet: true,
-    };
+    } as unknown as OperationData;
     const expectedObject = {
       ...objectData,
       worksheet: {
@@ -58,7 +61,7 @@ describe('StepRenameExcelWorksheet', () => {
 
     jest
       .spyOn(officeApiWorksheetHelper, 'renameExistingWorksheet')
-      .mockImplementation(() => 'test');
+      .mockImplementation(async () => 'test');
     jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
 
     // when
@@ -76,12 +79,12 @@ describe('StepRenameExcelWorksheet', () => {
     const objectData = {
       objectWorkingId: 'objectWorkingIdTest',
       name: 'test',
-    };
+    } as unknown as ObjectData;
     const excelContext = { sync: jest.fn() };
     const operationData = {
       excelContext,
       shouldRenameExcelWorksheet: false,
-    };
+    } as unknown as OperationData;
 
     jest.spyOn(officeApiWorksheetHelper, 'renameExistingWorksheet').mockImplementation();
 

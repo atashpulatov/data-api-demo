@@ -1,5 +1,8 @@
 import { officeApiWorksheetHelper } from './api/office-api-worksheet-helper';
 
+import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../types/object-types';
+
 import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 
@@ -15,7 +18,7 @@ class StepRenameExcelWorksheet {
    * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
    * @param {Boolean} operationData.shouldRenameExcelWorksheet Flag indicating whether worksheet name should be changed
    */
-  renameExcelWorksheet = async (objectData, operationData) => {
+  async renameExcelWorksheet(objectData: ObjectData, operationData: OperationData): Promise<void> {
     try {
       const { objectWorkingId, name } = objectData;
       const { excelContext, shouldRenameExcelWorksheet } = operationData;
@@ -37,7 +40,7 @@ class StepRenameExcelWorksheet {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
     }
-  };
+  }
 }
 
 const stepRenameExcelWorksheet = new StepRenameExcelWorksheet();

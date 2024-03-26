@@ -1,10 +1,17 @@
+import { ReduxStore } from '../store';
+
+import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../types/object-types';
+
 import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 
 class StepGetDuplicateName {
-  init = reduxStore => {
+  reduxStore: ReduxStore;
+
+  init(reduxStore: ReduxStore): void {
     this.reduxStore = reduxStore;
-  };
+  }
 
   /**
    * Assigns new name to duplicated object.
@@ -19,7 +26,7 @@ class StepGetDuplicateName {
    * @param {String} objectData.name Name of the original object.
    * during duplication with edit.
    */
-  getDuplicateName = (objectData, operationData) => {
+  getDuplicateName(objectData: ObjectData, operationData: OperationData): void {
     try {
       const { objectWorkingId, name } = objectData;
       const { objectEditedData } = operationData;
@@ -44,7 +51,7 @@ class StepGetDuplicateName {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData);
     }
-  };
+  }
 
   /**
    * Prepares new name for duplicated object based on original object name.
@@ -52,10 +59,10 @@ class StepGetDuplicateName {
    * New name contains original object name with additional counter at the end.
    * Counting number starts with 2.
    *
-   * @param {String} originalObjectName Name of the original object.
-   * @returns {String} Proposed name for new duplicated object.
+   * @param originalObjectName Name of the original object.
+   * @returns Proposed name for new duplicated object.
    */
-  prepareNewNameForDuplicatedObject = originalObjectName => {
+  prepareNewNameForDuplicatedObject(originalObjectName: string): string {
     const splitedName = String(originalObjectName).split(' ');
     const nrOfWords = splitedName.length;
 
@@ -78,7 +85,7 @@ class StepGetDuplicateName {
     const nameCandidate = splitedName.join(' ');
 
     return nameCandidate;
-  };
+  }
 
   /**
    * Checks nameCandidate for conflicts with names of other imported objects.
@@ -90,7 +97,7 @@ class StepGetDuplicateName {
    * @param {String} nameCandidate Prepared name for duplicated object
    * @returns {String} Final name for new duplicated object
    */
-  checkAndSolveNameConflicts = nameCandidate => {
+  checkAndSolveNameConflicts = (nameCandidate: string): string => {
     let finalNameCandidate = nameCandidate;
 
     const { objects } = this.reduxStore.getState().objectReducer;

@@ -1,9 +1,9 @@
-import mstrAttributeFormHelper from '../mstr-object/helper/mstr-attribute-form-helper';
+import mstrAttributeFormHelper from './helper/mstr-attribute-form-helper';
 import officeConverter from './office-converter-service-v2';
 
-import mstrCompoundGridHandler from '../mstr-object/handler/mstr-compound-grid-handler';
-import mstrGridHandler from '../mstr-object/handler/mstr-grid-handler';
-import jsonHandler from '../mstr-object/handler/mstr-normalized-json-handler';
+import mstrCompoundGridHandler from './handler/mstr-compound-grid-handler';
+import mstrGridHandler from './handler/mstr-grid-handler';
+import jsonHandler from './handler/mstr-normalized-json-handler';
 
 import {
   columnInformationMock,

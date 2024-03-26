@@ -1,5 +1,7 @@
-/* eslint-disable object-curly-newline, indent */
-import { reduxStore } from '../store';
+import { reduxStore, RootState } from '../store';
+
+import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../types/object-types';
 
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 import stepGetDuplicateName from './step-get-duplicate-name';
@@ -44,18 +46,21 @@ describe('StepGetDuplicateName', () => {
     'checkAndSolveNameConflicts should return adjusted name',
     ({ nameCandidate, expectedResult }) => {
       // given
-      jest.spyOn(reduxStore, 'getState').mockImplementation(() => ({
-        objectReducer: {
-          objects: [
-            { name: 'some name' },
-            { name: 'some name (2)' },
-            { name: 'some name (3)' },
-            { name: 'some name (4)' },
-            { name: 'name 7' },
-            { name: 'name 7 (2)' },
-          ],
-        },
-      }));
+      jest.spyOn(reduxStore, 'getState').mockImplementation(
+        () =>
+          ({
+            objectReducer: {
+              objects: [
+                { name: 'some name' },
+                { name: 'some name (2)' },
+                { name: 'some name (3)' },
+                { name: 'some name (4)' },
+                { name: 'name 7' },
+                { name: 'name 7 (2)' },
+              ],
+            },
+          }) as unknown as RootState
+      );
       // when
       const adjustedName = stepGetDuplicateName.checkAndSolveNameConflicts(nameCandidate);
       // then
@@ -68,8 +73,8 @@ describe('StepGetDuplicateName', () => {
     const objectData = {
       objectWorkingId: 'objectWorkingIdTest',
       name: 'nameTest',
-    };
-    const operationData = {};
+    } as unknown as ObjectData;
+    const operationData = {} as OperationData;
 
     const updateObjectMock = jest
       .spyOn(operationStepDispatcher, 'updateObject')
@@ -93,14 +98,14 @@ describe('StepGetDuplicateName', () => {
     const objectData = {
       objectWorkingId: 'objectWorkingIdTest',
       name: 'nameTest',
-    };
+    } as unknown as ObjectData;
     const operationData = {
       objectEditedData: {
         visualizationInfo: {
           nameAndFormatShouldUpdate: true,
         },
       },
-    };
+    } as OperationData;
 
     const updateObjectMock = jest
       .spyOn(operationStepDispatcher, 'updateObject')

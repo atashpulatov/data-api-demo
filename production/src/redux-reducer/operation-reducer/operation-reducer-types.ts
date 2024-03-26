@@ -7,9 +7,13 @@ import { OperationTypes } from '../../operation/operation-type-names';
 
 // TODO: refactor.
 // this is a temporary initial version. it should be improved
+export interface MstrTable {
+  [key: string]: any;
+}
 
 export interface InstanceDefinition {
   // TODO remove when type is finalized
+  mstrTable?: MstrTable;
   [key: string]: any;
 }
 

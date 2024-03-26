@@ -1,4 +1,4 @@
-import officeApiDataLoader from './api/office-api-data-loader';
+import officeApiDataLoader from './office-api-data-loader';
 
 describe('OfficeApiDataLoader', () => {
   afterEach(() => {

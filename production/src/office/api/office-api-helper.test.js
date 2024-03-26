@@ -1,8 +1,8 @@
-import { officeApiHelper } from './api/office-api-helper';
+import { officeApiHelper } from './office-api-helper';
 
-import { reduxStore } from '../store';
+import { reduxStore } from '../../store';
 
-import { OfficeSettingsEnum } from '../constants/office-constants';
+import { OfficeSettingsEnum } from '../../constants/office-constants';
 
 const INVALID_SELECTION = 'InvalidSelection';
 // FIXME: these were disabled anyway. Needs to be redone.
