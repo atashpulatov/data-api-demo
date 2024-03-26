@@ -3,6 +3,10 @@ export interface VisualizationInfo {
   pageKey?: string;
   visualizationKey?: string;
   nameAndFormatShouldUpdate?: boolean;
+  vizDimensions?: {
+    height: number;
+    width: number;
+  };
   dossierStructure?: {
     chapterName: string;
     dossierName: string;
