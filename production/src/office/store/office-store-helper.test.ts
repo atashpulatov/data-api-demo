@@ -47,7 +47,7 @@ describe('OfficeStoreHelper getOfficeSettings positive path', () => {
           settings: 'settingsTest',
         },
       },
-    };
+    } as any;
   });
 
   afterAll(() => {
@@ -93,7 +93,8 @@ describe('OfficeStoreHelper setters', () => {
     const settingsMock = {
       set: jest.fn(),
       saveAsync: jest.fn(),
-    };
+    } as unknown as Office.Settings;
+
     jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
 
     // when
@@ -131,7 +132,7 @@ describe('OfficeStoreHelper setters', () => {
     // given
     const settingsMock = {
       get: jest.fn().mockReturnValue('isFileSecuredTest'),
-    };
+    } as unknown as Office.Settings;
 
     jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
 
@@ -162,6 +163,7 @@ describe('OfficeStoreHelper getters', () => {
     jest.spyOn(officeStoreHelper, 'setPropertyValue').mockImplementation();
 
     // when
+    // @ts-expect-error
     officeStoreHelper[setterNameParam]('valueTest');
 
     // then
@@ -178,6 +180,7 @@ describe('OfficeStoreHelper getters', () => {
     jest.spyOn(officeStoreHelper, 'getPropertyValue').mockReturnValue('valueTest');
 
     // when
+    // @ts-expect-error
     const result = officeStoreHelper[getterNameParam](propertyNameParam);
 
     // then

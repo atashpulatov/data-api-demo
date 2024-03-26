@@ -1,5 +1,9 @@
 import officeStoreHelper from './office-store-helper';
 
+import { ReduxStore } from '../../store';
+
+import { ObjectData } from '../../types/object-types';
+
 import { errorService } from '../../error/error-handler';
 import { restoreAllAnswers } from '../../redux-reducer/answers-reducer/answers-actions';
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
@@ -8,21 +12,23 @@ import { OfficeSettingsEnum } from '../../constants/office-constants';
 import { ObjectImportType } from '../../mstr-object/constants';
 
 class OfficeStoreRestoreObject {
-  init = reduxStore => {
+  reduxStore: ReduxStore;
+
+  init(reduxStore: ReduxStore): void {
     this.reduxStore = reduxStore;
-  };
+  }
 
   /**
    * Retrieves information about object imported in previous versions,
    * maps them to new format of data and stores them in Redux and Office Settings,
    * and then remove the previously stored information from Office settings
    */
-  restoreObjectsFromExcelStore = () => {
+  restoreObjectsFromExcelStore = (): void => {
     const settings = officeStoreHelper.getOfficeSettings();
     let objects = settings.get(OfficeSettingsEnum.storedObjects) || [];
     objects = this.restoreLegacyObjectsFromExcelStore(settings, objects);
     if (objects?.filter) {
-      objects = objects.filter(object => !object.doNotPersist);
+      objects = objects.filter((object: any) => !object.doNotPersist);
     }
 
     this.resetIsPromptedForDossiersWithAnswers(objects);
@@ -33,16 +39,17 @@ class OfficeStoreRestoreObject {
     // Do filter image objects if the shape api is not supported
     // and only reflect udated objects in redux store and not back into office store.
     objects = this.filterImageObjectsIfNoShapeAPI(objects);
+    // @ts-expect-error
     objects && this.reduxStore.dispatch(restoreAllObjects(objects));
   };
 
   /**
    * Filters out image objects if the shape api is not supported in current version in order to maintain the backward compatibility.
    *
-   * @param {*} objects
+   * @param objects
    * @returns objects object definitions from excel document
    */
-  filterImageObjectsIfNoShapeAPI = objects => {
+  filterImageObjectsIfNoShapeAPI = (objects: ObjectData[]): ObjectData[] => {
     const isShapeAPISupported = officeContext.isShapeAPISupported();
 
     if (!isShapeAPISupported && objects?.filter) {
@@ -55,9 +62,9 @@ class OfficeStoreRestoreObject {
   /**
    * Parse the objects and set 'importType' to 'TABLE' if it is not defined.
    *
-   * @param {*} objects restored object definitions from excel document.
+   * @param objects restored object definitions from excel document.
    */
-  restoreLegacyObjectsWithImportType = objects => {
+  restoreLegacyObjectsWithImportType = (objects: ObjectData[]): void => {
     objects?.forEach(object => {
       if (object && !object.importType) {
         object.importType = ObjectImportType.TABLE;
@@ -72,9 +79,9 @@ class OfficeStoreRestoreObject {
    * the dossier was prompted because it was loaded in consumption mode, and the user never had a chance to answer
    * the prompts or re-prompt the dossier to change the answers (it retained shortcut values).
    *
-   * @param {*} objects restored object definitions from excel document.
+   * @param objects restored object definitions from excel document.
    */
-  resetIsPromptedForDossiersWithAnswers = objects => {
+  resetIsPromptedForDossiersWithAnswers = (objects: ObjectData[]): void => {
     objects
       ?.filter(object => object.mstrObjectType.type === 55)
       .forEach(object => {
@@ -88,22 +95,26 @@ class OfficeStoreRestoreObject {
    * Retrieves information about prompts answers imported in previous versions.
    * It fetches the information from Office Settings and stores it in Redux store.
    */
-  restoreAnswersFromExcelStore = () => {
+  restoreAnswersFromExcelStore = (): void => {
     const settings = officeStoreHelper.getOfficeSettings();
     const answers = settings.get(OfficeSettingsEnum.storedAnswers) || [];
     // If answers happens to be an empty array then it is still necessary
     // to dispatch it to clear the answers in Redux store.
+    // @ts-expect-error
     this.reduxStore.dispatch(restoreAllAnswers(answers));
   };
 
   /**
    * Maps previously stored objects information to new format of data
    *
-   * @param {Array} [objects] Objects imported in previous version of plugin
-   * @param {Office} settings Office settings that is required in order to use Office Api
-   * @return {Array} New objects and old objects converted to new format of data
+   * @param objects Objects imported in previous version of plugin
+   * @param settings Office settings that is required in order to use Office Api
+   * @return New objects and old objects converted to new format of data
    */
-  restoreLegacyObjectsFromExcelStore = (settings, objects = []) => {
+  restoreLegacyObjectsFromExcelStore = (
+    settings: Office.Settings,
+    objects: ObjectData[] = []
+  ): ObjectData[] => {
     const reportArray = this.getLegacyObjectsList();
     const objectsToBeAdded = [];
 
@@ -132,11 +143,11 @@ class OfficeStoreRestoreObject {
   /**
    * Maps values from legacy object to new key used in new data format
    *
-   * @param {Object} object Object imported in previous version of plugin
-   * @param {String} newKey New name of the field
-   * @param {String} oldKey Old name of the field
+   * @param object Object imported in previous version of plugin
+   * @param newKey New name of the field
+   * @param oldKey Old name of the field
    */
-  mapLegacyObjectValue = (object, newKey, oldKey) => {
+  mapLegacyObjectValue = (object: any, newKey: string, oldKey: string): void => {
     if (object[oldKey]) {
       object[newKey] = object[oldKey];
       delete object[oldKey];
@@ -146,10 +157,10 @@ class OfficeStoreRestoreObject {
   /**
    * Retrieves list of objects imported in previous versions,
    *
-   * @return {Array} Contains legacy objects data
+   * @return Contains legacy objects data
    * @throws Error on failed execution of Office api function
    */
-  getLegacyObjectsList = () => {
+  getLegacyObjectsList = (): any[] => {
     try {
       const settings = officeStoreHelper.getOfficeSettings();
       if (!settings.get(OfficeSettingsEnum.loadedReportProperties)) {
@@ -164,11 +175,11 @@ class OfficeStoreRestoreObject {
 
   /**
    * Retrieves one setting from Excel,
-   * @param {String} key
-   * @return {Any} Contains settings value
+   * @param key
+   * @return Contains settings value
    * @throws Error on failed execution of Office api function
    */
-  getExcelSettingValue = key => {
+  getExcelSettingValue = (key: string): any => {
     const settings = officeStoreHelper.getOfficeSettings();
     return settings.get(key);
   };

@@ -2,17 +2,19 @@ import { RunOutsideOfficeError } from '../../error/run-outside-office-error';
 import { OfficeSettingsEnum } from '../../constants/office-constants';
 
 class OfficeStoreHelper {
-  init = errorService => {
+  errorService: any;
+
+  init(errorService: any): void {
     this.errorService = errorService;
-  };
+  }
 
   /**
    * Return reference to Office settings that is required in order to use Office Api
    *
-   * @return {Office} reference to Office settings
+   * @return reference to Office settings
    * @throws Error when cannot reach Office Api
    */
-  getOfficeSettings = () => {
+  getOfficeSettings(): Office.Settings {
     if (
       Office === undefined ||
       Office.context === undefined ||
@@ -22,44 +24,45 @@ class OfficeStoreHelper {
     }
 
     return Office.context.document.settings;
-  };
+  }
 
   /**
    * Set value of isFileSecured flag in Office settings
    *
-   * @param {String} value Key used by Office Api to determine value from settings
+   * @param  value Key used by Office Api to determine value from settings
    */
-  setFileSecuredFlag = value => this.setPropertyValue(OfficeSettingsEnum.isSecured, value);
+  setFileSecuredFlag = (value: boolean): void =>
+    this.setPropertyValue(OfficeSettingsEnum.isSecured, value);
 
   /**
    * Set value of isClearDataFailed flag in Office settings
    *
-   * @param {String} propertyName Key used by Office Api to determine value from settings
+   * @param propertyName Key used by Office Api to determine value from settings
    */
-  setIsClearDataFailed = value =>
+  setIsClearDataFailed = (value: boolean): void =>
     this.setPropertyValue(OfficeSettingsEnum.isClearDataFailed, value);
 
   /**
    * Return value from Office settings specifying value of isFileSecured flag
    *
-   * @return {Boolean} isFileSecured flag
+   * @return isFileSecured flag
    */
-  isFileSecured = () => this.getPropertyValue(OfficeSettingsEnum.isSecured);
+  isFileSecured = (): boolean => this.getPropertyValue(OfficeSettingsEnum.isSecured);
 
   /**
    * Return value from Office settings specifying value of isClearDataFailed flag
    *
-   * @return {Boolean} isClearDataFailed flag
+   * @return isClearDataFailed flag
    */
-  isClearDataFailed = () => this.getPropertyValue(OfficeSettingsEnum.isClearDataFailed);
+  isClearDataFailed = (): boolean => this.getPropertyValue(OfficeSettingsEnum.isClearDataFailed);
 
   /**
    * Set value in Office settings corresponding to passed key
    *
-   * @param {String} propertyName Key used by Office Api to determine value from settings
-   * @param {*} value Value to be saved in Office settings
+   * @param propertyName Key used by Office Api to determine value from settings
+   * @param value Value to be saved in Office settings
    */
-  setPropertyValue = (propertyName, value) => {
+  setPropertyValue = (propertyName: string, value: any): void => {
     try {
       const settings = this.getOfficeSettings();
       settings.set(propertyName, value);
@@ -72,10 +75,10 @@ class OfficeStoreHelper {
   /**
    * Return value from Office settings corresponding to passed key
    *
-   * @param {String} propertyName Key used by Office Api to determine value from settings
-   * @return {*} value from Office
+   * @param propertyName Key used by Office Api to determine value from settings
+   * @return value from Office
    */
-  getPropertyValue = propertyName => {
+  getPropertyValue = (propertyName?: string): any => {
     try {
       const settings = this.getOfficeSettings();
       return settings.get(propertyName);

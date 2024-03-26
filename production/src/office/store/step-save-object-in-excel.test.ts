@@ -1,12 +1,16 @@
 import officeStoreObject from './office-store-object';
 
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
+
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import stepSaveObjectInExcel from './step-save-object-in-excel';
 
 describe('StepSaveObjectInExcel', () => {
-  let dateOriginal;
+  let dateOriginal: any;
   beforeAll(() => {
     dateOriginal = global.Date;
+    // @ts-expect-error
     global.Date = { now: () => 'nowTest' };
   });
 
@@ -21,6 +25,7 @@ describe('StepSaveObjectInExcel', () => {
   it('init work as expected', () => {
     // given
     // when
+    // @ts-expect-error
     stepSaveObjectInExcel.init('initTest');
 
     // then
@@ -30,7 +35,7 @@ describe('StepSaveObjectInExcel', () => {
   it('saveObject should handle an error', async () => {
     // given
     const objectDataMock = {
-      objectWorkingId: 'objectWorkingIdTest',
+      objectWorkingId: 2137,
       preparedInstanceId: 'preparedInstanceIdTest',
       details: {},
       importType: 'table',
@@ -46,12 +51,13 @@ describe('StepSaveObjectInExcel', () => {
       throw new Error('errorTest');
     });
 
+    // @ts-expect-error
     stepSaveObjectInExcel.init({ dispatch: jest.fn() });
 
     // when
     await stepSaveObjectInExcel.saveObject(objectDataMock, {
       instanceDefinition,
-    });
+    } as unknown as OperationData);
 
     // then
     expect(stepSaveObjectInExcel.reduxStore.dispatch).toHaveBeenCalled();
@@ -62,8 +68,8 @@ describe('StepSaveObjectInExcel', () => {
 
   it('saveObject should work as expected', async () => {
     // given
-    const objectDataMock = {
-      objectWorkingId: 'objectWorkingIdTest',
+    const objectDataMock: ObjectData = {
+      objectWorkingId: 2137,
       preparedInstanceId: 'preparedInstanceIdTest',
       details: {},
       importType: 'table',
@@ -73,6 +79,7 @@ describe('StepSaveObjectInExcel', () => {
 
     jest.spyOn(operationStepDispatcher, 'completeSaveObjectInExcel').mockImplementation();
 
+    // @ts-expect-error
     stepSaveObjectInExcel.init({ dispatch: jest.fn() });
     // when
     await stepSaveObjectInExcel.saveObject(objectDataMock, {
@@ -81,7 +88,7 @@ describe('StepSaveObjectInExcel', () => {
         columns: 'columnsTest',
         mstrTable: {},
       },
-    });
+    } as unknown as OperationData);
 
     // then
     expect(objectDataMock.previousTableDimensions).toEqual({

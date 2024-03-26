@@ -4,27 +4,31 @@ import officeStoreHelper from './office-store-helper';
 import { reduxStore } from '../../store';
 import officeStoreRestoreObject from './office-store-restore-object';
 
+import { ObjectData } from '../../types/object-types';
+
 import { errorService } from '../../error/error-handler';
 import * as answersActions from '../../redux-reducer/answers-reducer/answers-actions';
 import * as objectActions from '../../redux-reducer/object-reducer/object-actions';
 import { OfficeSettingsEnum } from '../../constants/office-constants';
 
-const internalData = {};
+const internalData = {} as any;
 
 const settingsMock = {
-  set: (key, value) => {
+  set: (key: string, value: any) => {
     internalData[key] = value;
   },
-  get: key => internalData[key],
-  remove: key => {
+  get: (key: string) => internalData[key],
+  remove: (key: string) => {
     delete internalData[key];
   },
-};
+  saveAsync: jest.fn(),
+} as unknown as Office.Settings;
 
 describe('OfficeStoreRestoreObject init', () => {
   it('init work as expected', () => {
     // given
     // when
+    // @ts-expect-error
     officeStoreRestoreObject.init('initTest');
 
     // then
@@ -46,9 +50,10 @@ describe.each`
     storedObjectParam,
     restoredFromExcelObject,
   }) => {
-    let objectActionsOriginal;
+    let objectActionsOriginal: any;
     beforeAll(() => {
       objectActionsOriginal = objectActions.restoreAllObjects;
+      // @ts-expect-error
       objectActions.restoreAllObjects = jest.fn().mockReturnValue('restoreAllObjectsTest');
     });
 
@@ -57,6 +62,7 @@ describe.each`
 
       internalData[OfficeSettingsEnum.storedObjects] = storedObjectParam;
 
+      // @ts-expect-error
       officeStoreRestoreObject.init(reduxStore);
     });
 
@@ -67,6 +73,7 @@ describe.each`
     afterAll(() => {
       delete internalData[OfficeSettingsEnum.storedObjects];
 
+      // @ts-expect-error
       objectActions.restoreAllObjects = objectActionsOriginal;
     });
 
@@ -117,7 +124,7 @@ describe.each`
 );
 
 describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
-  let answersActionsOriginal;
+  let answersActionsOriginal: any;
   beforeAll(() => {
     answersActionsOriginal = answersActions.restoreAllAnswers;
     answersActionsOriginal.restoreAllAnswers = jest.fn().mockReturnValue('restoreAllAnswersTest');
@@ -126,6 +133,7 @@ describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     internalData[OfficeSettingsEnum.storedAnswers] = 'restoredAnswerFromExcelTest';
+    // @ts-expect-error
     officeStoreRestoreObject.init(reduxStore);
   });
 
@@ -136,6 +144,7 @@ describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
   afterAll(() => {
     delete internalData[OfficeSettingsEnum.storedAnswers];
 
+    // @ts-expect-error
     answersActions.restoreAllAnswers = answersActionsOriginal;
   });
 
@@ -144,13 +153,9 @@ describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
     jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
     jest
       .spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsFromExcelStore')
-      .mockReturnValue('restoredObjectFromExcelTest');
-    jest
-      .spyOn(officeStoreRestoreObject, 'resetIsPromptedForDossiersWithAnswers')
-      .mockReturnValue('restoredObjectFromExcelTest');
-    jest
-      .spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsWithImportType')
-      .mockReturnValue('restoredFromExcelObject');
+      .mockReturnValue('restoredObjectFromExcelTest' as unknown as ObjectData[]);
+    jest.spyOn(officeStoreRestoreObject, 'resetIsPromptedForDossiersWithAnswers').mockReturnValue();
+    jest.spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsWithImportType').mockReturnValue();
 
     jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
@@ -169,9 +174,11 @@ describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
 });
 
 describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
-  let dateOriginal;
+  let dateOriginal: any;
+
   beforeAll(() => {
     dateOriginal = global.Date;
+    // @ts-expect-error
     global.Date = { now: () => 'nowTest' };
   });
 
@@ -231,7 +238,7 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
       // given
       jest
         .spyOn(officeStoreRestoreObject, 'getLegacyObjectsList')
-        .mockReturnValue([{ objectWorkingId: 'objectWorkingIdTest', bindId: 'otherBindId' }]);
+        .mockReturnValue([{ objectWorkingId: 2137, bindId: 'otherBindId' }]);
 
       jest.spyOn(officeStoreRestoreObject, 'mapLegacyObjectValue').mockImplementation();
 
@@ -289,8 +296,8 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
     ({ expectedResult, objectsParam }) => {
       // given
       jest.spyOn(officeStoreRestoreObject, 'getLegacyObjectsList').mockReturnValue([
-        { objectWorkingId: 'objectWorkingIdTest', bindId: 'otherBindId' },
-        { objectWorkingId: 'objectWorkingIdTest', bindId: 'otherBindId' },
+        { objectWorkingId: 2137, bindId: 'otherBindId' },
+        { objectWorkingId: 2137, bindId: 'otherBindId' },
       ]);
 
       jest.spyOn(officeStoreRestoreObject, 'mapLegacyObjectValue').mockImplementation();
@@ -368,7 +375,7 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
     // given
     jest
       .spyOn(officeStoreRestoreObject, 'getLegacyObjectsList')
-      .mockReturnValue([{ objectWorkingId: 'objectWorkingIdTest', bindId: 'sameBindId' }]);
+      .mockReturnValue([{ objectWorkingId: 2137, bindId: 'sameBindId' }]);
 
     jest.spyOn(officeStoreRestoreObject, 'mapLegacyObjectValue').mockImplementation();
 

@@ -7,27 +7,30 @@ import officeStoreObject from './office-store-object';
 import { errorService } from '../../error/error-handler';
 import * as objectActions from '../../redux-reducer/object-reducer/object-actions';
 
-const internalData = {};
+const internalData = {} as any;
 
 const settingsMock = {
-  set: (key, value) => {
+  set: (key: string, value: any) => {
     internalData[key] = value;
   },
-  get: key => internalData[key],
-  remove: key => {
+  get: (key: string) => internalData[key],
+  remove: (key: string) => {
     delete internalData[key];
   },
   saveAsync: jest.fn(),
-};
+} as unknown as Office.Settings;
 
 describe('OfficeStoreObject', () => {
-  let removeObjectObject;
+  let removeObjectObject: any;
+
   beforeAll(() => {
     removeObjectObject = objectActions.removeObject;
+    // @ts-expect-error
     objectActions.removeObject = jest.fn().mockReturnValue('removeObjectTest');
   });
 
   beforeEach(() => {
+    // @ts-expect-error
     officeStoreObject.init(reduxStore);
   });
 
@@ -35,16 +38,19 @@ describe('OfficeStoreObject', () => {
     jest.restoreAllMocks();
 
     settingsMock.remove('storedObjects');
+    // @ts-expect-error
     settingsMock.saveAsync.mockReset();
   });
 
   afterAll(() => {
+    // @ts-expect-error
     objectActions.removeObject = removeObjectObject;
   });
 
   it('init work as expected', () => {
     // given
     // when
+    // @ts-expect-error
     officeStoreObject.init('initTest');
 
     // then
@@ -60,7 +66,7 @@ describe('OfficeStoreObject', () => {
     jest.spyOn(errorService, 'handleError').mockImplementation();
 
     // when
-    officeStoreObject.removeObjectInExcelStore('objectWorkingIdTest');
+    officeStoreObject.removeObjectInExcelStore(2137);
 
     // then
     expect(officeStoreHelper.getOfficeSettings).toHaveBeenCalledTimes(1);
@@ -120,24 +126,24 @@ describe('OfficeStoreObject', () => {
     jest.spyOn(officeStoreObject, 'removeObjectInExcelStore').mockImplementation();
 
     // when
-    officeStoreObject.removeObjectFromStore('objectWorkingIdTest');
+    officeStoreObject.removeObjectFromStore(2137);
 
     // then
     expect(objectActions.removeObject).toHaveBeenCalledTimes(1);
-    expect(objectActions.removeObject).toHaveBeenCalledWith('objectWorkingIdTest');
+    expect(objectActions.removeObject).toHaveBeenCalledWith(2137);
 
     expect(reduxStore.dispatch).toHaveBeenCalledTimes(1);
     expect(reduxStore.dispatch).toHaveBeenCalledWith('removeObjectTest');
 
     expect(officeStoreObject.removeObjectInExcelStore).toHaveBeenCalledTimes(1);
-    expect(officeStoreObject.removeObjectInExcelStore).toHaveBeenCalledWith('objectWorkingIdTest');
+    expect(officeStoreObject.removeObjectInExcelStore).toHaveBeenCalledWith(2137);
   });
 
   it('saveObjectsInExcelStore should work as expected', async () => {
     // given
-    jest
-      .spyOn(reduxStore, 'getState')
-      .mockReturnValue({ objectReducer: { objects: 'objectsTest' } });
+
+    // @ts-expect-error
+    jest.spyOn(reduxStore, 'getState').mockReturnValue({ objectReducer: { objects: 'objectsTest' } });
 
     jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
 

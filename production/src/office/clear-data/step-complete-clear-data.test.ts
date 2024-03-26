@@ -18,7 +18,7 @@ describe('StepClearCrosstabHeaders', () => {
 
     const mockedGetOperations = jest
       .spyOn(officeReducerHelper, 'getOperationsListFromOperationReducer')
-      .mockReturnValue([{}, {}]);
+      .mockReturnValue([{}, {}] as OperationData[]);
     const mockedGetObjects = jest
       .spyOn(officeReducerHelper, 'getObjectsListFromObjectReducer')
       .mockImplementation();

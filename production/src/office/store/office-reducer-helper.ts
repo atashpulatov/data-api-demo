@@ -1,21 +1,22 @@
-// TODO remove when changed to TS
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
 
 import { OperationTypes } from '../../operation/operation-type-names';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 
 class OfficeReducerHelper {
-  init = reduxStore => {
+  reduxStore: any;
+
+  init(reduxStore: any): void {
     this.reduxStore = reduxStore;
-  };
+  }
 
   /**
    * Function return array of objects from objects reducer
    *
-   * @return {Array} Contains all currently existing objects
+   * @return  Contains all currently existing objects
    */
-  getObjectsListFromObjectReducer = () => {
+  getObjectsListFromObjectReducer = (): ObjectData[] => {
     const state = this.reduxStore.getState();
     const { objects } = state.objectReducer;
 
@@ -25,13 +26,13 @@ class OfficeReducerHelper {
   /**
    * Function return array of operations from operation reducer, excluding highlight operation
    *
-   * @return {Array} Contains all currently existing operations
+   * @return Contains all currently existing operations
    */
-  getOperationsListFromOperationReducer = () =>
+  getOperationsListFromOperationReducer = (): OperationData[] =>
     this.reduxStore
       .getState()
       .operationReducer.operations.filter(
-        operation => operation.operationType !== OperationTypes.HIGHLIGHT_OPERATION
+        (operation: OperationData) => operation.operationType !== OperationTypes.HIGHLIGHT_OPERATION
       );
 
   /**
@@ -39,30 +40,30 @@ class OfficeReducerHelper {
    * return false if number of operations bigger than 0
    * return true if number of operations is equal 0
    *
-   * @return {Boolean} Specify if there is no operation in the operation reducer
+   * @return  Specify if there is no operation in the operation reducer
    */
-  noOperationInProgress = () => this.getOperationsListFromOperationReducer().length === 0;
+  noOperationInProgress = (): boolean => this.getOperationsListFromOperationReducer().length === 0;
 
   /**
    * Return object from object Reducer correspongin to passed bindId
    *
-   * @param {String} bindId Id of the Office table created on import used for referencing the Excel table
-   * @return {ObjectData}
+   * @param  bindId Id of the Office table created on import used for referencing the Excel table
+   * @return
    */
-  getObjectFromObjectReducerByBindId = bindId => {
+  getObjectFromObjectReducerByBindId = (bindId: string): ObjectData => {
     const { objects } = this.reduxStore.getState().objectReducer;
-    return objects.find(object => object.bindId === bindId);
+    return objects.find((object: ObjectData) => object.bindId === bindId);
   };
 
   /**
    * Return object from object Reducer corresponding to passed objectWorkingId
    *
-   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
-   * @return {ObjectData}
+   * @param objectWorkingId Unique Id of the object allowing to reference specific object
+   * @return
    */
-  getObjectFromObjectReducerByObjectWorkingId = objectWorkingId => {
+  getObjectFromObjectReducerByObjectWorkingId = (objectWorkingId: number): ObjectData => {
     const { objects } = this.reduxStore.getState().objectReducer;
-    return objects.find(object => object.objectWorkingId === objectWorkingId);
+    return objects.find((object: ObjectData) => object.objectWorkingId === objectWorkingId);
   };
 
   /**
@@ -71,17 +72,19 @@ class OfficeReducerHelper {
    * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
    * @return {Object}
    */
-  getNotificationFromNotificationReducer = objectWorkingId => {
+  getNotificationFromNotificationReducer = (objectWorkingId: number): any => {
     const { notifications } = this.reduxStore.getState().notificationReducer;
-    return notifications.find(notification => notification.objectWorkingId === objectWorkingId);
+    return notifications.find(
+      (notification: any) => notification.objectWorkingId === objectWorkingId
+    );
   };
 
   /**
    * Set popup data in office reducer. Based on this data will display the popup.
    *
-   * @param {Object} popupData Contains data about popup to be displayed
+   * @param popupData Contains data about popup to be displayed
    */
-  displayPopup = popupData => {
+  displayPopup = (popupData: any): void => {
     this.reduxStore.dispatch(officeActions.setPopupData(popupData));
   };
 
@@ -89,7 +92,7 @@ class OfficeReducerHelper {
    * Clear popup data in office reducer. Based on this data will hide the popup.
    *
    */
-  clearPopupData = () => {
+  clearPopupData = (): void => {
     this.reduxStore.dispatch(officeActions.clearPopupData());
   };
 }

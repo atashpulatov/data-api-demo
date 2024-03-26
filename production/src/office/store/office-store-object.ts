@@ -1,5 +1,9 @@
 import officeStoreHelper from './office-store-helper';
 
+import { ReduxStore } from '../../store';
+
+import { ObjectData } from '../../types/object-types';
+
 import { errorService } from '../../error/error-handler';
 import { removeObject } from '../../redux-reducer/object-reducer/object-actions';
 import { officeContext } from '../office-context';
@@ -7,24 +11,26 @@ import { OfficeSettingsEnum } from '../../constants/office-constants';
 import { ObjectImportType } from '../../mstr-object/constants';
 
 class OfficeStoreObject {
-  init = reduxStore => {
+  reduxStore: ReduxStore;
+
+  init(reduxStore: ReduxStore): void {
     this.reduxStore = reduxStore;
-  };
+  }
 
   /**
    * Removes object from office settings based on passed objectWorkingId
    *
    */
-  removeObjectInExcelStore = objectWorkingId => {
+  removeObjectInExcelStore = (objectWorkingId?: number): void => {
     try {
       const settings = officeStoreHelper.getOfficeSettings();
       if (objectWorkingId) {
-        const storedObjects = settings.get(OfficeSettingsEnum.storedObjects);
-        const indexOfReport = storedObjects.findIndex(
-          report => report.objectWorkingId === objectWorkingId
+        const storedObjects: ObjectData[] = settings.get(OfficeSettingsEnum.storedObjects);
+        const indexOfObject = storedObjects.findIndex(
+          object => object.objectWorkingId === objectWorkingId
         );
-        if (indexOfReport !== -1) {
-          storedObjects.splice(indexOfReport, 1);
+        if (indexOfObject !== -1) {
+          storedObjects.splice(indexOfObject, 1);
           settings.set(OfficeSettingsEnum.storedObjects, storedObjects);
         }
       }
@@ -39,7 +45,8 @@ class OfficeStoreObject {
    * Removes object from redux and office settings based on passed objectWorkingId
    *
    */
-  removeObjectFromStore = objectWorkingId => {
+  removeObjectFromStore = (objectWorkingId: number): void => {
+    // @ts-expect-error
     this.reduxStore.dispatch(removeObject(objectWorkingId));
     this.removeObjectInExcelStore(objectWorkingId);
   };
@@ -50,14 +57,14 @@ class OfficeStoreObject {
    *
    * @returns {Array} Contains objects definitions from excel document
    */
-  mergeReduxToExcelStoreObjectsIfShapeApiNotSupported = () => {
+  mergeReduxToExcelStoreObjectsIfShapeApiNotSupported = (): ObjectData[] => {
     const { objects } = this.reduxStore.getState().objectReducer;
     const isShapeAPISupported = officeContext.isShapeAPISupported();
 
     if (!isShapeAPISupported) {
       // Restore objects from Office Store that contain image objects.
       const settings = officeStoreHelper.getOfficeSettings();
-      const objectsInOfficeStore = settings.get(OfficeSettingsEnum.storedObjects);
+      const objectsInOfficeStore: ObjectData[] = settings.get(OfficeSettingsEnum.storedObjects);
 
       if (objectsInOfficeStore?.length > 0) {
         // Grab image objects from Office Store
@@ -79,24 +86,24 @@ class OfficeStoreObject {
    * Saves current objects list from Object Reducer in Office Settings
    *
    */
-  saveObjectsInExcelStore = async () => {
+  saveObjectsInExcelStore = (): void => {
     // Make sure that objects are merged before saving in Office Settings
     // to maintain backward compatibility and include image objects if Shape API is not supported.
     const objects = this.mergeReduxToExcelStoreObjectsIfShapeApiNotSupported();
     const settings = officeStoreHelper.getOfficeSettings();
     settings.set(OfficeSettingsEnum.storedObjects, objects);
-    await settings.saveAsync();
+    settings.saveAsync();
   };
 
   /**
    * Saves current answers list from Answer Reducer in Office Settings
    *
    */
-  saveAnswersInExcelStore = async () => {
+  saveAnswersInExcelStore = (): void => {
     const { answers } = this.reduxStore.getState().answersReducer;
     const settings = officeStoreHelper.getOfficeSettings();
     settings.set(OfficeSettingsEnum.storedAnswers, answers);
-    await settings.saveAsync();
+    settings.saveAsync();
   };
 }
 
