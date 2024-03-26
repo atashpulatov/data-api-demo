@@ -5,7 +5,7 @@ import { authenticationService } from '../authentication/auth-rest-service';
 import { homeHelper } from '../home/home-helper';
 import { userRestService } from '../home/user-rest-service';
 
-import { ObjectData } from '../redux-reducer/object-reducer/object-reducer-types';
+import { ObjectData } from '../types/object-types';
 
 import { errorService } from '../error/error-handler';
 import { importRequested } from '../redux-reducer/operation-reducer/operation-actions';
@@ -43,7 +43,7 @@ class SessionHelper {
     const { authToken } = this.reduxStore.getState().sessionReducer;
     const { envUrl } = this.reduxStore.getState().sessionReducer;
     try {
-      await authenticationService.logout(envUrl, authToken);
+      authenticationService.logout(envUrl, authToken);
     } catch (error) {
       errorService.handleError(error, { isLogout: true } as any);
     }

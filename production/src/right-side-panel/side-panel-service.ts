@@ -6,9 +6,9 @@ import officeReducerHelper from '../office/store/office-reducer-helper';
 
 import officeStoreObject from '../office/store/office-store-object';
 
-import { ObjectData } from '../redux-reducer/object-reducer/object-reducer-types';
+import { PopupTypeEnum } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
+import { ObjectData } from '../types/object-types';
 
-import { PopupTypeEnum } from '../home/popup-type-enum';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupController } from '../popup/popup-controller';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';

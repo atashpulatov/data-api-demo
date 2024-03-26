@@ -7,8 +7,8 @@ import { officeApiHelper } from '../office/api/office-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { sidePanelService } from './side-panel-service';
 
-import { ObjectData } from '../redux-reducer/object-reducer/object-reducer-types';
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../types/object-types';
 
 import { errorService } from '../error/error-handler';
 import { calculateLoadingProgress } from '../operation/operation-loading-progress';

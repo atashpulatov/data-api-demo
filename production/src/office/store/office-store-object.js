@@ -2,8 +2,8 @@ import officeStoreHelper from './office-store-helper';
 
 import { errorService } from '../../error/error-handler';
 import { removeObject } from '../../redux-reducer/object-reducer/object-actions';
-import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 import { officeContext } from '../office-context';
+import { OfficeSettingsEnum } from '../../constants/office-constants';
 import { ObjectImportType } from '../../mstr-object/constants';
 
 class OfficeStoreObject {
@@ -19,13 +19,13 @@ class OfficeStoreObject {
     try {
       const settings = officeStoreHelper.getOfficeSettings();
       if (objectWorkingId) {
-        const storedObjects = settings.get(officeProperties.storedObjects);
+        const storedObjects = settings.get(OfficeSettingsEnum.storedObjects);
         const indexOfReport = storedObjects.findIndex(
           report => report.objectWorkingId === objectWorkingId
         );
         if (indexOfReport !== -1) {
           storedObjects.splice(indexOfReport, 1);
-          settings.set(officeProperties.storedObjects, storedObjects);
+          settings.set(OfficeSettingsEnum.storedObjects, storedObjects);
         }
       }
 
@@ -57,11 +57,13 @@ class OfficeStoreObject {
     if (!isShapeAPISupported) {
       // Restore objects from Office Store that contain image objects.
       const settings = officeStoreHelper.getOfficeSettings();
-      const objectsInOfficeStore = settings.get(officeProperties.storedObjects);
+      const objectsInOfficeStore = settings.get(OfficeSettingsEnum.storedObjects);
 
       if (objectsInOfficeStore?.length > 0) {
         // Grab image objects from Office Store
-        const imageObjects = objectsInOfficeStore.filter(object => object?.importType === ObjectImportType.IMAGE);
+        const imageObjects = objectsInOfficeStore.filter(
+          object => object?.importType === ObjectImportType.IMAGE
+        );
 
         // Merge imageObjects with objects from redux based and sort descendng on objectWorkingId property in object.
         if (imageObjects?.length > 0) {
@@ -82,7 +84,7 @@ class OfficeStoreObject {
     // to maintain backward compatibility and include image objects if Shape API is not supported.
     const objects = this.mergeReduxToExcelStoreObjectsIfShapeApiNotSupported();
     const settings = officeStoreHelper.getOfficeSettings();
-    settings.set(officeProperties.storedObjects, objects);
+    settings.set(OfficeSettingsEnum.storedObjects, objects);
     await settings.saveAsync();
   };
 
@@ -93,7 +95,7 @@ class OfficeStoreObject {
   saveAnswersInExcelStore = async () => {
     const { answers } = this.reduxStore.getState().answersReducer;
     const settings = officeStoreHelper.getOfficeSettings();
-    settings.set(officeProperties.storedAnswers, answers);
+    settings.set(OfficeSettingsEnum.storedAnswers, answers);
     await settings.saveAsync();
   };
 }

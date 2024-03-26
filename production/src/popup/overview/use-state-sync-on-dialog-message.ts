@@ -5,8 +5,9 @@ import { popupHelper } from '../popup-helper';
 
 import { reduxStore } from '../../store';
 
+import { PopupTypeEnum } from '../../redux-reducer/popup-state-reducer/popup-state-reducer-types';
+
 import { selectorProperties } from '../../attribute-selector/selector-properties';
-import { PopupTypeEnum } from '../../home/popup-type-enum';
 import {
   createGlobalNotification,
   restoreAllNotifications,

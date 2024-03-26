@@ -251,7 +251,7 @@ describe('Settings Menu', () => {
       <SettingsMenuNotConnected isSettings toggleIsSettingsFlag={toggleIsSettingsFlagMock} />
     );
     // when
-    map.keyup({ keyCode: 27 });
+    map.keyup({ key: 'Escape' });
     rerender(
       <SettingsMenuNotConnected isSettings toggleIsSettingsFlag={toggleIsSettingsFlagMock} />
     );

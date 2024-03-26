@@ -3,7 +3,8 @@ import { sessionHelper } from '../storage/session-helper';
 
 import { reduxStore } from '../store';
 
-import { PopupTypeEnum } from '../home/popup-type-enum';
+import { PopupTypeEnum } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
+
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupController } from '../popup/popup-controller';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';

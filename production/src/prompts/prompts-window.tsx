@@ -454,7 +454,6 @@ export const mapStateToProps = (state: RootState): any => {
     answersReducer,
     repromptsQueueReducer,
   } = state;
-  // @ts-expect-error
   const popupState = popupReducer.editedObject;
   const {
     promptsAnswers,

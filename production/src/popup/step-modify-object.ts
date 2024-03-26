@@ -1,5 +1,5 @@
-import { ObjectData } from '../redux-reducer/object-reducer/object-reducer-types';
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../types/object-types';
 
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 

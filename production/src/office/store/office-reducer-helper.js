@@ -1,6 +1,6 @@
 // TODO remove when changed to TS
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { ObjectData } from '../../redux-reducer/object-reducer/object-reducer-types';
+import { ObjectData } from '../../types/object-types';
 
 import { OperationTypes } from '../../operation/operation-type-names';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
