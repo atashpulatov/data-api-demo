@@ -89,7 +89,7 @@ class SidePanelService {
   async rename(objectWorkingId: number, newName: string): Promise<void> {
     const renamedObject = { objectWorkingId, name: newName };
     this.reduxStore.dispatch(updateObject(renamedObject));
-    await officeStoreObject.saveObjectsInExcelStore();
+    officeStoreObject.saveObjectsInExcelStore();
   }
 
   /**

@@ -142,13 +142,15 @@ describe('OfficeStoreObject', () => {
   it('saveObjectsInExcelStore should work as expected', async () => {
     // given
 
-    // @ts-expect-error
-    jest.spyOn(reduxStore, 'getState').mockReturnValue({ objectReducer: { objects: 'objectsTest' } });
+    jest
+      .spyOn(reduxStore, 'getState')
+      // @ts-expect-error
+      .mockReturnValue({ objectReducer: { objects: 'objectsTest' } });
 
     jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
 
     // when
-    await officeStoreObject.saveObjectsInExcelStore();
+    officeStoreObject.saveObjectsInExcelStore();
 
     // then
     expect(officeStoreHelper.getOfficeSettings).toHaveBeenCalledTimes(2);
