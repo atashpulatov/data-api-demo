@@ -1,22 +1,23 @@
 import mstrCompoundGridFlatten from './helper/mstr-compound-grid-flatten';
 
+import { MstrTable } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import { VisualizationTypes } from './mstr-object-types';
+
 import mstrCompoundGridHandler from './handler/mstr-compound-grid-handler';
 import mstrGridHandler from './handler/mstr-grid-handler';
-import mstrObjectType from './mstr-object-type-enum';
 
 /**
  * Service to parse JSON response from REST API v2
  *
- * @class OfficeConverterServiceV2
  */
 class OfficeConverterServiceV2 {
   /**
    * cretes mstrTable object containing information about structure of the object
    *
-   * @param {JSON} response
-   * @return {number[]}
+   * @param response
+   * @return
    */
-  createTable(response) {
+  createTable(response: any): MstrTable {
     const handler = this.getHandler(response);
     const mstrTable = handler.createTable(response);
 
@@ -36,11 +37,11 @@ class OfficeConverterServiceV2 {
   /**
    * Gets raw table rows
    *
-   * @param {JSON} response
-   * @param {Boolean} isCrosstab Specify if object is a crosstab
-   * @return {number[]}
+   * @param response
+   * @param isCrosstab Specify if object is a crosstab
+   * @return
    */
-  getRows = (response, isCrosstab) => {
+  getRows = (response: any, isCrosstab: boolean): { row: any[]; rowTotals?: any[] } => {
     const handler = this.getHandler(response);
     return handler.getRows(response, isCrosstab);
   };
@@ -48,13 +49,21 @@ class OfficeConverterServiceV2 {
   /**
    * Gets object with crosstab rows and column headers
    *
-   * @param {JSON} response
-   * @param {Boolean} isCrosstab Specify if object is a crosstab
-   * @param {Boolean} isCrosstabular Crosstabular is a Crosstab report with metrics in Rows and nothing in columns
-   * @return {Object}
+   * @param response
+   * @param isCrosstab Specify if object is a crosstab
+   * @param isCrosstabular Crosstabular is a Crosstab report with metrics in Rows and nothing in columns
+   * @return 
 
    */
-  getHeaders = (response, isCrosstab, isCrosstabular) => {
+  getHeaders = (
+    response: any,
+    isCrosstab: boolean,
+    isCrosstabular?: boolean
+  ): {
+    rows?: any[];
+    columns?: any[];
+    subtotalAddress?: any[];
+  } => {
     const handler = this.getHandler(response);
     return handler.getHeaders(response, isCrosstab, isCrosstabular);
   };
@@ -62,10 +71,10 @@ class OfficeConverterServiceV2 {
   /**
    * Gets subtotals defined or visible information from the response.
    *
-   * @param {JSON} response
-   * @return {Object}
+   * @param response
+   * @return
    */
-  getSubtotalsInformation = response => {
+  getSubtotalsInformation = (response: any): any => {
     const handler = this.getHandler(response);
     return handler.getSubtotalsInformation(response);
   };
@@ -73,10 +82,10 @@ class OfficeConverterServiceV2 {
   /**
    * Checks if response contains crosstabs
    *
-   * @param {JSON} response
-   * @return {Boolean}
+   * @param  response
+   * @return
    */
-  isCrosstab = response => {
+  isCrosstab = (response: any): boolean => {
     try {
       const { grid } = response.definition;
       return !!grid.crossTab && grid.columns.length !== 0;
@@ -89,13 +98,13 @@ class OfficeConverterServiceV2 {
   /**
    * return reference to handler based on response structure
    *
-   * @param {JSON} response
-   * @return {Class}
+   * @param response
+   * @return
    */
-  getHandler = response => {
+  getHandler = (response: any): any => {
     switch (response.visualizationType) {
-      case mstrObjectType.visualizationType.COMPOUND_GRID:
-      case mstrObjectType.visualizationType.MICROCHARTS:
+      case VisualizationTypes.COMPOUND_GRID:
+      case VisualizationTypes.MICROCHARTS:
         return this.getHandlerForCompoundGrid(response);
       default:
         return mstrGridHandler;
@@ -105,15 +114,17 @@ class OfficeConverterServiceV2 {
   /**
    * return reference to handler based on compound grid structure
    *
-   * @param {JSON} response
-   * @return {Class}
+   * @param response
+   * @return
    */
-  getHandlerForCompoundGrid = response => {
+  getHandlerForCompoundGrid = (response: any): any => {
     const {
       definition: { grid },
     } = response;
     const isCrosstab = grid.crossTab;
-    const notEmptyColumnSet = grid.columnSets.find(({ columns }) => columns.length > 0);
+    const notEmptyColumnSet = grid.columnSets.find(
+      ({ columns }: { columns: any[] }) => columns.length > 0
+    );
 
     // We are removing empty column sets only for non crosstab visualizatoins and
     // only when they have at least 1 non empty columnset
@@ -138,16 +149,16 @@ class OfficeConverterServiceV2 {
    * replaces all cell data values containing null (which is MSTR standard for no data)
    * to empty string (which is Excel standard for no data) as "null" in Excel means "do not change current value"
    *
-   * @param {body} response body
-   * @return {body}
+   * @param  response body
+   * @return
    */
-  convertCellValuesToExcelStandard = body => {
-    const replaceNullValues = value => (value === null ? '' : value);
+  convertCellValuesToExcelStandard = (body: any): any => {
+    const replaceNullValues = (value: any): any => (value === null ? '' : value);
 
-    const replaceNullsInNestedRawValues = metricValues => {
+    const replaceNullsInNestedRawValues = (metricValues: any): any => {
       Object.keys(metricValues).forEach(key => {
         if (key === 'raw') {
-          metricValues[key] = metricValues[key].map(singleRawArray =>
+          metricValues[key] = metricValues[key].map((singleRawArray: any[]): any[] =>
             singleRawArray.map(replaceNullValues)
           );
         } else {

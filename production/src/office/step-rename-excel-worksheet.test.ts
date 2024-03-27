@@ -25,7 +25,7 @@ describe('StepRenameExcelWorksheet', () => {
     jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
     // when
-    await stepRenameExcelWorksheet.renameExcelWorksheet({}, operationData);
+    await stepRenameExcelWorksheet.renameExcelWorksheet({} as ObjectData, operationData);
 
     // then
     expect(console.error).toBeCalledTimes(1);

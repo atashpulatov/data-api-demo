@@ -2,6 +2,8 @@ import React from 'react';
 
 import { sessionHelper } from './storage/session-helper';
 
+import { ObjectData } from './types/object-types';
+
 import mstrObjectType from './mstr-object/mstr-object-type-enum';
 
 const objectList = {
@@ -110,7 +112,9 @@ export const DevelopmentImportList = (): React.ReactElement => (
   <div className='refresh-button-container'>
     <button
       type='button'
-      onClick={() => sessionHelper.importObjectWithouPopup(objectList.CrosstabSubtotal)}
+      onClick={() =>
+        sessionHelper.importObjectWithouPopup(objectList.CrosstabSubtotal as ObjectData)
+      }
     >
       Quick Import
     </button>

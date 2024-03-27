@@ -2,6 +2,8 @@
 import mstrAttributeFormHelper from '../helper/mstr-attribute-form-helper';
 import mstrAttributeMetricHelper from '../helper/mstr-attribute-metric-helper';
 
+import { MstrTable } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+
 import jsonHandler from './mstr-normalized-json-handler';
 /**
  * Handler to parse grids
@@ -9,7 +11,7 @@ import jsonHandler from './mstr-normalized-json-handler';
  * @class GridHandler
  */
 class GridHandler {
-  createTable(response) {
+  createTable(response: any): MstrTable {
     const { grid } = response.definition;
     // Crosstabular is a Crosstab report with metrics in Rows and nothing in columns, so we display it as tabular
     const isCrosstabular =
@@ -36,10 +38,13 @@ class GridHandler {
   /**
    * Get attribute names for crosstab report
    *
-   * @param {JSON} definition Object definition from response
-   * @return {Object} Contains arrays of columns and rows attributes names
+   * @param definition Object definition from response
+   * @return Contains arrays of columns and rows attributes names
    */
-  getAttributesName = (definition, attrforms) => {
+  getAttributesName = (
+    definition: any,
+    attrforms: any
+  ): { rowsAttributes: any[]; columnsAttributes: any[] } => {
     const columnsAttributes = mstrAttributeFormHelper.getAttributeWithForms(
       definition.grid.columns,
       attrforms
@@ -54,18 +59,18 @@ class GridHandler {
   /**
    * Gets raw table rows
    *
-   * @param {JSON} response
-   * @param {Boolean} isCrosstab Specify if object is a crosstab
-   * @return {number[]}
+   * @param response
+   * @param isCrosstab Specify if object is a crosstab
+   * @return
    */
-  getRows = (response, isCrosstab) => {
-    const rowTotals = [];
+  getRows = (response: any, isCrosstab: boolean): { row: any[]; rowTotals?: any[] } => {
+    const rowTotals: any[] = [];
     const { attrforms } = response;
-    const onAttribute = array => e => {
+    const onAttribute = (array: any[]) => (element: any) => {
       if (array) {
-        array.push(e.subtotalAddress);
+        array.push(element.subtotalAddress);
       }
-      return `${e.value.join(' ')}`;
+      return `${element.value.join(' ')}`;
     };
     if (isCrosstab) {
       return { row: jsonHandler.renderRows(response.data) };
@@ -84,30 +89,37 @@ class GridHandler {
   /**
    * Gets object with crosstab rows and column headers
    *
-   * @param {JSON} response
-   * @param {Boolean} isCrosstab Specify if object is a crosstab
-   * @param {Boolean} isCrosstabular Crosstabular is a Crosstab report with metrics in Rows and nothing in columns
-   * @return {Object}
-
+   * @param response
+   * @param isCrosstab Specify if object is a crosstab
+   * @param isCrosstabular Crosstabular is a Crosstab report with metrics in Rows and nothing in columns
+   * @return
    */
-  getHeaders(response, isCrosstab, isCrosstabular) {
-    const rowTotals = [];
-    const columnTotals = [];
+  getHeaders(
+    response: any,
+    isCrosstab: boolean,
+    isCrosstabular?: boolean
+  ): {
+    rows?: any[];
+    columns?: any[];
+    subtotalAddress?: any[];
+  } {
+    const rowTotals: any[] = [];
+    const columnTotals: any[] = [];
     const { attrforms } = response;
     const supportForms = attrforms ? attrforms.supportForms : false;
-    const onElement = array => e => {
+    const onElement = (array: any[]) => (element: any) => {
       if (array) {
-        array.push(e.subtotalAddress);
+        array.push(element.subtotalAddress);
       }
       // attribute as row with forms
-      const forms = mstrAttributeFormHelper.getAttributesTitleWithForms(e, attrforms);
+      const forms = mstrAttributeFormHelper.getAttributesTitleWithForms(element, attrforms);
       if (forms) {
         return forms;
       }
       // attribute as column with forms
-      return supportForms && e.value.length > 1
-        ? e.value.map(form => `${form}`)
-        : `${e.value.join(' ')}`;
+      return supportForms && element.value.length > 1
+        ? element.value.map((form: any) => `${form}`)
+        : `${element.value.join(' ')}`;
     };
     if (isCrosstab) {
       const rows = jsonHandler.renderHeaders(
@@ -131,6 +143,7 @@ class GridHandler {
       response.definition,
       'rows',
       response.data.headers,
+      // @ts-expect-error
       onElement(),
       supportForms
     );
@@ -138,6 +151,7 @@ class GridHandler {
       response.definition,
       'columns',
       response.data.headers,
+      // @ts-expect-error
       onElement(),
       supportForms
     );
@@ -149,12 +163,16 @@ class GridHandler {
   /**
    * Returns number of rows and metric columns of tabular data if not crosstabs of metrics grid if crosstabs
    *
-   * @param {JSON} response
-   * @param {Object} columnInformation - Array with indexed column definition for metrics and attributes
-   * @param {Boolean} isCrosstab Specify if object is a crosstab
-   * @return {Number}
+   * @param response
+   * @param columnInformation - Array with indexed column definition for metrics and attributes
+   * @param isCrosstab Specify if object is a crosstab
+   * @return
    */
-  getTableSize = (response, columnInformation, isCrosstab) => {
+  getTableSize = (
+    response: any,
+    columnInformation: any,
+    isCrosstab: boolean
+  ): { rows: number; columns: number } => {
     const columnsCount = columnInformation.length;
     const columnHeader = response.data.headers.columns[0];
     let columns;
@@ -174,10 +192,10 @@ class GridHandler {
   /**
    * Checks if response contains crosstabs
    *
-   * @param {JSON} response
-   * @return {Boolean}
+   * @param response
+   * @return
    */
-  isCrosstab = response => {
+  isCrosstab = (response: any): boolean => {
     try {
       const { grid } = response.definition;
       return !!grid.crossTab && grid.columns.length !== 0;
@@ -190,16 +208,16 @@ class GridHandler {
   /**
    * Gets array with indexed column definition
    *
-   * @param {JSON} response
-   * @param {Boolean} isCrosstabular Crosstabular is a Crosstab report with metrics in Rows and nothing in columns
-   * @return {Object}
+   * @param response
+   * @param isCrosstabular Crosstabular is a Crosstab report with metrics in Rows and nothing in columns
+   * @return
    */
-  getColumnInformation = (response, isCrosstabular) => {
+  getColumnInformation = (response: any, isCrosstabular: boolean): any[] => {
     const { attrforms } = response;
     const supportForms = attrforms ? attrforms.supportForms : false;
     let columns;
 
-    const onElement = element => element;
+    const onElement = (element: any): any => element;
     const metricColumns = jsonHandler.renderHeaders(
       response.definition,
       'columns',
@@ -229,10 +247,10 @@ class GridHandler {
   /**
    * Gets subtotals defined or visible information from the response.
    *
-   * @param {JSON} response
-   * @return {Object}
+   * @param response
+   * @return
    */
-  getSubtotalsInformation = response => {
+  getSubtotalsInformation = (response: any): any => {
     try {
       const { subtotals } = response.definition.grid;
       return subtotals;

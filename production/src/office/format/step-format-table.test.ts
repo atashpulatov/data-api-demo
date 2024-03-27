@@ -1,4 +1,5 @@
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
 
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import officeApiDataLoader from '../api/office-api-data-loader';
@@ -20,14 +21,17 @@ describe('StepFormatTable', () => {
     jest.spyOn(operationStepDispatcher, 'completeFormatOfficeTable').mockImplementation();
 
     // when
-    await stepFormatTable.formatTable({}, {
-      instanceDefinition: {
-        mstrTable: { crosstabHeaderDimensions: {} },
-        columns: 42,
-      },
-      officeTable: {} as Excel.Table,
-      shouldFormat: true,
-    } as unknown as OperationData);
+    await stepFormatTable.formatTable(
+      {} as ObjectData,
+      {
+        instanceDefinition: {
+          mstrTable: { crosstabHeaderDimensions: {} },
+          columns: 42,
+        },
+        officeTable: {} as Excel.Table,
+        shouldFormat: true,
+      } as unknown as OperationData
+    );
 
     // then
     expect(stepFormatTable.formatCrosstabHeaders).toBeCalledTimes(1);
@@ -41,7 +45,7 @@ describe('StepFormatTable', () => {
 
   it('formatTable should be skipped for shouldFormat false', async () => {
     // given
-    const objectData = {};
+    const objectData = {} as ObjectData;
 
     const excelContextSyncMock = jest.fn();
     const operationData = {
@@ -81,7 +85,7 @@ describe('StepFormatTable', () => {
   it('formatTable should log no autofit, when columns are more than 49', async () => {
     // given
     jest.spyOn(console, 'log');
-    const objectData = {};
+    const objectData = {} as ObjectData;
     const excelContextSyncMock = jest.fn();
     const operationData = {
       objectWorkingId: 2137,
@@ -122,7 +126,7 @@ describe('StepFormatTable', () => {
 
   it('formatTable should work as expected', async () => {
     // given
-    const objectData = {};
+    const objectData = {} as ObjectData;
 
     const excelContextSyncMock = jest.fn();
     const operationData = {

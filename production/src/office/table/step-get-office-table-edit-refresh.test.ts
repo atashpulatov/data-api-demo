@@ -40,9 +40,12 @@ describe('StepGetOfficeTableEditRefresh', () => {
     jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
     // when
-    await stepGetOfficeTableEditRefresh.getOfficeTableEditRefresh({}, {
-      instanceDefinition: {},
-    } as OperationData);
+    await stepGetOfficeTableEditRefresh.getOfficeTableEditRefresh(
+      {} as ObjectData,
+      {
+        instanceDefinition: {},
+      } as OperationData
+    );
 
     // then
     expect(getOfficeTableHelper.checkReportTypeChange).toBeCalledTimes(1);

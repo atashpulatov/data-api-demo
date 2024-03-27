@@ -20,7 +20,7 @@ class StepModifyObject {
     const { objectWorkingId, subtotalsInfo } = objectData;
 
     if (objectEditedData) {
-      const updatedObject: ObjectData = {
+      const updatedObject: Partial<ObjectData> = {
         objectWorkingId,
         body: objectEditedData.body,
       };

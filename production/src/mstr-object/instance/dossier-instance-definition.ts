@@ -1,6 +1,12 @@
 import { mstrObjectRestService } from '../mstr-object-rest-service';
 import { visualizationInfoService } from '../visualization-info-service';
 
+import {
+  InstanceDefinition,
+  OperationData,
+} from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData, VisualizationInfo } from '../../types/object-types';
+
 import { errorService } from '../../error/error-handler';
 import { OperationTypes } from '../../operation/operation-type-names';
 import mstrObjectEnum from '../mstr-object-type-enum';
@@ -16,7 +22,11 @@ class DossierInstanceDefinition {
     manipulationsXML,
     preparedInstanceId,
     visualizationInfo,
-  }) {
+  }: ObjectData): Promise<{
+    body: any;
+    visualizationInfo: VisualizationInfo;
+    instanceDefinition: InstanceDefinition;
+  }> {
     if (manipulationsXML) {
       if (!body) {
         body = {};
@@ -25,7 +35,7 @@ class DossierInstanceDefinition {
       body.promptAnswers = manipulationsXML.promptAnswers;
     }
 
-    let instanceId;
+    let instanceId: string;
     try {
       if (preparedInstanceId) {
         instanceId = preparedInstanceId;
@@ -45,6 +55,7 @@ class DossierInstanceDefinition {
     const updatedVisualizationInfo = await this.getUpdatedVisualizationInfo(
       projectId,
       objectId,
+      // @ts-expect-error
       visualizationInfo.visualizationKey,
       instanceId
     );
@@ -89,16 +100,21 @@ class DossierInstanceDefinition {
    *
    * If there is no visualization for a given key, throws error that dossier doesn't exist (INVALID_VIZ_KEY_MESSAGE).
    *
-   * @param {String} projectId Id of the project that object belongs
-   * @param {String} objectId Id of the object itself
-   * @param {String} visualizationKey visualization id.
-   * @param {Object} instanceId Id of the created instance
-   * @returns {Object} Contains info for visualization.
+   * @param projectId Id of the project that object belongs
+   * @param objectId Id of the object itself
+   * @param visualizationKey visualization id.
+   * @param instanceId Id of the created instance
+   * @return Contains info for visualization.
    *
-   * @throws {Error} ErrorMessages.DOSSIER_HAS_CHANGED when dossier has changed.
-   * @throws {Error} ErrorMessages.INVALID_VIZ_KEY_MESSAGE when dossier is not supported.
+   * @throws ErrorMessages.DOSSIER_HAS_CHANGED when dossier has changed.
+   * @throws ErrorMessages.INVALID_VIZ_KEY_MESSAGE when dossier is not supported.
    */
-  getUpdatedVisualizationInfo = async (projectId, objectId, visualizationKey, instanceId) => {
+  getUpdatedVisualizationInfo = async (
+    projectId: string,
+    objectId: string,
+    visualizationKey: string,
+    instanceId: string
+  ): Promise<any> => {
     try {
       const visualizationInfo = await visualizationInfoService.getVisualizationInfo(
         projectId,
@@ -118,7 +134,11 @@ class DossierInstanceDefinition {
     }
   };
 
-  getVisualizationName = (operationData, name, instanceDefinition) => {
+  getVisualizationName = (
+    operationData: OperationData,
+    name: string,
+    instanceDefinition: InstanceDefinition
+  ): string => {
     const { objectEditedData, operationType } = operationData;
 
     if (
@@ -135,10 +155,10 @@ class DossierInstanceDefinition {
   /**
    * Returns an error type based on error get from visualization importing.
    *
-   * @param {Object} error
-   * @return {String || undefined} errorType
+   * @param error
+   * @return errorType
    */
-  getVisualizationErrorType = error => {
+  getVisualizationErrorType = (error: any): string | undefined => {
     if (!error) {
       return;
     }

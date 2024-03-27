@@ -27,7 +27,7 @@ describe('StepBindOfficeTable', () => {
     jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
     // when
-    await stepBindOfficeTable.bindOfficeTable({}, operationData);
+    await stepBindOfficeTable.bindOfficeTable({} as ObjectData, operationData);
 
     // then
     expect(console.error).toBeCalledTimes(1);
@@ -43,11 +43,11 @@ describe('StepBindOfficeTable', () => {
 
   it('bindOfficeTable should work as expected', async () => {
     // given
-    const objectData: ObjectData = {
+    const objectData = {
       bindId: 'bindIdTest',
       objectWorkingId: 2137,
       isCrosstab: true,
-    };
+    } as unknown as ObjectData;
     const excelContext = { sync: jest.fn() };
     const operationData = {
       excelContext,
@@ -85,11 +85,11 @@ describe('StepBindOfficeTable', () => {
     ${OperationTypes.REFRESH_OPERATION}
   `('should skip bindOfficeTable if no new table created', async ({ operationType }) => {
     // given
-    const objectData: ObjectData = {
+    const objectData = {
       bindId: 'bindIdTest',
       objectWorkingId: 2137,
       isCrosstab: true,
-    };
+    } as unknown as ObjectData;
     const excelContext = { sync: jest.fn() };
     const operationData = {
       excelContext,

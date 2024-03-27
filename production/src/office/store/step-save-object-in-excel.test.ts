@@ -39,7 +39,7 @@ describe('StepSaveObjectInExcel', () => {
       preparedInstanceId: 'preparedInstanceIdTest',
       details: {},
       importType: 'table',
-    };
+    } as unknown as ObjectData;
     const instanceDefinition = {
       rows: 5,
       columns: 'columnsTest',
@@ -68,12 +68,12 @@ describe('StepSaveObjectInExcel', () => {
 
   it('saveObject should work as expected', async () => {
     // given
-    const objectDataMock: ObjectData = {
+    const objectDataMock = {
       objectWorkingId: 2137,
       preparedInstanceId: 'preparedInstanceIdTest',
       details: {},
       importType: 'table',
-    };
+    } as unknown as ObjectData;
 
     jest.spyOn(officeStoreObject, 'saveObjectsInExcelStore').mockImplementation();
 

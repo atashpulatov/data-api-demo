@@ -1,6 +1,6 @@
-import jsonHandler from './handler/mstr-normalized-json-handler';
+import jsonHandler from './mstr-normalized-json-handler';
 
-import { reportV2 } from '../../__mocks__/mockDataV2';
+import { reportV2 } from '../../../__mocks__/mockDataV2';
 
 describe('Normalized JSON Handler', () => {
   it('should lookup for column elements by index', () => {

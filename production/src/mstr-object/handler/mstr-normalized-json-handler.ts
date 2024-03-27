@@ -1,9 +1,9 @@
 /**
  * Helper class to manipulate the new normalized REST API V2
  *
- * @export
- * @class NormalizedJsonHandler
  */
+
+import { Axis, ValueMatrix } from '../../types/object-types';
 
 class NormalizedJsonHandler {
   /**
@@ -11,12 +11,12 @@ class NormalizedJsonHandler {
    * Generate unified value property for single-form attribute element, multi-form
    * attribute element and metric-object-as-element.
    *
-   * @param {Object} definition - Dataset definition
-   * @param {string} axis - 'rows' or 'columns'
-   * @param {number} attributeIndex - Array index that corresponds to an attribute
-   * @param {number} elementIndex - Array index that corresponds to an attribue element
+   * @param definition - Dataset definition
+   * @param axis - 'rows' or 'columns'
+   * @param attributeIndex - Array index that corresponds to an attribute
+   * @param elementIndex - Array index that corresponds to an attribue element
    *
-   * @return {Object}
+   * @return
    */
   lookupElement = ({
     definition,
@@ -25,7 +25,14 @@ class NormalizedJsonHandler {
     elementIndex,
     rowIndex = -1,
     colIndex = -1,
-  }) => {
+  }: {
+    definition: any;
+    axis: Axis;
+    attributeIndex: number;
+    elementIndex: number;
+    rowIndex?: number;
+    colIndex?: number;
+  }): any => {
     const { crossTab } = definition.grid;
     const rawElement = definition.grid[axis][attributeIndex].elements[elementIndex];
     const { name, formValues, subtotal } = rawElement;
@@ -55,13 +62,13 @@ class NormalizedJsonHandler {
   /**
    * Gets the attribute name based on its index, returns object with an additional value key.
    *
-   * @param {Object} definition - Dataset definition
-   * @param {string} axis - 'rows' or 'columns'
-   * @param {number} attributeIndex - Array index that corresponds to an attribute
+   * @param definition - Dataset definition
+   * @param axis - 'rows' or 'columns'
+   * @param attributeIndex - Array index that corresponds to an attribute
    *
-   * @return {Object}
+   * @return
    */
-  lookupAttributeName = (definition, axis, attributeIndex) => {
+  lookupAttributeName = (definition: any, axis: Axis, attributeIndex: number): any => {
     const rawAttribute = definition.grid[axis][attributeIndex];
     const { name, formValues } = rawAttribute;
     return { ...rawAttribute, value: formValues || [name] };
@@ -81,7 +88,13 @@ class NormalizedJsonHandler {
     headerCells: elementIndices,
     rowIndex = -1,
     colIndex = -1,
-  }) => {
+  }: {
+    definition: any;
+    axis: Axis;
+    headerCells: any[];
+    rowIndex?: number;
+    colIndex?: number;
+  }): any[] => {
     const result = [];
     const { length } = definition.grid[axis];
     let columnIndex = 0;
@@ -118,11 +131,11 @@ class NormalizedJsonHandler {
   /**
    * Get an array with element names
    *
-   * @param {Object} definition - Dataset definition
-   * @param {string} axis - 'rows' or 'columns'
-   * @return {Array}
+   * @param definition - Dataset definition
+   * @param axis - 'rows' or 'columns'
+   * @return
    */
-  mapElementIndicesToNames = ({ definition, axis }) => {
+  mapElementIndicesToNames = ({ definition, axis }: { definition: any; axis: Axis }): any[] => {
     const result = [];
     const { length } = definition.grid[axis];
 
@@ -147,7 +160,12 @@ class NormalizedJsonHandler {
    *
    * @return {Array}
    */
-  renderTabular = (definition, data, onElement, valueMatrix = 'raw') => {
+  renderTabular = (
+    definition: any,
+    data: any,
+    onElement: Function,
+    valueMatrix: ValueMatrix = 'raw'
+  ): any[][] => {
     // For each row in header zone.
     const { headers, metricValues } = data;
     const { rows } = headers;
@@ -207,13 +225,13 @@ class NormalizedJsonHandler {
   /**
    * Creates a 2D array with the attribute forms headers
    *
-   * @param {Array} result - the forms headers
-   * @param {Array} axisElements - the axis elements
-   * @param {function} onElement - Callback function to process elements
+   * @param result - the forms headers
+   * @param axisElements - the axis elements
+   * @param onElement - Callback function to process elements
    *
    * @return {Array}
    */
-  convertForms = (result, axisElements, onElement) => {
+  convertForms = (result: any[], axisElements: any[], onElement: Function): any[] => {
     for (const axisElement of axisElements) {
       const elements = onElement(axisElement);
       result = typeof elements === 'string' ? [...result, elements] : [...result, ...elements];
@@ -224,21 +242,27 @@ class NormalizedJsonHandler {
   /**
    * Creates a 2D array with the crosstabs headers
    *
-   * @param {Object} definition - Dataset definition
-   * @param {string} axis - 'rows' or 'columns'
-   * @param {Array} headers - Header data from response
-   * @param {function} onElement - Callback function to process elements
+   * @param definition - Dataset definition
+   * @param axis - 'rows' or 'columns'
+   * @param headers - Header data from response
+   * @param onElement - Callback function to process elements
    *
    * @return {Array}
    */
-  renderHeaders = (definition, axis, headers, onElement, supportForms) => {
+  renderHeaders = (
+    definition: any,
+    axis: Axis,
+    headers: any,
+    onElement: Function,
+    supportForms?: string
+  ): any[][] => {
     if (headers[axis].length === 0) {
       return [[]];
     }
     const headersNormalized =
       axis === 'columns' ? this.transposeMatrix(headers[axis]) : headers[axis];
 
-    const matrix = headersNormalized.map((headerCells, colIndex) => {
+    const matrix = headersNormalized.map((headerCells: any[], colIndex: number) => {
       const axisElements = this.mapElementIndicesToElements({
         definition,
         axis,
@@ -264,8 +288,15 @@ class NormalizedJsonHandler {
    *
    * @return {Array}
    */
-  renderTitles = (definition, axis, headers, onElement, supportForms) => {
-    const columnTitles = headers[axis].map(headerCells => {
+  renderTitles = (
+    definition: any,
+    axis: Axis,
+    headers: any[],
+    onElement: Function,
+    supportForms?: string
+  ): any[][] => {
+    // @ts-expect-error
+    const columnTitles = headers[axis].map((headerCells: any) => {
       const mapFn =
         axis === 'rows' ? this.mapElementIndicesToNames : this.mapElementIndicesToElements;
       const axisElements = mapFn({ definition, axis, headerCells });
@@ -284,12 +315,12 @@ class NormalizedJsonHandler {
    * e.g., onElement = (value) => value.rv;
    * If the table doesn't have metrics we return an empty 2d array
    *
-   * @param {Object} data - Metric values object
-   * @param {String} valueMatrix - Cell value ("raw*", "formatted", "extras")
+   * @param data - Metric values object
+   * @param valueMatrix - Cell value ("raw*", "formatted", "extras")
    *
-   * @return {Array}
+   * @return
    */
-  renderRows = (data, valueMatrix = 'raw') =>
+  renderRows = (data: any, valueMatrix: ValueMatrix = 'raw'): any[][] =>
     data.metricValues && data.metricValues[valueMatrix].length
       ? data.metricValues[valueMatrix]
       : Array(data.paging.current).fill(Array(data.headers.columns[0].length).fill(null));
@@ -304,7 +335,12 @@ class NormalizedJsonHandler {
    *
    * @return {Array}
    */
-  getElementIdForGivenHeaderCell = (definition, axis, attributeIndex, headerIndex) => {
+  getElementIdForGivenHeaderCell = (
+    definition: any,
+    axis: Axis,
+    attributeIndex: number,
+    headerIndex: number
+  ): string => {
     // axis is either "rows" or "columns"
     const attribute = definition.grid[axis][attributeIndex];
     const element = attribute.elements[headerIndex];
@@ -314,19 +350,23 @@ class NormalizedJsonHandler {
   /**
    * For keep-only/exclude on a metric value cell
    *
-   * @param {Array} headers - Array with row and column header index
-   * @param {number} mvZoneRowIndex - Metric value row index
-   * @param {number} mvZoneColumnIndex - Metric value column index
+   * @param headers - Array with row and column header index
+   * @param mvZoneRowIndex - Metric value row index
+   * @param mvZoneColumnIndex - Metric value column index
    *
-   * @return {Array}
+   * @return
    */
-  getElementIdListForGivenMetricCell = (headers, mvZoneRowIndex, mvZoneColumnIndex) => {
+  getElementIdListForGivenMetricCell = (
+    headers: any,
+    mvZoneRowIndex: number,
+    mvZoneColumnIndex: number
+  ): string[] => {
     const rowHeader = headers.rows[mvZoneRowIndex];
     const columnHeader = headers.columns[mvZoneColumnIndex];
-    return rowHeader.concat(columnHeader).map(element => element.id);
+    return rowHeader.concat(columnHeader).map((element: any) => element.id);
   };
 
-  getMetricsColumnsInformation(columns) {
+  getMetricsColumnsInformation(columns: any[]): any[] {
     if (columns.length === 0) {
       return columns;
     }
@@ -335,7 +375,7 @@ class NormalizedJsonHandler {
     const parsedColumns = [];
 
     for (const currentColumn of transposedHeaders) {
-      const metrics = currentColumn.find(element => element.type === 'metric');
+      const metrics = currentColumn.find((element: any) => element.type === 'metric');
 
       if (metrics) {
         parsedColumns.push(metrics);
@@ -349,11 +389,12 @@ class NormalizedJsonHandler {
   /**
    * Tranpose a matrix (2D array)
    *
-   * @param {Array} matrix - 2D Array
+   * @param matrix - 2D Array
    *
-   * @return {Array} - Transposed 2D array
+   * @return - Transposed 2D array
    */
-  transposeMatrix = matrix => matrix[0].map((_, col) => matrix.map(row => row[col]));
+  transposeMatrix = (matrix: any[][]): any[][] =>
+    matrix[0].map((_, col) => matrix.map(row => row[col]));
 }
 
 export default new NormalizedJsonHandler();

@@ -1,3 +1,5 @@
+import { ObjectData } from '../../types/object-types';
+
 import { operationsMap, OperationSteps } from '../../operation/operation-steps';
 import {
   CANCEL_OPERATION,
@@ -16,7 +18,7 @@ import { ObjectImportType } from '../../mstr-object/constants';
 describe('OperationActions', () => {
   it('returns IMPORT_OPERATION action on importRequested call', () => {
     // given
-    const exampleObject = { objectWorkingId: 2137 };
+    const exampleObject = { objectWorkingId: 2137 } as ObjectData;
 
     // when
     const importAction = importRequested(exampleObject);
@@ -74,7 +76,7 @@ describe('OperationActions', () => {
     const exampleObject = {
       objectWorkingId: 123,
       otherProperty: 'someValue',
-    };
+    } as unknown as ObjectData;
     // when
     const duplicateAction = duplicateRequested(exampleObject);
     // then

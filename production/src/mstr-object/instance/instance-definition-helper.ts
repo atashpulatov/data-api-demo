@@ -4,6 +4,7 @@ import { mstrObjectRestService } from '../mstr-object-rest-service';
 import { PageByData, PageByDisplayType } from '../../page-by/page-by-types';
 
 import mstrObjectEnum from '../mstr-object-type-enum';
+import { DisplayAttrFormNames } from '../constants';
 
 class InstanceDefinitionHelper {
   /**
@@ -33,7 +34,7 @@ class InstanceDefinitionHelper {
     promptsAnswers: any[];
     dossierData: any;
     body: any;
-    displayAttrFormNames: any;
+    displayAttrFormNames: DisplayAttrFormNames;
   }): Promise<any> => {
     // Status 2 = report has open prompts to be answered before data can be returned
     if (instanceDefinition.status !== ObjectExecutionStatus.PROMPTED) {
@@ -64,7 +65,7 @@ class InstanceDefinitionHelper {
         };
 
         if (count === promptsAnswers.length - 1) {
-          instanceDefinition = await mstrObjectRestService.modifyInstance(configInstance);
+          instanceDefinition = mstrObjectRestService.modifyInstance(configInstance);
         }
 
         count += 1;

@@ -1,12 +1,12 @@
-import mstrAttributeMetricHelper from './helper/mstr-attribute-metric-helper';
+import mstrAttributeMetricHelper from './mstr-attribute-metric-helper';
 
-import compoundJSONwithMetricsInRows from '../../__mocks__/compound-grid/Compound Grid with Metrics on Row.json';
-import regularCompoundJSON from '../../__mocks__/compound-grid/Regular Compound Grid.json';
+import compoundJSONwithMetricsInRows from '../../../__mocks__/compound-grid/Compound Grid with Metrics on Row.json';
+import regularCompoundJSON from '../../../__mocks__/compound-grid/Regular Compound Grid.json';
 import {
   dossierWithMetricsInRows,
   reportV2,
   reportWithMetricsInRows,
-} from '../../__mocks__/mockDataV2';
+} from '../../../__mocks__/mockDataV2';
 
 describe('MstrAttributeMetricHelper', () => {
   describe('extractAttributesMetricsCompoundGrid', () => {

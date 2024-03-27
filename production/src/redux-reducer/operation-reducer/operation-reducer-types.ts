@@ -1,5 +1,6 @@
 import { Action } from 'redux';
 
+import { VisualizationTypes } from '../../mstr-object/mstr-object-types';
 import { ObjectData } from '../../types/object-types';
 
 import { OperationSteps } from '../../operation/operation-steps';
@@ -8,6 +9,22 @@ import { OperationTypes } from '../../operation/operation-type-names';
 // TODO: refactor.
 // this is a temporary initial version. it should be improved
 export interface MstrTable {
+  tableSize: { rows: number; columns: number };
+  columnInformation: any[]; // Replace with actual type
+  headers: {
+    rows?: any[]; // Replace with actual type
+    columns?: any[]; // Replace with actual type
+    subtotalAddress?: any[]; // Replace with actual type
+  };
+  id: string;
+  isCrosstab: boolean;
+  isCrosstabular: boolean;
+  name: string;
+  rows: { row: any[] }; // Replace with actual type
+  visualizationType: VisualizationTypes;
+  attributesNames: { rowsAttributes: any[] }; // Replace with actual type
+  attributes: any[]; // Replace with actual type
+  metrics: any[]; // Replace with actual type
   [key: string]: any;
 }
 
@@ -31,6 +48,7 @@ export interface OperationData {
   totalRows?: number;
   loadedRows?: number;
   shouldFormat?: boolean;
+  oldBindId?: string;
   // TODO remove when type is finalized
   [key: string]: any;
 }

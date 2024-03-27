@@ -335,7 +335,6 @@ class PopupController {
       name: response.chosenObjectName,
       objectId: response.chosenObjectId,
       projectId: response.projectId,
-      // @ts-expect-error TODO fix type
       mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(response.chosenObjectSubtype),
       body: response.body,
       dossierData: response.dossierData,
@@ -344,7 +343,7 @@ class PopupController {
         response.promptsAnswers?.length > 0 && response.promptsAnswers[0].answers?.length > 0,
       instanceId: response.instanceId,
       subtotalsInfo: response.subtotalsInfo,
-      displayAttrFormNames: response.displayAttrFormNames,
+      displayAttrFormNames: response.displayAttrFormNames as DisplayAttrFormNames,
       definition: { filters: response.filterDetails },
     };
 

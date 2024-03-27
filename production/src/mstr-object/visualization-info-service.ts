@@ -1,4 +1,8 @@
+import { VisualizationInfo } from '../types/object-types';
+
 class VisualizationInfoService {
+  mstrObjectRestService: any;
+
   constructor() {
     this.getVisualizationInfo = this.getVisualizationInfo.bind(this);
     this.prepareVisualizationInfoObject = this.prepareVisualizationInfoObject.bind(this);
@@ -7,7 +11,7 @@ class VisualizationInfoService {
     this.parseDossierPage = this.parseDossierPage.bind(this);
   }
 
-  init = mstrObjectRestService => {
+  init = (mstrObjectRestService: any): any => {
     this.mstrObjectRestService = mstrObjectRestService;
   };
 
@@ -17,13 +21,18 @@ class VisualizationInfoService {
    *
    * Exceptions are handled by callers.
    *
-   * @param {String} projectId
-   * @param {String} objectId
-   * @param {String} visualizationKey visualization id
-   * @param {Object} dossierInstance dossier instance id
-   * @returns {Object} Contains info for visualization or null if visualization key is not found
+   * @param projectId
+   * @param objectId
+   * @param visualizationKey visualization id
+   * @param dossierInstance dossier instance id
+   * @returns Contains info for visualization or null if visualization key is not found
    */
-  async getVisualizationInfo(projectId, objectId, visualizationKey, dossierInstance) {
+  async getVisualizationInfo(
+    projectId: string,
+    objectId: string,
+    visualizationKey: string,
+    dossierInstance: any
+  ): Promise<VisualizationInfo> {
     const dossierDefinition = await this.mstrObjectRestService.getDossierInstanceDefinition(
       projectId,
       objectId,
@@ -50,16 +59,20 @@ class VisualizationInfoService {
 
   /**
    * Converts given data to visualization info object
-   * @param {String} chapterData.key key of parsed chapter
-   * @param {String} chapterData.name name of parsed chapter
-   * @param {String} pageData.key key of parsed page
-   * @param {String} pageData.name name of parsed page
-   * @param {String} visualizationKey key of visualization which script is looking for
-   * @param {String} dossierName name of parsed dossier
-   * @returns {Object} visualization info object
+   * @param chapterData.key key of parsed chapter
+   * @param chapterData.name name of parsed chapter
+   * @param pageData.key key of parsed page
+   * @param pageData.name name of parsed page
+   * @param visualizationKey key of visualization which script is looking for
+   * @param dossierName name of parsed dossier
+   * @returns visualization info object
    */
-  // eslint-disable-next-line class-methods-use-this
-  prepareVisualizationInfoObject(chapterData, pageData, visualizationKey, dossierName) {
+  prepareVisualizationInfoObject(
+    chapterData: any,
+    pageData: any,
+    visualizationKey: any,
+    dossierName: string
+  ): VisualizationInfo {
     return {
       chapterKey: chapterData.key,
       pageKey: pageData.key,
@@ -74,16 +87,22 @@ class VisualizationInfoService {
 
   /**
    * Parses given visualizations from dossier page or panel to find visualization with given key.
-   * @param {Array<Object>} visualizations arrray of visualizations being parsed
-   * @param {String} chapterData.key key of parsed chapter
-   * @param {String} chapterData.name name of parsed chapter
-   * @param {String} pageData.key key of parsed page
-   * @param {String} pageData.name name of parsed page
-   * @param {String} visualizationKey key of visualization which script is looking for
-   * @param {String} dossierName name of parsed dossier
-   * @returns {Object} Visualization info or null.
+   * @param visualizations arrray of visualizations being parsed
+   * @param chapterData.key key of parsed chapter
+   * @param chapterData.name name of parsed chapter
+   * @param pageData.key key of parsed page
+   * @param pageData.name name of parsed page
+   * @param visualizationKey key of visualization which script is looking for
+   * @param dossierName name of parsed dossier
+   * @returns Visualization info or null.
    */
-  parseVisualizations(visualizations, chapterData, pageData, visualizationKey, dossierName) {
+  parseVisualizations(
+    visualizations: any[],
+    chapterData: any,
+    pageData: any,
+    visualizationKey: string,
+    dossierName: string
+  ): VisualizationInfo {
     for (const visualization of visualizations) {
       if (visualization.key === visualizationKey) {
         return this.prepareVisualizationInfoObject(
@@ -100,16 +119,22 @@ class VisualizationInfoService {
 
   /**
    * Recursively parses given panel stacks from dossier page to find visualization with given key.
-   * @param {Array<Object>} givenPanelStacks arrray of panel stacks being parsed
-   * @param {String} visualizationKey key of visualization which script is looking for
-   * @param {String} chapterData.key key of parsed chapter
-   * @param {String} chapterData.name name of parsed chapter
-   * @param {String} pageData.key key of parsed page
-   * @param {String} pageData.name name of parsed page
-   * @param {String} dossierName name of parsed dossier
-   * @returns {Object} Visualization info or null.
+   * @param givenPanelStacks arrray of panel stacks being parsed
+   * @param visualizationKey key of visualization which script is looking for
+   * @param chapterData.key key of parsed chapter
+   * @param chapterData.name name of parsed chapter
+   * @param pageData.key key of parsed page
+   * @param pageData.name name of parsed page
+   * @param dossierName name of parsed dossier
+   * @returns Visualization info or null.
    */
-  parsePanelStacks(givenPanelStacks, visualizationKey, chapterData, pageData, dosierName) {
+  parsePanelStacks(
+    givenPanelStacks: any[],
+    visualizationKey: string,
+    chapterData: any,
+    pageData: any,
+    dosierName: string
+  ): VisualizationInfo {
     for (const panelStack of givenPanelStacks) {
       for (const panel of panelStack.panels) {
         if (panel.visualizations) {
@@ -152,7 +177,12 @@ class VisualizationInfoService {
    * @param {String} dossierName name of parsed dossier
    * @returns {Object} Visualization info or null.
    */
-  parseDossierPage(page, visualizationKey, chapterData, dossierName) {
+  parseDossierPage(
+    page: any,
+    visualizationKey: string,
+    chapterData: any,
+    dossierName: string
+  ): VisualizationInfo {
     const pageData = { name: page.name, key: page.key };
 
     if (page.visualizations) {

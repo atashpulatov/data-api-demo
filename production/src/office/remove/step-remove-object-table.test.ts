@@ -3,6 +3,7 @@ import { officeApiHelper } from '../api/office-api-helper';
 import { officeRemoveHelper } from './office-remove-helper';
 
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
 
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import stepRemoveObjectTable from './step-remove-object-table';
@@ -23,7 +24,10 @@ describe('StepRemoveObjectTable', () => {
     jest.spyOn(operationStepDispatcher, 'completeRemoveObjectTable').mockImplementation();
 
     // when
-    await stepRemoveObjectTable.removeObjectTable({ objectWorkingId: 2137 }, {} as OperationData);
+    await stepRemoveObjectTable.removeObjectTable(
+      { objectWorkingId: 2137 } as ObjectData,
+      {} as OperationData
+    );
 
     // then
     expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
@@ -75,7 +79,7 @@ describe('StepRemoveObjectTable', () => {
         bindId: 'bindIdTest',
         isCrosstab: isCrosstabParam,
         crosstabHeaderDimensions: crosstabHeaderDimensionsParam,
-      };
+      } as unknown as ObjectData;
 
       // when
       await stepRemoveObjectTable.removeObjectTable(objectData, {} as OperationData);

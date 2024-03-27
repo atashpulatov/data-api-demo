@@ -5,6 +5,12 @@ import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-
 import { mstrObjectRestService } from '../mstr-object-rest-service';
 import instanceDefinitionHelper from './instance-definition-helper';
 
+import {
+  InstanceDefinition,
+  OperationData,
+} from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
+
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { OperationSteps } from '../../operation/operation-steps';
@@ -23,15 +29,18 @@ class StepGetInstanceDefinition {
    * This function is subscribed as one of the operation steps with the key GET_INSTANCE_DEFINITION,
    * therefore should be called only via operation bus.
    *
-   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
-   * @param {String} objectData.displayAttrFormNames The style in which attribute form will be displayed
-   * @param {Boolean} objectData.insertNewWorksheet Determines if the object will be displayed in a new spreadsheet
-   * @param {Object} objectData.subtotalsInfo Determines if subtotals will be displayed and stores subtotal addresses
-   * @param {String} objectData.bindId Unique Id of the Office table used for referencing the table in Excel
-   * @param {Object} objectData.visualizationInfo Contains information about location of visualization in dossier
-   * @param {Array} operationData.stepsQueue Queue of steps in current operation
+   * @param objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param objectData.displayAttrFormNames The style in which attribute form will be displayed
+   * @param objectData.insertNewWorksheet Determines if the object will be displayed in a new spreadsheet
+   * @param objectData.subtotalsInfo Determines if subtotals will be displayed and stores subtotal addresses
+   * @param objectData.bindId Unique Id of the Office table used for referencing the table in Excel
+   * @param objectData.visualizationInfo Contains information about location of visualization in dossier
+   * @param operationData.stepsQueue Queue of steps in current operation
    */
-  getInstanceDefinition = async (objectData, operationData) => {
+  getInstanceDefinition = async (
+    objectData: ObjectData,
+    operationData: OperationData
+  ): Promise<void> => {
     console.group('Getting Instance definition');
     console.time('Total');
 
@@ -57,7 +66,7 @@ class StepGetInstanceDefinition {
 
       this.setupBodyTemplate(body);
 
-      let startCell;
+      let startCell: string;
       let instanceDefinition = preparedInstanceDefinition;
       let shouldRenameExcelWorksheet = false;
 
@@ -74,10 +83,12 @@ class StepGetInstanceDefinition {
           instanceDefinition
         );
       } else if (!instanceDefinition) {
+        // @ts-expect-error
         instanceDefinition = await mstrObjectRestService.createInstance(objectData);
       }
 
       if (!preparedInstanceDefinition) {
+        // @ts-expect-error
         instanceDefinition = await instanceDefinitionHelper.modifyInstanceWithPrompt({
           ...objectData,
           instanceDefinition,
@@ -115,7 +126,7 @@ class StepGetInstanceDefinition {
       }
 
       const { mstrTable } = instanceDefinition;
-      const updatedObject = {
+      const updatedObject: Partial<ObjectData> = {
         objectWorkingId,
         envUrl: authenticationHelper.getCurrentMstrContext(),
         body,
@@ -129,7 +140,7 @@ class StepGetInstanceDefinition {
         },
       };
 
-      const updatedOperation = {
+      const updatedOperation: Partial<OperationData> = {
         objectWorkingId,
         instanceDefinition,
         excelContext,
@@ -169,9 +180,9 @@ class StepGetInstanceDefinition {
    *
    * Deletes body.requestedObject when no attributes and metrics defined.
    *
-   * @param {Object} body to modify template and requestedObject
+   * @param body to modify template and requestedObject
    */
-  setupBodyTemplate = body => {
+  setupBodyTemplate = (body: any): void => {
     if (body && body.requestedObjects) {
       if (
         body.requestedObjects.attributes.length === 0 &&
@@ -186,18 +197,18 @@ class StepGetInstanceDefinition {
   /**
    * Answers prompts and modify instance of the object.
    *
-   * @param {Object} instanceDefinition Object containing information about MSTR object
-   * @param {Object} crosstabHeaderDimensions Contains information about crosstab headers dimensions
-   * @param {Object[]} subtotalsAddresses Contains adresses of subtotals from first import
-   * @param {String} futureStep Specifies which step wuill be used to create Excel table
+   * @param instanceDefinition Object containing information about MSTR object
+   * @param crosstabHeaderDimensions Contains information about crosstab headers dimensions
+   * @param subtotalsAddresses Contains adresses of subtotals from first import
+   * @param futureStep Specifies which step wuill be used to create Excel table
    */
   savePreviousObjectData = (
-    instanceDefinition,
-    crosstabHeaderDimensions,
-    subtotalsAddresses,
-    futureStep,
+    instanceDefinition: InstanceDefinition,
+    crosstabHeaderDimensions: any,
+    subtotalsAddresses: any[],
+    futureStep: OperationSteps,
     importType = ObjectImportType.TABLE
-  ) => {
+  ): void => {
     // We do not need to set prevCrosstabDimensions, crosstabHeaderDimensions and subtotalsInfo for images
     if (importType === ObjectImportType.IMAGE) {
       return;

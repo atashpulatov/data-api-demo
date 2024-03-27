@@ -1,4 +1,5 @@
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
 
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import officeFormatSubtotals from './office-format-subtotals';
@@ -17,7 +18,7 @@ describe('StepApplySubtotalFormatting', () => {
     'applySubtotalFormattingRedux should work as expected - subtotalsAddresses.length is 0 or undefined',
     async ({ subtotalsAddressesLength }) => {
       // given
-      const objectData = {};
+      const objectData = {} as ObjectData;
 
       const operationData = {
         objectWorkingId: 2137,
@@ -49,7 +50,7 @@ describe('StepApplySubtotalFormatting', () => {
 
   it('applySubtotalFormattingRedux should work as expected - subtotalsAddresses.length is defined', async () => {
     // given
-    const objectData = {};
+    const objectData = {} as ObjectData;
 
     const operationData = {
       objectWorkingId: 2137,

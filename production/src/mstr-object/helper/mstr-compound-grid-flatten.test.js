@@ -1,6 +1,6 @@
-import mstrCompoundGridFlatten from './helper/mstr-compound-grid-flatten';
+import mstrCompoundGridFlatten from './mstr-compound-grid-flatten';
 
-import onlyAttrCompoundJSON from '../../__mocks__/compound-grid/Compound Grid with Only Attribute on Row.json';
+import onlyAttrCompoundJSON from '../../../__mocks__/compound-grid/Compound Grid with Only Attribute on Row.json';
 
 describe('MstrCompoundGridFlatten', () => {
   afterEach(() => {

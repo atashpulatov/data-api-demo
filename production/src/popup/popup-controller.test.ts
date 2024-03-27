@@ -473,7 +473,7 @@ describe('PopupController', () => {
       command: actionCommand,
       objectWorkingIds: [1],
       importType: 'table',
-    } as ObjectData;
+    } as unknown as ObjectData;
 
     const handleOverviewActionCommandMock = jest
       .spyOn(overviewHelper, 'handleOverviewActionCommand')
