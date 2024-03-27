@@ -15,13 +15,13 @@ class OfficeShapeApiHelper {
     shapeId: string
   ): Promise<Excel.Shape | undefined> => {
     const worksheetCollection = excelContext.workbook.worksheets;
-    await worksheetCollection.load(sheetCollectionProps.ITEMS);
+    worksheetCollection.load(sheetCollectionProps.ITEMS);
     await excelContext.sync();
     for (const sheet of worksheetCollection.items) {
       const shape = sheet.shapes.getItemOrNullObject(shapeId);
       // load shape properties
       const { IS_NULL_OBJECT, TOP, LEFT, WIDTH, HEIGHT } = shapeProps;
-      await shape.load([IS_NULL_OBJECT, TOP, LEFT, WIDTH, HEIGHT]);
+      shape.load([IS_NULL_OBJECT, TOP, LEFT, WIDTH, HEIGHT]);
       await excelContext.sync();
 
       if (!shape.isNullObject) {

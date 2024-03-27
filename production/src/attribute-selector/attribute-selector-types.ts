@@ -21,7 +21,6 @@ export interface AttributeSelectorNotConnectedProps {
   supportForms: boolean;
 }
 
-// TODO: fix any types
 export interface MstrDataProps {
   id: string;
   envUrl: string;
@@ -31,7 +30,7 @@ export interface MstrDataProps {
   chosenObjectName: string;
   objectType: ObjectTypeProps;
   preparedInstanceId: string;
-  chosenSubtype: any;
+  chosenSubtype: number;
   isPrompted: boolean;
   promptsAnswers: Array<Object>;
   mstrObjectType: {
@@ -39,7 +38,6 @@ export interface MstrDataProps {
   };
 }
 
-// TODO: fix any types
 export interface EditedObjectProps {
   chosenObjectId: string;
   chosenObjectName: string;
@@ -51,19 +49,25 @@ export interface EditedObjectProps {
   mstrObjectType: {
     name: string;
   };
-  chosenObjectType: any;
-  chosenObjectSubtype: any;
-  selectedAttributes: any;
-  selectedMetrics: any;
-  selectedFilters: any;
-  selectedAttrForms: any;
+  chosenObjectType: ChosenObjectType;
+  chosenObjectSubtype: number;
+  selectedAttributes: string[];
+  selectedMetrics: string[];
+  selectedFilters: Record<string, number[] | string[]>;
+  selectedAttrForms: string[];
 }
 
-// TODO: fix any types
+export interface ChosenObjectType {
+  name: string;
+  request: string;
+  subtypes: number[] | string;
+  type: number;
+}
+
 export interface SessionProps {
   envUrl: string;
   authToken: string;
-  attrFormPrivilege: any;
+  attrFormPrivilege: boolean;
 }
 
 export interface SubtotalsInfoProps {

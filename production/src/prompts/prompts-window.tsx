@@ -232,7 +232,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
   const loadEmbeddedDossier = useCallback(
     async (localContainer: any) => {
       const chosenObjectIdLocal = chosenObjectId || editedObject.chosenObjectId;
-      const projectId = mstrData.chosenProjectId || editedObject.projectId; // FIXME: potential problem with projectId
+      const projectId = mstrData.chosenProjectId || editedObject.projectId;
       const { envUrl, authToken } = session;
 
       // Declared variables to determine whether importing a report/dossier is taking place and
@@ -274,7 +274,6 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
             msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, promptAnsweredHandler);
             msgRouter.registerEventHandler(EventType.ON_PROMPT_LOADED, promptLoadedHandler);
             msgRouter.registerEventHandler(EventType.ON_ERROR, onEmbeddedError);
-            // TODO: We should remember to unregister this handler once the page loads
           },
         };
 

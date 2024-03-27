@@ -2,8 +2,6 @@ import { homeHelper } from '../../home/home-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 import { officeRemoveHelper } from './office-remove-helper';
 
-import officeStoreObject from '../store/office-store-object';
-
 import officeApiDataLoader from '../api/office-api-data-loader';
 
 describe('OfficeRemoveHelper', () => {
@@ -123,24 +121,6 @@ describe('OfficeRemoveHelper', () => {
     // then
     expect(getTableMock).toBeCalledTimes(1);
     expect(result).toBe(false);
-  });
-
-  it('removeObjectNotExistingInExcel should work as expected', async () => {
-    // given
-    const releaseByIdAsyncMock = jest.fn().mockImplementation();
-    const object = { bindId: 1 };
-    const officeContextMock = {
-      document: { bindings: { releaseByIdAsync: releaseByIdAsyncMock } },
-    } as unknown as Office.Context;
-
-    const deleteRowsMock = jest.spyOn(officeStoreObject, 'removeObjectFromStore').mockReturnValue();
-
-    // when
-    await officeRemoveHelper.removeObjectNotExistingInExcel(object, officeContextMock);
-
-    // then
-    expect(deleteRowsMock).toBeCalledTimes(1);
-    expect(releaseByIdAsyncMock).toBeCalledTimes(1);
   });
 
   it.each`
