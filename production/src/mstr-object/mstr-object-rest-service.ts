@@ -38,7 +38,7 @@ function parseInstanceDefinition(response: any, attrforms: any): InstanceDefinit
     const { instanceId, status } = body;
     return { instanceId, status };
   }
-  const { instanceId, data, internal } = body;
+  const { instanceId, data, definition, internal } = body;
   body.attrforms = attrforms;
   if (data.paging.total === 0) {
     throw new Error(ErrorMessages.NO_DATA_RETURNED);
@@ -51,6 +51,8 @@ function parseInstanceDefinition(response: any, attrforms: any): InstanceDefinit
     rows,
     columns,
     mstrTable,
+    data,
+    definition,
     manipulationsXML: internal,
   };
 }

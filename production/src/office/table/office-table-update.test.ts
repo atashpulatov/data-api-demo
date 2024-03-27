@@ -336,10 +336,10 @@ describe('OfficeTableUpdate', () => {
 
   it.each`
     startCell | isCrosstab | fromCrosstabChange | crosstabHeaderDimensions     | prevCrosstabDimensions       | tableChanged | expectedResult
-    ${'B3'}   | ${true}    | ${false}           | ${{ rowsX: 1, columnsY: 2 }} | ${false}                     | ${false}     | ${'A1'}
-    ${'E5'}   | ${true}    | ${false}           | ${{ rowsX: 4, columnsY: 4 }} | ${{ rowsX: 2, columnsY: 4 }} | ${false}     | ${'A1'}
-    ${'C5'}   | ${false}   | ${true}            | ${false}                     | ${{ rowsX: 2, columnsY: 4 }} | ${false}     | ${'A1'}
-    ${'D2'}   | ${false}   | ${true}            | ${false}                     | ${{ rowsX: 3, columnsY: 1 }} | ${false}     | ${'A1'}
+    ${'B3'}   | ${true}    | ${false}           | ${{ rowsX: 1, columnsY: 3 }} | ${false}                     | ${false}     | ${'A1'}
+    ${'E5'}   | ${true}    | ${false}           | ${{ rowsX: 4, columnsY: 5 }} | ${{ rowsX: 2, columnsY: 5 }} | ${false}     | ${'A1'}
+    ${'C5'}   | ${false}   | ${true}            | ${false}                     | ${{ rowsX: 2, columnsY: 5 }} | ${false}     | ${'A1'}
+    ${'D2'}   | ${false}   | ${true}            | ${false}                     | ${{ rowsX: 3, columnsY: 2 }} | ${false}     | ${'A1'}
     ${'A1'}   | ${false}   | ${false}           | ${false}                     | ${false}                     | ${false}     | ${'A1'}
   `(
     'getCrosstabStartCell should work as expected',

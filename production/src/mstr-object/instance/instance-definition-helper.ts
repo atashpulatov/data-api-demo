@@ -1,7 +1,7 @@
 import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
 import { mstrObjectRestService } from '../mstr-object-rest-service';
 
-import { PageByData } from '../../page-by/page-by-types';
+import { PageByData, PageByDisplayType } from '../../page-by/page-by-types';
 
 import mstrObjectEnum from '../mstr-object-type-enum';
 import { DisplayAttrFormNames } from '../constants';
@@ -93,7 +93,7 @@ class InstanceDefinitionHelper {
     instanceDefinition: any,
     body: any
   ): Promise<any> => {
-    if (!pageByData) {
+    if (!pageByData || pageByData?.pageByDisplayType === PageByDisplayType.DEFAULT_PAGE) {
       return instanceDefinition;
     }
 
