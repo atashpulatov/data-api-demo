@@ -206,7 +206,7 @@ class StepGetInstanceDefinition {
     instanceDefinition: InstanceDefinition,
     crosstabHeaderDimensions: any,
     subtotalsAddresses: any[],
-    futureStep: OperationSteps,
+    futureStep?: OperationSteps,
     importType = ObjectImportType.TABLE
   ): void => {
     // We do not need to set prevCrosstabDimensions, crosstabHeaderDimensions and subtotalsInfo for images

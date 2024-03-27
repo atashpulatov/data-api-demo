@@ -124,7 +124,7 @@ describe('Normalized JSON Handler', () => {
       supportForms: false,
       displayAttrFormNames: 'Automatic',
     };
-    const onElement = element => element.value[0];
+    const onElement = (element: any): any => element.value[0];
     const expectedFirstRow = ['2009', 'January', 3139, 17046.02, 4543, 2406, 20915.41, 3449];
     // when
     const tabular = jsonHandler.renderTabular(definition, data, onElement);
@@ -187,7 +187,7 @@ describe('Normalized JSON Handler', () => {
         'On-Time',
       ],
     ];
-    const onElement = ({ value }) => value[0];
+    const onElement = ({ value }: { value: any[] }): any => value[0];
     // when
     const colHeaders = jsonHandler.renderHeaders(definition, axis, headers, onElement);
     // then
@@ -209,7 +209,7 @@ describe('Normalized JSON Handler', () => {
       ['2010', 'March'],
       ['2010', 'Total'],
     ];
-    const onElement = e => e.value[0];
+    const onElement = (element: any): any => element.value[0];
     // when
     const colHeaders = jsonHandler.renderHeaders(definition, axis, headers, onElement);
     // then

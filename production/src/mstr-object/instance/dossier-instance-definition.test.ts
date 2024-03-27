@@ -1,9 +1,12 @@
 import { mstrObjectRestService } from '../mstr-object-rest-service';
 import { visualizationInfoService } from '../visualization-info-service';
 
+import { DossierData, VisualizationInfo } from '../../types/object-types';
+
 import mstrObjectEnum from '../mstr-object-type-enum';
 import dossierInstanceDefinition from './dossier-instance-definition';
 import { ErrorType, IncomingErrorStrings } from '../../error/constants';
+import { DisplayAttrFormNames } from '../constants';
 
 describe('DossierInstanceDefinition', () => {
   afterEach(() => {
@@ -25,6 +28,7 @@ describe('DossierInstanceDefinition', () => {
     // when
     let result;
     try {
+      // @ts-expect-error
       result = await dossierInstanceDefinition.getDossierInstanceDefinition({
         projectId: 'projectIdTest',
         objectId: 'objectIdTest',
@@ -58,7 +62,7 @@ describe('DossierInstanceDefinition', () => {
 
     jest
       .spyOn(visualizationInfoService, 'getVisualizationInfo')
-      .mockReturnValue('updatedVisualizationInfoTest');
+      .mockResolvedValue('updatedVisualizationInfoTest' as unknown as VisualizationInfo);
 
     jest.spyOn(mstrObjectRestService, 'fetchVisualizationDefinition').mockImplementation(() => {
       throw new Error('errorTest');
@@ -78,8 +82,8 @@ describe('DossierInstanceDefinition', () => {
         manipulationsXML: undefined,
         preparedInstanceId: 'preparedInstanceIdTest',
         visualizationInfo: { visualizationKey: 'visualizationKeyTest' },
-        dossierData: 'dossierDataTest',
-        displayAttrFormNames: 'displayAttrFormNamesTest',
+        dossierData: 'dossierDataTest' as unknown as DossierData,
+        displayAttrFormNames: DisplayAttrFormNames.AUTOMATIC,
       });
     } catch (error) {
       // then
@@ -163,7 +167,7 @@ describe('DossierInstanceDefinition', () => {
 
       jest
         .spyOn(visualizationInfoService, 'getVisualizationInfo')
-        .mockReturnValue('getVisualizationInfoTest');
+        .mockResolvedValue('getVisualizationInfoTest' as unknown as VisualizationInfo);
 
       jest
         .spyOn(mstrObjectRestService, 'fetchVisualizationDefinition')
@@ -176,8 +180,8 @@ describe('DossierInstanceDefinition', () => {
         projectId: 'projectIdTest',
         objectId: 'objectIdTest',
         body: bodyParam,
-        dossierData: 'dossierDataTest',
-        displayAttrFormNames: 'displayAttrFormNamesTest',
+        dossierData: 'dossierDataTest' as unknown as DossierData,
+        displayAttrFormNames: DisplayAttrFormNames.AUTOMATIC,
         manipulationsXML: manipulationsXMLParam,
         preparedInstanceId: preparedInstanceIdParam,
         visualizationInfo: { visualizationKey: 'visualizationKeyTest' },

@@ -287,7 +287,7 @@ describe('MstrAttributeMetricHelper', () => {
     it('should return data when object conains metrics in rows', () => {
       // given
       const body = dossierWithMetricsInRows;
-      const metricsInRows = [];
+      const metricsInRows: any[] = [];
       const fetchedBody = dossierWithMetricsInRows;
       const expectedResponse = {
         metricsInRows: [
@@ -352,9 +352,9 @@ describe('MstrAttributeMetricHelper', () => {
     it('should not return data when object does not conain metrics in rows', () => {
       // given
       const body = reportV2;
-      const metricsInRows = [];
+      const metricsInRows: any[] = [];
       const fetchedBody = reportV2;
-      const expectedResponse = {
+      const expectedResponse: any = {
         metricsInRows: [],
         metricsRows: [],
       };

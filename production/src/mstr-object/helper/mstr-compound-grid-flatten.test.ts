@@ -9,7 +9,7 @@ describe('MstrCompoundGridFlatten', () => {
 
   it('filterEmptyColumnSets should work correctly', () => {
     // given
-    const response = {
+    const response: any = {
       data: {
         headers: { columnSets: [[]] },
         metricValues: { columnSets: [{ raw: [] }] },
@@ -19,7 +19,7 @@ describe('MstrCompoundGridFlatten', () => {
       },
     };
 
-    const expectedValue = {
+    const expectedValue: any = {
       data: {
         headers: { columnSets: [] },
         metricValues: { columnSets: [] },
@@ -83,7 +83,7 @@ describe('MstrCompoundGridFlatten', () => {
   it('flattenMetricValues should work correctly', () => {
     // given
     const data = { metricValues: { columnSets: [{ raw: [[1], [2]] }] } };
-    const expectedValue = { extras: [], formatted: [], raw: [[1], [2]] };
+    const expectedValue: any = { extras: [], formatted: [], raw: [[1], [2]] };
 
     // when
     const metricValues = mstrCompoundGridFlatten.flattenMetricValues(data);

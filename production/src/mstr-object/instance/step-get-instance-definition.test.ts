@@ -1,17 +1,25 @@
-import { authenticationHelper } from '../authentication/authentication-helper';
-import { officeApiCrosstabHelper } from '../office/api/office-api-crosstab-helper';
-import { officeApiHelper } from '../office/api/office-api-helper';
-import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
-import instanceDefinitionHelper from './instance/instance-definition-helper';
-import { mstrObjectRestService } from './mstr-object-rest-service';
+import { authenticationHelper } from '../../authentication/authentication-helper';
+import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-helper';
+import { officeApiHelper } from '../../office/api/office-api-helper';
+import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
+import { mstrObjectRestService } from '../mstr-object-rest-service';
+import instanceDefinitionHelper from './instance-definition-helper';
 
-import operationErrorHandler from '../operation/operation-error-handler';
-import operationStepDispatcher from '../operation/operation-step-dispatcher';
-import { OperationSteps } from '../operation/operation-steps';
-import dossierInstanceDefinition from './instance/dossier-instance-definition';
-import stepGetInstanceDefinition from './instance/step-get-instance-definition';
-import mstrObjectEnum from './mstr-object-type-enum';
-import { ErrorMessages } from '../error/constants';
+import {
+  MstrTable,
+  OperationData,
+} from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
+import { MstrObjectTypes } from '../mstr-object-types';
+
+import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import { OperationSteps } from '../../operation/operation-steps';
+import mstrObjectEnum from '../mstr-object-type-enum';
+import dossierInstanceDefinition from './dossier-instance-definition';
+import stepGetInstanceDefinition from './step-get-instance-definition';
+import { ErrorMessages } from '../../error/constants';
+import { DisplayAttrFormNames } from '../constants';
 
 describe('StepGetInstanceDefinition', () => {
   afterEach(() => {
@@ -28,6 +36,7 @@ describe('StepGetInstanceDefinition', () => {
 
     // when
     try {
+      // @ts-expect-error
       await instanceDefinitionHelper.modifyInstanceWithPrompt({
         instanceDefinition: {
           status: 2,
@@ -64,7 +73,7 @@ describe('StepGetInstanceDefinition', () => {
       jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation();
       jest
         .spyOn(instanceDefinitionHelper, 'modifyInstanceWithPrompt')
-        .mockReturnValue({ mstrTable: { rows: rowsParam } });
+        .mockResolvedValue({ mstrTable: { rows: rowsParam } });
       jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
 
       jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
@@ -78,12 +87,12 @@ describe('StepGetInstanceDefinition', () => {
       // when
       await stepGetInstanceDefinition.getInstanceDefinition(
         {
-          mstrObjectType: {},
+          mstrObjectType: {} as MstrObjectTypes,
           isPrompted: isPromptedParam,
-        },
+        } as unknown as ObjectData,
         {
           stepsQueue: ['step_0', 'step_1', undefined],
-        }
+        } as unknown as OperationData
       );
 
       // then
@@ -154,9 +163,11 @@ describe('StepGetInstanceDefinition', () => {
         body: 'bodyTest',
         name: 'nameTest',
         importType: 'table',
-      };
+      } as unknown as ObjectData;
 
-      jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue('excelContextTest');
+      jest
+        .spyOn(officeApiHelper, 'getExcelContext')
+        .mockResolvedValue('excelContextTest' as unknown as Excel.RequestContext);
 
       jest.spyOn(authenticationHelper, 'getCurrentMstrContext').mockReturnValue({
         envUrl: 'envUrlTest',
@@ -165,13 +176,13 @@ describe('StepGetInstanceDefinition', () => {
 
       jest.spyOn(stepGetInstanceDefinition, 'setupBodyTemplate').mockImplementation();
 
-      jest.spyOn(dossierInstanceDefinition, 'getDossierInstanceDefinition').mockReturnValue({
+      jest.spyOn(dossierInstanceDefinition, 'getDossierInstanceDefinition').mockResolvedValue({
         body: 'bodyDossierTest',
         visualizationInfo: visualizationInfoParam,
         instanceDefinition: {
           mstrTable: {
             name: 'mstrTableNameDossierTest',
-          },
+          } as unknown as MstrTable,
         },
       });
 
@@ -181,7 +192,7 @@ describe('StepGetInstanceDefinition', () => {
 
       jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation();
 
-      jest.spyOn(instanceDefinitionHelper, 'modifyInstanceWithPrompt').mockReturnValue({
+      jest.spyOn(instanceDefinitionHelper, 'modifyInstanceWithPrompt').mockResolvedValue({
         mstrTable: {
           name: 'nameModifyInstanceWithPromptTest',
           rows: 'rowsModifyInstanceWithPromptTest',
@@ -206,12 +217,13 @@ describe('StepGetInstanceDefinition', () => {
       };
 
       if (manipulationsXMLParam) {
+        // @ts-expect-error
         expectedMstrTable.manipulationsXML = manipulationsXMLParam;
       }
 
       jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
 
-      jest.spyOn(officeApiWorksheetHelper, 'getStartCell').mockReturnValue('startCellTest');
+      jest.spyOn(officeApiWorksheetHelper, 'getStartCell').mockResolvedValue('startCellTest');
 
       jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
       jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
@@ -221,7 +233,7 @@ describe('StepGetInstanceDefinition', () => {
       await stepGetInstanceDefinition.getInstanceDefinition(objectData, {
         operationType: 'operationTypeTest',
         stepsQueue: ['step_0', 'step_1', nextStepParam],
-      });
+      } as unknown as OperationData);
 
       // then
       expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
@@ -381,9 +393,11 @@ describe('StepGetInstanceDefinition', () => {
         body: 'bodyTest',
         name: 'nameTest',
         importType: 'table',
-      };
+      } as unknown as ObjectData;
 
-      jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue('excelContextTest');
+      jest
+        .spyOn(officeApiHelper, 'getExcelContext')
+        .mockResolvedValue('excelContextTest' as unknown as Excel.RequestContext);
 
       jest.spyOn(authenticationHelper, 'getCurrentMstrContext').mockReturnValue({
         envUrl: 'envUrlTest',
@@ -404,7 +418,7 @@ describe('StepGetInstanceDefinition', () => {
         },
       });
 
-      jest.spyOn(instanceDefinitionHelper, 'modifyInstanceWithPrompt').mockReturnValue({
+      jest.spyOn(instanceDefinitionHelper, 'modifyInstanceWithPrompt').mockResolvedValue({
         mstrTable: {
           name: 'nameModifyInstanceWithPromptTest',
           rows: 'rowsModifyInstanceWithPromptTest',
@@ -419,7 +433,7 @@ describe('StepGetInstanceDefinition', () => {
 
       jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
 
-      jest.spyOn(officeApiWorksheetHelper, 'getStartCell').mockReturnValue('startCellTest');
+      jest.spyOn(officeApiWorksheetHelper, 'getStartCell').mockResolvedValue('startCellTest');
 
       jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
       jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
@@ -429,7 +443,7 @@ describe('StepGetInstanceDefinition', () => {
       await stepGetInstanceDefinition.getInstanceDefinition(objectData, {
         operationType: 'operationTypeTest',
         stepsQueue: ['step_0', 'step_1', nextStepParam],
-      });
+      } as unknown as OperationData);
 
       // then
       expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
@@ -577,6 +591,7 @@ describe('StepGetInstanceDefinition', () => {
     jest.spyOn(mstrObjectRestService, 'answerPrompts').mockImplementation();
 
     // when
+    // @ts-expect-error
     const result = await instanceDefinitionHelper.modifyInstanceWithPrompt({
       instanceDefinition: instanceDefinitionMock,
     });
@@ -601,7 +616,7 @@ describe('StepGetInstanceDefinition', () => {
       promptsAnswers: [],
       dossierData: 'dossierDataTest',
       body: 'bodyTest',
-      displayAttrFormNames: 'displayAttrFormNamesTest',
+      displayAttrFormNames: DisplayAttrFormNames.AUTOMATIC,
     });
 
     // then
@@ -630,7 +645,7 @@ describe('StepGetInstanceDefinition', () => {
       promptsAnswers: ['answer1'],
       dossierData: 'dossierDataTest',
       body: 'bodyTest',
-      displayAttrFormNames: 'displayAttrFormNamesTest',
+      displayAttrFormNames: DisplayAttrFormNames.AUTOMATIC,
     });
 
     // then
@@ -679,7 +694,7 @@ describe('StepGetInstanceDefinition', () => {
       promptsAnswers: ['answer1', 'answer2'],
       dossierData: 'dossierDataTest',
       body: 'bodyTest',
-      displayAttrFormNames: 'displayAttrFormNamesTest',
+      displayAttrFormNames: DisplayAttrFormNames.AUTOMATIC,
     });
 
     // then
@@ -735,7 +750,7 @@ describe('StepGetInstanceDefinition', () => {
       const mstrTableMock = {
         isCrosstab,
         subtotalsInfo: {},
-      };
+      } as unknown as MstrTable;
 
       const instanceDefinition = { mstrTable: mstrTableMock };
 
@@ -747,7 +762,7 @@ describe('StepGetInstanceDefinition', () => {
       stepGetInstanceDefinition.savePreviousObjectData(
         instanceDefinition,
         crosstabHeaderDimensions,
-        'subtotalsAddressesTest'
+        'subtotalsAddressesTest' as unknown as any[]
       );
 
       // then
@@ -774,12 +789,12 @@ describe('StepGetInstanceDefinition', () => {
       // given
       jest.spyOn(officeApiWorksheetHelper, 'createAndActivateNewWorksheet').mockImplementation();
 
-      jest.spyOn(officeApiHelper, 'getSelectedCell').mockReturnValue(42);
+      jest.spyOn(officeApiHelper, 'getSelectedCell').mockResolvedValue('42');
 
       // when
       const result = await officeApiWorksheetHelper.getStartCell(
         insertNewWorksheet,
-        'excelContextTest',
+        'excelContextTest' as unknown as Excel.RequestContext,
         'nameTest'
       );
 

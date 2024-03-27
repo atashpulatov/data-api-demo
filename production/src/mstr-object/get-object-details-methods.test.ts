@@ -1,6 +1,9 @@
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { mstrObjectRestService } from './mstr-object-rest-service';
 
+import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../types/object-types';
+
 import {
   getObjectPrompts,
   populateDefinition,
@@ -14,8 +17,9 @@ describe('Get Object Details Methods', () => {
       const mockedObjectDataWithoutPrompts = {
         promptsAnswers: false,
         mstrObjectType: { name: 'report' },
-      };
+      } as unknown as ObjectData;
       // when
+      // @ts-expect-error
       const objectPrompts = await getObjectPrompts(mockedObjectDataWithoutPrompts);
       // then
       expect(objectPrompts).toBeFalsy();
@@ -26,10 +30,12 @@ describe('Get Object Details Methods', () => {
         promptsAnswers: true,
         mstrObjectType: { name: 'report' },
         manipulationsXML: { promptAnswers: {} },
-      };
-      const mockedObjectId = 1;
-      const mockedProjectId = 12;
-      const mockedOperationData = { instanceDefinition: { instanceId: 2 } };
+      } as unknown as ObjectData;
+      const mockedObjectId = '1';
+      const mockedProjectId = '12';
+      const mockedOperationData = {
+        instanceDefinition: { instanceId: 2 },
+      } as unknown as OperationData;
       jest.spyOn(mstrObjectRestService, 'getObjectPrompts').mockImplementation(() => []);
       // when
       await getObjectPrompts(
@@ -47,14 +53,14 @@ describe('Get Object Details Methods', () => {
       );
     });
     describe('promptAnswerFunctionsMap', () => {
-      let mockedObjectData;
+      let mockedObjectData: ObjectData;
 
       beforeEach(() => {
         mockedObjectData = {
           promptsAnswers: true,
           mstrObjectType: { name: 'report' },
           manipulationsXML: { promptAnswers: {} },
-        };
+        } as unknown as ObjectData;
       });
 
       it('should map object answers', async () => {
@@ -70,12 +76,9 @@ describe('Get Object Details Methods', () => {
           .mockResolvedValue(mockedPromptAnswers);
         const expectedResult = [['some name1', 'some name2']];
         // when
-        const result = await getObjectPrompts(
-          mockedObjectData,
-          {},
-          {},
-          { instanceDefinition: { instanceId: 2 } }
-        );
+        const result = await getObjectPrompts(mockedObjectData, '', '', {
+          instanceDefinition: { instanceId: 2 },
+        } as unknown as OperationData);
         // then
         expect(result).toEqual(expectedResult);
       });
@@ -95,12 +98,9 @@ describe('Get Object Details Methods', () => {
           .mockResolvedValue(mockedPromptAnswers);
         const expectedResult = [['some name1', 'some name2']];
         // when
-        const result = await getObjectPrompts(
-          mockedObjectData,
-          {},
-          {},
-          { instanceDefinition: { instanceId: 2 } }
-        );
+        const result = await getObjectPrompts(mockedObjectData, '', '', {
+          instanceDefinition: { instanceId: 2 },
+        } as unknown as OperationData);
         // then
         expect(result).toEqual(expectedResult);
       });
@@ -120,12 +120,9 @@ describe('Get Object Details Methods', () => {
           .mockResolvedValue(mockedPromptAnswers);
         const expectedResult = ['some content'];
         // when
-        const result = await getObjectPrompts(
-          mockedObjectData,
-          {},
-          {},
-          { instanceDefinition: { instanceId: 2 } }
-        );
+        const result = await getObjectPrompts(mockedObjectData, '', '', {
+          instanceDefinition: { instanceId: 2 },
+        } as unknown as OperationData);
         // then
         expect(result).toEqual(expectedResult);
       });
@@ -143,12 +140,9 @@ describe('Get Object Details Methods', () => {
           .mockResolvedValue(mockedPromptAnswers);
         const expectedResult = [['some name1', 'some name2']];
         // when
-        const result = await getObjectPrompts(
-          mockedObjectData,
-          {},
-          {},
-          { instanceDefinition: { instanceId: 2 } }
-        );
+        const result = await getObjectPrompts(mockedObjectData, '', '', {
+          instanceDefinition: { instanceId: 2 },
+        } as unknown as OperationData);
         // then
         expect(result).toEqual(expectedResult);
       });
@@ -166,12 +160,9 @@ describe('Get Object Details Methods', () => {
           .mockResolvedValue(mockedPromptAnswers);
         const expectedResult = ['some answer'];
         // when
-        const result = await getObjectPrompts(
-          mockedObjectData,
-          {},
-          {},
-          { instanceDefinition: { instanceId: 2 } }
-        );
+        const result = await getObjectPrompts(mockedObjectData, '', '', {
+          instanceDefinition: { instanceId: 2 },
+        } as unknown as OperationData);
         // then
         expect(result).toEqual(expectedResult);
       });
@@ -215,12 +206,9 @@ describe('Get Object Details Methods', () => {
           'some answer',
         ];
         // when
-        const result = await getObjectPrompts(
-          mockedObjectData,
-          {},
-          {},
-          { instanceDefinition: { instanceId: 2 } }
-        );
+        const result = await getObjectPrompts(mockedObjectData, '', '', {
+          instanceDefinition: { instanceId: 2 },
+        } as unknown as OperationData);
         // then
         expect(result).toEqual(expectedResult);
       });
@@ -232,7 +220,7 @@ describe('Get Object Details Methods', () => {
       // given
       const mockedObjectData = {
         definition: { someProperty: 'some definition' },
-      };
+      } as unknown as ObjectData;
       // when
       const definition = populateDefinition(mockedObjectData);
       // then
@@ -243,7 +231,7 @@ describe('Get Object Details Methods', () => {
       // given
       const mockedObjectData = {
         definition: { someProperty: 'some definition' },
-      };
+      } as unknown as ObjectData;
       const mockedPrompts = { someProperty: 'some data' };
       const expectedResult = {
         ...mockedObjectData.definition,
@@ -264,7 +252,7 @@ describe('Get Object Details Methods', () => {
         .spyOn(authenticationHelper, 'getCurrentMstrUserFullName')
         .mockImplementation(() => mockedUserName);
       // when
-      populateDetails({}, {}, {}, {});
+      populateDetails({}, true, '', '');
       // then
       expect(authenticationHelper.getCurrentMstrUserFullName).toBeCalled();
     });
@@ -276,7 +264,7 @@ describe('Get Object Details Methods', () => {
         .spyOn(authenticationHelper, 'getCurrentMstrUserFullName')
         .mockImplementation(() => mockedUserName);
       const mockedAncestors = 'Some ancestors';
-      const mockedCertifiedInfo = 'Some certified info';
+      const mockedCertifiedInfo = true;
       const mockedDateModified = 'Some date';
       const mockedOwner = 'Some owner';
       const expectedDetails = {

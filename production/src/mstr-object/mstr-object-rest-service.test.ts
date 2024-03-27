@@ -7,6 +7,7 @@ jest.mock('superagent');
 
 describe('MstrObjectRestService', () => {
   beforeAll(() => {
+    // @ts-ignore
     mstrObjectRestService.init(reduxStore);
   });
 
@@ -44,6 +45,7 @@ describe('MstrObjectRestService', () => {
             {
               status: 404,
               statusText: 'Not Found',
+              // @ts-expect-error
               'Content-Type': 'application/json',
             }
           )
