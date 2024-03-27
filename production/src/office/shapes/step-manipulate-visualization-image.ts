@@ -30,10 +30,10 @@ class StepManipulateVisualizationImage {
    * @param operationData Reference to the operation data required for error handling
    *
    */
-  async manipulateVisualizationImage(
+  manipulateVisualizationImage = async (
     objectData: ObjectData,
     operationData: OperationData
-  ): Promise<void> {
+  ): Promise<void> => {
     console.time('Refresh Visualization Image');
     try {
       const {
@@ -133,7 +133,7 @@ class StepManipulateVisualizationImage {
     } finally {
       console.timeEnd('Refresh Visualization Image');
     }
-  }
+  };
 
   /**
    * Checks whether the Edit, Refresh Or Duplicate operations are valid and throws an error
@@ -149,11 +149,11 @@ class StepManipulateVisualizationImage {
    * @param operationType Type of operation
    * @throws VISUALIZATION_REMOVED_FROM_EXCEL error if the image was manually removed from sheet
    */
-  validateOperation(
+  validateOperation = (
     shapeInWorksheet: any,
     shapeToBeDuplicated: any,
     operationType: OperationTypes
-  ): void {
+  ): void => {
     const isInValidEditOperation =
       operationType === OperationTypes.EDIT_OPERATION && !shapeInWorksheet;
 
@@ -166,7 +166,7 @@ class StepManipulateVisualizationImage {
     if (isInValidDuplicateOperation || isInValidEditOperation || isInValidRefreshOperation) {
       throw new Error(ErrorMessages.VISUALIZATION_REMOVED_FROM_EXCEL);
     }
-  }
+  };
 }
 
 const stepManipulateVisualizationImage = new StepManipulateVisualizationImage();
