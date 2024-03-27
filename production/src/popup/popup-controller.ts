@@ -459,9 +459,10 @@ class PopupController {
   };
 
   /**
-   * Method used for handling import of a deafult Page-by attributes combination of the object.
+   * Method used for handling import of all valid Page-by attributes combinations of the object.
    *
    * @param pageByLinkId Unique identifier of the Page-by sibling
+   * @param validPageByData Contains information about the valid Page-by elements combinations
    * @param objectData Contains information about the MSTR object
    * @param preparedInstanceDefinition Contains information about the object's instance
    * @param pageByDisplayType Contains information about the currently selected Page-by display setting
