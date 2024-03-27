@@ -97,7 +97,7 @@ class GridHandler {
   getHeaders(
     response: any,
     isCrosstab: boolean,
-    isCrosstabular: boolean
+    isCrosstabular?: boolean
   ): {
     rows?: any[];
     columns?: any[];

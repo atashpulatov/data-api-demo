@@ -1,5 +1,6 @@
 import { Action } from 'redux';
 
+import { VisualizationTypes } from '../../mstr-object/mstr-object-types';
 import { ObjectData } from '../../types/object-types';
 
 import { OperationSteps } from '../../operation/operation-steps';
@@ -20,7 +21,7 @@ export interface MstrTable {
   isCrosstabular: boolean;
   name: string;
   rows: { row: any[] }; // Replace with actual type
-  visualizationType: string;
+  visualizationType: VisualizationTypes;
   attributesNames: { rowsAttributes: any[] }; // Replace with actual type
   attributes: any[]; // Replace with actual type
   metrics: any[]; // Replace with actual type

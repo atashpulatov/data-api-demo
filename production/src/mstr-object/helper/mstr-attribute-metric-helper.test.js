@@ -1,4 +1,4 @@
-import mstrAttributeMetricHelper from './mstr-attribute-metric-helper.ts';
+import mstrAttributeMetricHelper from './mstr-attribute-metric-helper';
 
 import compoundJSONwithMetricsInRows from '../../../__mocks__/compound-grid/Compound Grid with Metrics on Row.json';
 import regularCompoundJSON from '../../../__mocks__/compound-grid/Regular Compound Grid.json';

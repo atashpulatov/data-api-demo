@@ -1,12 +1,19 @@
 import request from 'superagent';
 
 import mstrAttributeFormHelper from './helper/mstr-attribute-form-helper';
-import mstrAttributeMetricHelper from './helper/mstr-attribute-metric-helper.ts';
+import mstrAttributeMetricHelper from './helper/mstr-attribute-metric-helper';
 import officeConverterServiceV2 from './office-converter-service-v2';
+
+import { ReduxStore } from '../store';
+
+import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import { DossierData, TableDimensions, VisualizationInfo } from '../types/object-types';
+import { MstrObjectTypes, VisualizationTypes } from './mstr-object-types';
 
 import { OutsideOfRangeError } from '../error/outside-of-range-error';
 import mstrObjectEnum from './mstr-object-type-enum';
 import { ErrorMessages } from '../error/constants';
+import { DisplayAttrFormNames } from './constants';
 
 const reportObjectType = mstrObjectEnum.mstrObjectType.report;
 
@@ -18,16 +25,16 @@ export const DATA_LIMIT = 200000; // 200000 is around 1mb of MSTR JSON response
 export const IMPORT_ROW_LIMIT = 20000; // Maximum number of rows to fetch during data import.
 export const PROMISE_LIMIT = 10; // Number of concurrent excelContext.sync() promises during data import.
 
-function checkTableDimensions({ rows, columns }) {
+function checkTableDimensions({ rows, columns }: TableDimensions): TableDimensions {
   if (rows >= EXCEL_ROW_LIMIT || columns >= EXCEL_COLUMN_LIMIT) {
     throw new OutsideOfRangeError();
   }
   return { rows, columns };
 }
 
-function parseInstanceDefinition(res, attrforms) {
-  const { body } = res;
-  if (res.status === 200 && body.status === 2) {
+function parseInstanceDefinition(response: any, attrforms: any): InstanceDefinition {
+  const { body } = response;
+  if (response.status === 200 && body.status === 2) {
     const { instanceId, status } = body;
     return { instanceId, status };
   }
@@ -55,8 +62,16 @@ function getFullPath({
   objectId,
   instanceId,
   version = 1,
-  visualizationInfo = false,
-}) {
+  visualizationInfo = {},
+}: {
+  envUrl: string;
+  limit?: number;
+  mstrObjectType: MstrObjectTypes;
+  objectId: string;
+  instanceId?: string;
+  version?: number;
+  visualizationInfo?: VisualizationInfo;
+}): string {
   let path;
   if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
     const { chapterKey, visualizationKey } = visualizationInfo;
@@ -73,13 +88,13 @@ function getFullPath({
 /**
  * Returns fields query selector value based on type of the object
  *
- * @param {string} visualizationType Specifies type of the visualisation
- * @returns {string} fields query selector
+ * @param visualizationType Specifies type of the visualisation
+ * @returns fields query selector
  */
-function getFetchObjectContentFields(visualizationType) {
+function getFetchObjectContentFields(visualizationType: VisualizationTypes): string {
   switch (visualizationType) {
-    case mstrObjectEnum.visualizationType.COMPOUND_GRID:
-    case mstrObjectEnum.visualizationType.MICROCHARTS:
+    case VisualizationTypes.COMPOUND_GRID:
+    case VisualizationTypes.MICROCHARTS:
       return `-data.metricValues.columnSets.extras,-data.metricValues.columnSets.formatted`;
     default:
       return `-data.metricValues.extras,-data.metricValues.formatted`;
@@ -87,13 +102,13 @@ function getFetchObjectContentFields(visualizationType) {
 }
 
 function fetchObjectContent(
-  fullPath,
-  authToken,
-  projectId,
-  visualizationType,
+  fullPath: string,
+  authToken: string,
+  projectId: string,
+  visualizationType: VisualizationTypes,
   offset = 0,
   limit = -1
-) {
+): any {
   if (limit > IMPORT_ROW_LIMIT || offset > EXCEL_ROW_LIMIT) {
     throw new Error(ErrorMessages.PROBLEM_WITH_REQUEST);
   }
@@ -112,15 +127,22 @@ function fetchObjectContent(
 /**
  * This function fetches the content of the object.
  * It is used to fetch the dossier or report in chunks to be inserted in workbook.
- * @param {*} fullPath
- * @param {*} authToken
- * @param {*} projectId
- * @param {*} offset
- * @param {*} limit
- * @param {*} visualizationType
+ * @param fullPath
+ * @param authToken
+ * @param projectId
+ * @param offset
+ * @param limit
+ * @param visualizationType
  * @returns
  */
-async function fetchContentPart(fullPath, authToken, projectId, offset, limit, visualizationType) {
+async function fetchContentPart(
+  fullPath: string,
+  authToken: string,
+  projectId: string,
+  offset: number,
+  limit: number,
+  visualizationType: VisualizationTypes
+): Promise<any> {
   const { body: fetchedBody } = await fetchObjectContent(
     fullPath,
     authToken,
@@ -137,34 +159,36 @@ async function fetchContentPart(fullPath, authToken, projectId, offset, limit, v
 
 /**
  * This function offsets the subtotal row index by the offset value.
- * @param {*} e
- * @param {*} offset
+ * @param element
+ * @param offset
  */
-function offsetRowSubtotal(e, offset) {
-  if (e) {
-    e.rowIndex += offset;
+function offsetRowSubtotal(element: any, offset: number): void {
+  if (element) {
+    element.rowIndex += offset;
   }
 }
 
 /**
  * This function offsets the subtotal column index by the offset value.
- * @param {*} e
- * @param {*} offset
+ * @param element
+ * @param offset
  */
-function offsetCrosstabSubtotal(e, offset) {
-  if (e && e.axis === 'rows') {
-    e.colIndex += offset;
+function offsetCrosstabSubtotal(element: any, offset: number): void {
+  if (element && element.axis === 'rows') {
+    element.colIndex += offset;
   }
 }
 
 class MstrObjectRestService {
+  reduxStore: ReduxStore;
+
   constructor() {
     this.fetchContentGenerator = this.fetchContentGenerator.bind(this);
   }
 
-  init = reduxStore => {
+  init(reduxStore: ReduxStore): void {
     this.reduxStore = reduxStore;
-  };
+  }
 
   // eslint-disable-next-line class-methods-use-this
   async *fetchContentGenerator({
@@ -172,11 +196,19 @@ class MstrObjectRestService {
     objectId,
     projectId,
     mstrObjectType,
-    dossierData,
     limit = IMPORT_ROW_LIMIT,
     visualizationInfo,
     displayAttrFormNames,
-  }) {
+  }: {
+    instanceDefinition: InstanceDefinition;
+    objectId: string;
+    projectId: string;
+    mstrObjectType: any;
+    dossierData: DossierData;
+    limit: number;
+    visualizationInfo: any;
+    displayAttrFormNames: any;
+  }): any {
     const {
       rows: totalRows,
       instanceId,
@@ -191,7 +223,6 @@ class MstrObjectRestService {
     let offset = 0;
     const metricsInRows = [];
     const fullPath = getFullPath({
-      dossierData,
       envUrl,
       mstrObjectType,
       objectId,
@@ -202,8 +233,9 @@ class MstrObjectRestService {
 
     // Declaring these functions outside of the loop to avoid creating them on each iteration
     // and mitigate eslint no-loop-func rule.
-    const offsetRowSubtotalFn = e => offsetRowSubtotal(e, offset);
-    const offsetCrosstabSubtotalFn = e => offsetCrosstabSubtotal(e, offset);
+    const offsetRowSubtotalFn = (element: any): void => offsetRowSubtotal(element, offset);
+    const offsetCrosstabSubtotalFn = (element: any): void =>
+      offsetCrosstabSubtotal(element, offset);
 
     while (fetchedRows < totalRows && fetchedRows < EXCEL_ROW_LIMIT) {
       const fetchedBody = await fetchContentPart(
@@ -264,7 +296,13 @@ class MstrObjectRestService {
     instanceId,
     promptsAnswers,
     ignoreValidateRequiredCheck = false,
-  }) => {
+  }: {
+    objectId: string;
+    projectId: string;
+    instanceId: string;
+    promptsAnswers: any;
+    ignoreValidateRequiredCheck: boolean;
+  }): any => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/promptsAnswers${ignoreValidateRequiredCheck ? '?ignoreValidateRequiredCheck=true' : ''}`;
@@ -283,7 +321,13 @@ class MstrObjectRestService {
     instanceId,
     promptsAnswers,
     ignoreValidateRequiredCheck = false,
-  }) => {
+  }: {
+    objectId: string;
+    projectId: string;
+    instanceId: string;
+    promptsAnswers: any;
+    ignoreValidateRequiredCheck: boolean;
+  }): any => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/promptsAnswers${ignoreValidateRequiredCheck ? '?ignoreValidateRequiredCheck=true' : ''}`;
@@ -296,7 +340,11 @@ class MstrObjectRestService {
       .then(res => res.status);
   };
 
-  createDossierBasedOnReport = (chosenObjectId, instanceId, projectId) => {
+  createDossierBasedOnReport = (
+    chosenObjectId: string,
+    instanceId: string,
+    projectId: string
+  ): any => {
     // TODO: get rid of the getState
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
@@ -328,17 +376,23 @@ class MstrObjectRestService {
     objectId,
     projectId,
     mstrObjectType = reportObjectType,
-    dossierData,
     body = {},
     limit = 1,
     displayAttrFormNames,
-  }) => {
+  }: {
+    objectId: string;
+    projectId: string;
+    mstrObjectType: MstrObjectTypes;
+    dossierData: DossierData;
+    body: any;
+    limit: number;
+    displayAttrFormNames: DisplayAttrFormNames;
+  }): InstanceDefinition => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const { supportForms } = storeState.officeReducer;
     const attrforms = { supportForms, displayAttrFormNames };
     const fullPath = getFullPath({
-      dossierData,
       envUrl,
       limit,
       mstrObjectType,
@@ -362,7 +416,14 @@ class MstrObjectRestService {
     visualizationInfo,
     body,
     displayAttrFormNames,
-  }) => {
+  }: {
+    projectId: string;
+    objectId: string;
+    instanceId: string;
+    visualizationInfo: VisualizationInfo;
+    body: any;
+    displayAttrFormNames: DisplayAttrFormNames;
+  }): InstanceDefinition => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const { supportForms } = storeState.officeReducer;
@@ -378,7 +439,7 @@ class MstrObjectRestService {
       .then(res => parseInstanceDefinition(res, attrforms));
   };
 
-  createDossierInstance = (projectId, objectId, body = {}) => {
+  createDossierInstance = (projectId: string, objectId: string, body: any = {}): any => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/dossiers/${objectId}/instances`;
@@ -391,7 +452,11 @@ class MstrObjectRestService {
       .then(res => res.body);
   };
 
-  getDossierInstanceDefinition = (projectId, objectId, dossierInstanceId) => {
+  getDossierInstanceDefinition = (
+    projectId: string,
+    objectId: string,
+    dossierInstanceId: string
+  ): any => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/v2/dossiers/${objectId}/instances/${dossierInstanceId}/definition`;
@@ -403,7 +468,7 @@ class MstrObjectRestService {
       .then(res => res.body);
   };
 
-  deleteDossierInstance = (projectId, objectId, instanceId) => {
+  deleteDossierInstance = (projectId: string, objectId: string, instanceId: string): any => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}`;
@@ -415,7 +480,7 @@ class MstrObjectRestService {
       .then(res => res.body);
   };
 
-  getDossierStatus = (dossierId, instanceId, projectId) => {
+  getDossierStatus = (dossierId: string, instanceId: string, projectId: string): any => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${dossierId}/instances/${instanceId}/status`;
@@ -432,17 +497,23 @@ class MstrObjectRestService {
     objectId,
     projectId,
     mstrObjectType = reportObjectType,
-    dossierData,
     body = {},
     instanceId,
     displayAttrFormNames,
-  }) => {
+  }: {
+    objectId: string;
+    projectId: string;
+    mstrObjectType: MstrObjectTypes;
+    dossierData: DossierData;
+    body: any;
+    instanceId: string;
+    displayAttrFormNames: DisplayAttrFormNames;
+  }): InstanceDefinition => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const { supportForms } = storeState.officeReducer;
     const attrforms = { supportForms, displayAttrFormNames };
     const fullPath = getFullPath({
-      dossierData,
       envUrl,
       mstrObjectType,
       objectId,
@@ -463,17 +534,22 @@ class MstrObjectRestService {
     objectId,
     projectId,
     mstrObjectType = reportObjectType,
-    dossierData,
     body = {},
     instanceId,
     displayAttrFormNames,
-  }) => {
+  }: {
+    objectId: string;
+    projectId: string;
+    mstrObjectType: MstrObjectTypes;
+    body: any;
+    instanceId: string;
+    displayAttrFormNames: DisplayAttrFormNames;
+  }): InstanceDefinition => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const { supportForms } = storeState.officeReducer;
     const attrforms = { supportForms, displayAttrFormNames };
     const fullPath = getFullPath({
-      dossierData,
       envUrl,
       limit: 1,
       mstrObjectType,
@@ -490,7 +566,11 @@ class MstrObjectRestService {
       .then(res => parseInstanceDefinition(res, attrforms));
   };
 
-  getObjectDefinition = (objectId, projectId, mstrObjectType = reportObjectType) => {
+  getObjectDefinition = (
+    objectId: string,
+    projectId: string,
+    mstrObjectType: MstrObjectTypes = reportObjectType
+  ): any => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const api = API_VERSION > 1 ? 'v2/' : '';
@@ -504,11 +584,16 @@ class MstrObjectRestService {
       .then(res => res.body);
   };
 
-  getObjectInfo = (objectId, projectId, mstrObjectType = reportObjectType) => {
+  getObjectInfo = (
+    objectId: string,
+    projectId: string,
+    mstrObjectType: MstrObjectTypes = reportObjectType
+  ): any => {
     const storeState = this.reduxStore.getState();
     // visualisation does not have object type, all other objects has type represented by number
     // If we pass not a number we know its visualisation and we set type as 55 (document)
     if (typeof mstrObjectType.type !== 'number') {
+      // @ts-expect-error
       mstrObjectType.type = 55;
     }
     const { envUrl, authToken } = storeState.sessionReducer;
@@ -525,15 +610,20 @@ class MstrObjectRestService {
   /**
    * Gets the prompts applied to the object's instance.
    *
-   * @param {String} objectId Id of an object
-   * @param {String} projectId Id of a project
-   * @param {String} instanceId Id of an instance
-   * @param {Boolean} bIncludeClosedPrompts Whether to request to include closed prompts
+   * @param objectId Id of an object
+   * @param projectId Id of a project
+   * @param instanceId Id of an instance
+   * @param includeClosedPrompts Whether to request to include closed prompts
    */
-  getObjectPrompts = (objectId, projectId, instanceId, bIncludeClosedPrompts = false) => {
+  getObjectPrompts = (
+    objectId: string,
+    projectId: string,
+    instanceId: string,
+    includeClosedPrompts = false
+  ): any => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts${bIncludeClosedPrompts ? '?closed=true' : ''}`;
+    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts${includeClosedPrompts ? '?closed=true' : ''}`;
 
     return request
       .get(fullPath)
@@ -543,7 +633,7 @@ class MstrObjectRestService {
       .then(res => res.body);
   };
 
-  isPrompted = (objectId, projectId, objectTypeName) => {
+  isPrompted = (objectId: string, projectId: string, objectTypeName: string): any => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
 
@@ -572,11 +662,11 @@ class MstrObjectRestService {
   /**
    * Function getting information about a cube from a certain project.
    *
-   * @param {string} objectId
-   * @param {string} projectId
-   * @returns {Object} Contains info for cube that match objectId and projectId
+   * @param objectId
+   * @param projectId
+   * @returns Contains info for cube that match objectId and projectId
    */
-  getCubeInfo = (objectId, projectId) =>
+  getCubeInfo = (objectId: string, projectId: string): any =>
     new Promise((resolve, reject) => {
       const storeState = this.reduxStore.getState();
       const { envUrl, authToken } = storeState.sessionReducer;
@@ -591,7 +681,7 @@ class MstrObjectRestService {
         .catch(error => reject(error));
     });
 
-  rePromptDossier = (dossierId, instanceId, projectId) => {
+  rePromptDossier = (dossierId: string, instanceId: string, projectId: string): any => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${dossierId}/instances/${instanceId}/rePrompt`;
@@ -607,7 +697,7 @@ class MstrObjectRestService {
   /**
    * Answer specified prompts on the document/dossier instance,
    * prompts can either be answered with default answers(if available)
-   * @param {*} param0
+   * @param  param0
    * @returns
    */
   updateDossierPrompts = ({
@@ -616,7 +706,13 @@ class MstrObjectRestService {
     instanceId,
     promptsAnswers,
     ignoreValidateRequiredCheck = false,
-  }) => {
+  }: {
+    objectId: string;
+    projectId: string;
+    instanceId: string;
+    promptsAnswers: any;
+    ignoreValidateRequiredCheck: boolean;
+  }): any => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts/answers${ignoreValidateRequiredCheck ? '?ignoreValidateRequiredCheck=true' : ''}`;
@@ -635,7 +731,13 @@ class MstrObjectRestService {
     instanceId,
     promptsAnswers,
     ignoreValidateRequiredCheck = false,
-  }) => {
+  }: {
+    objectId: string;
+    projectId: string;
+    instanceId: string;
+    promptsAnswers: any;
+    ignoreValidateRequiredCheck: boolean;
+  }): any => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/prompts/answers${ignoreValidateRequiredCheck ? '?ignoreValidateRequiredCheck=true' : ''}`;
@@ -654,7 +756,13 @@ class MstrObjectRestService {
     instanceId,
     promptsAnswers,
     ignoreValidateRequiredCheck = false,
-  }) => {
+  }: {
+    objectId: string;
+    projectId: string;
+    instanceId: string;
+    promptsAnswers: any;
+    ignoreValidateRequiredCheck: boolean;
+  }): any => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/dossiers/${objectId}/instances/${instanceId}/answerPrompts${ignoreValidateRequiredCheck ? '?ignoreValidateRequiredCheck=true' : ''}`;
@@ -670,13 +778,18 @@ class MstrObjectRestService {
   /**
    * This method is used to fetch attribute's elements list for a given prompt defined in a dossier's instance
    *
-   * @param {*} objectId
-   * @param {*} projectId
-   * @param {*} instanceId
-   * @param {*} promptId
-   * @returns {Promise} Promise object represents the list of attribute's elements
+   * @param objectId
+   * @param projectId
+   * @param instanceId
+   * @param promptId
+   * @returns Promise object represents the list of attribute's elements
    */
-  getPromptElements = (objectId, projectId, instanceId, promptId) => {
+  getPromptElements = (
+    objectId: string,
+    projectId: string,
+    instanceId: string,
+    promptId: string
+  ): any => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts/${promptId}/elements`;
@@ -692,13 +805,18 @@ class MstrObjectRestService {
   /**
    * This method fetches the list of objects elements for a given prompt defined in a dossier's instance
    *
-   * @param {*} objectId
-   * @param {*} projectId
-   * @param {*} instanceId
-   * @param {*} promptId
+   * @param objectId
+   * @param projectId
+   * @param instanceId
+   * @param promptId
    * @returns array of objects elements
    */
-  getPromptObjectElements = (objectId, projectId, instanceId, promptId) => {
+  getPromptObjectElements = (
+    objectId: string,
+    projectId: string,
+    instanceId: string,
+    promptId: string
+  ): any => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts/${promptId}/objects`;
@@ -715,7 +833,7 @@ class MstrObjectRestService {
    * This method fetches the visualization image as a ReadableStream
    * for a given visualization key.
    *
-   * @param {string} objectId
+   * @param {string} zobjectId
    * @param {string} projectId
    * @param {string} instanceId
    * @param {string} visualizationKey
@@ -723,7 +841,13 @@ class MstrObjectRestService {
    *
    * @returns array of objects elements
    */
-  getVisualizationImage = async (objectId, projectId, instanceId, visualizationKey, dimensions) => {
+  getVisualizationImage = async (
+    objectId: string,
+    projectId: string,
+    instanceId: string,
+    visualizationKey: string,
+    dimensions: { width: number; height: number }
+  ): Promise<any> => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/visualizations/${visualizationKey}/image`;
@@ -739,11 +863,14 @@ class MstrObjectRestService {
       body: JSON.stringify({ width, height }),
     };
 
+    // @ts-expect-error
     const response = await fetch(fullPath, options);
     if (!response.ok) {
       const responseBody = await response.json();
       const restError = new Error(responseBody.message);
+      // @ts-expect-error
       restError.response = { body: responseBody };
+      // @ts-expect-error
       restError.status = response.status;
       throw restError;
     }
@@ -754,12 +881,12 @@ class MstrObjectRestService {
   /**
    * Fetches information about Page-by elements of given Report instance
    *
-   * @param {string} reportId unique identifier of the mstr report
-   * @param {string} projectId unique identifier of the mstr project
-   * @param {string} instanceId unique identifier of the Report instance
-   * @returns {Promise} object containing Page-by elements and valid Page-by combinations
+   * @param reportId unique identifier of the mstr report
+   * @param projectId unique identifier of the mstr project
+   * @param instanceId unique identifier of the Report instance
+   * @returns object containing Page-by elements and valid Page-by combinations
    */
-  getPageByElements = async (reportId, projectId, instanceId) => {
+  getPageByElements = (reportId: string, projectId: string, instanceId: string): any => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/v2/reports/${reportId}/instances/${instanceId}/pageBy/elements`;

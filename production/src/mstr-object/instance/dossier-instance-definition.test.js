@@ -1,8 +1,8 @@
 import { mstrObjectRestService } from '../mstr-object-rest-service';
 import { visualizationInfoService } from '../visualization-info-service';
 
-import dossierInstanceDefinition from './dossier-instance-definition';
 import mstrObjectEnum from '../mstr-object-type-enum';
+import dossierInstanceDefinition from './dossier-instance-definition';
 import { ErrorType, IncomingErrorStrings } from '../../error/constants';
 
 describe('DossierInstanceDefinition', () => {

@@ -9,7 +9,7 @@ class MstrAttributeFormHelper {
    * @param {Boolean} supportForms user's privilege to use attribute forms
    * @returns {Array} column information including attribute forms
    */
-  splitAttributeForms = (columns: any[], supportForms: boolean): any[] => {
+  splitAttributeForms = (columns: any[], supportForms: any): any[] => {
     const fullColumnInformation: any[] = [];
     columns.forEach(column => {
       const type = column.type ? column.type.toLowerCase() : null;
