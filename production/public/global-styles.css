@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans|Noto+Sans+JP|Noto+Sans+KR|Noto+Sans+SC|Noto+Sans+TC|Roboto:300,400,500&display=swap');
+
+#root {
+  height: 100%;
+  background-color: #fff;
+}
+
+#loading {
+  font-family: 'Roboto', 'Noto Sans', 'Noto Sans JP', 'Noto Sans KR', 'Noto Sans SC', 'Noto Sans TC',
+    'Helvetica Neue', sans-serif;
+  position: fixed;
+  font-size: 14px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+}
+
+#loading img {
+  margin-right: 10px;
+  vertical-align: middle;
+}

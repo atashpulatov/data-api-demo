@@ -21,29 +21,8 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>MicroStrategy for Office</title>
-    <style>
-      @import url('https://fonts.googleapis.com/css?family=Noto+Sans|Noto+Sans+JP|Noto+Sans+KR|Noto+Sans+SC|Noto+Sans+TC|Roboto:300,400,500&display=swap');
 
-      #root {
-        background-color: #fff;
-      }
-
-      #loading {
-        font-family: 'Roboto', 'Noto Sans', 'Noto Sans JP', 'Noto Sans KR', 'Noto Sans SC',
-          'Noto Sans TC', 'Helvetica Neue', sans-serif;
-        position: fixed;
-        font-size: 14px;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: -1;
-      }
-
-      #loading img {
-        margin-right: 10px;
-        vertical-align: middle;
-      }
-    </style>
+    <link rel="stylesheet" href="global-styles.css" />
   </head>
 
   <body>
@@ -56,6 +35,7 @@
       />
       <span id="loadingSpan">Loading...</span>
     </div>
+
     <script>
       var loadingTranslations = {
         'en-US': 'Loading...',
@@ -80,6 +60,7 @@
         }
       } catch (e) {}
     </script>
+
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
