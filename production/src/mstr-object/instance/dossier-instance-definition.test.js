@@ -1,9 +1,9 @@
-import { mstrObjectRestService } from './mstr-object-rest-service';
-import { visualizationInfoService } from './visualization-info-service';
+import { mstrObjectRestService } from '../mstr-object-rest-service';
+import { visualizationInfoService } from '../visualization-info-service';
 
-import dossierInstanceDefinition from './instance/dossier-instance-definition';
-import mstrObjectEnum from './mstr-object-type-enum';
-import { ErrorType, IncomingErrorStrings } from '../error/constants';
+import dossierInstanceDefinition from './dossier-instance-definition';
+import mstrObjectEnum from '../mstr-object-type-enum';
+import { ErrorType, IncomingErrorStrings } from '../../error/constants';
 
 describe('DossierInstanceDefinition', () => {
   afterEach(() => {

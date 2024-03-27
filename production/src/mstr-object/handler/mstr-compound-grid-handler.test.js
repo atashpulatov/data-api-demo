@@ -1,6 +1,6 @@
-import mstrCompoundGridHandler from './handler/mstr-compound-grid-handler';
+import mstrCompoundGridHandler from './mstr-compound-grid-handler';
 
-import regularCompoundJSON from '../../__mocks__/compound-grid/Regular Compound Grid.json';
+import regularCompoundJSON from '../../../__mocks__/compound-grid/Regular Compound Grid.json';
 
 describe('Compound Grid Handler', () => {
   it('should create mstr table object', () => {

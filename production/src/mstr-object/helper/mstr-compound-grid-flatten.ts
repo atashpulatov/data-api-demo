@@ -2,16 +2,22 @@ class MstrCompoundGridFlatten {
   /**
    * Filters out empty column sets from response
    *
-   * @param {JSON} response response containing information about object
+   * @param response response containing information about object
    */
-  filterEmptyColumnSets = response => {
+  filterEmptyColumnSets = (response: any): void => {
     const { data, definition } = response;
     const { headers, metricValues } = data;
     const { grid } = definition;
 
-    grid.columnSets = grid.columnSets.filter(({ columns }) => columns.length > 0);
-    headers.columnSets = headers.columnSets.filter(columnHeaders => columnHeaders.length > 0);
-    metricValues.columnSets = metricValues.columnSets.filter(({ raw }) => raw.length > 0);
+    grid.columnSets = grid.columnSets.filter(
+      ({ columns }: { columns: any[] }) => columns.length > 0
+    );
+    headers.columnSets = headers.columnSets.filter(
+      (columnHeaders: any[]) => columnHeaders.length > 0
+    );
+    metricValues.columnSets = metricValues.columnSets.filter(
+      ({ raw }: { raw: any }) => raw.length > 0
+    );
   };
 
   /**
@@ -19,11 +25,11 @@ class MstrCompoundGridFlatten {
    *
    * @param {JSON} response response containing information about object
    */
-  flattenColumnSets(response) {
+  flattenColumnSets(response: any): void {
     const { data, definition } = response;
     const { headers } = data;
     const { grid } = definition;
-    let gridColumns = [];
+    let gridColumns: any[] = [];
 
     if (grid.columnSets[0].columns[0]) {
       gridColumns = this.flattenColumnSetsMetricElemets(grid);
@@ -41,12 +47,18 @@ class MstrCompoundGridFlatten {
   /**
    * Flatten metrics values from all column sets into single array
    *
-   * @param {Object} data contains infromation about object table body
-   * @returns {Array} flattened metric values
+   * @param data contains infromation about object table body
+   * @returns flattened metric values
    */
-  flattenMetricValues = data => {
+  flattenMetricValues = (
+    data: any
+  ): {
+    raw: any[];
+    formatted: any[];
+    extras: any[];
+  } => {
     const columSetsNumber = data.metricValues.columnSets.length;
-    const metricValues = { raw: [], formatted: [], extras: [] };
+    const metricValues = { raw: [] as any, formatted: [] as any, extras: [] as any };
     let rawValues;
 
     for (let i = 0; i < data.metricValues.columnSets[0].raw.length; i++) {
@@ -68,10 +80,10 @@ class MstrCompoundGridFlatten {
   /**
    * Flatten headers values indexes from all column sets into single array
    *
-   * @param {Object} headers contains infromation about headers values indexes
-   * @returns {Array} flattened metric values
+   * @param headers contains infromation about headers values indexes
+   * @returns flattened metric values
    */
-  flattenColumnSetsHeaders = headers => {
+  flattenColumnSetsHeaders = (headers: any): any[] => {
     const columSetsNumber = headers.columnSets.length;
     let headerIndexOffset = 0;
     const headerColumns = [];
@@ -88,17 +100,17 @@ class MstrCompoundGridFlatten {
   /**
    * Flatten metric elemets from all column sets into single array
    *
-   * @param {Object} grid contains infromation about metric elemets
-   * @returns {Array} flattened metric elemets
+   * @param grid contains infromation about metric elemets
+   * @returns flattened metric elemets
    */
-  flattenColumnSetsMetricElemets = grid => {
+  flattenColumnSetsMetricElemets = (grid: any): any[] => {
     const columSetsNumber = grid.columnSets.length;
     const gridColumns = [
       {
         name: 'Metrics',
         id: '00000000000000000000000000000000',
         type: 'templateMetrics',
-        elements: [],
+        elements: [] as any[],
       },
     ];
 

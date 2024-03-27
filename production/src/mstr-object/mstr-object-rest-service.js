@@ -1,7 +1,7 @@
 import request from 'superagent';
 
 import mstrAttributeFormHelper from './helper/mstr-attribute-form-helper';
-import mstrAttributeMetricHelper from './helper/mstr-attribute-metric-helper';
+import mstrAttributeMetricHelper from './helper/mstr-attribute-metric-helper.ts';
 import officeConverterServiceV2 from './office-converter-service-v2';
 
 import { OutsideOfRangeError } from '../error/outside-of-range-error';

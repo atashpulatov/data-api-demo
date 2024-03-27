@@ -1,3 +1,8 @@
+import { DisplayAttrFormNames } from '../mstr-object/constants';
+
+export type Axis = 'rows' | 'columns';
+
+export type ValueMatrix = 'raw' | 'formatted' | 'extras';
 export interface VisualizationInfo {
   chapterKey?: string;
   pageKey?: string;
@@ -14,8 +19,14 @@ export interface VisualizationInfo {
   };
 }
 
+export interface dossierData {
+  chapterKey: string;
+  dossierKey: string;
+  pageKey: string;
+}
+
 export interface ObjectData {
-  body?: object;
+  body?: any;
   objectWorkingId?: number;
   bindId?: string;
   id?: string;
@@ -26,6 +37,10 @@ export interface ObjectData {
     subtypes: number[];
     type: number | string;
   };
+  objectId: string;
+  projectId: string;
+  dossierData: dossierData;
+  displayAttrFormNames?: DisplayAttrFormNames;
   refreshDate?: number;
   // TODO fix type
   visualizationInfo?: false | VisualizationInfo;
