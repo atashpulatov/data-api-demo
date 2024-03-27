@@ -42,7 +42,7 @@ describe('StepCheckObjectStatus', () => {
 
   it('should handle error on checkObjectStatus', async () => {
     // given
-    const objectData = { objectWorkingId: 1 };
+    const objectData = { objectWorkingId: 1 } as ObjectData;
     const operationData = {} as OperationData;
     const error = new Error('error');
 

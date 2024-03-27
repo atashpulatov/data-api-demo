@@ -3,6 +3,7 @@ import { officeApiHelper } from '../api/office-api-helper';
 import officeStoreObject from '../store/office-store-object';
 
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
 
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import stepRemoveObjectBinding from './step-remove-object-binding';
@@ -36,7 +37,7 @@ describe('StepRemoveObjectBinding', () => {
 
     // when
     await stepRemoveObjectBinding.removeObjectBinding(
-      { objectWorkingId: 2137 },
+      { objectWorkingId: 2137 } as ObjectData,
       {} as OperationData
     );
 
@@ -74,7 +75,7 @@ describe('StepRemoveObjectBinding', () => {
     const objectData = {
       objectWorkingId: 2137,
       bindId: 'bindIdTest',
-    };
+    } as ObjectData;
 
     // when
     await stepRemoveObjectBinding.removeObjectBinding(objectData, {} as OperationData);

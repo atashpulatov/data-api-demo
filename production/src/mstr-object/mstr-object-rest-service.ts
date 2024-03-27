@@ -326,7 +326,7 @@ class MstrObjectRestService {
     projectId: string;
     instanceId: string;
     promptsAnswers: any;
-    ignoreValidateRequiredCheck: boolean;
+    ignoreValidateRequiredCheck?: boolean;
   }): any => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
@@ -540,7 +540,7 @@ class MstrObjectRestService {
   }: {
     objectId: string;
     projectId: string;
-    mstrObjectType: MstrObjectTypes;
+    mstrObjectType?: MstrObjectTypes;
     body: any;
     instanceId: string;
     displayAttrFormNames: DisplayAttrFormNames;

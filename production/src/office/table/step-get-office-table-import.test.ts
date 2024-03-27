@@ -1,4 +1,5 @@
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
 
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
@@ -21,7 +22,7 @@ describe('StepGetOfficeTableImport', () => {
     jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
     // when
-    await stepGetOfficeTableImport.getOfficeTableImport({}, {} as OperationData);
+    await stepGetOfficeTableImport.getOfficeTableImport({} as ObjectData, {} as OperationData);
 
     // then
     expect(officeTableCreate.createOfficeTable).toBeCalledTimes(1);
@@ -39,7 +40,7 @@ describe('StepGetOfficeTableImport', () => {
 
   it('getOfficeTableImport should work as expected', async () => {
     // given
-    const objectData = {};
+    const objectData = {} as ObjectData;
 
     const operationData = {
       objectWorkingId: 'objectWorkingIdTest',

@@ -381,7 +381,7 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
 
     // when
     const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(settingsMock, [
-      { bindId: 'sameBindId' },
+      { bindId: 'sameBindId' } as unknown as ObjectData,
     ]);
 
     // then
@@ -410,7 +410,7 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
     const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(settingsMock, [
       { bindId: 'paramBindId' },
       { bindId: 'sameBindId' },
-    ]);
+    ] as unknown as ObjectData[]);
 
     // then
     expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledTimes(1);
@@ -472,7 +472,7 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
     const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(settingsMock, [
       { bindId: 'oneExistingBindId' },
       { bindId: 'twoExistingBindId' },
-    ]);
+    ] as unknown as ObjectData[]);
 
     // then
     expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledTimes(1);

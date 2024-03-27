@@ -88,7 +88,6 @@ class DossierInstanceDefinition {
     return {
       body,
       visualizationInfo: updatedVisualizationInfo,
-      // @ts-expect-error
       instanceDefinition,
     };
   }

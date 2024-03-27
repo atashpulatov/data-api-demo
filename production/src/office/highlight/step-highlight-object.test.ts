@@ -1,6 +1,7 @@
 import { officeApiHelper } from '../api/office-api-helper';
 
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
 
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
@@ -13,7 +14,7 @@ describe('StepHighlightObject', () => {
 
   it('StepHighlightObject should highligh object', async () => {
     // given
-    const objectData = { objectWorkingId: 1 };
+    const objectData = { objectWorkingId: 1 } as ObjectData;
 
     const mockedOnObjectClick = jest
       .spyOn(officeApiHelper, 'onBindingObjectClick')
@@ -34,7 +35,7 @@ describe('StepHighlightObject', () => {
 
   it('should handle error on highligh object', async () => {
     // given
-    const objectData = { objectWorkingId: 1 };
+    const objectData = { objectWorkingId: 1 } as ObjectData;
     const operationData = {} as OperationData;
     const error = new Error('error');
 

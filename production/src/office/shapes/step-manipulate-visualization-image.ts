@@ -87,7 +87,6 @@ class StepManipulateVisualizationImage {
         projectId,
         instanceId,
         visualizationKey,
-        // @ts-expect-error
         {
           width: convertPointsToPixels(width),
           height: convertPointsToPixels(height),

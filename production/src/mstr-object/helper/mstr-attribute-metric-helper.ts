@@ -1,4 +1,4 @@
-import MstrObjectType from '../mstr-object-type-enum';
+import { VisualizationTypes } from '../mstr-object-types';
 
 class MstrAttributeMetricHelper {
   /**
@@ -75,7 +75,7 @@ class MstrAttributeMetricHelper {
    */
   extractMetricsInRows = (body: any): any[] => {
     const columns =
-      body.visualizationType === MstrObjectType.visualizationType.COMPOUND_GRID
+      body.visualizationType === VisualizationTypes.COMPOUND_GRID
         ? body.definition.grid.columnSets.reduce(
             (allColumns: any, currColumnSet: any) => allColumns.concat(currColumnSet.columns),
             []

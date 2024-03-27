@@ -1,4 +1,5 @@
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
 
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import officeFormatHyperlinks from './office-format-hyperlinks';
@@ -30,7 +31,7 @@ describe('StepApplyFormatting', () => {
     } as unknown as OperationData;
 
     // when
-    await stepApplyFormatting.applyFormatting({}, operationData);
+    await stepApplyFormatting.applyFormatting({} as ObjectData, operationData);
 
     // then
     expect(stepApplyFormatting.filterColumnInformation).toBeCalledTimes(1);
@@ -73,7 +74,7 @@ describe('StepApplyFormatting', () => {
     jest.spyOn(operationStepDispatcher, 'completeFormatData').mockImplementation();
 
     // when
-    await stepApplyFormatting.applyFormatting({}, operationData);
+    await stepApplyFormatting.applyFormatting({} as ObjectData, operationData);
 
     // then
     expect(stepApplyFormatting.filterColumnInformation).toBeCalledTimes(1);

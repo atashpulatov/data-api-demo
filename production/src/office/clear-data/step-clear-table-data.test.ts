@@ -1,6 +1,7 @@
 import { officeRemoveHelper } from '../remove/office-remove-helper';
 
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
 
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
@@ -17,7 +18,7 @@ describe('StepclearTableData', () => {
     ${false}    | ${0}
   `('clearTableData should works correctly', async ({ objectExist, calledClearTable }) => {
     // given
-    const objectData = {};
+    const objectData = {} as ObjectData;
     const operationData = { objectExist } as unknown as OperationData;
 
     const mockedRemoveTable = jest
@@ -38,7 +39,7 @@ describe('StepclearTableData', () => {
 
   it('should handle error on clearTableData', async () => {
     // given
-    const objectData = {};
+    const objectData = {} as ObjectData;
     const operationData = { objectExist: true } as unknown as OperationData;
     const error = new Error('error');
 

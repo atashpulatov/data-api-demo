@@ -1,6 +1,7 @@
 import officeReducerHelper from '../store/office-reducer-helper';
 
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
 
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
@@ -13,7 +14,7 @@ describe('StepClearCrosstabHeaders', () => {
 
   it('StepHighlightObject should highligh object', async () => {
     // given
-    const objectData = {};
+    const objectData = {} as ObjectData;
     const operationData = { objectWorkingId: 1 } as OperationData;
 
     const mockedGetOperations = jest
@@ -37,7 +38,7 @@ describe('StepClearCrosstabHeaders', () => {
 
   it('should handle error on clearCrosstabHeaders', async () => {
     // given
-    const objectData = {};
+    const objectData = {} as ObjectData;
     const operationData = { objectWorkingId: 1 } as OperationData;
     const error = new Error('error');
 

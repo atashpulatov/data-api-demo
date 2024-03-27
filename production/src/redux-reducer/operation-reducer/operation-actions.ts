@@ -29,7 +29,7 @@ function getStepsQueue(
 function createOperation(
   operationType: OperationTypes,
   objectWorkingId: number,
-  objectData: ObjectData = {},
+  objectData: Partial<ObjectData> = {},
   importType = ObjectImportType.TABLE
 ): OperationData {
   const { backupObjectData, objectEditedData, preparedInstanceDefinition } = objectData;
@@ -79,7 +79,7 @@ export const refreshRequested = (
 
 export const editRequested = (
   objectData: ObjectData,
-  objectEditedData: ObjectData
+  objectEditedData: any
 ): EditOperationAction => {
   const backupObjectData = JSON.parse(JSON.stringify(objectData));
   const { objectWorkingId } = backupObjectData;
@@ -100,7 +100,7 @@ export const editRequested = (
 
 export const duplicateRequested = (
   object: ObjectData,
-  objectEditedData?: ObjectData
+  objectEditedData?: any
 ): DuplicateOperationAction => {
   const { objectWorkingId, importType } = object;
   return {
@@ -123,7 +123,12 @@ export const removeRequested = (
 ): RemoveOperationAction => ({
   type: OperationActionTypes.REMOVE_OPERATION,
   payload: {
-    operation: createOperation(OperationTypes.REMOVE_OPERATION, objectWorkingId, {}, importType),
+    operation: createOperation(
+      OperationTypes.REMOVE_OPERATION,
+      objectWorkingId,
+      {} as ObjectData,
+      importType
+    ),
   },
 });
 
@@ -143,7 +148,7 @@ export const clearDataRequested = (
     operation: createOperation(
       OperationTypes.CLEAR_DATA_OPERATION,
       objectWorkingId,
-      {},
+      {} as ObjectData,
       importType
     ),
   },

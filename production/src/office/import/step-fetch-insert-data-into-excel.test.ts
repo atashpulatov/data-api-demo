@@ -83,7 +83,7 @@ describe('StepFetchInsertDataIntoExcel', () => {
 
     // when
     await stepFetchInsertDataIntoExcel.fetchInsertDataIntoExcel(
-      { subtotalsInfo: {} },
+      { subtotalsInfo: {} } as unknown as ObjectData,
       operationDataMock
     );
 
@@ -108,7 +108,6 @@ describe('StepFetchInsertDataIntoExcel', () => {
 
     jest.spyOn(officeInsertService, 'syncChangesToExcel').mockImplementation();
 
-    // @ts-expect-error
     jest.spyOn(mstrObjectRestService, 'fetchContentGenerator').mockReturnValue([]);
 
     jest.spyOn(stepFetchInsertDataIntoExcel, 'getSubtotalCoordinates').mockImplementation();
@@ -178,7 +177,6 @@ describe('StepFetchInsertDataIntoExcel', () => {
 
       jest.spyOn(officeInsertService, 'syncChangesToExcel').mockImplementation();
 
-      // @ts-expect-error
       jest.spyOn(mstrObjectRestService, 'fetchContentGenerator').mockReturnValue([
         {
           row: [42, 42],
@@ -313,7 +311,6 @@ describe('StepFetchInsertDataIntoExcel', () => {
 
       jest.spyOn(officeInsertService, 'syncChangesToExcel').mockImplementation();
 
-      // @ts-expect-error
       jest.spyOn(mstrObjectRestService, 'fetchContentGenerator').mockReturnValue([
         {
           row: [42, 42],
