@@ -1,8 +1,6 @@
 import { homeHelper } from '../../home/home-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 
-import officeStoreObject from '../store/office-store-object';
-
 import officeApiDataLoader from '../api/office-api-data-loader';
 
 class OfficeRemoveHelper {
@@ -128,19 +126,6 @@ class OfficeRemoveHelper {
     } catch (error) {
       return false;
     }
-  }
-
-  /**
-   * Remove objects that no longer exists in the Excel workbook from the store
-   *
-   * @param object Contains information obout the object
-   * @param officeContext Excel context
-   */
-  async removeObjectNotExistingInExcel(object: any, officeContext: Office.Context): Promise<void> {
-    officeStoreObject.removeObjectFromStore(object.objectWorkingId);
-    await officeContext.document.bindings.releaseByIdAsync(object.bindId, () => {
-      console.log('released binding');
-    });
   }
 }
 
