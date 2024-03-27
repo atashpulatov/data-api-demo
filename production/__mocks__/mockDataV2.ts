@@ -1,8 +1,8 @@
 import { GlobalNotificationTypes, ObjectNotificationTypes } from '@mstr/connector-components';
 
-import { IMPORT_OPERATION } from '../src/operation/operation-type-names';
+import { OperationTypes } from '../src/operation/operation-type-names';
 
-export const reportV2 = {
+export const reportV2: any = {
   id: '0ED85DEE11E9772400000080EFC5116D',
   name: 'airline-sample-data--tabular-with-multiform',
   instanceId: '23058A7E11E98B7620BF0080EF15AAB5',
@@ -418,21 +418,21 @@ export const reportWithMetricsInRows = {
           ],
         },
       ],
-      columns: [],
-      pageBy: [],
+      columns: [] as any[],
+      pageBy: [] as any[],
       subtotals: {
         defined: false,
         visible: true,
       },
       sorting: {
-        rows: [],
-        columns: [],
+        rows: [] as any[],
+        columns: [] as any[],
       },
-      thresholds: [],
+      thresholds: [] as any[],
     },
   },
   data: {
-    currentPageBy: [],
+    currentPageBy: [] as any[],
     paging: {
       total: 96,
       current: 96,
@@ -538,7 +538,7 @@ export const reportWithMetricsInRows = {
         [7, 3, 1],
         [7, 3, 2],
       ],
-      columns: [],
+      columns: [] as any[],
     },
     metricValues: {
       raw: [
@@ -734,10 +734,10 @@ export const dossierWithMetricsInRows = {
             order: 'ascending',
           },
         ],
-        columns: [],
-        pageBy: [],
+        columns: [] as any[],
+        pageBy: [] as any[],
       },
-      thresholds: [],
+      thresholds: [] as any[],
     },
   },
   data: {
@@ -758,7 +758,7 @@ export const dossierWithMetricsInRows = {
       ],
     },
   },
-  promptOrdering: [],
+  promptOrdering: [] as any[],
   attrforms: { supportForms: true },
 };
 
@@ -816,7 +816,7 @@ export const mockedWarningImportNotification = {
   type: ObjectNotificationTypes.WARNING,
   title: 'The table you try to import exceeds the worksheet limits.',
   details: 'Failure details',
-  operationType: IMPORT_OPERATION,
+  operationType: OperationTypes.IMPORT_OPERATION,
 };
 
 export const mockedGlobalWarningNotification = {

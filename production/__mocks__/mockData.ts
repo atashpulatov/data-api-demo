@@ -128,8 +128,8 @@ export const mockReports = [
             },
           },
         ],
-        thresholds: [],
-        sorting: [],
+        thresholds: [] as any[],
+        sorting: [] as any[],
       },
       data: {
         paging: {
@@ -137,8 +137,8 @@ export const mockReports = [
           current: 40,
           offset: 0,
           limit: 1000,
-          prev: null,
-          next: null,
+          prev: null as any,
+          next: null as any,
         },
         root: {
           isPartial: false,
@@ -947,8 +947,8 @@ export const mockReports = [
             },
           },
         ],
-        thresholds: [],
-        sorting: [],
+        thresholds: [] as any[],
+        sorting: [] as any[],
       },
       data: {
         paging: {
@@ -956,8 +956,8 @@ export const mockReports = [
           current: 8,
           offset: 0,
           limit: 1000,
-          prev: null,
-          next: null,
+          prev: null as any,
+          next: null as any,
         },
         root: {
           isPartial: false,
@@ -1201,8 +1201,8 @@ export const mockReports = [
             },
           },
         ],
-        thresholds: [],
-        sorting: [],
+        thresholds: [] as any[],
+        sorting: [] as any[],
       },
       data: {
         paging: {
@@ -1210,8 +1210,8 @@ export const mockReports = [
           current: 32,
           offset: 0,
           limit: 1000,
-          prev: null,
-          next: null,
+          prev: null as any,
+          next: null as any,
         },
         root: {
           isPartial: false,
@@ -2386,8 +2386,8 @@ export const mockReports = [
             },
           },
         ],
-        thresholds: [],
-        sorting: [],
+        thresholds: [] as any[],
+        sorting: [] as any[],
       },
       data: {
         paging: {
@@ -2395,8 +2395,8 @@ export const mockReports = [
           current: 51,
           offset: 0,
           limit: 1000,
-          prev: null,
-          next: null,
+          prev: null as any,
+          next: null as any,
         },
         root: {
           isPartial: false,
@@ -3483,8 +3483,8 @@ export const mockReports = [
             },
           },
         ],
-        thresholds: [],
-        sorting: [],
+        thresholds: [] as any[],
+        sorting: [] as any[],
       },
       data: {
         paging: {
@@ -3492,8 +3492,8 @@ export const mockReports = [
           current: 24,
           offset: 0,
           limit: 1000,
-          prev: null,
-          next: null,
+          prev: null as any,
+          next: null as any,
         },
         root: {
           isPartial: false,
@@ -3847,7 +3847,7 @@ export const mockReports = [
     instanceId: 'D803FDCE11E94BE916D30080EF85455B',
     result: {
       definition: {
-        attributes: [],
+        attributes: [] as any[],
         metrics: [
           {
             name: 'Cost',
@@ -3882,8 +3882,8 @@ export const mockReports = [
             },
           },
         ],
-        thresholds: [],
-        sorting: [],
+        thresholds: [] as any[],
+        sorting: [] as any[],
       },
       data: {
         paging: {
@@ -3891,8 +3891,8 @@ export const mockReports = [
           current: 1,
           offset: 0,
           limit: 5000,
-          prev: null,
-          next: null,
+          prev: null as any,
+          next: null as any,
         },
         root: {
           metrics: {
@@ -3981,8 +3981,8 @@ export const mockReports = [
             },
           },
         ],
-        thresholds: [],
-        sorting: [],
+        thresholds: [] as any[],
+        sorting: [] as any[],
       },
       data: {
         paging: {
@@ -3990,10 +3990,10 @@ export const mockReports = [
           current: 0,
           offset: 0,
           limit: 5000,
-          prev: null,
-          next: null,
+          prev: null as any,
+          next: null as any,
         },
-        root: null,
+        root: null as any,
       },
     },
   },
@@ -4037,8 +4037,8 @@ export const mockBadReports = [
             },
           },
         ],
-        thresholds: [],
-        sorting: [],
+        thresholds: [] as any[],
+        sorting: [] as any[],
       },
       data: {
         paging: {
@@ -4046,8 +4046,8 @@ export const mockBadReports = [
           current: 16,
           offset: 0,
           limit: 1000,
-          prev: null,
-          next: null,
+          prev: null as any,
+          next: null as any,
         },
         root: {
           isPartial: false,
@@ -4376,7 +4376,7 @@ export const mockBadReports = [
             },
           },
         ],
-        thresholds: [],
+        thresholds: [] as any[],
         sorting: [
           {
             type: 'form',
@@ -4418,8 +4418,8 @@ export const mockBadReports = [
           current: 24,
           offset: 0,
           limit: 1000,
-          prev: null,
-          next: null,
+          prev: null as any,
+          next: null as any,
         },
         root: {
           isPartial: false,
@@ -5089,7 +5089,7 @@ export const mockBadReports = [
             condition: '',
           },
         ],
-        sorting: [],
+        sorting: [] as any[],
       },
       data: {
         paging: {
@@ -5097,8 +5097,8 @@ export const mockBadReports = [
           current: 8,
           offset: 0,
           limit: 1000,
-          prev: null,
-          next: null,
+          prev: null as any,
+          next: null as any,
         },
         root: {
           isPartial: false,
