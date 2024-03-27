@@ -87,10 +87,12 @@ describe('Page-by helper', () => {
 
   it('should correctly parse valid Page-by elements', () => {
     // given
+    const { pageBy, validPageByElements } = pageByDataResponse;
+
     // when
-    const validPageByElements = pageByHelper.parseValidPageByElements(pageByDataResponse);
+    const validPageByData = pageByHelper.parseValidPageByElements(pageBy, validPageByElements);
 
     // then
-    expect(validPageByElements).toEqual(expectedResponse);
+    expect(validPageByData).toEqual(expectedResponse);
   });
 });

@@ -1,6 +1,6 @@
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 
-import { PageByDataElement, PageByResponse } from './page-by-types';
+import { PageBy, PageByDataElement, ValidPageByElements } from './page-by-types';
 
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 
@@ -26,18 +26,22 @@ class PageByHelper {
       instanceDefinition.instanceId
     );
 
-    return this.parseValidPageByElements(pageByElements);
+    const { pageBy, validPageByElements } = pageByElements;
+
+    return this.parseValidPageByElements(pageBy, validPageByElements);
   };
 
   /**
    * Creates new pageByDataElement for each valid combination of Page-by elements
    *
-   * @param pageByElements Response from the pageBy/elements REST API endpoint containing information about the object's Page-by elements
+   * @param pageBy contains Page-by elements of a Report
+   * @param validPageByElements containts valid Page-by combinations of Report's Page-by attributes
    * @returns Two-dimensional array of valid Page-by elements combinations
    */
-  parseValidPageByElements = (pageByElements: PageByResponse): PageByDataElement[][] => {
-    const { pageBy, validPageByElements } = pageByElements;
-
+  parseValidPageByElements = (
+    pageBy: PageBy[],
+    validPageByElements: ValidPageByElements
+  ): PageByDataElement[][] => {
     const validPageByData: PageByDataElement[][] = [];
 
     validPageByElements?.items?.forEach(combination => {
