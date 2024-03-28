@@ -17,6 +17,7 @@ import { popupReducer } from './redux-reducer/popup-reducer/popup-reducer';
 import { popupStateReducer } from './redux-reducer/popup-state-reducer/popup-state-reducer';
 import { repromptsQueueReducer } from './redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer';
 import { sessionReducer } from './redux-reducer/session-reducer/session-reducer';
+import { settingsReducer } from './redux-reducer/settings-reducer/settings-reducer';
 
 const rootReducer = combineReducers({
   sessionReducer,
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
   objectReducer,
   answersReducer,
   repromptsQueueReducer,
+  settingsReducer,
 });
 
 const persistConfig = {
