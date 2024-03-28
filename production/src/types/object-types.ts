@@ -1,10 +1,7 @@
 import { MstrObjectTypes } from '../mstr-object/mstr-object-types';
+import { PageByData } from '../page-by/page-by-types';
 
-import { DisplayAttrFormNames } from '../mstr-object/constants';
-
-export type Axis = 'rows' | 'columns';
-
-export type ValueMatrix = 'raw' | 'formatted' | 'extras';
+import { DisplayAttrFormNames, ObjectImportType } from '../mstr-object/constants';
 
 export interface ObjectDetails {
   ancestors: any;
@@ -12,11 +9,19 @@ export interface ObjectDetails {
   modifiedDate: string;
   owner: string;
   importedBy: string;
+  excelTableSize?: TableDimensions;
 }
 
 export interface TableDimensions {
   rows: number;
   columns: number;
+}
+
+export interface CrosstabHeaderDimensions {
+  rowsY: number;
+  rowsX: number;
+  columnsY: number;
+  columnsX: number;
 }
 
 export interface VisualizationInfo {
@@ -41,21 +46,62 @@ export interface DossierData {
   pageKey: string;
 }
 
+export interface ManipulationsXML {
+  manipulations: string;
+  promptAnswers: any;
+}
+
+export interface SubtotalsInfo {
+  subtotalsAddresses?: any[];
+  importSubtotal: boolean;
+}
+
+export interface envUrl {
+  envUrl: string;
+  username: string;
+}
+
+export interface Body {
+  viewFilter: {
+    operands: any[];
+    operator: string;
+  };
+  manipulations?: string;
+  promptAnswers?: any;
+}
+
 export interface ObjectData {
-  body?: any;
+  body?: Body;
   objectWorkingId?: number;
   bindId?: string;
-  id?: string;
-  name?: string;
+  name: string;
+  envUrl: envUrl;
   mstrObjectType?: MstrObjectTypes;
+  objectType: MstrObjectTypes;
   objectId: string;
   projectId: string;
   dossierData: DossierData;
   displayAttrFormNames?: DisplayAttrFormNames;
   refreshDate?: number;
+  manipulationsXML?: ManipulationsXML;
+  promptsAnswers?: any;
+  definition?: any;
+  isPrompted?: boolean;
+  subtotalsInfo?: false | SubtotalsInfo;
+  importType?: ObjectImportType;
+  preparedInstanceId?: string;
+  crosstabHeaderDimensions?: CrosstabHeaderDimensions;
+  isCrosstab?: boolean;
+  details?: ObjectDetails;
+  tableName?: string;
+  worksheet?: any;
+  startCell?: string;
+  response?: any;
+  pageByData?: PageByData;
+  previousTableDimensions?: TableDimensions;
+  insertNewWorksheet?: boolean;
+  bindIdToBeDuplicated?: string;
+  shapeProps?: any;
   // TODO fix type
   visualizationInfo?: false | VisualizationInfo;
-  isSelected?: boolean;
-  // TODO remove when type is finalized
-  [key: string]: any;
 }

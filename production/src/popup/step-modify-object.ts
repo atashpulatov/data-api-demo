@@ -27,6 +27,7 @@ class StepModifyObject {
 
       if (
         !objectEditedData.visualizationInfo &&
+        subtotalsInfo &&
         subtotalsInfo.importSubtotal !== objectEditedData.subtotalsInfo.importSubtotal
       ) {
         const subtotalsInformation = { ...subtotalsInfo };
@@ -55,6 +56,7 @@ class StepModifyObject {
         }
 
         updatedObject.preparedInstanceId = objectEditedData.preparedInstanceId;
+        // @ts-expect-error
         updatedObject.isEdit = false;
       }
 

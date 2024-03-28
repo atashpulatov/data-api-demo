@@ -18,6 +18,7 @@ import { errorService } from '../error/error-handler';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import * as operationActions from '../redux-reducer/operation-reducer/operation-actions';
 import { popupController } from './popup-controller';
+import { ObjectImportType } from '../mstr-object/constants';
 
 import { Office } from '../../__mocks__/mockOffice';
 
@@ -472,7 +473,7 @@ describe('PopupController', () => {
     const actionObject = {
       command: actionCommand,
       objectWorkingIds: [1],
-      importType: 'table',
+      importType: ObjectImportType.TABLE,
     } as unknown as ObjectData;
 
     const handleOverviewActionCommandMock = jest
@@ -487,7 +488,7 @@ describe('PopupController', () => {
     jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementation(async () => {});
     jest
       .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId')
-      .mockImplementation(() => actionObject.importType);
+      .mockImplementation(() => actionObject.importType as unknown as ObjectData);
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
       .mockImplementation(async () => {});

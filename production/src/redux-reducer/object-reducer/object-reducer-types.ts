@@ -1,6 +1,3 @@
-// TODO: refactor.
-// this is a temporary initial version. it should be improved
-
 import { Action } from 'redux';
 
 import { ObjectData } from '../../types/object-types';

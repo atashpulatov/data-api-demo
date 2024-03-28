@@ -374,7 +374,7 @@ class MstrObjectRestService {
       .then(res => res.body);
   };
 
-  createInstance = ({
+  createInstance = async ({
     objectId,
     projectId,
     mstrObjectType = reportObjectType,
@@ -389,7 +389,7 @@ class MstrObjectRestService {
     body: any;
     limit: number;
     displayAttrFormNames: DisplayAttrFormNames;
-  }): InstanceDefinition => {
+  }): Promise<InstanceDefinition> => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const { supportForms } = storeState.officeReducer;
@@ -425,13 +425,14 @@ class MstrObjectRestService {
     visualizationInfo: VisualizationInfo;
     body: any;
     displayAttrFormNames: DisplayAttrFormNames;
-  }): InstanceDefinition => {
+  }): Promise<InstanceDefinition> => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const { supportForms } = storeState.officeReducer;
     const attrforms = { supportForms, displayAttrFormNames };
     const { chapterKey, visualizationKey } = visualizationInfo;
     const fullPath = `${envUrl}/v2/dossiers/${objectId}/instances/${instanceId}/chapters/${chapterKey}/visualizations/${visualizationKey}?limit=1&contentFlags=768`;
+
     return request
       .get(fullPath)
       .set('x-mstr-authtoken', authToken)
@@ -510,7 +511,7 @@ class MstrObjectRestService {
     body: any;
     instanceId: string;
     displayAttrFormNames: DisplayAttrFormNames;
-  }): InstanceDefinition => {
+  }): Promise<InstanceDefinition> => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const { supportForms } = storeState.officeReducer;
@@ -523,6 +524,7 @@ class MstrObjectRestService {
       limit: 1,
       version: API_VERSION,
     });
+
     return request
       .get(fullPath)
       .set('x-mstr-authtoken', authToken)
@@ -546,7 +548,7 @@ class MstrObjectRestService {
     body: any;
     instanceId: string;
     displayAttrFormNames: DisplayAttrFormNames;
-  }): InstanceDefinition => {
+  }): Promise<InstanceDefinition> => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const { supportForms } = storeState.officeReducer;
@@ -559,6 +561,7 @@ class MstrObjectRestService {
       instanceId,
       version: API_VERSION,
     });
+
     return request
       .put(fullPath)
       .set('x-mstr-authtoken', authToken)

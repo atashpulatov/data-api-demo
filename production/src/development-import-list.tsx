@@ -113,7 +113,7 @@ export const DevelopmentImportList = (): React.ReactElement => (
     <button
       type='button'
       onClick={() =>
-        sessionHelper.importObjectWithouPopup(objectList.CrosstabSubtotal as ObjectData)
+        sessionHelper.importObjectWithouPopup(objectList.CrosstabSubtotal as unknown as ObjectData)
       }
     >
       Quick Import

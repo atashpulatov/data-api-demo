@@ -182,7 +182,7 @@ class PopupActions {
    *
    * @param editedDossier - Contains data of edited dossier.
    */
-  prepareDossierForEdit = async (editedDossier: ObjectData): Promise<void> => {
+  prepareDossierForEdit = async (editedDossier: any): Promise<void> => {
     const { projectId, objectId, manipulationsXML, visualizationInfo } = editedDossier;
 
     const instance = await this.mstrObjectRestService.createDossierInstance(projectId, objectId, {
@@ -196,7 +196,6 @@ class PopupActions {
       updatedVisualizationInfo = await this.visualizationInfoService.getVisualizationInfo(
         projectId,
         objectId,
-        // @ts-expect-error
         visualizationInfo.visualizationKey,
         instance.mid
       );
@@ -208,7 +207,6 @@ class PopupActions {
     editedDossier.isEdit = true;
 
     if (updatedVisualizationInfo) {
-      // @ts-expect-error
       const { vizDimensions } = visualizationInfo;
       editedDossier.visualizationInfo = {
         vizDimensions,
@@ -222,7 +220,7 @@ class PopupActions {
    * Creates instance of dossier which is used during reprompt workflow.
    * @param repromptedDossier
    */
-  prepareDossierForReprompt = async (repromptedDossier: ObjectData): Promise<void> => {
+  prepareDossierForReprompt = async (repromptedDossier: any): Promise<void> => {
     const { projectId, objectId, manipulationsXML, visualizationInfo } = repromptedDossier;
 
     const instance = await this.mstrObjectRestService.createDossierInstance(projectId, objectId, {
@@ -236,7 +234,6 @@ class PopupActions {
       updatedVisualizationInfo = await this.visualizationInfoService.getVisualizationInfo(
         projectId,
         objectId,
-        // @ts-expect-error
         visualizationInfo.visualizationKey,
         instance.mid
       );
@@ -256,7 +253,6 @@ class PopupActions {
     repromptedDossier.isEdit = true;
 
     if (updatedVisualizationInfo) {
-      // @ts-expect-error
       const { vizDimensions } = visualizationInfo;
       repromptedDossier.visualizationInfo = {
         vizDimensions,

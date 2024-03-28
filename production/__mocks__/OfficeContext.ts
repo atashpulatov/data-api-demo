@@ -1,4 +1,8 @@
 class OfficeContextMock {
+  workbook: any;
+
+  sync: any;
+
   constructor() {
     this.workbook = {
       worksheets: { getActiveWorksheet: () => {} },

@@ -1,15 +1,21 @@
+import { OperationSteps } from '../src/operation/operation-steps';
+
 class FakeStore {
+  private state: any;
+
+  private listener: any;
+
   constructor() {
     this.resetState();
   }
 
-  getState = () => this.state;
+  getState = (): any => this.state;
 
-  subscribe = listener => {
+  subscribe = (listener: any): void => {
     this.listener = listener;
   };
 
-  resetState = () => {
+  resetState = (): void => {
     this.state = {
       operationReducer: { operations: [{ stepsQueue: [] }] },
       objectReducer: { objects: [] },
@@ -17,14 +23,14 @@ class FakeStore {
     this.listener && this.listener();
   };
 
-  addStep = stepName => {
+  addStep = (stepName: OperationSteps): void => {
     const operation = this.state.operationReducer.operations[0];
     operation.stepsQueue = [...operation.stepsQueue, stepName];
 
     this.listener();
   };
 
-  removeFirstStep = () => {
+  removeFirstStep = (): void => {
     const operation = this.state.operationReducer.operations[0];
     operation.stepsQueue.shift();
     this.listener();

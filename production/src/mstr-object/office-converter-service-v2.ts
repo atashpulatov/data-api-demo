@@ -41,7 +41,7 @@ class OfficeConverterServiceV2 {
    * @param isCrosstab Specify if object is a crosstab
    * @return
    */
-  getRows = (response: any, isCrosstab: boolean): { row: any[]; rowTotals?: any[] } => {
+  getRows = (response: any, isCrosstab?: boolean): { row: any[]; rowTotals?: any[] } => {
     const handler = this.getHandler(response);
     return handler.getRows(response, isCrosstab);
   };
@@ -85,7 +85,7 @@ class OfficeConverterServiceV2 {
    * @param  response
    * @return
    */
-  isCrosstab = (response: any): boolean => {
+  isCrosstab = (response?: any): boolean => {
     try {
       const { grid } = response.definition;
       return !!grid.crossTab && grid.columns.length !== 0;

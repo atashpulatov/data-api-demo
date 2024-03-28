@@ -1,3 +1,5 @@
+import { MstrObjectTypes } from './mstr-object-types';
+
 import mstrObjectEnum from './mstr-object-type-enum';
 
 describe('mstrObjectTypeEnum', () => {
@@ -12,7 +14,7 @@ describe('mstrObjectTypeEnum', () => {
   });
   it('should return proper type by name', () => {
     // given
-    const nameMock = 'DaTaSet';
+    const nameMock = 'DaTaSet' as unknown as MstrObjectTypes;
     const expectedOutput = mstrObjectEnum.mstrObjectType.dataset;
     // when
     const ouptput = mstrObjectEnum.getMstrTypeByName(nameMock);

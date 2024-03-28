@@ -39,8 +39,8 @@ export const getObjectPrompts = async (
 
 export const populateDefinition = (
   objectData: ObjectData,
-  prompts: any,
-  name: string
+  prompts?: any,
+  name?: string
 ): ObjectData => ({
   ...objectData.definition,
   sourceName: name,

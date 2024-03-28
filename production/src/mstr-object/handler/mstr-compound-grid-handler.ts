@@ -2,6 +2,16 @@ import mstrAttributeFormHelper from '../helper/mstr-attribute-form-helper';
 import mstrAttributeMetricHelper from '../helper/mstr-attribute-metric-helper';
 
 import { MstrTable } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { TableDimensions } from '../../types/object-types';
+import {
+  ColumnSet,
+  CompoundGridData,
+  CompoundGridHeaders,
+  Element,
+  MetricValues,
+  MstrCompoundGridDefinition,
+  MstrCompoundGridResponse,
+} from '../mstr-object-response-types';
 
 import mstrNormalizedJsonHandler from './mstr-normalized-json-handler';
 
@@ -17,7 +27,7 @@ class CompoundGridHandler {
    * @param response
    * @returns mstr table
    */
-  createTable(response: any): MstrTable {
+  createTable(response: MstrCompoundGridResponse): MstrTable {
     const { definition, data, attrforms } = response;
     // Crosstabular is a Crosstab report with metrics in Rows and nothing in columns, so we display it as tabular
     const isCrosstabular = false;
@@ -50,9 +60,13 @@ class CompoundGridHandler {
    * @param attrforms attribute forms information
    * @returns
    */
-  getColumnInformation(definition: any, data: any, attrforms: any): any[] {
+  getColumnInformation(
+    definition: MstrCompoundGridDefinition,
+    data: CompoundGridData,
+    attrforms: any
+  ): any[] {
     const { headers } = data;
-    const onElement = (element: any): any[] => [element];
+    const onElement = (element: Element): Element[] => [element];
     const supportForms = attrforms ? attrforms.supportForms : false;
 
     const commonColumns = this.renderCompoundGridRowTitles(
@@ -82,7 +96,7 @@ class CompoundGridHandler {
    * @param data grid data from response
    * @return object with rows and columns
    */
-  getTableSize(data: any): { rows: number; columns: number } {
+  getTableSize(data: CompoundGridData): TableDimensions {
     const {
       headers: { columnSets },
     } = data;
@@ -103,7 +117,10 @@ class CompoundGridHandler {
    * @param attrforms attribute forms information
    * @return Contains arrays of columns and rows attributes names
    */
-  getAttributesName(definition: any, attrforms: any): { rowsAttributes: any[] } {
+  getAttributesName(
+    definition: MstrCompoundGridDefinition,
+    attrforms: any
+  ): { rowsAttributes: string[] } {
     const rowsAttributes = mstrAttributeFormHelper.getAttributeWithForms(
       definition.grid.rows,
       attrforms
@@ -134,29 +151,31 @@ class CompoundGridHandler {
   /**
    * Gets raw table rows
    *
-   * @param {JSON} response
-   * @return {Object} object with rows property
+   * @param response
+   * @return object with rows property
    */
-  getRows = (response: any): { row: any[] } => ({ row: this.renderRows(response.data) });
+  getRows = (response: MstrCompoundGridResponse): { row: any[] } => ({
+    row: this.renderRows(response.data),
+  });
 
   /**
    * Gets subtotals defined or visible information from the response.
    *
-   * @param {JSON} response
-   * @return {Object}
+   * @param response
+   * @return
    */
-  getSubtotalsInformation = (_response: any): any[] => []; // Not supported at this moment
+  getSubtotalsInformation = (_response: MstrCompoundGridResponse): any[] => []; // Not supported at this moment
 
   /**
    * Creates an array with metric values per columnSet
    * If the table doesn't have metrics we return an empty 2d array
    *
-   * @param {Object} data - Metric values object
-   * @param {String} valueMatrix - Cell value ("raw*", "formatted", "extras")
+   * @param data - Metric values object
+   * @param valueMatrix - Cell value ("raw*", "formatted", "extras")
    *
-   * @return {Array}
+   * @return
    */
-  renderRows(data: any, valueMatrix = 'raw'): any[] {
+  renderRows(data: CompoundGridData, valueMatrix = 'raw'): any[][] {
     const {
       metricValues: { columnSets },
       paging,
@@ -168,7 +187,9 @@ class CompoundGridHandler {
       for (let colSet = 0; colSet < columnSets.length; colSet++) {
         const headersColumnSetLength = headers.columnSets[colSet].length;
 
+        // @ts-expect-error
         if (columnSets[colSet][valueMatrix][row] && columnSets[colSet][valueMatrix][row].length) {
+          // @ts-expect-error
           rowValues.push(...columnSets[colSet][valueMatrix][row]);
         } else if (headersColumnSetLength) {
           // if we have no metric values, but we still have headers thats mean we have attributes only in column set,
@@ -187,7 +208,11 @@ class CompoundGridHandler {
    * @param response
    * @return rows, columns and subtotals values
    */
-  getHeaders(response: any): any {
+  getHeaders(response: MstrCompoundGridResponse): {
+    rows: Element[];
+    columns: Element[];
+    subtotalAddress: any[];
+  } {
     const { definition, data, attrforms } = response;
     const { headers } = data;
     const supportForms = attrforms ? attrforms.supportForms : false;
@@ -258,8 +283,8 @@ class CompoundGridHandler {
    * @return
    */
   renderCompoundGridRowTitles(
-    headers: any[],
-    definition: any,
+    headers: CompoundGridHeaders,
+    definition: MstrCompoundGridDefinition,
     supportForms: string,
     onElement = (e: any) => e
   ): any[] {
@@ -283,8 +308,8 @@ class CompoundGridHandler {
    * @return
    */
   renderCompoundGridRowHeaders(
-    headers: any[],
-    definition: any,
+    headers: CompoundGridHeaders,
+    definition: MstrCompoundGridDefinition,
     supportForms: string,
     onElement = (e: any) => e
   ): any[] {
@@ -308,8 +333,8 @@ class CompoundGridHandler {
    * @return
    */
   renderCompoundGridColumnHeaders(
-    data: any,
-    definition: any,
+    data: CompoundGridData,
+    definition: MstrCompoundGridDefinition,
     onAttribute: Function,
     onMetric: Function
   ): any[] {
@@ -420,8 +445,8 @@ class CompoundGridHandler {
    */
   populateEmptyColumnSetsHeaders(
     columnSetsHeaders: any[],
-    columnSetsMetricValues: any[],
-    columnSetsDefinition: any[]
+    columnSetsMetricValues: MetricValues[],
+    columnSetsDefinition: ColumnSet[]
   ): void {
     for (let i = 0; i < columnSetsHeaders.length; i++) {
       const rawMetricValues = columnSetsMetricValues[i].raw;
@@ -452,7 +477,7 @@ class CompoundGridHandler {
    * @param boundingHeight
    * @param currentColumnSet
    */
-  addEmptyHeaders(header: any[], boundingHeight: number, currentColumnSet: any): void {
+  addEmptyHeaders(header: any[], boundingHeight: number, currentColumnSet: ColumnSet): void {
     for (let i = 0; i < header.length; i++) {
       while (header[i].length < boundingHeight) {
         if (i === 0) {

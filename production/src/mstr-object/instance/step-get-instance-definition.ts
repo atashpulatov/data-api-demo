@@ -9,7 +9,7 @@ import {
   InstanceDefinition,
   OperationData,
 } from '../../redux-reducer/operation-reducer/operation-reducer-types';
-import { ObjectData } from '../../types/object-types';
+import { ObjectData, SubtotalsInfo } from '../../types/object-types';
 
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
@@ -105,7 +105,7 @@ class StepGetInstanceDefinition {
       this.savePreviousObjectData(
         instanceDefinition,
         crosstabHeaderDimensions,
-        subtotalsInfo.subtotalsAddresses,
+        (subtotalsInfo as SubtotalsInfo).subtotalsAddresses,
         futureStep,
         importType
       );
@@ -206,7 +206,7 @@ class StepGetInstanceDefinition {
     instanceDefinition: InstanceDefinition,
     crosstabHeaderDimensions: any,
     subtotalsAddresses: any[],
-    futureStep: OperationSteps,
+    futureStep?: OperationSteps,
     importType = ObjectImportType.TABLE
   ): void => {
     // We do not need to set prevCrosstabDimensions, crosstabHeaderDimensions and subtotalsInfo for images

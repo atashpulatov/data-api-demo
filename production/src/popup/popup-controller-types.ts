@@ -1,3 +1,5 @@
+import { Body, DossierData, SubtotalsInfo, VisualizationInfo } from '../types/object-types';
+
 import mstrObjectType from '../mstr-object/mstr-object-type-enum';
 
 // TODO: Fix any types
@@ -14,7 +16,7 @@ export interface DialogResponse {
   chosenProject?: string;
   chosenObjectSubtype?: string;
   chosenSubtype?: number;
-  dossierData?: any;
+  dossierData?: DossierData;
   importType?: string;
   isPrompted?: boolean;
   promptsAnswers?: any;
@@ -24,29 +26,9 @@ export interface DialogResponse {
   projectId?: string;
   body?: Body;
   instanceId?: number;
-  subtotalsInfo?: SubTotalsInfo;
+  subtotalsInfo?: SubtotalsInfo;
   error?: any;
   filterDetails?: FilterDetails[];
-}
-
-export interface VisualizationInfo {
-  chapterKey: string;
-  visualizationKey: string;
-  vizDimensions: {
-    height: number;
-    width: number;
-  };
-}
-
-export interface Body {
-  viewFilter: {
-    operands: any[];
-    operator: string;
-  };
-}
-
-export interface SubTotalsInfo {
-  importSubtotal: boolean;
 }
 
 export interface FilterDetails {

@@ -331,7 +331,7 @@ class PopupController {
   };
 
   handleUpdateCommand = async (response: DialogResponse): Promise<void> => {
-    const objectData: ObjectData = {
+    const objectData = {
       name: response.chosenObjectName,
       objectId: response.chosenObjectId,
       projectId: response.projectId,
@@ -440,6 +440,7 @@ class PopupController {
     pageBy: PageBy[],
     pageByDisplayType: PageByDisplayType
   ): void => {
+    // @ts-expect-error
     const { currentPageBy } = preparedInstanceDefinition.data;
 
     const elements = pageByHelper.parseValidPageByElements(pageBy, {

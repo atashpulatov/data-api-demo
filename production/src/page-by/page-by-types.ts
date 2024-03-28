@@ -25,7 +25,7 @@ export interface PageBy {
   elements: PageByElement[];
 }
 
-interface PageByPaging {
+export interface PageByPaging {
   total: number;
   current: number;
   offset: number;

@@ -6,7 +6,7 @@ import {
 import officeInsertService from './office-insert-service';
 
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
-import { ObjectData } from '../../types/object-types';
+import { ObjectData, SubtotalsInfo } from '../../types/object-types';
 
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
@@ -42,12 +42,8 @@ class StepFetchInsertDataIntoExcel {
     console.group('Fetch and insert data into Excel');
     console.time('Total');
     try {
-      const {
-        objectWorkingId,
-        subtotalsInfo,
-        subtotalsInfo: { importSubtotal = true },
-        definition,
-      } = objectData;
+      const { objectWorkingId, subtotalsInfo, definition } = objectData;
+      const { importSubtotal = true } = subtotalsInfo as SubtotalsInfo;
       const { excelContext, officeTable, instanceDefinition } = operationData;
 
       const { columns, rows, mstrTable } = instanceDefinition;

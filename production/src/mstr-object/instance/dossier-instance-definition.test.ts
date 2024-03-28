@@ -1,9 +1,13 @@
 import { mstrObjectRestService } from '../mstr-object-rest-service';
 import { visualizationInfoService } from '../visualization-info-service';
 
+import { InstanceDefinition } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { DossierData, ObjectData, VisualizationInfo } from '../../types/object-types';
+
 import mstrObjectEnum from '../mstr-object-type-enum';
 import dossierInstanceDefinition from './dossier-instance-definition';
 import { ErrorType, IncomingErrorStrings } from '../../error/constants';
+import { DisplayAttrFormNames } from '../constants';
 
 describe('DossierInstanceDefinition', () => {
   afterEach(() => {
@@ -31,7 +35,7 @@ describe('DossierInstanceDefinition', () => {
         body: 'bodyTest',
         manipulationsXML: undefined,
         preparedInstanceId: undefined,
-      });
+      } as unknown as ObjectData);
     } catch (error) {
       // then
       expect(error).toBeInstanceOf(Error);
@@ -58,7 +62,7 @@ describe('DossierInstanceDefinition', () => {
 
     jest
       .spyOn(visualizationInfoService, 'getVisualizationInfo')
-      .mockReturnValue('updatedVisualizationInfoTest');
+      .mockResolvedValue('updatedVisualizationInfoTest' as unknown as VisualizationInfo);
 
     jest.spyOn(mstrObjectRestService, 'fetchVisualizationDefinition').mockImplementation(() => {
       throw new Error('errorTest');
@@ -79,8 +83,8 @@ describe('DossierInstanceDefinition', () => {
         preparedInstanceId: 'preparedInstanceIdTest',
         visualizationInfo: { visualizationKey: 'visualizationKeyTest' },
         dossierData: 'dossierDataTest',
-        displayAttrFormNames: 'displayAttrFormNamesTest',
-      });
+        displayAttrFormNames: DisplayAttrFormNames.AUTOMATIC,
+      } as unknown as ObjectData);
     } catch (error) {
       // then
       expect(error).toBeInstanceOf(Error);
@@ -102,7 +106,7 @@ describe('DossierInstanceDefinition', () => {
     expect(mstrObjectRestService.fetchVisualizationDefinition).toBeCalledTimes(1);
     expect(mstrObjectRestService.fetchVisualizationDefinition).toBeCalledWith({
       body: 'bodyTest',
-      displayAttrFormNames: 'displayAttrFormNamesTest',
+      displayAttrFormNames: DisplayAttrFormNames.AUTOMATIC,
       dossierData: 'dossierDataTest',
       instanceId: 'preparedInstanceIdTest',
       mstrObjectType: mstrObjectEnum.mstrObjectType.dossier.name,
@@ -163,11 +167,11 @@ describe('DossierInstanceDefinition', () => {
 
       jest
         .spyOn(visualizationInfoService, 'getVisualizationInfo')
-        .mockReturnValue('getVisualizationInfoTest');
+        .mockResolvedValue('getVisualizationInfoTest' as unknown as VisualizationInfo);
 
       jest
         .spyOn(mstrObjectRestService, 'fetchVisualizationDefinition')
-        .mockReturnValue({ sth: 'fetchVisualizationDefinitionTest' });
+        .mockResolvedValue({ sth: 'fetchVisualizationDefinitionTest' } as InstanceDefinition);
 
       jest.spyOn(dossierInstanceDefinition, 'getVisualizationErrorType').mockImplementation();
 
@@ -176,12 +180,12 @@ describe('DossierInstanceDefinition', () => {
         projectId: 'projectIdTest',
         objectId: 'objectIdTest',
         body: bodyParam,
-        dossierData: 'dossierDataTest',
-        displayAttrFormNames: 'displayAttrFormNamesTest',
+        dossierData: 'dossierDataTest' as unknown as DossierData,
+        displayAttrFormNames: DisplayAttrFormNames.AUTOMATIC,
         manipulationsXML: manipulationsXMLParam,
         preparedInstanceId: preparedInstanceIdParam,
         visualizationInfo: { visualizationKey: 'visualizationKeyTest' },
-      });
+      } as ObjectData);
 
       // then
       if (preparedInstanceIdParam) {
@@ -211,7 +215,7 @@ describe('DossierInstanceDefinition', () => {
         dossierData: 'dossierDataTest',
         body: expectedBody,
         visualizationInfo: 'getVisualizationInfoTest',
-        displayAttrFormNames: 'displayAttrFormNamesTest',
+        displayAttrFormNames: DisplayAttrFormNames.AUTOMATIC,
       });
 
       expect(dossierInstanceDefinition.getVisualizationErrorType).not.toBeCalled();

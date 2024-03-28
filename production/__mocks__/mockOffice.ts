@@ -6,7 +6,7 @@ export const mockOffice = {
     },
     diagnostics: {},
   },
-};
+} as unknown as typeof Office;
 
 global.Office = mockOffice;
 export const { Office } = global;

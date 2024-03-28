@@ -1,3 +1,5 @@
+import { MstrCompoundGridResponse } from '../mstr-object-response-types';
+
 import mstrCompoundGridHandler from './mstr-compound-grid-handler';
 
 import regularCompoundJSON from '../../../__mocks__/compound-grid/Regular Compound Grid.json';
@@ -5,7 +7,7 @@ import regularCompoundJSON from '../../../__mocks__/compound-grid/Regular Compou
 describe('Compound Grid Handler', () => {
   it('should create mstr table object', () => {
     // given
-    const response = regularCompoundJSON;
+    const response = regularCompoundJSON as unknown as MstrCompoundGridResponse;
     const expectedProperties = [
       'tableSize',
       'columnInformation',
@@ -32,8 +34,8 @@ describe('Compound Grid Handler', () => {
 
   it('should return column information', () => {
     // given
-    const { definition, data } = regularCompoundJSON;
-    const attributeForms = null;
+    const { definition, data } = regularCompoundJSON as unknown as MstrCompoundGridResponse;
+    const attributeForms: any = null;
     const expectedLength = 8;
     const expectedSecondColName = 'Profit';
 
@@ -52,7 +54,7 @@ describe('Compound Grid Handler', () => {
 
   it('should return column information with attribute forms', () => {
     // given
-    const { definition, data } = regularCompoundJSON;
+    const { definition, data } = regularCompoundJSON as unknown as MstrCompoundGridResponse;
     const attributeForms = { supportForms: true };
     const expectedLength = 8;
     const expectedAttributeName = 'Subcategory';
@@ -73,7 +75,7 @@ describe('Compound Grid Handler', () => {
 
   it('should return final table size', () => {
     // given
-    const { data } = regularCompoundJSON;
+    const { data } = regularCompoundJSON as unknown as MstrCompoundGridResponse;
     const expectedSize = { columns: 7, rows: 7 };
 
     // when
@@ -85,8 +87,8 @@ describe('Compound Grid Handler', () => {
 
   it('should return attribute forms names', () => {
     // given
-    const { definition } = regularCompoundJSON;
-    const attributeForms = null;
+    const { definition } = regularCompoundJSON as unknown as MstrCompoundGridResponse;
+    const attributeForms: any = null;
     const expectedAttrForms = { rowsAttributes: ['Subcategory'] };
 
     // when
@@ -111,7 +113,7 @@ describe('Compound Grid Handler', () => {
 
   it('should return rows form response', () => {
     // given
-    const response = regularCompoundJSON;
+    const response = regularCompoundJSON as unknown as MstrCompoundGridResponse;
     const expected1stRow = [null, null, null, 83891.267, 159665.636, 122315.7, null];
     const expectedLastRow = [
       6708.9268000006,
@@ -133,8 +135,8 @@ describe('Compound Grid Handler', () => {
 
   it('should return subtotal information', () => {
     // given
-    const response = regularCompoundJSON;
-    const expectedSubtotals = [];
+    const response = regularCompoundJSON as unknown as MstrCompoundGridResponse;
+    const expectedSubtotals: any[] = [];
 
     // when
     const subtotals = mstrCompoundGridHandler.getSubtotalsInformation(response);
@@ -145,7 +147,7 @@ describe('Compound Grid Handler', () => {
 
   it('should render rows form data in chosen format', () => {
     // given
-    const { data } = regularCompoundJSON;
+    const { data } = regularCompoundJSON as unknown as MstrCompoundGridResponse;
     const expected1stRow = ['', '', '', '$83,891', '$159,666', '$122,316', ''];
     const expectedLastRow = ['$6,709', '', '', '', '$308,420', '$237,860', '$176,310'];
 
@@ -159,7 +161,7 @@ describe('Compound Grid Handler', () => {
 
   it('should render rows for column set without metrics values', () => {
     // given
-    const { data } = regularCompoundJSON;
+    const { data } = regularCompoundJSON as unknown as MstrCompoundGridResponse;
 
     data.metricValues.columnSets[0].raw = [];
     data.metricValues.columnSets[1].raw = [];
@@ -253,6 +255,7 @@ describe('Compound Grid Handler', () => {
     const expectedFirstTitleName = 'Subcategory';
 
     // when
+    // @ts-expect-error
     const titles = mstrCompoundGridHandler.renderCompoundGridRowTitles(headers, definition);
 
     // then
@@ -272,6 +275,7 @@ describe('Compound Grid Handler', () => {
     const expectedFirstTitleName = ['Art & Architecture'];
 
     // when
+    // @ts-expect-error
     const titles = mstrCompoundGridHandler.renderCompoundGridRowHeaders(headers, definition);
 
     // then
@@ -284,7 +288,7 @@ describe('Compound Grid Handler', () => {
     const response = JSON.parse(JSON.stringify(regularCompoundJSON));
     const { data, definition } = response;
     const expectedLength = 2;
-    const onElement = e => [e.name || e.formValues[0]];
+    const onElement = (element: any): any[] => [element.name || element.formValues[0]];
 
     const expectedColumnHeaders = [
       ['Music', 'Movies', 'Electronics', 'Books', 'Cost', 'Cost', 'Cost'],
@@ -312,7 +316,7 @@ describe('Compound Grid Handler', () => {
     data.metricValues.columnSets.push({ raw: [[1]] });
     data.headers.columnSets.push([]);
     const expectedLength = 2;
-    const onElement = e => [e.name || e.formValues[0]];
+    const onElement = (element: any): any[] => [element.name || element.formValues[0]];
 
     const expectedColumnHeaders = [
       ['Music', 'Movies', 'Electronics', 'Books', 'Cost', 'Cost', 'Cost', "'"],
@@ -370,6 +374,7 @@ describe('Compound Grid Handler', () => {
     ];
 
     // when
+    // @ts-expect-error
     mstrCompoundGridHandler.addEmptyHeaders(firstColumnSet, boundingHeight, columnSetHeaders);
 
     // then
