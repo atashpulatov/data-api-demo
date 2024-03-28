@@ -13,16 +13,17 @@ export interface Form {
 }
 
 export interface Element {
+  name?: string; // check
   id: string;
   formValues: string[];
   subtotal?: boolean;
 }
 
 export interface Attribute {
-  id: string;
-  name: string;
+  id?: string;
+  name?: string;
   type: string;
-  forms: Form[];
+  forms?: Form[];
   elements: Element[];
 }
 
@@ -107,15 +108,11 @@ export interface CompoundGridHeaders {
 export interface MetricValues {
   raw: number[][];
   formatted: string[][];
-  extras: { mi: number }[][][];
+  extras: any[][][];
 }
 
 export interface CompondGridMetricValues {
-  columnSets: {
-    raw: number[][];
-    formatted: string[][];
-    extras: any[][][];
-  }[];
+  columnSets: MetricValues[];
 }
 
 export interface Data {
@@ -125,9 +122,22 @@ export interface Data {
   metricValues: MetricValues;
 }
 
+export interface CompoundGridData {
+  currentPageBy: number[];
+  paging: Paging;
+  headers: CompoundGridHeaders;
+  metricValues: CompondGridMetricValues;
+}
+
 export interface MstrObjectDefinition {
   headerCells: any[]; // TODO: check if correct
   grid: Grid;
+  attrforms: any; // TODO: check if correct
+}
+
+export interface MstrCompoundGridDefinition {
+  headerCells: any[]; // TODO: check if correct
+  grid: CompoundGrid;
   attrforms: any; // TODO: check if correct
 }
 
@@ -147,6 +157,7 @@ export interface MstrCompoundGridResponse {
   k: string;
   n: string;
   visualizationType: VisualizationTypes;
-  definition: MstrObjectDefinition;
-  data: Data;
+  definition: MstrCompoundGridDefinition;
+  data: CompoundGridData;
+  attrforms?: any; // TODO: check if correct
 }

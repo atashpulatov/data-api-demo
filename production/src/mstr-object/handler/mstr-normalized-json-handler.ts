@@ -4,9 +4,12 @@
  */
 
 import {
+  Attribute,
   Axis,
+  CompoundGridHeaders,
   Data,
   Headers,
+  MstrCompoundGridDefinition,
   MstrObjectDefinition,
   ValueMatrix,
 } from '../mstr-object-response-types';
@@ -32,7 +35,7 @@ class NormalizedJsonHandler {
     rowIndex = -1,
     colIndex = -1,
   }: {
-    definition: any;
+    definition: MstrObjectDefinition;
     axis: Axis;
     attributeIndex: number;
     elementIndex: number;
@@ -44,7 +47,7 @@ class NormalizedJsonHandler {
     const { name, formValues, subtotal } = rawElement;
 
     if (formValues) {
-      const { forms } = definition.grid[axis][attributeIndex];
+      const { forms } = definition.grid[axis][attributeIndex] as Attribute;
       const numberOfForms = forms ? forms.length : 0;
       for (let index = formValues.length; index < numberOfForms; index++) {
         formValues.unshift('');
@@ -256,16 +259,18 @@ class NormalizedJsonHandler {
    * @return
    */
   renderHeaders = (
-    definition: MstrObjectDefinition,
+    definition: MstrObjectDefinition | MstrCompoundGridDefinition,
     axis: Axis,
-    headers: Headers,
+    headers: Headers | CompoundGridHeaders,
     onElement: Function,
     supportForms?: string
   ): any[][] => {
+    // @ts-expect-error
     if (headers[axis].length === 0) {
       return [[]];
     }
     const headersNormalized =
+      // @ts-expect-error
       axis === 'columns' ? this.transposeMatrix(headers[axis]) : headers[axis];
 
     const matrix = headersNormalized.map((headerCells: any[], colIndex: number) => {
@@ -295,12 +300,13 @@ class NormalizedJsonHandler {
    * @return {Array}
    */
   renderTitles = (
-    definition: MstrObjectDefinition,
+    definition: MstrObjectDefinition | MstrCompoundGridDefinition,
     axis: Axis,
-    headers: Headers,
+    headers: Headers | CompoundGridHeaders,
     onElement: Function,
     supportForms?: string
   ): any[][] => {
+    // @ts-expect-error
     const columnTitles = headers[axis].map((headerCells: any) => {
       const mapFn =
         axis === 'rows' ? this.mapElementIndicesToNames : this.mapElementIndicesToElements;
