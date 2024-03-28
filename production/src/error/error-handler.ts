@@ -53,12 +53,12 @@ class ErrorService {
    * @param callback Function to be called after clikc on warning notification
    * @param operationData Data about the operation that was performed
    */
-  async handleObjectBasedError(
+  handleObjectBasedError = async (
     objectWorkingId: number,
     error: any,
     callback: Function,
     operationData: OperationData
-  ): Promise<void> {
+  ): Promise<void> => {
     const errorType = this.getErrorType(error, operationData);
     if (error.Code === 5012) {
       this.handleError(error);
@@ -94,7 +94,7 @@ class ErrorService {
         callback,
       });
     }
-  }
+  };
 
   /**
    * Maion function to handle errors
@@ -103,14 +103,14 @@ class ErrorService {
    * @param options Object with additional options
    */
   // TODO combine with handleObjectBasedError
-  async handleError(
+  handleError = async (
     error: any,
     options = {
       chosenObjectName: 'Report',
       isLogout: false,
       dialogType: null as any,
     }
-  ): Promise<void> {
+  ): Promise<void> => {
     const { isLogout, dialogType, ...parameters } = options;
     const errorType = this.getErrorType(error);
     const errorMessage = errorMessageFactory(errorType)({
@@ -126,7 +126,7 @@ class ErrorService {
 
     this.displayErrorNotification(error, errorType, errorMessage);
     this.checkForLogout(errorType, isLogout);
-  }
+  };
 
   /**
    * Return ErrorType based on the error
@@ -135,12 +135,12 @@ class ErrorService {
    * @param operationData Data about the operation that was performed
    * @returns ErrorType
    */
-  getErrorType(error: any, operationData?: OperationData): ErrorType {
+  getErrorType = (error: any, operationData?: OperationData): ErrorType => {
     const updateError = this.getExcelError(error, operationData);
     return (
       updateError.type || this.getOfficeErrorType(updateError) || this.getRestErrorType(updateError)
     );
-  }
+  };
 
   /**
    * Extracts error details from the error object
@@ -149,7 +149,7 @@ class ErrorService {
    * @params errorMessage Error message
    * @returns error details to display
    */
-  getErrorDetails(error: any, errorMessage: string): string {
+  getErrorDetails = (error: any, errorMessage: string): string => {
     const errorDetails = (error.response && error.response.text) || error.message || '';
     let details;
     const {
@@ -174,7 +174,7 @@ class ErrorService {
         break;
     }
     return details;
-  }
+  };
 
   /**
    * dsiaply global notifiacation with error message
@@ -183,7 +183,7 @@ class ErrorService {
    * @param type Type of the error
    * @param errorMessage Error message
    */
-  displayErrorNotification(error: any, type: ErrorType, errorMessage = ''): void {
+  displayErrorNotification = (error: any, type: ErrorType, errorMessage = ''): void => {
     const errorDetails = (error.response && error.response.text) || error.message || '';
     const details = errorMessage !== errorDetails ? errorDetails : '';
     if (type === ErrorType.UNAUTHORIZED_ERR) {
@@ -193,21 +193,20 @@ class ErrorService {
     const payload = this.createNotificationPayload(errorMessage, details);
     payload.children = this.getChildrenButtons();
     this.notificationService.globalWarningAppeared(payload);
-  }
+  };
 
   /**
    * Creates object containing buttons for the notification
    * @returns Object with notification button data
    */
-  getChildrenButtons(): any {
-    return getNotificationButtons([
+  getChildrenButtons = (): any =>
+    getNotificationButtons([
       {
         type: 'basic',
         label: i18n.t('OK'),
         onClick: () => this.notificationService.globalNotificationDissapear(),
       },
     ]);
-  }
 
   /**
    * Trigger logout based on error type
@@ -215,20 +214,20 @@ class ErrorService {
    * @param errorType type of error
    * @param isLogout Flag indicating whether to log out user
    */
-  checkForLogout(errorType: ErrorType, isLogout = false): void {
+  checkForLogout = (errorType: ErrorType, isLogout = false): void => {
     if (!isLogout && [ErrorType.UNAUTHORIZED_ERR].includes(errorType)) {
       setTimeout(() => {
         this.fullLogOut();
       }, TIMEOUT);
     }
-  }
+  };
 
   /**
    * Function getting errors that occurs in Office operations.
    *
    * @param error Error object that was thrown
    */
-  getOfficeErrorType(error: any): string {
+  getOfficeErrorType = (error: any): string => {
     console.warn({ error });
     console.warn(error.message);
 
@@ -236,7 +235,7 @@ class ErrorService {
       return stringMessageToErrorType(error.message);
     }
     return null;
-  }
+  };
 
   /**
    * Function getting errors that occurs in types of operations.
@@ -245,7 +244,7 @@ class ErrorService {
    * @param error Error thrown during the operation execution
    * @param operationData Contains informatons about current operation
    */
-  getExcelError(error: any, operationData: OperationData): any {
+  getExcelError = (error: any, operationData: OperationData): any => {
     const { name, code, debugInfo } = error;
     const isExcelApiError =
       name === 'RichApi.Error' &&
@@ -272,7 +271,7 @@ class ErrorService {
         break;
     }
     return updateError;
-  }
+  };
 
   /**
    * Function getting errors that occurs in REST requests.
@@ -280,7 +279,7 @@ class ErrorService {
    * @param error Error object that was thrown
    * @returns ErrorType
    */
-  getRestErrorType(error: any): ErrorType {
+  getRestErrorType = (error: any): ErrorType => {
     if (!error.status && !error.response) {
       if (error.message && error.message.includes(IncomingErrorStrings.CONNECTION_BROKEN)) {
         return ErrorType.CONNECTION_BROKEN_ERR;
@@ -289,7 +288,7 @@ class ErrorService {
     }
     const status = error.status || (error.response ? error.response.status : null);
     return httpStatusToErrorType(status);
-  }
+  };
 
   /**
    * Function getting error message based on the error type
@@ -298,10 +297,10 @@ class ErrorService {
    * @param options Object with additional options
    * @returns Error message
    */
-  getErrorMessage(error: any, options = { chosenObjectName: 'Report' }): ErrorMessages {
+  getErrorMessage = (error: any, options = { chosenObjectName: 'Report' }): ErrorMessages => {
     const errorType = this.getErrorType(error);
     return errorMessageFactory(errorType)({ error, ...options });
-  }
+  };
 
   /**
    * Function logging out user from the application
@@ -320,7 +319,7 @@ class ErrorService {
    * @param details Details of the notification
    * @returns Object with notification payload
    */
-  createNotificationPayload(message: string, details: string): any {
+  createNotificationPayload = (message: string, details: string): any => {
     const buttons = [
       {
         title: 'Ok',
@@ -337,14 +336,14 @@ class ErrorService {
       buttons,
     };
     return payload;
-  }
+  };
 
   /**
    * Function checking if the dialog is open and closing it if it is.
    * Also clearing Reprompt task queue if dialog was open for Reprompt workflow.
    * * @param shouldClose flag indicated whether to close the dialog or not
    */
-  async closePopupIfOpen(shouldClose: boolean): Promise<void> {
+  closePopupIfOpen = async (shouldClose: boolean): Promise<void> => {
     const storeState = this.reduxStore.getState();
 
     const { isDialogOpen } = storeState.officeReducer;
@@ -357,7 +356,7 @@ class ErrorService {
       // clear Reprompt task queue if in Reprompt All workflow
       isDialogOpenForReprompt && this.reduxStore.dispatch(clearRepromptTask());
     }
-  }
+  };
 
   /**
    * Close/hide Reprompt dialog only in Overview window if an error has occured
@@ -365,7 +364,7 @@ class ErrorService {
    * and user interacts with Prompts' dialog or cube is not published or dossier/report is not
    * available in the environment as it was deleted at the time of reprompting.
    */
-  closePromptsDialogInOverview(): void {
+  closePromptsDialogInOverview = (): void => {
     const { repromptsQueueReducer, popupStateReducer } = this.reduxStore.getState();
 
     // Verify if there are any reprompts in queue to determine whether it's multiple re-prompt
@@ -388,7 +387,7 @@ class ErrorService {
         this.popupController.runImportedDataOverviewPopup();
       }
     }
-  }
+  };
 }
 
 export const errorService = new ErrorService();

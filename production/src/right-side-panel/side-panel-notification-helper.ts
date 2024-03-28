@@ -38,7 +38,7 @@ class SidePanelNotificationHelper {
    * @param data.setSidePanelPopup - Callback to save popup in state of RightSidePanel.
    * @param data.setDuplicatedObjectId - Callback to save objectWorkingId in state of RightSidePanel.
    */
-  setDuplicatePopup({
+  setDuplicatePopup = ({
     objectWorkingId,
     activeCellAddress,
     setSidePanelPopup,
@@ -48,7 +48,7 @@ class SidePanelNotificationHelper {
     activeCellAddress: string;
     setSidePanelPopup: Function;
     setDuplicatedObjectId: Function;
-  }): void {
+  }): void => {
     const closePopup = (): void => {
       setSidePanelPopup(null);
       setDuplicatedObjectId(null);
@@ -67,19 +67,19 @@ class SidePanelNotificationHelper {
       },
       onClose: closePopup,
     });
-  }
+  };
 
   /**
    * Creates or updates range taken popup.
    * Saves the popup and the objectWorkingId in state of RightSidePanel.
    * Called after value in redux is changed
    *
-   * @param {Object} data  Data required to create and update range taken popup.
-   * @param {Number} data.objectWorkingId  Uniqe id of source object for duplication.
-   * @param {String} data.activeCellAddress  Adress of selected cell in excel.
-   * @param {Function} data.callback  Callback to cancel operation
+   * @param data  Data required to create and update range taken popup.
+   * @param data.objectWorkingId  Uniqe id of source object for duplication.
+   * @param data.activeCellAddress  Adress of selected cell in excel.
+   * @param data.callback  Callback to cancel operation
    */
-  setRangeTakenPopup({
+  setRangeTakenPopup = ({
     objectWorkingId,
     activeCellAddress,
     setSidePanelPopup,
@@ -89,7 +89,7 @@ class SidePanelNotificationHelper {
     activeCellAddress: string;
     setSidePanelPopup: Function;
     callback: Function;
-  }): void {
+  }): void => {
     const onCancel = (): void => {
       officeReducerHelper.clearPopupData();
       callback();
@@ -105,7 +105,7 @@ class SidePanelNotificationHelper {
       onCancel,
       onClose: onCancel,
     });
-  }
+  };
 
   /**
    * Dispatches new data to redux in order to repeat step of the operation.
@@ -114,11 +114,11 @@ class SidePanelNotificationHelper {
    * @param activeCellAddress  Adress of selected cell in excel.
    * @param insertNewWorksheet  specify if the object will be imported on new worksheet
    */
-  importInNewRange(
+  importInNewRange = (
     objectWorkingId: number,
     activeCellAddress: string,
     insertNewWorksheet: boolean
-  ): void {
+  ): void => {
     this.reduxStore.dispatch(
       updateOperation({
         objectWorkingId,
@@ -128,14 +128,14 @@ class SidePanelNotificationHelper {
         insertNewWorksheet,
       })
     );
-  }
+  };
 
   /**
    * Displays one of the 2 popup for clear data based on the values in redux store.
    *
    * @returns Contains type and callback for the popup
    */
-  setClearDataPopups(): any {
+  setClearDataPopups = (): any => {
     let popup = null;
 
     const { isSecured, isClearDataFailed } = this.reduxStore.getState().officeReducer;
@@ -150,12 +150,12 @@ class SidePanelNotificationHelper {
         onViewData: this.handleViewData,
       });
     return popup;
-  }
+  };
 
   /**
    * Toggles flags for cleardata and refresh all existing objects.
    */
-  async handleViewData(): Promise<void> {
+  handleViewData = async (): Promise<void> => {
     try {
       await officeApiHelper.checkStatusOfSessions();
       this.reduxStore.dispatch(officeActions.toggleSecuredFlag(false));
@@ -168,7 +168,7 @@ class SidePanelNotificationHelper {
     } catch (error) {
       errorService.handleError(error);
     }
-  }
+  };
 
   /**
    * Displays notifications on the objects tiles
@@ -177,12 +177,12 @@ class SidePanelNotificationHelper {
    * @param notifications  Contains data of all notifications to be displayed
    * @param operations  Contains data of all currently existing operation
    */
-  injectNotificationsToObjects(
+  injectNotificationsToObjects = (
     loadedObjects: ObjectData[],
     notifications: any[],
     operations: OperationData[]
-  ): ObjectData[] {
-    return loadedObjects.map(object => {
+  ): ObjectData[] =>
+    loadedObjects.map(object => {
       const objectOperation = operations.find(
         operation => operation.objectWorkingId === object.objectWorkingId
       );
@@ -216,7 +216,6 @@ class SidePanelNotificationHelper {
         notification,
       };
     });
-  }
 
   /**
    * Determines whether the progress percentages should be displayed based on the type of the operation
@@ -224,14 +223,11 @@ class SidePanelNotificationHelper {
    * @param objectOperation Data about operation running on specific object
    * @return specify whether progress percentages should be displayed
    */
-  shouldGenerateProgressPercentage(objectOperation: OperationData): boolean {
-    return (
-      objectOperation &&
-      objectOperation.operationType !== OperationTypes.REMOVE_OPERATION &&
-      objectOperation.operationType !== OperationTypes.CLEAR_DATA_OPERATION &&
-      objectOperation.operationType !== OperationTypes.HIGHLIGHT_OPERATION
-    );
-  }
+  shouldGenerateProgressPercentage = (objectOperation: OperationData): boolean =>
+    objectOperation &&
+    objectOperation.operationType !== OperationTypes.REMOVE_OPERATION &&
+    objectOperation.operationType !== OperationTypes.CLEAR_DATA_OPERATION &&
+    objectOperation.operationType !== OperationTypes.HIGHLIGHT_OPERATION;
 
   /**
    * Handles error thrown during invoking side panel actions like refresh, edit etc.
@@ -241,7 +237,7 @@ class SidePanelNotificationHelper {
    *
    * @param error Plain error object thrown by method calls.
    */
-  handleSidePanelActionError(error: any): void {
+  handleSidePanelActionError = (error: any): void => {
     const castedError = String(error);
     const { CONNECTION_BROKEN } = IncomingErrorStrings;
     if (castedError.includes(CONNECTION_BROKEN)) {
@@ -252,18 +248,18 @@ class SidePanelNotificationHelper {
       return;
     }
     errorService.handleError(error);
-  }
+  };
 
   /**
    * This method creates an interval and checkes every CONNECTION_CHECK_TIMOUT seconds
    * whether the connection to the internet has been restored
    *
    */
-  connectionCheckerLoop(): void {
+  connectionCheckerLoop = (): void => {
     const checkInterval = setInterval(() => {
       authenticationHelper.doesConnectionExist(checkInterval);
     }, CONNECTION_CHECK_TIMEOUT);
-  }
+  };
 }
 
 export const sidePanelNotificationHelper = new SidePanelNotificationHelper();
