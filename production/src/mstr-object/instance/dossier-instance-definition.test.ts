@@ -1,7 +1,8 @@
 import { mstrObjectRestService } from '../mstr-object-rest-service';
 import { visualizationInfoService } from '../visualization-info-service';
 
-import { DossierData, VisualizationInfo } from '../../types/object-types';
+import { InstanceDefinition } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { DossierData, ObjectData, VisualizationInfo } from '../../types/object-types';
 
 import mstrObjectEnum from '../mstr-object-type-enum';
 import dossierInstanceDefinition from './dossier-instance-definition';
@@ -28,14 +29,13 @@ describe('DossierInstanceDefinition', () => {
     // when
     let result;
     try {
-      // @ts-expect-error
       result = await dossierInstanceDefinition.getDossierInstanceDefinition({
         projectId: 'projectIdTest',
         objectId: 'objectIdTest',
         body: 'bodyTest',
         manipulationsXML: undefined,
         preparedInstanceId: undefined,
-      });
+      } as ObjectData);
     } catch (error) {
       // then
       expect(error).toBeInstanceOf(Error);
@@ -84,7 +84,7 @@ describe('DossierInstanceDefinition', () => {
         visualizationInfo: { visualizationKey: 'visualizationKeyTest' },
         dossierData: 'dossierDataTest' as unknown as DossierData,
         displayAttrFormNames: DisplayAttrFormNames.AUTOMATIC,
-      });
+      } as ObjectData);
     } catch (error) {
       // then
       expect(error).toBeInstanceOf(Error);
@@ -171,7 +171,7 @@ describe('DossierInstanceDefinition', () => {
 
       jest
         .spyOn(mstrObjectRestService, 'fetchVisualizationDefinition')
-        .mockReturnValue({ sth: 'fetchVisualizationDefinitionTest' });
+        .mockResolvedValue({ sth: 'fetchVisualizationDefinitionTest' } as InstanceDefinition);
 
       jest.spyOn(dossierInstanceDefinition, 'getVisualizationErrorType').mockImplementation();
 
@@ -185,7 +185,7 @@ describe('DossierInstanceDefinition', () => {
         manipulationsXML: manipulationsXMLParam,
         preparedInstanceId: preparedInstanceIdParam,
         visualizationInfo: { visualizationKey: 'visualizationKeyTest' },
-      });
+      } as ObjectData);
 
       // then
       if (preparedInstanceIdParam) {

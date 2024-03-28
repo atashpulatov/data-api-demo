@@ -29,7 +29,7 @@ function getStepsQueue(
 function createOperation(
   operationType: OperationTypes,
   objectWorkingId: number,
-  objectData: Partial<ObjectData> = {},
+  objectData: any = {},
   importType = ObjectImportType.TABLE
 ): OperationData {
   const { backupObjectData, objectEditedData, preparedInstanceDefinition } = objectData;
@@ -46,7 +46,7 @@ function createOperation(
 }
 
 export const importRequested = (
-  object: ObjectData,
+  object: any,
   preparedInstanceDefinition?: any,
   pageByIndex = 0
 ): ImportOperationAction => {

@@ -14,7 +14,7 @@ describe('OperationBus', () => {
 
   it('does not call subscriber when current step empty', () => {
     // given
-    fakeStore.addStep('justSomeStep');
+    fakeStore.addStep('justSomeStep' as OperationSteps);
     operationBus.init(fakeStore);
     const subscriber = jest.fn();
     const subscribedStep = 'subscribed' as OperationSteps;
@@ -32,7 +32,7 @@ describe('OperationBus', () => {
     operationBus.init(fakeStore);
     const subscriber = jest.fn();
     const subscribedStep = 'subscribed' as OperationSteps;
-    const postedStep = 'posted';
+    const postedStep = 'posted' as OperationSteps;
     operationBus.subscribe(subscribedStep, subscriber);
 
     // when
@@ -58,7 +58,7 @@ describe('OperationBus', () => {
 
   it('calls subscriber when matching step is next', () => {
     // given
-    fakeStore.addStep('justSomeStep');
+    fakeStore.addStep('justSomeStep' as OperationSteps);
     operationBus.init(fakeStore);
     const subscriber = jest.fn();
     const subscribedStep = 'subscribed' as OperationSteps;

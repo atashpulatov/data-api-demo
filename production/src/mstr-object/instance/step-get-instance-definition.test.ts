@@ -408,9 +408,10 @@ describe('StepGetInstanceDefinition', () => {
 
       jest.spyOn(dossierInstanceDefinition, 'getDossierInstanceDefinition').mockImplementation();
 
-      jest.spyOn(mstrObjectRestService, 'createInstance').mockReturnValue({
+      jest.spyOn(mstrObjectRestService, 'createInstance').mockResolvedValue({
         body: 'bodyNoDossierTest',
         visualizationInfo: visualizationInfoParam,
+        // ????????????????????????????????????/
         instanceDefinition: {
           mstrTable: {
             name: 'mstrTableNameNoDossierTest',
@@ -629,7 +630,7 @@ describe('StepGetInstanceDefinition', () => {
     // given
     jest.spyOn(mstrObjectRestService, 'answerPrompts').mockImplementation();
 
-    jest.spyOn(mstrObjectRestService, 'modifyInstance').mockReturnValue({
+    jest.spyOn(mstrObjectRestService, 'modifyInstance').mockResolvedValue({
       status: 1,
       instanceId: 'instanceIdTest',
     });
@@ -678,7 +679,7 @@ describe('StepGetInstanceDefinition', () => {
     // given
     jest.spyOn(mstrObjectRestService, 'answerPrompts').mockImplementation();
 
-    jest.spyOn(mstrObjectRestService, 'modifyInstance').mockReturnValue({
+    jest.spyOn(mstrObjectRestService, 'modifyInstance').mockResolvedValue({
       status: 1,
       instanceId: 'instanceIdTest',
     });

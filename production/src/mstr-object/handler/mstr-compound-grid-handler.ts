@@ -2,6 +2,7 @@ import mstrAttributeFormHelper from '../helper/mstr-attribute-form-helper';
 import mstrAttributeMetricHelper from '../helper/mstr-attribute-metric-helper';
 
 import { MstrTable } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { Headers, MstrObjectResponse } from '../mstr-object-response-types';
 
 import mstrNormalizedJsonHandler from './mstr-normalized-json-handler';
 
@@ -134,16 +135,18 @@ class CompoundGridHandler {
   /**
    * Gets raw table rows
    *
-   * @param {JSON} response
-   * @return {Object} object with rows property
+   * @param response
+   * @return object with rows property
    */
-  getRows = (response: any): { row: any[] } => ({ row: this.renderRows(response.data) });
+  getRows = (response: any): { row: any[] } => ({
+    row: this.renderRows(response.data),
+  });
 
   /**
    * Gets subtotals defined or visible information from the response.
    *
-   * @param {JSON} response
-   * @return {Object}
+   * @param response
+   * @return
    */
   getSubtotalsInformation = (_response: any): any[] => []; // Not supported at this moment
 
@@ -151,10 +154,10 @@ class CompoundGridHandler {
    * Creates an array with metric values per columnSet
    * If the table doesn't have metrics we return an empty 2d array
    *
-   * @param {Object} data - Metric values object
-   * @param {String} valueMatrix - Cell value ("raw*", "formatted", "extras")
+   * @param data - Metric values object
+   * @param valueMatrix - Cell value ("raw*", "formatted", "extras")
    *
-   * @return {Array}
+   * @return
    */
   renderRows(data: any, valueMatrix = 'raw'): any[] {
     const {
@@ -187,7 +190,11 @@ class CompoundGridHandler {
    * @param response
    * @return rows, columns and subtotals values
    */
-  getHeaders(response: any): any {
+  getHeaders(response: MstrObjectResponse): {
+    rows: any[];
+    columns: any[];
+    subtotalAddress: any[];
+  } {
     const { definition, data, attrforms } = response;
     const { headers } = data;
     const supportForms = attrforms ? attrforms.supportForms : false;
@@ -258,7 +265,7 @@ class CompoundGridHandler {
    * @return
    */
   renderCompoundGridRowTitles(
-    headers: any[],
+    headers: Headers,
     definition: any,
     supportForms: string,
     onElement = (e: any) => e
@@ -283,7 +290,7 @@ class CompoundGridHandler {
    * @return
    */
   renderCompoundGridRowHeaders(
-    headers: any[],
+    headers: Headers,
     definition: any,
     supportForms: string,
     onElement = (e: any) => e

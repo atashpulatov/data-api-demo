@@ -3,7 +3,13 @@
  *
  */
 
-import { Axis, ValueMatrix } from '../../types/object-types';
+import {
+  Axis,
+  Data,
+  Headers,
+  MstrObjectDefinition,
+  ValueMatrix,
+} from '../mstr-object-response-types';
 
 class NormalizedJsonHandler {
   /**
@@ -161,8 +167,8 @@ class NormalizedJsonHandler {
    * @return {Array}
    */
   renderTabular = (
-    definition: any,
-    data: any,
+    definition: MstrObjectDefinition,
+    data: Data,
     onElement: Function,
     valueMatrix: ValueMatrix = 'raw'
   ): any[][] => {
@@ -229,7 +235,7 @@ class NormalizedJsonHandler {
    * @param axisElements - the axis elements
    * @param onElement - Callback function to process elements
    *
-   * @return {Array}
+   * @return
    */
   convertForms = (result: any[], axisElements: any[], onElement: Function): any[] => {
     for (const axisElement of axisElements) {
@@ -247,12 +253,12 @@ class NormalizedJsonHandler {
    * @param headers - Header data from response
    * @param onElement - Callback function to process elements
    *
-   * @return {Array}
+   * @return
    */
   renderHeaders = (
-    definition: any,
+    definition: MstrObjectDefinition,
     axis: Axis,
-    headers: any,
+    headers: Headers,
     onElement: Function,
     supportForms?: string
   ): any[][] => {
@@ -281,21 +287,20 @@ class NormalizedJsonHandler {
   /**
    * Creates a 2D array with the header titles
    *
-   * @param {Object} definition - Dataset definition
-   * @param {string} axis - 'rows' or 'columns'
-   * @param {Array} headers - header data from response
-   * @param {function} onElement - Callback function to process elements
+   * @param definition - Dataset definition
+   * @param axis - 'rows' or 'columns'
+   * @param headers - header data from response
+   * @param onElement - Callback function to process elements
    *
    * @return {Array}
    */
   renderTitles = (
-    definition: any,
+    definition: MstrObjectDefinition,
     axis: Axis,
-    headers: any[],
+    headers: Headers,
     onElement: Function,
     supportForms?: string
   ): any[][] => {
-    // @ts-expect-error
     const columnTitles = headers[axis].map((headerCells: any) => {
       const mapFn =
         axis === 'rows' ? this.mapElementIndicesToNames : this.mapElementIndicesToElements;
@@ -320,7 +325,7 @@ class NormalizedJsonHandler {
    *
    * @return
    */
-  renderRows = (data: any, valueMatrix: ValueMatrix = 'raw'): any[][] =>
+  renderRows = (data: Data, valueMatrix: ValueMatrix = 'raw'): any[][] =>
     data.metricValues && data.metricValues[valueMatrix].length
       ? data.metricValues[valueMatrix]
       : Array(data.paging.current).fill(Array(data.headers.columns[0].length).fill(null));
@@ -328,10 +333,10 @@ class NormalizedJsonHandler {
   /**
    * For keep-only/exclude on an attribute cell
    *
-   * @param {Object} definition - Dataset definition
-   * @param {string} axis - 'rows' or 'columns'
-   * @param {number} attributeIndex - Array index that corresponds to an attribute
-   * @param {number} headerIndex - Array index that corresponds to the header
+   * @param definition - Dataset definition
+   * @param axis - 'rows' or 'columns'
+   * @param attributeIndex - Array index that corresponds to an attribute
+   * @param headerIndex - Array index that corresponds to the header
    *
    * @return {Array}
    */

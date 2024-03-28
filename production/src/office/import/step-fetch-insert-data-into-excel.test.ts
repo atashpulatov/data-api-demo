@@ -170,6 +170,7 @@ describe('StepFetchInsertDataIntoExcel', () => {
       getSubtotalCoordinatesCallsNo,
     }) => {
       // given
+      // @ts-expect-error
       objectDataMock.subtotalsInfo.importSubtotal = paramImportSubtotal;
       resultInstanceDefinition.mstrTable.subtotalsInfo.importSubtotal = resultImportSubtotal;
 
@@ -281,6 +282,7 @@ describe('StepFetchInsertDataIntoExcel', () => {
       getSubtotalCoordinatesCallsNo,
     }) => {
       // given
+      // @ts-expect-error
       objectDataMock.subtotalsInfo.importSubtotal = paramImportSubtotal;
       const { mstrTable } = resultInstanceDefinition;
       mstrTable.subtotalsInfo.importSubtotal = resultImportSubtotal;

@@ -1,13 +1,17 @@
 import { Action } from 'redux';
 
 import { VisualizationTypes } from '../../mstr-object/mstr-object-types';
-import { ObjectData } from '../../types/object-types';
+import {
+  CrosstabHeaderDimensions,
+  ManipulationsXML,
+  ObjectData,
+  SubtotalsInfo,
+  VisualizationInfo,
+} from '../../types/object-types';
 
 import { OperationSteps } from '../../operation/operation-steps';
 import { OperationTypes } from '../../operation/operation-type-names';
 
-// TODO: refactor.
-// this is a temporary initial version. it should be improved
 export interface MstrTable {
   tableSize: { rows: number; columns: number };
   columnInformation: any[]; // Replace with actual type
@@ -25,13 +29,23 @@ export interface MstrTable {
   attributesNames: { rowsAttributes: any[] }; // Replace with actual type
   attributes: any[]; // Replace with actual type
   metrics: any[]; // Replace with actual type
-  [key: string]: any;
+  prevCrosstabDimensions?: false | CrosstabHeaderDimensions;
+  crosstabHeaderDimensions?: CrosstabHeaderDimensions;
+  metricsInRows?: boolean;
+  subtotalsInfo?: SubtotalsInfo;
 }
 
 export interface InstanceDefinition {
-  // TODO remove when type is finalized
+  instanceId?: string;
+  body?: any;
+  visualizationInfo?: VisualizationInfo;
   mstrTable?: MstrTable;
-  [key: string]: any;
+  rows?: number;
+  columns?: number;
+  data?: any[];
+  definition?: any;
+  manipulationsXML?: ManipulationsXML;
+  status?: number;
 }
 
 export interface OperationData {
@@ -39,7 +53,7 @@ export interface OperationData {
   objectWorkingId: number;
   stepsQueue: OperationSteps[];
   backupObjectData?: ObjectData;
-  objectEditedData?: ObjectData;
+  objectEditedData?: any;
   instanceDefinition?: InstanceDefinition;
   startCell?: string;
   excelContext?: Excel.RequestContext;
@@ -49,8 +63,12 @@ export interface OperationData {
   loadedRows?: number;
   shouldFormat?: boolean;
   oldBindId?: string;
-  // TODO remove when type is finalized
-  [key: string]: any;
+  repeatStep?: boolean;
+  insertNewWorksheet?: boolean;
+  shouldRenameExcelWorksheet?: boolean;
+  preparedInstanceDefinition?: any;
+  isTotalsRowVisible?: boolean;
+  objectExist?: boolean;
 }
 
 export interface OperationState {

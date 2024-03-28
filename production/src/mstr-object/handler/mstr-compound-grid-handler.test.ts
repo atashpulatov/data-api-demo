@@ -33,7 +33,7 @@ describe('Compound Grid Handler', () => {
   it('should return column information', () => {
     // given
     const { definition, data } = regularCompoundJSON;
-    const attributeForms = null;
+    const attributeForms: any = null;
     const expectedLength = 8;
     const expectedSecondColName = 'Profit';
 
@@ -86,7 +86,7 @@ describe('Compound Grid Handler', () => {
   it('should return attribute forms names', () => {
     // given
     const { definition } = regularCompoundJSON;
-    const attributeForms = null;
+    const attributeForms: any = null;
     const expectedAttrForms = { rowsAttributes: ['Subcategory'] };
 
     // when
@@ -134,7 +134,7 @@ describe('Compound Grid Handler', () => {
   it('should return subtotal information', () => {
     // given
     const response = regularCompoundJSON;
-    const expectedSubtotals = [];
+    const expectedSubtotals: any[] = [];
 
     // when
     const subtotals = mstrCompoundGridHandler.getSubtotalsInformation(response);
@@ -253,6 +253,7 @@ describe('Compound Grid Handler', () => {
     const expectedFirstTitleName = 'Subcategory';
 
     // when
+    // @ts-expect-error
     const titles = mstrCompoundGridHandler.renderCompoundGridRowTitles(headers, definition);
 
     // then
@@ -272,6 +273,7 @@ describe('Compound Grid Handler', () => {
     const expectedFirstTitleName = ['Art & Architecture'];
 
     // when
+    // @ts-expect-error
     const titles = mstrCompoundGridHandler.renderCompoundGridRowHeaders(headers, definition);
 
     // then
@@ -284,7 +286,7 @@ describe('Compound Grid Handler', () => {
     const response = JSON.parse(JSON.stringify(regularCompoundJSON));
     const { data, definition } = response;
     const expectedLength = 2;
-    const onElement = e => [e.name || e.formValues[0]];
+    const onElement = (element: any): any[] => [element.name || element.formValues[0]];
 
     const expectedColumnHeaders = [
       ['Music', 'Movies', 'Electronics', 'Books', 'Cost', 'Cost', 'Cost'],
@@ -312,7 +314,7 @@ describe('Compound Grid Handler', () => {
     data.metricValues.columnSets.push({ raw: [[1]] });
     data.headers.columnSets.push([]);
     const expectedLength = 2;
-    const onElement = e => [e.name || e.formValues[0]];
+    const onElement = (element: any): any[] => [element.name || element.formValues[0]];
 
     const expectedColumnHeaders = [
       ['Music', 'Movies', 'Electronics', 'Books', 'Cost', 'Cost', 'Cost', "'"],

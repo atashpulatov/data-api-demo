@@ -108,10 +108,10 @@ describe('objectReducer', () => {
   describe('updateObject', () => {
     it('should throw error if element with id does not exist', () => {
       // given
-      const objectName = 'someName';
+      const name = 'someName';
       const action: UpdateObjectAction = {
         type: ObjectActionTypes.UPDATE_OBJECT,
-        payload: { objectWorkingId: 123, objectName },
+        payload: { objectWorkingId: 123, name },
       };
 
       // when
@@ -123,10 +123,10 @@ describe('objectReducer', () => {
 
     it('should add one property to object on single element array', () => {
       // given
-      const objectName = 'someName';
+      const name = 'someName';
       const action: UpdateObjectAction = {
         type: ObjectActionTypes.UPDATE_OBJECT,
-        payload: { objectWorkingId: 2137, objectName },
+        payload: { objectWorkingId: 2137, name },
       };
 
       // when
@@ -135,20 +135,20 @@ describe('objectReducer', () => {
       // then
       expect(resultState.objects[0]).toEqual({
         ...initialState.singleObject.objects[0],
-        objectName,
+        name,
       });
     });
 
     it('should add two properties to object on single element array', () => {
       // given
-      const objectName = 'someName';
-      const someProp = 'someProp';
+      const name = 'someName';
+      const tableName = 'tableName';
       const action: UpdateObjectAction = {
         type: ObjectActionTypes.UPDATE_OBJECT,
         payload: {
           objectWorkingId: 2137,
-          objectName,
-          someProp,
+          name,
+          tableName,
         },
       };
 
@@ -158,17 +158,17 @@ describe('objectReducer', () => {
       // then
       expect(resultState.objects[0]).toEqual({
         ...initialState.singleObject.objects[0],
-        objectName,
-        someProp,
+        name,
+        tableName,
       });
     });
 
     it('should add one property to object on multi element array', () => {
       // given
-      const objectName = 'someName';
+      const name = 'someName';
       const action: UpdateObjectAction = {
         type: ObjectActionTypes.UPDATE_OBJECT,
-        payload: { objectWorkingId: 2, objectName },
+        payload: { objectWorkingId: 2, name },
       };
 
       // when
@@ -177,17 +177,17 @@ describe('objectReducer', () => {
       // then
       expect(resultState.objects[1]).toEqual({
         ...initialState.multipleObjects.objects[1],
-        objectName,
+        name,
       });
     });
 
     it('should add two properties to object on multi element array', () => {
       // given
-      const objectName = 'someName';
-      const someProp = 'someProp';
+      const name = 'someName';
+      const tableName = 'tableName';
       const action: UpdateObjectAction = {
         type: ObjectActionTypes.UPDATE_OBJECT,
-        payload: { objectWorkingId: 2, objectName, someProp },
+        payload: { objectWorkingId: 2, name, tableName },
       };
 
       // when
@@ -196,8 +196,8 @@ describe('objectReducer', () => {
       // then
       expect(resultState.objects[1]).toEqual({
         ...initialState.multipleObjects.objects[1],
-        objectName,
-        someProp,
+        name,
+        tableName,
       });
     });
   });
