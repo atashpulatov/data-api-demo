@@ -1,13 +1,11 @@
 import { Action } from 'redux';
 
+import { SubtotalsInfo } from '../../types/object-types';
+
 import { DisplayAttrFormNames, ObjectImportType } from '../../mstr-object/constants';
 
 // TODO: refactor.
 // this is a temporary initial version. it should be improved
-interface SubtotalsInfo {
-  subtotalsAddresses?: any[]; // Replace 'any' with the appropriate type
-  importSubtotal?: boolean;
-}
 
 export interface MstrData {
   chosenObjectId?: string;

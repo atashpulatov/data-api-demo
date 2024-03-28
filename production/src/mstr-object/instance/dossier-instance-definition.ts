@@ -29,7 +29,7 @@ class DossierInstanceDefinition {
   }> {
     if (manipulationsXML) {
       if (!body) {
-        body = {};
+        body = {} as any;
       }
       body.manipulations = manipulationsXML.manipulations;
       body.promptAnswers = manipulationsXML.promptAnswers;

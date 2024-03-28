@@ -374,7 +374,7 @@ class MstrObjectRestService {
       .then(res => res.body);
   };
 
-  createInstance = ({
+  createInstance = async ({
     objectId,
     projectId,
     mstrObjectType = reportObjectType,

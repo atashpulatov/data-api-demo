@@ -6,6 +6,7 @@ import { mstrObjectRestService } from '../mstr-object-rest-service';
 import instanceDefinitionHelper from './instance-definition-helper';
 
 import {
+  InstanceDefinition,
   MstrTable,
   OperationData,
 } from '../../redux-reducer/operation-reducer/operation-reducer-types';
@@ -409,15 +410,10 @@ describe('StepGetInstanceDefinition', () => {
       jest.spyOn(dossierInstanceDefinition, 'getDossierInstanceDefinition').mockImplementation();
 
       jest.spyOn(mstrObjectRestService, 'createInstance').mockResolvedValue({
-        body: 'bodyNoDossierTest',
-        visualizationInfo: visualizationInfoParam,
-        // ????????????????????????????????????/
-        instanceDefinition: {
-          mstrTable: {
-            name: 'mstrTableNameNoDossierTest',
-          },
+        mstrTable: {
+          name: 'mstrTableNameNoDossierTest',
         },
-      });
+      } as unknown as InstanceDefinition);
 
       jest.spyOn(instanceDefinitionHelper, 'modifyInstanceWithPrompt').mockResolvedValue({
         mstrTable: {
@@ -464,13 +460,9 @@ describe('StepGetInstanceDefinition', () => {
         importType: 'table',
         insertNewWorksheet: 'insertNewWorksheetTest',
         instanceDefinition: {
-          body: 'bodyNoDossierTest',
-          instanceDefinition: {
-            mstrTable: {
-              name: 'mstrTableNameNoDossierTest',
-            },
+          mstrTable: {
+            name: 'mstrTableNameNoDossierTest',
           },
-          visualizationInfo: visualizationInfoParam,
         },
         mstrObjectType: {
           name: 'report',
@@ -661,7 +653,7 @@ describe('StepGetInstanceDefinition', () => {
     expect(mstrObjectRestService.modifyInstance).toBeCalledTimes(1);
     expect(mstrObjectRestService.modifyInstance).toHaveBeenNthCalledWith(1, {
       body: 'bodyTest',
-      displayAttrFormNames: 'displayAttrFormNamesTest',
+      displayAttrFormNames: DisplayAttrFormNames.AUTOMATIC,
       dossierData: 'dossierDataTest',
       instanceId: 'instanceIdTest',
       objectId: 'objectIdTest',
@@ -716,7 +708,7 @@ describe('StepGetInstanceDefinition', () => {
     expect(mstrObjectRestService.modifyInstance).toBeCalledTimes(1);
     expect(mstrObjectRestService.modifyInstance).toHaveBeenNthCalledWith(1, {
       body: 'bodyTest',
-      displayAttrFormNames: 'displayAttrFormNamesTest',
+      displayAttrFormNames: DisplayAttrFormNames.AUTOMATIC,
       dossierData: 'dossierDataTest',
       instanceId: 'instanceIdTest',
       objectId: 'objectIdTest',
@@ -782,8 +774,8 @@ describe('StepGetInstanceDefinition', () => {
 
   it.each`
     expectedStartCell | createAndActivateNewWorksheetCallNo | insertNewWorksheet
-    ${42}             | ${0}                                | ${false}
-    ${42}             | ${1}                                | ${true}
+    ${'42'}           | ${0}                                | ${false}
+    ${'42'}           | ${1}                                | ${true}
   `(
     'getStartCell should work as expected',
     async ({ expectedStartCell, createAndActivateNewWorksheetCallNo, insertNewWorksheet }) => {

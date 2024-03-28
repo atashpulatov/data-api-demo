@@ -86,13 +86,14 @@ describe('StepGetObjectDetails', () => {
   it('should call populateDefinition', async () => {
     // given
     const mockedPromptsAnswer = ['some prompts'];
-    jest.spyOn(objectDetailsMethods, 'getObjectPrompts').mockResolvedValue([]);
+    jest.spyOn(objectDetailsMethods, 'getObjectPrompts').mockResolvedValue(mockedPromptsAnswer);
     jest
       .spyOn(objectDetailsMethods, 'populateDetails')
       .mockImplementation(() => ({}) as ObjectDetails);
     jest
       .spyOn(objectDetailsMethods, 'populateDefinition')
       .mockImplementation(() => ({}) as ObjectData);
+
     // when
     await stepGetObjectDetails.getObjectDetails(objectDataMock, operationDataMock);
     // then
@@ -110,7 +111,7 @@ describe('StepGetObjectDetails', () => {
     jest.spyOn(objectDetailsMethods, 'getObjectPrompts').mockResolvedValue([]);
     jest
       .spyOn(objectDetailsMethods, 'populateDetails')
-      .mockImplementation(() => ({}) as ObjectDetails);
+      .mockImplementation(() => mockedDetailsReturn as unknown as ObjectDetails);
     jest
       .spyOn(objectDetailsMethods, 'populateDefinition')
       .mockImplementation(() => ({}) as ObjectData);
@@ -119,6 +120,7 @@ describe('StepGetObjectDetails', () => {
     // then
     expect(operationStepDispatcher.updateObject).toBeCalled();
     expect(operationStepDispatcher.updateObject).toBeCalledWith({
+      definition: {},
       ...objectDataMock,
       details: mockedDetailsReturn,
     });
@@ -133,10 +135,10 @@ describe('StepGetObjectDetails', () => {
     jest.spyOn(objectDetailsMethods, 'getObjectPrompts').mockResolvedValue([]);
     jest
       .spyOn(objectDetailsMethods, 'populateDetails')
-      .mockImplementation(() => ({}) as ObjectDetails);
+      .mockImplementation(() => mockedDetailsReturn as unknown as ObjectDetails);
     jest
       .spyOn(objectDetailsMethods, 'populateDefinition')
-      .mockImplementation(() => ({}) as ObjectData);
+      .mockImplementation(() => mockedPopulateDefinitionReturn as unknown as ObjectData);
     // when
     await stepGetObjectDetails.getObjectDetails(objectDataMock, operationDataMock);
     // then

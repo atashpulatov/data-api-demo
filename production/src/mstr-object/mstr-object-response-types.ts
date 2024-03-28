@@ -1,3 +1,4 @@
+import { PageByPaging } from '../page-by/page-by-types';
 import { VisualizationTypes } from './mstr-object-types';
 
 export type Axis = 'rows' | 'columns';
@@ -88,13 +89,6 @@ interface Source {
   name: string;
 }
 
-interface Paging {
-  current: number;
-  total: number;
-  offset: number;
-  limit: number;
-}
-
 export interface Headers {
   rows: number[][];
   columns: number[][];
@@ -117,14 +111,14 @@ export interface CompondGridMetricValues {
 
 export interface Data {
   currentPageBy: number[];
-  paging: Paging;
+  paging: PageByPaging;
   headers: Headers;
   metricValues: MetricValues;
 }
 
 export interface CompoundGridData {
   currentPageBy: number[];
-  paging: Paging;
+  paging: PageByPaging;
   headers: CompoundGridHeaders;
   metricValues: CompondGridMetricValues;
 }

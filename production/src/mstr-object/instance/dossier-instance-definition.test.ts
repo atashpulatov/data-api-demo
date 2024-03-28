@@ -35,7 +35,7 @@ describe('DossierInstanceDefinition', () => {
         body: 'bodyTest',
         manipulationsXML: undefined,
         preparedInstanceId: undefined,
-      } as ObjectData);
+      } as unknown as ObjectData);
     } catch (error) {
       // then
       expect(error).toBeInstanceOf(Error);
@@ -82,9 +82,9 @@ describe('DossierInstanceDefinition', () => {
         manipulationsXML: undefined,
         preparedInstanceId: 'preparedInstanceIdTest',
         visualizationInfo: { visualizationKey: 'visualizationKeyTest' },
-        dossierData: 'dossierDataTest' as unknown as DossierData,
+        dossierData: 'dossierDataTest',
         displayAttrFormNames: DisplayAttrFormNames.AUTOMATIC,
-      } as ObjectData);
+      } as unknown as ObjectData);
     } catch (error) {
       // then
       expect(error).toBeInstanceOf(Error);
@@ -106,7 +106,7 @@ describe('DossierInstanceDefinition', () => {
     expect(mstrObjectRestService.fetchVisualizationDefinition).toBeCalledTimes(1);
     expect(mstrObjectRestService.fetchVisualizationDefinition).toBeCalledWith({
       body: 'bodyTest',
-      displayAttrFormNames: 'displayAttrFormNamesTest',
+      displayAttrFormNames: DisplayAttrFormNames.AUTOMATIC,
       dossierData: 'dossierDataTest',
       instanceId: 'preparedInstanceIdTest',
       mstrObjectType: mstrObjectEnum.mstrObjectType.dossier.name,
@@ -215,7 +215,7 @@ describe('DossierInstanceDefinition', () => {
         dossierData: 'dossierDataTest',
         body: expectedBody,
         visualizationInfo: 'getVisualizationInfoTest',
-        displayAttrFormNames: 'displayAttrFormNamesTest',
+        displayAttrFormNames: DisplayAttrFormNames.AUTOMATIC,
       });
 
       expect(dossierInstanceDefinition.getVisualizationErrorType).not.toBeCalled();

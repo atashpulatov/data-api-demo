@@ -61,8 +61,17 @@ export interface envUrl {
   username: string;
 }
 
+export interface Body {
+  viewFilter: {
+    operands: any[];
+    operator: string;
+  };
+  manipulations?: string;
+  promptAnswers?: any;
+}
+
 export interface ObjectData {
-  body?: any;
+  body?: Body;
   objectWorkingId?: number;
   bindId?: string;
   name: string;
