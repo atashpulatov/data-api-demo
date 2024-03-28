@@ -7,6 +7,8 @@ produces and publishes a versioned deployment package'
 
   assigned_node_string 'rhel8_vra'
 
+  concurrent_build true
+
   triggers do
       pull_request_builder do
       end
