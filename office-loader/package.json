@@ -45,7 +45,7 @@
   ],
   "babel": {
     "presets": [
-    "react-app"
+      "react-app"
     ]
   },
   "devDependencies": {
@@ -60,6 +60,7 @@
     "glob-parent": "^5.1.2",
     "shell-quote": "^1.7.3",
     "loader-utils": "^1.4.2",
-    "immer": "^9.0.6"
+    "immer": "^9.0.6",
+    "follow-redirects": "^1.15.6"
   }
 }
