@@ -437,11 +437,10 @@ class PopupController {
     preparedInstanceDefinition: InstanceDefinition,
     pageByDisplayType: PageByDisplayType
   ): void => {
-    const pageByData = pageByHelper.getPageByDataForDefaultPage(
-      preparedInstanceDefinition,
+    const pageByData = {
       pageByLinkId,
-      pageByDisplayType
-    );
+      pageByDisplayType,
+    };
 
     return this.reduxStore.dispatch(
       importRequested({ ...objectData, pageByData }, preparedInstanceDefinition)
