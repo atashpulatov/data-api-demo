@@ -5,7 +5,7 @@ import instanceDefinitionHelper from '../mstr-object/instance/instance-definitio
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { pageByHelper } from '../page-by/page-by-helper';
 
-import { PageBy, PageByDataElement, PageByDisplayType } from '../page-by/page-by-types';
+import { PageByDataElement, PageByDisplayType } from '../page-by/page-by-types';
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { PopupTypeEnum } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 import { ObjectData } from '../types/object-types';
@@ -378,10 +378,6 @@ class PopupController {
    * @param objectData Contains information about the MSTR object
    */
   handleImport = async (objectData: any): Promise<void> => {
-    const pageByLinkId = uuidv4();
-    // TODO: Replace with actual setting from the user when implemented
-    const selectedPageByDisplayType = PageByDisplayType.DEFAULT_PAGE as PageByDisplayType;
-
     const preparedInstanceDefinition =
       await instanceDefinitionHelper.createReportInstance(objectData);
 
@@ -392,6 +388,10 @@ class PopupController {
         importRequested({ ...objectData }, preparedInstanceDefinition)
       );
     }
+
+    const pageByLinkId = uuidv4();
+    // TODO: Replace with actual setting from the user when implemented
+    const selectedPageByDisplayType = PageByDisplayType.DEFAULT_PAGE as PageByDisplayType;
 
     const validPageByData = await pageByHelper.getValidPageByData(
       objectData,
@@ -404,7 +404,6 @@ class PopupController {
           pageByLinkId,
           objectData,
           preparedInstanceDefinition,
-          pageBy,
           selectedPageByDisplayType
         );
       case PageByDisplayType.ALL_PAGES:
@@ -437,21 +436,13 @@ class PopupController {
     pageByLinkId: string,
     objectData: ObjectData,
     preparedInstanceDefinition: InstanceDefinition,
-    pageBy: PageBy[],
     pageByDisplayType: PageByDisplayType
   ): void => {
-    // @ts-expect-error
-    const { currentPageBy } = preparedInstanceDefinition.data;
-
-    const elements = pageByHelper.parseValidPageByElements(pageBy, {
-      items: [currentPageBy],
-    });
-
-    const pageByData = {
+    const pageByData = pageByHelper.getPageByDataForDefaultPage(
+      preparedInstanceDefinition,
       pageByLinkId,
-      pageByDisplayType,
-      elements: elements[0],
-    };
+      pageByDisplayType
+    );
 
     return this.reduxStore.dispatch(
       importRequested({ ...objectData, pageByData }, preparedInstanceDefinition)

@@ -5,6 +5,7 @@ import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-
 import { mstrObjectRestService } from '../mstr-object-rest-service';
 import instanceDefinitionHelper from './instance-definition-helper';
 
+import { PageByDisplayType } from '../../page-by/page-by-types';
 import {
   InstanceDefinition,
   MstrTable,
@@ -72,6 +73,7 @@ describe('StepGetInstanceDefinition', () => {
       jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation();
       jest.spyOn(officeApiWorksheetHelper, 'isActiveWorksheetEmpty').mockImplementation();
       jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation();
+      jest.spyOn(instanceDefinitionHelper, 'getPageByDataForDisplayType').mockImplementation();
       jest
         .spyOn(instanceDefinitionHelper, 'modifyInstanceWithPrompt')
         .mockResolvedValue({ mstrTable: { rows: rowsParam } });
@@ -222,6 +224,8 @@ describe('StepGetInstanceDefinition', () => {
         expectedMstrTable.manipulationsXML = manipulationsXMLParam;
       }
 
+      jest.spyOn(instanceDefinitionHelper, 'getPageByDataForDisplayType').mockImplementation();
+
       jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
 
       jest.spyOn(officeApiWorksheetHelper, 'getStartCell').mockResolvedValue('startCellTest');
@@ -271,6 +275,8 @@ describe('StepGetInstanceDefinition', () => {
       );
 
       expect(mstrObjectRestService.createInstance).not.toBeCalled();
+
+      expect(instanceDefinitionHelper.getPageByDataForDisplayType).toBeCalledTimes(1);
 
       expect(instanceDefinitionHelper.modifyInstanceWithPrompt).toBeCalledTimes(1);
       expect(instanceDefinitionHelper.modifyInstanceWithPrompt).toBeCalledWith({
@@ -394,6 +400,17 @@ describe('StepGetInstanceDefinition', () => {
         body: 'bodyTest',
         name: 'nameTest',
         importType: 'table',
+        pageByData: {
+          pageByDisplayType: PageByDisplayType.DEFAULT_PAGE,
+          pageByLinkId: 'pageByLinkIdTest',
+          elements: [
+            {
+              name: 'elementName',
+              value: 'elementValue',
+              valueId: 'elementValueId',
+            },
+          ],
+        },
       } as unknown as ObjectData;
 
       jest
@@ -427,6 +444,8 @@ describe('StepGetInstanceDefinition', () => {
         },
         rows: 'rowsModifyInstanceWithPromptTest',
       });
+
+      jest.spyOn(instanceDefinitionHelper, 'getPageByDataForDisplayType').mockImplementation();
 
       jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
 
@@ -473,7 +492,20 @@ describe('StepGetInstanceDefinition', () => {
           subtotalsAddresses: 'subtotalsAddressesTest',
         },
         visualizationInfo: visualizationInfoParam,
+        pageByData: {
+          pageByDisplayType: PageByDisplayType.DEFAULT_PAGE,
+          pageByLinkId: 'pageByLinkIdTest',
+          elements: [
+            {
+              name: 'elementName',
+              value: 'elementValue',
+              valueId: 'elementValueId',
+            },
+          ],
+        },
       });
+
+      expect(instanceDefinitionHelper.getPageByDataForDisplayType).toBeCalledTimes(1);
 
       expect(stepGetInstanceDefinition.savePreviousObjectData).toBeCalledTimes(1);
       expect(stepGetInstanceDefinition.savePreviousObjectData).toBeCalledWith(

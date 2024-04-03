@@ -1,6 +1,13 @@
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 
-import { PageBy, PageByDataElement, ValidPageByElements } from './page-by-types';
+import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import {
+  PageBy,
+  PageByData,
+  PageByDataElement,
+  PageByDisplayType,
+  ValidPageByElements,
+} from './page-by-types';
 
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 
@@ -55,6 +62,39 @@ class PageByHelper {
     });
 
     return validPageByData;
+  };
+
+  /**
+   * Creates new pageByData for default page-by elements
+   *
+   * @param instanceDefinition Object containing information about MSTR object
+   * @param pageByLinkId Unique identifier of the Page-by sibling
+   * @param pageByDisplayType Contains information about the currently selected Page-by display setting
+   * @returns Two-dimensional array of valid Page-by elements combinations
+   */
+  getPageByDataForDefaultPage = (
+    instanceDefinition: InstanceDefinition,
+    pageByLinkId: string,
+    pageByDisplayType: PageByDisplayType
+  ): PageByData => {
+    // @ts-expect-error
+    const { currentPageBy } = instanceDefinition.data;
+
+    const { pageBy } = instanceDefinition?.definition.grid ?? {};
+
+    const validPageByElements = {
+      items: [currentPageBy],
+    };
+
+    const elements = this.parseValidPageByElements(pageBy, validPageByElements);
+
+    const pageByData = {
+      pageByLinkId,
+      pageByDisplayType,
+      elements: elements[0],
+    };
+
+    return pageByData;
   };
 }
 

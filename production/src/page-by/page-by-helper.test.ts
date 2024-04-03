@@ -1,12 +1,15 @@
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { pageByHelper } from './page-by-helper';
 
+import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import { PageByDisplayType } from './page-by-types';
+
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 
 import { pageByDataResponse } from '../../__mocks__/page-by-data-response';
 
 describe('Page-by helper', () => {
-  const expectedResponse = [
+  const expectedElements = [
     [
       {
         name: 'Region',
@@ -67,7 +70,7 @@ describe('Page-by helper', () => {
     const validPageByData = await pageByHelper.getValidPageByData(objectData, instanceDefinition);
 
     // then
-    expect(validPageByData).toEqual(expectedResponse);
+    expect(validPageByData).toEqual(expectedElements);
   });
 
   it('should return undefined for Dashboard', async () => {
@@ -93,6 +96,38 @@ describe('Page-by helper', () => {
     const validPageByData = pageByHelper.parseValidPageByElements(pageBy, validPageByElements);
 
     // then
-    expect(validPageByData).toEqual(expectedResponse);
+    expect(validPageByData).toEqual(expectedElements);
+  });
+
+  it('should correctly get page by data for default page', () => {
+    // given
+    const mockedPageByDisplayType = PageByDisplayType.DEFAULT_PAGE;
+    const mockedPageByLinkId = 'pageByLinkId';
+    const mockedInstanceDefinition = {
+      definition: {
+        grid: {
+          pageBy: pageByDataResponse.pageBy,
+        },
+      },
+      data: {
+        currentPageBy: pageByDataResponse.validPageByElements.items[0],
+      },
+    } as unknown as InstanceDefinition;
+
+    const mockedExpectedPageByData = {
+      pageByLinkId: mockedPageByLinkId,
+      pageByDisplayType: mockedPageByDisplayType,
+      elements: expectedElements[0],
+    };
+
+    // when
+    const pageByData = pageByHelper.getPageByDataForDefaultPage(
+      mockedInstanceDefinition,
+      mockedPageByLinkId,
+      mockedPageByDisplayType
+    );
+
+    // then
+    expect(pageByData).toEqual(mockedExpectedPageByData);
   });
 });

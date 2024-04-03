@@ -57,9 +57,8 @@ class StepGetInstanceDefinition {
         isPrompted,
         definition,
         importType,
-        pageByData,
       } = objectData;
-      let { visualizationInfo, body, name } = objectData;
+      let { visualizationInfo, body, name, pageByData } = objectData;
       const { preparedInstanceDefinition } = operationData;
 
       const excelContext = await officeApiHelper.getExcelContext();
@@ -102,6 +101,11 @@ class StepGetInstanceDefinition {
         );
       }
 
+      pageByData = instanceDefinitionHelper.getPageByDataForDisplayType(
+        objectData,
+        instanceDefinition
+      );
+
       this.savePreviousObjectData(
         instanceDefinition,
         crosstabHeaderDimensions,
@@ -138,6 +142,7 @@ class StepGetInstanceDefinition {
           attributes: mstrTable.attributes,
           metrics: mstrTable.metrics,
         },
+        pageByData,
       };
 
       const updatedOperation: Partial<OperationData> = {
