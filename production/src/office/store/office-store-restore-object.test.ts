@@ -91,7 +91,7 @@ describe.each`
         .mockReturnValue(restoredFromExcelObject);
       jest
         .spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsWithWorksheetAndIndex')
-        .mockReturnValue(restoredFromExcelObject);
+        .mockResolvedValue(restoredFromExcelObject);
       jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
       // when
