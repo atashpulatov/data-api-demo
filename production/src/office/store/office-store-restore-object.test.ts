@@ -77,7 +77,7 @@ describe.each`
       objectActions.restoreAllObjects = objectActionsOriginal;
     });
 
-    it('restoreObjectsFromExcelStore should work as expected', () => {
+    it('restoreObjectsFromExcelStore should work as expected', async () => {
       // given
       jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
       jest
@@ -95,7 +95,7 @@ describe.each`
       jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
       // when
-      officeStoreRestoreObject.restoreObjectsFromExcelStore();
+      await officeStoreRestoreObject.restoreObjectsFromExcelStore();
 
       // then
       expect(officeStoreHelper.getOfficeSettings).toBeCalledTimes(1);
@@ -151,7 +151,7 @@ describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
     answersActions.restoreAllAnswers = answersActionsOriginal;
   });
 
-  it('restoreObjectsFromExcelStore should work as expected', () => {
+  it('restoreObjectsFromExcelStore should work as expected', async () => {
     // given
     jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
     jest
@@ -166,7 +166,7 @@ describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
     jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
     // when
-    officeStoreRestoreObject.restoreObjectsFromExcelStore();
+    await officeStoreRestoreObject.restoreObjectsFromExcelStore();
 
     // then
     expect(officeStoreHelper.getOfficeSettings).toBeCalledTimes(1);
