@@ -131,7 +131,7 @@ class InstanceDefinitionHelper {
   };
 
   /**
-   * Gets page-by elements ids and modifies instance of the object.
+   * Gets new page by data based on object instance
    *
    * @param objectData Contains information about MSTR object
    * @param instanceDefinition Object containing information about MSTR object
@@ -142,7 +142,7 @@ class InstanceDefinitionHelper {
     instanceDefinition: InstanceDefinition
   ): PageByData => {
     const { pageByData } = objectData;
-    switch (objectData.pageByData.pageByDisplayType) {
+    switch (pageByData.pageByDisplayType) {
       case PageByDisplayType.DEFAULT_PAGE:
         return pageByHelper.getPageByDataForDefaultPage(
           instanceDefinition,

@@ -276,8 +276,6 @@ describe('StepGetInstanceDefinition', () => {
 
       expect(mstrObjectRestService.createInstance).not.toBeCalled();
 
-      expect(instanceDefinitionHelper.getPageByDataForDisplayType).toBeCalledTimes(1);
-
       expect(instanceDefinitionHelper.modifyInstanceWithPrompt).toBeCalledTimes(1);
       expect(instanceDefinitionHelper.modifyInstanceWithPrompt).toBeCalledWith({
         instanceDefinition: {

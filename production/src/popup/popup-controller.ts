@@ -429,7 +429,6 @@ class PopupController {
    * @param pageByLinkId Unique identifier of the Page-by sibling
    * @param objectData Contains information about the MSTR object
    * @param preparedInstanceDefinition Contains information about the object's instance
-   * @param pageBy Contains Page-by elements of the object
    * @param pageByDisplayType Contains information about the currently selected Page-by display setting
    */
   handleDefaultPageImport = (

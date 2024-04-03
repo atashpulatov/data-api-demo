@@ -101,10 +101,13 @@ class StepGetInstanceDefinition {
         );
       }
 
-      pageByData = instanceDefinitionHelper.getPageByDataForDisplayType(
-        objectData,
-        instanceDefinition
-      );
+      console.log('🚀 ~ StepGetInstanceDefinition ~ pageByData:', pageByData);
+      if (pageByData) {
+        pageByData = instanceDefinitionHelper.getPageByDataForDisplayType(
+          objectData,
+          instanceDefinition
+        );
+      }
 
       this.savePreviousObjectData(
         instanceDefinition,
