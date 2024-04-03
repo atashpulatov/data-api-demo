@@ -82,11 +82,11 @@ export const HomeNotConnected: React.FC<HomeProps> = props => {
   });
 
   useEffect(() => {
-    function initializeHome(): void {
+    async function initializeHome(): Promise<void> {
       try {
         // initialize shape API support status in store
         homeHelper.initIsShapeAPISupported();
-        officeStoreRestoreObject.restoreObjectsFromExcelStore();
+        await officeStoreRestoreObject.restoreObjectsFromExcelStore();
         officeStoreRestoreObject.restoreAnswersFromExcelStore();
         homeHelper.saveLoginValues();
         homeHelper.getTokenFromStorage();

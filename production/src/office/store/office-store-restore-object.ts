@@ -1,3 +1,4 @@
+import { officeApiHelper } from '../api/office-api-helper';
 import officeStoreHelper from './office-store-helper';
 
 import { ReduxStore } from '../../store';
@@ -23,7 +24,7 @@ class OfficeStoreRestoreObject {
    * maps them to new format of data and stores them in Redux and Office Settings,
    * and then remove the previously stored information from Office settings
    */
-  restoreObjectsFromExcelStore = (): void => {
+  restoreObjectsFromExcelStore = async (): Promise<void> => {
     const settings = officeStoreHelper.getOfficeSettings();
     let objects = settings.get(OfficeSettingsEnum.storedObjects) || [];
     objects = this.restoreLegacyObjectsFromExcelStore(settings, objects);
@@ -33,6 +34,7 @@ class OfficeStoreRestoreObject {
 
     this.resetIsPromptedForDossiersWithAnswers(objects);
     this.restoreLegacyObjectsWithImportType(objects);
+    await this.restoreLegacyObjectsWithWorksheetAndIndex(objects);
 
     settings.set(OfficeSettingsEnum.storedObjects, objects);
 
@@ -70,6 +72,43 @@ class OfficeStoreRestoreObject {
         object.importType = ObjectImportType.TABLE;
       }
     });
+  };
+
+  /**
+   * Parse the objects and set worksheet and/or worksheet.index of the object if it is not already defined.
+   * Currently, if the worksheet has been deleted, we still retain the object but clear worksheet props.
+   * @param objects restored object definitions from excel document.
+   */
+  restoreLegacyObjectsWithWorksheetAndIndex = async (objects: ObjectData[]): Promise<void> => {
+    const excelContext = await officeApiHelper.getExcelContext();
+    const { worksheets } = excelContext.workbook;
+
+    for (const object of objects || []) {
+      if (object && !object.worksheet) {
+        const objectWorksheet = await officeApiHelper.getExcelSheetFromTable(
+          excelContext,
+          object.bindId
+        );
+
+        if (objectWorksheet) {
+          objectWorksheet.load(['name', 'id', 'position']);
+          await excelContext.sync();
+          const { name, id, position } = objectWorksheet;
+          object.worksheet = { id, name, index: position };
+        }
+      } else if (object && object.worksheet && object.worksheet.index == null) {
+        const objectWorksheet = worksheets.getItemOrNullObject(object.worksheet.id);
+        objectWorksheet.load(['isNullObject', 'position']);
+        await excelContext.sync();
+
+        if (!objectWorksheet.isNullObject) {
+          object.worksheet.index = objectWorksheet.position;
+        } else {
+          // Clear worksheet props if the worksheet has been deleted
+          object.worksheet = { id: '', name: '', index: -1 };
+        }
+      }
+    }
   };
 
   /**
