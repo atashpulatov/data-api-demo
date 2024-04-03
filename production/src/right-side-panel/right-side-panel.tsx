@@ -7,6 +7,7 @@ import { officeApiHelper } from '../office/api/office-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import officeStoreHelper from '../office/store/office-store-helper';
 import { sidePanelEventHelper } from './side-panel-event-helper';
+import { injectGroupDataToObjects } from './side-panel-grouping-helper';
 import { sidePanelNotificationHelper } from './side-panel-notification-helper';
 import { sidePanelService } from './side-panel-service';
 
@@ -152,12 +153,18 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   }, [activeCellAddress, popupData]);
 
   useEffect(() => {
-    setLoadedObjectsWrapped(() =>
-      sidePanelNotificationHelper.injectNotificationsToObjects(
+    setLoadedObjectsWrapped(() => {
+      let newLoadedObjects = sidePanelNotificationHelper.injectNotificationsToObjects(
         loadedObjects,
         notifications,
         operations
       )
+      
+      // Add groupData 
+      newLoadedObjects = injectGroupDataToObjects(newLoadedObjects);
+
+      return newLoadedObjects
+    }
     );
   }, [loadedObjects, notifications, operations]);
 
