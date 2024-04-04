@@ -1,7 +1,6 @@
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
-import { ObjectData } from '../types/object-types';
 import {
   PageBy,
   PageByData,
@@ -101,15 +100,14 @@ class PageByHelper {
   /**
    * Gets new page by data based on object instance
    *
-   * @param objectData Contains information about MSTR object
+   * @param pageByData Contains information about MSTR object
    * @param instanceDefinition Object containing information about MSTR object
    * @returns PageByData object containing information about page-by elements
    */
   getPageByDataForDisplayType = (
-    objectData: ObjectData,
+    pageByData: PageByData,
     instanceDefinition: InstanceDefinition
   ): PageByData => {
-    const { pageByData } = objectData;
     switch (pageByData.pageByDisplayType) {
       case PageByDisplayType.DEFAULT_PAGE:
         return this.getPageByDataForDefaultPage(

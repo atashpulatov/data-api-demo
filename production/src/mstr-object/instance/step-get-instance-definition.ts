@@ -103,7 +103,7 @@ class StepGetInstanceDefinition {
       }
 
       if (pageByData) {
-        pageByData = pageByHelper.getPageByDataForDisplayType(objectData, instanceDefinition);
+        pageByData = pageByHelper.getPageByDataForDisplayType(pageByData, instanceDefinition);
       }
 
       this.savePreviousObjectData(
