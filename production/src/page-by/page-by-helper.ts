@@ -100,20 +100,22 @@ class PageByHelper {
   /**
    * Gets new page by data based on object instance
    *
-   * @param pageByData Contains information about MSTR object
-   * @param instanceDefinition Object containing information about MSTR object
+   * @param pageByData Contains information about Page-by data of given object
+   * @param instanceDefinition Object containing information about MSTR object instance definition
    * @returns PageByData object containing information about page-by elements
    */
   getPageByDataForDisplayType = (
     pageByData: PageByData,
     instanceDefinition: InstanceDefinition
   ): PageByData => {
+    const { pageByDisplayType, pageByLinkId } = pageByData;
+
     switch (pageByData.pageByDisplayType) {
       case PageByDisplayType.DEFAULT_PAGE:
         return this.getPageByDataForDefaultPage(
           instanceDefinition,
-          pageByData.pageByLinkId,
-          pageByData.pageByDisplayType
+          pageByLinkId,
+          pageByDisplayType
         );
       case PageByDisplayType.ALL_PAGES:
       case PageByDisplayType.SELECT_PAGES:
