@@ -109,7 +109,6 @@ class OfficeStoreRestoreObject {
             { object: objectWorksheet, key: 'isNullObject' },
             { object: objectWorksheet, key: 'position' },
           ]);
-          await excelContext.sync();
 
           if (!isNullObject) {
             object.worksheet.index = position;
