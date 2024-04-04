@@ -33,10 +33,7 @@ class OfficeStoreRestoreObject {
       objects = objects.filter((object: any) => !object.doNotPersist);
     }
 
-    // TODO: Condense functions that iterate through objects into one function
-    this.resetIsPromptedForDossiersWithAnswers(objects);
-    this.restoreLegacyObjectsWithImportType(objects);
-    await this.restoreLegacyObjectsWithWorksheetAndGroupData(objects);
+    await this.restoreLegacyObjectsWithNewProps(objects);
 
     settings.set(OfficeSettingsEnum.storedObjects, objects);
 
@@ -64,92 +61,94 @@ class OfficeStoreRestoreObject {
   };
 
   /**
-   * Parse the objects and set 'importType' to 'TABLE' if it is not defined.
-   *
-   * @param objects restored object definitions from excel document.
-   */
-  restoreLegacyObjectsWithImportType = (objects: ObjectData[]): void => {
-    objects?.forEach(object => {
-      if (object && !object.importType) {
-        object.importType = ObjectImportType.TABLE;
-      }
-    });
-  };
-
-  /**
-   * Parse the objects and set worksheet and groupData props of the object if not already defined.
-   * Currently, if the worksheet has been deleted, we still retain the object but clear worksheet props.
-   * @param objects restored object definitions from excel document.
-   */
-  restoreLegacyObjectsWithWorksheetAndGroupData = async (objects: ObjectData[]): Promise<void> => {
-    const excelContext = await officeApiHelper.getExcelContext();
-    const { worksheets } = excelContext.workbook;
-
-    let i;
-    for (i = 0; i < (objects || []).length; i++) {
-      const object = objects[i];
-
-      if (!object) i++; // Skip if object is undefined
-      // Restore worksheet related props
-      if (!object.worksheet) {
-        const objectWorksheet = await officeApiHelper.getExcelSheetFromTable(
-          excelContext,
-          object.bindId
-        );
-
-        if (objectWorksheet) {
-          const { name, id, position } = await officeApiDataLoader.loadExcelData(excelContext, [
-            { object: objectWorksheet, key: 'name' },
-            { object: objectWorksheet, key: 'id' },
-            { object: objectWorksheet, key: 'position' },
-          ]);
-          object.worksheet = { id, name, index: position };
-        }
-      } else if (
-        object.worksheet &&
-        (object.worksheet.index === undefined || object.worksheet.index === null)
-      ) {
-        const objectWorksheet = worksheets.getItemOrNullObject(object.worksheet.id);
-        const { isNullObject, position } = await officeApiDataLoader.loadExcelData(excelContext, [
-          { object: objectWorksheet, key: 'isNullObject' },
-          { object: objectWorksheet, key: 'position' },
-        ]);
-
-        if (!isNullObject) {
-          object.worksheet.index = position;
-        } else {
-          // Clear worksheet props if the worksheet has been deleted
-          object.worksheet = { id: '', name: '', index: -1 };
-        }
-      }
-      // Restore groupData related props
-      if (!object.groupData) {
-        const { worksheet } = object;
-        object.groupData = {
-          key: worksheet?.index || -1,
-          title: worksheet?.name || '',
-        };
-      }
-    }
-  };
-
-  /**
-   * Parse the objects and set the isPrompted flag to true if the dossier has prompt answers in the definition
+   * Set object's isPrompted flag to true if the dossier has prompt answers in the definition
    * and in the manipulationsXML properties, but isPrompted is false, and promptsAnswers is null.
    * This overrides the isPrompted flag, which was set to false in the previous version of the plugin even if
    * the dossier was prompted because it was loaded in consumption mode, and the user never had a chance to answer
    * the prompts or re-prompt the dossier to change the answers (it retained shortcut values).
-   *
-   * @param objects restored object definitions from excel document.
+   * @param object Restored object definition from excel document.
    */
-  resetIsPromptedForDossiersWithAnswers = (objects: ObjectData[]): void => {
-    objects
-      ?.filter(object => object.mstrObjectType.type === 55)
-      .forEach(object => {
-        if (!object.isPrompted) {
-          object.isPrompted = object.manipulationsXML?.promptAnswers !== undefined;
-        }
-      });
+  resetIsPromptedForDossierWithAnswers = (object: ObjectData): void => {
+    if (object && object.mstrObjectType.type === 55 && !object.isPrompted) {
+      object.isPrompted = object.manipulationsXML?.promptAnswers !== undefined;
+    }
+  };
+
+  /**
+   * Set object's 'importType' to 'TABLE' if it is not defined.
+   * @param object Restored object definition from excel document.
+   */
+  assignImportTypeToObject = (object: ObjectData): void => {
+    if (object && !object.importType) {
+      object.importType = ObjectImportType.TABLE;
+    }
+  };
+
+  /**
+   * Set worksheet and groupData props of the object if not already defined.
+   * Currently, if the worksheet has been deleted, we still retain the object but clear worksheet props.
+   * @param object Restored object definition from excel document.
+   */
+  assignWorksheetAndGroupDataToObject = async (object: ObjectData): Promise<void> => {
+    const excelContext = await officeApiHelper.getExcelContext();
+    const { worksheets } = excelContext.workbook;
+
+    if (object && !object.worksheet) {
+      const objectWorksheet = await officeApiHelper.getExcelSheetFromTable(
+        excelContext,
+        object.bindId
+      );
+
+      if (objectWorksheet) {
+        const { name, id, position } = await officeApiDataLoader.loadExcelData(excelContext, [
+          { object: objectWorksheet, key: 'name' },
+          { object: objectWorksheet, key: 'id' },
+          { object: objectWorksheet, key: 'position' },
+        ]);
+        object.worksheet = { id, name, index: position };
+      }
+    } else if (
+      object &&
+      object.worksheet &&
+      (object.worksheet.index === undefined || object.worksheet.index === null)
+    ) {
+      const objectWorksheet = worksheets.getItemOrNullObject(object.worksheet.id);
+      const { isNullObject, position } = await officeApiDataLoader.loadExcelData(excelContext, [
+        { object: objectWorksheet, key: 'isNullObject' },
+        { object: objectWorksheet, key: 'position' },
+      ]);
+
+      if (!isNullObject) {
+        object.worksheet.index = position;
+      } else {
+        // Clear worksheet props if the worksheet has been deleted
+        object.worksheet = { id: '', name: '', index: -1 };
+      }
+    }
+    // Restore groupData related props
+    if (!object.groupData) {
+      const { worksheet } = object;
+      object.groupData = {
+        key: worksheet?.index || -1,
+        title: worksheet?.name || '',
+      };
+    }
+  };
+
+  /**
+   * Parse the objects, then reset and assign properties to the object based on its existing
+   * properties in contrast to the newly expected properties.
+   * This includes resetting/assigning isPrompted, importType, worksheet, and groupData.
+   * @param objects Restored object definitions from excel document.
+   */
+  restoreLegacyObjectsWithNewProps = async (objects: ObjectData[]): Promise<void> => {
+    for (const object of objects || []) {
+      if (object) {
+        this.resetIsPromptedForDossierWithAnswers(object);
+        this.assignImportTypeToObject(object);
+        await this.assignWorksheetAndGroupDataToObject(object);
+      }
+    }
   };
 
   /**

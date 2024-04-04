@@ -84,13 +84,7 @@ describe.each`
         .spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsFromExcelStore')
         .mockReturnValue(restoredFromExcelObject);
       jest
-        .spyOn(officeStoreRestoreObject, 'resetIsPromptedForDossiersWithAnswers')
-        .mockReturnValue(restoredFromExcelObject);
-      jest
-        .spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsWithImportType')
-        .mockReturnValue(restoredFromExcelObject);
-      jest
-        .spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsWithWorksheetAndGroupData')
+        .spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsWithNewProps')
         .mockResolvedValue(restoredFromExcelObject);
       jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
@@ -107,11 +101,7 @@ describe.each`
         expectedObjectsFromProperties
       );
 
-      expect(officeStoreRestoreObject.resetIsPromptedForDossiersWithAnswers).toBeCalledTimes(1);
-      expect(officeStoreRestoreObject.restoreLegacyObjectsWithImportType).toBeCalledTimes(1);
-      expect(
-        officeStoreRestoreObject.restoreLegacyObjectsWithWorksheetAndGroupData
-      ).toBeCalledTimes(1);
+      expect(officeStoreRestoreObject.restoreLegacyObjectsWithNewProps).toBeCalledTimes(1);
 
       expect(reduxStore.dispatch).toBeCalledTimes(expectedDispatchCallNo);
       if (expectedDispatchCallNo === 1) {
@@ -159,11 +149,7 @@ describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
     jest
       .spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsFromExcelStore')
       .mockReturnValue('restoredObjectFromExcelTest' as unknown as ObjectData[]);
-    jest.spyOn(officeStoreRestoreObject, 'resetIsPromptedForDossiersWithAnswers').mockReturnValue();
-    jest.spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsWithImportType').mockReturnValue();
-    jest
-      .spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsWithWorksheetAndGroupData')
-      .mockResolvedValue();
+    jest.spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsWithNewProps').mockResolvedValue();
 
     jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
@@ -174,11 +160,7 @@ describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
     expect(officeStoreHelper.getOfficeSettings).toBeCalledTimes(1);
     expect(officeStoreHelper.getOfficeSettings).toBeCalledWith();
 
-    expect(officeStoreRestoreObject.resetIsPromptedForDossiersWithAnswers).toBeCalledTimes(1);
-    expect(officeStoreRestoreObject.restoreLegacyObjectsWithImportType).toBeCalledTimes(1);
-    expect(officeStoreRestoreObject.restoreLegacyObjectsWithWorksheetAndGroupData).toBeCalledTimes(
-      1
-    );
+    expect(officeStoreRestoreObject.restoreLegacyObjectsWithNewProps).toBeCalledTimes(1);
 
     expect(reduxStore.dispatch).toBeCalledTimes(1);
   });
