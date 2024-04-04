@@ -1,10 +1,7 @@
 import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
-import { pageByHelper } from '../../page-by/page-by-helper';
 import { mstrObjectRestService } from '../mstr-object-rest-service';
 
 import { PageByData, PageByDisplayType } from '../../page-by/page-by-types';
-import { InstanceDefinition } from '../../redux-reducer/operation-reducer/operation-reducer-types';
-import { ObjectData } from '../../types/object-types';
 
 import mstrObjectEnum from '../mstr-object-type-enum';
 import { DisplayAttrFormNames } from '../constants';
@@ -128,36 +125,6 @@ class InstanceDefinitionHelper {
       instanceDefinition,
       ...objectData,
     });
-  };
-
-  /**
-   * Gets new page by data based on object instance
-   *
-   * @param objectData Contains information about MSTR object
-   * @param instanceDefinition Object containing information about MSTR object
-   * @returns PageByData object containing information about page-by elements
-   */
-  getPageByDataForDisplayType = (
-    objectData: ObjectData,
-    instanceDefinition: InstanceDefinition
-  ): PageByData => {
-    const { pageByData } = objectData;
-    switch (pageByData.pageByDisplayType) {
-      case PageByDisplayType.DEFAULT_PAGE:
-        return pageByHelper.getPageByDataForDefaultPage(
-          instanceDefinition,
-          pageByData.pageByLinkId,
-          pageByData.pageByDisplayType
-        );
-      case PageByDisplayType.ALL_PAGES:
-        // TODO: Implement for ALL_PAGES
-        break;
-      case PageByDisplayType.SELECT_PAGES:
-        // TODO: Implement for SELECT_PAGES
-        break;
-      default:
-        break;
-    }
   };
 }
 

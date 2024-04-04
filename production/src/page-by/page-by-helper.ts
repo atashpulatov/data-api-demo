@@ -1,6 +1,7 @@
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../types/object-types';
 import {
   PageBy,
   PageByData,
@@ -95,6 +96,32 @@ class PageByHelper {
     };
 
     return pageByData;
+  };
+
+  /**
+   * Gets new page by data based on object instance
+   *
+   * @param objectData Contains information about MSTR object
+   * @param instanceDefinition Object containing information about MSTR object
+   * @returns PageByData object containing information about page-by elements
+   */
+  getPageByDataForDisplayType = (
+    objectData: ObjectData,
+    instanceDefinition: InstanceDefinition
+  ): PageByData => {
+    const { pageByData } = objectData;
+    switch (pageByData.pageByDisplayType) {
+      case PageByDisplayType.DEFAULT_PAGE:
+        return this.getPageByDataForDefaultPage(
+          instanceDefinition,
+          pageByData.pageByLinkId,
+          pageByData.pageByDisplayType
+        );
+      case PageByDisplayType.ALL_PAGES:
+      case PageByDisplayType.SELECT_PAGES:
+      default:
+        return pageByData;
+    }
   };
 }
 

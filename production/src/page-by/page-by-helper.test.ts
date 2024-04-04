@@ -2,6 +2,7 @@ import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { pageByHelper } from './page-by-helper';
 
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../types/object-types';
 import { PageByDisplayType } from './page-by-types';
 
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
@@ -129,5 +130,24 @@ describe('Page-by helper', () => {
 
     // then
     expect(pageByData).toEqual(mockedExpectedPageByData);
+  });
+
+  it('should  call getPageByDataForDefaultPage for display type DEFAULT_PAGE', () => {
+    // given
+    const objectData = {
+      pageByData: {
+        pageByDisplayType: PageByDisplayType.DEFAULT_PAGE,
+        pageByLinkId: 'pageByLinkId',
+      },
+    } as unknown as ObjectData;
+    const mockedInstanceDefinition = {};
+
+    jest.spyOn(pageByHelper, 'getPageByDataForDefaultPage').mockImplementation();
+
+    // when
+    pageByHelper.getPageByDataForDisplayType(objectData, mockedInstanceDefinition);
+
+    // then
+    expect(pageByHelper.getPageByDataForDefaultPage).toHaveBeenCalledTimes(1);
   });
 });

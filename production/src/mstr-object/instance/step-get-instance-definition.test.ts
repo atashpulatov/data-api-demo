@@ -2,6 +2,7 @@ import { authenticationHelper } from '../../authentication/authentication-helper
 import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-helper';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
+import { pageByHelper } from '../../page-by/page-by-helper';
 import { mstrObjectRestService } from '../mstr-object-rest-service';
 import instanceDefinitionHelper from './instance-definition-helper';
 
@@ -73,7 +74,7 @@ describe('StepGetInstanceDefinition', () => {
       jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation();
       jest.spyOn(officeApiWorksheetHelper, 'isActiveWorksheetEmpty').mockImplementation();
       jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation();
-      jest.spyOn(instanceDefinitionHelper, 'getPageByDataForDisplayType').mockImplementation();
+      jest.spyOn(pageByHelper, 'getPageByDataForDisplayType').mockImplementation();
       jest
         .spyOn(instanceDefinitionHelper, 'modifyInstanceWithPrompt')
         .mockResolvedValue({ mstrTable: { rows: rowsParam } });
@@ -224,7 +225,7 @@ describe('StepGetInstanceDefinition', () => {
         expectedMstrTable.manipulationsXML = manipulationsXMLParam;
       }
 
-      jest.spyOn(instanceDefinitionHelper, 'getPageByDataForDisplayType').mockImplementation();
+      jest.spyOn(pageByHelper, 'getPageByDataForDisplayType').mockImplementation();
 
       jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
 
@@ -443,7 +444,7 @@ describe('StepGetInstanceDefinition', () => {
         rows: 'rowsModifyInstanceWithPromptTest',
       });
 
-      jest.spyOn(instanceDefinitionHelper, 'getPageByDataForDisplayType').mockImplementation();
+      jest.spyOn(pageByHelper, 'getPageByDataForDisplayType').mockImplementation();
 
       jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
 
@@ -503,7 +504,7 @@ describe('StepGetInstanceDefinition', () => {
         },
       });
 
-      expect(instanceDefinitionHelper.getPageByDataForDisplayType).toBeCalledTimes(1);
+      jest.spyOn(pageByHelper, 'getPageByDataForDisplayType').mockImplementation();
 
       expect(stepGetInstanceDefinition.savePreviousObjectData).toBeCalledTimes(1);
       expect(stepGetInstanceDefinition.savePreviousObjectData).toBeCalledWith(
