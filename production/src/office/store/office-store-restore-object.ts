@@ -85,48 +85,50 @@ class OfficeStoreRestoreObject {
     const excelContext = await officeApiHelper.getExcelContext();
     const { worksheets } = excelContext.workbook;
 
-    for (const object of objects || []) {
-      if (object) {
-        // Restore worksheet related props
-        if (!object.worksheet) {
-          const objectWorksheet = await officeApiHelper.getExcelSheetFromTable(
-            excelContext,
-            object.bindId
-          );
+    let i;
+    for (i = 0; i < (objects || []).length; i++) {
+      const object = objects[i];
 
-          if (objectWorksheet) {
-            const { name, id, position } = await officeApiDataLoader.loadExcelData(excelContext, [
-              { object: objectWorksheet, key: 'name' },
-              { object: objectWorksheet, key: 'id' },
-              { object: objectWorksheet, key: 'position' },
-            ]);
-            object.worksheet = { id, name, index: position };
-          }
-        } else if (
-          object.worksheet &&
-          (object.worksheet.index === undefined || object.worksheet.index === null)
-        ) {
-          const objectWorksheet = worksheets.getItemOrNullObject(object.worksheet.id);
-          const { isNullObject, position } = await officeApiDataLoader.loadExcelData(excelContext, [
-            { object: objectWorksheet, key: 'isNullObject' },
+      if (!object) i++; // Skip if object is undefined
+      // Restore worksheet related props
+      if (!object.worksheet) {
+        const objectWorksheet = await officeApiHelper.getExcelSheetFromTable(
+          excelContext,
+          object.bindId
+        );
+
+        if (objectWorksheet) {
+          const { name, id, position } = await officeApiDataLoader.loadExcelData(excelContext, [
+            { object: objectWorksheet, key: 'name' },
+            { object: objectWorksheet, key: 'id' },
             { object: objectWorksheet, key: 'position' },
           ]);
+          object.worksheet = { id, name, index: position };
+        }
+      } else if (
+        object.worksheet &&
+        (object.worksheet.index === undefined || object.worksheet.index === null)
+      ) {
+        const objectWorksheet = worksheets.getItemOrNullObject(object.worksheet.id);
+        const { isNullObject, position } = await officeApiDataLoader.loadExcelData(excelContext, [
+          { object: objectWorksheet, key: 'isNullObject' },
+          { object: objectWorksheet, key: 'position' },
+        ]);
 
-          if (!isNullObject) {
-            object.worksheet.index = position;
-          } else {
-            // Clear worksheet props if the worksheet has been deleted
-            object.worksheet = { id: '', name: '', index: -1 };
-          }
+        if (!isNullObject) {
+          object.worksheet.index = position;
+        } else {
+          // Clear worksheet props if the worksheet has been deleted
+          object.worksheet = { id: '', name: '', index: -1 };
         }
-        // Restore groupData related props
-        if (!object.groupData) {
-          const { worksheet } = object;
-          object.groupData = {
-            key: worksheet?.index || -1,
-            title: worksheet?.name || '',
-          };
-        }
+      }
+      // Restore groupData related props
+      if (!object.groupData) {
+        const { worksheet } = object;
+        object.groupData = {
+          key: worksheet?.index || -1,
+          title: worksheet?.name || '',
+        };
       }
     }
   };
