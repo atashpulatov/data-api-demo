@@ -127,10 +127,10 @@ class OfficeStoreRestoreObject {
     }
     // Restore groupData related props
     if (!object.groupData) {
-      const { worksheet } = object;
+      const { worksheet: { index = -1, name = '' } = {} } = object;
       object.groupData = {
-        key: worksheet?.index || -1,
-        title: worksheet?.name || '',
+        key: index,
+        title: name,
       };
     }
   };
