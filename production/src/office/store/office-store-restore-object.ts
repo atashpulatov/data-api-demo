@@ -33,6 +33,7 @@ class OfficeStoreRestoreObject {
       objects = objects.filter((object: any) => !object.doNotPersist);
     }
 
+    // TODO: Condense functions that iterate through objects into one function
     this.resetIsPromptedForDossiersWithAnswers(objects);
     this.restoreLegacyObjectsWithImportType(objects);
     await this.restoreLegacyObjectsWithWorksheetAndIndex(objects);
