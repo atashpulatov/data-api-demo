@@ -36,7 +36,7 @@ class OfficeStoreRestoreObject {
     // TODO: Condense functions that iterate through objects into one function
     this.resetIsPromptedForDossiersWithAnswers(objects);
     this.restoreLegacyObjectsWithImportType(objects);
-    await this.restoreLegacyObjectsWithWorksheetAndIndex(objects);
+    await this.restoreLegacyObjectsWithWorksheetAndGroupData(objects);
 
     settings.set(OfficeSettingsEnum.storedObjects, objects);
 
@@ -77,16 +77,17 @@ class OfficeStoreRestoreObject {
   };
 
   /**
-   * Parse the objects and set worksheet and/or worksheet.index of the object if it is not already defined.
+   * Parse the objects and set worksheet and groupData props of the object if not already defined.
    * Currently, if the worksheet has been deleted, we still retain the object but clear worksheet props.
    * @param objects restored object definitions from excel document.
    */
-  restoreLegacyObjectsWithWorksheetAndIndex = async (objects: ObjectData[]): Promise<void> => {
+  restoreLegacyObjectsWithWorksheetAndGroupData = async (objects: ObjectData[]): Promise<void> => {
     const excelContext = await officeApiHelper.getExcelContext();
     const { worksheets } = excelContext.workbook;
 
     for (const object of objects || []) {
       if (object) {
+        // Restore worksheet related props
         if (!object.worksheet) {
           const objectWorksheet = await officeApiHelper.getExcelSheetFromTable(
             excelContext,
@@ -117,6 +118,14 @@ class OfficeStoreRestoreObject {
             // Clear worksheet props if the worksheet has been deleted
             object.worksheet = { id: '', name: '', index: -1 };
           }
+        }
+        // Restore groupData related props
+        if (!object.groupData) {
+          const { worksheet } = object;
+          object.groupData = {
+            key: worksheet?.index || -1,
+            title: worksheet?.name || '',
+          };
         }
       }
     }

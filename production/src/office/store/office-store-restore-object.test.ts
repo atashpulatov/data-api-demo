@@ -90,7 +90,7 @@ describe.each`
         .spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsWithImportType')
         .mockReturnValue(restoredFromExcelObject);
       jest
-        .spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsWithWorksheetAndIndex')
+        .spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsWithWorksheetAndGroupData')
         .mockResolvedValue(restoredFromExcelObject);
       jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
@@ -109,7 +109,9 @@ describe.each`
 
       expect(officeStoreRestoreObject.resetIsPromptedForDossiersWithAnswers).toBeCalledTimes(1);
       expect(officeStoreRestoreObject.restoreLegacyObjectsWithImportType).toBeCalledTimes(1);
-      expect(officeStoreRestoreObject.restoreLegacyObjectsWithWorksheetAndIndex).toBeCalledTimes(1);
+      expect(
+        officeStoreRestoreObject.restoreLegacyObjectsWithWorksheetAndGroupData
+      ).toBeCalledTimes(1);
 
       expect(reduxStore.dispatch).toBeCalledTimes(expectedDispatchCallNo);
       if (expectedDispatchCallNo === 1) {
@@ -160,7 +162,7 @@ describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
     jest.spyOn(officeStoreRestoreObject, 'resetIsPromptedForDossiersWithAnswers').mockReturnValue();
     jest.spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsWithImportType').mockReturnValue();
     jest
-      .spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsWithWorksheetAndIndex')
+      .spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsWithWorksheetAndGroupData')
       .mockResolvedValue();
 
     jest.spyOn(reduxStore, 'dispatch').mockImplementation();
@@ -174,7 +176,9 @@ describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
 
     expect(officeStoreRestoreObject.resetIsPromptedForDossiersWithAnswers).toBeCalledTimes(1);
     expect(officeStoreRestoreObject.restoreLegacyObjectsWithImportType).toBeCalledTimes(1);
-    expect(officeStoreRestoreObject.restoreLegacyObjectsWithWorksheetAndIndex).toBeCalledTimes(1);
+    expect(officeStoreRestoreObject.restoreLegacyObjectsWithWorksheetAndGroupData).toBeCalledTimes(
+      1
+    );
 
     expect(reduxStore.dispatch).toBeCalledTimes(1);
   });

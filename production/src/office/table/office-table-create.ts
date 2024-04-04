@@ -250,6 +250,7 @@ class OfficeTableCreate {
         bindId,
         tableName: newOfficeTableName,
         worksheet: { id, name, index: position },
+        groupData: { key: position, title: name },
       };
     } catch (error) {
       await excelContext.sync();

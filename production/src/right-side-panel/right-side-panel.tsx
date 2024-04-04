@@ -153,19 +153,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   }, [activeCellAddress, popupData]);
 
   useEffect(() => {
-    setLoadedObjectsWrapped(() => {
-      let newLoadedObjects = sidePanelNotificationHelper.injectNotificationsToObjects(
-        loadedObjects,
-        notifications,
-        operations
-      )
-      
-      // Add groupData 
-      newLoadedObjects = injectGroupDataToObjects(newLoadedObjects);
-
-      return newLoadedObjects
-    }
-    );
+    setLoadedObjectsWrapped(sidePanelNotificationHelper.injectNotificationsToObjects(loadedObjects, notifications, operations));
   }, [loadedObjects, notifications, operations]);
 
   /**

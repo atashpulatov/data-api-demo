@@ -105,16 +105,17 @@ class StepGetOfficeTableEditRefresh {
         tableChanged
       );
 
-      officeTable.worksheet.load(['id', 'name']);
+      officeTable.worksheet.load(['id', 'name', 'position']);
       await excelContext.sync();
 
-      const { id, name } = officeTable.worksheet;
+      const { id, name, position } = officeTable.worksheet;
 
       const updatedObject = {
         objectWorkingId,
         bindId,
         startCell,
-        worksheet: { id, name },
+        worksheet: { id, name, index: position },
+        groupData: { key: position, title: name },
       };
 
       operationStepDispatcher.updateOperation(updatedOperation);
