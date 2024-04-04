@@ -8,6 +8,7 @@ import { ObjectData } from '../../types/object-types';
 import { errorService } from '../../error/error-handler';
 import { restoreAllAnswers } from '../../redux-reducer/answers-reducer/answers-actions';
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
+import officeApiDataLoader from '../api/office-api-data-loader';
 import { officeContext } from '../office-context';
 import { OfficeSettingsEnum } from '../../constants/office-constants';
 import { ObjectImportType } from '../../mstr-object/constants';
@@ -84,28 +85,38 @@ class OfficeStoreRestoreObject {
     const { worksheets } = excelContext.workbook;
 
     for (const object of objects || []) {
-      if (object && !object.worksheet) {
-        const objectWorksheet = await officeApiHelper.getExcelSheetFromTable(
-          excelContext,
-          object.bindId
-        );
+      if (object) {
+        if (!object.worksheet) {
+          const objectWorksheet = await officeApiHelper.getExcelSheetFromTable(
+            excelContext,
+            object.bindId
+          );
 
-        if (objectWorksheet) {
-          objectWorksheet.load(['name', 'id', 'position']);
+          if (objectWorksheet) {
+            const { name, id, position } = await officeApiDataLoader.loadExcelData(excelContext, [
+              { object: objectWorksheet, key: 'name' },
+              { object: objectWorksheet, key: 'id' },
+              { object: objectWorksheet, key: 'position' },
+            ]);
+            object.worksheet = { id, name, index: position };
+          }
+        } else if (
+          object.worksheet &&
+          (object.worksheet.index === undefined || object.worksheet.index === null)
+        ) {
+          const objectWorksheet = worksheets.getItemOrNullObject(object.worksheet.id);
+          const { isNullObject, position } = await officeApiDataLoader.loadExcelData(excelContext, [
+            { object: objectWorksheet, key: 'isNullObject' },
+            { object: objectWorksheet, key: 'position' },
+          ]);
           await excelContext.sync();
-          const { name, id, position } = objectWorksheet;
-          object.worksheet = { id, name, index: position };
-        }
-      } else if (object && object.worksheet && object.worksheet.index == null) {
-        const objectWorksheet = worksheets.getItemOrNullObject(object.worksheet.id);
-        objectWorksheet.load(['isNullObject', 'position']);
-        await excelContext.sync();
 
-        if (!objectWorksheet.isNullObject) {
-          object.worksheet.index = objectWorksheet.position;
-        } else {
-          // Clear worksheet props if the worksheet has been deleted
-          object.worksheet = { id: '', name: '', index: -1 };
+          if (!isNullObject) {
+            object.worksheet.index = position;
+          } else {
+            // Clear worksheet props if the worksheet has been deleted
+            object.worksheet = { id: '', name: '', index: -1 };
+          }
         }
       }
     }
