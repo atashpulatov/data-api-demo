@@ -110,7 +110,7 @@ class PageByHelper {
   ): PageByData => {
     const { pageByDisplayType, pageByLinkId } = pageByData;
 
-    switch (pageByData.pageByDisplayType) {
+    switch (pageByDisplayType) {
       case PageByDisplayType.DEFAULT_PAGE:
         return this.getPageByDataForDefaultPage(
           instanceDefinition,
