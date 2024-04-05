@@ -70,6 +70,17 @@ export interface Body {
   promptAnswers?: any;
 }
 
+export interface Worksheet {
+  id: string;
+  name: string;
+  index: number;
+}
+
+export interface GroupData {
+  key: number;
+  title: string;
+}
+
 export interface ObjectData {
   body?: Body;
   objectWorkingId?: number;
@@ -94,10 +105,11 @@ export interface ObjectData {
   isCrosstab?: boolean;
   details?: ObjectDetails;
   tableName?: string;
-  worksheet?: any;
+  worksheet?: Worksheet;
   startCell?: string;
   response?: any;
   pageByData?: PageByData;
+  groupData?: GroupData;
   previousTableDimensions?: TableDimensions;
   insertNewWorksheet?: boolean;
   bindIdToBeDuplicated?: string;

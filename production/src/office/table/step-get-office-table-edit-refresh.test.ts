@@ -21,6 +21,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
     worksheet: {
       id: 1,
       name: 'worksheetTest',
+      position: 0,
       load: mockFn,
     },
   };
@@ -144,7 +145,8 @@ describe('StepGetOfficeTableEditRefresh', () => {
       objectWorkingId: 'objectWorkingIdTest',
       bindId: 'bindIdTest',
       startCell: 'startCellTest',
-      worksheet: { id: 1, name: 'worksheetTest' },
+      worksheet: { id: 1, name: 'worksheetTest', index: 0 },
+      groupData: { key: 0, title: 'worksheetTest' },
     });
 
     expect(operationStepDispatcher.completeGetOfficeTableEditRefresh).toBeCalledTimes(1);
@@ -240,7 +242,8 @@ describe('StepGetOfficeTableEditRefresh', () => {
         objectWorkingId: 'objectWorkingIdTest',
         bindId: 'oldBindIdTest',
         startCell: 'startCellTest',
-        worksheet: { id: 1, name: 'worksheetTest' },
+        worksheet: { id: 1, name: 'worksheetTest', index: 0 },
+        groupData: { key: 0, title: 'worksheetTest' },
       });
 
       expect(operationStepDispatcher.completeGetOfficeTableEditRefresh).toBeCalledTimes(1);

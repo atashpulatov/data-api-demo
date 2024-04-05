@@ -32,6 +32,10 @@ class StepRenameExcelWorksheet {
             ...objectData.worksheet,
             name: newName,
           },
+          groupData: {
+            ...objectData.groupData,
+            title: newName,
+          },
         });
       }
 

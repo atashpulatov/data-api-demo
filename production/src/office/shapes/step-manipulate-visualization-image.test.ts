@@ -46,6 +46,7 @@ describe('stepManipulateVisualizationImage', () => {
   const mockSheet = {
     id: 'mockedSheetId',
     name: 'mockedSheetName',
+    position: 0,
     shapes: {
       addImage: jest.fn().mockImplementation(_image =>
         Promise.resolve({
@@ -101,6 +102,11 @@ describe('stepManipulateVisualizationImage', () => {
     worksheet: {
       id: 'mockedSheetId',
       name: 'mockedSheetName',
+      index: 0,
+    },
+    groupData: {
+      key: 0,
+      title: 'mockedSheetName',
     },
   } as unknown as ObjectData;
 

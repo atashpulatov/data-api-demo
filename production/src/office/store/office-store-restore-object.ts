@@ -1,3 +1,4 @@
+import { officeApiHelper } from '../api/office-api-helper';
 import officeStoreHelper from './office-store-helper';
 
 import { ReduxStore } from '../../store';
@@ -7,6 +8,7 @@ import { ObjectData } from '../../types/object-types';
 import { errorService } from '../../error/error-handler';
 import { restoreAllAnswers } from '../../redux-reducer/answers-reducer/answers-actions';
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
+import officeApiDataLoader from '../api/office-api-data-loader';
 import { officeContext } from '../office-context';
 import { OfficeSettingsEnum } from '../../constants/office-constants';
 import { ObjectImportType } from '../../mstr-object/constants';
@@ -23,7 +25,7 @@ class OfficeStoreRestoreObject {
    * maps them to new format of data and stores them in Redux and Office Settings,
    * and then remove the previously stored information from Office settings
    */
-  restoreObjectsFromExcelStore = (): void => {
+  restoreObjectsFromExcelStore = async (): Promise<void> => {
     const settings = officeStoreHelper.getOfficeSettings();
     let objects = settings.get(OfficeSettingsEnum.storedObjects) || [];
     objects = this.restoreLegacyObjectsFromExcelStore(settings, objects);
@@ -31,8 +33,7 @@ class OfficeStoreRestoreObject {
       objects = objects.filter((object: any) => !object.doNotPersist);
     }
 
-    this.resetIsPromptedForDossiersWithAnswers(objects);
-    this.restoreLegacyObjectsWithImportType(objects);
+    await this.restoreLegacyObjectsWithNewProps(objects);
 
     settings.set(OfficeSettingsEnum.storedObjects, objects);
 
@@ -60,35 +61,94 @@ class OfficeStoreRestoreObject {
   };
 
   /**
-   * Parse the objects and set 'importType' to 'TABLE' if it is not defined.
-   *
-   * @param objects restored object definitions from excel document.
-   */
-  restoreLegacyObjectsWithImportType = (objects: ObjectData[]): void => {
-    objects?.forEach(object => {
-      if (object && !object.importType) {
-        object.importType = ObjectImportType.TABLE;
-      }
-    });
-  };
-
-  /**
-   * Parse the objects and set the isPrompted flag to true if the dossier has prompt answers in the definition
+   * Set object's isPrompted flag to true if the dossier has prompt answers in the definition
    * and in the manipulationsXML properties, but isPrompted is false, and promptsAnswers is null.
    * This overrides the isPrompted flag, which was set to false in the previous version of the plugin even if
    * the dossier was prompted because it was loaded in consumption mode, and the user never had a chance to answer
    * the prompts or re-prompt the dossier to change the answers (it retained shortcut values).
-   *
-   * @param objects restored object definitions from excel document.
+   * @param object Restored object definition from excel document.
    */
-  resetIsPromptedForDossiersWithAnswers = (objects: ObjectData[]): void => {
-    objects
-      ?.filter(object => object.mstrObjectType.type === 55)
-      .forEach(object => {
-        if (!object.isPrompted) {
-          object.isPrompted = object.manipulationsXML?.promptAnswers !== undefined;
-        }
-      });
+  resetIsPromptedForDossierWithAnswers = (object: ObjectData): void => {
+    if (object && object.mstrObjectType.type === 55 && !object.isPrompted) {
+      object.isPrompted = object.manipulationsXML?.promptAnswers !== undefined;
+    }
+  };
+
+  /**
+   * Set object's 'importType' to 'TABLE' if it is not defined.
+   * @param object Restored object definition from excel document.
+   */
+  assignImportTypeToObject = (object: ObjectData): void => {
+    if (object && !object.importType) {
+      object.importType = ObjectImportType.TABLE;
+    }
+  };
+
+  /**
+   * Set worksheet and groupData props of the object if not already defined.
+   * Currently, if the worksheet has been deleted, we still retain the object but clear worksheet props.
+   * @param object Restored object definition from excel document.
+   */
+  assignWorksheetAndGroupDataToObject = async (object: ObjectData): Promise<void> => {
+    const excelContext = await officeApiHelper.getExcelContext();
+    const { worksheets } = excelContext.workbook;
+
+    if (object && !object.worksheet) {
+      const objectWorksheet = await officeApiHelper.getExcelSheetFromTable(
+        excelContext,
+        object.bindId
+      );
+
+      if (objectWorksheet) {
+        const { name, id, position } = await officeApiDataLoader.loadExcelData(excelContext, [
+          { object: objectWorksheet, key: 'name' },
+          { object: objectWorksheet, key: 'id' },
+          { object: objectWorksheet, key: 'position' },
+        ]);
+        object.worksheet = { id, name, index: position };
+      }
+    } else if (
+      object &&
+      object.worksheet &&
+      (object.worksheet.index === undefined || object.worksheet.index === null)
+    ) {
+      const objectWorksheet = worksheets.getItemOrNullObject(object.worksheet.id);
+      const { isNullObject, position } = await officeApiDataLoader.loadExcelData(excelContext, [
+        { object: objectWorksheet, key: 'isNullObject' },
+        { object: objectWorksheet, key: 'position' },
+      ]);
+
+      if (!isNullObject) {
+        object.worksheet.index = position;
+      } else {
+        // Clear worksheet props if the worksheet has been deleted
+        object.worksheet = { id: '', name: '', index: -1 };
+      }
+    }
+    // Restore groupData related props
+    if (!object.groupData) {
+      const { worksheet: { index = -1, name = '' } = {} } = object;
+      object.groupData = {
+        key: index,
+        title: name,
+      };
+    }
+  };
+
+  /**
+   * Parse the objects, then reset and assign properties to the object based on its existing
+   * properties in contrast to the newly expected properties.
+   * This includes resetting/assigning isPrompted, importType, worksheet, and groupData.
+   * @param objects Restored object definitions from excel document.
+   */
+  restoreLegacyObjectsWithNewProps = async (objects: ObjectData[]): Promise<void> => {
+    for (const object of objects || []) {
+      if (object) {
+        this.resetIsPromptedForDossierWithAnswers(object);
+        this.assignImportTypeToObject(object);
+        await this.assignWorksheetAndGroupDataToObject(object);
+      }
+    }
   };
 
   /**

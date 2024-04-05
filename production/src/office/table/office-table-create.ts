@@ -237,19 +237,20 @@ class OfficeTableCreate {
       }
 
       worksheet.activate();
-      worksheet.load(['name', 'id']);
+      worksheet.load(['name', 'id', 'position']);
 
       await excelContext.sync();
 
       const bindId = officeTable.id;
 
-      const { id, name } = worksheet;
+      const { id, name, position } = worksheet;
 
       return {
         officeTable,
         bindId,
         tableName: newOfficeTableName,
-        worksheet: { id, name },
+        worksheet: { id, name, index: position },
+        groupData: { key: position, title: name },
       };
     } catch (error) {
       await excelContext.sync();
