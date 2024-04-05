@@ -77,7 +77,7 @@ export interface Worksheet {
 }
 
 export interface GroupData {
-  key: number | string;
+  key: number;
   title: string;
 }
 
