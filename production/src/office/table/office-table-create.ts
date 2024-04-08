@@ -4,6 +4,8 @@ import { officeApiWorksheetHelper } from '../api/office-api-worksheet-helper';
 import getOfficeTableHelper from './get-office-table-helper';
 import officeTableHelperRange from './office-table-helper-range';
 
+import { PageByData } from '../../page-by/page-by-types';
+
 const DEFAULT_TABLE_STYLE = 'TableStyleLight11';
 
 class OfficeTableCreate {
@@ -19,6 +21,7 @@ class OfficeTableCreate {
    * @param tableChanged Specify if table columns has been changed. False by default
    * @param isRepeatStep Specify if repeat creating of the table
    * @param insertNewWorksheet Specify if new worksheet has to be created before creating the table
+   * @param pageByData Contains information about page-by elements
    *
    */
   async createOfficeTable({
@@ -30,6 +33,7 @@ class OfficeTableCreate {
     tableChanged = false,
     isRepeatStep,
     insertNewWorksheet,
+    pageByData,
   }: {
     instanceDefinition: any;
     excelContext: Excel.RequestContext;
@@ -39,6 +43,7 @@ class OfficeTableCreate {
     tableChanged?: boolean;
     isRepeatStep?: boolean;
     insertNewWorksheet: boolean;
+    pageByData?: PageByData;
   }): Promise<any> {
     const {
       rows,
@@ -53,7 +58,8 @@ class OfficeTableCreate {
       startCell = await officeApiWorksheetHelper.getStartCell(
         insertNewWorksheet,
         excelContext,
-        name
+        name,
+        pageByData
       );
     }
 

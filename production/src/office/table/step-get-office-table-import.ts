@@ -31,6 +31,7 @@ class StepGetOfficeTableImport {
           instanceDefinition,
           startCell,
           insertNewWorksheet,
+          pageByData: objectData.pageByData,
         });
 
       const updatedOperation = {

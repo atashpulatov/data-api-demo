@@ -1,5 +1,7 @@
 import { officeApiHelper } from './office-api-helper';
 
+import { PageByData, PageByWorksheetNaming } from '../../page-by/page-by-types';
+
 import { ProtectedSheetError } from '../../error/protected-sheets-error';
 
 class OfficeApiWorksheetHelper {
@@ -73,13 +75,15 @@ class OfficeApiWorksheetHelper {
    *
    * @param excelContext Reference to Excel Context used by Excel API functions
    * @param objectName Name of the object added to the worksheet
+   * @param pageByData Contains information about page-by elements
    *
    */
   async createAndActivateNewWorksheet(
     excelContext: Excel.RequestContext,
-    objectName: string
+    objectName: string,
+    pageByData?: PageByData
   ): Promise<void> {
-    const newSheetName = await this.prepareWorksheetName(excelContext, objectName);
+    const newSheetName = await this.prepareWorksheetName(excelContext, objectName, pageByData);
 
     const sheets = excelContext.workbook.worksheets;
     await excelContext.sync();
@@ -97,17 +101,55 @@ class OfficeApiWorksheetHelper {
    * @param insertNewWorksheet specify whether new worksheet should be create before getting startcell
    * @param excelContext Reference to Excel Context used by Excel API functions
    * @param objectName Name of the object added to the new worksheet
+   * @param pageByData Contains information about page-by elements
    * @return address of Excel cell
    */
   async getStartCell(
     insertNewWorksheet: boolean,
     excelContext: Excel.RequestContext,
-    objectName: string
+    objectName: string,
+    pageByData?: PageByData
   ): Promise<string> {
     if (insertNewWorksheet) {
-      await this.createAndActivateNewWorksheet(excelContext, objectName);
+      await this.createAndActivateNewWorksheet(excelContext, objectName, pageByData);
     }
     return officeApiHelper.getSelectedCell(excelContext);
+  }
+
+  /**
+   * Generates a worksheet name based on naming conventions and pageBy value
+   * @param objectName Name of the object added to the new worksheet
+   * @param pageByData Contains information about page-by elements
+   * @param currentNamingSetting name setting chosed by user
+   * @return Generated worksheet name.
+   */
+  prepareNameBasedOnPageBySettings(
+    reportName: string,
+    pageByData: PageByData,
+    // TODO: Replace with actual setting from the user when implemented
+    currentNamingSetting: PageByWorksheetNaming
+  ): string {
+    const pageByElement = pageByData.elements.map(element => element.value).join(', ');
+    let newSheetName;
+
+    switch (currentNamingSetting) {
+      case PageByWorksheetNaming.USE_REPORT_NAME:
+        newSheetName = reportName;
+        break;
+      case PageByWorksheetNaming.USE_PAGE_NAME:
+        newSheetName = pageByElement;
+        break;
+      case PageByWorksheetNaming.USE_PAGE_NAME_AND_REPORT_NAME:
+        newSheetName = `${pageByElement} - ${reportName}`;
+        break;
+      case PageByWorksheetNaming.USE_REPORT_NAME_AND_PAGE_NAME:
+        newSheetName = `${reportName} - ${pageByElement}`;
+        break;
+      default:
+        break;
+    }
+
+    return newSheetName;
   }
 
   /**
@@ -118,21 +160,31 @@ class OfficeApiWorksheetHelper {
    *
    * @param excelContext Reference to Excel Context used by Excel API functions
    * @param objectName Name of the object added to the worksheet
+   * @param pageByData Contains information about page-by elements
    * @returns New Excel worksheet name
    */
   async prepareWorksheetName(
     excelContext: Excel.RequestContext,
-    objectName: string
+    objectName: string,
+    pageByData?: PageByData
   ): Promise<string> {
     const EXCEL_WORKSHEET_CHAR_LIMIT = 31;
 
     const sheets = excelContext.workbook.worksheets;
-
     sheets.load('items/name');
     await excelContext.sync();
     const sheetsNames = sheets.items.map(item => item.name);
 
     let newSheetName = objectName.replace(/[:?*\\/\][]/g, '_');
+
+    if (pageByData) {
+      newSheetName = this.prepareNameBasedOnPageBySettings(
+        newSheetName,
+        pageByData,
+        // TODO: Replace with actual setting from the user when implemented
+        PageByWorksheetNaming.USE_REPORT_NAME
+      );
+    }
 
     // if objectName only contains whitespaces replace it with _
     if (!newSheetName.replace(/\s/g, '').length) {
@@ -180,16 +232,18 @@ class OfficeApiWorksheetHelper {
    *
    * @param excelContext Reference to Excel Context used by Excel API functions
    * @param objectName Name of the object added to the worksheet
+   * @param pageByData Contains information about page-by elements
    *
    * @returns New Excel worksheet name
    */
 
   async renameExistingWorksheet(
     excelContext: Excel.RequestContext,
-    objectName: string
+    objectName: string,
+    pageByData?: PageByData
   ): Promise<string> {
     const currentSheet = excelContext.workbook.worksheets.getActiveWorksheet();
-    const newSheetName = await this.prepareWorksheetName(excelContext, objectName);
+    const newSheetName = await this.prepareWorksheetName(excelContext, objectName, pageByData);
 
     currentSheet.name = newSheetName;
     await excelContext.sync();

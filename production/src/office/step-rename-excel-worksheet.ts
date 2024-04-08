@@ -20,11 +20,14 @@ class StepRenameExcelWorksheet {
    */
   async renameExcelWorksheet(objectData: ObjectData, operationData: OperationData): Promise<void> {
     try {
-      const { objectWorkingId, name } = objectData;
+      const { objectWorkingId, name, pageByData } = objectData;
       const { excelContext, shouldRenameExcelWorksheet } = operationData;
-
       if (shouldRenameExcelWorksheet) {
-        const newName = await officeApiWorksheetHelper.renameExistingWorksheet(excelContext, name);
+        const newName = await officeApiWorksheetHelper.renameExistingWorksheet(
+          excelContext,
+          name,
+          pageByData
+        );
 
         operationStepDispatcher.updateObject({
           ...objectData,

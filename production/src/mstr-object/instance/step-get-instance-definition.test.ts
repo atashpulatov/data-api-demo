@@ -317,7 +317,8 @@ describe('StepGetInstanceDefinition', () => {
         expect(officeApiWorksheetHelper.getStartCell).toBeCalledWith(
           'insertNewWorksheetTest',
           'excelContextTest',
-          'getVisualizationNameTest'
+          'getVisualizationNameTest',
+          undefined
         );
       }
 
@@ -531,7 +532,8 @@ describe('StepGetInstanceDefinition', () => {
         expect(officeApiWorksheetHelper.getStartCell).toBeCalledWith(
           'insertNewWorksheetTest',
           'excelContextTest',
-          'nameTest'
+          'nameTest',
+          undefined
         );
       }
 
@@ -831,7 +833,8 @@ describe('StepGetInstanceDefinition', () => {
       if (createAndActivateNewWorksheetCallNo === 1) {
         expect(officeApiWorksheetHelper.createAndActivateNewWorksheet).toBeCalledWith(
           'excelContextTest',
-          'nameTest'
+          'nameTest',
+          undefined
         );
       }
 

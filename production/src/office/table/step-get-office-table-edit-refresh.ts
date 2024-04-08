@@ -35,7 +35,7 @@ class StepGetOfficeTableEditRefresh {
   ): Promise<void> {
     try {
       console.time('Create or get table - edit or refresh');
-      const { tableName, previousTableDimensions, objectWorkingId } = objectData;
+      const { tableName, previousTableDimensions, objectWorkingId, pageByData } = objectData;
       const { excelContext, instanceDefinition, oldBindId, objectEditedData, insertNewWorksheet } =
         operationData;
       let { tableChanged, startCell } = operationData;
@@ -74,6 +74,7 @@ class StepGetOfficeTableEditRefresh {
           tableChanged,
           isRepeatStep,
           insertNewWorksheet,
+          pageByData,
         }));
       } else {
         shouldFormat =

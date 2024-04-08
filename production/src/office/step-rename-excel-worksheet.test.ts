@@ -75,7 +75,11 @@ describe('StepRenameExcelWorksheet', () => {
 
     // then
     expect(officeApiWorksheetHelper.renameExistingWorksheet).toBeCalledTimes(1);
-    expect(officeApiWorksheetHelper.renameExistingWorksheet).toBeCalledWith(excelContext, 'test');
+    expect(officeApiWorksheetHelper.renameExistingWorksheet).toBeCalledWith(
+      excelContext,
+      'test',
+      undefined
+    );
     expect(operationStepDispatcher.updateObject).toBeCalledTimes(1);
     expect(operationStepDispatcher.updateObject).toBeCalledWith(expectedObject);
   });
