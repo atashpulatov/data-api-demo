@@ -64,8 +64,6 @@ class StepGetInstanceDefinition {
 
       const excelContext = await officeApiHelper.getExcelContext();
 
-      this.setupBodyTemplate(body);
-
       let startCell: string;
       let instanceDefinition = preparedInstanceDefinition;
       let shouldRenameExcelWorksheet = false;
@@ -83,6 +81,8 @@ class StepGetInstanceDefinition {
           instanceDefinition
         );
       } else if (!instanceDefinition) {
+        body = instanceDefinitionHelper.setupBodyTemplate(body);
+
         // @ts-expect-error
         instanceDefinition = await mstrObjectRestService.createInstance(objectData);
       }
@@ -91,9 +91,12 @@ class StepGetInstanceDefinition {
         // @ts-expect-error
         instanceDefinition = await instanceDefinitionHelper.modifyInstanceWithPrompt({
           ...objectData,
+          body,
           instanceDefinition,
         });
-      } else {
+      }
+
+      if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name) {
         instanceDefinition = await instanceDefinitionHelper.modifyInstanceForPageBy(
           objectData,
           pageByData,
@@ -178,25 +181,6 @@ class StepGetInstanceDefinition {
     } finally {
       console.timeEnd('Total');
       console.groupEnd();
-    }
-  };
-
-  /**
-   * Setups body.template to be equal body.requestedObject.
-   *
-   * Deletes body.requestedObject when no attributes and metrics defined.
-   *
-   * @param body to modify template and requestedObject
-   */
-  setupBodyTemplate = (body: any): void => {
-    if (body && body.requestedObjects) {
-      if (
-        body.requestedObjects.attributes.length === 0 &&
-        body.requestedObjects.metrics.length === 0
-      ) {
-        delete body.requestedObjects;
-      }
-      body.template = body.requestedObjects;
     }
   };
 

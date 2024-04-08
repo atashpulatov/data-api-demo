@@ -72,6 +72,7 @@ export const AttributeSelectorWindowNotConnected: React.FC<
       subtotalsInfo,
       displayAttrFormNames: displayAttrFormNamesSet,
       filterDetails,
+      pageByData: editedObject?.pageByData,
     };
     popupHelper.officeMessageParent(message);
   };

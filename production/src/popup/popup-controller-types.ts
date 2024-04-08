@@ -1,6 +1,7 @@
 import { Body, DossierData, SubtotalsInfo, VisualizationInfo } from '../types/object-types';
 
 import mstrObjectType from '../mstr-object/mstr-object-type-enum';
+import { DisplayAttrFormNames, ObjectImportType } from '../mstr-object/constants';
 
 // TODO: Fix any types
 export interface DialogResponse {
@@ -17,12 +18,12 @@ export interface DialogResponse {
   chosenObjectSubtype?: string;
   chosenSubtype?: number;
   dossierData?: DossierData;
-  importType?: string;
+  importType?: ObjectImportType;
   isPrompted?: boolean;
   promptsAnswers?: any;
   visualizationInfo?: VisualizationInfo;
   preparedInstanceId?: string;
-  displayAttrFormNames?: string;
+  displayAttrFormNames?: DisplayAttrFormNames;
   projectId?: string;
   body?: Body;
   instanceId?: number;

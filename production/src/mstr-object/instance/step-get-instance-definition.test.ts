@@ -164,7 +164,7 @@ describe('StepGetInstanceDefinition', () => {
           name: mstrObjectEnum.mstrObjectType.visualization.name,
         },
         visualizationInfo: 'visualizationInfoTest',
-        body: 'bodyTest',
+        body: 'bodyDossierTest',
         name: 'nameTest',
         importType: 'table',
       } as unknown as ObjectData;
@@ -177,8 +177,6 @@ describe('StepGetInstanceDefinition', () => {
         envUrl: 'envUrlTest',
         username: 'usernameTest',
       });
-
-      jest.spyOn(stepGetInstanceDefinition, 'setupBodyTemplate').mockImplementation();
 
       jest.spyOn(dossierInstanceDefinition, 'getDossierInstanceDefinition').mockResolvedValue({
         body: 'bodyDossierTest',
@@ -244,9 +242,6 @@ describe('StepGetInstanceDefinition', () => {
       // then
       expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
 
-      expect(stepGetInstanceDefinition.setupBodyTemplate).toBeCalledTimes(1);
-      expect(stepGetInstanceDefinition.setupBodyTemplate).toBeCalledWith('bodyTest');
-
       expect(dossierInstanceDefinition.getDossierInstanceDefinition).toBeCalledTimes(1);
       expect(dossierInstanceDefinition.getDossierInstanceDefinition).toBeCalledWith({
         objectWorkingId: 'objectWorkingIdTest',
@@ -259,7 +254,7 @@ describe('StepGetInstanceDefinition', () => {
         mstrObjectType: {
           name: mstrObjectEnum.mstrObjectType.visualization.name,
         },
-        body: 'bodyTest',
+        body: 'bodyDossierTest',
         visualizationInfo: 'visualizationInfoTest',
         name: 'nameTest',
         importType: 'table',
@@ -293,7 +288,7 @@ describe('StepGetInstanceDefinition', () => {
           name: mstrObjectEnum.mstrObjectType.visualization.name,
         },
         visualizationInfo: 'visualizationInfoTest',
-        body: 'bodyTest',
+        body: 'bodyDossierTest',
         insertNewWorksheet: 'insertNewWorksheetTest',
         crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
         name: 'nameTest',
@@ -422,7 +417,7 @@ describe('StepGetInstanceDefinition', () => {
         username: 'usernameTest',
       });
 
-      jest.spyOn(stepGetInstanceDefinition, 'setupBodyTemplate').mockImplementation();
+      jest.spyOn(instanceDefinitionHelper, 'setupBodyTemplate').mockReturnValue(objectData.body);
 
       jest.spyOn(dossierInstanceDefinition, 'getDossierInstanceDefinition').mockImplementation();
 
@@ -464,8 +459,8 @@ describe('StepGetInstanceDefinition', () => {
       // then
       expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
 
-      expect(stepGetInstanceDefinition.setupBodyTemplate).toBeCalledTimes(1);
-      expect(stepGetInstanceDefinition.setupBodyTemplate).toBeCalledWith('bodyTest');
+      expect(instanceDefinitionHelper.setupBodyTemplate).toBeCalledTimes(1);
+      expect(instanceDefinitionHelper.setupBodyTemplate).toBeCalledWith('bodyTest');
 
       expect(dossierInstanceDefinition.getDossierInstanceDefinition).not.toBeCalled();
 
@@ -602,11 +597,11 @@ describe('StepGetInstanceDefinition', () => {
     'setupBodyTemplate should work as expected',
     ({ expectedBodyTemplate, expectedRequestedObjects, body }) => {
       // when
-      stepGetInstanceDefinition.setupBodyTemplate(body);
+      const modifiedBody = instanceDefinitionHelper.setupBodyTemplate(body);
 
       // then
-      expect(body.template).toEqual(expectedBodyTemplate);
-      expect(body.requestedObjects).toEqual(expectedRequestedObjects);
+      expect(modifiedBody.template).toEqual(expectedBodyTemplate);
+      expect(modifiedBody.requestedObjects).toEqual(expectedRequestedObjects);
     }
   );
 

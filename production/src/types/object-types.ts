@@ -1,3 +1,4 @@
+import { Attribute } from '../mstr-object/mstr-object-response-types';
 import { MstrObjectTypes } from '../mstr-object/mstr-object-types';
 import { PageByData } from '../page-by/page-by-types';
 
@@ -56,9 +57,14 @@ export interface SubtotalsInfo {
   importSubtotal: boolean;
 }
 
-export interface envUrl {
+export interface EnvUrl {
   envUrl: string;
   username: string;
+}
+
+interface RequestedObjects {
+  attributes: Attribute[];
+  metrics: { id: string }[];
 }
 
 export interface Body {
@@ -67,7 +73,9 @@ export interface Body {
     operator: string;
   };
   manipulations?: string;
-  promptAnswers?: any;
+  promptAnswers?: string;
+  requestedObjects?: RequestedObjects;
+  template?: RequestedObjects;
 }
 
 export interface Worksheet {
@@ -86,9 +94,9 @@ export interface ObjectData {
   objectWorkingId?: number;
   bindId?: string;
   name: string;
-  envUrl: envUrl;
+  envUrl?: EnvUrl;
   mstrObjectType?: MstrObjectTypes;
-  objectType: MstrObjectTypes;
+  objectType?: MstrObjectTypes;
   objectId: string;
   projectId: string;
   dossierData: DossierData;

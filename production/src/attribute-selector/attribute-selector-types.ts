@@ -1,3 +1,5 @@
+import { PageByData } from '../page-by/page-by-types';
+
 export interface AttributeSelectorNotConnectedProps {
   title: string;
   triggerUpdate: boolean;
@@ -55,6 +57,7 @@ export interface EditedObjectProps {
   selectedMetrics: string[];
   selectedFilters: Record<string, number[] | string[]>;
   selectedAttrForms: string[];
+  pageByData: PageByData;
 }
 
 export interface ChosenObjectType {

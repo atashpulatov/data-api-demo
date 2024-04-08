@@ -343,7 +343,7 @@ class PopupController {
         response.promptsAnswers?.length > 0 && response.promptsAnswers[0].answers?.length > 0,
       instanceId: response.instanceId,
       subtotalsInfo: response.subtotalsInfo,
-      displayAttrFormNames: response.displayAttrFormNames as DisplayAttrFormNames,
+      displayAttrFormNames: response.displayAttrFormNames,
       definition: { filters: response.filterDetails },
     };
 
@@ -377,9 +377,14 @@ class PopupController {
    *
    * @param objectData Contains information about the MSTR object
    */
-  handleImport = async (objectData: any): Promise<void> => {
-    const preparedInstanceDefinition =
-      await instanceDefinitionHelper.createReportInstance(objectData);
+  handleImport = async (objectData: ObjectData): Promise<void> => {
+    const { mstrObjectType } = objectData;
+
+    let preparedInstanceDefinition;
+
+    if (mstrObjectType === mstrObjectEnum.mstrObjectType.report) {
+      preparedInstanceDefinition = await instanceDefinitionHelper.createReportInstance(objectData);
+    }
 
     const { pageBy } = preparedInstanceDefinition?.definition.grid ?? {};
 

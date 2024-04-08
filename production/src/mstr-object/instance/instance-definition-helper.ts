@@ -2,11 +2,34 @@ import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
 import { mstrObjectRestService } from '../mstr-object-rest-service';
 
 import { PageByData, PageByDisplayType } from '../../page-by/page-by-types';
+import { Body } from '../../types/object-types';
 
-import mstrObjectEnum from '../mstr-object-type-enum';
 import { DisplayAttrFormNames } from '../constants';
 
 class InstanceDefinitionHelper {
+  /**
+   * Setups body.template to be equal body.requestedObject.
+   *
+   * Deletes body.requestedObject when no attributes and metrics defined.
+   *
+   * @param body to modify template and requestedObject
+   */
+  setupBodyTemplate = (body: Body): Body => {
+    const modifiedBody = { ...body };
+
+    if (modifiedBody?.requestedObjects) {
+      const { attributes, metrics } = modifiedBody.requestedObjects;
+
+      if (attributes.length === 0 && metrics.length === 0) {
+        delete modifiedBody.requestedObjects;
+      }
+
+      modifiedBody.template = modifiedBody.requestedObjects;
+    }
+
+    return modifiedBody;
+  };
+
   /**
    * Answers prompts and modify instance of the object.
    *
@@ -93,7 +116,9 @@ class InstanceDefinitionHelper {
     instanceDefinition: any,
     body: any
   ): Promise<any> => {
-    if (!pageByData || pageByData?.pageByDisplayType === PageByDisplayType.DEFAULT_PAGE) {
+    const isPageByDisplayDefault = pageByData?.pageByDisplayType === PageByDisplayType.DEFAULT_PAGE;
+
+    if (!pageByData || isPageByDisplayDefault) {
       return instanceDefinition;
     }
 
@@ -115,15 +140,14 @@ class InstanceDefinitionHelper {
    * @returns instanceDefinition object containing information about MSTR object
    */
   createReportInstance = async (objectData: any): Promise<any> => {
-    if (objectData.mstrObjectType !== mstrObjectEnum.mstrObjectType.report) {
-      return;
-    }
+    const body = this.setupBodyTemplate(objectData.body);
 
     const instanceDefinition = await mstrObjectRestService.createInstance(objectData);
 
     return this.modifyInstanceWithPrompt({
       instanceDefinition,
       ...objectData,
+      body,
     });
   };
 }
