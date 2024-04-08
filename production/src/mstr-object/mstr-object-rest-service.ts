@@ -903,6 +903,26 @@ class MstrObjectRestService {
       .withCredentials()
       .then(res => res.body);
   };
+
+  /**
+   * This method fetches the information about a report's definition
+   * it can additionally return metricFilters which is needed for view filters
+   * @param reportId unique identifier of the mstr report
+   * @param projectId unique identifier of the mstr project
+   * @returns object containing the report's definition which includes "information", "sourceType", "dataSource", "grid" and perhaps "advancedProperties" and "timezone" if exist
+   */
+  getReportDefinition = (reportId: string, projectId: string): any => {
+    const storeState = this.reduxStore.getState();
+    const { envUrl, authToken } = storeState.sessionReducer;
+    const fullPath = `${envUrl}/model/reports/${reportId}`;
+
+    return request
+      .get(fullPath)
+      .set('x-mstr-authtoken', authToken)
+      .set('x-mstr-projectid', projectId)
+      .withCredentials()
+      .then(res => res.body);
+  };
 }
 
 export const mstrObjectRestService = new MstrObjectRestService();
