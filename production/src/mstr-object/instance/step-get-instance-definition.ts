@@ -2,6 +2,7 @@ import { authenticationHelper } from '../../authentication/authentication-helper
 import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-helper';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
+import { pageByHelper } from '../../page-by/page-by-helper';
 import { mstrObjectRestService } from '../mstr-object-rest-service';
 import instanceDefinitionHelper from './instance-definition-helper';
 
@@ -57,9 +58,8 @@ class StepGetInstanceDefinition {
         isPrompted,
         definition,
         importType,
-        pageByData,
       } = objectData;
-      let { visualizationInfo, body, name } = objectData;
+      let { visualizationInfo, body, name, pageByData } = objectData;
       const { preparedInstanceDefinition } = operationData;
 
       const excelContext = await officeApiHelper.getExcelContext();
@@ -102,6 +102,10 @@ class StepGetInstanceDefinition {
         );
       }
 
+      if (pageByData) {
+        pageByData = pageByHelper.getPageByDataForDisplayType(pageByData, instanceDefinition);
+      }
+
       this.savePreviousObjectData(
         instanceDefinition,
         crosstabHeaderDimensions,
@@ -138,6 +142,7 @@ class StepGetInstanceDefinition {
           attributes: mstrTable.attributes,
           metrics: mstrTable.metrics,
         },
+        pageByData,
       };
 
       const updatedOperation: Partial<OperationData> = {
