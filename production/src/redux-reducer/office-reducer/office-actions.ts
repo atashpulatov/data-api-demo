@@ -69,6 +69,14 @@ const toggleRenderSettingsFlag = () => (dispatch: Dispatch<any>) => {
   dispatch({ type: OfficeActionsTypes.TOGGLE_RENDER_SETTINGS_FLAG });
 };
 
+const toggleImportAsPivotTableFlag =
+  (isImportAsPivotTableSupported: boolean) => (dispatch: Dispatch<any>) => {
+    dispatch({
+      type: OfficeActionsTypes.TOGGLE_IMPORT_AS_PIVOT_TABLE_FLAG,
+      isImportAsPivotTableSupported,
+    });
+  };
+
 const setActiveCellAddress = (activeCellAddress: string): SetActiveCellAddressAction => ({
   type: OfficeActionsTypes.SET_ACTIVE_CELL_ADDRESS,
   activeCellAddress,
@@ -101,6 +109,7 @@ export const officeActions = {
   toggleSettingsPanelLoadedFlag,
   toggleReusePromptAnswersFlag,
   toggleRenderSettingsFlag,
+  toggleImportAsPivotTableFlag,
   setActiveCellAddress,
   updateActiveCellAddress,
   setPopupData,

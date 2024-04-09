@@ -1,11 +1,14 @@
 import { Action } from 'redux';
 
+import { ObjectImportType } from '../../mstr-object/constants';
+
 export interface PopupStateState {
   popupType?: PopupTypeEnum;
   isDataOverviewOpen?: boolean;
   filteredPageByLinkId?: string;
   isReprompt?: boolean;
   isPrompted?: boolean | any;
+  importType?: ObjectImportType;
 }
 
 export enum PopupStateActionTypes {
@@ -16,6 +19,7 @@ export enum PopupStateActionTypes {
   CLEAR_POPUP_STATE = 'POPUP_STATE_CLEAR_POPUP_STATE',
   SET_IS_DATA_OVERVIEW_OPEN = 'POPUP_STATE_SET_IS_DATA_OVERVIEW_OPEN',
   SET_FILTERED_PAGE_BY_LINK_ID = 'SET_FILTERED_PAGE_BY_LINK_ID',
+  SET_IMPORT_TYPE = 'POPUP_STATE_SET_IMPORT_TYPE',
 }
 
 export enum PopupTypeEnum {
@@ -67,6 +71,11 @@ interface SetFilteredPageByLinkIdAction extends Action {
   payload: string;
 }
 
+interface SetImportTypeAction extends Action {
+  type: PopupStateActionTypes.SET_IMPORT_TYPE;
+  importType: ObjectImportType;
+}
+
 export type PopupStateActions =
   | SetPopupTypeAction
   | SetMstrDataAction
@@ -74,4 +83,5 @@ export type PopupStateActions =
   | OnPopupBackAction
   | ClearPopupStateAction
   | SetIsDataOverviewOpenAction
-  | SetFilteredPageByLinkIdAction;
+  | SetFilteredPageByLinkIdAction
+  | SetImportTypeAction;

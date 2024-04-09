@@ -4,6 +4,7 @@ import { PopupStateActionTypes, PopupTypeEnum } from './popup-state-reducer-type
 
 import { navigationTreeActions } from '../navigation-tree-reducer/navigation-tree-actions';
 import { popupActions } from '../popup-reducer/popup-actions';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 class PopupStateActions {
   setPopupType = (popupType: PopupTypeEnum) => (dispatch: Dispatch<any>) =>
@@ -62,6 +63,13 @@ class PopupStateActions {
     dispatch({
       type: PopupStateActionTypes.SET_FILTERED_PAGE_BY_LINK_ID,
       payload,
+    });
+  };
+
+  setImportType = (importType: ObjectImportType) => (dispatch: Dispatch<any>) => {
+    dispatch({
+      type: PopupStateActionTypes.SET_IMPORT_TYPE,
+      importType,
     });
   };
 }

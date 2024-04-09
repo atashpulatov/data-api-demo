@@ -177,5 +177,6 @@ const operationStepsMapImage = {
 
 export const operationsMap = {
   [ObjectImportType.TABLE]: operationStepsMapTable,
+  [ObjectImportType.PIVOT_TABLE]: operationStepsMapTable,
   [ObjectImportType.IMAGE]: operationStepsMapImage,
 };

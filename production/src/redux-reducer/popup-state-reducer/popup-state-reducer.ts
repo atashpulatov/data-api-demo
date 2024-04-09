@@ -5,7 +5,11 @@ import {
   PopupTypeEnum,
 } from './popup-state-reducer-types';
 
-export const initialState: PopupStateState = {};
+import { ObjectImportType } from '../../mstr-object/constants';
+
+export const initialState: PopupStateState = {
+  importType: ObjectImportType.TABLE,
+};
 
 export const popupStateReducer = (
   // eslint-disable-next-line default-param-last
@@ -46,6 +50,12 @@ export const popupStateReducer = (
       return {
         ...state,
         filteredPageByLinkId: action.payload,
+      };
+    }
+    case PopupStateActionTypes.SET_IMPORT_TYPE: {
+      return {
+        ...state,
+        importType: action.importType,
       };
     }
 

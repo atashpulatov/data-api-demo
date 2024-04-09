@@ -7,6 +7,7 @@ import {
   SetIsDialogLoadedAction,
   SetIsShapeAPISupportedAction,
   SetPopupDataAction,
+  ToggleImportAsPivotTableFlagAction,
   ToggleIsClearDataFailedFlagAction,
   ToggleIsConfirmFlagAction,
   ToggleIsSettingsFlagAction,
@@ -28,6 +29,8 @@ const initialState: OfficeState = {
   isShapeAPISupported: false,
   isSecured: false,
   isClearDataFailed: false,
+  // TODO: isImportAsPivotTableSupported,
+  isImportAsPivotTableSupported: false,
 };
 
 // eslint-disable-next-line default-param-last
@@ -62,6 +65,9 @@ export const officeReducer = (state = initialState, action: OfficeActions): Offi
 
     case OfficeActionsTypes.TOGGLE_REUSE_PROMPT_ANSWERS_FLAG:
       return toggleReusePromptAnswersFlag(state, action);
+
+    case OfficeActionsTypes.TOGGLE_IMPORT_AS_PIVOT_TABLE_FLAG:
+      return toggleImportAsPivotTableFlag(state, action);
 
     case OfficeActionsTypes.SET_ACTIVE_CELL_ADDRESS:
       return setActiveCellAddress(state, action);
@@ -156,6 +162,16 @@ function toggleReusePromptAnswersFlag(
   return {
     ...state,
     reusePromptAnswers: action.reusePromptAnswers,
+  };
+}
+
+function toggleImportAsPivotTableFlag(
+  state: OfficeState,
+  action: ToggleImportAsPivotTableFlagAction
+): OfficeState {
+  return {
+    ...state,
+    isImportAsPivotTableSupported: action.isImportAsPivotTableSupported,
   };
 }
 

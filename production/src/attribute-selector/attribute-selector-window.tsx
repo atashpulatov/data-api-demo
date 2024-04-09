@@ -9,7 +9,7 @@ import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { AttributeSelector } from './attribute-selector';
 import { selectorProperties } from './selector-properties';
-import { DisplayAttrFormNames, ObjectImportType } from '../mstr-object/constants';
+import { DisplayAttrFormNames } from '../mstr-object/constants';
 
 import '../home/home.css';
 
@@ -116,8 +116,8 @@ export const AttributeSelectorWindowNotConnected: React.FC<
         handleBack={(!isEdit || isPrompted) && (handleBack as () => void)}
         handleOk={handleOk}
         handleCancel={handleCancel}
-        primaryImportType={ObjectImportType.TABLE}
         onPreviewClick={() => setIsModalOpen(true)}
+        isEdit={isEdit}
       />
     </div>
   );

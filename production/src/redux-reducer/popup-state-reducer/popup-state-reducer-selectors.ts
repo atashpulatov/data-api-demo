@@ -8,3 +8,8 @@ export const selectIsDataOverviewOpen = createSelector(
   [getPopupState],
   popupState => popupState.isDataOverviewOpen
 );
+
+export const selectImportType = createSelector(
+  [getPopupState],
+  popupState => popupState.importType
+);

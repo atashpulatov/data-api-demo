@@ -35,8 +35,10 @@ interface DossierWindowProps {
   chosenProjectId: string;
   isShapeAPISupported: boolean;
   handleBack: () => void;
+  setImportType: (importType: ObjectImportType) => void;
   editedObject: EditedObject;
   isReprompt: boolean;
+  importType: ObjectImportType;
   repromptsQueue: RepromptsQueueState;
   popupData: { objectWorkingId: number };
 }
@@ -60,18 +62,24 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
   const {
     chosenObjectName = DEFAULT_PROJECT_NAME,
     handleBack,
+    setImportType,
     editedObject = {} as EditedObject,
     chosenObjectId = 'default id',
     chosenProjectId = 'default id',
     isReprompt = false,
+    importType = ObjectImportType.TABLE,
     repromptsQueue = { total: 0, index: 0 },
     isShapeAPISupported = false,
     popupData,
   } = props;
 
-  const { isEdit, importType = ObjectImportType.TABLE } = editedObject;
+  const { isEdit, importType: editedObjectImportType } = editedObject;
   const { chapterKey, visualizationKey, vizDimensions } = lastSelectedViz;
   const [dialogPopup, setDialogPopup] = React.useState(null);
+
+  if (editedObjectImportType && importType !== editedObjectImportType) {
+    setImportType(editedObjectImportType);
+  }
 
   const vizData = useMemo(
     () =>
@@ -85,7 +93,6 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
   const isSupported = !!(isSelected && vizData && vizData.isSupported);
   const isChecking = !!(isSelected && (!vizData || (vizData && vizData.isSupported === undefined)));
   const isSecondaryActionDisabled = !isShapeAPISupported || isEdit;
-  const primaryImportType = importType || ObjectImportType.TABLE;
 
   const handleCancel = (): void => {
     const { commandCancel } = selectorProperties;
@@ -351,15 +358,15 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
             />
           </div>
           <PopupButtons
-            handleOk={() => handleOk(primaryImportType)}
+            handleOk={() => handleOk(importType)}
             handleSecondary={() => handleOk(ObjectImportType.IMAGE)}
             hideSecondary={isSecondaryActionDisabled}
-            primaryImportType={primaryImportType}
-            shouldShowImportImage
+            shouldShowImportAsVisualization
             handleCancel={handleCancel}
             handleBack={!isEdit && handleBack}
             disableActiveActions={!isSelected}
             isPublished={!(isSelected && !isSupported && !isChecking)}
+            isEdit={isEdit}
             disableSecondary={isSelected && !isSupported && !isChecking}
             checkingSelection={isChecking}
             hideOk={isReprompt}
@@ -394,6 +401,7 @@ function mapStateToProps(state: RootState): any {
     importRequested,
   } = navigationTree;
   const { editedObject } = popupReducer;
+  const { isReprompt, importType } = popupStateReducer;
   const { supportForms, isShapeAPISupported, popupData } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
   const { answers } = answersReducer;
@@ -413,12 +421,16 @@ function mapStateToProps(state: RootState): any {
     promptObjects,
     importRequested,
     isShapeAPISupported,
-    isReprompt: popupStateReducer.isReprompt,
+    isReprompt,
+    importType,
     repromptsQueue: { ...repromptsQueueReducer },
     popupData,
   };
 }
 
-const mapActionsToProps = { handleBack: popupStateActions.onPopupBack };
+const mapActionsToProps = {
+  handleBack: popupStateActions.onPopupBack,
+  setImportType: popupStateActions.setImportType,
+};
 
 export const DossierWindow = connect(mapStateToProps, mapActionsToProps)(DossierWindowNotConnected);

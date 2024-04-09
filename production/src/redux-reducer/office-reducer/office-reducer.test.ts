@@ -6,6 +6,7 @@ import {
   SetActiveCellAddressAction,
   SetIsDialogLoadedAction,
   ShowDialogAction,
+  ToggleImportAsPivotTableFlagAction,
   ToggleIsClearDataFailedFlagAction,
   ToggleIsConfirmFlagAction,
   ToggleIsSettingsFlagAction,
@@ -36,6 +37,7 @@ describe('officeReducer', () => {
       reusePromptAnswers: false,
       isClearDataFailed: false,
       'isSecured': false,
+      isImportAsPivotTableSupported: false,
     });
   });
 
@@ -173,5 +175,18 @@ describe('officeReducer', () => {
     const newState = officeReducer(oldState, action);
     // then
     expect(newState.reusePromptAnswers).toBe(true);
+  });
+
+  it('should return proper state in case of toggleImportAsPivotTableFlag action', () => {
+    // given
+    const oldState: any = { isImportAsPivotTableSupported: false };
+    const action: ToggleImportAsPivotTableFlagAction = {
+      type: OfficeActionsTypes.TOGGLE_IMPORT_AS_PIVOT_TABLE_FLAG,
+      isImportAsPivotTableSupported: true,
+    };
+    // when
+    const newState = officeReducer(oldState, action);
+    // then
+    expect(newState).toEqual({ isImportAsPivotTableSupported: true });
   });
 });

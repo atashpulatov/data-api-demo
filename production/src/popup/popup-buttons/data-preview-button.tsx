@@ -21,6 +21,7 @@ export const DataPreviewButton: React.FC<DataPreviewButtonProps> = ({
         }}
         onClick={onPreviewClick}
         disabled={!!disableReason}
+        variant='secondary'
       >
         {t('Data Preview')}
       </Button>

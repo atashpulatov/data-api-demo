@@ -1,13 +1,20 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 import { fireEvent, render } from '@testing-library/react';
 
-import { PopupButtonsNotConnected } from './popup-buttons/popup-buttons';
-import { ObjectImportType } from '../mstr-object/constants';
+import { reduxStore } from '../store';
+
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
+import { PopupButtons } from './popup-buttons/popup-buttons';
 
 describe('PopupButtons', () => {
   it('should NOT display prepare data when secondary action NOT provided', () => {
     // when
-    const { queryByText } = render(<PopupButtonsNotConnected />);
+    const { queryByText } = render(
+      <Provider store={reduxStore}>
+        <PopupButtons />
+      </Provider>
+    );
     // then
     expect(queryByText('Prepare Data')).not.toBeInTheDocument();
   });
@@ -17,7 +24,9 @@ describe('PopupButtons', () => {
     const secondaryAction = jest.fn();
     // when
     const { getByText } = render(
-      <PopupButtonsNotConnected handleSecondary={secondaryAction} hideSecondary={false} />
+      <Provider store={reduxStore}>
+        <PopupButtons handleSecondary={secondaryAction} hideSecondary={false} />
+      </Provider>
     );
     // then
     expect(getByText('Prepare Data')).toBeInTheDocument();
@@ -27,14 +36,22 @@ describe('PopupButtons', () => {
     // given
     const handleBack = jest.fn();
     // when
-    const { getByText } = render(<PopupButtonsNotConnected handleBack={handleBack} />);
+    const { getByText } = render(
+      <Provider store={reduxStore}>
+        <PopupButtons handleBack={handleBack} />
+      </Provider>
+    );
     // then
     expect(getByText('Back')).toBeInTheDocument();
   });
 
   it('should NOT display back button with cancel action when handleBack NOT provided', () => {
     // when
-    const { queryByText } = render(<PopupButtonsNotConnected />);
+    const { queryByText } = render(
+      <Provider store={reduxStore}>
+        <PopupButtons />
+      </Provider>
+    );
     // then
     expect(queryByText('Back')).not.toBeInTheDocument();
   });
@@ -42,7 +59,11 @@ describe('PopupButtons', () => {
   it('should call secondary action when prepare data clicked', () => {
     // given
     const secondaryAction = jest.fn();
-    const { getByText } = render(<PopupButtonsNotConnected handleSecondary={secondaryAction} />);
+    const { getByText } = render(
+      <Provider store={reduxStore}>
+        <PopupButtons handleSecondary={secondaryAction} />
+      </Provider>
+    );
     const secondaryButton = getByText('Prepare Data');
     // when
     fireEvent.click(secondaryButton);
@@ -54,21 +75,27 @@ describe('PopupButtons', () => {
     const disableActiveActions = true;
     // when
     const { getByText } = render(
-      <PopupButtonsNotConnected disableActiveActions={disableActiveActions} />
+      <Provider store={reduxStore}>
+        <PopupButtons disableActiveActions={disableActiveActions} />
+      </Provider>
     );
 
-    const button = getByText('Import Data');
+    const button = getByText('Import');
     fireEvent.focus(button);
 
     // then
     expect(document.querySelector('.mstr-rc-3-tooltip__content')).toBeInTheDocument();
   });
 
-  it('should render a tooltip span if the cube Isn’t  published', () => {
+  it('should render a tooltip span if the cube isn’t  published', () => {
     // when
-    const { getByText } = render(<PopupButtonsNotConnected isPublished={false} />);
+    const { getByText } = render(
+      <Provider store={reduxStore}>
+        <PopupButtons isPublished={false} />
+      </Provider>
+    );
 
-    const button = getByText('Import Data');
+    const button = getByText('Import');
     fireEvent.focus(button);
 
     // then
@@ -77,14 +104,22 @@ describe('PopupButtons', () => {
 
   it('should NOT display secondary button when hideSecondary prop is provided', () => {
     // when
-    const { queryByText } = render(<PopupButtonsNotConnected hideSecondary />);
+    const { queryByText } = render(
+      <Provider store={reduxStore}>
+        <PopupButtons hideSecondary />
+      </Provider>
+    );
     // then
     expect(queryByText('Data Preview')).not.toBeInTheDocument();
   });
 
   it('should display secondary button when hideSecondary prop is not provided', () => {
     // when
-    const { getByText } = render(<PopupButtonsNotConnected hideSecondary={false} />);
+    const { getByText } = render(
+      <Provider store={reduxStore}>
+        <PopupButtons hideSecondary={false} />
+      </Provider>
+    );
     // then
     expect(getByText('Data Preview')).toBeInTheDocument();
   });
@@ -92,48 +127,59 @@ describe('PopupButtons', () => {
   it('should display primary button as Apply when useImportAsRunButton is provided ', () => {
     // given
     // when
-    const { getByText } = render(<PopupButtonsNotConnected useImportAsRunButton />);
+    const { getByText } = render(
+      <Provider store={reduxStore}>
+        <PopupButtons useImportAsRunButton />
+      </Provider>
+    );
     // then
     expect(getByText('Data Preview')).toBeInTheDocument();
     expect(getByText('Apply')).toBeInTheDocument();
-    expect(getByText('Cancel')).toBeInTheDocument();
+    expect(getByText('Cancel')).toBeInTheDocument(1);
   });
 
-  it('should display primary button as "Import Data" when primaryImportType is "table" ', () => {
+  it('should display ButtonWithOptions when shouldShowImportAsVisualization is provided ', () => {
     // given
+    reduxStore.dispatch(officeActions.toggleImportAsPivotTableFlag(true));
     // when
-    const { getByText } = render(
-      <PopupButtonsNotConnected primaryImportType={ObjectImportType.TABLE} />
+    const { getByText, getByLabelText } = render(
+      <Provider store={reduxStore}>
+        <PopupButtons shouldShowImportAsVisualization />
+      </Provider>
     );
     // then
-    expect(getByText('Import Data')).toBeInTheDocument();
+    expect(getByText('Import')).toBeInTheDocument();
+    expect(getByLabelText('Show options')).toBeInTheDocument();
     expect(getByText('Cancel')).toBeInTheDocument();
   });
 
-  it('should display primary button as "Import Image" when primaryImportType is "image" ', () => {
+  it('should display ButtonWithOptions when isImportReport is provided ', () => {
     // given
+    reduxStore.dispatch(officeActions.toggleImportAsPivotTableFlag(true));
     // when
-    const { getByText } = render(
-      <PopupButtonsNotConnected primaryImportType={ObjectImportType.IMAGE} />
+    const { getByText, getByLabelText } = render(
+      <Provider store={reduxStore}>
+        <PopupButtons isImportReport />
+      </Provider>
     );
     // then
-    expect(getByText('Import Image')).toBeInTheDocument();
+    expect(getByText('Import')).toBeInTheDocument();
+    expect(getByLabelText('Show options')).toBeInTheDocument();
     expect(getByText('Cancel')).toBeInTheDocument();
   });
 
-  it(`should display primary button as "Import Data" and secondary button as "Import Image"
-    when primaryImportType is "table" and shouldShowImportImage is true`, () => {
+  it('should display ButtonWithOptions when hideSecondary and handleSecondary are not provided', () => {
+    // given
+    reduxStore.dispatch(officeActions.toggleImportAsPivotTableFlag(true));
     // when
-    const { getByText } = render(
-      <PopupButtonsNotConnected
-        primaryImportType={ObjectImportType.TABLE}
-        shouldShowImportImage
-        handleSecondary={jest.fn()}
-      />
+    const { getByText, getByLabelText } = render(
+      <Provider store={reduxStore}>
+        <PopupButtons />
+      </Provider>
     );
     // then
-    expect(getByText('Import Data')).toBeInTheDocument();
-    expect(getByText('Import Image')).toBeInTheDocument();
+    expect(getByText('Import')).toBeInTheDocument();
+    expect(getByLabelText('Show options')).toBeInTheDocument();
     expect(getByText('Cancel')).toBeInTheDocument();
   });
 });
