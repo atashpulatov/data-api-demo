@@ -6,6 +6,7 @@ const loadingStateEnumWeights = {
     [OperationTypes.IMPORT_OPERATION]: {
       GET_INSTANCE_DEFINITION: 5,
       GET_OBJECT_DETAILS: 10,
+      GET_OBJECT_SETTINGS: 10,
       GET_OFFICE_TABLE_IMPORT: 15,
       FETCH_INSERT_DATA: 20,
       FORMAT_DATA: 20,
@@ -19,6 +20,7 @@ const loadingStateEnumWeights = {
     [OperationTypes.REFRESH_OPERATION]: {
       GET_INSTANCE_DEFINITION: 5,
       GET_OBJECT_DETAILS: 10,
+      GET_OBJECT_SETTINGS: 10,
       GET_OFFICE_TABLE_EDIT_REFRESH: 15,
       FETCH_INSERT_DATA: 20,
       FORMAT_DATA: 20,
@@ -32,6 +34,7 @@ const loadingStateEnumWeights = {
       MODIFY_OBJECT: 0,
       GET_INSTANCE_DEFINITION: 5,
       GET_OBJECT_DETAILS: 10,
+      GET_OBJECT_SETTINGS: 10,
       GET_OFFICE_TABLE_EDIT_REFRESH: 15,
       FETCH_INSERT_DATA: 20,
       FORMAT_DATA: 20,
@@ -46,6 +49,7 @@ const loadingStateEnumWeights = {
       GET_DUPLICATE_NAME: 3,
       GET_INSTANCE_DEFINITION: 5,
       GET_OBJECT_DETAILS: 10,
+      GET_OBJECT_SETTINGS: 10,
       GET_OFFICE_TABLE_IMPORT: 15,
       FETCH_INSERT_DATA: 20,
       FORMAT_DATA: 20,

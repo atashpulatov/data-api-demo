@@ -1,6 +1,7 @@
 import stepSaveObjectInExcel from '../office/store/step-save-object-in-excel';
 
 import stepGetInstanceDefinition from '../mstr-object/instance/step-get-instance-definition';
+import stepGetObjectSettings from '../mstr-object/settings/step-get-object-settings';
 import stepGetObjectDetails from '../mstr-object/step-get-object-details';
 import stepDisplayNotificationCompleted from '../notification/step-display-notification-completed';
 import stepNotificationInProgress from '../notification/step-notification-in-progress';
@@ -35,6 +36,11 @@ class SubscribeSteps {
     operationBus.subscribe(
       OperationSteps.BACKUP_OBJECT_DATA,
       stepBackupObjectData.backupObjectData
+    );
+
+    operationBus.subscribe(
+      OperationSteps.GET_OBJECT_SETTINGS,
+      stepGetObjectSettings.getObjectSettings
     );
 
     operationBus.subscribe(

@@ -124,4 +124,10 @@ export interface ObjectData {
   shapeProps?: any;
   // TODO fix type
   visualizationInfo?: false | VisualizationInfo;
+  objectSettings?: ObjectSettings;
+}
+
+export interface ObjectSettings {
+  mergeCrosstabColumns?: boolean;
+  importAttributesAsText?: boolean;
 }

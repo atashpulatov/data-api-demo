@@ -36,6 +36,12 @@ class OperationStepDispatcher {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.GET_OBJECT_DETAILS));
   }
 
+  completeGetObjectSettings(objectWorkingId: number): void {
+    this.reduxStore.dispatch(
+      markStepCompleted(objectWorkingId, OperationSteps.GET_OBJECT_SETTINGS)
+    );
+  }
+
   completeFormatOfficeTable(objectWorkingId: number): void {
     this.reduxStore.dispatch(
       markStepCompleted(objectWorkingId, OperationSteps.FORMAT_OFFICE_TABLE)

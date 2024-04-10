@@ -17,6 +17,7 @@ export enum OperationSteps {
   SAVE_OBJECT_IN_EXCEL = 'SAVE_OBJECT_IN_EXCEL',
   GET_DUPLICATE_NAME = 'GET_DUPLICATE_NAME',
   RENAME_EXCEL_WORKSHEET = 'RENAME_EXCEL_WORKSHEET',
+  GET_OBJECT_SETTINGS = 'GET_OBJECT_SETTINGS',
 
   REMOVE_OBJECT_BINDING = 'REMOVE_OBJECT_BINDING',
   REMOVE_OBJECT_TABLE = 'REMOVE_OBJECT_TABLE',
@@ -37,6 +38,7 @@ export enum OperationSteps {
 const operationStepsMapTable = {
   [OperationTypes.IMPORT_OPERATION]: [
     OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
+    OperationSteps.GET_OBJECT_SETTINGS,
     OperationSteps.GET_INSTANCE_DEFINITION,
     OperationSteps.GET_OBJECT_DETAILS,
     OperationSteps.GET_OFFICE_TABLE_IMPORT,
@@ -53,6 +55,7 @@ const operationStepsMapTable = {
   [OperationTypes.REFRESH_OPERATION]: [
     OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
     OperationSteps.BACKUP_OBJECT_DATA,
+    OperationSteps.GET_OBJECT_SETTINGS,
     OperationSteps.GET_INSTANCE_DEFINITION,
     OperationSteps.GET_OBJECT_DETAILS,
     OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH,
@@ -67,6 +70,7 @@ const operationStepsMapTable = {
 
   [OperationTypes.EDIT_OPERATION]: [
     OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
+    OperationSteps.GET_OBJECT_SETTINGS,
     OperationSteps.MODIFY_OBJECT,
     OperationSteps.GET_INSTANCE_DEFINITION,
     OperationSteps.GET_OBJECT_DETAILS,
@@ -82,6 +86,7 @@ const operationStepsMapTable = {
 
   [OperationTypes.DUPLICATE_OPERATION]: [
     OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
+    OperationSteps.GET_OBJECT_SETTINGS,
     OperationSteps.MODIFY_OBJECT,
     OperationSteps.GET_DUPLICATE_NAME,
     OperationSteps.GET_INSTANCE_DEFINITION,
