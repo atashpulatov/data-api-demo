@@ -1,8 +1,8 @@
 selenium
-Appium-Python-Client
+Appium-Python-Client==1.2.0
 behave
 Pillow
 opencv-python-headless
 pyperclip
 allure-behave
-requests
+requests==2.26.0
