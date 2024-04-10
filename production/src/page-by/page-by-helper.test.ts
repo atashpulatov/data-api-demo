@@ -1,7 +1,10 @@
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { pageByHelper } from './page-by-helper';
 
+import { reduxStore } from '../store';
+
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../types/object-types';
 import { PageByData, PageByDisplayType } from './page-by-types';
 
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
@@ -146,5 +149,38 @@ describe('Page-by helper', () => {
 
     // then
     expect(pageByHelper.getPageByDataForDefaultPage).toHaveBeenCalledTimes(1);
+  });
+
+  it('should return all page by siblings based on passed source object', () => {
+    // given
+    const mockedPageByData = {
+      pageByDisplayType: PageByDisplayType.ALL_PAGES,
+      pageByLinkId: 'pageByLinkId',
+    };
+    const mockedObjectData = [
+      {
+        objectWorkingId: 1,
+        pageByData: mockedPageByData,
+      },
+      {
+        objectWorkingId: 2,
+        pageByData: mockedPageByData,
+      },
+      {
+        objectWorkingId: 3,
+        pageByData: mockedPageByData,
+      },
+    ] as unknown as ObjectData[];
+
+    jest
+      .spyOn(reduxStore, 'getState')
+      // @ts-expect-error
+      .mockReturnValueOnce({ objectReducer: { objects: mockedObjectData } });
+
+    // when
+    const siblings = pageByHelper.getPageBySiblings(mockedObjectData[0]);
+
+    // then
+    expect(siblings).toHaveLength(3);
   });
 });

@@ -3,6 +3,7 @@ import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
+import { pageByHelper } from '../page-by/page-by-helper';
 
 import officeStoreObject from '../office/store/office-store-object';
 
@@ -103,6 +104,24 @@ class SidePanelService {
       const sourceObject =
         officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
       this.reduxStore.dispatch(refreshRequested(objectWorkingId, sourceObject?.importType));
+    });
+  }
+
+  /**
+   * Handles the refresh of multiple pages for page-by object.
+   *
+   * @param objectWorkingIds Contains unique Id of the objects, allowing to reference source object.
+   */
+  refreshMultiplePagesForPageBy(objectWorkingId: number): void {
+    const sourceObject =
+      officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
+
+    const pageByObjects = pageByHelper.getPageBySiblings(sourceObject);
+
+    pageByObjects.forEach((pageByObject: ObjectData) => {
+      this.reduxStore.dispatch(
+        refreshRequested(pageByObject.objectWorkingId, pageByObject?.importType)
+      );
     });
   }
 

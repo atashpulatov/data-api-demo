@@ -396,7 +396,7 @@ class PopupController {
 
     const pageByLinkId = uuidv4();
     // TODO: Replace with actual setting from the user when implemented
-    const selectedPageByDisplayType = PageByDisplayType.DEFAULT_PAGE as PageByDisplayType;
+    const selectedPageByDisplayType = PageByDisplayType.ALL_PAGES as PageByDisplayType;
 
     const validPageByData = await pageByHelper.getValidPageByData(
       objectData,

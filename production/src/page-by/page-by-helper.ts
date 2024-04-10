@@ -1,6 +1,9 @@
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 
+import { reduxStore } from '../store';
+
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../types/object-types';
 import {
   PageBy,
   PageByData,
@@ -12,6 +15,20 @@ import {
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 
 class PageByHelper {
+  /**
+   * Gets Page-by siblings of the source object
+   *
+   * @param sourceObject Contains information about the source object
+   * @returns Array of objects containing information about the Page-by siblings
+   */
+  getPageBySiblings = (sourceObject: ObjectData): ObjectData[] => {
+    const { objects } = reduxStore.getState().objectReducer;
+    const pageByObjects = objects.filter(
+      object => object?.pageByData?.pageByLinkId === sourceObject.pageByData?.pageByLinkId
+    );
+    return pageByObjects.sort((a, b) => a.objectWorkingId - b.objectWorkingId);
+  };
+
   /**
    * Gets valid combinations of Report's Page-by elements
    *

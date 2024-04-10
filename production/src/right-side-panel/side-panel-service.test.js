@@ -3,6 +3,7 @@ import { userRestService } from '../home/user-rest-service';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
+import { pageByHelper } from '../page-by/page-by-helper';
 import { sidePanelService } from './side-panel-service';
 
 import officeStoreObject from '../office/store/office-store-object';
@@ -79,7 +80,25 @@ describe('SidePanelService', () => {
     // when
     sidePanelService.refresh(objectWorkingIds);
     // then
+
     expect(mockedDispatch).toBeCalledTimes(objectWorkingIds.length);
+  });
+
+  it('should refresh objects for multiple pages, when requested', () => {
+    // given
+    const objectWorkingIds = 1;
+    const mockedPageByObjects = [{ objectWorkingId: 1 }, { objectWorkingId: 2 }];
+
+    const mockedGetPageBySiblings = jest
+      .spyOn(pageByHelper, 'getPageBySiblings')
+      .mockReturnValueOnce(mockedPageByObjects);
+    const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+
+    // when
+    sidePanelService.refreshMultiplePagesForPageBy(objectWorkingIds);
+    // then
+    expect(mockedGetPageBySiblings).toHaveBeenCalled();
+    expect(mockedDispatch).toBeCalledTimes(mockedPageByObjects.length);
   });
 
   it('should remove objects', () => {
