@@ -69,7 +69,6 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
     isReprompt = false,
     importType = ObjectImportType.TABLE,
     repromptsQueue = { total: 0, index: 0 },
-    isShapeAPISupported = false,
     popupData,
   } = props;
 
@@ -92,7 +91,6 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
   const isSelected = !!(chapterKey && visualizationKey);
   const isSupported = !!(isSelected && vizData && vizData.isSupported);
   const isChecking = !!(isSelected && (!vizData || (vizData && vizData.isSupported === undefined)));
-  const isSecondaryActionDisabled = !isShapeAPISupported || isEdit;
 
   const handleCancel = (): void => {
     const { commandCancel } = selectorProperties;
@@ -200,7 +198,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
   );
 
   const handleOk = useCallback(
-    (impType = ObjectImportType.TABLE) => {
+    (selectedImportType = ObjectImportType.TABLE) => {
       const message = {
         command: selectorProperties.commandOk,
         chosenObjectName,
@@ -210,7 +208,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
         // @ts-expect-error
         isPrompted: promptsAnswers?.answers?.length > 0,
         promptsAnswers,
-        importType: impType,
+        importType: selectedImportType,
         visualizationInfo: {
           chapterKey,
           visualizationKey,
@@ -359,14 +357,11 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
           </div>
           <PopupButtons
             handleOk={() => handleOk(importType)}
-            handleSecondary={() => handleOk(ObjectImportType.IMAGE)}
-            hideSecondary={isSecondaryActionDisabled}
-            shouldShowImportAsVisualization
             handleCancel={handleCancel}
             handleBack={!isEdit && handleBack}
+            hideSecondary
             disableActiveActions={!isSelected}
             isPublished={!(isSelected && !isSupported && !isChecking)}
-            isEdit={isEdit}
             disableSecondary={isSelected && !isSupported && !isChecking}
             checkingSelection={isChecking}
             hideOk={isReprompt}

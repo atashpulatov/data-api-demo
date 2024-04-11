@@ -1,8 +1,22 @@
 import { createSelector } from 'reselect';
 
-const getOfficeState = (state: any): any => state.officeReducer;
+import { RootState } from '../../store';
 
-export const selectIsImportAsPivotTableSupported = createSelector(
+import { OfficeState } from './office-reducer-types';
+
+const getOfficeState = (state: RootState): OfficeState => state.officeReducer;
+
+const selectIsPivotTableSupported = createSelector(
   [getOfficeState],
-  officeState => officeState.isImportAsPivotTableSupported
+  (officeReducer: OfficeState) => officeReducer.isPivotTableSupported
 );
+
+const selectIsShapeAPISupported = createSelector(
+  [getOfficeState],
+  (officeReducer: OfficeState) => officeReducer.isShapeAPISupported
+);
+
+export const officeSelectors = {
+  selectIsPivotTableSupported,
+  selectIsShapeAPISupported,
+};

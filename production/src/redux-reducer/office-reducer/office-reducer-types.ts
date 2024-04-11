@@ -14,7 +14,7 @@ export type OfficeState = {
   settingsPanelLoaded: boolean;
   reusePromptAnswers: boolean;
   isShapeAPISupported: boolean;
-  isImportAsPivotTableSupported: boolean;
+  isPivotTableSupported: boolean;
 };
 
 export enum OfficeActionsTypes {
@@ -28,7 +28,7 @@ export enum OfficeActionsTypes {
   TOGGLE_IS_CLEAR_DATA_FAILED_FLAG = 'OFFICE_TOGGLE_IS_CLEAR_DATA_FAILED',
   TOGGLE_SETTINGS_PANEL_LOADED_FLAG = 'OFFICE_TOGGLE_SETTINGS_PANEL_LOADED_FLAG',
   TOGGLE_REUSE_PROMPT_ANSWERS_FLAG = 'OFFICE_TOGGLE_REUSE_PROMPT_ANSWERS_FLAG',
-  TOGGLE_IMPORT_AS_PIVOT_TABLE_FLAG = 'OFFICE_TOGGLE_IMPORT_AS_PIVOT_TABLE_FLAG',
+  TOGGLE_PIVOT_TABLE_FLAG = 'OFFICE_TOGGLE_PIVOT_TABLE_FLAG',
   SET_ACTIVE_CELL_ADDRESS = 'OFFICE_SET_ACTIVE_CELL_ADDRESS',
   SET_POPUP_DATA = 'OFFICE_SET_POPUP_DATA',
   CLEAR_POPUP_DATA = 'OFFICE_CLEAR_POPUP_DATA',
@@ -82,9 +82,9 @@ export interface ToggleReusePromptAnswersFlagAction extends Action {
   reusePromptAnswers: boolean;
 }
 
-export interface ToggleImportAsPivotTableFlagAction extends Action {
-  type: OfficeActionsTypes.TOGGLE_IMPORT_AS_PIVOT_TABLE_FLAG;
-  isImportAsPivotTableSupported: boolean;
+export interface TogglePivotTableSupportedFlagAction extends Action {
+  type: OfficeActionsTypes.TOGGLE_PIVOT_TABLE_FLAG;
+  isPivotTableSupported: boolean;
 }
 
 export interface SetActiveCellAddressAction extends Action {
@@ -117,7 +117,7 @@ export type OfficeActions =
   | ToggleIsClearDataFailedFlagAction
   | ToggleSettingsPanelLoadedFlagAction
   | ToggleReusePromptAnswersFlagAction
-  | ToggleImportAsPivotTableFlagAction
+  | TogglePivotTableSupportedFlagAction
   | SetActiveCellAddressAction
   | SetPopupDataAction
   | ClearPopupDataAction

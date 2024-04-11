@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { ObjectWindowTitle } from '@mstr/connector-components';
 import { Spinner } from '@mstr/rc';
 
@@ -32,6 +32,7 @@ const {
 } = mstrObjectRestService;
 
 export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => {
+  const dispatch = useDispatch();
   const [isPublished, setIsPublished] = useState(true);
   const [t] = useTranslation('common', { i18n });
 
@@ -54,7 +55,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
    * The parameter in this function is provided by the ON_LIBRARY_ITEM_SELECTED event. It will be
    * an array containing only one object which will be the selected dossier or report or dataset
    *
-   * @param {{Array<ItemType>}} itemsInfo - Array of selected items
+   * @param itemsInfo - Array of selected items
    */
   const handleSelection = useCallback(
     async (itemsInfo: ItemType[]): Promise<any> => {
@@ -62,6 +63,9 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
         selectObject({});
         return;
       }
+
+      // Reset import type to default on object selection
+      dispatch(popupStateActions.setImportType(null) as any);
 
       const { projectId, type, name, docId } = itemsInfo[0];
 
@@ -106,7 +110,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
         mstrObjectType: chosenMstrObjectType,
       });
     },
-    [selectObject]
+    [dispatch, selectObject]
   );
 
   /**

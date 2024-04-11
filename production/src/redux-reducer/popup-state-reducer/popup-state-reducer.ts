@@ -5,11 +5,7 @@ import {
   PopupTypeEnum,
 } from './popup-state-reducer-types';
 
-import { ObjectImportType } from '../../mstr-object/constants';
-
-export const initialState: PopupStateState = {
-  importType: ObjectImportType.TABLE,
-};
+export const initialState: PopupStateState = {};
 
 export const popupStateReducer = (
   // eslint-disable-next-line default-param-last

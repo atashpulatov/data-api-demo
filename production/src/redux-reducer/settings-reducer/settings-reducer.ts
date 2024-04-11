@@ -13,6 +13,7 @@ import {
   ToggleWorksheetObjectInfoSettingAction,
 } from './settings-reducer-types';
 
+import { ObjectImportType } from '../../mstr-object/constants';
 import {
   initialSidePanelObjectInfoSettings,
   initialWorksheetObjectInfoSettings,
@@ -23,6 +24,7 @@ const initialState: SettingsState = {
   importAttributesAsText: false,
   sidePanelObjectInfoSettings: initialSidePanelObjectInfoSettings,
   worksheetObjectInfoSettings: initialWorksheetObjectInfoSettings,
+  importType: ObjectImportType.TABLE,
 };
 
 // eslint-disable-next-line default-param-last

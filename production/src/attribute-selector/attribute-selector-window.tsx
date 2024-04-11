@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 
 import { popupHelper } from '../popup/popup-helper';
 
+import { RootState } from '../store';
+
 import { AttributeSelectorWindowNotConnectedProps } from './attribute-selector-types';
 
 import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
@@ -117,22 +119,12 @@ export const AttributeSelectorWindowNotConnected: React.FC<
         handleOk={handleOk}
         handleCancel={handleCancel}
         onPreviewClick={() => setIsModalOpen(true)}
-        isEdit={isEdit}
       />
     </div>
   );
 };
 
-// TODO: fix any types
-const mapStateToProps = (state: {
-  navigationTree: {
-    [x: string]: any;
-    importSubtotal: any;
-    displayAttrFormNames: any;
-  };
-  popupReducer: { editedObject: any };
-  popupStateReducer: any;
-}): any => {
+const mapStateToProps = (state: RootState): any => {
   const { importSubtotal, displayAttrFormNames, ...chosenObject } = state.navigationTree;
   const { editedObject } = state.popupReducer;
 

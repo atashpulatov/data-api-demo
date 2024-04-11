@@ -1,10 +1,13 @@
 import { Action } from 'redux';
 
+import { ObjectImportType } from '../../mstr-object/constants';
+
 export type SettingsState = {
   mergeCrosstabColumns: boolean;
   importAttributesAsText: boolean;
   sidePanelObjectInfoSettings: ObjectInfoSetting[];
   worksheetObjectInfoSettings: ObjectInfoSetting[];
+  importType: ObjectImportType;
 };
 
 export enum SettingsActionTypes {

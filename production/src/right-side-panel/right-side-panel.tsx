@@ -26,10 +26,7 @@ import {
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { selectOperations } from '../redux-reducer/operation-reducer/operation-reducer-selectors';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
-import {
-  selectIsDataOverviewOpen,
-  selectPopupType,
-} from '../redux-reducer/popup-state-reducer/popup-state-reducer-selectors';
+import { popupStateSelectors } from '../redux-reducer/popup-state-reducer/popup-state-reducer-selectors';
 
 import './right-side-panel.scss';
 
@@ -81,8 +78,8 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   const operations = useSelector(selectOperations);
   const globalNotification = useSelector(selectGlobalNotification);
   const notifications = useSelector(selectNotifications);
-  const popupType = useSelector(selectPopupType);
-  const isDataOverviewOpen = useSelector(selectIsDataOverviewOpen);
+  const popupType = useSelector(popupStateSelectors.selectPopupType);
+  const isDataOverviewOpen = useSelector(popupStateSelectors.selectIsDataOverviewOpen);
 
   const duplicatePopupParams = {
     activeCellAddress,
@@ -152,7 +149,13 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   }, [activeCellAddress, popupData]);
 
   useEffect(() => {
-    setLoadedObjectsWrapped(sidePanelNotificationHelper.injectNotificationsToObjects(loadedObjects, notifications, operations));
+    setLoadedObjectsWrapped(
+      sidePanelNotificationHelper.injectNotificationsToObjects(
+        loadedObjects,
+        notifications,
+        operations
+      )
+    );
   }, [loadedObjects, notifications, operations]);
 
   /**

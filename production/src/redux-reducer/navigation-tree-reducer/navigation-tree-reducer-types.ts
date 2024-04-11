@@ -1,5 +1,6 @@
 import { Action } from 'redux';
 
+import { MstrObjectTypes } from '../../mstr-object/mstr-object-types';
 import { PromptsAnswer } from '../answers-reducer/answers-reducer-types';
 import { PopupTypeEnum } from '../popup-state-reducer/popup-state-reducer-types';
 
@@ -30,7 +31,7 @@ export interface NavigationTreeState {
   importRequested: boolean;
   dossierData: any | null; // Replace 'any' with the appropriate type
   promptsAnswers: any | null; // Replace 'any' with the appropriate type
-  mstrObjectType: any | null; // Replace 'any' with the appropriate type
+  mstrObjectType: MstrObjectTypes | null;
   chosenChapterKey: string | null;
   chosenVisualizationKey: string | null;
   dossierOpenRequested: boolean;

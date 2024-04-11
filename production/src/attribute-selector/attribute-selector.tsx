@@ -6,6 +6,8 @@ import { AttributeMetricFilter, ErrorBoundary } from '@mstr/mstr-react-library';
 
 import { popupHelper } from '../popup/popup-helper';
 
+import { RootState } from '../store';
+
 import {
   AttributeSelectorNotConnectedProps,
   EditedObjectProps,
@@ -151,19 +153,7 @@ export const AttributeSelectorNotConnected: React.FC<
   );
 };
 
-// TODO: fix any types
-const mapStateToProps = (state: {
-  navigationTree: {
-    [x: string]: any;
-    promptsAnswers: any;
-    importSubtotal: any;
-    displayAttrFormNames: any;
-  };
-  popupStateReducer: any;
-  popupReducer: any;
-  sessionReducer: any;
-  officeReducer: any;
-}): any => {
+const mapStateToProps = (state: RootState): any => {
   const {
     navigationTree: { promptsAnswers, importSubtotal, displayAttrFormNames, ...chosenObject },
     popupStateReducer,

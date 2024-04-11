@@ -1,5 +1,6 @@
 import { Action } from 'redux';
 
+import { MstrObjectTypes } from '../../mstr-object/mstr-object-types';
 import { SubtotalsInfo } from '../../types/object-types';
 
 import { DisplayAttrFormNames, ObjectImportType } from '../../mstr-object/constants';
@@ -15,6 +16,7 @@ export interface MstrData {
 }
 
 export interface EditedObject {
+  name?: string;
   chosenObjectId?: string;
   projectId?: string;
   isEdit?: boolean;
@@ -28,7 +30,7 @@ export interface EditedObject {
   selectedMetrics?: string[];
   selectedFilters?: any | any[]; // Replace 'any' with the appropriate type
   importType: ObjectImportType;
-  mstrObjectType: any;
+  mstrObjectType: MstrObjectTypes;
 }
 export interface PopupState {
   editedObject?: EditedObject;

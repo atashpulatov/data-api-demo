@@ -1,5 +1,6 @@
 import { settingsActions } from './settings-actions';
 import { settingsReducer } from './settings-reducer';
+import { ObjectImportType } from '../../mstr-object/constants';
 import {
   initialSidePanelObjectInfoSettings,
   initialWorksheetObjectInfoSettings,
@@ -11,6 +12,7 @@ describe('settingsReducer', () => {
     importAttributesAsText: false,
     sidePanelObjectInfoSettings: initialSidePanelObjectInfoSettings,
     worksheetObjectInfoSettings: initialWorksheetObjectInfoSettings,
+    importType: ObjectImportType.TABLE,
   };
 
   it('should return correct initial state', () => {

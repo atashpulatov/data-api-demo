@@ -72,7 +72,7 @@ const toggleRenderSettingsFlag = () => (dispatch: Dispatch<any>) => {
 const toggleImportAsPivotTableFlag =
   (isImportAsPivotTableSupported: boolean) => (dispatch: Dispatch<any>) => {
     dispatch({
-      type: OfficeActionsTypes.TOGGLE_IMPORT_AS_PIVOT_TABLE_FLAG,
+      type: OfficeActionsTypes.TOGGLE_PIVOT_TABLE_FLAG,
       isImportAsPivotTableSupported,
     });
   };

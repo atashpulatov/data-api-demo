@@ -124,62 +124,45 @@ describe('PopupButtons', () => {
     expect(getByText('Data Preview')).toBeInTheDocument();
   });
 
-  it('should display primary button as Apply when useImportAsRunButton is provided ', () => {
-    // given
-    // when
-    const { getByText } = render(
-      <Provider store={reduxStore}>
-        <PopupButtons useImportAsRunButton />
-      </Provider>
-    );
-    // then
-    expect(getByText('Data Preview')).toBeInTheDocument();
-    expect(getByText('Apply')).toBeInTheDocument();
-    expect(getByText('Cancel')).toBeInTheDocument(1);
-  });
-
   it('should display ButtonWithOptions when shouldShowImportAsVisualization is provided ', () => {
     // given
     reduxStore.dispatch(officeActions.toggleImportAsPivotTableFlag(true));
     // when
-    const { getByText, getByLabelText } = render(
+    const { getByText } = render(
       <Provider store={reduxStore}>
         <PopupButtons shouldShowImportAsVisualization />
       </Provider>
     );
     // then
     expect(getByText('Import')).toBeInTheDocument();
-    expect(getByLabelText('Show options')).toBeInTheDocument();
     expect(getByText('Cancel')).toBeInTheDocument();
   });
 
-  it('should display ButtonWithOptions when isImportReport is provided ', () => {
+  it('should display import button when isImportReport is provided ', () => {
     // given
     reduxStore.dispatch(officeActions.toggleImportAsPivotTableFlag(true));
     // when
-    const { getByText, getByLabelText } = render(
+    const { getByText } = render(
       <Provider store={reduxStore}>
         <PopupButtons isImportReport />
       </Provider>
     );
     // then
     expect(getByText('Import')).toBeInTheDocument();
-    expect(getByLabelText('Show options')).toBeInTheDocument();
     expect(getByText('Cancel')).toBeInTheDocument();
   });
 
-  it('should display ButtonWithOptions when hideSecondary and handleSecondary are not provided', () => {
+  it('should display import button when hideSecondary and handleSecondary are not provided', () => {
     // given
     reduxStore.dispatch(officeActions.toggleImportAsPivotTableFlag(true));
     // when
-    const { getByText, getByLabelText } = render(
+    const { getByText } = render(
       <Provider store={reduxStore}>
         <PopupButtons />
       </Provider>
     );
     // then
     expect(getByText('Import')).toBeInTheDocument();
-    expect(getByLabelText('Show options')).toBeInTheDocument();
     expect(getByText('Cancel')).toBeInTheDocument();
   });
 });

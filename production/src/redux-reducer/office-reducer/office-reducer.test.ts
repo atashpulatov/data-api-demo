@@ -6,10 +6,10 @@ import {
   SetActiveCellAddressAction,
   SetIsDialogLoadedAction,
   ShowDialogAction,
-  ToggleImportAsPivotTableFlagAction,
   ToggleIsClearDataFailedFlagAction,
   ToggleIsConfirmFlagAction,
   ToggleIsSettingsFlagAction,
+  TogglePivotTableSupportedFlagAction,
   ToggleRenderSettingsFlagAction,
   ToggleReusePromptAnswersFlagAction,
   ToggleSecuredFlagAction,
@@ -36,8 +36,8 @@ describe('officeReducer', () => {
       isShapeAPISupported: false,
       reusePromptAnswers: false,
       isClearDataFailed: false,
-      'isSecured': false,
-      isImportAsPivotTableSupported: false,
+      isSecured: false,
+      isPivotTableSupported: false,
     });
   });
 
@@ -179,14 +179,14 @@ describe('officeReducer', () => {
 
   it('should return proper state in case of toggleImportAsPivotTableFlag action', () => {
     // given
-    const oldState: any = { isImportAsPivotTableSupported: false };
-    const action: ToggleImportAsPivotTableFlagAction = {
-      type: OfficeActionsTypes.TOGGLE_IMPORT_AS_PIVOT_TABLE_FLAG,
-      isImportAsPivotTableSupported: true,
+    const oldState: any = { isPivotTableSupported: false };
+    const action: TogglePivotTableSupportedFlagAction = {
+      type: OfficeActionsTypes.TOGGLE_PIVOT_TABLE_FLAG,
+      isPivotTableSupported: true,
     };
     // when
     const newState = officeReducer(oldState, action);
     // then
-    expect(newState).toEqual({ isImportAsPivotTableSupported: true });
+    expect(newState).toEqual({ isPivotTableSupported: true });
   });
 });

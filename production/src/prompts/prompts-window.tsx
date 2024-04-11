@@ -434,9 +434,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
         handleCancel={closePopup}
         hideSecondary
         handleBack={!isReprompt && handleBack}
-        useImportAsRunButton
         disableActiveActions={isPromptLoading}
-        isEdit={isEdit}
       />
     </div>
   );
