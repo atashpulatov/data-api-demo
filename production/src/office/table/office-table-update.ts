@@ -3,6 +3,9 @@ import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import { officeRemoveHelper } from '../remove/office-remove-helper';
 import officeTableHelperRange from './office-table-helper-range';
 
+import { InstanceDefinition } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
+
 import officeApiDataLoader from '../api/office-api-data-loader';
 import officeFormatSubtotals from '../format/office-format-subtotals';
 
@@ -18,7 +21,8 @@ class OfficeTableUpdate {
   async updateOfficeTable(
     instanceDefinition: any,
     excelContext: Excel.RequestContext,
-    prevOfficeTable: Excel.Table
+    prevOfficeTable: Excel.Table,
+    objectData: ObjectData
   ): Promise<any> {
     console.time('Validate existing table');
 
@@ -42,7 +46,7 @@ class OfficeTableUpdate {
       await this.validateAddedRowsRange(excelContext, rows, prevOfficeTable);
 
       if (isCrosstab) {
-        this.createHeadersForCrosstab(prevOfficeTable, instanceDefinition);
+        this.createHeadersForCrosstab(prevOfficeTable, instanceDefinition, objectData);
       } else {
         this.setHeaderValuesNoCrosstab(excelContext, prevOfficeTable, mstrTable.headers.columns);
       }
@@ -113,7 +117,11 @@ class OfficeTableUpdate {
     return Math.max(0, newRowsCount - prevRowsCount);
   }
 
-  createHeadersForCrosstab(prevOfficeTable: Excel.Table, instanceDefinition: any): void {
+  createHeadersForCrosstab(
+    prevOfficeTable: Excel.Table,
+    instanceDefinition: InstanceDefinition,
+    objectData: ObjectData
+  ): void {
     const crosstabHeaderDimensions =
       officeApiCrosstabHelper.getCrosstabHeaderDimensions(instanceDefinition);
 
@@ -121,7 +129,8 @@ class OfficeTableUpdate {
     officeApiCrosstabHelper.createCrosstabHeaders(
       prevOfficeTable,
       mstrTable,
-      crosstabHeaderDimensions
+      crosstabHeaderDimensions,
+      objectData
     );
   }
 

@@ -4,6 +4,9 @@ import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import { officeRemoveHelper } from '../remove/office-remove-helper';
 import officeTableHelperRange from './office-table-helper-range';
 
+import { InstanceDefinition } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
+
 import officeApiDataLoader from '../api/office-api-data-loader';
 import officeFormatSubtotals from '../format/office-format-subtotals';
 import officeTableRefresh from './office-table-refresh';
@@ -44,7 +47,8 @@ describe('OfficeTableUpdate', () => {
       await officeTableUpdate.updateOfficeTable(
         instanceDefinitionMock,
         excelContextMock,
-        undefined
+        undefined,
+        {} as unknown as ObjectData
       );
     } catch (error) {
       // then
@@ -99,7 +103,8 @@ describe('OfficeTableUpdate', () => {
     const result = await officeTableUpdate.updateOfficeTable(
       instanceDefinitionMock,
       excelContextMock,
-      prevOfficeTableMock
+      prevOfficeTableMock,
+      {} as unknown as ObjectData
     );
 
     // then
@@ -122,7 +127,8 @@ describe('OfficeTableUpdate', () => {
       expect(officeTableUpdate.createHeadersForCrosstab).toBeCalledTimes(1);
       expect(officeTableUpdate.createHeadersForCrosstab).toBeCalledWith(
         { worksheet: 'worksheetTest' },
-        instanceDefinitionMock
+        instanceDefinitionMock,
+        {}
       );
     } else {
       expect(officeTableUpdate.setHeaderValuesNoCrosstab).toBeCalledTimes(1);
@@ -268,6 +274,7 @@ describe('OfficeTableUpdate', () => {
   it('createHeadersForCrosstab should work as expected', () => {
     // given
     const prevOfficeTableMock = {} as unknown as Excel.Table;
+    const objectDataMock = {} as unknown as ObjectData;
 
     jest
       .spyOn(officeApiCrosstabHelper, 'getCrosstabHeaderDimensions')
@@ -276,7 +283,11 @@ describe('OfficeTableUpdate', () => {
     jest.spyOn(officeApiCrosstabHelper, 'createCrosstabHeaders').mockImplementation();
 
     // when
-    officeTableUpdate.createHeadersForCrosstab(prevOfficeTableMock, { mstrTable: 'mstrTableTest' });
+    officeTableUpdate.createHeadersForCrosstab(
+      prevOfficeTableMock,
+      { mstrTable: 'mstrTableTest' } as unknown as InstanceDefinition,
+      objectDataMock
+    );
 
     // then
     expect(officeApiCrosstabHelper.getCrosstabHeaderDimensions).toBeCalledTimes(1);
@@ -288,7 +299,8 @@ describe('OfficeTableUpdate', () => {
     expect(officeApiCrosstabHelper.createCrosstabHeaders).toBeCalledWith(
       prevOfficeTableMock,
       'mstrTableTest',
-      'crosstabHeaderDimensionsTest'
+      'crosstabHeaderDimensionsTest',
+      {}
     );
   });
 

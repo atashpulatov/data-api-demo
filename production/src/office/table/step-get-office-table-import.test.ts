@@ -71,6 +71,7 @@ describe('StepGetOfficeTableImport', () => {
       excelContext: 'excelContextTest',
       instanceDefinition: 'instanceDefinitionTest',
       startCell: 'startCellTest',
+      objectData,
     });
 
     expect(operationStepDispatcher.updateOperation).toBeCalledTimes(1);

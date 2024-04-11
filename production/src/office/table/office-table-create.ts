@@ -5,6 +5,7 @@ import getOfficeTableHelper from './get-office-table-helper';
 import officeTableHelperRange from './office-table-helper-range';
 
 import { PageByData } from '../../page-by/page-by-types';
+import { ObjectData } from '../../types/object-types';
 
 const DEFAULT_TABLE_STYLE = 'TableStyleLight11';
 
@@ -34,6 +35,7 @@ class OfficeTableCreate {
     isRepeatStep,
     insertNewWorksheet,
     pageByData,
+    objectData,
   }: {
     instanceDefinition: any;
     excelContext: Excel.RequestContext;
@@ -44,6 +46,7 @@ class OfficeTableCreate {
     isRepeatStep?: boolean;
     insertNewWorksheet: boolean;
     pageByData?: PageByData;
+    objectData: ObjectData;
   }): Promise<any> {
     const {
       rows,
@@ -92,7 +95,8 @@ class OfficeTableCreate {
       officeApiCrosstabHelper.createCrosstabHeaders(
         officeTable,
         mstrTable,
-        crosstabHeaderDimensions
+        crosstabHeaderDimensions,
+        objectData
       );
     }
 

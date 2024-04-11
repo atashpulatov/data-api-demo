@@ -1,5 +1,7 @@
 import { officeApiHeaderMergeHelper } from './office-api-header-merge-helper';
 
+import { CrosstabHeaderDimensions, ObjectData } from '../../types/object-types';
+
 import mstrNormalizedJsonHandler from '../../mstr-object/handler/mstr-normalized-json-handler';
 
 const EXCEL_XTABS_BORDER_COLOR = '#a5a5a5';
@@ -185,7 +187,8 @@ class OfficeApiCrosstabHelper {
   createCrosstabHeaders(
     officeTable: Excel.Table,
     mstrTable: any,
-    crosstabHeaderDimensions: any
+    crosstabHeaderDimensions: CrosstabHeaderDimensions,
+    objectData: ObjectData
   ): void {
     const {
       attributesNames,
@@ -195,7 +198,7 @@ class OfficeApiCrosstabHelper {
 
     officeTable.showHeaders = false;
 
-    this.createColumnsHeaders(officeTable, columns);
+    this.createColumnsHeaders(officeTable, columns, objectData);
 
     this.createCrosstabHeadersTitles(
       officeTable,
@@ -212,7 +215,8 @@ class OfficeApiCrosstabHelper {
    * @param columns Contains headers structure and data
    * @return Context.sync
    */
-  createColumnsHeaders(officeTable: Excel.Table, columns: any[]): void {
+  createColumnsHeaders(officeTable: Excel.Table, columns: any[], objectData: ObjectData): void {
+    const { mergeCrosstabColumns } = objectData.objectSettings;
     const reportStartingCell = officeTable.getDataBodyRange().getCell(0, 0);
     const columnOffset = columns.length;
     const rowOffset = 0;
@@ -224,7 +228,9 @@ class OfficeApiCrosstabHelper {
     const headerRange = startingCell.getResizedRange(columns.length - 1, columns[0].length - 1);
     this.insertHeadersValues(headerRange, columns, 'columns');
 
-    this.createHeaders(columns, startingCell, directionVector);
+    if (mergeCrosstabColumns) {
+      this.createHeaders(columns, startingCell, directionVector);
+    }
   }
 
   /**
@@ -268,11 +274,13 @@ class OfficeApiCrosstabHelper {
     // we are not inserting attributes names if they do not exist
     if (columnsAttributes && columnsAttributes.length) {
       columnsTitlesRange.values = mstrNormalizedJsonHandler.transposeMatrix([columnsAttributes]);
+      // TODO potentially to let go
       officeApiHeaderMergeHelper.mergeHeaderColumns(columnsAttributes, columnsTitlesRange);
     }
 
     if (rowsAttributes && rowsAttributes.length) {
       rowsTitlesRange.values = [rowsAttributes];
+      // TODO potentially to let go
       officeApiHeaderMergeHelper.mergeHeaderRows(rowsAttributes, rowsTitlesRange);
     }
   }
