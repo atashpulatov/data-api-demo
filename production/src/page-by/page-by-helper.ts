@@ -1,4 +1,5 @@
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
+import officeReducerHelper from '../office/store/office-reducer-helper';
 
 import { reduxStore } from '../store';
 
@@ -13,6 +14,10 @@ import {
 } from './page-by-types';
 
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import {
+  refreshRequested,
+  removeRequested,
+} from '../redux-reducer/operation-reducer/operation-actions';
 
 class PageByHelper {
   /**
@@ -139,6 +144,38 @@ class PageByHelper {
       default:
         return pageByData;
     }
+  };
+
+  /**
+   * Triggers refresh operation for all Page-by siblings of the source object
+   *
+   * @param objectWorkingId Unique identifier of the object
+   */
+  handleRefreshingMultiplePages = (objectWorkingId: number): void => {
+    const sourceObject =
+      officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
+
+    const pageByObjects = this.getPageBySiblings(sourceObject);
+
+    pageByObjects.forEach((pageByObject: ObjectData) => {
+      reduxStore.dispatch(refreshRequested(pageByObject.objectWorkingId, pageByObject?.importType));
+    });
+  };
+
+  /**
+   * Triggers remove operation for all Page-by siblings of the source object
+   *
+   * @param objectWorkingId Unique identifier of the object
+   */
+  handleRemovingMultiplePages = (objectWorkingId: number): void => {
+    const sourceObject =
+      officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
+
+    const pageByObjects = this.getPageBySiblings(sourceObject);
+
+    pageByObjects.forEach((pageByObject: ObjectData) => {
+      reduxStore.dispatch(removeRequested(pageByObject.objectWorkingId, pageByObject?.importType));
+    });
   };
 }
 

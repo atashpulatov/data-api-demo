@@ -247,13 +247,13 @@ class OverviewHelper {
         await this.sidePanelService.edit(response.objectWorkingId);
         break;
       case OverviewActionCommands.REPROMPT:
-        await this.sidePanelService.reprompt(response.objectWorkingIds, true);
+        this.sidePanelService.reprompt(response.objectWorkingIds, true);
         break;
       case OverviewActionCommands.REFRESH:
-        await this.sidePanelService.refresh(response.objectWorkingIds);
+        this.sidePanelService.refresh(response.objectWorkingIds);
         break;
       case OverviewActionCommands.REMOVE:
-        await this.sidePanelService.remove(response.objectWorkingIds);
+        this.sidePanelService.remove(response.objectWorkingIds);
         break;
       case OverviewActionCommands.DUPLICATE:
         response.objectWorkingIds.forEach(objectWorkingId => {

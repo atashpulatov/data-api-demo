@@ -56,7 +56,7 @@ class SidePanelService {
   /**
    * Clears the reprompt task queue and resets the index.
    */
-  async clearRepromptTask(): Promise<void> {
+  clearRepromptTask(): void {
     this.reduxStore.dispatch(clearRepromptTask());
   }
 
@@ -75,7 +75,7 @@ class SidePanelService {
    *
    * @param objectWorkingId Unique Id of the object, allowing to reference source object.
    */
-  async highlightObject(objectWorkingId: number): Promise<void> {
+  highlightObject(objectWorkingId: number): void {
     this.reduxStore.dispatch(highlightRequested(objectWorkingId));
   }
 
@@ -87,7 +87,7 @@ class SidePanelService {
    * @param objectWorkingId Unique Id of the object, allowing to reference source object.
    * @param newName New name for object
    */
-  async rename(objectWorkingId: number, newName: string): Promise<void> {
+  rename(objectWorkingId: number, newName: string): void {
     const renamedObject = { objectWorkingId, name: newName };
     this.reduxStore.dispatch(updateObject(renamedObject));
     officeStoreObject.saveObjectsInExcelStore();
@@ -110,19 +110,10 @@ class SidePanelService {
   /**
    * Handles the refresh of multiple pages for page-by object.
    *
-   * @param objectWorkingIds Contains unique Id of the objects, allowing to reference source object.
+   * @param objectWorkingId Contains unique Id of the object, allowing to reference source object.
    */
   refreshMultiplePagesForPageBy(objectWorkingId: number): void {
-    const sourceObject =
-      officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
-
-    const pageByObjects = pageByHelper.getPageBySiblings(sourceObject);
-
-    pageByObjects.forEach((pageByObject: ObjectData) => {
-      this.reduxStore.dispatch(
-        refreshRequested(pageByObject.objectWorkingId, pageByObject?.importType)
-      );
-    });
+    pageByHelper.handleRefreshingMultiplePages(objectWorkingId);
   }
 
   /**
@@ -131,12 +122,21 @@ class SidePanelService {
    *
    * @param {Array} objectWorkingIds Contains unique Id of the objects, allowing to reference source object.
    */
-  async remove(objectWorkingIds: number[]): Promise<void> {
+  remove(objectWorkingIds: number[]): void {
     objectWorkingIds.forEach(objectWorkingId => {
       const sourceObject =
         officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
       this.reduxStore.dispatch(removeRequested(objectWorkingId, sourceObject?.importType));
     });
+  }
+
+  /**
+   * Handles the remove of multiple pages for page-by object.
+   *
+   * @param objectWorkingId Contains unique Id of the object, allowing to reference source object.
+   */
+  removeMultiplePagesForPageBy(objectWorkingId: number): void {
+    pageByHelper.handleRemovingMultiplePages(objectWorkingId);
   }
 
   /**
@@ -151,11 +151,7 @@ class SidePanelService {
    * @param insertNewWorksheet  Flag which shows whether the duplication should happen to new excel worksheet.
    * @param withEdit Flag which shows whether the duplication should happen with additional edit popup.
    */
-  async duplicate(
-    objectWorkingId: number,
-    insertNewWorksheet: boolean,
-    withEdit: boolean
-  ): Promise<void> {
+  duplicate(objectWorkingId: number, insertNewWorksheet: boolean, withEdit: boolean): void {
     const sourceObject =
       officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
     const object = JSON.parse(JSON.stringify(sourceObject));
@@ -248,7 +244,7 @@ class SidePanelService {
    * @param objectWorkingIds contains list of unique Id of the objects, allowing to reference source objects.
    * @param isFromDataOverviewDialog Flag which shows whether the re-prompting is from overview dialog.
    */
-  async reprompt(objectWorkingIds: number[], isFromDataOverviewDialog = false): Promise<void> {
+  reprompt(objectWorkingIds: number[], isFromDataOverviewDialog = false): void {
     // Prepare dispatch actions
     const dispatchTasks: any[] = [];
 

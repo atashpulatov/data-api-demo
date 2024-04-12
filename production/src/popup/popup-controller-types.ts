@@ -1,3 +1,4 @@
+import { PageByData } from '../page-by/page-by-types';
 import { Body, DossierData, SubtotalsInfo, VisualizationInfo } from '../types/object-types';
 
 import mstrObjectType from '../mstr-object/mstr-object-type-enum';
@@ -30,6 +31,7 @@ export interface DialogResponse {
   subtotalsInfo?: SubtotalsInfo;
   error?: any;
   filterDetails?: FilterDetails[];
+  pageByData?: PageByData;
 }
 
 export interface FilterDetails {

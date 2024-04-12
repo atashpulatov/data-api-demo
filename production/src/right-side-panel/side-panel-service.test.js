@@ -93,12 +93,16 @@ describe('SidePanelService', () => {
       .spyOn(pageByHelper, 'getPageBySiblings')
       .mockReturnValueOnce(mockedPageByObjects);
     const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+    const mockedRefreshRequested = jest
+      .spyOn(operationActions, 'refreshRequested')
+      .mockImplementation();
 
     // when
     sidePanelService.refreshMultiplePagesForPageBy(objectWorkingIds);
     // then
     expect(mockedGetPageBySiblings).toHaveBeenCalled();
     expect(mockedDispatch).toBeCalledTimes(mockedPageByObjects.length);
+    expect(mockedRefreshRequested).toBeCalledTimes(mockedPageByObjects.length);
   });
 
   it('should remove objects', () => {
@@ -109,6 +113,28 @@ describe('SidePanelService', () => {
     sidePanelService.remove(objectWorkingIds);
     // then
     expect(mockedDispatch).toBeCalledTimes(objectWorkingIds.length);
+  });
+
+  it('should remove multiple Page-by pages', () => {
+    // given
+    const objectWorkingIds = 1;
+    const mockedPageByObjects = [{ objectWorkingId: 1 }, { objectWorkingId: 2 }];
+
+    const mockedGetPageBySiblings = jest
+      .spyOn(pageByHelper, 'getPageBySiblings')
+      .mockReturnValueOnce(mockedPageByObjects);
+    const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+    const mockedRemoveRequested = jest
+      .spyOn(operationActions, 'removeRequested')
+      .mockImplementation();
+
+    // when
+    sidePanelService.removeMultiplePagesForPageBy(objectWorkingIds);
+
+    // then
+    expect(mockedGetPageBySiblings).toHaveBeenCalled();
+    expect(mockedDispatch).toBeCalledTimes(mockedPageByObjects.length);
+    expect(mockedRemoveRequested).toBeCalledTimes(mockedPageByObjects.length);
   });
 
   it('should dispatch duplicateRequested for duplicate with import', () => {
@@ -274,7 +300,7 @@ describe('SidePanelService', () => {
       .mockImplementation();
 
     // when
-    await sidePanelService.reprompt([objectWorkingId]);
+    sidePanelService.reprompt([objectWorkingId]);
 
     // then
     expect(getObjectFromObjectReducerByObjectWorkingId).toBeCalled();
@@ -300,7 +326,7 @@ describe('SidePanelService', () => {
       .mockImplementation();
 
     // when
-    await sidePanelService.reprompt(objectWorkingIds);
+    sidePanelService.reprompt(objectWorkingIds);
 
     // then
     expect(getObjectFromObjectReducerByObjectWorkingId).toBeCalled();
