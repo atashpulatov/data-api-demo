@@ -1,4 +1,5 @@
 import officeReducerHelper from '../office/store/office-reducer-helper';
+import { pageByHelper } from '../page-by/page-by-helper';
 
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { PopupTypeEnum } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
@@ -14,6 +15,7 @@ import {
   ErrorType,
   httpStatusToErrorType,
   IncomingErrorStrings,
+  isPageByRefreshError,
   stringMessageToErrorType,
 } from './constants';
 
@@ -63,7 +65,6 @@ class ErrorService {
     if (error.Code === 5012) {
       this.handleError(error);
     }
-
     const errorMessage = errorMessageFactory(errorType)({ error });
     const details = this.getErrorDetails(error, errorMessage);
 
@@ -72,6 +73,18 @@ class ErrorService {
         objectWorkingId,
         title: errorMessage,
         message: details,
+        callback,
+      };
+
+      officeReducerHelper.displayPopup(popupData);
+    } else if (errorType === ErrorType.PAGE_BY_REFRESH_ERR) {
+      const selectedObjects = pageByHelper.getPageBySiblings(objectWorkingId);
+
+      const popupData = {
+        objectWorkingId,
+        title: errorMessage,
+        message: details,
+        selectedObjects,
         callback,
       };
 
@@ -286,6 +299,10 @@ class ErrorService {
       }
       return null;
     }
+    if (error?.response?.body?.message && isPageByRefreshError(error)) {
+      return ErrorType.PAGE_BY_REFRESH_ERR;
+    }
+
     const status = error.status || (error.response ? error.response.status : null);
     return httpStatusToErrorType(status);
   };

@@ -1,5 +1,6 @@
 import { notificationService } from '../notification/notification-service';
 import officeReducerHelper from '../office/store/office-reducer-helper';
+import { pageByHelper } from '../page-by/page-by-helper';
 
 import { errorService } from './error-handler';
 
@@ -10,6 +11,42 @@ jest.mock('../notification/notification-service');
 describe('ErrorService', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  it('should handle page-by refresh error', async () => {
+    // given
+    const objectWorkingId = 'objectWorkingId';
+    const error = {
+      response: {
+        body: {
+          code: 'ERR006',
+          message: 'The report has 1 page-by units but you have input 2 page-by selected',
+        },
+      },
+    };
+    const callback = jest.fn();
+    const operationData = {};
+
+    const errorType = errorService.getErrorType(error, operationData);
+
+    errorService.getErrorDetails = jest.fn().mockReturnValue('error details');
+    errorService.reduxStore = {
+      getState: jest.fn().mockReturnValue({
+        popupStateReducer: { isDataOverviewOpen: true },
+        officeReducer: { isDialogOpen: false },
+      }),
+    };
+
+    jest.spyOn(errorService, 'closePromptsDialogInOverview').mockReturnValue(jest.fn());
+    jest.spyOn(pageByHelper, 'getPageBySiblings').mockImplementation();
+
+    // when
+    await errorService.handleObjectBasedError(objectWorkingId, error, callback, operationData);
+
+    // then
+    expect(errorType).toEqual('pageByRefresh');
+    expect(errorService.getErrorDetails).toHaveBeenCalled();
+    expect(pageByHelper.getPageBySiblings).toHaveBeenCalled();
   });
 
   it('should handle overlapping tables error', async () => {

@@ -27,6 +27,7 @@ export enum ErrorType {
   UNKNOWN_ERR = 'unknown',
   INVALID_VIZ_KEY = 'invalidVizKey',
   EXCEEDS_EXCEL_API_LIMITS = 'exceedExcelApiLimit',
+  PAGE_BY_REFRESH_ERR = 'pageByRefresh',
 }
 
 export enum IncomingErrorStrings {
@@ -82,6 +83,7 @@ export enum ErrorMessages {
   MISSING_ELEMENT_OBJECT_MESSAGE = 'This action cannot be performed. It appears that part of the data has been removed from the data source. Please click Edit to see the changes.',
   WRONG_RANGE = 'Please select only one range before import.',
   MICROSTRATEGY_API_MISSING = 'Cannot find microstrategy.dossier, please check if embeddinglib.js is present in your environment.',
+  PAGE_BY_REFRESH_ERROR_MESSAGE = 'The source object has been modified. You can either edit it or delete it.',
 }
 
 export const stringMessageToErrorType = withDefaultValue(
@@ -140,6 +142,20 @@ export const errorCodes = {
   ERR003: 'ERR003',
   ERR006: 'ERR006',
   ERR009: 'ERR009',
+};
+
+export const isPageByRefreshError = (error: any): boolean => {
+  const pageByAttributeChangedError =
+    error.response.body.message.includes('The report has') &&
+    error.response.body.message.includes('page-by units but you have input') &&
+    error.response.body.message.includes('page-by selected');
+  const pageByObjectDoesNotMatchError =
+    error.response.body.message.includes('In position') &&
+    error.response.body.message.includes('the selected page-by element') &&
+    error.response.body.message.includes('and page-by unit id') &&
+    error.response.body.message.includes('dont match.');
+
+  return pageByAttributeChangedError || pageByObjectDoesNotMatchError;
 };
 
 export const handleBadRequestError = (error: any): string => {
@@ -216,6 +232,7 @@ export const errorMessageFactory = withDefaultValue(
     [ErrorType.PROTECTED_SHEET_ERR]: () => ErrorMessages.PROTECTED_SHEET,
     [ErrorType.INVALID_VIZ_KEY]: () => ErrorMessages.INVALID_VIZ_KEY_MESSAGE,
     [ErrorType.EXCEEDS_EXCEL_API_LIMITS]: () => ErrorMessages.EXCEEDS_EXCEL_API_LIMITS,
+    [ErrorType.PAGE_BY_REFRESH_ERR]: () => ErrorMessages.PAGE_BY_REFRESH_ERROR_MESSAGE,
   },
   ({ error }: { error: any }) => error.message || ErrorMessages.UNKNOWN_ERROR
 );
