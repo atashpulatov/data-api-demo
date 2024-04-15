@@ -145,17 +145,17 @@ export const errorCodes = {
 };
 
 export const isPageByRefreshError = (error: any): boolean => {
-  const pageByAttributeChangedError =
-    error.response.body.message.includes('The report has') &&
-    error.response.body.message.includes('page-by units but you have input') &&
-    error.response.body.message.includes('page-by selected');
-  const pageByObjectDoesNotMatchError =
-    error.response.body.message.includes('In position') &&
-    error.response.body.message.includes('the selected page-by element') &&
-    error.response.body.message.includes('and page-by unit id') &&
-    error.response.body.message.includes('dont match.');
+  const errorString = error.response.body.message;
 
-  return pageByAttributeChangedError || pageByObjectDoesNotMatchError;
+  const pageByAttributeChangedErrorPattern =
+    /The report has \d+ page-by units but you have input \d+ page-by selected elements\./;
+  const pageByObjectDoesNotMatchErrorPattern =
+    /In position \d+, the selected page-by element '[^']+' and page-by unit id '[^']+' dont match\./;
+
+  return (
+    pageByAttributeChangedErrorPattern.test(errorString) ||
+    pageByObjectDoesNotMatchErrorPattern.test(errorString)
+  );
 };
 
 export const handleBadRequestError = (error: any): string => {

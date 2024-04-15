@@ -20,7 +20,7 @@ describe('ErrorService', () => {
       response: {
         body: {
           code: 'ERR006',
-          message: 'The report has 1 page-by units but you have input 2 page-by selected',
+          message: 'The report has 2 page-by units but you have input 1 page-by selected elements.',
         },
       },
     };
