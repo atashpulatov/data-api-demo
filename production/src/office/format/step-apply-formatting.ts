@@ -20,10 +20,7 @@ class StepApplyFormatting {
    * @param operationData.instanceDefinition Object containing information about MSTR object
    * @param operationData.excelContext Reference to Excel Context used by Excel API functions
    */
-  applyFormatting = async (
-    _objectData: ObjectData,
-    operationData: OperationData
-  ): Promise<void> => {
+  applyFormatting = async (objectData: ObjectData, operationData: OperationData): Promise<void> => {
     console.group('Apply formatting');
     console.time('Total');
 
@@ -43,6 +40,7 @@ class StepApplyFormatting {
         offset,
         officeTable,
         excelContext,
+        objectData,
         columns,
         metricsInRows
       );
@@ -94,11 +92,13 @@ class StepApplyFormatting {
     offset: number,
     officeTable: Excel.Table,
     excelContext: Excel.RequestContext,
+    objectData: ObjectData,
     columns?: number,
     metricsInRows?: boolean
   ): Promise<void> {
     for (let index = 0; index < filteredColumnInformation.length; index++) {
       const object = filteredColumnInformation[index];
+      const { importAttributesAsText } = objectData.objectSettings || {};
       const columnRange = this.getColumnRangeForFormatting(
         index,
         isCrosstab,
@@ -108,9 +108,10 @@ class StepApplyFormatting {
         metricsInRows
       );
       if (object.isAttribute) {
+        columnRange.numberFormat = (importAttributesAsText ? '@' : '') as any;
         await officeFormatHyperlinks.formatColumnAsHyperlinks(object, columnRange, excelContext);
       } else {
-        columnRange.numberFormat = this.getFormat(object) as unknown as any[][];
+        columnRange.numberFormat = this.getFormat(object) as any;
       }
 
       if (index % 5000 === 0) {

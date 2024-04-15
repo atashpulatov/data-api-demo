@@ -93,6 +93,7 @@ describe('StepApplyFormatting', () => {
       'calculateOffsetTest',
       { columns: 'columnsTest' },
       { sync: excelContextSyncMock },
+      {} as ObjectData,
       'instanceColumnsTest',
       'metricsInRowsTest'
     );
@@ -154,7 +155,14 @@ describe('StepApplyFormatting', () => {
     jest.spyOn(stepApplyFormatting, 'getColumnRangeForFormatting').mockImplementation();
 
     // when
-    stepApplyFormatting.setupFormatting([], undefined, undefined, undefined, excelContext);
+    stepApplyFormatting.setupFormatting(
+      [],
+      undefined,
+      undefined,
+      undefined,
+      excelContext,
+      {} as ObjectData
+    );
 
     // then
     expect(stepApplyFormatting.getColumnRangeForFormatting).not.toBeCalled();
@@ -177,6 +185,7 @@ describe('StepApplyFormatting', () => {
       1,
       ExcleTableMock,
       excelContext,
+      {} as ObjectData,
       2,
       true
     );
@@ -194,7 +203,7 @@ describe('StepApplyFormatting', () => {
 
     expect(stepApplyFormatting.getFormat).not.toBeCalled();
 
-    expect(columnRangeMock.numberFormat).toBeUndefined();
+    expect(columnRangeMock.numberFormat).toEqual('');
   });
 
   it('setupFormatting should work as expected for 1 filteredColumnInformation not attribute element', () => {
@@ -215,6 +224,7 @@ describe('StepApplyFormatting', () => {
       1,
       ExcleTableMock,
       excelContext,
+      {} as ObjectData,
       2,
       true
     );
@@ -248,7 +258,8 @@ describe('StepApplyFormatting', () => {
       true,
       1,
       ExcleTableMock,
-      excelContext
+      excelContext,
+      {} as ObjectData
     );
 
     // then
@@ -256,11 +267,11 @@ describe('StepApplyFormatting', () => {
   });
 
   it.each`
-    expectedNumberFormat      | getFormatCallNo | filteredColumnInformation
-    ${[undefined, undefined]} | ${0}            | ${[{ isAttribute: true }, { isAttribute: true }]}
-    ${['fmt 0', undefined]}   | ${1}            | ${[{ isAttribute: false }, { isAttribute: true }]}
-    ${[undefined, 'fmt 1']}   | ${1}            | ${[{ isAttribute: true }, { isAttribute: false }]}
-    ${['fmt 0', 'fmt 1']}     | ${2}            | ${[{ isAttribute: false }, { isAttribute: false }]}
+    expectedNumberFormat  | getFormatCallNo | filteredColumnInformation
+    ${['', '']}           | ${0}            | ${[{ isAttribute: true }, { isAttribute: true }]}
+    ${['fmt 0', '']}      | ${1}            | ${[{ isAttribute: false }, { isAttribute: true }]}
+    ${['', 'fmt 1']}      | ${1}            | ${[{ isAttribute: true }, { isAttribute: false }]}
+    ${['fmt 0', 'fmt 1']} | ${2}            | ${[{ isAttribute: false }, { isAttribute: false }]}
   `(
     'setupFormatting should work as expected for 2 filteredColumnInformation elements',
     async ({ expectedNumberFormat, getFormatCallNo, filteredColumnInformation }) => {
@@ -287,6 +298,7 @@ describe('StepApplyFormatting', () => {
         1,
         ExcleTableMock,
         excelContext,
+        {} as ObjectData,
         2,
         true
       );
