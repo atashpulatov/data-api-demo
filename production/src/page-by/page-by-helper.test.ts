@@ -1,4 +1,5 @@
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
+import officeReducerHelper from '../office/store/office-reducer-helper';
 import { pageByHelper } from './page-by-helper';
 
 import { reduxStore } from '../store';
@@ -176,9 +177,12 @@ describe('Page-by helper', () => {
       .spyOn(reduxStore, 'getState')
       // @ts-expect-error
       .mockReturnValueOnce({ objectReducer: { objects: mockedObjectData } });
+    jest
+      .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId')
+      .mockReturnValueOnce(mockedObjectData[0]);
 
     // when
-    const siblings = pageByHelper.getPageBySiblings(mockedObjectData[0]);
+    const siblings = pageByHelper.getPageBySiblings(mockedObjectData[0].objectWorkingId);
 
     // then
     expect(siblings).toHaveLength(3);
