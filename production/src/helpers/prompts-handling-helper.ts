@@ -113,14 +113,14 @@ export async function answerDossierPromptsHelper(
  * It will validated instance is prompted prior to applying prompts.
  * If prompted, it will answer the prompts and return the updated instance definition.
  * @param instanceDefinition
- * @param objectId
+ * @param dossierId
  * @param projectId
  * @param promptsAnswers
  * @returns
  */
 export async function preparePromptedDossier(
   instanceDefinition: any,
-  objectId: string,
+  dossierId: string,
   projectId: string,
   promptsAnswers: PromptsAnswer[]
 ): Promise<any> {
@@ -128,20 +128,72 @@ export async function preparePromptedDossier(
   if (dossierInstanceDefinition?.status === ObjectExecutionStatus.PROMPTED) {
     // Re-prompt the Dossier's instance to apply previous answers. Get new instance definition.
     const rePromptResponse = await mstrObjectRestService.rePromptDossier(
-      objectId,
+      dossierId,
       instanceDefinition.mid,
       projectId
     );
     dossierInstanceDefinition.mid = rePromptResponse.mid;
 
-    // Loop through the prompts and answer them.
-    dossierInstanceDefinition = await answerDossierPromptsHelper(
-      dossierInstanceDefinition,
-      objectId,
-      projectId,
-      promptsAnswers
-    );
+    try {
+      // Loop through the prompts and answer them.
+      dossierInstanceDefinition = await answerDossierPromptsHelper(
+        dossierInstanceDefinition,
+        dossierId,
+        projectId,
+        promptsAnswers
+      );
+    } catch (error) {
+      console.error('Error applying prompt answers:', error);
+
+      // Proceed with creating a new Dossier's instance to ensure prompts
+      // are rendered with default values. No saved answers will be applied.
+      // Delete the current Dossier's instance and create a new one based on the dossier Id.
+      await mstrObjectRestService.deleteDossierInstance(
+        projectId,
+        dossierId,
+        dossierInstanceDefinition.mid
+      );
+
+      const body = { disableManipulationsAutoSaving: false, persistViewState: true };
+      dossierInstanceDefinition = await mstrObjectRestService.createDossierInstance(
+        projectId,
+        dossierId,
+        body
+      );
+
+      return dossierInstanceDefinition;
+    }
   }
+
+  return dossierInstanceDefinition;
+}
+
+/**
+ * Resets current prompted instance by deleting in and creating a new one based on the report.
+ * This is used to ensure that the prompts are rendered with default values and force the user
+ * to answer them again starting with a clean slate even for nested prompts.
+ *
+ * @param {*} projectId - project id
+ * @param {*} objectId - report's objectId
+ * @param {*} sourceReportInstanceId - instance Id of the current report's instance
+ * @param {*} dossierInstanceId - dossier instance definition
+ * @returns
+ */
+async function resetDossierInstance(
+  projectId: string,
+  objectId: string,
+  sourceReportInstanceId: string,
+  dossierInstanceId: string
+): Promise<any> {
+  // Delete the Dossier's instance to remove lingering one.
+  await mstrObjectRestService.deleteDossierInstance(projectId, objectId, dossierInstanceId);
+
+  // Create a new prompted Dossier's instance based on the report
+  const dossierInstanceDefinition = await mstrObjectRestService.createDossierBasedOnReport(
+    objectId,
+    sourceReportInstanceId,
+    projectId
+  );
 
   return dossierInstanceDefinition;
 }
@@ -177,13 +229,28 @@ export async function preparePromptedReport(
     promptsAnswers[0].answers?.length > 0 &&
     dossierInstanceDefinition.status === ObjectExecutionStatus.PROMPTED
   ) {
-    // Reflect saved answers to the prompts of the Dossier's instance if applicable.
-    dossierInstanceDefinition = await answerDossierPromptsHelper(
-      dossierInstanceDefinition,
-      chosenObjectIdLocal,
-      projectId,
-      promptsAnswers
-    );
+    try {
+      // Reflect saved answers to the prompts of the Dossier's instance if applicable.
+      dossierInstanceDefinition = await answerDossierPromptsHelper(
+        dossierInstanceDefinition,
+        chosenObjectIdLocal,
+        projectId,
+        promptsAnswers
+      );
+    } catch (error) {
+      console.error('Error applying prompt answers:', error);
+
+      // Proceed with creating a new Dossier's instance based on the report and ensure prompts
+      // are rendered with default values. No saved answers will be applied.
+      dossierInstanceDefinition = await resetDossierInstance(
+        projectId,
+        chosenObjectIdLocal,
+        instanceId,
+        dossierInstanceDefinition.mid
+      );
+
+      return dossierInstanceDefinition;
+    }
   }
 
   // Re-prompt the Dossier's instance to change execution status to 2 and force Prompts' dialog to open.
@@ -192,8 +259,11 @@ export async function preparePromptedReport(
     dossierInstanceDefinition.mid,
     projectId
   );
-  dossierInstanceDefinition.mid = repromptResponse.mid;
-  dossierInstanceDefinition.id = chosenObjectIdLocal;
+
+  if (repromptResponse?.mid) {
+    dossierInstanceDefinition.mid = repromptResponse.mid;
+    dossierInstanceDefinition.id = chosenObjectIdLocal;
+  }
 
   return dossierInstanceDefinition;
 }
