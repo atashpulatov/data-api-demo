@@ -253,5 +253,14 @@
    "Import Image": "Importer l'image",
    "Loading...": "Chargement...",
    "Close": "Fermer",
-   "Overview": "Présentation"
+   "Overview": "Présentation",
+   "Object and Worksheet Naming": "Dénomination d'objet et de feuille de calcul",
+   "Use page name": "Utiliser le nom de la page",
+   "Use source report name": "Utiliser le nom du rapport source",
+   "Use source report name and page name": "Utiliser le nom du rapport source et le nom de la page",
+   "Use page name and source report name": "Utiliser le nom de la page et le nom du rapport source",
+   "Page-by Display": "Affichage par page",
+   "Prompt to select pages": "Invite pour sélectionner des pages",
+   "Import default page": "Importer la page par défaut",
+   "Import all pages": "Importer toutes les pages"
 }

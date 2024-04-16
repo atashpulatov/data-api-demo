@@ -253,5 +253,14 @@
    "Import Image": "Import Image",
    "Loading...": "Loading...",
    "Close": "Close",
-   "Overview": "Overview"
+   "Overview": "Overview",
+   "Object and Worksheet Naming": "Object and Worksheet Naming",
+   "Use page name": "Use page name",
+   "Use source report name": "Use source report name",
+   "Use source report name and page name": "Use source report name and page name",
+   "Use page name and source report name": "Use page name and source report name",
+   "Page-by Display": "Page-by Display",
+   "Prompt to select pages": "Prompt to select pages",
+   "Import default page": "Import default page",
+   "Import all pages": "Import all pages"
 }

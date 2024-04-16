@@ -253,5 +253,14 @@
    "Import Image": "Importer billede",
    "Loading...": "Indlæser...",
    "Close": "Luk",
-   "Overview": "Oversigt"
+   "Overview": "Oversigt",
+   "Object and Worksheet Naming": "Navngivning af objekt og regneark",
+   "Use page name": "Brug sidenavn",
+   "Use source report name": "Brug kilderapportens navn",
+   "Use source report name and page name": "Brug kilderapportens navn og sidenavn",
+   "Use page name and source report name": "Brug sidenavn og kilderapportnavn",
+   "Page-by Display": "Side efter-visning",
+   "Prompt to select pages": "Prompt for at vælge sider",
+   "Import default page": "Importer standardside",
+   "Import all pages": "Importer alle sider"
 }

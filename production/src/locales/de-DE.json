@@ -253,5 +253,14 @@
    "Import Image": "Bild importieren",
    "Loading...": "Wird geladen...",
    "Close": "Schließen",
-   "Overview": "Übersicht"
+   "Overview": "Übersicht",
+   "Object and Worksheet Naming": "Objekt- und Arbeitsblattbenennung",
+   "Use page name": "Seitennamen verwenden",
+   "Use source report name": "Namen des Quellberichts verwenden",
+   "Use source report name and page name": "Quellberichtsnamen und Seitennamen verwenden",
+   "Use page name and source report name": "Seitennamen und Namen des Quellberichts verwenden",
+   "Page-by Display": "Page-By-Anzeige",
+   "Prompt to select pages": "Eingabeaufforderung zum Auswählen von Seiten",
+   "Import default page": "Standardseite importieren",
+   "Import all pages": "Alle Seiten importieren"
 }

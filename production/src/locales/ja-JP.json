@@ -253,5 +253,14 @@
    "Import Image": "画像をインポート",
    "Loading...": "ロード中...",
    "Close": "閉じる",
-   "Overview": "概要"
+   "Overview": "概要",
+   "Object and Worksheet Naming": "オブジェクトおよびワークシートの命名",
+   "Use page name": "ページ名を使用",
+   "Use source report name": "ソース レポート名を使用",
+   "Use source report name and page name": "ソースのレポート名およびページ名を使用",
+   "Use page name and source report name": "ページ名とソース レポート名を使用",
+   "Page-by Display": "ページバイ表示",
+   "Prompt to select pages": "ページを選択するプロンプト",
+   "Import default page": "デフォルトのページをインポート",
+   "Import all pages": "すべてのページをインポート"
 }
