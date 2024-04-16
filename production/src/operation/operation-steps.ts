@@ -33,6 +33,8 @@ export enum OperationSteps {
   REMOVE_VISUALIZATION_IMAGE = 'REMOVE_VISUALIZATION_IMAGE',
   ADD_VISUALIZATION_PLACEHOLDER = 'ADD_VISUALIZATION_PLACEHOLDER',
   SAVE_IMAGE_DETAILS = 'SAVE_IMAGE_DETAILS',
+  IMPORT_EXPORT_ENGINE_WORKBOOK = 'IMPORT_EXPORT_ENGINE_WORKBOOK',
+  MOVE_FORMATTED_DATA_FROM_EXPORT_ENGINE = 'MOVE_FORMATTED_DATA_FROM_EXPORT_ENGINE',
 }
 
 const operationStepsMapTable = {
@@ -120,6 +122,84 @@ const operationStepsMapTable = {
   ],
 };
 
+const operationStepsMapFormattedTable = {
+  [OperationTypes.IMPORT_OPERATION]: [
+    OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
+    OperationSteps.GET_INSTANCE_DEFINITION,
+    OperationSteps.GET_OBJECT_DETAILS,
+    OperationSteps.GET_OFFICE_TABLE_IMPORT,
+    OperationSteps.IMPORT_EXPORT_ENGINE_WORKBOOK,
+    OperationSteps.MOVE_FORMATTED_DATA_FROM_EXPORT_ENGINE,
+    OperationSteps.FORMAT_OFFICE_TABLE,
+    OperationSteps.BIND_OFFICE_TABLE,
+    OperationSteps.RENAME_EXCEL_WORKSHEET,
+    OperationSteps.SAVE_OBJECT_IN_EXCEL,
+    OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
+  ],
+
+  [OperationTypes.REFRESH_OPERATION]: [
+    OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
+    OperationSteps.BACKUP_OBJECT_DATA,
+    OperationSteps.GET_INSTANCE_DEFINITION,
+    OperationSteps.GET_OBJECT_DETAILS,
+    OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH,
+    OperationSteps.IMPORT_EXPORT_ENGINE_WORKBOOK,
+    OperationSteps.MOVE_FORMATTED_DATA_FROM_EXPORT_ENGINE,
+    OperationSteps.FORMAT_OFFICE_TABLE,
+    OperationSteps.BIND_OFFICE_TABLE,
+    OperationSteps.SAVE_OBJECT_IN_EXCEL,
+    OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
+  ],
+
+  [OperationTypes.EDIT_OPERATION]: [
+    OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
+    OperationSteps.MODIFY_OBJECT,
+    OperationSteps.GET_INSTANCE_DEFINITION,
+    OperationSteps.GET_OBJECT_DETAILS,
+    OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH,
+    OperationSteps.IMPORT_EXPORT_ENGINE_WORKBOOK,
+    OperationSteps.MOVE_FORMATTED_DATA_FROM_EXPORT_ENGINE,
+    OperationSteps.FORMAT_OFFICE_TABLE,
+    OperationSteps.BIND_OFFICE_TABLE,
+    OperationSteps.SAVE_OBJECT_IN_EXCEL,
+    OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
+  ],
+
+
+  [OperationTypes.DUPLICATE_OPERATION]: [
+    OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
+    OperationSteps.MODIFY_OBJECT,
+    OperationSteps.GET_DUPLICATE_NAME,
+    OperationSteps.GET_INSTANCE_DEFINITION,
+    OperationSteps.GET_OBJECT_DETAILS,
+    OperationSteps.GET_OFFICE_TABLE_IMPORT,
+    OperationSteps.IMPORT_EXPORT_ENGINE_WORKBOOK,
+    OperationSteps.MOVE_FORMATTED_DATA_FROM_EXPORT_ENGINE,
+    OperationSteps.FORMAT_OFFICE_TABLE,
+    OperationSteps.BIND_OFFICE_TABLE,
+    OperationSteps.SAVE_OBJECT_IN_EXCEL,
+    OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
+  ],
+
+  [OperationTypes.REMOVE_OPERATION]: [
+    OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
+    OperationSteps.REMOVE_OBJECT_TABLE,
+    OperationSteps.REMOVE_OBJECT_BINDING,
+    OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
+  ],
+
+  [OperationTypes.HIGHLIGHT_OPERATION]: [OperationSteps.HIGHLIGHT_OBJECT],
+
+  [OperationTypes.CLEAR_DATA_OPERATION]: [
+    OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
+    OperationSteps.CHECK_OBJECT_STATUS,
+    OperationSteps.CLEAR_CROSSTAB_HEADERS,
+    OperationSteps.CLEAR_TABLE_DATA,
+    OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
+    OperationSteps.COMPLETE_CLEAR_DATA,
+  ],
+};
+
 const operationStepsMapImage = {
   [OperationTypes.IMPORT_OPERATION]: [
     OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
@@ -182,6 +262,7 @@ const operationStepsMapImage = {
 
 export const operationsMap = {
   [ObjectImportType.TABLE]: operationStepsMapTable,
+  [ObjectImportType.FORMATTED_TABLE]: operationStepsMapFormattedTable,
   [ObjectImportType.PIVOT_TABLE]: operationStepsMapTable,
   [ObjectImportType.IMAGE]: operationStepsMapImage,
 };

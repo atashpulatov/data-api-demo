@@ -32,6 +32,8 @@ const useGetImportOptions = (): ImportButtonOptionsType[] => {
 
   options.push(optionsDictionary[ObjectImportType.TABLE]);
 
+  options.push(optionsDictionary[ObjectImportType.FORMATTED_TABLE]);
+
   if (isShapeAPISupported && selectedMstrObjectType === mstrObjectType.mstrObjectType.dossier) {
     options.push(optionsDictionary[ObjectImportType.IMAGE]);
   }

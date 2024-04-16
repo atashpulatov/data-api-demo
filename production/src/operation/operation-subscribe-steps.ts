@@ -3,6 +3,8 @@ import stepSaveObjectInExcel from '../office/store/step-save-object-in-excel';
 import stepGetInstanceDefinition from '../mstr-object/instance/step-get-instance-definition';
 import stepGetObjectSettings from '../mstr-object/settings/step-get-object-settings';
 import stepGetObjectDetails from '../mstr-object/step-get-object-details';
+import stepImportExportEngineWorkbook from '../mstr-object/step-import-export-engine-workbook';
+import stepMoveFormattedDataExportEngine from '../mstr-object/step-move-formatted-data-export-engine';
 import stepDisplayNotificationCompleted from '../notification/step-display-notification-completed';
 import stepNotificationInProgress from '../notification/step-notification-in-progress';
 import stepBackupObjectData from '../office/backup-object-data/step-backup-object-data';
@@ -108,7 +110,14 @@ class SubscribeSteps {
       OperationSteps.COMPLETE_CLEAR_DATA,
       stepCompleteClearData.completeClearData
     );
-
+    operationBus.subscribe(
+      OperationSteps.IMPORT_EXPORT_ENGINE_WORKBOOK,
+      stepImportExportEngineWorkbook.importExportEngineWorkbook
+    );
+    operationBus.subscribe(
+      OperationSteps.MOVE_FORMATTED_DATA_FROM_EXPORT_ENGINE,
+      stepMoveFormattedDataExportEngine.moveFormattedDataFromExportEngine
+    );
     operationBus.subscribe(
       OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
       stepNotificationInProgress.moveNotificationToInProgress

@@ -3,6 +3,7 @@ export const DEFAULT_CELL_POSITION = 'A1';
 
 export enum ObjectImportType {
   TABLE = 'table',
+  FORMATTED_TABLE = 'formattedTable',
   PIVOT_TABLE = 'pivot-table',
   IMAGE = 'image',
 }

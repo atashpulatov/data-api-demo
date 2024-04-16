@@ -189,6 +189,14 @@ class OperationStepDispatcher {
   completeSaveImageDetails(objectWorkingId: number): void {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.SAVE_IMAGE_DETAILS));
   }
+
+  completeImportExportEngineWorkbook(objectWorkingId: number): void {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.IMPORT_EXPORT_ENGINE_WORKBOOK));
+  }
+
+  completeMoveFormattedDataExportEngine(objectWorkingId: number): void {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.MOVE_FORMATTED_DATA_FROM_EXPORT_ENGINE));
+  }
 }
 
 const operationStepDispatcher = new OperationStepDispatcher();

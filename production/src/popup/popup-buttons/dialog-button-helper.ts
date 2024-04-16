@@ -48,6 +48,11 @@ class DialogButtonHelper {
     let id = ImportButtonIds.IMPORT;
     let actionType = ImportActionTypes.IMPORT;
 
+    if (importType === ObjectImportType.FORMATTED_TABLE) {
+      id = ImportButtonIds.IMPORT_DATA_WITH_FORMATTING;
+      actionType = ImportActionTypes.IMPORT_DATA_WITH_FORMATTING;
+    }
+
     if (importType === ObjectImportType.PIVOT_TABLE) {
       id = ImportButtonIds.IMPORT_PIVOT_TABLE;
       actionType = ImportActionTypes.IMPORT_PIVOT_TABLE;

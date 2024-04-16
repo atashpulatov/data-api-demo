@@ -922,6 +922,36 @@ class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .withCredentials()
       .then(res => res.body);
+  }
+
+  getWorksheetBinary = async (
+    docId: string,
+    dossierInstanceId: string,
+    visualizationKey: string,
+    projectId: string
+  ): Promise<any> => {
+    const storeState = this.reduxStore.getState();
+    const { envUrl, authToken } = storeState.sessionReducer;
+    const fullPath = `${envUrl}/documents/${docId}/instances/${dossierInstanceId}/excel`;
+
+    const body = { pageOption: 'DEFAULT', pagePerSheet: false, keys: [visualizationKey] };
+
+    const options = {
+      method: 'POST',
+      credentials: 'include' as RequestCredentials,
+      headers: {
+        ...(dossierInstanceId && { 'X-MSTR-MS-Instance': dossierInstanceId }),
+        Accept: 'application/octet-stream',
+        'Content-type': 'application/json; charset=utf-8',
+        ...(projectId && { 'x-mstr-projectId': projectId }),
+        ...(authToken && { 'X-MSTR-AuthToken': authToken }),
+
+      },
+      body: JSON.stringify(body),
+    };
+
+    const response = await fetch(fullPath, options);
+    return response;
   };
 }
 

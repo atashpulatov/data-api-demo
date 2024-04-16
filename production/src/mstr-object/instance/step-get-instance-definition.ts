@@ -67,6 +67,7 @@ class StepGetInstanceDefinition {
       let startCell: string;
       let instanceDefinition = preparedInstanceDefinition;
       let shouldRenameExcelWorksheet = false;
+      const currentActiveWorksheet = excelContext.workbook.worksheets.getActiveWorksheet();
 
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
         ({ body, visualizationInfo, instanceDefinition } =
@@ -156,7 +157,7 @@ class StepGetInstanceDefinition {
         shouldRenameExcelWorksheet,
       };
 
-      if (importType === ObjectImportType.TABLE) {
+      if (importType === ObjectImportType.TABLE || importType === ObjectImportType.FORMATTED_TABLE) {
         // update table specific props
         updatedObject.crosstabHeaderDimensions = mstrTable.crosstabHeaderDimensions;
         updatedObject.isCrosstab = mstrTable.isCrosstab;
@@ -164,6 +165,10 @@ class StepGetInstanceDefinition {
         updatedOperation.startCell = startCell;
         updatedOperation.oldBindId = bindId;
         updatedOperation.totalRows = instanceDefinition.rows;
+      }
+
+      if (importType === ObjectImportType.FORMATTED_TABLE) {
+        updatedOperation.targetWorksheetId = currentActiveWorksheet.id;
       }
 
       if (mstrTable.rows.length === 0) {
