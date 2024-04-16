@@ -1,5 +1,4 @@
 /* eslint-disable no-import-assign */
-import { userRestService } from '../home/user-rest-service';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
@@ -332,47 +331,5 @@ describe('SidePanelService', () => {
     expect(getObjectFromObjectReducerByObjectWorkingId).toBeCalled();
     expect(mockedDispatch).toBeCalled();
     expect(clearRepromptTaskMockup).toBeCalled();
-  });
-
-  it('should dispatch officeActions.toggleReusePromptAnswersFlag to initialize the reuse prompt answers flag', async () => {
-    // given
-    const mockObject = {
-      value: 0,
-    };
-    const mockedGetUserPreference = jest
-      .spyOn(userRestService, 'getUserPreference')
-      .mockImplementationOnce(() => mockObject);
-    const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
-    // when
-    await sidePanelService.initReusePromptAnswers();
-    // then
-    expect(mockedGetUserPreference).toBeCalled();
-    expect(mockedDispatch).toBeCalled();
-  });
-
-  it('should dispatch officeActions.toggleReusePromptAnswersFlag to update the reuse prompt answers flag', async () => {
-    // given
-    const mockObject = {
-      value: 0,
-    };
-    const mockedSetUserPreference = jest
-      .spyOn(userRestService, 'setUserPreference')
-      .mockImplementationOnce(() => mockObject);
-
-    const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
-    // when
-    await sidePanelService.toggleReusePromptAnswers(0);
-    // then
-    expect(mockedSetUserPreference).toBeCalled();
-    expect(mockedDispatch).toBeCalled();
-  });
-
-  it('should dispatch officeActions.toggleSettingsPanelLoadedFlag to update the settings panel loaded flag', async () => {
-    // given
-    const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
-    // when
-    sidePanelService.toggleSettingsPanel(true);
-    // then
-    expect(mockedDispatch).toBeCalled();
   });
 });

@@ -1,4 +1,3 @@
-import { userRestService } from '../home/user-rest-service';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
@@ -14,7 +13,6 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupController } from '../popup/popup-controller';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { updateObject } from '../redux-reducer/object-reducer/object-actions';
-import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import {
   duplicateRequested,
   highlightRequested,
@@ -30,7 +28,6 @@ import {
 } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import { ObjectImportType } from '../mstr-object/constants';
 
-const EXCEL_REUSE_PROMPT_ANSWERS = 'excelReusePromptAnswers';
 class SidePanelService {
   reduxStore: any;
 
@@ -47,9 +44,6 @@ class SidePanelService {
     this.edit = this.edit.bind(this);
     this.createRepromptTask = this.createRepromptTask.bind(this);
     this.reprompt = this.reprompt.bind(this);
-    this.initReusePromptAnswers = this.initReusePromptAnswers.bind(this);
-    this.toggleReusePromptAnswers = this.toggleReusePromptAnswers.bind(this);
-    this.toggleSettingsPanel = this.toggleSettingsPanel.bind(this);
     this.highlightImageObject = this.highlightImageObject.bind(this);
   };
 
@@ -271,31 +265,6 @@ class SidePanelService {
 
     // Dispatch executeRepromptTask() once after all actions are dispatched
     this.reduxStore.dispatch(executeNextRepromptTask());
-  }
-
-  async initReusePromptAnswers(): Promise<void> {
-    const { value } = await userRestService.getUserPreference(EXCEL_REUSE_PROMPT_ANSWERS);
-    const reusePromptAnswersFlag = !Number.isNaN(+value)
-      ? !!parseInt(value, 10)
-      : JSON.parse(value);
-
-    this.reduxStore.dispatch(officeActions.toggleReusePromptAnswersFlag(reusePromptAnswersFlag));
-  }
-
-  async toggleReusePromptAnswers(reusePromptAnswers: boolean): Promise<void> {
-    const { value } = await userRestService.setUserPreference(
-      EXCEL_REUSE_PROMPT_ANSWERS,
-      !reusePromptAnswers
-    );
-    const reusePromptAnswersFlag = !Number.isNaN(+value)
-      ? !!parseInt(value, 10)
-      : JSON.parse(value);
-
-    this.reduxStore.dispatch(officeActions.toggleReusePromptAnswersFlag(reusePromptAnswersFlag));
-  }
-
-  toggleSettingsPanel(settingsPanelLoded: boolean): void {
-    this.reduxStore.dispatch(officeActions.toggleSettingsPanelLoadedFlag(settingsPanelLoded));
   }
 
   async highlightImageObject(objectData: ObjectData): Promise<void> {

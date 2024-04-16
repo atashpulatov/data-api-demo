@@ -6,6 +6,7 @@ import { notificationService } from '../notification/notification-service';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import officeStoreHelper from '../office/store/office-store-helper';
+import { settingsSidePanelHelper } from './settings-panel/settings-side-panel-helper';
 import { sidePanelEventHelper } from './side-panel-event-helper';
 import { sidePanelNotificationHelper } from './side-panel-notification-helper';
 import { sidePanelService } from './side-panel-service';
@@ -27,6 +28,7 @@ import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { selectOperations } from '../redux-reducer/operation-reducer/operation-reducer-selectors';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { popupStateSelectors } from '../redux-reducer/popup-state-reducer/popup-state-reducer-selectors';
+import SettingsSidePanel from './settings-panel/settings-side-panel';
 
 import './right-side-panel.scss';
 
@@ -38,7 +40,6 @@ interface RightSidePanelProps {
   isSecured?: boolean;
   isClearDataFailed?: boolean;
   settingsPanelLoaded?: boolean;
-  reusePromptAnswers?: boolean;
   toggleIsSettingsFlag?: (flag?: boolean) => void;
   toggleSecuredFlag?: (flag?: boolean) => void;
   toggleIsClearDataFailedFlag?: (flag?: boolean) => void;
@@ -58,7 +59,6 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   isSecured,
   isClearDataFailed,
   settingsPanelLoaded,
-  reusePromptAnswers,
   toggleIsSettingsFlag,
   toggleSecuredFlag,
   toggleIsClearDataFailedFlag,
@@ -92,7 +92,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
       try {
         await sidePanelEventHelper.addRemoveObjectListener();
         await sidePanelEventHelper.initializeActiveCellChangedListener(updateActiveCellAddress);
-        await sidePanelService.initReusePromptAnswers();
+        await settingsSidePanelHelper.initReusePromptAnswers();
       } catch (error) {
         console.error(error);
       }
@@ -211,13 +211,6 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   const renameWrapper = async (params: any, name: string): Promise<void> => {
     await wrapper(sidePanelService.rename, params, name);
   };
-  const handleReusePromptAnswers = async (): Promise<void> => {
-    await wrapper(sidePanelService.toggleReusePromptAnswers, reusePromptAnswers);
-  };
-
-  const handleToggleSettingsPanel = (): void => {
-    sidePanelService.toggleSettingsPanel(settingsPanelLoaded);
-  };
 
   useEffect(() => {
     if (isDialogLoaded) {
@@ -245,36 +238,37 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   return (
     <>
       {toggleCurtain && <div className='block-side-panel-ui' />}
-      <SidePanel
-        loadedObjects={loadedObjectsWrapped as any}
-        onAddData={addDataWrapper}
-        onTileClick={highlightObjectWrapper}
-        onDuplicateClick={duplicateWrapper}
-        onEditClick={editWrapper}
-        onRefreshClick={refreshWrapper}
-        onRemoveClick={removeWrapper}
-        onRename={renameWrapper}
-        popup={!isDialogRendered && sidePanelPopup}
-        // @ts-expect-error
-        settingsMenu={isSettings && <SettingsMenu />}
-        onSettingsClick={() => toggleIsSettingsFlag(!isSettings)}
-        confirmationWindow={isConfirm && <Confirmation />}
-        globalNotification={globalNotification}
-        onSelectAll={notificationService.dismissNotifications}
-        shouldDisableActions={!officeReducerHelper.noOperationInProgress()}
-        isPopupRendered={isDialogRendered}
-        reusePromptAnswers={reusePromptAnswers}
-        settingsPanelLoaded={settingsPanelLoaded}
-        handleReusePromptAnswers={handleReusePromptAnswers}
-        handleToggleSettingsPanel={handleToggleSettingsPanel}
-        onRepromptClick={repromptWrapper}
-        onPageByClick={pageByLinkId => {
-          popupController.runImportedDataOverviewPopup();
-          setFilteredPageByLinkId(pageByLinkId);
-          setIsDataOverviewOpen(true);
-        }}
-        applicationType={OfficeApplicationType.EXCEL}
-      />
+      {settingsPanelLoaded ? (
+        <SettingsSidePanel />
+      ) : (
+        <SidePanel
+          activeGroupKey={0}
+          loadedObjects={loadedObjectsWrapped as any}
+          onAddData={addDataWrapper}
+          onTileClick={highlightObjectWrapper}
+          onDuplicateClick={duplicateWrapper}
+          onEditClick={editWrapper}
+          onRefreshClick={refreshWrapper}
+          onRemoveClick={removeWrapper}
+          onRename={renameWrapper}
+          popup={!isDialogRendered && sidePanelPopup}
+          // @ts-expect-error
+          settingsMenu={isSettings && <SettingsMenu />}
+          onSettingsClick={() => toggleIsSettingsFlag(!isSettings)}
+          confirmationWindow={isConfirm && <Confirmation />}
+          globalNotification={globalNotification}
+          onSelectAll={notificationService.dismissNotifications}
+          shouldDisableActions={!officeReducerHelper.noOperationInProgress()}
+          isPopupRendered={isDialogRendered}
+          onRepromptClick={repromptWrapper}
+          onPageByClick={(pageByLinkId: any) => {
+            popupController.runImportedDataOverviewPopup();
+            setFilteredPageByLinkId(pageByLinkId);
+            setIsDataOverviewOpen(true);
+          }}
+          applicationType={OfficeApplicationType.EXCEL}
+        />
+      )}
     </>
   );
 };

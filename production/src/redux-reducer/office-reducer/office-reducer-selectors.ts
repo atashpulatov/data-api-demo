@@ -16,7 +16,13 @@ const selectIsShapeAPISupported = createSelector(
   (officeReducer: OfficeState) => officeReducer.isShapeAPISupported
 );
 
+const selectReusePromptAnswers = createSelector(
+  [getOfficeState],
+  officeState => officeState.reusePromptAnswers
+);
+
 export const officeSelectors = {
   selectIsPivotTableSupported,
   selectIsShapeAPISupported,
+  selectReusePromptAnswers,
 };
