@@ -1,5 +1,4 @@
-import { officeApiHeaderMergeHelper } from './office-api-header-merge-helper';
-
+import { MetricsPosition } from '../../mstr-object/mstr-object-response-types';
 import { CrosstabHeaderDimensions, ObjectData } from '../../types/object-types';
 
 import mstrNormalizedJsonHandler from '../../mstr-object/handler/mstr-normalized-json-handler';
@@ -244,44 +243,41 @@ class OfficeApiCrosstabHelper {
   createCrosstabHeadersTitles(
     officeTable: Excel.Table,
     attributesNames: any,
-    crosstabHeaderDimensions: any,
-    metricsPosition: any
+    crosstabHeaderDimensions: CrosstabHeaderDimensions,
+    metricsPosition: MetricsPosition
   ): void {
     const { rowsAttributes, columnsAttributes } = attributesNames;
-    const isMetrisFirstRowInColumns =
-      metricsPosition?.axis === 'rows' || columnsAttributes?.length > 1;
+    const { rowsX, columnsY } = crosstabHeaderDimensions;
+    const isMetricFirstInRows = metricsPosition?.axis === 'rows' && metricsPosition?.index === 1;
 
     const reportStartingCell = officeTable.getDataBodyRange().getCell(0, 0);
     const titlesBottomCell = reportStartingCell.getOffsetRange(-1, -1);
-    const rowsTitlesRange = titlesBottomCell.getResizedRange(
-      0,
-      -(crosstabHeaderDimensions.rowsX - 1)
-    );
-
-    // If metrics are on first row in column we want to skipp one more row to not display metric Title
-    const columnsTitlesOffset =
-      crosstabHeaderDimensions.columnsY + (isMetrisFirstRowInColumns ? -1 : -2);
-
-    const columnsTitlesRange = isMetrisFirstRowInColumns
-      ? titlesBottomCell.getResizedRange(-columnsTitlesOffset, 0)
-      : titlesBottomCell.getResizedRange(-columnsTitlesOffset, 0).getOffsetRange(-1, 0);
+    const rowsTitlesRange = titlesBottomCell.getResizedRange(0, -(rowsX - 1));
+    const columnsTitlesRange = titlesBottomCell.getResizedRange(-(columnsY - 1), 0);
 
     const headerTitlesRange = columnsTitlesRange.getBoundingRect(rowsTitlesRange);
     headerTitlesRange.format.verticalAlignment = window.Excel.VerticalAlignment.bottom;
     this.formatCrosstabRange(headerTitlesRange);
-    headerTitlesRange.values = '  ' as unknown as any[][];
+    headerTitlesRange.values = '  ' as any;
 
-    // we are not inserting attributes names if they do not exist
-    if (columnsAttributes && columnsAttributes.length) {
-      columnsTitlesRange.values = mstrNormalizedJsonHandler.transposeMatrix([columnsAttributes]);
-      // TODO potentially to let go
-      officeApiHeaderMergeHelper.mergeHeaderColumns(columnsAttributes, columnsTitlesRange);
-    }
+    const insertColumnHeadersTitles = (): void => {
+      if (columnsAttributes?.length) {
+        columnsTitlesRange.values = mstrNormalizedJsonHandler.transposeMatrix([columnsAttributes]);
+      }
+    };
+    const insertRowHeadersTitles = (): void => {
+      if (rowsAttributes?.length) {
+        rowsTitlesRange.values = [rowsAttributes];
+      }
+    };
 
-    if (rowsAttributes && rowsAttributes.length) {
-      rowsTitlesRange.values = [rowsAttributes];
-      // TODO potentially to let go
-      officeApiHeaderMergeHelper.mergeHeaderRows(rowsAttributes, rowsTitlesRange);
+    // By default rows are displayed on top of columns, but if metrics is in rows in frist columns we want to override it
+    if (isMetricFirstInRows) {
+      insertRowHeadersTitles();
+      insertColumnHeadersTitles();
+    } else {
+      insertColumnHeadersTitles();
+      insertRowHeadersTitles();
     }
   }
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { ButtonWithOptions, DropdownOption } from '@mstr/rc';
 
 import { sessionHelper } from './storage/session-helper';
 
@@ -6,7 +7,7 @@ import { ObjectData } from './types/object-types';
 
 import mstrObjectType from './mstr-object/mstr-object-type-enum';
 
-const objectList = {
+const objectList: { [key: string]: Partial<ObjectData> } = {
   SeasonalReport: {
     name: 'Seasonal Report',
     mstrObjectType: mstrObjectType.mstrObjectType.report,
@@ -101,22 +102,39 @@ const objectList = {
           },
         ],
       },
-      subtotals: {
-        visible: true,
-      },
     },
+  },
+  CrosstabSubtotal2: {
+    name: 'Report with crosstab & subtotals',
+    mstrObjectType: mstrObjectType.mstrObjectType.report,
+    objectId: 'B570B68011EA637625CE0080EF65F1FA',
+    projectId: 'B7CA92F04B9FAE8D941C3E9B7E0CD754',
   },
 };
 
-export const DevelopmentImportList = (): React.ReactElement => (
-  <div className='refresh-button-container'>
-    <button
-      type='button'
+export const DevelopmentImportList = (): React.ReactElement => {
+  const [selectedObject, setSelectedObject] = React.useState<string>(Object.keys(objectList)[0]);
+
+  const options: DropdownOption<string>[] = Object.keys(objectList).map(key => ({
+    key,
+    value: objectList[key].name,
+  }));
+
+  const handleOptionChange = (option: string): void => {
+    setSelectedObject(option);
+  };
+
+  return (
+    <ButtonWithOptions
+      id='quick-import-button'
+      options={options}
+      selectedValue={selectedObject}
+      onOptionChange={handleOptionChange}
       onClick={() =>
-        sessionHelper.importObjectWithouPopup(objectList.CrosstabSubtotal as unknown as ObjectData)
+        sessionHelper.importObjectWithouPopup(objectList[selectedObject] as unknown as ObjectData)
       }
     >
       Quick Import
-    </button>
-  </div>
-);
+    </ButtonWithOptions>
+  );
+};
