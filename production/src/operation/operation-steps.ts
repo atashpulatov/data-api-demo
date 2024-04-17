@@ -33,6 +33,8 @@ export enum OperationSteps {
   REMOVE_VISUALIZATION_IMAGE = 'REMOVE_VISUALIZATION_IMAGE',
   ADD_VISUALIZATION_PLACEHOLDER = 'ADD_VISUALIZATION_PLACEHOLDER',
   SAVE_IMAGE_DETAILS = 'SAVE_IMAGE_DETAILS',
+  // pivot-table steps
+  CREATE_PIVOT_TABLE = 'CREATE_PIVOT_TABLE',
 }
 
 const operationStepsMapTable = {
@@ -180,8 +182,49 @@ const operationStepsMapImage = {
   [OperationTypes.HIGHLIGHT_OPERATION]: [OperationSteps.HIGHLIGHT_OBJECT],
 };
 
+const operationStepsMapPivotTable = {
+  [OperationTypes.IMPORT_OPERATION]: [
+    OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
+    OperationSteps.GET_INSTANCE_DEFINITION,
+    OperationSteps.GET_OBJECT_DETAILS,
+    OperationSteps.GET_OFFICE_TABLE_IMPORT,
+    OperationSteps.FETCH_INSERT_DATA,
+    OperationSteps.CREATE_PIVOT_TABLE,
+    OperationSteps.BIND_OFFICE_TABLE,
+    OperationSteps.SAVE_OBJECT_IN_EXCEL,
+    OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
+  ],
+
+  [OperationTypes.REFRESH_OPERATION]: [
+    OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
+    OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
+  ],
+
+  [OperationTypes.EDIT_OPERATION]: [
+    OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
+    OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
+  ],
+
+  [OperationTypes.DUPLICATE_OPERATION]: [
+    OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
+    OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
+  ],
+
+  [OperationTypes.REMOVE_OPERATION]: [
+    OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
+    OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
+  ],
+
+  [OperationTypes.HIGHLIGHT_OPERATION]: [OperationSteps.HIGHLIGHT_OBJECT],
+
+  [OperationTypes.CLEAR_DATA_OPERATION]: [
+    OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
+    OperationSteps.COMPLETE_CLEAR_DATA,
+  ],
+};
+
 export const operationsMap = {
   [ObjectImportType.TABLE]: operationStepsMapTable,
-  [ObjectImportType.PIVOT_TABLE]: operationStepsMapTable,
+  [ObjectImportType.PIVOT_TABLE]: operationStepsMapPivotTable,
   [ObjectImportType.IMAGE]: operationStepsMapImage,
 };

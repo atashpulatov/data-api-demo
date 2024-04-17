@@ -214,6 +214,7 @@ class PopupViewSelectorHelper {
       chosenSubtype: props.chosenSubtype,
       chosenObjectName: props.chosenObjectName,
       isPrompted: props.promptsAnswers?.length > 0 && props.promptsAnswers[0].answers?.length > 0,
+      importType: props.importType,
       promptsAnswers: props.promptsAnswers,
       visualizationInfo,
       preparedInstanceId: props.preparedInstanceId,

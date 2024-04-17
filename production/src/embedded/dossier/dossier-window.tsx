@@ -67,7 +67,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
     chosenObjectId = 'default id',
     chosenProjectId = 'default id',
     isReprompt = false,
-    importType = ObjectImportType.TABLE,
+    importType,
     repromptsQueue = { total: 0, index: 0 },
     popupData,
   } = props;
@@ -197,46 +197,44 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
     [chosenObjectId, chosenProjectId, vizualizationsData]
   );
 
-  const handleOk = useCallback(
-    (selectedImportType = ObjectImportType.TABLE) => {
-      const message = {
-        command: selectorProperties.commandOk,
-        chosenObjectName,
-        chosenObject: chosenObjectId,
-        chosenProject: chosenProjectId,
-        chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
-        // @ts-expect-error
-        isPrompted: promptsAnswers?.answers?.length > 0,
-        promptsAnswers,
-        importType: selectedImportType,
-        visualizationInfo: {
-          chapterKey,
-          visualizationKey,
-          vizDimensions,
-        },
-        preparedInstanceId: instanceId.current,
-        isEdit,
-      };
-      popupHelper.officeMessageParent(message);
-    },
-    [
-      chapterKey,
-      chosenObjectId,
+  const handleOk = useCallback(() => {
+    const message = {
+      command: selectorProperties.commandOk,
       chosenObjectName,
-      chosenProjectId,
-      instanceId,
-      isEdit,
+      chosenObject: chosenObjectId,
+      chosenProject: chosenProjectId,
+      chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
+      // @ts-expect-error
+      isPrompted: promptsAnswers?.answers?.length > 0,
       promptsAnswers,
-      visualizationKey,
-      vizDimensions,
-    ]
-  );
+      importType,
+      visualizationInfo: {
+        chapterKey,
+        visualizationKey,
+        vizDimensions,
+      },
+      preparedInstanceId: instanceId.current,
+      isEdit,
+    };
+    popupHelper.officeMessageParent(message);
+  }, [
+    chapterKey,
+    chosenObjectId,
+    chosenObjectName,
+    chosenProjectId,
+    instanceId,
+    isEdit,
+    promptsAnswers,
+    visualizationKey,
+    vizDimensions,
+    importType,
+  ]);
 
   // Automatically close popup if re-prompted dossier is answered
   // and visualization is selected
   useEffect(() => {
     if (isReprompt && isSelected) {
-      handleOk(importType);
+      handleOk();
 
       // Hide embedded and let loading spinner show while prompts are being answered.
       setShowLoading(true);
@@ -356,7 +354,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
             />
           </div>
           <PopupButtons
-            handleOk={() => handleOk(importType)}
+            handleOk={handleOk}
             handleCancel={handleCancel}
             handleBack={!isEdit && handleBack}
             hideSecondary

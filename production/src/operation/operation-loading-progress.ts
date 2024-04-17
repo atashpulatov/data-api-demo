@@ -95,6 +95,18 @@ const loadingStateEnumWeights = {
       DISPLAY_NOTIFICATION_COMPLETED: 100,
     },
   },
+  [ObjectImportType.PIVOT_TABLE]: {
+    [OperationTypes.IMPORT_OPERATION]: {
+      GET_INSTANCE_DEFINITION: 5,
+      GET_OBJECT_DETAILS: 10,
+      GET_OFFICE_TABLE_IMPORT: 15,
+      FETCH_INSERT_DATA: 20,
+      CREATE_PIVOT_TABLE: 25,
+      BIND_OFFICE_TABLE: 40,
+      SAVE_OBJECT_IN_EXCEL: 40,
+      DISPLAY_NOTIFICATION_COMPLETED: 40,
+    },
+  },
 };
 
 export const calculateLoadingProgress = (

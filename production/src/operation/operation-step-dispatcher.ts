@@ -189,6 +189,10 @@ class OperationStepDispatcher {
   completeSaveImageDetails(objectWorkingId: number): void {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.SAVE_IMAGE_DETAILS));
   }
+
+  completeCreatePivotTable(objectWorkingId: number): void {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.CREATE_PIVOT_TABLE));
+  }
 }
 
 const operationStepDispatcher = new OperationStepDispatcher();

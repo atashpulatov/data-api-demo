@@ -117,15 +117,20 @@ class StepGetInstanceDefinition {
         importType
       );
 
-      // FIXME: below flow should not be part of this step
-      if (futureStep in ImportOperationStepDict) {
-        startCell = await officeApiWorksheetHelper.getStartCell(
-          insertNewWorksheet,
-          excelContext,
-          name,
-          pageByData
-        );
+      if (importType !== ObjectImportType.PIVOT_TABLE && futureStep in ImportOperationStepDict) {
+        // FIXME: below flow should not be part of this step
+        if (insertNewWorksheet) {
+          const worksheet = await officeApiWorksheetHelper.createNewWorksheet({
+            excelContext,
+            worksheetName: name,
+            pageByData,
+          });
+          worksheet.activate();
+          await excelContext.sync();
+        }
+        startCell = await officeApiHelper.getSelectedCell(excelContext);
       }
+
       if (insertNewWorksheet) {
         delete objectData.insertNewWorksheet;
       } else {
@@ -154,9 +159,10 @@ class StepGetInstanceDefinition {
         instanceDefinition,
         excelContext,
         shouldRenameExcelWorksheet,
+        insertNewWorksheet: importType === ObjectImportType.PIVOT_TABLE || insertNewWorksheet,
       };
 
-      if (importType === ObjectImportType.TABLE) {
+      if (importType === ObjectImportType.TABLE || importType === ObjectImportType.PIVOT_TABLE) {
         // update table specific props
         updatedObject.crosstabHeaderDimensions = mstrTable.crosstabHeaderDimensions;
         updatedObject.isCrosstab = mstrTable.isCrosstab;
