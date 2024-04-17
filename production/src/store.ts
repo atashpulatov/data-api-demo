@@ -19,7 +19,7 @@ import { repromptsQueueReducer } from './redux-reducer/reprompt-queue-reducer/re
 import { sessionReducer } from './redux-reducer/session-reducer/session-reducer';
 import { settingsReducer } from './redux-reducer/settings-reducer/settings-reducer';
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
   sessionReducer,
   officeReducer,
   configReducer,

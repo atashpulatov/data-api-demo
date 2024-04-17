@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
-import { OfficeApplicationType, PopupTypes, SidePanel } from '@mstr/connector-components';
+import { OfficeApplicationType, SidePanel } from '@mstr/connector-components';
+
+import { useGetSidePanelPopup } from './use-get-side-panel-popup';
+import { useGetUpdatedDuplicatePopup } from './use-get-updated-duplicate-popup';
 
 import { notificationService } from '../notification/notification-service';
 import { officeApiHelper } from '../office/api/office-api-helper';
@@ -17,7 +20,6 @@ import { ObjectData } from '../types/object-types';
 
 import { Confirmation } from '../home/confirmation';
 import { SettingsMenu } from '../home/settings-menu';
-import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupController } from '../popup/popup-controller';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import {
@@ -25,9 +27,11 @@ import {
   selectNotifications,
 } from '../redux-reducer/notification-reducer/notification-reducer-selectors';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
+import { officeSelectors } from '../redux-reducer/office-reducer/office-reducer-selectors';
 import { selectOperations } from '../redux-reducer/operation-reducer/operation-reducer-selectors';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { popupStateSelectors } from '../redux-reducer/popup-state-reducer/popup-state-reducer-selectors';
+import { repromptsQueueSelector } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer-selector';
 import SettingsSidePanel from './settings-panel/settings-side-panel';
 
 import './right-side-panel.scss';
@@ -37,8 +41,6 @@ interface RightSidePanelProps {
   loadedObjects: ObjectData[];
   isConfirm?: boolean;
   isSettings?: boolean;
-  isSecured?: boolean;
-  isClearDataFailed?: boolean;
   settingsPanelLoaded?: boolean;
   toggleIsSettingsFlag?: (flag?: boolean) => void;
   toggleSecuredFlag?: (flag?: boolean) => void;
@@ -46,8 +48,6 @@ interface RightSidePanelProps {
   updateActiveCellAddress?: (cellAddress?: string) => void;
   isDialogRendered?: boolean;
   isDialogLoaded?: boolean;
-  toggleCurtain?: boolean;
-  activeCellAddress?: string;
   setIsDataOverviewOpen: (isDataOverviewOpen: boolean) => void;
   setFilteredPageByLinkId: (filteredPageByLinkId: string) => void;
 }
@@ -56,8 +56,6 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   loadedObjects,
   isConfirm,
   isSettings,
-  isSecured,
-  isClearDataFailed,
   settingsPanelLoaded,
   toggleIsSettingsFlag,
   toggleSecuredFlag,
@@ -66,26 +64,18 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   popupData,
   isDialogRendered,
   isDialogLoaded,
-  toggleCurtain,
-  activeCellAddress,
   setIsDataOverviewOpen,
   setFilteredPageByLinkId,
 }) => {
   const [sidePanelPopup, setSidePanelPopup] = useState(null);
-  const [duplicatedObjectId, setDuplicatedObjectId] = useState(null);
   const [loadedObjectsWrapped, setLoadedObjectsWrapped] = useState(loadedObjects);
 
   const operations = useSelector(selectOperations);
   const globalNotification = useSelector(selectGlobalNotification);
   const notifications = useSelector(selectNotifications);
   const popupType = useSelector(popupStateSelectors.selectPopupType);
-  const isDataOverviewOpen = useSelector(popupStateSelectors.selectIsDataOverviewOpen);
-
-  const duplicatePopupParams = {
-    activeCellAddress,
-    setDuplicatedObjectId,
-    setSidePanelPopup,
-  };
+  const isSidePanelBlocked = useSelector(repromptsQueueSelector.doesRepromptQueueContainItems);
+  const activeCellAddress = useSelector(officeSelectors.selectActiveCellAddress);
 
   useEffect(() => {
     async function initializeSidePanel(): Promise<void> {
@@ -106,47 +96,15 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
     officeStoreHelper.isClearDataFailed() && toggleIsClearDataFailedFlag(true);
   }, [toggleSecuredFlag, toggleIsClearDataFailedFlag]);
 
-  useEffect(() => {
-    setSidePanelPopup(sidePanelNotificationHelper.setClearDataPopups());
-  }, [isSecured, isClearDataFailed]);
+  const duplicatePopupParams = useGetUpdatedDuplicatePopup({
+    sidePanelPopup,
+    setSidePanelPopup,
+  });
 
-  // Updates the activeCellAddress in duplicate popup if this popup is opened.
-  useEffect(() => {
-    if (
-      sidePanelPopup !== null &&
-      sidePanelPopup.type === PopupTypes.DUPLICATE &&
-      duplicatedObjectId !== null
-    ) {
-      sidePanelNotificationHelper.setDuplicatePopup({
-        objectWorkingId: duplicatedObjectId,
-        ...duplicatePopupParams,
-      });
-    }
-    // Added disable addition of sidePanelPopup and duplicatedObjectId to dependency array.
-    // This effect should be called only if duplicate popup is opened and activeCellAddress changes.
-    // TODO: Move logic for controlling popup visibility to Redux
-    if (popupData) {
-      sidePanelNotificationHelper.setRangeTakenPopup({
-        ...popupData,
-        setSidePanelPopup,
-        activeCellAddress,
-      });
-
-      // For the mulitiple reprompt workflow from the side panel, pass the popupData to the native dialog
-      const { objectWorkingId } = popupData;
-      const objectData =
-        officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
-      const isDossier =
-        objectData.mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
-      const isReport = objectData.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
-      if ((isDossier || isReport) && toggleCurtain && !isDataOverviewOpen) {
-        popupController.sendMessageToDialog(JSON.stringify({ popupData }));
-      }
-    } else if (sidePanelPopup?.type === PopupTypes.RANGE_TAKEN) {
-      setSidePanelPopup(null);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeCellAddress, popupData]);
+  useGetSidePanelPopup({
+    setSidePanelPopup,
+    sidePanelPopup,
+  });
 
   useEffect(() => {
     setLoadedObjectsWrapped(
@@ -237,7 +195,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
 
   return (
     <>
-      {toggleCurtain && <div className='block-side-panel-ui' />}
+      {isSidePanelBlocked && <div className='block-side-panel-ui' />}
       {settingsPanelLoaded ? (
         <SettingsSidePanel />
       ) : (
@@ -275,7 +233,6 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
 
 export const mapStateToProps = (state: RootState): any => {
   const { importRequested, dossierOpenRequested } = state.navigationTree;
-  const { repromptsQueue } = state.repromptsQueueReducer;
   const { objects } = state.objectReducer;
 
   const {
@@ -288,7 +245,6 @@ export const mapStateToProps = (state: RootState): any => {
     popupData,
     isDialogOpen,
     isDialogLoaded,
-    activeCellAddress,
   } = state.officeReducer;
 
   return {
@@ -304,8 +260,6 @@ export const mapStateToProps = (state: RootState): any => {
     popupData,
     isDialogRendered: isDialogOpen,
     isDialogLoaded,
-    toggleCurtain: repromptsQueue?.length > 0,
-    activeCellAddress,
   };
 };
 
