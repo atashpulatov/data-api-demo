@@ -1,3 +1,5 @@
+import { t } from 'i18next';
+
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { mstrObjectRestService } from './mstr-object-rest-service';
 
@@ -59,3 +61,54 @@ export const populateDetails = (
   owner,
   importedBy: authenticationHelper.getCurrentMstrUserFullName(),
 });
+
+const convertTokensToString = (tokens: any): string =>
+  // slice(1) to remove the first token which is the root token, "%"
+  tokens
+    .slice(1)
+    .map((token: any) => {
+      if (token.type === 'function') {
+        if (token.value === 'And') {
+          return t('And');
+        }
+        if (token.value === 'Or') {
+          return t('Or');
+        }
+        if (token.value === 'Not') {
+          return t('Not');
+        }
+      }
+      return token.value;
+    })
+    .join(' ')
+    .trim();
+
+export const generateReportFilterText = (
+  filterData: any
+): {
+  reportFilterText: string;
+  reportLimitsText: string;
+  viewFilterText: string;
+  metricLimitsText: string;
+} => {
+  const reportFilter = filterData?.dataSource?.filter;
+  const reportLimits = filterData?.dataSource?.dataTemplate?.units.find(
+    (unit: any) => unit.type === 'metrics'
+  ).limit;
+  const viewFilter = filterData?.grid?.viewFilter;
+  const metricLimits = filterData?.grid?.viewTemplate?.columns?.units.find(
+    (unit: any) => unit.type === 'metrics'
+  ).elements;
+
+  const reportFilterText = convertTokensToString(reportFilter.tokens);
+  const reportLimitsText = convertTokensToString(reportLimits.tokens);
+  const viewFilterText = convertTokensToString(viewFilter.tokens);
+  const metricLimitsText = `( ${metricLimits.map((element: any) => element.limit.text).join(' ) And ( ')} )`;
+
+  return {
+    reportFilterText,
+    reportLimitsText,
+    viewFilterText,
+    metricLimitsText,
+  };
+};
