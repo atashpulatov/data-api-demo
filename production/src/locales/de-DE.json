@@ -262,5 +262,19 @@
    "Page-by Display": "Page-By-Anzeige",
    "Prompt to select pages": "Eingabeaufforderung zum Auswählen von Seiten",
    "Import default page": "Standardseite importieren",
-   "Import all pages": "Alle Seiten importieren"
+   "Import all pages": "Alle Seiten importieren",
+   "Prompt": "Eingabeaufforderung",
+   "Reuse Prompt Answers": "Eingabeaufforderungsantworten erneut verwenden",
+   "When this function is enabled, previously given answers to prompts will be shared automatically across dashboards and reports.": "Wenn diese Funktion aktiviert ist, werden zuvor gegebene Antworten auf Eingabeaufforderungen automatisch über Dashboards und Berichte hinweg freigegeben.",
+   "Imported By": "Importiert von",
+   "Date Modified": "Änderungsdatum",
+   "Date Created": "Erstellungsdatum",
+   "Description": "Beschreibung",
+   "Location": "Speicherort",
+   "ID": "ID",
+   "Filter": "Filtern",
+   "Page-By Information": "Page-By-Informationen",
+   "and": "und",
+   "or": "oder",
+   "not": "nicht"
 }

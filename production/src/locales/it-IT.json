@@ -262,5 +262,19 @@
    "Page-by Display": "Visualizzazione raggruppamento a pagine",
    "Prompt to select pages": "Prompt per selezionare le pagine",
    "Import default page": "Importa pagina predefinita",
-   "Import all pages": "Importa tutte le pagine"
+   "Import all pages": "Importa tutte le pagine",
+   "Prompt": "Prompt",
+   "Reuse Prompt Answers": "Riutilizza le risposte ai prompt",
+   "When this function is enabled, previously given answers to prompts will be shared automatically across dashboards and reports.": "Quando questa funzione è abilitata, le risposte ai prompt precedentemente fornite vengono condivise automaticamente tra dashboard e report.",
+   "Imported By": "Importato da",
+   "Date Modified": "Data di modifica",
+   "Date Created": "Data di creazione",
+   "Description": "Descrizione",
+   "Location": "Posizione",
+   "ID": "ID",
+   "Filter": "Filtro",
+   "Page-By Information": "Informazioni di raggruppamento a pagine",
+   "and": "e",
+   "or": "o",
+   "not": "non"
 }

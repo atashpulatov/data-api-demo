@@ -262,5 +262,19 @@
    "Page-by Display": "Side efter-visning",
    "Prompt to select pages": "Prompt for at vælge sider",
    "Import default page": "Importer standardside",
-   "Import all pages": "Importer alle sider"
+   "Import all pages": "Importer alle sider",
+   "Prompt": "Prompt",
+   "Reuse Prompt Answers": "Genbrug promptsvar",
+   "When this function is enabled, previously given answers to prompts will be shared automatically across dashboards and reports.": "Når denne funktion er aktiveret, deles tidligere givne svar på prompter automatisk på tværs af dashboards og rapporter.",
+   "Imported By": "Importeret af",
+   "Date Modified": "Ændret dato",
+   "Date Created": "Oprettelsesdato",
+   "Description": "Beskrivelse",
+   "Location": "Placering",
+   "ID": "ID",
+   "Filter": "Filtrer",
+   "Page-By Information": "Page-By-oplysninger",
+   "and": "og",
+   "or": "eller",
+   "not": "ikke"
 }

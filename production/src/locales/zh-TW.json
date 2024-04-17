@@ -262,5 +262,19 @@
    "Page-by Display": "逐頁分組顯示",
    "Prompt to select pages": "選取頁面的提示",
    "Import default page": "匯入預設頁面",
-   "Import all pages": "匯入所有頁面"
+   "Import all pages": "匯入所有頁面",
+   "Prompt": "提示",
+   "Reuse Prompt Answers": "重複使用提示答案",
+   "When this function is enabled, previously given answers to prompts will be shared automatically across dashboards and reports.": "啟用此功能後之前給出的提示答案會在儀表板和報告間自動分享。",
+   "Imported By": "匯入者",
+   "Date Modified": "日期已修改",
+   "Date Created": "建立日期",
+   "Description": "描述",
+   "Location": "位置",
+   "ID": "ID",
+   "Filter": "篩選條件",
+   "Page-By Information": "逐頁分組資訊",
+   "and": "和",
+   "or": "或",
+   "not": "非"
 }

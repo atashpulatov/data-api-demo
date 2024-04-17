@@ -262,5 +262,19 @@
    "Page-by Display": "Visualización de paginación",
    "Prompt to select pages": "Selección dinámica de páginas",
    "Import default page": "Importar página por defecto",
-   "Import all pages": "Importar todas las páginas"
+   "Import all pages": "Importar todas las páginas",
+   "Prompt": "Selección dinámica",
+   "Reuse Prompt Answers": "Reutilizar respuestas de selección dinámica",
+   "When this function is enabled, previously given answers to prompts will be shared automatically across dashboards and reports.": "Cuando esta función está habilitada, las respuestas dadas anteriormente a las selecciones dinámicas se compartirán automáticamente entre los dashboards y los informes.",
+   "Imported By": "Importado por",
+   "Date Modified": "Fecha de modificación",
+   "Date Created": "Fecha de creación",
+   "Description": "Descripción",
+   "Location": "Ubicación",
+   "ID": "ID",
+   "Filter": "Filtrar",
+   "Page-By Information": "Información de paginación",
+   "and": "y",
+   "or": "o",
+   "not": "no"
 }

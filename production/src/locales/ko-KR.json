@@ -262,5 +262,19 @@
    "Page-by Display": "페이지-바이 표시",
    "Prompt to select pages": "페이지를 선택하라는 프롬프트",
    "Import default page": "기본 페이지 가져오기",
-   "Import all pages": "모든 페이지 가져오기"
+   "Import all pages": "모든 페이지 가져오기",
+   "Prompt": "프롬프트",
+   "Reuse Prompt Answers": "프롬프트 응답 재사용",
+   "When this function is enabled, previously given answers to prompts will be shared automatically across dashboards and reports.": "이 기능이 활성화되면 이전에 프롬프트에 대한 응답이 대시보드와 리포트에서 자동으로 공유됩니다.",
+   "Imported By": "가져온 사람",
+   "Date Modified": "수정한 날짜",
+   "Date Created": "만든 날짜",
+   "Description": "설명",
+   "Location": "위치",
+   "ID": "ID",
+   "Filter": "필터",
+   "Page-By Information": "페이지-바이 정보",
+   "and": "및",
+   "or": "또는",
+   "not": "아님"
 }

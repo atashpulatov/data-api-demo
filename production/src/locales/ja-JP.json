@@ -262,5 +262,19 @@
    "Page-by Display": "ページバイ表示",
    "Prompt to select pages": "ページを選択するプロンプト",
    "Import default page": "デフォルトのページをインポート",
-   "Import all pages": "すべてのページをインポート"
+   "Import all pages": "すべてのページをインポート",
+   "Prompt": "プロンプト",
+   "Reuse Prompt Answers": "プロンプト回答を再利用",
+   "When this function is enabled, previously given answers to prompts will be shared automatically across dashboards and reports.": "この機能を有効にすると、以前に回答したプロンプトへの回答が、ダッシュボードとレポートで自動的に共有されます。",
+   "Imported By": "インポートしたユーザー:",
+   "Date Modified": "変更日",
+   "Date Created": "作成日",
+   "Description": "説明",
+   "Location": "位置",
+   "ID": "ID",
+   "Filter": "フィルター",
+   "Page-By Information": "ページバイ情報",
+   "and": "および",
+   "or": "または",
+   "not": "Not"
 }

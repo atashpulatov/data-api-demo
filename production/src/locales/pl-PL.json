@@ -262,5 +262,19 @@
    "Page-by Display": "Wyświetlanie stronicowania",
    "Prompt to select pages": "Prompt, aby wybrać strony",
    "Import default page": "Importuj stronę domyślną",
-   "Import all pages": "Importuj wszystkie strony"
+   "Import all pages": "Importuj wszystkie strony",
+   "Prompt": "Prompt",
+   "Reuse Prompt Answers": "Użyj ponownie odpowiedzi na prompty",
+   "When this function is enabled, previously given answers to prompts will be shared automatically across dashboards and reports.": "Gdy ta funkcja jest włączona, wcześniej udzielone odpowiedzi na prompty będą automatycznie udostępniane w dashboardach i raportach.",
+   "Imported By": "Zaimportowane z",
+   "Date Modified": "Data modyfikacji",
+   "Date Created": "Data utworzenia",
+   "Description": "Opis",
+   "Location": "Lokalizacja",
+   "ID": "ID",
+   "Filter": "Filtr",
+   "Page-By Information": "Informacje o stronicowaniu",
+   "and": "oraz",
+   "or": "lub",
+   "not": "nie"
 }

@@ -262,5 +262,19 @@
    "Page-by Display": "分页显示",
    "Prompt to select pages": "提示选择页面",
    "Import default page": "导入默认页面",
-   "Import all pages": "导入所有页面"
+   "Import all pages": "导入所有页面",
+   "Prompt": "提示",
+   "Reuse Prompt Answers": "重复使用提示答案",
+   "When this function is enabled, previously given answers to prompts will be shared automatically across dashboards and reports.": "启用此功能后之前对提示的答案将在仪表盘和报表之间自动共享。",
+   "Imported By": "导入者",
+   "Date Modified": "修改日期",
+   "Date Created": "创建日期",
+   "Description": "描述",
+   "Location": "地点",
+   "ID": "ID",
+   "Filter": "筛选",
+   "Page-By Information": "分页信息",
+   "and": "和",
+   "or": "或",
+   "not": "不"
 }

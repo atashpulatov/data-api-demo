@@ -262,5 +262,19 @@
    "Page-by Display": "Affichage par page",
    "Prompt to select pages": "Invite pour sélectionner des pages",
    "Import default page": "Importer la page par défaut",
-   "Import all pages": "Importer toutes les pages"
+   "Import all pages": "Importer toutes les pages",
+   "Prompt": "Invite",
+   "Reuse Prompt Answers": "Réutiliser les réponses aux invites",
+   "When this function is enabled, previously given answers to prompts will be shared automatically across dashboards and reports.": "Lorsque cette fonction est activée, les réponses aux invites données précédemment seront partagées automatiquement entre les tableaux de bord et rapports.",
+   "Imported By": "Importé par",
+   "Date Modified": "Date de modification",
+   "Date Created": "Date de création",
+   "Description": "Description",
+   "Location": "Emplacement",
+   "ID": "ID",
+   "Filter": "Filtrer",
+   "Page-By Information": "Informations de saut de page",
+   "and": "et",
+   "or": "ou en",
+   "not": "non"
 }

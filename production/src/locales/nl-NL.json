@@ -262,5 +262,19 @@
    "Page-by Display": "Op pagina-weergave",
    "Prompt to select pages": "Prompt om pagina's te selecteren",
    "Import default page": "Standaard pagina importeren",
-   "Import all pages": "Alle pagina's importeren"
+   "Import all pages": "Alle pagina's importeren",
+   "Prompt": "Prompt",
+   "Reuse Prompt Answers": "Promptantwoorden hergebruiken",
+   "When this function is enabled, previously given answers to prompts will be shared automatically across dashboards and reports.": "Als deze functie is ingeschakeld, worden eerder gegeven antwoorden op prompts automatisch gedeeld in dashboards en rapporten.",
+   "Imported By": "Geïmporteerd door",
+   "Date Modified": "Datum van aanpassing",
+   "Date Created": "Aangemaakt op",
+   "Description": "Beschrijving",
+   "Location": "Locatie",
+   "ID": "ID",
+   "Filter": "Filter",
+   "Page-By Information": "Op pagina-informatie",
+   "and": "en",
+   "or": "of",
+   "not": "niet"
 }
