@@ -22,6 +22,10 @@ class OperationStepDispatcher {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.FORMAT_DATA));
   }
 
+  completeFormatHyperlinks(objectWorkingId: number): void {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.FORMAT_HYPERLINKS));
+  }
+
   completeBackupObjectData(objectWorkingId: number): void {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.BACKUP_OBJECT_DATA));
   }

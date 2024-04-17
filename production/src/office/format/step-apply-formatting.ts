@@ -1,8 +1,9 @@
+import formattingHelper from './formatting-helper';
+
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
 
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
-import officeFormatHyperlinks from './office-format-hyperlinks';
 
 class StepApplyFormatting {
   /**
@@ -30,8 +31,11 @@ class StepApplyFormatting {
     const { columnInformation, isCrosstab, metricsInRows } = instanceDefinition.mstrTable;
 
     try {
-      const filteredColumnInformation = this.filterColumnInformation(columnInformation);
-      const offset = this.calculateMetricColumnOffset(filteredColumnInformation, isCrosstab);
+      const filteredColumnInformation = formattingHelper.filterColumnInformation(columnInformation);
+      const offset = formattingHelper.calculateMetricColumnOffset(
+        filteredColumnInformation,
+        isCrosstab
+      );
 
       await excelContext.sync();
       await this.setupFormatting(
@@ -58,24 +62,6 @@ class StepApplyFormatting {
   };
 
   /**
-   * Returns the position of the table for crosstabs (equals to index of first metric)
-   * For tabular reports there is no offset.
-   *
-   * @param columnInformation Columns data
-   * @param isCrosstab Specify if object is a crosstab
-   * @returns Offset required
-   */
-  calculateMetricColumnOffset(columnInformation: any[], isCrosstab: boolean): number {
-    if (isCrosstab) {
-      return Math.max(
-        columnInformation.findIndex(col => !col.isAttribute),
-        0
-      );
-    }
-    return 0;
-  }
-
-  /**
    * Setups formatting.
    *
    * @param filteredColumnInformation
@@ -99,7 +85,7 @@ class StepApplyFormatting {
     for (let index = 0; index < filteredColumnInformation.length; index++) {
       const object = filteredColumnInformation[index];
       const { importAttributesAsText } = objectData.objectSettings || {};
-      const columnRange = this.getColumnRangeForFormatting(
+      const columnRange = formattingHelper.getColumnRangeForFormatting(
         index,
         isCrosstab,
         offset,
@@ -109,7 +95,6 @@ class StepApplyFormatting {
       );
       if (object.isAttribute) {
         columnRange.numberFormat = (importAttributesAsText ? '@' : '') as any;
-        await officeFormatHyperlinks.formatColumnAsHyperlinks(object, columnRange, excelContext);
       } else {
         columnRange.numberFormat = this.getFormat(object) as any;
       }
@@ -119,59 +104,6 @@ class StepApplyFormatting {
       }
     }
   }
-
-  /**
-   * Gets columns range to apply formatting to.
-   *
-   * Offset is added to index for tables, for crosstabs index is subtracted by offset.
-   *
-   * @param index Index of a column.
-   * @param isCrosstab Specify if object is a crosstab
-   * @param offset Number of columns to be offsetted when formatting
-   * @param officeTable Reference to Excel table
-   * @param columns Number of columns in the table
-   * @param metricsInRows Specify if metrics are present in rows
-   * @returns Columns range to apply formatting to
-   */
-  getColumnRangeForFormatting(
-    index: number,
-    isCrosstab: boolean,
-    offset: number,
-    officeTable: Excel.Table,
-    columns?: number,
-    metricsInRows?: boolean
-  ): Excel.Range {
-    const objectIndex = isCrosstab ? index - offset : index + offset;
-    // Crosstab
-    if (isCrosstab && index < offset) {
-      // @ts-expect-error
-      return officeTable.columns.getItemAt().getDataBodyRange().getOffsetRange(0, objectIndex);
-    }
-
-    // Metrics in rows
-    if (metricsInRows) {
-      if (isCrosstab) {
-        return officeTable.rows.getItemAt(objectIndex).getRange();
-      }
-
-      return officeTable.rows
-        .getItemAt(objectIndex)
-        .getRange()
-        .getOffsetRange(0, columns - 1);
-    }
-
-    // Tabular
-    return officeTable.columns.getItemAt(objectIndex).getDataBodyRange();
-  }
-
-  /**
-   * Returns filtered column information to ignore consolidations
-   *
-   * @param columnInformation Columns data
-   * @return filteredColumnInformation Filtered columnInformation
-   */
-  filterColumnInformation = (columnInformation: any[]): any[] =>
-    columnInformation.filter(col => Object.keys(col).length !== 0);
 
   /**
    * Returns Excel format string based on MicroStrategy format string.
