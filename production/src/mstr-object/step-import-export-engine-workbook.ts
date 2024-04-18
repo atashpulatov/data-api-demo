@@ -41,7 +41,6 @@ class StepImportExportEngineWorkbook {
     const reader = new FileReader();
 
     return new Promise((resolve, reject) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       reader.onload = async () => {
         const fileData = reader.result.toString();
 

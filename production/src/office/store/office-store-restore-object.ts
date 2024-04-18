@@ -9,7 +9,6 @@ import { errorService } from '../../error/error-handler';
 import { restoreAllAnswers } from '../../redux-reducer/answers-reducer/answers-actions';
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
 import officeApiDataLoader from '../api/office-api-data-loader';
-import { officeContext } from '../office-context';
 import { OfficeSettingsEnum } from '../../constants/office-constants';
 import { ObjectImportType } from '../../mstr-object/constants';
 

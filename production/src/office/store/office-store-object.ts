@@ -6,7 +6,6 @@ import { ObjectData } from '../../types/object-types';
 
 import { errorService } from '../../error/error-handler';
 import { removeObject } from '../../redux-reducer/object-reducer/object-actions';
-import { officeContext } from '../office-context';
 import { OfficeSettingsEnum } from '../../constants/office-constants';
 import { ObjectImportType } from '../../mstr-object/constants';
 
@@ -63,7 +62,7 @@ class OfficeStoreObject {
     const { isShapeAPISupported } = this.reduxStore.getState().officeReducer;
 
     if (!isShapeAPISupported) {
-      this.consolidateStoreObjectsToRedux(objects, ObjectImportType.IMAGE);
+      this.mergeStoreObjectsToRedux(objects, ObjectImportType.IMAGE);
     }
 
     return objects;
@@ -82,7 +81,7 @@ class OfficeStoreObject {
     const { isInsertWorksheetAPISupported } = this.reduxStore.getState().officeReducer;
 
     if (!isInsertWorksheetAPISupported) {
-      return this.consolidateStoreObjectsToRedux(objects, ObjectImportType.FORMATTED_TABLE);
+      return this.mergeStoreObjectsToRedux(objects, ObjectImportType.FORMATTED_TABLE);
     }
 
     return objects;
@@ -94,7 +93,7 @@ class OfficeStoreObject {
    * 
    * @returns {Array} Contains objects definitions from excel document
    */
-  consolidateStoreObjectsToRedux = (objects: any, objectImportType: any) => {
+  mergeStoreObjectsToRedux = (objects: any, objectImportType: any): any => {
     const settings = officeStoreHelper.getOfficeSettings();
     const objectsInOfficeStore: ObjectData[] = settings.get(OfficeSettingsEnum.storedObjects);
 
