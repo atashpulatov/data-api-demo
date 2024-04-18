@@ -131,12 +131,20 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
     return () => window.removeEventListener('message', messageReceived);
   }, [messageReceived]);
 
+  /**
+   * Handler that is called when a prompt is answered in the Prompts dialog (UI)
+   * when 'Run' or 'Apply' button is clicked. It only returns prompt answers manually
+   * provided by the user while interacting with the prompts dialog.
+   *
+   * @param {*} newAnswer prompt answers entered by the user.
+   */
   const promptAnsweredHandler = (newAnswer: any): void => {
     setIsPromptLoading(true);
     if (newPromptsAnswers.current.length > 0) {
       const newArray = [...newPromptsAnswers.current, newAnswer];
       newPromptsAnswers.current = newArray;
     } else {
+      // Initialize newPromptsAnswers with the new answer.
       newPromptsAnswers.current = [newAnswer];
     }
   };

@@ -41,6 +41,8 @@ export interface MstrDataProps {
 }
 
 export interface EditedObjectProps {
+  name: string;
+  objectWorkingId: number;
   chosenObjectId: string;
   chosenObjectName: string;
   displayAttrFormNames: string;

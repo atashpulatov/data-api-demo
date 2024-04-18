@@ -1,4 +1,5 @@
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
+import officeReducerHelper from '../office/store/office-reducer-helper';
 
 import { reduxStore } from '../store';
 
@@ -13,16 +14,23 @@ import {
 } from './page-by-types';
 
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import {
+  refreshRequested,
+  removeRequested,
+} from '../redux-reducer/operation-reducer/operation-actions';
 
 class PageByHelper {
   /**
    * Gets Page-by siblings of the source object
    *
-   * @param sourceObject Contains information about the source object
+   * @param objectWorkingId Unique Id of the object allowing to reference specific object
    * @returns Array of objects containing information about the Page-by siblings
    */
-  getPageBySiblings = (sourceObject: ObjectData): ObjectData[] => {
+  getPageBySiblings = (objectWorkingId: number): ObjectData[] => {
+    const sourceObject =
+      officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
     const { objects } = reduxStore.getState().objectReducer;
+
     const pageByObjects = objects.filter(
       object => object?.pageByData?.pageByLinkId === sourceObject.pageByData?.pageByLinkId
     );
@@ -139,6 +147,32 @@ class PageByHelper {
       default:
         return pageByData;
     }
+  };
+
+  /**
+   * Triggers refresh operation for all Page-by siblings of the source object
+   *
+   * @param objectWorkingId Unique identifier of the object
+   */
+  handleRefreshingMultiplePages = (objectWorkingId: number): void => {
+    const pageByObjects = this.getPageBySiblings(objectWorkingId);
+
+    pageByObjects.forEach((pageByObject: ObjectData) => {
+      reduxStore.dispatch(refreshRequested(pageByObject.objectWorkingId, pageByObject?.importType));
+    });
+  };
+
+  /**
+   * Triggers remove operation for all Page-by siblings of the source object
+   *
+   * @param objectWorkingId Unique identifier of the object
+   */
+  handleRemovingMultiplePages = (objectWorkingId: number): void => {
+    const pageByObjects = this.getPageBySiblings(objectWorkingId);
+
+    pageByObjects.forEach((pageByObject: ObjectData) => {
+      reduxStore.dispatch(removeRequested(pageByObject.objectWorkingId, pageByObject?.importType));
+    });
   };
 }
 

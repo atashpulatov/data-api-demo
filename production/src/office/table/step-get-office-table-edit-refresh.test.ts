@@ -128,6 +128,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
       tableName: 'tableNameTest',
       prevOfficeTable: 'prevOfficeTableTest',
       tableChanged: true,
+      objectData,
     });
 
     expect(operationStepDispatcher.updateOperation).toBeCalledTimes(1);
@@ -224,7 +225,8 @@ describe('StepGetOfficeTableEditRefresh', () => {
       expect(officeTableUpdate.updateOfficeTable).toBeCalledWith(
         { mstrTable: 'mstrTableTest' },
         excelContextMock,
-        mockedOfficeTable
+        mockedOfficeTable,
+        objectData
       );
 
       expect(operationStepDispatcher.updateOperation).toBeCalledTimes(1);

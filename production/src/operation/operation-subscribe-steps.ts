@@ -14,9 +14,11 @@ import stepClearTableData from '../office/clear-data/step-clear-table-data';
 import stepCompleteClearData from '../office/clear-data/step-complete-clear-data';
 import stepApplyFormatting from '../office/format/step-apply-formatting';
 import stepApplySubtotalFormatting from '../office/format/step-apply-subtotal-formatting';
+import stepFormatHyperlinks from '../office/format/step-format-hyperlinks';
 import stepFormatTable from '../office/format/step-format-table';
 import stepHighlightObject from '../office/highlight/step-highlight-object';
 import stepFetchInsertDataIntoExcel from '../office/import/step-fetch-insert-data-into-excel';
+import stepCreatePivotTable from '../office/pivot-table/step-create-pivot-table';
 import stepRemoveObjectBinding from '../office/remove/step-remove-object-binding';
 import stepRemoveObjectTable from '../office/remove/step-remove-object-table';
 import stepAddVisualizationPlaceholder from '../office/shapes/step-add-visualization-placeholder';
@@ -64,6 +66,8 @@ class SubscribeSteps {
     );
 
     operationBus.subscribe(OperationSteps.FORMAT_DATA, stepApplyFormatting.applyFormatting);
+
+    operationBus.subscribe(OperationSteps.FORMAT_HYPERLINKS, stepFormatHyperlinks.formatHyperlinks);
 
     operationBus.subscribe(OperationSteps.FORMAT_OFFICE_TABLE, stepFormatTable.formatTable);
 
@@ -150,6 +154,11 @@ class SubscribeSteps {
     operationBus.subscribe(
       OperationSteps.SAVE_IMAGE_DETAILS,
       stepSaveImageDetails.saveImageDetails
+    );
+
+    operationBus.subscribe(
+      OperationSteps.CREATE_PIVOT_TABLE,
+      stepCreatePivotTable.createPivotTable
     );
   };
 }

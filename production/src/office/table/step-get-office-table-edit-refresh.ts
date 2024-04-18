@@ -75,6 +75,7 @@ class StepGetOfficeTableEditRefresh {
           isRepeatStep,
           insertNewWorksheet,
           pageByData,
+          objectData,
         }));
       } else {
         shouldFormat =
@@ -86,7 +87,8 @@ class StepGetOfficeTableEditRefresh {
         officeTable = await officeTableUpdate.updateOfficeTable(
           instanceDefinition,
           excelContext,
-          prevOfficeTable
+          prevOfficeTable,
+          objectData
         );
       }
 

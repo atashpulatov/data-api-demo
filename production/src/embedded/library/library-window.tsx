@@ -65,7 +65,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
       }
 
       // Reset import type to default on object selection
-      dispatch(popupStateActions.setImportType(null) as any);
+      dispatch(popupStateActions.setImportType(undefined) as any);
 
       const { projectId, type, name, docId } = itemsInfo[0];
 

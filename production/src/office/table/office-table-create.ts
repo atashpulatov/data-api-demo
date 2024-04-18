@@ -5,6 +5,10 @@ import getOfficeTableHelper from './get-office-table-helper';
 import officeTableHelperRange from './office-table-helper-range';
 
 import { PageByData } from '../../page-by/page-by-types';
+import { InstanceDefinition } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
+
+import officeApiDataLoader from '../api/office-api-data-loader';
 
 const DEFAULT_TABLE_STYLE = 'TableStyleLight11';
 
@@ -34,8 +38,9 @@ class OfficeTableCreate {
     isRepeatStep,
     insertNewWorksheet,
     pageByData,
+    objectData,
   }: {
-    instanceDefinition: any;
+    instanceDefinition: InstanceDefinition;
     excelContext: Excel.RequestContext;
     startCell: string;
     tableName?: string;
@@ -44,6 +49,7 @@ class OfficeTableCreate {
     isRepeatStep?: boolean;
     insertNewWorksheet: boolean;
     pageByData?: PageByData;
+    objectData: ObjectData;
   }): Promise<any> {
     const {
       rows,
@@ -53,17 +59,23 @@ class OfficeTableCreate {
     } = instanceDefinition;
 
     const newOfficeTableName = getOfficeTableHelper.createTableName(mstrTable, tableName);
+    const { importType } = objectData;
+
+    const worksheet = await officeApiWorksheetHelper.getWorksheet(
+      insertNewWorksheet,
+      excelContext,
+      importType,
+      name,
+      pageByData,
+      prevOfficeTable
+    );
 
     if (insertNewWorksheet) {
-      startCell = await officeApiWorksheetHelper.getStartCell(
-        insertNewWorksheet,
-        excelContext,
-        name,
-        pageByData
-      );
+      startCell = 'A1';
+    } else if (!startCell) {
+      startCell = await officeApiHelper.getSelectedCell(excelContext);
     }
 
-    const worksheet = this.getExcelWorksheet(prevOfficeTable, insertNewWorksheet, excelContext);
     const tableStartCell = this.getTableStartCell(
       startCell,
       instanceDefinition,
@@ -73,6 +85,7 @@ class OfficeTableCreate {
 
     const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
     const range = this.getObjectRange(tableStartCell, worksheet, tableRange, mstrTable);
+
     excelContext.trackedObjects.add(range);
 
     await officeTableHelperRange.checkObjectRangeValidity(
@@ -92,7 +105,8 @@ class OfficeTableCreate {
       officeApiCrosstabHelper.createCrosstabHeaders(
         officeTable,
         mstrTable,
-        crosstabHeaderDimensions
+        crosstabHeaderDimensions,
+        objectData
       );
     }
 
@@ -112,25 +126,6 @@ class OfficeTableCreate {
    */
   styleHeaders(officeTable: Excel.Table): void {
     officeTable.style = DEFAULT_TABLE_STYLE;
-  }
-
-  /**
-   * Get excel worksheet of previous office table or acxtive if no table was passed.
-   *
-   * @param prevOfficeTable previous office table
-   * @param insertNewWorksheet Specify if new worksheet has to be created before creating the table
-   * @param excelContext Reference to Excel Context used by Excel API functions
-   * @returns Excel worksheet
-   */
-  getExcelWorksheet(
-    prevOfficeTable: Excel.Table,
-    insertNewWorksheet: boolean,
-    excelContext: Excel.RequestContext
-  ): Excel.Worksheet {
-    if (prevOfficeTable && !insertNewWorksheet) {
-      return prevOfficeTable.worksheet;
-    }
-    return excelContext.workbook.worksheets.getActiveWorksheet();
   }
 
   /**
@@ -242,21 +237,25 @@ class OfficeTableCreate {
         ];
       }
 
-      worksheet.activate();
-      worksheet.load(['name', 'id', 'position']);
-
       await excelContext.sync();
-
       const bindId = officeTable.id;
 
-      const { id, name, position } = worksheet;
+      const {
+        name,
+        id,
+        position: index,
+      } = await officeApiDataLoader.loadExcelData(excelContext, [
+        { object: worksheet, key: 'name' },
+        { object: worksheet, key: 'id' },
+        { object: worksheet, key: 'position' },
+      ]);
 
       return {
         officeTable,
         bindId,
         tableName: newOfficeTableName,
-        worksheet: { id, name, index: position },
-        groupData: { key: position, title: name },
+        worksheet: { id, name, index },
+        groupData: { key: index, title: name },
       };
     } catch (error) {
       await excelContext.sync();

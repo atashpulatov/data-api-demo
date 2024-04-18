@@ -6,7 +6,7 @@ import {
 
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
-import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-notification-helper';
+import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-services/side-panel-notification-helper';
 import { popupHelper } from '../popup-helper';
 
 import { DialogPopup } from './overview-types';
@@ -42,10 +42,18 @@ class OverviewHelper {
 
   notificationService: any;
 
-  init = (reduxStore: any, sidePanelService: any, notificationService: any): void => {
+  sidePanelHelper: any;
+
+  init = (
+    reduxStore: any,
+    sidePanelService: any,
+    notificationService: any,
+    sidePanelHelper: any
+  ): void => {
     this.store = reduxStore;
     this.sidePanelService = sidePanelService;
     this.notificationService = notificationService;
+    this.sidePanelHelper = sidePanelHelper;
   };
 
   /**
@@ -247,17 +255,17 @@ class OverviewHelper {
         await this.sidePanelService.edit(response.objectWorkingId);
         break;
       case OverviewActionCommands.REPROMPT:
-        await this.sidePanelService.reprompt(response.objectWorkingIds, true);
+        this.sidePanelService.reprompt(...response.objectWorkingIds, true);
         break;
       case OverviewActionCommands.REFRESH:
-        await this.sidePanelService.refresh(response.objectWorkingIds);
+        this.sidePanelService.refresh(...response.objectWorkingIds);
         break;
       case OverviewActionCommands.REMOVE:
-        await this.sidePanelService.remove(response.objectWorkingIds);
+        this.sidePanelService.remove(...response.objectWorkingIds);
         break;
       case OverviewActionCommands.DUPLICATE:
         response.objectWorkingIds.forEach(objectWorkingId => {
-          this.sidePanelService.duplicate(
+          this.sidePanelHelper.duplicateObject(
             objectWorkingId,
             response.insertNewWorksheet,
             response.withEdit
@@ -289,7 +297,7 @@ class OverviewHelper {
         this.handleDismissGlobalNotification();
         break;
       default:
-        console.log('Unhandled dialog command: ', response.command);
+        console.warn('Unhandled dialog command: ', response.command);
         break;
     }
   }

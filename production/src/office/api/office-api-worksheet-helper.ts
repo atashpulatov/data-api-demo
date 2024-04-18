@@ -1,10 +1,18 @@
 import { officeApiHelper } from './office-api-helper';
 
-import { PageByData, PageByWorksheetNaming } from '../../page-by/page-by-types';
+import { PageByData } from '../../page-by/page-by-types';
+import { ObjectAndWorksheetNamingOption } from '../../right-side-panel/settings-side-panel/settings-side-panel-types';
 
 import { ProtectedSheetError } from '../../error/protected-sheets-error';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 class OfficeApiWorksheetHelper {
+  reduxStore: any;
+
+  init(reduxStore: any): void {
+    this.reduxStore = reduxStore;
+  }
+
   /**
    * Returns true if specific worksheet is protected
    *
@@ -71,49 +79,81 @@ class OfficeApiWorksheetHelper {
   }
 
   /**
-   * Creates Excel worksheet and sets it as a active one. New worksheet name is based on added object name
+   * Creates Excel worksheet and sets it visiblity. New worksheet name is based on added object name.
    *
    * @param excelContext Reference to Excel Context used by Excel API functions
-   * @param objectName Name of the object added to the worksheet
+   * @param worksheetName Name of the object added to the worksheet
    * @param pageByData Contains information about page-by elements
-   *
+   * @param visibility Visibility of the worksheet
+   * @returns New Excel worksheet
    */
-  async createAndActivateNewWorksheet(
-    excelContext: Excel.RequestContext,
-    objectName: string,
-    pageByData?: PageByData
-  ): Promise<void> {
-    const newSheetName = await this.prepareWorksheetName(excelContext, objectName, pageByData);
-
+  async createNewWorksheet({
+    excelContext,
+    worksheetName,
+    pageByData,
+    visibility = Excel.SheetVisibility.visible,
+  }: {
+    excelContext: Excel.RequestContext;
+    worksheetName: string;
+    pageByData?: PageByData;
+    visibility?: Excel.SheetVisibility;
+  }): Promise<Excel.Worksheet> {
+    const newWorksheetName = await this.prepareWorksheetName(
+      excelContext,
+      worksheetName,
+      pageByData
+    );
     const sheets = excelContext.workbook.worksheets;
+    const sheet = sheets.add(newWorksheetName);
+
+    sheet.visibility = visibility;
     await excelContext.sync();
 
-    const sheet = sheets.add(newSheetName);
-
-    await excelContext.sync();
-    sheet.activate();
-    await excelContext.sync();
+    return sheet;
   }
 
   /**
-   * Get address of the Excel cell based on value of insertNewWorksheet might also create new worksheet.
+   * Gets existing worksheet or creates new one.
    *
-   * @param insertNewWorksheet specify whether new worksheet should be create before getting startcell
+   * @param insertNewWorksheet Specify if data should be inserted into a new worksheet
    * @param excelContext Reference to Excel Context used by Excel API functions
-   * @param objectName Name of the object added to the new worksheet
+   * @param importType Type of the import
+   * @param name Name of the object
    * @param pageByData Contains information about page-by elements
-   * @return address of Excel cell
+   * @param prevOfficeTable Previous office table
+   * @return Excel worksheet
    */
-  async getStartCell(
+  async getWorksheet(
     insertNewWorksheet: boolean,
     excelContext: Excel.RequestContext,
-    objectName: string,
-    pageByData?: PageByData
-  ): Promise<string> {
+    importType: ObjectImportType,
+    name: string,
+    pageByData: PageByData,
+    prevOfficeTable: Excel.Table
+  ): Promise<Excel.Worksheet> {
+    const isPivotTableImport = importType === ObjectImportType.PIVOT_TABLE;
+    let worksheet;
+
     if (insertNewWorksheet) {
-      await this.createAndActivateNewWorksheet(excelContext, objectName, pageByData);
+      worksheet = await this.createNewWorksheet({
+        excelContext,
+        worksheetName: isPivotTableImport ? `${name} data source` : name,
+        pageByData,
+        visibility: isPivotTableImport
+          ? Excel.SheetVisibility.veryHidden
+          : Excel.SheetVisibility.visible,
+      });
+
+      if (!isPivotTableImport) {
+        worksheet.activate();
+        await excelContext.sync();
+      }
+    } else if (prevOfficeTable) {
+      worksheet = prevOfficeTable.worksheet;
+    } else {
+      worksheet = excelContext.workbook.worksheets.getActiveWorksheet();
     }
-    return officeApiHelper.getSelectedCell(excelContext);
+    return worksheet;
   }
 
   /**
@@ -123,26 +163,23 @@ class OfficeApiWorksheetHelper {
    * @param currentNamingSetting name setting chosed by user
    * @return Generated worksheet name.
    */
-  prepareNameBasedOnPageBySettings(
-    reportName: string,
-    pageByData: PageByData,
-    // TODO: Replace with actual setting from the user when implemented
-    currentNamingSetting: PageByWorksheetNaming
-  ): string {
+  prepareNameBasedOnPageBySettings(reportName: string, pageByData: PageByData): string {
     const pageByElement = pageByData.elements.map(element => element.value).join(', ');
-    let newSheetName;
+    const { settingsReducer } = this.reduxStore.getState();
+    const currentNamingSetting = settingsReducer.objectAndWorksheetNamingSetting;
 
+    let newSheetName;
     switch (currentNamingSetting) {
-      case PageByWorksheetNaming.USE_REPORT_NAME:
+      case ObjectAndWorksheetNamingOption.REPORT_NAME:
         newSheetName = reportName;
         break;
-      case PageByWorksheetNaming.USE_PAGE_NAME:
+      case ObjectAndWorksheetNamingOption.PAGE_NAME:
         newSheetName = pageByElement;
         break;
-      case PageByWorksheetNaming.USE_PAGE_NAME_AND_REPORT_NAME:
+      case ObjectAndWorksheetNamingOption.PAGE_NAME_AND_REPORT_NAME:
         newSheetName = `${pageByElement} - ${reportName}`;
         break;
-      case PageByWorksheetNaming.USE_REPORT_NAME_AND_PAGE_NAME:
+      case ObjectAndWorksheetNamingOption.REPORT_NAME_AND_PAGE_NAME:
         newSheetName = `${reportName} - ${pageByElement}`;
         break;
       default:
@@ -178,12 +215,7 @@ class OfficeApiWorksheetHelper {
     let newSheetName = objectName.replace(/[:?*\\/\][]/g, '_');
 
     if (pageByData) {
-      newSheetName = this.prepareNameBasedOnPageBySettings(
-        newSheetName,
-        pageByData,
-        // TODO: Replace with actual setting from the user when implemented
-        PageByWorksheetNaming.USE_REPORT_NAME
-      );
+      newSheetName = this.prepareNameBasedOnPageBySettings(newSheetName, pageByData);
     }
 
     // if objectName only contains whitespaces replace it with _

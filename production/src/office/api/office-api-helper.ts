@@ -361,7 +361,7 @@ class OfficeApiHelper {
         { id: bindId },
         (result: { status: string; value: { type: any; id: any }; error: { message: any } }) => {
           if (result.status === 'succeeded') {
-            console.log(
+            console.info(
               `Added new binding with type: ${result.value.type} and id: ${result.value.id}`
             );
             resolve();

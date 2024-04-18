@@ -1,4 +1,6 @@
+import { authenticationHelper } from '../authentication/authentication-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
+import { pageByHelper } from '../page-by/page-by-helper';
 
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { PopupTypeEnum } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
@@ -14,9 +16,11 @@ import {
   ErrorType,
   httpStatusToErrorType,
   IncomingErrorStrings,
+  isPageByRefreshError,
   stringMessageToErrorType,
 } from './constants';
 
+const CONNECTION_CHECK_TIMEOUT = 3000;
 const COLUMN_EXCEL_API_LIMIT = 5000;
 const TIMEOUT = 3000;
 
@@ -31,19 +35,49 @@ class ErrorService {
 
   reduxStore: any;
 
+  homeHelper: any;
+
   init(
     sessionActions: any,
     sessionHelper: any,
     notificationService: any,
     popupController: any,
-    reduxStore: any
+    reduxStore: any,
+    homeHelper: any
   ): void {
     this.sessionActions = sessionActions;
     this.sessionHelper = sessionHelper;
     this.notificationService = notificationService;
     this.popupController = popupController;
     this.reduxStore = reduxStore;
+    this.homeHelper = homeHelper;
   }
+
+  /**
+   * Handles error thrown during invoking side panel actions like refresh, edit etc.
+   * For Webkit based clients (Safari, Excel for Mac)
+   * it checks for network connection with custom implementation
+   * This logic allows us to provide user with connection lost notification
+   *
+   * @param error Plain error object thrown by method calls.
+   */
+  handleSidePanelActionError = (error: any): void => {
+    const castedError = String(error);
+    const { CONNECTION_BROKEN } = IncomingErrorStrings;
+    if (castedError.includes(CONNECTION_BROKEN)) {
+      if (this.homeHelper.isMacAndSafariBased()) {
+        const connectionCheckerLoop = (): void => {
+          const checkInterval = setInterval(() => {
+            authenticationHelper.doesConnectionExist(checkInterval);
+          }, CONNECTION_CHECK_TIMEOUT);
+        };
+
+        connectionCheckerLoop();
+      }
+      return;
+    }
+    this.handleError(error);
+  };
 
   /**
    * Handles error that is related to specific object on side panel
@@ -63,7 +97,6 @@ class ErrorService {
     if (error.Code === 5012) {
       this.handleError(error);
     }
-
     const errorMessage = errorMessageFactory(errorType)({ error });
     const details = this.getErrorDetails(error, errorMessage);
 
@@ -72,6 +105,18 @@ class ErrorService {
         objectWorkingId,
         title: errorMessage,
         message: details,
+        callback,
+      };
+
+      officeReducerHelper.displayPopup(popupData);
+    } else if (errorType === ErrorType.PAGE_BY_REFRESH_ERR) {
+      const selectedObjects = pageByHelper.getPageBySiblings(objectWorkingId);
+
+      const popupData = {
+        objectWorkingId,
+        title: errorMessage,
+        message: details,
+        selectedObjects,
         callback,
       };
 
@@ -286,6 +331,10 @@ class ErrorService {
       }
       return null;
     }
+    if (error?.response?.body?.message && isPageByRefreshError(error)) {
+      return ErrorType.PAGE_BY_REFRESH_ERR;
+    }
+
     const status = error.status || (error.response ? error.response.status : null);
     return httpStatusToErrorType(status);
   };

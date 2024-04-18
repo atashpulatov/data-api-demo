@@ -8,6 +8,7 @@ import { pageByHelper } from '../page-by/page-by-helper';
 import { PageByDataElement, PageByDisplayType } from '../page-by/page-by-types';
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { PopupTypeEnum } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
+import { PageByDisplayOption } from '../right-side-panel/settings-side-panel/settings-side-panel-types';
 import { ObjectData } from '../types/object-types';
 import { DialogResponse, ReportParams } from './popup-controller-types';
 
@@ -264,24 +265,10 @@ class PopupController {
 
       switch (command) {
         case commandOk:
-          if (!reportParams) {
-            await this.handleOkCommand(response);
-          } else if (reportParams.duplicateMode) {
-            this.reduxStore.dispatch(duplicateRequested(reportParams.object, response));
-          } else {
-            const reportPreviousState = this.getObjectPreviousState(reportParams);
-            this.reduxStore.dispatch(editRequested(reportPreviousState, response));
-          }
+          await this.onCommandOk(response, reportParams);
           break;
         case commandOnUpdate:
-          if (!reportParams) {
-            await this.handleUpdateCommand(response);
-          } else if (reportParams.duplicateMode) {
-            this.reduxStore.dispatch(duplicateRequested(reportParams.object, response));
-          } else {
-            const reportPreviousState = this.getObjectPreviousState(reportParams);
-            this.reduxStore.dispatch(editRequested(reportPreviousState, response));
-          }
+          await this.onCommandUpdate(response, reportParams);
           break;
         case commandCancel:
           await this.manageDialogType(
@@ -330,6 +317,57 @@ class PopupController {
     }
   };
 
+  /**
+   * Method used for handling the 'ok' command sent from the dialog.
+   *
+   * @param response Message received from the dialog
+   * @param reportParams Contains information about the currently selected object
+   */
+  onCommandOk = async (response: DialogResponse, reportParams: ReportParams): Promise<void> => {
+    if (!reportParams) {
+      return this.handleOkCommand(response);
+    }
+
+    if (reportParams.duplicateMode) {
+      return this.reduxStore.dispatch(duplicateRequested(reportParams.object, response));
+    }
+
+    const reportPreviousState = this.getObjectPreviousState(reportParams);
+    return this.reduxStore.dispatch(editRequested(reportPreviousState, response));
+  };
+
+  /**
+   * Method used for handling the 'update' command sent from the dialog.
+   *
+   * @param response Message received from the dialog
+   * @param reportParams Contains information about the currently selected object
+   */
+  onCommandUpdate = async (response: DialogResponse, reportParams: ReportParams): Promise<void> => {
+    const { objectWorkingId, pageByData } = response;
+
+    if (!reportParams) {
+      return this.handleUpdateCommand(response);
+    }
+
+    if (reportParams.duplicateMode) {
+      return this.reduxStore.dispatch(duplicateRequested(reportParams.object, response));
+    }
+
+    // TODO: Add error handling for re-importing Page-by on Edit
+    if (pageByData && pageByData.pageByDisplayType !== PageByDisplayType.DEFAULT_PAGE) {
+      pageByHelper.handleRemovingMultiplePages(objectWorkingId);
+      return this.handleUpdateCommand(response);
+    }
+
+    const reportPreviousState = this.getObjectPreviousState(reportParams);
+    return this.reduxStore.dispatch(editRequested(reportPreviousState, response));
+  };
+
+  /**
+   * Transforms the response from the dialog into an object data structure, and then calls the handleImport method.
+   *
+   * @param response Message received from the dialog
+   */
   handleUpdateCommand = async (response: DialogResponse): Promise<void> => {
     const objectData = {
       name: response.chosenObjectName,
@@ -350,6 +388,11 @@ class PopupController {
     await this.handleImport(objectData);
   };
 
+  /**
+   * Transforms the response from the dialog into an object data structure, and then calls the handleImport method.
+   *
+   * @param response Message received from the dialog
+   */
   handleOkCommand = async (response: DialogResponse): Promise<void> => {
     if (response.chosenObject) {
       const objectData = {
@@ -395,31 +438,31 @@ class PopupController {
     }
 
     const pageByLinkId = uuidv4();
-    // TODO: Replace with actual setting from the user when implemented
-    const selectedPageByDisplayType = PageByDisplayType.ALL_PAGES as PageByDisplayType;
+    const { settingsReducer } = this.reduxStore.getState();
+    const { pageByDisplaySetting } = settingsReducer;
 
     const validPageByData = await pageByHelper.getValidPageByData(
       objectData,
       preparedInstanceDefinition
     );
 
-    switch (selectedPageByDisplayType) {
-      case PageByDisplayType.DEFAULT_PAGE:
+    switch (pageByDisplaySetting) {
+      case PageByDisplayOption.DEFAULT_PAGE:
         return this.handleDefaultPageImport(
           pageByLinkId,
           objectData,
           preparedInstanceDefinition,
-          selectedPageByDisplayType
+          pageByDisplaySetting
         );
-      case PageByDisplayType.ALL_PAGES:
+      case PageByDisplayOption.ALL_PAGES:
         return this.handleAllPagesImport(
           pageByLinkId,
           validPageByData,
           objectData,
           preparedInstanceDefinition,
-          selectedPageByDisplayType
+          pageByDisplaySetting
         );
-      case PageByDisplayType.SELECT_PAGES:
+      case PageByDisplayOption.SELECT_PAGES:
         // Set Page-by modal state to open
         // Logic for parsing data and passing to the Page-by component
         break;
@@ -500,7 +543,7 @@ class PopupController {
     try {
       return dialog.close();
     } catch (e) {
-      console.log('Attempted to close an already closed dialog');
+      console.info('Attempted to close an already closed dialog');
     }
   };
 

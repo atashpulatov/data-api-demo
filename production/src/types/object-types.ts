@@ -93,6 +93,7 @@ export interface ObjectData {
   body?: Body;
   objectWorkingId?: number;
   bindId?: string;
+  pivotTableId?: string;
   name: string;
   envUrl?: EnvUrl;
   mstrObjectType?: MstrObjectTypes;

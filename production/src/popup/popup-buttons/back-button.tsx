@@ -14,7 +14,7 @@ export const BackButton: React.FC<BackButtonProps> = ({ handleBack }) => {
   const { t } = useTranslation();
 
   const onBackClick = (): void => {
-    dispatch(popupStateActions.setImportType(null) as any);
+    dispatch(popupStateActions.setImportType(undefined) as any);
     handleBack();
   };
 

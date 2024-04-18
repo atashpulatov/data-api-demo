@@ -36,11 +36,6 @@ describe('StepFormatTable', () => {
     // then
     expect(stepFormatTable.formatCrosstabHeaders).toBeCalledTimes(1);
     expect(stepFormatTable.formatCrosstabHeaders).toThrowError(Error);
-    expect(console.log).toBeCalledTimes(1);
-    expect(console.log).toBeCalledWith(
-      'Error when formatting - no columns autofit applied',
-      new Error('errorTest')
-    );
   });
 
   it('formatTable should be skipped for shouldFormat false', async () => {
@@ -119,9 +114,6 @@ describe('StepFormatTable', () => {
 
     expect(operationStepDispatcher.completeFormatOfficeTable).toBeCalledTimes(1);
     expect(operationStepDispatcher.completeFormatOfficeTable).toBeCalledWith(2137);
-    expect(console.log).toBeCalledWith(
-      'The column count is more than columns autofit limit or should not format - no columns autofit applied.'
-    );
   });
 
   it('formatTable should work as expected', async () => {

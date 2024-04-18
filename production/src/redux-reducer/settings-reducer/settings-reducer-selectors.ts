@@ -11,9 +11,17 @@ const selectSidePanelObjectInfoSettings = createSelector(
   settingsState => settingsState.sidePanelObjectInfoSettings
 );
 
+const selectSidePanelMainSwitchValue = createSelector([getSettingsState], settingsState =>
+  settingsState.sidePanelObjectInfoSettings.some(setting => setting.toggleChecked)
+);
+
 const selectWorksheetObjectInfoSettings = createSelector(
   [getSettingsState],
   settingsState => settingsState.worksheetObjectInfoSettings
+);
+
+const selectWorksheetMainSwitchValue = createSelector([getSettingsState], settingsState =>
+  settingsState.worksheetObjectInfoSettings.some(setting => setting.toggleChecked)
 );
 
 const selectImportType = createSelector(
@@ -21,8 +29,22 @@ const selectImportType = createSelector(
   settingsState => settingsState.importType
 );
 
+const selectObjectAndWorksheetNamingSetting = createSelector(
+  [getSettingsState],
+  settingsState => settingsState.objectAndWorksheetNamingSetting
+);
+
+const selectPageByDisplaySetting = createSelector(
+  [getSettingsState],
+  settingsState => settingsState.pageByDisplaySetting
+);
+
 export const settingsReducerSelectors = {
   selectSidePanelObjectInfoSettings,
+  selectSidePanelMainSwitchValue,
   selectWorksheetObjectInfoSettings,
+  selectWorksheetMainSwitchValue,
   selectImportType,
+  selectObjectAndWorksheetNamingSetting,
+  selectPageByDisplaySetting,
 };

@@ -25,7 +25,7 @@ class AuthenticationHelper {
 
   loginUser = async (err: any, values: any): Promise<void> => {
     if (err) {
-      console.log(err);
+      console.error(err);
       return;
     }
     try {
@@ -39,7 +39,7 @@ class AuthenticationHelper {
       );
       this.sessionActions.logIn(authToken);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       this.errorService.handleError(error, { isLogout: true });
     } finally {
       this.sessionActions.disableLoading();

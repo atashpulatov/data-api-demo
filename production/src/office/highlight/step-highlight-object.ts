@@ -1,4 +1,4 @@
-import { sidePanelService } from '../../right-side-panel/side-panel-service';
+import { sidePanelHelper } from '../../right-side-panel/side-panel-services/side-panel-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
@@ -21,7 +21,7 @@ class StepHighlightObject {
     try {
       // Highlight operation is not supported for images as Excel API does not support shape selection as of now
       if (objectData?.importType === ObjectImportType.IMAGE) {
-        sidePanelService.highlightImageObject(objectData);
+        sidePanelHelper.highlightImageObject(objectData);
       } else {
         await officeApiHelper.onBindingObjectClick(objectData);
       }

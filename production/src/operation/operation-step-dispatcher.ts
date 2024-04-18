@@ -22,6 +22,10 @@ class OperationStepDispatcher {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.FORMAT_DATA));
   }
 
+  completeFormatHyperlinks(objectWorkingId: number): void {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.FORMAT_HYPERLINKS));
+  }
+
   completeBackupObjectData(objectWorkingId: number): void {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.BACKUP_OBJECT_DATA));
   }
@@ -190,6 +194,10 @@ class OperationStepDispatcher {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.SAVE_IMAGE_DETAILS));
   }
 
+  completeCreatePivotTable(objectWorkingId: number): void {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.CREATE_PIVOT_TABLE));
+  }
+  
   completeImportExportEngineWorkbook(objectWorkingId: number): void {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.IMPORT_EXPORT_ENGINE_WORKBOOK));
   }

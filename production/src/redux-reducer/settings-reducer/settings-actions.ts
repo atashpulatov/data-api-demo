@@ -1,7 +1,15 @@
 import {
+  ObjectAndWorksheetNamingOption,
+  PageByDisplayOption,
+} from '../../right-side-panel/settings-side-panel/settings-side-panel-types';
+import {
   KeyValue,
-  OrderWorksheetObjectInfoSettingsAction,
+  LoadSidePanelObjectInfoSettingAction,
+  LoadWorksheetObjectInfoSettingAction,
+  ObjectInfoSetting,
+  SetPageByDisplaySettingAction,
   SettingsActionTypes,
+  SetWorksheetNamingSettingAction,
   ToggleImportAttributesAsTextFlagAction,
   ToggleMainSidePanelObjectInfoSettingAction,
   ToggleMainWorksheetObjectInfoSettingAction,
@@ -24,6 +32,13 @@ const toggleMergeCrosstabColumnsFlag = (
   mergeCrosstabColumns,
 });
 
+const loadSidePanelObjectInfoSettings = (
+  sidePanelObjectInfoSettings: ObjectInfoSetting[]
+): LoadSidePanelObjectInfoSettingAction => ({
+  type: SettingsActionTypes.LOAD_SIDE_PANEL_OBJECT_INFO_SETTINGS,
+  sidePanelObjectInfoSettings,
+});
+
 const toggleSidePanelObjectInfoSetting = (
   payload: KeyValue
 ): ToggleSidePanelObjectInfoSettingAction => ({
@@ -36,6 +51,13 @@ const toggleMainSidePanelObjectInfoSetting = (
 ): ToggleMainSidePanelObjectInfoSettingAction => ({
   type: SettingsActionTypes.TOGGLE_MAIN_SIDE_PANEL_OBJECT_INFO_SETTING,
   payload,
+});
+
+const loadWorksheetObjectInfoSettings = (
+  worksheetObjectInfoSettings: ObjectInfoSetting[]
+): LoadWorksheetObjectInfoSettingAction => ({
+  type: SettingsActionTypes.LOAD_WORKSHEET_OBJECT_INFO_SETTINGS,
+  worksheetObjectInfoSettings,
 });
 
 const toggleWorksheetObjectInfoSetting = (
@@ -52,19 +74,29 @@ const toggleMainWorksheetObjectInfoSetting = (
   payload,
 });
 
-const orderWorksheetObjectInfoSettings = (
-  worksheetObjectInfoKeys: string[]
-): OrderWorksheetObjectInfoSettingsAction => ({
-  type: SettingsActionTypes.ORDER_WORKSHEET_OBJECT_INFO_SETTINGS,
-  worksheetObjectInfoKeys,
+const setWorksheetNamingSetting = (
+  objectAndWorksheetNamingSetting: ObjectAndWorksheetNamingOption
+): SetWorksheetNamingSettingAction => ({
+  type: SettingsActionTypes.SET_OBJECT_AND_WORKSHEET_NAMING_SETTING,
+  objectAndWorksheetNamingSetting,
+});
+
+const setPageByDisplaySetting = (
+  pageByDisplaySetting: PageByDisplayOption
+): SetPageByDisplaySettingAction => ({
+  type: SettingsActionTypes.SET_PAGE_BY_DISPLAY_SETTING,
+  pageByDisplaySetting,
 });
 
 export const settingsActions = {
   toggleImportAttributesAsTextFlag,
   toggleMergeCrosstabColumnsFlag,
+  loadSidePanelObjectInfoSettings,
   toggleSidePanelObjectInfoSetting,
   toggleMainSidePanelObjectInfoSetting,
+  loadWorksheetObjectInfoSettings,
   toggleWorksheetObjectInfoSetting,
   toggleMainWorksheetObjectInfoSetting,
-  orderWorksheetObjectInfoSettings,
+  setWorksheetNamingSetting,
+  setPageByDisplaySetting,
 };

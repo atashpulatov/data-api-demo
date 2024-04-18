@@ -43,12 +43,8 @@ export const AttributeSelectorWindowNotConnected: React.FC<
     chosenObjectName: string,
     filterDetails: any
   ): void => {
-    const {
-      chosenObject: { chosenObjectName: objectName },
-    } = props;
+    const { chosenObject, editedObject, importSubtotal, displayAttrFormNames, objectName } = props;
     chosenObjectName = chosenObjectName || objectName;
-
-    const { chosenObject, editedObject, importSubtotal, displayAttrFormNames } = props;
 
     const subtotalsInfo = {
       importSubtotal:
@@ -63,6 +59,7 @@ export const AttributeSelectorWindowNotConnected: React.FC<
 
     const message = {
       command: selectorProperties.commandOnUpdate,
+      objectWorkingId: editedObject?.objectWorkingId,
       chosenObjectId,
       projectId,
       chosenObjectSubtype,

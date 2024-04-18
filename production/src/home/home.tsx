@@ -18,9 +18,9 @@ import { SessionExtendingWrapper } from '../popup/session-extending-wrapper';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
-import PrivilegeErrorSidePanel from '../right-side-panel/info-panels/privilege-error-side-panel';
 import { RightSidePanel } from '../right-side-panel/right-side-panel';
 import { HomeDialog } from './home-dialog';
+import PrivilegeErrorSidePanel from './info-panels/privilege-error-side-panel';
 
 import './home.css';
 

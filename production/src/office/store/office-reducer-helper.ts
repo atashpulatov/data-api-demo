@@ -9,6 +9,9 @@ class OfficeReducerHelper {
 
   init(reduxStore: any): void {
     this.reduxStore = reduxStore;
+
+    this.getObjectFromObjectReducerByObjectWorkingId =
+      this.getObjectFromObjectReducerByObjectWorkingId.bind(this);
   }
 
   /**
@@ -61,10 +64,10 @@ class OfficeReducerHelper {
    * @param objectWorkingId Unique Id of the object allowing to reference specific object
    * @return
    */
-  getObjectFromObjectReducerByObjectWorkingId = (objectWorkingId: number): ObjectData => {
+  getObjectFromObjectReducerByObjectWorkingId(objectWorkingId: number): ObjectData {
     const { objects } = this.reduxStore.getState().objectReducer;
     return objects.find((object: ObjectData) => object.objectWorkingId === objectWorkingId);
-  };
+  }
 
   /**
    * Return notification from notification Reducer corresponding to passed objectWorkingId

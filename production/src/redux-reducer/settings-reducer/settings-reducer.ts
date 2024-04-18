@@ -1,10 +1,16 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import {
-  ObjectInfoSetting,
-  OrderWorksheetObjectInfoSettingsAction,
+  ObjectAndWorksheetNamingOption,
+  PageByDisplayOption,
+} from '../../right-side-panel/settings-side-panel/settings-side-panel-types';
+import {
+  LoadSidePanelObjectInfoSettingAction,
+  LoadWorksheetObjectInfoSettingAction,
+  SetPageByDisplaySettingAction,
   SettingsActions,
   SettingsActionTypes,
   SettingsState,
+  SetWorksheetNamingSettingAction,
   ToggleImportAttributesAsTextFlagAction,
   ToggleMainSidePanelObjectInfoSettingAction,
   ToggleMainWorksheetObjectInfoSettingAction,
@@ -25,6 +31,8 @@ const initialState: SettingsState = {
   sidePanelObjectInfoSettings: initialSidePanelObjectInfoSettings,
   worksheetObjectInfoSettings: initialWorksheetObjectInfoSettings,
   importType: ObjectImportType.TABLE,
+  objectAndWorksheetNamingSetting: ObjectAndWorksheetNamingOption.REPORT_NAME,
+  pageByDisplaySetting: PageByDisplayOption.SELECT_PAGES,
 };
 
 // eslint-disable-next-line default-param-last
@@ -34,16 +42,22 @@ export const settingsReducer = (state = initialState, action: SettingsActions): 
       return toggleMergeCrosstabColumnsFlag(state, action);
     case SettingsActionTypes.TOGGLE_IMPORT_ATTRIBUTES_AS_TEXT_FLAG:
       return toggleImportAttributesAsTextFlag(state, action);
+    case SettingsActionTypes.LOAD_SIDE_PANEL_OBJECT_INFO_SETTINGS:
+      return loadSidePanelObjectInfoSettings(state, action);
     case SettingsActionTypes.TOGGLE_SIDE_PANEL_OBJECT_INFO_SETTING:
       return toggleSidePanelObjectInfoSetting(state, action);
     case SettingsActionTypes.TOGGLE_MAIN_SIDE_PANEL_OBJECT_INFO_SETTING:
       return toggleMainSidePanelObjectInfoSetting(state, action);
+    case SettingsActionTypes.LOAD_WORKSHEET_OBJECT_INFO_SETTINGS:
+      return loadWorksheetObjectInfoSettings(state, action);
     case SettingsActionTypes.TOGGLE_WORKSHEET_OBJECT_INFO_SETTING:
       return toggleWorksheetObjectInfoSetting(state, action);
     case SettingsActionTypes.TOGGLE_MAIN_WORKSHEET_OBJECT_INFO_SETTING:
       return toggleMainWorksheetObjectInfoSetting(state, action);
-    case SettingsActionTypes.ORDER_WORKSHEET_OBJECT_INFO_SETTINGS:
-      return orderWorksheetObjectInfoSettings(state, action);
+    case SettingsActionTypes.SET_OBJECT_AND_WORKSHEET_NAMING_SETTING:
+      return setWorksheetNamingSetting(state, action);
+    case SettingsActionTypes.SET_PAGE_BY_DISPLAY_SETTING:
+      return setPageByDisplaySetting(state, action);
     default:
       return state;
   }
@@ -66,6 +80,16 @@ function toggleImportAttributesAsTextFlag(
   return {
     ...state,
     importAttributesAsText: action.importAttributesAsText,
+  };
+}
+
+function loadSidePanelObjectInfoSettings(
+  state: SettingsState,
+  action: LoadSidePanelObjectInfoSettingAction
+): SettingsState {
+  return {
+    ...state,
+    sidePanelObjectInfoSettings: action.sidePanelObjectInfoSettings,
   };
 }
 
@@ -96,6 +120,16 @@ function toggleMainSidePanelObjectInfoSetting(
   };
 }
 
+function loadWorksheetObjectInfoSettings(
+  state: SettingsState,
+  action: LoadWorksheetObjectInfoSettingAction
+): SettingsState {
+  return {
+    ...state,
+    worksheetObjectInfoSettings: action.worksheetObjectInfoSettings,
+  };
+}
+
 function toggleWorksheetObjectInfoSetting(
   state: SettingsState,
   action: ToggleWorksheetObjectInfoSettingAction
@@ -123,22 +157,16 @@ function toggleMainWorksheetObjectInfoSetting(
   };
 }
 
-function orderWorksheetObjectInfoSettings(
+function setWorksheetNamingSetting(
   state: SettingsState,
-  action: OrderWorksheetObjectInfoSettingsAction
+  action: SetWorksheetNamingSettingAction
 ): SettingsState {
-  const { worksheetObjectInfoKeys } = action;
+  return { ...state, objectAndWorksheetNamingSetting: action.objectAndWorksheetNamingSetting };
+}
 
-  const orderedList = worksheetObjectInfoKeys.reduce((acc, key) => {
-    const item = state.worksheetObjectInfoSettings.find(i => i.key === key);
-    if (item) {
-      acc.push(item);
-    }
-    return acc;
-  }, [] as ObjectInfoSetting[]);
-
-  return {
-    ...state,
-    worksheetObjectInfoSettings: orderedList,
-  };
+function setPageByDisplaySetting(
+  state: SettingsState,
+  action: SetPageByDisplaySettingAction
+): SettingsState {
+  return { ...state, pageByDisplaySetting: action.pageByDisplaySetting };
 }

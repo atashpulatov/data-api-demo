@@ -66,7 +66,7 @@ const renderProperComponent = (popupType: PopupTypeEnum): any => {
 export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = props => {
   const { authToken, popupType: popupTypeProps } = props;
   if (!authToken) {
-    console.log('Waiting for token to be passed');
+    console.info('Waiting for token to be passed');
     return null;
   }
   const popupType = popupViewSelectorHelper.setPopupType(props, popupTypeProps);
@@ -84,7 +84,7 @@ function mapStateToProps(state: any): any {
   } = state;
   const { promptsAnswers } = navigationTree;
   const { supportForms } = officeReducer;
-  const { popupType } = popupStateReducer;
+  const { popupType, importType } = popupStateReducer;
   const isReport =
     editedObject && editedObject.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
@@ -97,6 +97,7 @@ function mapStateToProps(state: any): any {
     preparedInstance,
     propsToPass: { ...popupStateReducer },
     popupType,
+    importType,
     formsPrivilege,
     repromptsQueueProps: { ...repromptsQueueReducer },
   };

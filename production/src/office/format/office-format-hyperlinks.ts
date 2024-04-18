@@ -81,7 +81,7 @@ class OfficeFormatHyperlinks {
       range.load('values');
       await excelContext.sync();
     } catch (error) {
-      console.log('Excel API cannot load hyperlink values, skipping column');
+      console.warn('Excel API cannot load hyperlink values, skipping column');
       throw error;
     }
 

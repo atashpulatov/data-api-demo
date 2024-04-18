@@ -4,6 +4,7 @@ import { ObjectData } from '../../types/object-types';
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import officeTableCreate from './office-table-create';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 class StepGetOfficeTableImport {
   /**
@@ -32,6 +33,7 @@ class StepGetOfficeTableImport {
           startCell,
           insertNewWorksheet,
           pageByData: objectData.pageByData,
+          objectData,
         });
 
       const updatedOperation = {
@@ -43,14 +45,20 @@ class StepGetOfficeTableImport {
         startCell,
       };
 
-      const updatedObject = {
+      let updatedObject: Partial<ObjectData> = {
         objectWorkingId,
         tableName,
         bindId,
-        worksheet,
         startCell,
-        groupData,
       };
+
+      if (objectData.importType !== ObjectImportType.PIVOT_TABLE) {
+        updatedObject = {
+          ...updatedObject,
+          worksheet,
+          groupData,
+        };
+      }
 
       operationStepDispatcher.updateOperation(updatedOperation);
       operationStepDispatcher.updateObject(updatedObject);
