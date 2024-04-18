@@ -9,7 +9,7 @@ export enum ObjectImportType {
 }
 
 export enum ImportOperationStepDict {
-  GET_OFFICE_TABLE_IMPORT = ObjectImportType.IMAGE,
+  GET_OFFICE_TABLE_IMPORT = ObjectImportType.TABLE,
   MANIPULATE_VISUALIZATION_IMAGE = ObjectImportType.IMAGE,
 }
 

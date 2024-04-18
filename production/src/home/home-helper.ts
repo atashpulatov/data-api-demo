@@ -153,6 +153,11 @@ export class HomeHelper {
     const isShapeAPISupported = officeContext.isShapeAPISupported();
     this.reduxStore.dispatch(officeActions.setIsShapeAPISupported(isShapeAPISupported));
   }
+
+  initIsInsertWorksheetAPISupported(): void {
+    const isInsertWorksheetAPISupported = officeContext.isInsertWorksheetAPISupported();
+    this.reduxStore.dispatch(officeActions.setIsInsertWorksheetAPISupported(isInsertWorksheetAPISupported));
+  }
 }
 
 export const homeHelper = new HomeHelper();

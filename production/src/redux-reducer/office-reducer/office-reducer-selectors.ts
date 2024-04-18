@@ -16,7 +16,13 @@ const selectIsShapeAPISupported = createSelector(
   (officeReducer: OfficeState) => officeReducer.isShapeAPISupported
 );
 
+const selectIsInsertWorksheetAPISupported = createSelector(
+  [getOfficeState],
+  (officeReducer: OfficeState) => officeReducer.isInsertWorksheetAPISupported
+);
+
 export const officeSelectors = {
   selectIsPivotTableSupported,
   selectIsShapeAPISupported,
+  selectIsInsertWorksheetAPISupported
 };

@@ -6,6 +6,7 @@ import {
   SetActiveCellAddressAction,
   SetIsDialogLoadedAction,
   SetIsShapeAPISupportedAction,
+  SetIsInsertWorksheetAPISupportedAction,
   SetPopupDataAction,
   ToggleIsClearDataFailedFlagAction,
   ToggleIsConfirmFlagAction,
@@ -27,6 +28,7 @@ const initialState: OfficeState = {
   settingsPanelLoaded: false,
   reusePromptAnswers: false,
   isShapeAPISupported: false,
+  isInsertWorksheetAPISupported: false,
   isSecured: false,
   isClearDataFailed: false,
   isPivotTableSupported: false,
@@ -79,6 +81,9 @@ export const officeReducer = (state = initialState, action: OfficeActions): Offi
 
     case OfficeActionsTypes.SET_SHAPE_API_SUPPORTED:
       return setIsShapeAPISupported(state, action);
+
+    case OfficeActionsTypes.SET_INSERT_WORKSHEET_API_SUPPORTED:
+      return setIsInsertWorksheetAPISupported(state, action);
 
     default:
       break;
@@ -202,5 +207,15 @@ function setIsShapeAPISupported(
   return {
     ...state,
     isShapeAPISupported: action.isShapeAPISupported,
+  };
+}
+
+function setIsInsertWorksheetAPISupported(
+  state: OfficeState,
+  action: SetIsInsertWorksheetAPISupportedAction
+): OfficeState {
+  return {
+    ...state,
+    isInsertWorksheetAPISupported: action.isInsertWorksheetAPISupported,
   };
 }

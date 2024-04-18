@@ -52,35 +52,64 @@ class OfficeStoreObject {
   };
 
   /**
-   * Prepares objects before saving in Office Settings. It merges objects from redux with image objects from Office Store
-   * if Shape API is not supported and image objects are present in Office Store.
+   * Merges filtered out image objects back to redux store to maintain backward compatibility.
+   * 
+   * NOTE: Method @link {OfficeStoreRestoreObject.filterImageObjects()} used for filtering out objects,
+   * if Shape API is not supported before initializing redux store.
    *
    * @returns {Array} Contains objects definitions from excel document
    */
-  mergeReduxToExcelStoreObjectsIfShapeApiNotSupported = (): ObjectData[] => {
-    const { objects } = this.reduxStore.getState().objectReducer;
-    const isShapeAPISupported = officeContext.isShapeAPISupported();
+  mergeImageStoreObjectsToRedux = (objects: any): ObjectData[] => {
+    const { isShapeAPISupported } = this.reduxStore.getState().officeReducer;
 
     if (!isShapeAPISupported) {
-      // Restore objects from Office Store that contain image objects.
-      const settings = officeStoreHelper.getOfficeSettings();
-      const objectsInOfficeStore: ObjectData[] = settings.get(OfficeSettingsEnum.storedObjects);
-
-      if (objectsInOfficeStore?.length > 0) {
-        // Grab image objects from Office Store
-        const imageObjects = objectsInOfficeStore.filter(
-          object => object?.importType === ObjectImportType.IMAGE
-        );
-
-        // Merge imageObjects with objects from redux based and sort descendng on objectWorkingId property in object.
-        if (imageObjects?.length > 0) {
-          return objects.concat(imageObjects).sort((a, b) => b.objectWorkingId - a.objectWorkingId);
-        }
-      }
+      this.consolidateStoreObjectsToRedux(objects, ObjectImportType.IMAGE);
     }
 
     return objects;
   };
+
+  /**
+   * 
+   * Merges filtered out formatted table objects back to redux store to maintain backward compatibility.
+   * 
+   * NOTE: Method @link {OfficeStoreRestoreObject.filterFormattedTableObjects()} used for filtering out objects,
+   * if Workbook API is not supported before initializing redux store.
+   * 
+   * @returns {Array} Contains objects definitions from excel document
+   */
+  mergeFormattedTableStoreObjectsToRedux = (objects: any): ObjectData[] => {
+    const { isInsertWorksheetAPISupported } = this.reduxStore.getState().officeReducer;
+
+    if (!isInsertWorksheetAPISupported) {
+      return this.consolidateStoreObjectsToRedux(objects, ObjectImportType.FORMATTED_TABLE);
+    }
+
+    return objects;
+  };
+
+  /**
+   * 
+   * Merges filtered out objects to redux store. Ultimately sorts by objectWorkingId.
+   * 
+   * @returns {Array} Contains objects definitions from excel document
+   */
+  consolidateStoreObjectsToRedux = (objects: any, objectImportType: any) => {
+    const settings = officeStoreHelper.getOfficeSettings();
+    const objectsInOfficeStore: ObjectData[] = settings.get(OfficeSettingsEnum.storedObjects);
+
+    if (objectsInOfficeStore?.length > 0) {
+      const filteredObjects = objectsInOfficeStore.filter(
+        (object: any) => object?.importType === objectImportType
+      );
+
+      if (filteredObjects?.length > 0) {
+        return objects.concat(filteredObjects).sort((a: { objectWorkingId: number; }, b: { objectWorkingId: number; }) => b.objectWorkingId - a.objectWorkingId);
+      }
+    }
+
+    return objects;
+  }
 
   /**
    * Saves current objects list from Object Reducer in Office Settings
@@ -89,7 +118,15 @@ class OfficeStoreObject {
   saveObjectsInExcelStore = (): void => {
     // Make sure that objects are merged before saving in Office Settings
     // to maintain backward compatibility and include image objects if Shape API is not supported.
-    const objects = this.mergeReduxToExcelStoreObjectsIfShapeApiNotSupported();
+    const { objects: objectsInRedux } = this.reduxStore.getState().objectReducer;
+
+    let objects = [...objectsInRedux];
+    // Restore hidden formatted table objects before saving objects into office settings
+    objects = this.mergeImageStoreObjectsToRedux(objects);
+
+    // Restore hidden image table objects before saving objects into office settings
+    objects = this.mergeFormattedTableStoreObjectsToRedux(objects);
+
     const settings = officeStoreHelper.getOfficeSettings();
     settings.set(OfficeSettingsEnum.storedObjects, objects);
     settings.saveAsync();

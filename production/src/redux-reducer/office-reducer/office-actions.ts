@@ -7,6 +7,7 @@ import {
   SetActiveCellAddressAction,
   SetIsDialogLoadedAction,
   SetIsShapeAPISupportedAction,
+  SetIsInsertWorksheetAPISupportedAction,
   SetPopupDataAction,
   ShowDialogAction,
 } from './office-reducer-types';
@@ -98,6 +99,13 @@ const setIsShapeAPISupported = (isShapeAPISupported: any): SetIsShapeAPISupporte
   isShapeAPISupported,
 });
 
+const setIsInsertWorksheetAPISupported = (isInsertWorksheetAPISupported: boolean): SetIsInsertWorksheetAPISupportedAction => {
+  return {
+    type: OfficeActionsTypes.SET_INSERT_WORKSHEET_API_SUPPORTED,
+    isInsertWorksheetAPISupported,
+  };
+}
+
 export const officeActions = {
   showDialog,
   hideDialog,
@@ -115,4 +123,5 @@ export const officeActions = {
   setPopupData,
   clearPopupData,
   setIsShapeAPISupported,
+  setIsInsertWorksheetAPISupported,
 };
