@@ -9,7 +9,7 @@ import { notificationService } from '../notification/notification-service';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import officeStoreHelper from '../office/store/office-store-helper';
-import { settingsSidePanelHelper } from './settings-panel/settings-side-panel-helper';
+import { settingsSidePanelHelper } from './settings-side-panel/settings-side-panel-helper';
 import { sidePanelEventHelper } from './side-panel-event-helper';
 import { sidePanelNotificationHelper } from './side-panel-notification-helper';
 import { sidePanelService } from './side-panel-service';
@@ -32,7 +32,7 @@ import { selectOperations } from '../redux-reducer/operation-reducer/operation-r
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { popupStateSelectors } from '../redux-reducer/popup-state-reducer/popup-state-reducer-selectors';
 import { repromptsQueueSelector } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer-selector';
-import SettingsSidePanel from './settings-panel/settings-side-panel';
+import SettingsSidePanel from './settings-side-panel/settings-side-panel';
 
 import './right-side-panel.scss';
 
@@ -83,6 +83,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
         await sidePanelEventHelper.addRemoveObjectListener();
         await sidePanelEventHelper.initializeActiveCellChangedListener(updateActiveCellAddress);
         await settingsSidePanelHelper.initReusePromptAnswers();
+        await settingsSidePanelHelper.initObjectInfoSettings();
       } catch (error) {
         console.error(error);
       }

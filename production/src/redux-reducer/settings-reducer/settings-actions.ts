@@ -1,6 +1,8 @@
 import {
   KeyValue,
-  OrderWorksheetObjectInfoSettingsAction,
+  LoadSidePanelObjectInfoSettingAction,
+  LoadWorksheetObjectInfoSettingAction,
+  ObjectInfoSetting,
   SettingsActionTypes,
   ToggleImportAttributesAsTextFlagAction,
   ToggleMainSidePanelObjectInfoSettingAction,
@@ -24,6 +26,13 @@ const toggleMergeCrosstabColumnsFlag = (
   mergeCrosstabColumns,
 });
 
+const loadSidePanelObjectInfoSettings = (
+  sidePanelObjectInfoSettings: ObjectInfoSetting[]
+): LoadSidePanelObjectInfoSettingAction => ({
+  type: SettingsActionTypes.LOAD_SIDE_PANEL_OBJECT_INFO_SETTINGS,
+  sidePanelObjectInfoSettings,
+});
+
 const toggleSidePanelObjectInfoSetting = (
   payload: KeyValue
 ): ToggleSidePanelObjectInfoSettingAction => ({
@@ -36,6 +45,13 @@ const toggleMainSidePanelObjectInfoSetting = (
 ): ToggleMainSidePanelObjectInfoSettingAction => ({
   type: SettingsActionTypes.TOGGLE_MAIN_SIDE_PANEL_OBJECT_INFO_SETTING,
   payload,
+});
+
+const loadWorksheetObjectInfoSettings = (
+  worksheetObjectInfoSettings: ObjectInfoSetting[]
+): LoadWorksheetObjectInfoSettingAction => ({
+  type: SettingsActionTypes.LOAD_WORKSHEET_OBJECT_INFO_SETTINGS,
+  worksheetObjectInfoSettings,
 });
 
 const toggleWorksheetObjectInfoSetting = (
@@ -52,19 +68,13 @@ const toggleMainWorksheetObjectInfoSetting = (
   payload,
 });
 
-const orderWorksheetObjectInfoSettings = (
-  worksheetObjectInfoKeys: string[]
-): OrderWorksheetObjectInfoSettingsAction => ({
-  type: SettingsActionTypes.ORDER_WORKSHEET_OBJECT_INFO_SETTINGS,
-  worksheetObjectInfoKeys,
-});
-
 export const settingsActions = {
   toggleImportAttributesAsTextFlag,
   toggleMergeCrosstabColumnsFlag,
+  loadSidePanelObjectInfoSettings,
   toggleSidePanelObjectInfoSetting,
   toggleMainSidePanelObjectInfoSetting,
+  loadWorksheetObjectInfoSettings,
   toggleWorksheetObjectInfoSetting,
   toggleMainWorksheetObjectInfoSetting,
-  orderWorksheetObjectInfoSettings,
 };

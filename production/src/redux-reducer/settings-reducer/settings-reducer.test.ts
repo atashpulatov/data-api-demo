@@ -78,21 +78,4 @@ describe('settingsReducer', () => {
     // then
     expect(newState.worksheetObjectInfoSettings.every(setting => setting.toggleChecked)).toBe(true);
   });
-
-  it('should return proper state in case of ORDER_WORKSHEET_OBJECT_INFO_SETTINGS action', () => {
-    // given
-    const action = settingsActions.orderWorksheetObjectInfoSettings([
-      'description',
-      'name',
-      'owner',
-    ]);
-    // when
-    const newState = settingsReducer(initialState, action);
-    // then
-    expect(newState.worksheetObjectInfoSettings.map(setting => setting.key)).toEqual([
-      'description',
-      'name',
-      'owner',
-    ]);
-  });
 });

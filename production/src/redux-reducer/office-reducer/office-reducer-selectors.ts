@@ -41,6 +41,11 @@ const selectReusePromptAnswers = createSelector(
   officeState => officeState.reusePromptAnswers
 );
 
+const selectIsSettingsPanelLoaded = createSelector(
+  [getOfficeState],
+  officeState => officeState.settingsPanelLoaded
+);
+
 export const officeSelectors = {
   selectIsPivotTableSupported,
   selectIsShapeAPISupported,
@@ -49,4 +54,5 @@ export const officeSelectors = {
   selectActiveCellAddress,
   selectPopupData,
   selectIsClearDataFailed,
+  selectIsSettingsPanelLoaded,
 };

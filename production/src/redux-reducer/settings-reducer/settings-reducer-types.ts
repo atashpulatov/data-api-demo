@@ -13,11 +13,12 @@ export type SettingsState = {
 export enum SettingsActionTypes {
   TOGGLE_MERGE_CROSSTAB_COLUMNS_FLAG = 'SETTINGS_TOGGLE_MERGE_CROSSTAB_COLUMNS_FLAG',
   TOGGLE_IMPORT_ATTRIBUTES_AS_TEXT_FLAG = 'SETTINGS_TOGGLE_IMPORT_ATTRIBUTES_AS_TEXT_FLAG',
+  LOAD_SIDE_PANEL_OBJECT_INFO_SETTINGS = 'SETTINGS_LOAD_SIDE_PANEL_OBJECT_INFO_SETTINGS',
   TOGGLE_SIDE_PANEL_OBJECT_INFO_SETTING = 'SETTINGS_TOGGLE_SIDE_PANEL_OBJECT_INFO_SETTING',
   TOGGLE_MAIN_SIDE_PANEL_OBJECT_INFO_SETTING = 'SETTINGS_TOGGLE_MAIN_SIDE_PANEL_OBJECT_INFO_SETTING',
+  LOAD_WORKSHEET_OBJECT_INFO_SETTINGS = 'SETTINGS_LOAD_WORKSHEET_OBJECT_INFO_SETTINGS',
   TOGGLE_WORKSHEET_OBJECT_INFO_SETTING = 'SETTINGS_TOGGLE_WORKSHEET_OBJECT_INFO_SETTING',
   TOGGLE_MAIN_WORKSHEET_OBJECT_INFO_SETTING = 'SETTINGS_TOGGLE_MAIN_WORKSHEET_OBJECT_INFO_SETTING',
-  ORDER_WORKSHEET_OBJECT_INFO_SETTINGS = 'SETTINGS_ORDER_WORKSHEET_OBJECT_INFO_SETTINGS',
 }
 
 export interface ToggleMergeCrosstabColumnsFlagAction extends Action {
@@ -30,6 +31,11 @@ export interface ToggleImportAttributesAsTextFlagAction extends Action {
   importAttributesAsText: boolean;
 }
 
+export interface LoadSidePanelObjectInfoSettingAction extends Action {
+  type: SettingsActionTypes.LOAD_SIDE_PANEL_OBJECT_INFO_SETTINGS;
+  sidePanelObjectInfoSettings: ObjectInfoSetting[];
+}
+
 export interface ToggleSidePanelObjectInfoSettingAction extends Action {
   type: SettingsActionTypes.TOGGLE_SIDE_PANEL_OBJECT_INFO_SETTING;
   payload: KeyValue;
@@ -38,6 +44,11 @@ export interface ToggleSidePanelObjectInfoSettingAction extends Action {
 export interface ToggleMainSidePanelObjectInfoSettingAction extends Action {
   type: SettingsActionTypes.TOGGLE_MAIN_SIDE_PANEL_OBJECT_INFO_SETTING;
   payload: boolean;
+}
+
+export interface LoadWorksheetObjectInfoSettingAction extends Action {
+  type: SettingsActionTypes.LOAD_WORKSHEET_OBJECT_INFO_SETTINGS;
+  worksheetObjectInfoSettings: ObjectInfoSetting[];
 }
 
 export interface ToggleWorksheetObjectInfoSettingAction extends Action {
@@ -50,19 +61,15 @@ export interface ToggleMainWorksheetObjectInfoSettingAction extends Action {
   payload: boolean;
 }
 
-export interface OrderWorksheetObjectInfoSettingsAction extends Action {
-  type: SettingsActionTypes.ORDER_WORKSHEET_OBJECT_INFO_SETTINGS;
-  worksheetObjectInfoKeys: string[];
-}
-
 export type SettingsActions =
   | ToggleMergeCrosstabColumnsFlagAction
   | ToggleImportAttributesAsTextFlagAction
+  | LoadSidePanelObjectInfoSettingAction
   | ToggleSidePanelObjectInfoSettingAction
   | ToggleMainSidePanelObjectInfoSettingAction
+  | LoadWorksheetObjectInfoSettingAction
   | ToggleWorksheetObjectInfoSettingAction
-  | ToggleMainWorksheetObjectInfoSettingAction
-  | OrderWorksheetObjectInfoSettingsAction;
+  | ToggleMainWorksheetObjectInfoSettingAction;
 
 export type ObjectInfoSetting = {
   key: string;

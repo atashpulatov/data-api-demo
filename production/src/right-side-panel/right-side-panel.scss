@@ -13,8 +13,20 @@
   }
 }
 
-.settings > section {
-  margin-left: 10px;
+// TODO: settings classes with same name are conflicting, it should be renamed to something more specific in the CC
+.settings {
+  max-height: 100%;
+  overflow: auto;
+
+  section {
+    margin-left: 10px;
+  }
+}
+
+.header {
+  .settings {
+    overflow: unset;
+  }
 }
 
 .import-data {
