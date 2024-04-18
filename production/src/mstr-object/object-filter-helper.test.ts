@@ -120,9 +120,9 @@ describe('generateReportFilterText', () => {
     const result = generateReportFilterText(filterData);
     console.log(result);
     // then
-    expect(result.reportFilterText).toBe('Not ( filter1 And filter2 )');
-    expect(result.reportLimitsText).toBe('Not ( limit1 Or limit2 )');
-    expect(result.viewFilterText).toBe('Not ( viewFilter1 Or viewFilter2 )');
-    expect(result.metricLimitsText).toBe('( reference1 > 10 ) And ( reference2 > 10 )');
+    expect(result.reportFilterText).toBe('NOT ( filter1 AND filter2 )');
+    expect(result.reportLimitsText).toBe('NOT ( limit1 OR limit2 )');
+    expect(result.viewFilterText).toBe('NOT ( viewFilter1 OR viewFilter2 )');
+    expect(result.metricLimitsText).toBe('( reference1 > 10 ) AND ( reference2 > 10 )');
   });
 });

@@ -49,7 +49,7 @@ export const generateReportFilterText = (
   const reportFilterText = convertTokensToString(reportFilter.tokens);
   const reportLimitsText = convertTokensToString(reportLimits.tokens);
   const viewFilterText = convertTokensToString(viewFilter.tokens);
-  const metricLimitsText = `( ${metricLimits.map(element => element.limit.text).join(` ) ${t('And')} ( `)} )`;
+  const metricLimitsText = `( ${metricLimits.map(element => element.limit.text).join(` ) ${t('and').toUpperCase()} ( `)} )`;
 
   return {
     reportFilterText,
