@@ -15,13 +15,13 @@ const convertTokensToString = (tokens: Token[]): string =>
     .map(token => {
       if (token.type === 'function') {
         if (token.value === 'And') {
-          return t('And');
+          return t('and').toUpperCase();
         }
         if (token.value === 'Or') {
-          return t('Or');
+          return t('or').toUpperCase();
         }
         if (token.value === 'Not') {
-          return t('Not');
+          return t('not').toUpperCase();
         }
       }
       return token.value;
