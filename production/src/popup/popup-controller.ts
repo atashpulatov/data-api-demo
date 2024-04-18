@@ -8,6 +8,7 @@ import { pageByHelper } from '../page-by/page-by-helper';
 import { PageByDataElement, PageByDisplayType } from '../page-by/page-by-types';
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { PopupTypeEnum } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
+import { PageByDisplayOption } from '../right-side-panel/settings-side-panel/settings-side-panel-types';
 import { ObjectData } from '../types/object-types';
 import { DialogResponse, ReportParams } from './popup-controller-types';
 
@@ -437,31 +438,31 @@ class PopupController {
     }
 
     const pageByLinkId = uuidv4();
-    // TODO: Replace with actual setting from the user when implemented
-    const selectedPageByDisplayType = PageByDisplayType.DEFAULT_PAGE as PageByDisplayType;
+    const { settingsReducer } = this.reduxStore.getState();
+    const { pageByDisplaySetting } = settingsReducer;
 
     const validPageByData = await pageByHelper.getValidPageByData(
       objectData,
       preparedInstanceDefinition
     );
 
-    switch (selectedPageByDisplayType) {
-      case PageByDisplayType.DEFAULT_PAGE:
+    switch (pageByDisplaySetting) {
+      case PageByDisplayOption.DEFAULT_PAGE:
         return this.handleDefaultPageImport(
           pageByLinkId,
           objectData,
           preparedInstanceDefinition,
-          selectedPageByDisplayType
+          pageByDisplaySetting
         );
-      case PageByDisplayType.ALL_PAGES:
+      case PageByDisplayOption.ALL_PAGES:
         return this.handleAllPagesImport(
           pageByLinkId,
           validPageByData,
           objectData,
           preparedInstanceDefinition,
-          selectedPageByDisplayType
+          pageByDisplaySetting
         );
-      case PageByDisplayType.SELECT_PAGES:
+      case PageByDisplayOption.SELECT_PAGES:
         // Set Page-by modal state to open
         // Logic for parsing data and passing to the Page-by component
         break;

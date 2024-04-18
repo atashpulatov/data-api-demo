@@ -1,10 +1,16 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import {
+  ObjectAndWorksheetNamingOption,
+  PageByDisplayOption,
+} from '../../right-side-panel/settings-side-panel/settings-side-panel-types';
+import {
   LoadSidePanelObjectInfoSettingAction,
   LoadWorksheetObjectInfoSettingAction,
+  SetPageByDisplaySettingAction,
   SettingsActions,
   SettingsActionTypes,
   SettingsState,
+  SetWorksheetNamingSettingAction,
   ToggleImportAttributesAsTextFlagAction,
   ToggleMainSidePanelObjectInfoSettingAction,
   ToggleMainWorksheetObjectInfoSettingAction,
@@ -25,6 +31,8 @@ const initialState: SettingsState = {
   sidePanelObjectInfoSettings: initialSidePanelObjectInfoSettings,
   worksheetObjectInfoSettings: initialWorksheetObjectInfoSettings,
   importType: ObjectImportType.TABLE,
+  objectAndWorksheetNamingSetting: ObjectAndWorksheetNamingOption.REPORT_NAME,
+  pageByDisplaySetting: PageByDisplayOption.SELECT_PAGES,
 };
 
 // eslint-disable-next-line default-param-last
@@ -46,6 +54,10 @@ export const settingsReducer = (state = initialState, action: SettingsActions): 
       return toggleWorksheetObjectInfoSetting(state, action);
     case SettingsActionTypes.TOGGLE_MAIN_WORKSHEET_OBJECT_INFO_SETTING:
       return toggleMainWorksheetObjectInfoSetting(state, action);
+    case SettingsActionTypes.SET_OBJECT_AND_WORKSHEET_NAMING_SETTING:
+      return setWorksheetNamingSetting(state, action);
+    case SettingsActionTypes.SET_PAGE_BY_DISPLAY_SETTING:
+      return setPageByDisplaySetting(state, action);
     default:
       return state;
   }
@@ -143,4 +155,18 @@ function toggleMainWorksheetObjectInfoSetting(
       toggleChecked: action.payload,
     })),
   };
+}
+
+function setWorksheetNamingSetting(
+  state: SettingsState,
+  action: SetWorksheetNamingSettingAction
+): SettingsState {
+  return { ...state, objectAndWorksheetNamingSetting: action.objectAndWorksheetNamingSetting };
+}
+
+function setPageByDisplaySetting(
+  state: SettingsState,
+  action: SetPageByDisplaySettingAction
+): SettingsState {
+  return { ...state, pageByDisplaySetting: action.pageByDisplaySetting };
 }

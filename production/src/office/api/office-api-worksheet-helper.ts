@@ -1,11 +1,18 @@
 import { officeApiHelper } from './office-api-helper';
 
-import { PageByData, PageByWorksheetNaming } from '../../page-by/page-by-types';
+import { PageByData } from '../../page-by/page-by-types';
+import { ObjectAndWorksheetNamingOption } from '../../right-side-panel/settings-side-panel/settings-side-panel-types';
 
 import { ProtectedSheetError } from '../../error/protected-sheets-error';
 import { ObjectImportType } from '../../mstr-object/constants';
 
 class OfficeApiWorksheetHelper {
+  reduxStore: any;
+
+  init(reduxStore: any): void {
+    this.reduxStore = reduxStore;
+  }
+
   /**
    * Returns true if specific worksheet is protected
    *
@@ -156,26 +163,23 @@ class OfficeApiWorksheetHelper {
    * @param currentNamingSetting name setting chosed by user
    * @return Generated worksheet name.
    */
-  prepareNameBasedOnPageBySettings(
-    reportName: string,
-    pageByData: PageByData,
-    // TODO: Replace with actual setting from the user when implemented
-    currentNamingSetting: PageByWorksheetNaming
-  ): string {
+  prepareNameBasedOnPageBySettings(reportName: string, pageByData: PageByData): string {
     const pageByElement = pageByData.elements.map(element => element.value).join(', ');
-    let newSheetName;
+    const { settingsReducer } = this.reduxStore.getState();
+    const currentNamingSetting = settingsReducer.objectAndWorksheetNamingSetting;
 
+    let newSheetName;
     switch (currentNamingSetting) {
-      case PageByWorksheetNaming.USE_REPORT_NAME:
+      case ObjectAndWorksheetNamingOption.REPORT_NAME:
         newSheetName = reportName;
         break;
-      case PageByWorksheetNaming.USE_PAGE_NAME:
+      case ObjectAndWorksheetNamingOption.PAGE_NAME:
         newSheetName = pageByElement;
         break;
-      case PageByWorksheetNaming.USE_PAGE_NAME_AND_REPORT_NAME:
+      case ObjectAndWorksheetNamingOption.PAGE_NAME_AND_REPORT_NAME:
         newSheetName = `${pageByElement} - ${reportName}`;
         break;
-      case PageByWorksheetNaming.USE_REPORT_NAME_AND_PAGE_NAME:
+      case ObjectAndWorksheetNamingOption.REPORT_NAME_AND_PAGE_NAME:
         newSheetName = `${reportName} - ${pageByElement}`;
         break;
       default:
@@ -211,12 +215,7 @@ class OfficeApiWorksheetHelper {
     let newSheetName = objectName.replace(/[:?*\\/\][]/g, '_');
 
     if (pageByData) {
-      newSheetName = this.prepareNameBasedOnPageBySettings(
-        newSheetName,
-        pageByData,
-        // TODO: Replace with actual setting from the user when implemented
-        PageByWorksheetNaming.USE_REPORT_NAME
-      );
+      newSheetName = this.prepareNameBasedOnPageBySettings(newSheetName, pageByData);
     }
 
     // if objectName only contains whitespaces replace it with _

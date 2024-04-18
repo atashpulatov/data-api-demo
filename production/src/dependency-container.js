@@ -6,6 +6,7 @@ import { mstrObjectRestService } from './mstr-object/mstr-object-rest-service';
 import { visualizationInfoService } from './mstr-object/visualization-info-service';
 import { notificationService } from './notification/notification-service';
 import { officeApiHelper } from './office/api/office-api-helper';
+import { officeApiWorksheetHelper } from './office/api/office-api-worksheet-helper';
 import officeReducerHelper from './office/store/office-reducer-helper';
 import officeStoreHelper from './office/store/office-store-helper';
 import overviewHelper from './popup/overview/overview-helper';
@@ -43,6 +44,9 @@ class DIContainer {
 
     this.officeApiHelper = officeApiHelper;
     this.officeApiHelper.init(reduxStore);
+
+    this.officeApiWorksheetHelper = officeApiWorksheetHelper;
+    this.officeApiWorksheetHelper.init(reduxStore);
 
     this.officeReducerHelper = officeReducerHelper;
     this.officeReducerHelper.init(reduxStore);
@@ -108,6 +112,7 @@ class DIContainer {
     this.popupActions.init(
       errorService,
       officeApiHelper,
+      officeApiWorksheetHelper,
       officeReducerHelper,
       popupHelper,
       mstrObjectRestService,

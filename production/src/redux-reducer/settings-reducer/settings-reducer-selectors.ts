@@ -29,10 +29,22 @@ const selectImportType = createSelector(
   settingsState => settingsState.importType
 );
 
+const selectObjectAndWorksheetNamingSetting = createSelector(
+  [getSettingsState],
+  settingsState => settingsState.objectAndWorksheetNamingSetting
+);
+
+const selectPageByDisplaySetting = createSelector(
+  [getSettingsState],
+  settingsState => settingsState.pageByDisplaySetting
+);
+
 export const settingsReducerSelectors = {
   selectSidePanelObjectInfoSettings,
   selectSidePanelMainSwitchValue,
   selectWorksheetObjectInfoSettings,
   selectWorksheetMainSwitchValue,
   selectImportType,
+  selectObjectAndWorksheetNamingSetting,
+  selectPageByDisplaySetting,
 };

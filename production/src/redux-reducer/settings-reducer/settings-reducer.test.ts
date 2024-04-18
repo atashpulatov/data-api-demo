@@ -1,3 +1,8 @@
+import {
+  ObjectAndWorksheetNamingOption,
+  PageByDisplayOption,
+} from '../../right-side-panel/settings-side-panel/settings-side-panel-types';
+
 import { settingsActions } from './settings-actions';
 import { settingsReducer } from './settings-reducer';
 import { ObjectImportType } from '../../mstr-object/constants';
@@ -13,6 +18,8 @@ describe('settingsReducer', () => {
     sidePanelObjectInfoSettings: initialSidePanelObjectInfoSettings,
     worksheetObjectInfoSettings: initialWorksheetObjectInfoSettings,
     importType: ObjectImportType.TABLE,
+    objectAndWorksheetNamingSetting: ObjectAndWorksheetNamingOption.REPORT_NAME,
+    pageByDisplaySetting: PageByDisplayOption.SELECT_PAGES,
   };
 
   it('should return correct initial state', () => {
@@ -77,5 +84,27 @@ describe('settingsReducer', () => {
     const newState = settingsReducer(initialState, action);
     // then
     expect(newState.worksheetObjectInfoSettings.every(setting => setting.toggleChecked)).toBe(true);
+  });
+
+  it('should return proper state in case of SET_OBJECT_AND_WORKSHEET_NAMING_SETTING action', () => {
+    // given
+    const action = settingsActions.setWorksheetNamingSetting(
+      ObjectAndWorksheetNamingOption.REPORT_NAME_AND_PAGE_NAME
+    );
+    // when
+    const newState = settingsReducer(initialState, action);
+    // then
+    expect(newState.objectAndWorksheetNamingSetting).toBe(
+      ObjectAndWorksheetNamingOption.REPORT_NAME_AND_PAGE_NAME
+    );
+  });
+
+  it('should return proper state in case of SET_PAGE_BY_DISPLAY_SETTING action', () => {
+    // given
+    const action = settingsActions.setPageByDisplaySetting(PageByDisplayOption.ALL_PAGES);
+    // when
+    const newState = settingsReducer(initialState, action);
+    // then
+    expect(newState.pageByDisplaySetting).toBe(PageByDisplayOption.ALL_PAGES);
   });
 });
