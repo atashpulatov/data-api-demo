@@ -1,3 +1,4 @@
+import { homeHelper } from '../home/home-helper';
 import { notificationService } from '../notification/notification-service';
 import { sessionHelper } from '../storage/session-helper';
 
@@ -24,7 +25,8 @@ describe('ErrorService', () => {
       sessionHelper,
       notificationService,
       popupController,
-      reduxStore
+      reduxStore,
+      homeHelper
     );
     errorService.displayErrorNotification = jest.fn();
     console.warn = jest.fn();
@@ -562,4 +564,25 @@ describe('ErrorService', () => {
       expect(fullLogOutSpy).toBeCalled();
     });
   });
+  it.each`
+    error                                         | isMacAndSafariBased | handleErrorCalledTimes
+    ${'Possible causes: the network is offline,'} | ${true}             | ${0}
+    ${'Possible causes: the network is offline,'} | ${false}            | ${0}
+    ${'error'}                                    | ${true}             | ${1}
+    ${'error'}                                    | ${false}            | ${1}
+  `(
+    'should handle Side Panel Action Error',
+    ({ error, isMacAndSafariBased, handleErrorCalledTimes }) => {
+      // given
+      const mockHandleError = jest.spyOn(errorService, 'handleError').mockImplementation();
+
+      jest.spyOn(homeHelper, 'isMacAndSafariBased').mockReturnValueOnce(isMacAndSafariBased);
+
+      // when
+      errorService.handleSidePanelActionError(error);
+      // then
+
+      expect(mockHandleError).toHaveBeenCalledTimes(handleErrorCalledTimes);
+    }
+  );
 });

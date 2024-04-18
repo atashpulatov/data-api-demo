@@ -2,8 +2,9 @@ import { GlobalNotificationTypes, ObjectNotificationTypes } from '@mstr/connecto
 
 import { notificationService } from '../../notification/notification-service';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
-import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-notification-helper';
-import { sidePanelService } from '../../right-side-panel/side-panel-service';
+import { sidePanelHelper } from '../../right-side-panel/side-panel-services/side-panel-helper';
+import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-services/side-panel-notification-helper';
+import { sidePanelService } from '../../right-side-panel/side-panel-services/side-panel-service';
 import { popupHelper } from '../popup-helper';
 import overviewHelper, { OverviewActionCommands } from './overview-helper';
 
@@ -228,7 +229,7 @@ describe('overview-helper', () => {
     await overviewHelper.handleOverviewActionCommand(actionCommand);
 
     // Then
-    expect(refreshMock).toHaveBeenCalledWith(objectWorkingIds);
+    expect(refreshMock).toHaveBeenCalledWith(...objectWorkingIds);
   });
 
   it('should handle edit command', async () => {
@@ -260,7 +261,7 @@ describe('overview-helper', () => {
     await overviewHelper.handleOverviewActionCommand(actionCommand);
 
     // Then
-    expect(repromptMock).toHaveBeenCalledWith(objectWorkingIds, true);
+    expect(repromptMock).toHaveBeenCalledWith(...objectWorkingIds, true);
   });
 
   it('should handle remove command', async () => {
@@ -276,7 +277,7 @@ describe('overview-helper', () => {
     await overviewHelper.handleOverviewActionCommand(actionCommand);
 
     // Then
-    expect(removeMock).toHaveBeenCalledWith(objectWorkingIds);
+    expect(removeMock).toHaveBeenCalledWith(...objectWorkingIds);
   });
 
   it('should handle duplicate command', async () => {
@@ -288,7 +289,7 @@ describe('overview-helper', () => {
       withEdit: false,
     };
 
-    const duplicateMock = jest.spyOn(sidePanelService, 'duplicate').mockImplementation();
+    const duplicateMock = jest.spyOn(sidePanelHelper, 'duplicateObject').mockImplementation();
 
     // When
     await overviewHelper.handleOverviewActionCommand(actionCommand);

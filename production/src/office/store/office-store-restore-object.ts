@@ -193,7 +193,7 @@ class OfficeStoreRestoreObject {
       }
       settings.set(OfficeSettingsEnum.loadedReportProperties, []);
       settings.saveAsync(saveAsync =>
-        console.log(`Clearing report Array in settings ${saveAsync.status}`)
+        console.info(`Clearing report Array in settings ${saveAsync.status}`)
       );
     }
     return [...objects, ...objectsToBeAdded];

@@ -39,10 +39,10 @@ class StepFormatTable {
           await excelContext.sync();
         } catch (error) {
           console.error(error);
-          console.log('Error when formatting - no columns autofit applied', error);
+          console.error('Error when formatting - no columns autofit applied', error);
         }
       } else {
-        console.log(
+        console.warn(
           'The column count is more than columns autofit limit or should not format - no columns autofit applied.'
         );
       }

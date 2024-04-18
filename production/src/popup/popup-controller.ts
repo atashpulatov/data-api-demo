@@ -542,7 +542,7 @@ class PopupController {
     try {
       return dialog.close();
     } catch (e) {
-      console.log('Attempted to close an already closed dialog');
+      console.info('Attempted to close an already closed dialog');
     }
   };
 

@@ -1,6 +1,6 @@
-import { notificationService } from '../notification/notification-service';
-import { officeApiHelper } from '../office/api/office-api-helper';
-import officeReducerHelper from '../office/store/office-reducer-helper';
+import { notificationService } from '../../notification/notification-service';
+import { officeApiHelper } from '../../office/api/office-api-helper';
+import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { sidePanelEventHelper } from './side-panel-event-helper';
 import { sidePanelService } from './side-panel-service';
 
@@ -61,7 +61,7 @@ describe('SidePanelService', () => {
     expect(mockedGetObjects).toBeCalled();
     expect(mockedRemoveNotification).toBeCalled();
     expect(mockedRemove).toBeCalled();
-    expect(mockedRemove).toBeCalledWith([1]);
+    expect(mockedRemove).toBeCalledWith(1);
   });
 
   it('should remove objects in setOnDeletedWorksheetEvent', async () => {
@@ -102,7 +102,7 @@ describe('SidePanelService', () => {
     expect(mockedGetObjects).toBeCalled();
     expect(mockedRemoveNotification).toBeCalled();
     expect(mockedRemove).toBeCalled();
-    expect(mockedRemove).toBeCalledWith([2]);
+    expect(mockedRemove).toBeCalledWith(2);
   });
 
   it.each`

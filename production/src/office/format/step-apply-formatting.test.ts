@@ -37,8 +37,7 @@ describe('StepApplyFormatting', () => {
     // then
     expect(formattingHelper.filterColumnInformation).toBeCalledTimes(1);
     expect(formattingHelper.filterColumnInformation).toThrowError(Error);
-    expect(console.log).toBeCalledTimes(1);
-    expect(console.log).toBeCalledWith('Cannot apply formatting, skipping');
+
     expect(console.error).toBeCalledTimes(1);
     expect(console.error).toBeCalledWith(new Error('errorTest'));
 

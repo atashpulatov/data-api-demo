@@ -6,10 +6,10 @@ import { createStore } from 'redux';
 
 import { useGetSidePanelPopup } from './use-get-side-panel-popup';
 
-import officeReducerHelper from '../office/store/office-reducer-helper';
-import { sidePanelNotificationHelper } from './side-panel-notification-helper';
+import officeReducerHelper from '../../office/store/office-reducer-helper';
+import { sidePanelNotificationHelper } from '../side-panel-services/side-panel-notification-helper';
 
-import { rootReducer } from '../store';
+import { rootReducer } from '../../store';
 
 describe('useGetSidePanelPopup', () => {
   it('should call sidePanelNotificationHelper.setDuplicatePopup when conditions are met', () => {

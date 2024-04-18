@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { OfficeApplicationType, SidePanel } from '@mstr/connector-components';
 
-import { useGetSidePanelPopup } from './use-get-side-panel-popup';
-import { useGetUpdatedDuplicatePopup } from './use-get-updated-duplicate-popup';
+import { useDialogPanelCommunication } from './side-panel-hooks/use-dialog-panel-communication';
+import { useGetSidePanelPopup } from './side-panel-hooks/use-get-side-panel-popup';
+import { useGetUpdatedDuplicatePopup } from './side-panel-hooks/use-get-updated-duplicate-popup';
 
 import { notificationService } from '../notification/notification-service';
-import { officeApiHelper } from '../office/api/office-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
-import officeStoreHelper from '../office/store/office-store-helper';
 import { settingsSidePanelHelper } from './settings-side-panel/settings-side-panel-helper';
-import { sidePanelEventHelper } from './side-panel-event-helper';
-import { sidePanelNotificationHelper } from './side-panel-notification-helper';
-import { sidePanelService } from './side-panel-service';
+import { sidePanelEventHelper } from './side-panel-services/side-panel-event-helper';
+import { sidePanelHelper } from './side-panel-services/side-panel-helper';
+import { sidePanelNotificationHelper } from './side-panel-services/side-panel-notification-helper';
+import { sidePanelService } from './side-panel-services/side-panel-service';
 
 import { RootState } from '../store';
 
@@ -30,24 +30,18 @@ import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { officeSelectors } from '../redux-reducer/office-reducer/office-reducer-selectors';
 import { selectOperations } from '../redux-reducer/operation-reducer/operation-reducer-selectors';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
-import { popupStateSelectors } from '../redux-reducer/popup-state-reducer/popup-state-reducer-selectors';
 import { repromptsQueueSelector } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer-selector';
 import SettingsSidePanel from './settings-side-panel/settings-side-panel';
 
 import './right-side-panel.scss';
 
 interface RightSidePanelProps {
-  popupData?: { objectWorkingId: number; callback: Function };
   loadedObjects: ObjectData[];
   isConfirm?: boolean;
   isSettings?: boolean;
   settingsPanelLoaded?: boolean;
   toggleIsSettingsFlag?: (flag?: boolean) => void;
-  toggleSecuredFlag?: (flag?: boolean) => void;
-  toggleIsClearDataFailedFlag?: (flag?: boolean) => void;
   updateActiveCellAddress?: (cellAddress?: string) => void;
-  isDialogRendered?: boolean;
-  isDialogLoaded?: boolean;
   setIsDataOverviewOpen: (isDataOverviewOpen: boolean) => void;
   setFilteredPageByLinkId: (filteredPageByLinkId: string) => void;
 }
@@ -58,12 +52,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   isSettings,
   settingsPanelLoaded,
   toggleIsSettingsFlag,
-  toggleSecuredFlag,
-  toggleIsClearDataFailedFlag,
   updateActiveCellAddress,
-  popupData,
-  isDialogRendered,
-  isDialogLoaded,
   setIsDataOverviewOpen,
   setFilteredPageByLinkId,
 }) => {
@@ -73,9 +62,8 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   const operations = useSelector(selectOperations);
   const globalNotification = useSelector(selectGlobalNotification);
   const notifications = useSelector(selectNotifications);
-  const popupType = useSelector(popupStateSelectors.selectPopupType);
   const isSidePanelBlocked = useSelector(repromptsQueueSelector.doesRepromptQueueContainItems);
-  const activeCellAddress = useSelector(officeSelectors.selectActiveCellAddress);
+  const isDialogOpen = useSelector(officeSelectors.selectIsDialogOpen);
 
   useEffect(() => {
     async function initializeSidePanel(): Promise<void> {
@@ -84,28 +72,18 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
         await sidePanelEventHelper.initializeActiveCellChangedListener(updateActiveCellAddress);
         await settingsSidePanelHelper.initReusePromptAnswers();
         await settingsSidePanelHelper.initObjectInfoSettings();
+        sidePanelHelper.clearRepromptTask();
+        sidePanelHelper.initializeClearDataFlags();
       } catch (error) {
         console.error(error);
       }
     }
     initializeSidePanel();
-    sidePanelService.clearRepromptTask();
   }, [updateActiveCellAddress]);
 
-  useEffect(() => {
-    officeStoreHelper.isFileSecured() && toggleSecuredFlag(true);
-    officeStoreHelper.isClearDataFailed() && toggleIsClearDataFailedFlag(true);
-  }, [toggleSecuredFlag, toggleIsClearDataFailedFlag]);
-
-  const duplicatePopupParams = useGetUpdatedDuplicatePopup({
-    sidePanelPopup,
-    setSidePanelPopup,
-  });
-
-  useGetSidePanelPopup({
-    setSidePanelPopup,
-    sidePanelPopup,
-  });
+  useDialogPanelCommunication();
+  useGetSidePanelPopup({ setSidePanelPopup, sidePanelPopup });
+  const duplicatePopupParams = useGetUpdatedDuplicatePopup({ sidePanelPopup, setSidePanelPopup });
 
   useEffect(() => {
     setLoadedObjectsWrapped(
@@ -117,83 +95,6 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
     );
   }, [loadedObjects, notifications, operations]);
 
-  /**
-   * Wraps a function to be called when user clicks an action icon.
-   *
-   * Function will be called when:
-   *
-   * - session is valid,
-   * - no operation is in progress.
-   *
-   * @param func Function to be wrapped
-   * @param params Parameters to wrapped function
-   * @param name Optional new name of an object
-   */
-  const wrapper = async (func: Function, params: any, name?: string): Promise<void> => {
-    try {
-      const { onLine } = window.navigator;
-      if (onLine) {
-        await officeApiHelper.checkStatusOfSessions();
-        if (officeReducerHelper.noOperationInProgress()) {
-          await func(params, name);
-        }
-      }
-    } catch (error) {
-      sidePanelNotificationHelper.handleSidePanelActionError(error);
-    }
-  };
-
-  const addDataWrapper = async (params: any): Promise<void> => {
-    await wrapper(sidePanelService.addData, params);
-  };
-  const highlightObjectWrapper = async (params: any): Promise<void> => {
-    await wrapper(sidePanelService.highlightObject, params);
-  };
-  const duplicateWrapper = async (objectWorkingId: number): Promise<void> => {
-    await wrapper(sidePanelNotificationHelper.setDuplicatePopup, {
-      objectWorkingId,
-      ...duplicatePopupParams,
-    });
-  };
-  const editWrapper = async (params: any): Promise<void> => {
-    await wrapper(sidePanelService.edit, params);
-  };
-  const repromptWrapper = async (...params: any): Promise<void> => {
-    await wrapper(sidePanelService.reprompt, params);
-  };
-  const refreshWrapper = async (...params: any): Promise<void> => {
-    await wrapper(sidePanelService.refresh, params);
-  };
-  const removeWrapper = async (...params: any): Promise<void> => {
-    await wrapper(sidePanelService.remove, params);
-  };
-  const renameWrapper = async (params: any, name: string): Promise<void> => {
-    await wrapper(sidePanelService.rename, params, name);
-  };
-
-  useEffect(() => {
-    if (isDialogLoaded) {
-      popupController.sendMessageToDialog(
-        JSON.stringify({
-          popupType,
-          objects: loadedObjects,
-          notifications,
-          globalNotification,
-          activeCellAddress,
-          popupData,
-        })
-      );
-    }
-  }, [
-    loadedObjects,
-    notifications,
-    globalNotification,
-    activeCellAddress,
-    isDialogLoaded,
-    popupData,
-    popupType,
-  ]);
-
   return (
     <>
       {isSidePanelBlocked && <div className='block-side-panel-ui' />}
@@ -203,14 +104,17 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
         <SidePanel
           activeGroupKey={0}
           loadedObjects={loadedObjectsWrapped as any}
-          onAddData={addDataWrapper}
-          onTileClick={highlightObjectWrapper}
-          onDuplicateClick={duplicateWrapper}
-          onEditClick={editWrapper}
-          onRefreshClick={refreshWrapper}
-          onRemoveClick={removeWrapper}
-          onRename={renameWrapper}
-          popup={!isDialogRendered && sidePanelPopup}
+          onAddData={sidePanelService.addData}
+          onTileClick={sidePanelService.highlightObject}
+          onDuplicateClick={objectWorkingId =>
+            sidePanelService.duplicate(objectWorkingId, duplicatePopupParams)
+          }
+          onEditClick={sidePanelService.edit}
+          onRefreshClick={sidePanelService.refresh}
+          onRemoveClick={sidePanelService.remove}
+          onRename={sidePanelService.rename}
+          onRepromptClick={objectWorkingId => sidePanelService.reprompt([objectWorkingId], false)}
+          popup={!isDialogOpen && sidePanelPopup}
           // @ts-expect-error
           settingsMenu={isSettings && <SettingsMenu />}
           onSettingsClick={() => toggleIsSettingsFlag(!isSettings)}
@@ -218,8 +122,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
           globalNotification={globalNotification}
           onSelectAll={notificationService.dismissNotifications}
           shouldDisableActions={!officeReducerHelper.noOperationInProgress()}
-          isPopupRendered={isDialogRendered}
-          onRepromptClick={repromptWrapper}
+          isPopupRendered={isDialogOpen}
           onPageByClick={(pageByLinkId: any) => {
             popupController.runImportedDataOverviewPopup();
             setFilteredPageByLinkId(pageByLinkId);
@@ -233,42 +136,21 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
 };
 
 export const mapStateToProps = (state: RootState): any => {
-  const { importRequested, dossierOpenRequested } = state.navigationTree;
   const { objects } = state.objectReducer;
 
-  const {
-    isConfirm,
-    isSettings,
-    isSecured,
-    isClearDataFailed,
-    settingsPanelLoaded,
-    reusePromptAnswers,
-    popupData,
-    isDialogOpen,
-    isDialogLoaded,
-  } = state.officeReducer;
+  const { isConfirm, isSettings, settingsPanelLoaded } = state.officeReducer;
 
   return {
     loadedObjects: objects,
-    importRequested,
-    dossierOpenRequested,
     isConfirm,
     isSettings,
-    isSecured,
-    isClearDataFailed,
     settingsPanelLoaded,
-    reusePromptAnswers,
-    popupData,
-    isDialogRendered: isDialogOpen,
-    isDialogLoaded,
   };
 };
 
 const mapDispatchToProps = {
   cancelCurrentImportRequest: navigationTreeActions.cancelImportRequest,
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
-  toggleSecuredFlag: officeActions.toggleSecuredFlag,
-  toggleIsClearDataFailedFlag: officeActions.toggleIsClearDataFailedFlag,
   updateActiveCellAddress: officeActions.updateActiveCellAddress,
   setIsDataOverviewOpen: popupStateActions.setIsDataOverviewOpen,
   setFilteredPageByLinkId: popupStateActions.setFilteredPageByLinkId,

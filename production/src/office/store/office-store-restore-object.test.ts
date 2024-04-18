@@ -272,9 +272,6 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
       );
 
       expect(settingsMock.saveAsync).toBeCalledTimes(1);
-      expect(console.log).toBeCalledTimes(1);
-      expect(console.log).toBeCalledWith('Clearing report Array in settings saveAsyncTest');
-
       expect(result).toEqual(expectedResult);
     }
   );
@@ -357,9 +354,6 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
       );
 
       expect(settingsMock.saveAsync).toBeCalledTimes(1);
-      expect(console.log).toBeCalledTimes(1);
-      expect(console.log).toBeCalledWith('Clearing report Array in settings saveAsyncTest');
-
       expect(result).toEqual(expectedResult);
     }
   );
@@ -384,9 +378,6 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
     expect(officeStoreRestoreObject.mapLegacyObjectValue).not.toBeCalled();
 
     expect(settingsMock.saveAsync).toBeCalledTimes(1);
-    expect(console.log).toBeCalledTimes(1);
-    expect(console.log).toBeCalledWith('Clearing report Array in settings saveAsyncTest');
-
     expect(result).toEqual([{ bindId: 'sameBindId' }]);
   });
 
@@ -436,9 +427,6 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
     );
 
     expect(settingsMock.saveAsync).toBeCalledTimes(1);
-    expect(console.log).toBeCalledTimes(1);
-    expect(console.log).toBeCalledWith('Clearing report Array in settings saveAsyncTest');
-
     expect(result).toEqual([
       { bindId: 'paramBindId' },
       { bindId: 'sameBindId' },
@@ -474,9 +462,6 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
     expect(officeStoreRestoreObject.mapLegacyObjectValue).toBeCalledTimes(0);
 
     expect(settingsMock.saveAsync).toBeCalledTimes(1);
-    expect(console.log).toBeCalledTimes(1);
-    expect(console.log).toBeCalledWith('Clearing report Array in settings saveAsyncTest');
-
     expect(result).toEqual([{ bindId: 'oneExistingBindId' }, { bindId: 'twoExistingBindId' }]);
   });
 

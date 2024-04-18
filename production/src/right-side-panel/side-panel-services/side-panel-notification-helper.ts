@@ -1,24 +1,16 @@
 import { PopupTypes } from '@mstr/connector-components';
 
-import { authenticationHelper } from '../authentication/authentication-helper';
-import { homeHelper } from '../home/home-helper';
-import { notificationService } from '../notification/notification-service';
-import { officeApiHelper } from '../office/api/office-api-helper';
-import officeReducerHelper from '../office/store/office-reducer-helper';
-import { sidePanelService } from './side-panel-service';
+import { officeApiHelper } from '../../office/api/office-api-helper';
+import officeReducerHelper from '../../office/store/office-reducer-helper';
+import { sidePanelHelper } from './side-panel-helper';
 
-import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
-import { ObjectData } from '../types/object-types';
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
 
-import { errorService } from '../error/error-handler';
-import { calculateLoadingProgress } from '../operation/operation-loading-progress';
-import { OperationTypes } from '../operation/operation-type-names';
-import { officeActions } from '../redux-reducer/office-reducer/office-actions';
-import { updateOperation } from '../redux-reducer/operation-reducer/operation-actions';
-import { IncomingErrorStrings } from '../error/constants';
-import { ObjectImportType } from '../mstr-object/constants';
-
-const CONNECTION_CHECK_TIMEOUT = 3000;
+import { calculateLoadingProgress } from '../../operation/operation-loading-progress';
+import { OperationTypes } from '../../operation/operation-type-names';
+import { updateOperation } from '../../redux-reducer/operation-reducer/operation-actions';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 class SidePanelNotificationHelper {
   reduxStore: any;
@@ -38,7 +30,7 @@ class SidePanelNotificationHelper {
    * @param data.setSidePanelPopup - Callback to save popup in state of RightSidePanel.
    * @param data.setDuplicatedObjectId - Callback to save objectWorkingId in state of RightSidePanel.
    */
-  setDuplicatePopup = ({
+  setDuplicatePopup({
     objectWorkingId,
     activeCellAddress,
     setSidePanelPopup,
@@ -48,7 +40,7 @@ class SidePanelNotificationHelper {
     activeCellAddress: string;
     setSidePanelPopup: Function;
     setDuplicatedObjectId: Function;
-  }): void => {
+  }): void {
     const closePopup = (): void => {
       setSidePanelPopup(null);
       setDuplicatedObjectId(null);
@@ -58,16 +50,16 @@ class SidePanelNotificationHelper {
       type: PopupTypes.DUPLICATE,
       activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
       onImport: (isActiveCellOptionSelected: boolean): void => {
-        sidePanelService.duplicate(objectWorkingId, !isActiveCellOptionSelected, false);
+        sidePanelHelper.duplicateObject(objectWorkingId, !isActiveCellOptionSelected, false);
         closePopup();
       },
       onEdit: (isActiveCellOptionSelected: boolean): void => {
-        sidePanelService.duplicate(objectWorkingId, !isActiveCellOptionSelected, true);
+        sidePanelHelper.duplicateObject(objectWorkingId, !isActiveCellOptionSelected, true);
         closePopup();
       },
       onClose: closePopup,
     });
-  };
+  }
 
   /**
    * Creates or updates range taken popup.
@@ -135,39 +127,21 @@ class SidePanelNotificationHelper {
    *
    * @returns Contains type and callback for the popup
    */
-  setClearDataPopups = (): any => {
+  setClearDataPopups = (handleViewData: () => void): any => {
     let popup = null;
 
     const { isSecured, isClearDataFailed } = this.reduxStore.getState().officeReducer;
     isSecured &&
       (popup = {
         type: PopupTypes.DATA_CLEARED,
-        onViewData: this.handleViewData,
+        onViewData: handleViewData,
       });
     isClearDataFailed &&
       (popup = {
         type: PopupTypes.DATA_CLEARED_FAILED,
-        onViewData: this.handleViewData,
+        onViewData: handleViewData,
       });
     return popup;
-  };
-
-  /**
-   * Toggles flags for cleardata and refresh all existing objects.
-   */
-  handleViewData = async (): Promise<void> => {
-    try {
-      await officeApiHelper.checkStatusOfSessions();
-      this.reduxStore.dispatch(officeActions.toggleSecuredFlag(false));
-      this.reduxStore.dispatch(officeActions.toggleIsClearDataFailedFlag(false));
-      sidePanelService.refresh(
-        officeReducerHelper
-          .getObjectsListFromObjectReducer()
-          .map(({ objectWorkingId }) => objectWorkingId)
-      );
-    } catch (error) {
-      errorService.handleError(error);
-    }
   };
 
   /**
@@ -228,38 +202,6 @@ class SidePanelNotificationHelper {
     objectOperation.operationType !== OperationTypes.REMOVE_OPERATION &&
     objectOperation.operationType !== OperationTypes.CLEAR_DATA_OPERATION &&
     objectOperation.operationType !== OperationTypes.HIGHLIGHT_OPERATION;
-
-  /**
-   * Handles error thrown during invoking side panel actions like refresh, edit etc.
-   * For Webkit based clients (Safari, Excel for Mac)
-   * it checks for network connection with custom implementation
-   * This logic allows us to provide user with connection lost notification
-   *
-   * @param error Plain error object thrown by method calls.
-   */
-  handleSidePanelActionError = (error: any): void => {
-    const castedError = String(error);
-    const { CONNECTION_BROKEN } = IncomingErrorStrings;
-    if (castedError.includes(CONNECTION_BROKEN)) {
-      if (homeHelper.isMacAndSafariBased()) {
-        notificationService.connectionLost();
-        this.connectionCheckerLoop();
-      }
-      return;
-    }
-    errorService.handleError(error);
-  };
-
-  /**
-   * This method creates an interval and checkes every CONNECTION_CHECK_TIMOUT seconds
-   * whether the connection to the internet has been restored
-   *
-   */
-  connectionCheckerLoop = (): void => {
-    const checkInterval = setInterval(() => {
-      authenticationHelper.doesConnectionExist(checkInterval);
-    }, CONNECTION_CHECK_TIMEOUT);
-  };
 }
 
 export const sidePanelNotificationHelper = new SidePanelNotificationHelper();

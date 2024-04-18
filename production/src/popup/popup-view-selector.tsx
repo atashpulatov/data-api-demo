@@ -66,7 +66,7 @@ const renderProperComponent = (popupType: PopupTypeEnum): any => {
 export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = props => {
   const { authToken, popupType: popupTypeProps } = props;
   if (!authToken) {
-    console.log('Waiting for token to be passed');
+    console.info('Waiting for token to be passed');
     return null;
   }
   const popupType = popupViewSelectorHelper.setPopupType(props, popupTypeProps);

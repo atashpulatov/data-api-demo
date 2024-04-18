@@ -6,9 +6,9 @@ import { createStore } from 'redux';
 
 import { useGetUpdatedDuplicatePopup } from './use-get-updated-duplicate-popup';
 
-import { sidePanelNotificationHelper } from './side-panel-notification-helper';
+import { sidePanelNotificationHelper } from '../side-panel-services/side-panel-notification-helper';
 
-import { rootReducer } from '../store';
+import { rootReducer } from '../../store';
 
 describe('useGetUpdatedDuplicatePopup', () => {
   it('should call sidePanelNotificationHelper.setDuplicatePopup when conditions are met', () => {

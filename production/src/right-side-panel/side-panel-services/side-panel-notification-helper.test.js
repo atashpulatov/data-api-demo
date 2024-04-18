@@ -1,14 +1,7 @@
-/* eslint-disable no-import-assign */
-import { homeHelper } from '../home/home-helper';
-import { notificationService } from '../notification/notification-service';
-import { officeApiHelper } from '../office/api/office-api-helper';
 import { sidePanelNotificationHelper } from './side-panel-notification-helper';
 import { sidePanelService } from './side-panel-service';
 
-import { reduxStore } from '../store';
-
-import { errorService } from '../error/error-handler';
-import * as toggleFlag from '../redux-reducer/office-reducer/office-actions';
+import { reduxStore } from '../../store';
 
 describe('SidePanelService', () => {
   afterEach(() => {
@@ -119,40 +112,19 @@ describe('SidePanelService', () => {
       const mockedDispatch = jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({
         officeReducer: { isSecured, isClearDataFailed },
       });
-      const mockedViewData = jest
-        .spyOn(sidePanelNotificationHelper, 'handleViewData')
-        .mockImplementation();
+      const mockedViewData = jest.spyOn(sidePanelService, 'viewData').mockImplementation();
 
       const expectedObject = {
         onViewData: mockedViewData,
         type: popupType,
       };
       // when
-      const popup = sidePanelNotificationHelper.setClearDataPopups();
+      const popup = sidePanelNotificationHelper.setClearDataPopups(mockedViewData);
       // then
       expect({ ...popup }).toMatchObject(expectedObject);
       expect(mockedDispatch).toBeCalledTimes(1);
     }
   );
-
-  it('handleViewData should change flags anre refresh objects', async () => {
-    // given
-    const mockedSessionCheck = jest
-      .spyOn(officeApiHelper, 'checkStatusOfSessions')
-      .mockImplementation();
-    const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
-    const mockedRefresh = jest.spyOn(sidePanelService, 'refresh').mockImplementation();
-    toggleFlag.toggleSecuredFlag = jest.fn();
-    toggleFlag.toggleIsClearDataFailedFlag = jest.fn();
-
-    // when
-    await sidePanelNotificationHelper.handleViewData();
-
-    // then
-    expect(mockedSessionCheck).toBeCalledTimes(1);
-    expect(mockedDispatch).toBeCalledTimes(2);
-    expect(mockedRefresh).toBeCalledTimes(1);
-  });
 
   it.each`
     operationType             | expectedResult
@@ -174,41 +146,6 @@ describe('SidePanelService', () => {
         sidePanelNotificationHelper.shouldGenerateProgressPercentage(objectOperation);
       // then
       expect(returnedValue).toBe(expectedResult);
-    }
-  );
-
-  it.each`
-    error                                         | isMacAndSafariBased | handleErrorCalledTimes | connectionLostCalledTimes | connectionCheckerCalledTimes
-    ${'Possible causes: the network is offline,'} | ${true}             | ${0}                   | ${1}                      | ${1}
-    ${'Possible causes: the network is offline,'} | ${false}            | ${0}                   | ${0}                      | ${0}
-    ${'error'}                                    | ${true}             | ${1}                   | ${0}                      | ${0}
-    ${'error'}                                    | ${false}            | ${1}                   | ${0}                      | ${0}
-  `(
-    'should handle Side Panel Action Error',
-    ({
-      error,
-      isMacAndSafariBased,
-      handleErrorCalledTimes,
-      connectionLostCalledTimes,
-      connectionCheckerCalledTimes,
-    }) => {
-      // given
-      const mockHandleError = jest.spyOn(errorService, 'handleError').mockImplementation();
-      const mockedConnectionLost = jest
-        .spyOn(notificationService, 'connectionLost')
-        .mockImplementation();
-      const mockedConnectionCheckerp = jest
-        .spyOn(sidePanelNotificationHelper, 'connectionCheckerLoop')
-        .mockImplementation();
-      jest.spyOn(homeHelper, 'isMacAndSafariBased').mockReturnValueOnce(isMacAndSafariBased);
-
-      // when
-      sidePanelNotificationHelper.handleSidePanelActionError(error);
-      // then
-
-      expect(mockHandleError).toBeCalledTimes(handleErrorCalledTimes);
-      expect(mockedConnectionLost).toBeCalledTimes(connectionLostCalledTimes);
-      expect(mockedConnectionCheckerp).toBeCalledTimes(connectionCheckerCalledTimes);
     }
   );
 });

@@ -2,9 +2,9 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { PopupProps, PopupTypes } from '@mstr/connector-components';
 
-import { sidePanelNotificationHelper } from './side-panel-notification-helper';
+import { sidePanelNotificationHelper } from '../side-panel-services/side-panel-notification-helper';
 
-import { officeSelectors } from '../redux-reducer/office-reducer/office-reducer-selectors';
+import { officeSelectors } from '../../redux-reducer/office-reducer/office-reducer-selectors';
 
 interface UseGetUpdatedDuplicatePopupProps {
   sidePanelPopup: PopupProps;

@@ -41,6 +41,16 @@ const selectReusePromptAnswers = createSelector(
   officeState => officeState.reusePromptAnswers
 );
 
+const selectIsDialogLoaded = createSelector(
+  [getOfficeState],
+  officeState => officeState.isDialogLoaded
+);
+
+const selectIsDialogOpen = createSelector(
+  [getOfficeState],
+  officeState => officeState.isDialogOpen
+);
+
 const selectIsSettingsPanelLoaded = createSelector(
   [getOfficeState],
   officeState => officeState.settingsPanelLoaded
@@ -54,5 +64,7 @@ export const officeSelectors = {
   selectActiveCellAddress,
   selectPopupData,
   selectIsClearDataFailed,
+  selectIsDialogLoaded,
+  selectIsDialogOpen,
   selectIsSettingsPanelLoaded,
 };

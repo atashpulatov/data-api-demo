@@ -10,8 +10,9 @@ import officeReducerHelper from './office/store/office-reducer-helper';
 import officeStoreHelper from './office/store/office-store-helper';
 import overviewHelper from './popup/overview/overview-helper';
 import { popupHelper } from './popup/popup-helper';
-import { sidePanelNotificationHelper } from './right-side-panel/side-panel-notification-helper';
-import { sidePanelService } from './right-side-panel/side-panel-service';
+import { sidePanelHelper } from './right-side-panel/side-panel-services/side-panel-helper';
+import { sidePanelNotificationHelper } from './right-side-panel/side-panel-services/side-panel-notification-helper';
+import { sidePanelService } from './right-side-panel/side-panel-services/side-panel-service';
 import { sessionHelper } from './storage/session-helper';
 
 import officeStoreObject from './office/store/office-store-object';
@@ -64,20 +65,21 @@ class DIContainer {
     this.sessionActions = sessionActions;
     this.sessionActions.init(reduxStore);
 
+    this.homeHelper = homeHelper;
+    this.homeHelper.init(reduxStore, sessionActions, sessionHelper);
+
     this.errorService = errorService;
     this.errorService.init(
       sessionActions,
       sessionHelper,
       notificationService,
       popupController,
-      reduxStore
+      reduxStore,
+      homeHelper
     );
 
     this.authenticationHelper = authenticationHelper;
     this.authenticationHelper.init(reduxStore, sessionActions, authenticationService, errorService);
-
-    this.homeHelper = homeHelper;
-    this.homeHelper.init(reduxStore, sessionActions, sessionHelper);
 
     this.mstrObjectRestService = mstrObjectRestService;
     this.mstrObjectRestService.init(reduxStore);
@@ -88,14 +90,14 @@ class DIContainer {
     this.visualizationInfoService = visualizationInfoService;
     this.visualizationInfoService.init(mstrObjectRestService);
 
-    this.sidePanelService = sidePanelService;
-    this.sidePanelService.init(reduxStore);
+    this.sidePanelHelper = sidePanelHelper;
+    this.sidePanelHelper.init(reduxStore);
 
     this.popupController = popupController;
     this.popupController.init(reduxStore, sessionActions, popupActions, overviewHelper);
 
     this.overviewHelper = overviewHelper;
-    this.overviewHelper.init(reduxStore, sidePanelService, notificationService);
+    this.overviewHelper.init(reduxStore, sidePanelService, notificationService, sidePanelHelper);
 
     this.sidePanelNotificationHelper = sidePanelNotificationHelper;
     this.sidePanelNotificationHelper.init(reduxStore);

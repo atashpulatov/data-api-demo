@@ -40,7 +40,7 @@ class OfficeFormatSubtotals {
       excelContext.trackedObjects.remove(reportStartCell);
     } catch (error) {
       console.error(error);
-      console.log('Cannot apply subtotal formatting, skipping');
+      console.warn('Cannot apply subtotal formatting, skipping');
     }
     console.timeEnd('Subtotal Formatting');
   }

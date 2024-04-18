@@ -52,7 +52,7 @@ class StepApplyFormatting {
       await excelContext.sync();
     } catch (error) {
       console.error(error);
-      console.log('Cannot apply formatting, skipping');
+      console.warn('Cannot apply formatting, skipping');
     } finally {
       operationStepDispatcher.completeFormatData(objectWorkingId);
 

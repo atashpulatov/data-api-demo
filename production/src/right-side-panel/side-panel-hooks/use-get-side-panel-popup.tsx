@@ -2,14 +2,15 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { PopupProps, PopupTypes } from '@mstr/connector-components';
 
-import officeReducerHelper from '../office/store/office-reducer-helper';
-import { sidePanelNotificationHelper } from './side-panel-notification-helper';
+import officeReducerHelper from '../../office/store/office-reducer-helper';
+import { sidePanelNotificationHelper } from '../side-panel-services/side-panel-notification-helper';
+import { sidePanelService } from '../side-panel-services/side-panel-service';
 
-import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { popupController } from '../popup/popup-controller';
-import { officeSelectors } from '../redux-reducer/office-reducer/office-reducer-selectors';
-import { popupStateSelectors } from '../redux-reducer/popup-state-reducer/popup-state-reducer-selectors';
-import { repromptsQueueSelector } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer-selector';
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
+import { popupController } from '../../popup/popup-controller';
+import { officeSelectors } from '../../redux-reducer/office-reducer/office-reducer-selectors';
+import { popupStateSelectors } from '../../redux-reducer/popup-state-reducer/popup-state-reducer-selectors';
+import { repromptsQueueSelector } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer-selector';
 
 interface UseGetSidePanelPopupProps {
   sidePanelPopup: PopupProps;
@@ -33,7 +34,7 @@ export const useGetSidePanelPopup = ({
   const isSidePanelBlocked = useSelector(repromptsQueueSelector.doesRepromptQueueContainItems);
 
   useEffect(() => {
-    setSidePanelPopup(sidePanelNotificationHelper.setClearDataPopups());
+    setSidePanelPopup(sidePanelNotificationHelper.setClearDataPopups(sidePanelService.viewData));
   }, [isSecured, isClearDataFailed, setSidePanelPopup]);
 
   useEffect(() => {

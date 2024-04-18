@@ -1,9 +1,9 @@
-import { notificationService } from '../notification/notification-service';
-import { officeApiHelper } from '../office/api/office-api-helper';
-import officeReducerHelper from '../office/store/office-reducer-helper';
+import { notificationService } from '../../notification/notification-service';
+import { officeApiHelper } from '../../office/api/office-api-helper';
+import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { sidePanelService } from './side-panel-service';
 
-import { officeContext } from '../office/office-context';
+import { officeContext } from '../../office/office-context';
 
 class SidePanelEventHelper {
   eventRemove: any;
@@ -52,7 +52,7 @@ class SidePanelEventHelper {
     const ObjectToDelete = officeReducerHelper.getObjectFromObjectReducerByBindId(event.tableId);
     notificationService.removeExistingNotification(ObjectToDelete.objectWorkingId);
     await officeApiHelper.checkStatusOfSessions();
-    sidePanelService.remove([ObjectToDelete.objectWorkingId]);
+    sidePanelService.remove(ObjectToDelete.objectWorkingId);
   }
 
   /**
@@ -76,7 +76,7 @@ class SidePanelEventHelper {
     });
 
     const objectWorkingIds = objectsToDelete.map(object => object.objectWorkingId);
-    sidePanelService.remove(objectWorkingIds);
+    sidePanelService.remove(...objectWorkingIds);
   }
 }
 
