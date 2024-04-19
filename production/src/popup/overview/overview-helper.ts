@@ -323,6 +323,7 @@ class OverviewHelper {
         startCell,
         worksheet,
         pageByData,
+        definition,
       } = object;
 
       const objectNotification = notifications.find(
@@ -363,7 +364,14 @@ class OverviewHelper {
         owner: details?.owner.name,
         importedBy: details?.importedBy,
         isPrompted,
-        ...(pageByData && { page, pageByLinkId: pageByData?.pageByLinkId }),
+        ...(pageByData && {
+          page,
+          pageByLinkId: pageByData?.pageByLinkId,
+          sourceName: definition?.sourceName,
+        }),
+        ...(mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name && {
+          sourceName: definition?.sourceName,
+        }),
       };
     });
   }

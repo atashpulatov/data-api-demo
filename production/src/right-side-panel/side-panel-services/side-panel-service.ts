@@ -1,3 +1,5 @@
+import { PopupProps } from '@mstr/connector-components';
+
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
@@ -6,6 +8,8 @@ import { sidePanelNotificationHelper } from './side-panel-notification-helper';
 
 import officeStoreObject from '../../office/store/office-store-object';
 import { reduxStore } from '../../store';
+
+import { ObjectData } from '../../types/object-types';
 
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { popupController } from '../../popup/popup-controller';
@@ -186,6 +190,46 @@ export class SidePanelService {
 
     // Dispatch executeRepromptTask() once after all actions are dispatched
     reduxStore.dispatch(executeNextRepromptTask());
+  }
+
+  /**
+   * Handles the refreshing of all pages associated with a specific page by link ID.
+   *
+   * @param pageByLinkId The ID of the page by link to refresh all pages for
+   * @param setSidePanelPopup A function to set the side panel popup
+   * @param objects An array of ObjectData containing object information
+   */
+  @sidePanelOperationDecorator.operationWrapper
+  async refreshAllPages(
+    pageByLinkId: string,
+    setSidePanelPopup: React.Dispatch<PopupProps>,
+    objects: ObjectData[]
+  ): Promise<void> {
+    sidePanelNotificationHelper.setRefreshAllPagesPopup({
+      setSidePanelPopup,
+      objects,
+      pageByLinkId,
+    });
+  }
+
+  /**
+   * Handles the deleting of all pages associated with a specific page by link ID.
+   *
+   * @param pageByLinkId The ID of the page by link to refresh all pages for
+   * @param setSidePanelPopup A function to set the side panel popup
+   * @param objects An array of ObjectData containing object information
+   */
+  @sidePanelOperationDecorator.operationWrapper
+  async deleteAllPages(
+    pageByLinkId: string,
+    setSidePanelPopup: React.Dispatch<PopupProps>,
+    objects: ObjectData[]
+  ): Promise<void> {
+    sidePanelNotificationHelper.setDeleteAllPagesPopup({
+      setSidePanelPopup,
+      objects,
+      pageByLinkId,
+    });
   }
 }
 

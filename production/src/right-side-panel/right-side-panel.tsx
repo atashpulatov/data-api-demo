@@ -20,13 +20,11 @@ import { ObjectData } from '../types/object-types';
 
 import { Confirmation } from '../home/confirmation';
 import { SettingsMenu } from '../home/settings-menu';
-import { popupController } from '../popup/popup-controller';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { notificationReducerSelectors } from '../redux-reducer/notification-reducer/notification-reducer-selectors';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { officeSelectors } from '../redux-reducer/office-reducer/office-reducer-selectors';
 import { selectOperations } from '../redux-reducer/operation-reducer/operation-reducer-selectors';
-import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { repromptsQueueSelector } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer-selector';
 import SettingsSidePanel from './settings-side-panel/settings-side-panel';
 
@@ -39,8 +37,6 @@ interface RightSidePanelProps {
   settingsPanelLoaded?: boolean;
   toggleIsSettingsFlag?: (flag?: boolean) => void;
   updateActiveCellAddress?: (cellAddress?: string) => void;
-  setIsDataOverviewOpen: (isDataOverviewOpen: boolean) => void;
-  setFilteredPageByLinkId: (filteredPageByLinkId: string) => void;
 }
 
 export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
@@ -50,8 +46,6 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   settingsPanelLoaded,
   toggleIsSettingsFlag,
   updateActiveCellAddress,
-  setIsDataOverviewOpen,
-  setFilteredPageByLinkId,
 }) => {
   const [sidePanelPopup, setSidePanelPopup] = useState(null);
   const [loadedObjectsWrapped, setLoadedObjectsWrapped] = useState(loadedObjects);
@@ -112,7 +106,9 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
           onRefreshClick={sidePanelService.refresh}
           onRemoveClick={sidePanelService.remove}
           onRename={sidePanelService.rename}
-          onRepromptClick={objectWorkingId => sidePanelService.reprompt([objectWorkingId], false)}
+          onRepromptClick={(...objectWorkingIds) =>
+            sidePanelService.reprompt(objectWorkingIds, false)
+          }
           popup={!isDialogOpen && sidePanelPopup}
           // @ts-expect-error
           settingsMenu={isSettings && <SettingsMenu />}
@@ -121,12 +117,13 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
           globalNotification={globalNotification}
           onSelectAll={notificationService.dismissNotifications}
           shouldDisableActions={!officeReducerHelper.noOperationInProgress()}
+          onRefreshAllPagesClick={pageByLinkId =>
+            sidePanelService.refreshAllPages(pageByLinkId, setSidePanelPopup, loadedObjects)
+          }
+          onDeleteAllPagesClick={pageByLinkId =>
+            sidePanelService.deleteAllPages(pageByLinkId, setSidePanelPopup, loadedObjects)
+          }
           isPopupRendered={isDialogOpen}
-          onPageByClick={(pageByLinkId: any) => {
-            popupController.runImportedDataOverviewPopup();
-            setFilteredPageByLinkId(pageByLinkId);
-            setIsDataOverviewOpen(true);
-          }}
           applicationType={OfficeApplicationType.EXCEL}
         />
       )}
@@ -151,8 +148,6 @@ const mapDispatchToProps = {
   cancelCurrentImportRequest: navigationTreeActions.cancelImportRequest,
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
   updateActiveCellAddress: officeActions.updateActiveCellAddress,
-  setIsDataOverviewOpen: popupStateActions.setIsDataOverviewOpen,
-  setFilteredPageByLinkId: popupStateActions.setFilteredPageByLinkId,
 };
 
 export const RightSidePanel = connect(
