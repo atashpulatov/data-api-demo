@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { ObtainInstanceHelper } from './obtain-instance-helper';
-import overviewHelper from './overview/overview-helper';
 import { popupHelper } from './popup-helper';
 import { popupViewSelectorHelper } from './popup-view-selector-helper';
 
@@ -45,19 +44,7 @@ const renderProperComponent = (popupType: PopupTypeEnum): any => {
     case PopupTypeEnum.multipleRepromptTransitionPage:
       return <MultipleRepromptTransitionPage />;
     case PopupTypeEnum.importedDataOverview:
-      return (
-        <OverviewWindow
-          onImport={overviewHelper.sendImportRequest}
-          onEdit={overviewHelper.sendEditRequest}
-          onReprompt={overviewHelper.sendRepromptRequest}
-          onRefresh={overviewHelper.sendRefreshRequest}
-          onDelete={overviewHelper.sendDeleteRequest}
-          onDuplicate={overviewHelper.sendDuplicateRequest}
-          onRename={overviewHelper.sendRenameRequest}
-          onGoToWorksheet={overviewHelper.sendGoToWorksheetRequest}
-          onDismissNotification={overviewHelper.sendDismissNotificationRequest}
-        />
-      );
+      return <OverviewWindow />;
     default:
       return null;
   }

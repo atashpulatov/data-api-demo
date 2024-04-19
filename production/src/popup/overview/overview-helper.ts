@@ -255,7 +255,7 @@ class OverviewHelper {
         await this.sidePanelService.edit(response.objectWorkingId);
         break;
       case OverviewActionCommands.REPROMPT:
-        this.sidePanelService.reprompt(...response.objectWorkingIds, true);
+        this.sidePanelService.reprompt(response.objectWorkingIds, true);
         break;
       case OverviewActionCommands.REFRESH:
         this.sidePanelService.refresh(...response.objectWorkingIds);

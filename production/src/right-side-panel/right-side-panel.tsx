@@ -22,10 +22,7 @@ import { Confirmation } from '../home/confirmation';
 import { SettingsMenu } from '../home/settings-menu';
 import { popupController } from '../popup/popup-controller';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
-import {
-  selectGlobalNotification,
-  selectNotifications,
-} from '../redux-reducer/notification-reducer/notification-reducer-selectors';
+import { notificationReducerSelectors } from '../redux-reducer/notification-reducer/notification-reducer-selectors';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { officeSelectors } from '../redux-reducer/office-reducer/office-reducer-selectors';
 import { selectOperations } from '../redux-reducer/operation-reducer/operation-reducer-selectors';
@@ -60,8 +57,8 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   const [loadedObjectsWrapped, setLoadedObjectsWrapped] = useState(loadedObjects);
 
   const operations = useSelector(selectOperations);
-  const globalNotification = useSelector(selectGlobalNotification);
-  const notifications = useSelector(selectNotifications);
+  const globalNotification = useSelector(notificationReducerSelectors.selectGlobalNotification);
+  const notifications = useSelector(notificationReducerSelectors.selectNotifications);
   const isSidePanelBlocked = useSelector(repromptsQueueSelector.doesRepromptQueueContainItems);
   const isDialogOpen = useSelector(officeSelectors.selectIsDialogOpen);
 

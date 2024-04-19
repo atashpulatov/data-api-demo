@@ -137,15 +137,16 @@ export class SidePanelService {
       const objectData =
         officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
       const { bindId, mstrObjectType } = objectData;
+
       const excelContext = await officeApiHelper.getExcelContext();
       await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
 
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
         // @ts-expect-error
-        reduxStore.dispatch(popupActions.callForEditDossier({ bindId, mstrObjectType }));
+        reduxStore.dispatch(popupActions.callForEditDossier(objectData));
       } else {
         // @ts-expect-error
-        reduxStore.dispatch(popupActions.callForEdit({ bindId, mstrObjectType }));
+        reduxStore.dispatch(popupActions.callForEdit(objectData));
       }
     }
   }
