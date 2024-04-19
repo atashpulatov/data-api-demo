@@ -1,6 +1,5 @@
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { visualizationInfoService } from '../../mstr-object/visualization-info-service';
-import { officeApiHelper } from '../../office/api/office-api-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { popupHelper } from '../../popup/popup-helper';
 
@@ -12,7 +11,6 @@ import { errorService } from '../../error/error-handler';
 import { popupController } from '../../popup/popup-controller';
 import { popupActions as actions } from './popup-actions';
 
-jest.mock('../../office/api/office-api-helper');
 jest.mock('../../authentication/authentication-helper');
 jest.mock('../../office/store/office-reducer-helper');
 jest.mock('../../popup/popup-controller');
@@ -28,7 +26,6 @@ describe('Popup actions', () => {
   beforeAll(() => {
     actions.init(
       errorService,
-      officeApiHelper,
       officeReducerHelper,
       popupHelper,
       mstrObjectRestService,
@@ -51,27 +48,9 @@ describe('Popup actions', () => {
     });
   });
 
-  it('should call error service when callForEditDossier fails', async () => {
-    // given
-    const bindId = 'bindId';
-    const report = { bindId, objectType: 'whatever' };
-    const error = new Error('test error');
-    // @ts-expect-error
-    officeApiHelper.checkStatusOfSessions.mockImplementationOnce(() => {
-      throw error;
-    });
-    const listener = jest.fn();
-    // when
-    await actions.callForEditDossier(report)(listener);
-    // then
-    expect(errorService.handleError).toBeCalledWith(error);
-  });
-
   it('should do certain operations when callForEditDossier action called', async () => {
     // given
-    const bindId = 'bindId';
-    const report = { bindId, objectType: 'whatever' };
-    const returnedValue = {
+    const objectData = {
       projectId: 'projectId',
       id: 'id',
       manipulationsXML: 'manipulationsXML',
@@ -84,41 +63,18 @@ describe('Popup actions', () => {
         width: 454.34,
         height: 231.34,
       },
-    };
+    } as unknown as ObjectData;
     const listener = jest.fn();
     const spyPrepareDossierForEdit = jest.spyOn(actions, 'prepareDossierForEdit');
-    // @ts-expect-error
-    officeReducerHelper.getObjectFromObjectReducerByBindId.mockReturnValueOnce(returnedValue);
     // when
-    await actions.callForEditDossier(report)(listener);
+    await actions.callForEditDossier(objectData)(listener);
     // then
-    expect(officeApiHelper.checkStatusOfSessions).toBeCalled();
-    expect(officeReducerHelper.getObjectFromObjectReducerByBindId).toBeCalledWith(bindId);
-    expect(spyPrepareDossierForEdit).toBeCalledWith(returnedValue);
-    // expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: returnedValue });
-  });
-
-  it('should call error service when callForRepromptDossier fails', async () => {
-    // given
-    const bindId = 'bindId';
-    const report = { bindId, objectType: 'whatever' };
-    const error = new Error('test error');
-    // @ts-expect-error
-    officeApiHelper.checkStatusOfSessions.mockImplementationOnce(() => {
-      throw error;
-    });
-    const listener = jest.fn();
-    // when
-    await actions.callForRepromptDossier(report)(listener);
-    // then
-    expect(errorService.handleError).toBeCalledWith(error);
+    expect(spyPrepareDossierForEdit).toBeCalledWith(objectData);
   });
 
   it('should do certain operations when callForRepromptDossier action called', async () => {
     // given
-    const bindId = 'bindId';
-    const report = { bindId, objectType: 'whatever' };
-    const returnedValue = {
+    const objectData = {
       projectId: 'projectId',
       id: 'id',
       manipulationsXML: 'manipulationsXML',
@@ -131,112 +87,79 @@ describe('Popup actions', () => {
         width: 454.34,
         height: 231.34,
       },
-    };
+    } as unknown as ObjectData;
     const listener = jest.fn();
     const spyPrepareDossierForReprompt = jest.spyOn(actions, 'prepareDossierForReprompt');
-    // @ts-expect-error
-    officeReducerHelper.getObjectFromObjectReducerByBindId.mockReturnValueOnce(returnedValue);
+
     // when
-    await actions.callForRepromptDossier(report)(listener);
+    await actions.callForRepromptDossier(objectData)(listener);
     // then
-    expect(officeApiHelper.checkStatusOfSessions).toBeCalled();
-    expect(officeReducerHelper.getObjectFromObjectReducerByBindId).toBeCalledWith(bindId);
-    expect(spyPrepareDossierForReprompt).toBeCalledWith(returnedValue);
+    expect(spyPrepareDossierForReprompt).toBeCalledWith(objectData);
   });
 
   it('should run edit popup if edit action for not prompted object is called', async () => {
     // given
-    const bindId = 'bindId';
-    const report = { bindId, objectType: 'whatever' };
-    const returnedValue = {
+    const objectData = {
       id: 'id',
       projectId: 'projectId',
       instanceId: 'instanceId',
       body: {},
       promptsAnswers: [] as PromptsAnswer[],
       isPrompted: false,
-    };
+    } as unknown as ObjectData;
 
-    // @ts-expect-error
-    officeReducerHelper.getObjectFromObjectReducerByBindId.mockReturnValueOnce(returnedValue);
     const listener = jest.fn();
     // when
-    await actions.callForEdit(report)(listener);
+    await actions.callForEdit(objectData)(listener);
     // then
-    expect(officeReducerHelper.getObjectFromObjectReducerByBindId).toBeCalledWith(bindId);
     expect(listener).toHaveBeenCalledWith({
       type: PopupActionTypes.SET_REPORT_N_FILTERS,
-      editedObject: returnedValue,
+      editedObject: objectData,
     });
-    expect(popupController.runEditFiltersPopup).toBeCalledWith(report);
+    expect(popupController.runEditFiltersPopup).toHaveBeenCalledWith(objectData);
   });
 
   it('should run reprompt popup if edit action for prompted object is called', async () => {
     // given
-    const bindId = 'bindId';
-    const report = { bindId, objectType: 'whatever' };
-    const returnedValue = {
+    const objectData = {
       id: 'id',
       projectId: 'projectId',
       instanceId: 'instanceId',
       body: {},
       promptsAnswers: [] as PromptsAnswer[],
       isPrompted: true,
-    };
-    // @ts-expect-error
-    officeReducerHelper.getObjectFromObjectReducerByBindId.mockReturnValueOnce(returnedValue);
+    } as unknown as ObjectData;
     const listener = jest.fn();
     // when
-    await actions.callForEdit(report)(listener);
+    await actions.callForEdit(objectData)(listener);
     // then
-    expect(officeReducerHelper.getObjectFromObjectReducerByBindId).toBeCalledWith(bindId);
+
     expect(listener).toHaveBeenCalledWith({
       type: PopupActionTypes.SET_REPORT_N_FILTERS,
-      editedObject: returnedValue,
+      editedObject: objectData,
     });
-    expect(popupController.runRepromptPopup).toBeCalledWith(report);
+    expect(popupController.runRepromptPopup).toBeCalledWith(objectData);
   });
 
   it('should run reprompt popup with isEdit = false if reprompt action for prompted object is called', async () => {
     // given
-    const bindId = 'bindId';
-    const report = { bindId, objectType: 'whatever' };
-    const returnedValue = {
+    const objectData = {
       id: 'id',
       projectId: 'projectId',
       instanceId: 'instanceId',
       body: {},
       promptsAnswers: [] as PromptsAnswer[],
       isPrompted: true,
-    };
-    // @ts-expect-error
-    officeReducerHelper.getObjectFromObjectReducerByBindId.mockReturnValueOnce(returnedValue);
+    } as unknown as ObjectData;
     const listener = jest.fn();
     // when
-    await actions.callForReprompt(report)(listener);
+    await actions.callForReprompt(objectData)(listener);
     // then
-    expect(officeReducerHelper.getObjectFromObjectReducerByBindId).toBeCalledWith(bindId);
     expect(listener).toHaveBeenCalledWith({
       type: PopupActionTypes.SET_REPORT_N_FILTERS,
-      editedObject: returnedValue,
+      editedObject: objectData,
     });
-    expect(popupController.runRepromptPopup).toBeCalledWith(report, false);
-  });
-
-  it('should call error service when edit action fails', async () => {
-    // given
-    const bindId = 'bindId';
-    const report = { bindId, objectType: 'whatever' };
-    const error = new Error('test error');
-    // @ts-expect-error
-    officeApiHelper.checkStatusOfSessions.mockImplementationOnce(() => {
-      throw error;
-    });
-    const mockedDispatch = jest.fn();
-    // when
-    await actions.callForEdit(report)(mockedDispatch);
-    // then
-    expect(errorService.handleError).toBeCalledWith(error);
+    expect(popupController.runRepromptPopup).toBeCalledWith(objectData, false);
   });
 
   it('should set proper popupType when switch to edit requested', () => {
@@ -373,7 +296,7 @@ describe('Popup actions', () => {
     // when
     await actions.callForDuplicate(object)(listener);
     // then
-    expect(officeApiHelper.checkStatusOfSessions).toBeCalled();
+
     expect(listener).toHaveBeenCalledWith({
       type: PopupActionTypes.SET_REPORT_N_FILTERS,
       editedObject: object,
@@ -392,7 +315,6 @@ describe('Popup actions', () => {
     // when
     await actions.callForDuplicate(object)(listener);
     // then
-    expect(officeApiHelper.checkStatusOfSessions).toBeCalled();
     expect(listener).toHaveBeenCalledWith({
       type: PopupActionTypes.SET_REPORT_N_FILTERS,
       editedObject: object,
@@ -481,7 +403,6 @@ describe('Popup actions', () => {
     // when
     await actions.callForDuplicate(object)(listener);
     // then
-    expect(officeApiHelper.checkStatusOfSessions).toBeCalled();
     expect(spyPrepareDossierForEdit).toBeCalledWith(object);
     expect(listener).toHaveBeenCalledWith({
       type: PopupActionTypes.SET_REPORT_N_FILTERS,

@@ -1,13 +1,22 @@
 import { createSelector } from 'reselect';
 
-const getNotificationsState = (state: any): any => state.notificationReducer;
+import { RootState } from '../../store';
 
-export const selectGlobalNotification = createSelector(
+import { NotificationState } from './notification-reducer-types';
+
+const getNotificationsState = (state: RootState): NotificationState => state.notificationReducer;
+
+const selectGlobalNotification = createSelector(
   [getNotificationsState],
   notificationState => notificationState.globalNotification
 );
 
-export const selectNotifications = createSelector(
+const selectNotifications = createSelector(
   [getNotificationsState],
   notificationState => notificationState.notifications
 );
+
+export const notificationReducerSelectors = {
+  selectGlobalNotification,
+  selectNotifications,
+};

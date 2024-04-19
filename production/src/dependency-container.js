@@ -111,8 +111,6 @@ class DIContainer {
     this.popupActions = popupActions;
     this.popupActions.init(
       errorService,
-      officeApiHelper,
-      officeApiWorksheetHelper,
       officeReducerHelper,
       popupHelper,
       mstrObjectRestService,

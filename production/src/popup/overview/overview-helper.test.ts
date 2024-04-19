@@ -261,7 +261,7 @@ describe('overview-helper', () => {
     await overviewHelper.handleOverviewActionCommand(actionCommand);
 
     // Then
-    expect(repromptMock).toHaveBeenCalledWith(...objectWorkingIds, true);
+    expect(repromptMock).toHaveBeenCalledWith(objectWorkingIds, true);
   });
 
   it('should handle remove command', async () => {

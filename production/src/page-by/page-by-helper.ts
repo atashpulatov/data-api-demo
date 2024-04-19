@@ -4,6 +4,7 @@ import officeReducerHelper from '../office/store/office-reducer-helper';
 import { reduxStore } from '../store';
 
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectAndWorksheetNamingOption } from '../right-side-panel/settings-side-panel/settings-side-panel-types';
 import { ObjectData } from '../types/object-types';
 import {
   PageBy,
@@ -208,6 +209,38 @@ class PageByHelper {
       reduxStore.dispatch(removeRequested(pageByObject.objectWorkingId, pageByObject?.importType));
     });
   };
+
+  /**
+   * Generates a worksheet name based on naming conventions and pageBy value
+   * @param objectName Name of the object added to the new worksheet
+   * @param pageByData Contains information about page-by elements
+   * @return Generated worksheet name.
+   */
+  prepareNameBasedOnPageBySettings(objectName: string, pageByData: PageByData): string {
+    const pageByElement = pageByData.elements.map(element => element.value).join(', ');
+    const { settingsReducer } = reduxStore.getState();
+    const currentNamingSetting = settingsReducer.objectAndWorksheetNamingSetting;
+
+    let newSheetName;
+    switch (currentNamingSetting) {
+      case ObjectAndWorksheetNamingOption.REPORT_NAME:
+        newSheetName = objectName;
+        break;
+      case ObjectAndWorksheetNamingOption.PAGE_NAME:
+        newSheetName = pageByElement;
+        break;
+      case ObjectAndWorksheetNamingOption.PAGE_NAME_AND_REPORT_NAME:
+        newSheetName = `${pageByElement} - ${objectName}`;
+        break;
+      case ObjectAndWorksheetNamingOption.REPORT_NAME_AND_PAGE_NAME:
+        newSheetName = `${objectName} - ${pageByElement}`;
+        break;
+      default:
+        break;
+    }
+
+    return newSheetName;
+  }
 }
 
 export const pageByHelper = new PageByHelper();

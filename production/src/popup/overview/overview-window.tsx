@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { connect, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   DataOverview,
   ObjectNotificationTypes,
@@ -13,66 +13,26 @@ import useStateSyncOnDialogMessage from './use-state-sync-on-dialog-message';
 import { popupHelper } from '../popup-helper';
 import overviewHelper from './overview-helper';
 
-import { Notification } from '../../redux-reducer/notification-reducer/notification-reducer-types';
-
 import { selectorProperties } from '../../attribute-selector/selector-properties';
 import i18n from '../../i18n';
 import { OperationTypes } from '../../operation/operation-type-names';
-import { restoreAllNotifications } from '../../redux-reducer/notification-reducer/notification-action-creators';
-import {
-  selectGlobalNotification,
-  selectNotifications,
-} from '../../redux-reducer/notification-reducer/notification-reducer-selectors';
-import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
-import {
-  refreshRequested,
-  removeRequested,
-} from '../../redux-reducer/operation-reducer/operation-actions';
+import { notificationReducerSelectors } from '../../redux-reducer/notification-reducer/notification-reducer-selectors';
+import { selectObjects } from '../../redux-reducer/object-reducer/object-reducer-selectors';
+import { officeSelectors } from '../../redux-reducer/office-reducer/office-reducer-selectors';
 
 import './overview-window.scss';
 
-interface OverviewWindowProps {
-  onImport?: () => void;
-  onRefresh?: (objectWorkingIds: number[]) => Promise<void>;
-  onEdit?: (objectWorkingId: number) => Promise<void>;
-  onReprompt?: (objectWorkingIds: number[]) => Promise<void>;
-  onDelete?: (objectWorkingIds: number[]) => Promise<void>;
-  onDuplicate?: (
-    objectWorkingIds: number[],
-    insertNewWorksheet: boolean,
-    withEdit: boolean
-  ) => void;
-  onRename?: (objectWorkingId: number, newName: string) => Promise<void>;
-  onGoToWorksheet?: (objectWorkingId: number) => Promise<void>;
-  onDismissNotification?: (objectWorkingIds: number[]) => Promise<void>;
-  objects?: Array<Record<string, unknown>>;
-  popupData?: { objectWorkingId: number };
-  activeCellAddress?: string;
-}
-
-export const OverviewWindowNotConnected: React.FC<OverviewWindowProps> = props => {
-  const {
-    objects,
-    onImport,
-    onRefresh,
-    onDelete,
-    onDuplicate,
-    onEdit,
-    onReprompt,
-    onRename,
-    onGoToWorksheet,
-    onDismissNotification,
-    popupData,
-    activeCellAddress,
-  } = props;
+export const OverviewWindow: React.FC = () => {
+  const activeCellAddress = useSelector(officeSelectors.selectActiveCellAddress);
+  const popupData = useSelector(officeSelectors.selectPopupData);
+  const objects = useSelector(selectObjects);
+  const globalNotification = useSelector(notificationReducerSelectors.selectGlobalNotification);
+  const notifications = useSelector(notificationReducerSelectors.selectNotifications);
 
   useStateSyncOnDialogMessage();
 
   const [t] = useTranslation('common', { i18n });
   const [dialogPopup, setDialogPopup] = React.useState(null);
-
-  const globalNotification = useSelector(selectGlobalNotification);
-  const notifications: Notification[] = useSelector(selectNotifications);
 
   const shouldDisableActions = useMemo(
     () =>
@@ -106,7 +66,7 @@ export const OverviewWindowNotConnected: React.FC<OverviewWindowProps> = props =
         overviewHelper.setDuplicatePopup({
           objectWorkingIds,
           activeCellAddress,
-          onDuplicate,
+          onDuplicate: overviewHelper.sendDuplicateRequest,
           setDialogPopup,
         });
         resolve();
@@ -134,11 +94,11 @@ export const OverviewWindowNotConnected: React.FC<OverviewWindowProps> = props =
           notification.type === ObjectNotificationTypes.SUCCESS &&
           notification.operationType === OperationTypes.REMOVE_OPERATION
         ) {
-          onDismissNotification([notification.objectWorkingId]);
+          overviewHelper.sendDismissNotificationRequest([notification.objectWorkingId]);
         }
       }, 500);
     });
-  }, [notifications, objects, onDismissNotification]);
+  }, [notifications, objects]);
 
   return (
     <div className='data-overview-wrapper'>
@@ -146,14 +106,14 @@ export const OverviewWindowNotConnected: React.FC<OverviewWindowProps> = props =
         loadedObjects={objectsToRender}
         popup={dialogPopup}
         applicationType={OfficeApplicationType.EXCEL}
-        onAddData={onImport}
-        onEdit={onEdit}
-        onReprompt={onReprompt}
-        onRefresh={onRefresh}
+        onAddData={overviewHelper.sendImportRequest}
+        onEdit={overviewHelper.sendEditRequest}
+        onReprompt={overviewHelper.sendRepromptRequest}
+        onRefresh={overviewHelper.sendRefreshRequest}
         onDuplicate={handleDuplicate}
-        onDelete={onDelete}
-        onRename={onRename}
-        onGoTo={onGoToWorksheet}
+        onDelete={overviewHelper.sendDeleteRequest}
+        onRename={overviewHelper.sendRenameRequest}
+        onGoTo={overviewHelper.sendGoToWorksheetRequest}
         shouldDisableActions={shouldDisableActions}
         globalNotifications={notificationsToDisplay}
       />
@@ -163,27 +123,3 @@ export const OverviewWindowNotConnected: React.FC<OverviewWindowProps> = props =
     </div>
   );
 };
-
-export const mapStateToProps = ({ objectReducer, officeReducer, popupStateReducer }: any): any => {
-  const { objects } = objectReducer;
-  const { popupData, activeCellAddress } = officeReducer;
-  const { filteredPageByLinkId } = popupStateReducer;
-
-  return {
-    objects,
-    popupData,
-    activeCellAddress,
-    filteredPageByLinkId,
-  };
-};
-
-export const mapActionsToProps = {
-  refreshRequested,
-  removeRequested,
-  restoreAllObjects,
-  restoreAllNotifications,
-};
-export const OverviewWindow = connect(
-  mapStateToProps,
-  mapActionsToProps
-)(OverviewWindowNotConnected);

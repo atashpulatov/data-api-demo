@@ -2,6 +2,7 @@ import { PageByRefreshFailedOptions, PopupTypes } from '@mstr/connector-componen
 
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
+import { pageByHelper } from '../../page-by/page-by-helper';
 import { sidePanelHelper } from './side-panel-helper';
 
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
@@ -60,6 +61,84 @@ class SidePanelNotificationHelper {
       onClose: closePopup,
     });
   }
+
+  /**
+   * Filters an array of loaded object data to retrieve objects associated with a specific page by link ID.
+   *
+   * @param loadedObjects An array of ObjectData containing loaded objects.
+   * @param pageByLinkId The ID of the page by link to filter objects for.
+   * @returns An array of ObjectData filtered by the provided page by link ID.
+   */
+  getObjectsByPageByLinkId = (loadedObjects: ObjectData[], pageByLinkId: string): ObjectData[] =>
+    loadedObjects.filter(object => object.pageByData?.pageByLinkId === pageByLinkId);
+
+  /**
+   * Sets up a popup to refresh all pages associated with the provided pageByLinkId.
+   *
+   * @param data - Data required to create and update the refresh all pages popup.
+   * @param data.setSidePanelPopup - Callback function to save the popup in the state of RightSidePanel.
+   * @param data.pageByLinkId - The pageByLinkId used to identify the objects to refresh.
+   * @param data.objects - An array of ObjectData representing all loaded objects.
+   */
+  setRefreshAllPagesPopup = ({
+    setSidePanelPopup,
+    pageByLinkId,
+    objects,
+  }: {
+    setSidePanelPopup: Function;
+    pageByLinkId: string;
+    objects: ObjectData[];
+  }): void => {
+    const currentObjects = this.getObjectsByPageByLinkId(objects, pageByLinkId);
+
+    if (currentObjects.length === 1) {
+      pageByHelper.handleRefreshingMultiplePages(currentObjects[0].objectWorkingId);
+    } else {
+      setSidePanelPopup({
+        type: PopupTypes.REFRESH_ALL_PAGES,
+        onRefresh: () => {
+          pageByHelper.handleRefreshingMultiplePages(currentObjects[0].objectWorkingId);
+          setSidePanelPopup(null);
+        },
+        onClose: () => setSidePanelPopup(null),
+        selectedObjects: currentObjects,
+      });
+    }
+  };
+
+  /**
+   * Sets up a popup to delete all pages with the provided data.
+   *
+   * @param data - Data required to create and update the delete all pages popup.
+   * @param data.setSidePanelPopup - Callback function to save the popup in the state of RightSidePanel.
+   * @param data.pageByLinkId - The pageByLinkId used to identify the objects to delete.
+   * @param data.objects - An array of ObjectData representing the current objects.
+   */
+  setDeleteAllPagesPopup = ({
+    setSidePanelPopup,
+    pageByLinkId,
+    objects,
+  }: {
+    setSidePanelPopup: Function;
+    pageByLinkId: string;
+    objects: ObjectData[];
+  }): void => {
+    const currentObjects = this.getObjectsByPageByLinkId(objects, pageByLinkId);
+
+    if (currentObjects.length === 1) {
+      pageByHelper.handleRemovingMultiplePages(currentObjects[0].objectWorkingId);
+    } else {
+      setSidePanelPopup({
+        type: PopupTypes.DELETE_ALL_PAGES,
+        onDelete: () => {
+          pageByHelper.handleRemovingMultiplePages(currentObjects[0].objectWorkingId);
+          setSidePanelPopup(null);
+        },
+        onClose: () => setSidePanelPopup(null),
+        selectedObjects: currentObjects,
+      });
+    }
+  };
 
   /**
    * Creates or updates range taken popup.

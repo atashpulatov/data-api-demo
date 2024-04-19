@@ -2,9 +2,10 @@ import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { pageByHelper } from './page-by-helper';
 
-import { reduxStore } from '../store';
+import { reduxStore, RootState } from '../store';
 
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectAndWorksheetNamingOption } from '../right-side-panel/settings-side-panel/settings-side-panel-types';
 import { ObjectData } from '../types/object-types';
 import { PageByData, PageByDisplayType } from './page-by-types';
 
@@ -293,4 +294,32 @@ describe('Page-by helper', () => {
     // then
     expect(mockedDispatch).toHaveBeenCalled();
   });
+
+  it.each`
+    objectName | pageByData                          | objectAndWorksheetNamingSetting                             | expectedResult
+    ${'Test'}  | ${{ elements: [{ value: 'pop' }] }} | ${ObjectAndWorksheetNamingOption.REPORT_NAME}               | ${'Test'}
+    ${'Test'}  | ${{ elements: [{ value: 'pop' }] }} | ${ObjectAndWorksheetNamingOption.PAGE_NAME}                 | ${'pop'}
+    ${'Test'}  | ${{ elements: [{ value: 'pop' }] }} | ${ObjectAndWorksheetNamingOption.REPORT_NAME_AND_PAGE_NAME} | ${'Test - pop'}
+    ${'Test'}  | ${{ elements: [{ value: 'pop' }] }} | ${ObjectAndWorksheetNamingOption.PAGE_NAME_AND_REPORT_NAME} | ${'pop - Test'}
+  `(
+    'prepareNameBasedOnPageBySettings should return proper name',
+    async ({ objectName, pageByData, objectAndWorksheetNamingSetting, expectedResult }) => {
+      // given
+
+      jest.spyOn(reduxStore, 'getState').mockImplementation(
+        () =>
+          ({
+            settingsReducer: { objectAndWorksheetNamingSetting },
+          }) as RootState
+      );
+      // when
+      const worksheetName = await pageByHelper.prepareNameBasedOnPageBySettings(
+        objectName,
+        pageByData
+      );
+
+      // then
+      expect(worksheetName).toEqual(expectedResult);
+    }
+  );
 });

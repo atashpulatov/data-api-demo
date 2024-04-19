@@ -72,6 +72,7 @@ class SidePanelHelper {
         const excelContext = await officeApiHelper.getExcelContext();
         await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
 
+        const objectData = officeReducerHelper.getObjectFromObjectReducerByBindId(bindId);
         const isDossier = mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
 
         if (isFromDataOverviewDialog) {
@@ -83,8 +84,8 @@ class SidePanelHelper {
 
         // Based on the type of object, call the appropriate popup
         const popupAction = isDossier
-          ? popupActions.callForRepromptDossier({ bindId, mstrObjectType })
-          : popupActions.callForReprompt({ bindId, mstrObjectType });
+          ? popupActions.callForRepromptDossier(objectData)
+          : popupActions.callForReprompt(objectData);
 
         this.reduxStore.dispatch(popupAction);
       },
@@ -130,7 +131,7 @@ class SidePanelHelper {
   duplicateObject(objectWorkingId: number, insertNewWorksheet: boolean, withEdit: boolean): void {
     const sourceObject =
       officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
-    const object = JSON.parse(JSON.stringify(sourceObject));
+    const object: ObjectData = JSON.parse(JSON.stringify(sourceObject));
     object.insertNewWorksheet = insertNewWorksheet;
     object.objectWorkingId = Date.now();
 
