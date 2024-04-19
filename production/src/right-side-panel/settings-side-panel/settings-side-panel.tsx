@@ -10,6 +10,10 @@ import { settingsReducerSelectors } from '../../redux-reducer/settings-reducer/s
 const SettingsSidePanel: React.FC<any> = () => {
   const isSidePanelLoaded = useSelector(officeSelectors.selectIsSettingsPanelLoaded);
   const reusePromptAnswers = useSelector(officeSelectors.selectReusePromptAnswers);
+  const objectAndWorksheetNamingSetting = useSelector(
+    settingsReducerSelectors.selectObjectAndWorksheetNamingSetting
+  );
+  const pageByDisplaySetting = useSelector(settingsReducerSelectors.selectPageByDisplaySetting);
   const sidePanelObjectInfoSettings = useSelector(
     settingsReducerSelectors.selectSidePanelObjectInfoSettings
   );
@@ -23,9 +27,10 @@ const SettingsSidePanel: React.FC<any> = () => {
     settingsReducerSelectors.selectWorksheetMainSwitchValue
   );
 
-  const { getPromptSection, getObjectInfoSection } = settingsSidePanelHelper;
+  const { getPromptSection, getObjectInfoSection, getPageBySection } = settingsSidePanelHelper;
   const settingsSections: SettingsSection[] = [
     getPromptSection(reusePromptAnswers),
+    getPageBySection(objectAndWorksheetNamingSetting, pageByDisplaySetting),
     getObjectInfoSection(
       sidePanelObjectInfoSettings,
       worksheetObjectInfoSettings,

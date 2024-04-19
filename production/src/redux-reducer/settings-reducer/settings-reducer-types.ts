@@ -1,5 +1,10 @@
 import { Action } from 'redux';
 
+import {
+  ObjectAndWorksheetNamingOption,
+  PageByDisplayOption,
+} from '../../right-side-panel/settings-side-panel/settings-side-panel-types';
+
 import { ObjectImportType } from '../../mstr-object/constants';
 
 export type SettingsState = {
@@ -8,6 +13,8 @@ export type SettingsState = {
   sidePanelObjectInfoSettings: ObjectInfoSetting[];
   worksheetObjectInfoSettings: ObjectInfoSetting[];
   importType: ObjectImportType;
+  objectAndWorksheetNamingSetting: ObjectAndWorksheetNamingOption;
+  pageByDisplaySetting: PageByDisplayOption;
 };
 
 export enum SettingsActionTypes {
@@ -19,6 +26,8 @@ export enum SettingsActionTypes {
   LOAD_WORKSHEET_OBJECT_INFO_SETTINGS = 'SETTINGS_LOAD_WORKSHEET_OBJECT_INFO_SETTINGS',
   TOGGLE_WORKSHEET_OBJECT_INFO_SETTING = 'SETTINGS_TOGGLE_WORKSHEET_OBJECT_INFO_SETTING',
   TOGGLE_MAIN_WORKSHEET_OBJECT_INFO_SETTING = 'SETTINGS_TOGGLE_MAIN_WORKSHEET_OBJECT_INFO_SETTING',
+  SET_OBJECT_AND_WORKSHEET_NAMING_SETTING = 'SET_OBJECT_AND_WORKSHEET_NAMING_SETTING',
+  SET_PAGE_BY_DISPLAY_SETTING = 'SET_PAGE_BY_DISPLAY_SETTING',
 }
 
 export interface ToggleMergeCrosstabColumnsFlagAction extends Action {
@@ -61,6 +70,16 @@ export interface ToggleMainWorksheetObjectInfoSettingAction extends Action {
   payload: boolean;
 }
 
+export interface SetWorksheetNamingSettingAction extends Action {
+  type: SettingsActionTypes.SET_OBJECT_AND_WORKSHEET_NAMING_SETTING;
+  objectAndWorksheetNamingSetting: ObjectAndWorksheetNamingOption;
+}
+
+export interface SetPageByDisplaySettingAction extends Action {
+  type: SettingsActionTypes.SET_PAGE_BY_DISPLAY_SETTING;
+  pageByDisplaySetting: PageByDisplayOption;
+}
+
 export type SettingsActions =
   | ToggleMergeCrosstabColumnsFlagAction
   | ToggleImportAttributesAsTextFlagAction
@@ -69,7 +88,9 @@ export type SettingsActions =
   | ToggleMainSidePanelObjectInfoSettingAction
   | LoadWorksheetObjectInfoSettingAction
   | ToggleWorksheetObjectInfoSettingAction
-  | ToggleMainWorksheetObjectInfoSettingAction;
+  | ToggleMainWorksheetObjectInfoSettingAction
+  | SetWorksheetNamingSettingAction
+  | SetPageByDisplaySettingAction;
 
 export type ObjectInfoSetting = {
   key: string;

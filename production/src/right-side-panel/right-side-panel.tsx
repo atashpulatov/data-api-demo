@@ -71,6 +71,8 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
         await sidePanelEventHelper.addRemoveObjectListener();
         await sidePanelEventHelper.initializeActiveCellChangedListener(updateActiveCellAddress);
         await settingsSidePanelHelper.initReusePromptAnswers();
+        await settingsSidePanelHelper.initPageByDisplayAnswers();
+        await settingsSidePanelHelper.initWorksheetNamingAnswers();
         await settingsSidePanelHelper.initObjectInfoSettings();
         sidePanelHelper.clearRepromptTask();
         sidePanelHelper.initializeClearDataFlags();

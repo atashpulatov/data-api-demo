@@ -1,9 +1,15 @@
 import {
+  ObjectAndWorksheetNamingOption,
+  PageByDisplayOption,
+} from '../../right-side-panel/settings-side-panel/settings-side-panel-types';
+import {
   KeyValue,
   LoadSidePanelObjectInfoSettingAction,
   LoadWorksheetObjectInfoSettingAction,
   ObjectInfoSetting,
+  SetPageByDisplaySettingAction,
   SettingsActionTypes,
+  SetWorksheetNamingSettingAction,
   ToggleImportAttributesAsTextFlagAction,
   ToggleMainSidePanelObjectInfoSettingAction,
   ToggleMainWorksheetObjectInfoSettingAction,
@@ -68,6 +74,20 @@ const toggleMainWorksheetObjectInfoSetting = (
   payload,
 });
 
+const setWorksheetNamingSetting = (
+  objectAndWorksheetNamingSetting: ObjectAndWorksheetNamingOption
+): SetWorksheetNamingSettingAction => ({
+  type: SettingsActionTypes.SET_OBJECT_AND_WORKSHEET_NAMING_SETTING,
+  objectAndWorksheetNamingSetting,
+});
+
+const setPageByDisplaySetting = (
+  pageByDisplaySetting: PageByDisplayOption
+): SetPageByDisplaySettingAction => ({
+  type: SettingsActionTypes.SET_PAGE_BY_DISPLAY_SETTING,
+  pageByDisplaySetting,
+});
+
 export const settingsActions = {
   toggleImportAttributesAsTextFlag,
   toggleMergeCrosstabColumnsFlag,
@@ -77,4 +97,6 @@ export const settingsActions = {
   loadWorksheetObjectInfoSettings,
   toggleWorksheetObjectInfoSetting,
   toggleMainWorksheetObjectInfoSetting,
+  setWorksheetNamingSetting,
+  setPageByDisplaySetting,
 };

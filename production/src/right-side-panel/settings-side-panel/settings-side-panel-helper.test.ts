@@ -3,6 +3,14 @@ import { settingsSidePanelHelper } from './settings-side-panel-helper';
 
 import { reduxStore } from '../../store';
 
+import { SettingsActionTypes } from '../../redux-reducer/settings-reducer/settings-reducer-types';
+import {
+  EXCEL_PAGE_BY_AND_WORKSHEET_NAMING,
+  EXCEL_PAGE_BY_SELECTION,
+  ObjectAndWorksheetNamingOption,
+  PageByDisplayOption,
+} from './settings-side-panel-types';
+
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 import { settingsActions } from '../../redux-reducer/settings-reducer/settings-actions';
 import {
@@ -152,5 +160,39 @@ describe('SettingsSidePanelHelper', () => {
     expect(reduxStore.dispatch).toHaveBeenCalledWith(
       settingsActions.loadWorksheetObjectInfoSettings([])
     );
+  });
+
+  it('should initialize pageby answers', async () => {
+    // given
+    jest.resetAllMocks();
+    const getUserPreferenceMock = jest
+      .spyOn(userRestService, 'getUserPreference')
+      .mockResolvedValue({ value: PageByDisplayOption.ALL_PAGES });
+
+    await settingsSidePanelHelper.initPageByDisplayAnswers();
+
+    // then
+    expect(getUserPreferenceMock).toHaveBeenCalledWith(EXCEL_PAGE_BY_SELECTION);
+    expect(reduxStore.dispatch).toHaveBeenCalledWith({
+      pageByDisplaySetting: PageByDisplayOption.ALL_PAGES,
+      type: SettingsActionTypes.SET_PAGE_BY_DISPLAY_SETTING,
+    });
+  });
+
+  it('should initialize worksheet naming answers', async () => {
+    // given
+    jest.resetAllMocks();
+    const getUserPreferenceMock = jest
+      .spyOn(userRestService, 'getUserPreference')
+      .mockResolvedValue({ value: ObjectAndWorksheetNamingOption.PAGE_NAME });
+
+    await settingsSidePanelHelper.initWorksheetNamingAnswers();
+
+    // then
+    expect(getUserPreferenceMock).toHaveBeenCalledWith(EXCEL_PAGE_BY_AND_WORKSHEET_NAMING);
+    expect(reduxStore.dispatch).toHaveBeenCalledWith({
+      objectAndWorksheetNamingSetting: ObjectAndWorksheetNamingOption.PAGE_NAME,
+      type: SettingsActionTypes.SET_OBJECT_AND_WORKSHEET_NAMING_SETTING,
+    });
   });
 });

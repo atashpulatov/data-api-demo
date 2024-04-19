@@ -53,11 +53,3 @@ export interface PageByData {
   pageByDisplayType: PageByDisplayType;
   elements: PageByDataElement[];
 }
-
-// TODO: Replace with actual setting from the user when implemented
-export enum PageByWorksheetNaming {
-  USE_REPORT_NAME = 'useReportName',
-  USE_PAGE_NAME = 'usePageName',
-  USE_REPORT_NAME_AND_PAGE_NAME = 'useReportNameAndPageName',
-  USE_PAGE_NAME_AND_REPORT_NAME = 'usePageNameAndReportName',
-}

@@ -10,14 +10,19 @@ import {
   LoadWorksheetObjectInfoSettingAction,
   ObjectInfoSetting,
 } from '../../redux-reducer/settings-reducer/settings-reducer-types';
+import {
+  EXCEL_OBJECT_INFO_SIDE_PANEL_PREFERENCES,
+  EXCEL_OBJECT_INFO_WORKSHEET_PREFERENCES,
+  EXCEL_PAGE_BY_AND_WORKSHEET_NAMING,
+  EXCEL_PAGE_BY_SELECTION,
+  EXCEL_REUSE_PROMPT_ANSWERS,
+  ObjectAndWorksheetNamingOption,
+  PageByDisplayOption,
+} from './settings-side-panel-types';
 
 import i18n from '../../i18n';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 import { settingsActions } from '../../redux-reducer/settings-reducer/settings-actions';
-
-const EXCEL_REUSE_PROMPT_ANSWERS = 'excelReusePromptAnswers';
-const EXCEL_OBJECT_INFO_SIDE_PANEL_PREFERENCES = 'excelObjectInfoSidePanelPreferences';
-const EXCEL_OBJECT_INFO_WORKSHEET_PREFERENCES = 'excelObjectInfoWorksheetPreferences';
 
 class SettingsSidePanelHelper {
   // COMMON SETTINGS
@@ -244,6 +249,50 @@ class SettingsSidePanelHelper {
     reduxStore.dispatch(settingsActions.loadWorksheetObjectInfoSettings(orderedList));
   };
 
+  // PAGEBY SETTING
+  /**
+   * Updates the worksheet naming settings value
+   * @param worksheetNamingOption - worksheet naming value.
+   */
+  async handleWorksheetNamingChange(
+    worksheetNamingOption: ObjectAndWorksheetNamingOption
+  ): Promise<void> {
+    reduxStore.dispatch(settingsActions.setWorksheetNamingSetting(worksheetNamingOption));
+    await userRestService.setUserPreference(
+      EXCEL_PAGE_BY_AND_WORKSHEET_NAMING,
+      worksheetNamingOption
+    );
+  }
+
+  /**
+   * Updates the page-by display settings value
+   * @param pageByDisplayOption - page-by display value.
+   */
+  async handlePageByDisplayChange(pageByDisplayOption: PageByDisplayOption): Promise<void> {
+    reduxStore.dispatch(settingsActions.setPageByDisplaySetting(pageByDisplayOption));
+    await userRestService.setUserPreference(EXCEL_PAGE_BY_SELECTION, pageByDisplayOption);
+  }
+
+  /**
+   * Initializes the page by display option
+   * Retrieves the user preference for the page by display from the userRestService,
+   * updates the redux store with the retrieved value.
+   */
+  async initPageByDisplayAnswers(): Promise<void> {
+    const { value } = await userRestService.getUserPreference(EXCEL_PAGE_BY_SELECTION);
+    reduxStore.dispatch(settingsActions.setPageByDisplaySetting(value));
+  }
+
+  /**
+   * Initializes the worksheet naming option
+   * Retrieves the user preference for the worksheet naming from the userRestService,
+   * updates the redux store with the retrieved value.
+   */
+  async initWorksheetNamingAnswers(): Promise<void> {
+    const { value } = await userRestService.getUserPreference(EXCEL_PAGE_BY_AND_WORKSHEET_NAMING);
+    reduxStore.dispatch(settingsActions.setWorksheetNamingSetting(value));
+  }
+
   // SETTINGS PANEL SECTIONS
   /**
    * Returns the settings section for the prompt settings.
@@ -316,6 +365,72 @@ class SettingsSidePanelHelper {
         onOrderChange: this.orderWorksheetObjectInfoSettings,
         onListItemSwitchChange: this.toggleWorksheetObjectInfoSetting,
         settings: worksheetObjectInfoSettings,
+      },
+    ],
+  });
+
+  /**
+   * Returns the settings section for the worksheet naming settings.
+   * @param objectAndWorksheetNamingSetting - worksheet naming value.
+   * @returns The settings section for the worksheet naming settings.
+   */
+  getPageBySection = (
+    objectAndWorksheetNamingSetting: ObjectAndWorksheetNamingOption,
+    pageByDisplayOption: PageByDisplayOption
+  ): SettingsSection => ({
+    key: 'page-by-section',
+    label: i18n.t('Page-By'),
+    initialExpand: false,
+    settingsGroups: [
+      {
+        key: 'object-and-worksheet-naming-section',
+        label: i18n.t('Object and Worksheet Naming'),
+        type: SettingPanelSection.RADIO,
+        selectedOption: objectAndWorksheetNamingSetting,
+        onChange: this.handleWorksheetNamingChange,
+        settings: [
+          {
+            key: ObjectAndWorksheetNamingOption.PAGE_NAME,
+            label: i18n.t('Use page name'),
+            description: '“West, January”, “West, February”',
+          },
+          {
+            key: ObjectAndWorksheetNamingOption.REPORT_NAME,
+            label: i18n.t('Use source report name'),
+            description: '“Sales Report”, “Sales Report2”',
+          },
+          {
+            key: ObjectAndWorksheetNamingOption.REPORT_NAME_AND_PAGE_NAME,
+            label: i18n.t('Use source report name and page name'),
+            description: '“Sales Report - West, January”, “Sales Report - West, February”',
+          },
+          {
+            key: ObjectAndWorksheetNamingOption.PAGE_NAME_AND_REPORT_NAME,
+            label: i18n.t('Use page name and source report name'),
+            description: '“West, January - Sales Report”, “West, February - Sales Report”',
+          },
+        ],
+      },
+      {
+        key: 'page-by-display-section',
+        label: i18n.t('Page-by display'),
+        type: SettingPanelSection.RADIO,
+        selectedOption: pageByDisplayOption,
+        onChange: this.handlePageByDisplayChange,
+        settings: [
+          {
+            key: PageByDisplayOption.SELECT_PAGES,
+            label: i18n.t('Prompt to select pages'),
+          },
+          {
+            key: PageByDisplayOption.DEFAULT_PAGE,
+            label: i18n.t('Import default page'),
+          },
+          {
+            key: PageByDisplayOption.ALL_PAGES,
+            label: i18n.t('Import all pages'),
+          },
+        ],
       },
     ],
   });
