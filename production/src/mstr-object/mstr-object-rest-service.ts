@@ -924,6 +924,16 @@ class MstrObjectRestService {
       .then(res => res.body);
   }
 
+  /**
+   * Fetches the workbook where the specific visualization exported to excel using export engine.
+   * 
+   * @param docId unique identifier of dossier
+   * @param dossierInstanceId unique identifier of dossier instance
+   * @param visualizationKey visualization key
+   * @param projectId unique identifier of the mstr project
+   * 
+   * @returns Readable stream(blob)
+   */
   getWorksheetBinary = async (
     docId: string,
     dossierInstanceId: string,
