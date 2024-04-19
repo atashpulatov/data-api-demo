@@ -914,7 +914,7 @@ class MstrObjectRestService {
   getReportDefinition = (reportId: string, projectId: string): any => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/model/reports/${reportId}`;
+    const fullPath = `${envUrl}/model/reports/${reportId}?showFilterTokens=true`;
 
     return request
       .get(fullPath)
