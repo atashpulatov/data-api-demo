@@ -14,19 +14,21 @@ import {
 } from './page-by-types';
 
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { deleteObjectNotification } from '../redux-reducer/notification-reducer/notification-action-creators';
 import {
+  cancelOperation,
   refreshRequested,
   removeRequested,
 } from '../redux-reducer/operation-reducer/operation-actions';
 
 class PageByHelper {
   /**
-   * Gets Page-by siblings of the source object
+   * Gets all Page-by elements of the source object
    *
    * @param objectWorkingId Unique Id of the object allowing to reference specific object
-   * @returns Array of objects containing information about the Page-by siblings
+   * @returns Array of objects containing information about the all Page-by objects
    */
-  getPageBySiblings = (objectWorkingId: number): ObjectData[] => {
+  getAllPageByObjects = (objectWorkingId: number): ObjectData[] => {
     const sourceObject =
       officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
     const { objects } = reduxStore.getState().objectReducer;
@@ -35,6 +37,38 @@ class PageByHelper {
       object => object?.pageByData?.pageByLinkId === sourceObject.pageByData?.pageByLinkId
     );
     return pageByObjects.sort((a, b) => a.objectWorkingId - b.objectWorkingId);
+  };
+
+  /**
+   * Gets all Page-by siblings of the source object
+   *
+   * @param objectWorkingId Unique Id of the object allowing to reference specific object
+   * @returns Array of objects containing information about the Page-by siblings
+   */
+  getAllPageBySiblings = (objectWorkingId: number): ObjectData[] => {
+    const allPageByElements = this.getAllPageByObjects(objectWorkingId);
+    return allPageByElements.filter(sibling => sibling.objectWorkingId !== objectWorkingId);
+  };
+
+  /**
+   * Clears operations for all Page-by siblings of the source object
+   *
+   * @param objectWorkingId Unique Id of the object allowing to reference specific object
+   */
+  clearOperationsForPageBySiblings = (objectWorkingId: number): void => {
+    const pageBySiblings = this.getAllPageBySiblings(objectWorkingId);
+
+    const { operations } = reduxStore.getState().operationReducer;
+
+    for (const sibling of pageBySiblings) {
+      const isOperationExistForSibling = operations.some(
+        operation => operation.objectWorkingId === sibling.objectWorkingId
+      );
+      if (isOperationExistForSibling) {
+        reduxStore.dispatch(cancelOperation(sibling.objectWorkingId));
+        reduxStore.dispatch(deleteObjectNotification(sibling.objectWorkingId));
+      }
+    }
   };
 
   /**
@@ -155,7 +189,7 @@ class PageByHelper {
    * @param objectWorkingId Unique identifier of the object
    */
   handleRefreshingMultiplePages = (objectWorkingId: number): void => {
-    const pageByObjects = this.getPageBySiblings(objectWorkingId);
+    const pageByObjects = this.getAllPageByObjects(objectWorkingId);
 
     pageByObjects.forEach((pageByObject: ObjectData) => {
       reduxStore.dispatch(refreshRequested(pageByObject.objectWorkingId, pageByObject?.importType));
@@ -168,7 +202,7 @@ class PageByHelper {
    * @param objectWorkingId Unique identifier of the object
    */
   handleRemovingMultiplePages = (objectWorkingId: number): void => {
-    const pageByObjects = this.getPageBySiblings(objectWorkingId);
+    const pageByObjects = this.getAllPageByObjects(objectWorkingId);
 
     pageByObjects.forEach((pageByObject: ObjectData) => {
       reduxStore.dispatch(removeRequested(pageByObject.objectWorkingId, pageByObject?.importType));

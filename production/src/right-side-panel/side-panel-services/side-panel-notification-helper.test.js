@@ -28,6 +28,26 @@ describe('SidePanelService', () => {
     expect(setSidePanelPopup).toBeCalledTimes(1);
   });
 
+  it('setPageByRefreshFailedPopup should set up range taken popup', () => {
+    // given
+    const objectWorkingId = 1;
+    const selectedObjects = [{ objectWorkingId: 1 }, { objectWorkingId: 2 }];
+    const setSidePanelPopup = jest.fn();
+    const callback = jest.fn();
+
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+
+    // when
+    sidePanelNotificationHelper.setPageByRefreshFailedPopup({
+      objectWorkingId,
+      selectedObjects,
+      setSidePanelPopup,
+      callback,
+    });
+    // then
+    expect(setSidePanelPopup).toBeCalledTimes(1);
+  });
+
   it('setDuplicatePopup should set up duplicate popup', () => {
     // given
     const objectWorkingId = 1;

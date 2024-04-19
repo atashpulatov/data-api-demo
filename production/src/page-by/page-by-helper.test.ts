@@ -9,6 +9,7 @@ import { ObjectData } from '../types/object-types';
 import { PageByData, PageByDisplayType } from './page-by-types';
 
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { OperationTypes } from '../operation/operation-type-names';
 
 import { pageByDataResponse } from '../../__mocks__/page-by-data-response';
 
@@ -152,6 +153,42 @@ describe('Page-by helper', () => {
     expect(pageByHelper.getPageByDataForDefaultPage).toHaveBeenCalledTimes(1);
   });
 
+  it('should return all page by objects based on passed source object', () => {
+    // given
+    const mockedPageByData = {
+      pageByDisplayType: PageByDisplayType.ALL_PAGES,
+      pageByLinkId: 'pageByLinkId',
+    };
+    const mockedObjectData = [
+      {
+        objectWorkingId: 1,
+        pageByData: mockedPageByData,
+      },
+      {
+        objectWorkingId: 2,
+        pageByData: mockedPageByData,
+      },
+      {
+        objectWorkingId: 3,
+        pageByData: mockedPageByData,
+      },
+    ] as unknown as ObjectData[];
+
+    jest
+      .spyOn(reduxStore, 'getState')
+      // @ts-expect-error
+      .mockReturnValueOnce({ objectReducer: { objects: mockedObjectData } });
+    jest
+      .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId')
+      .mockReturnValueOnce(mockedObjectData[0]);
+
+    // when
+    const siblings = pageByHelper.getAllPageByObjects(mockedObjectData[0].objectWorkingId);
+
+    // then
+    expect(siblings).toHaveLength(3);
+  });
+
   it('should return all page by siblings based on passed source object', () => {
     // given
     const mockedPageByData = {
@@ -182,9 +219,78 @@ describe('Page-by helper', () => {
       .mockReturnValueOnce(mockedObjectData[0]);
 
     // when
-    const siblings = pageByHelper.getPageBySiblings(mockedObjectData[0].objectWorkingId);
+    const siblings = pageByHelper.getAllPageBySiblings(mockedObjectData[0].objectWorkingId);
 
     // then
-    expect(siblings).toHaveLength(3);
+    expect(siblings).toHaveLength(2);
+  });
+
+  it('should call dispatch actions for siblings', () => {
+    // given
+    const mockedPageByData = {
+      pageByDisplayType: PageByDisplayType.ALL_PAGES,
+      pageByLinkId: 'pageByLinkId',
+    };
+    const mockedObjectData = [
+      {
+        objectWorkingId: 1,
+        pageByData: mockedPageByData,
+      },
+      {
+        objectWorkingId: 2,
+        pageByData: mockedPageByData,
+      },
+      {
+        objectWorkingId: 3,
+        pageByData: mockedPageByData,
+      },
+    ] as unknown as ObjectData[];
+
+    /*     const initialState = {
+      operationsReducer: {
+        operations: [
+          {
+            objectWorkingId: 1,
+            operationType: 'REFRESH',
+          },
+          {
+            objectWorkingId: 2,
+            operationType: 'REFRESH',
+          },
+        ],
+      } as unknown as OperationState,
+    }; */
+
+    /* // @ts-expect-error
+    createStore(rootReducer, initialState); */
+
+    jest
+      .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId')
+      .mockReturnValueOnce(mockedObjectData[0]);
+    const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+
+    jest.spyOn(reduxStore, 'getState').mockReturnValue({
+      objectReducer: { objects: mockedObjectData },
+      operationReducer: {
+        operations: [
+          // @ts-expect-error
+          {
+            objectWorkingId: 1,
+            operationType: OperationTypes.REFRESH_OPERATION,
+          },
+          // @ts-expect-error
+          {
+            objectWorkingId: 2,
+            operationType: OperationTypes.REFRESH_OPERATION,
+          },
+        ],
+      },
+    });
+
+    // when
+    pageByHelper.clearOperationsForPageBySiblings(mockedObjectData[0].objectWorkingId);
+
+    // then
+    expect(mockedDispatch).toHaveBeenCalled();
   });
 });

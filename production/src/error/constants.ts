@@ -144,7 +144,7 @@ export const errorCodes = {
   ERR009: 'ERR009',
 };
 
-export const isPageByRefreshError = (error: any): boolean => {
+export const getIsPageByRefreshError = (error: any): boolean => {
   const errorString = error.response.body.message;
 
   const pageByAttributeChangedErrorPattern =

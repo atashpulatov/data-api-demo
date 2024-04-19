@@ -44,8 +44,8 @@ describe('SidePanelHelper', () => {
     const objectWorkingIds = 1;
     const mockedPageByObjects = [{ objectWorkingId: 1 }, { objectWorkingId: 2 }] as ObjectData[];
 
-    const mockedGetPageBySiblings = jest
-      .spyOn(pageByHelper, 'getPageBySiblings')
+    const mockedGetPageByObjects = jest
+      .spyOn(pageByHelper, 'getAllPageByObjects')
       .mockReturnValueOnce(mockedPageByObjects);
     const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
     const mockedRefreshRequested = jest
@@ -55,7 +55,7 @@ describe('SidePanelHelper', () => {
     // when
     sidePanelHelper.refreshMultiplePagesForPageBy(objectWorkingIds);
     // then
-    expect(mockedGetPageBySiblings).toHaveBeenCalled();
+    expect(mockedGetPageByObjects).toHaveBeenCalled();
     expect(mockedDispatch).toBeCalledTimes(mockedPageByObjects.length);
     expect(mockedRefreshRequested).toBeCalledTimes(mockedPageByObjects.length);
   });
@@ -65,8 +65,8 @@ describe('SidePanelHelper', () => {
     const objectWorkingIds = 1;
     const mockedPageByObjects = [{ objectWorkingId: 1 }, { objectWorkingId: 2 }] as ObjectData[];
 
-    const mockedGetPageBySiblings = jest
-      .spyOn(pageByHelper, 'getPageBySiblings')
+    const mockedGetPageByObjects = jest
+      .spyOn(pageByHelper, 'getAllPageByObjects')
       .mockReturnValueOnce(mockedPageByObjects);
     const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
     const mockedRemoveRequested = jest
@@ -77,7 +77,7 @@ describe('SidePanelHelper', () => {
     sidePanelHelper.removeMultiplePagesForPageBy(objectWorkingIds);
 
     // then
-    expect(mockedGetPageBySiblings).toHaveBeenCalled();
+    expect(mockedGetPageByObjects).toHaveBeenCalled();
     expect(mockedDispatch).toBeCalledTimes(mockedPageByObjects.length);
     expect(mockedRemoveRequested).toBeCalledTimes(mockedPageByObjects.length);
   });

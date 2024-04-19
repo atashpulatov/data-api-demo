@@ -1,8 +1,13 @@
+import { PopupTypes } from '@mstr/connector-components';
+
 import { authenticationHelper } from '../authentication/authentication-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { pageByHelper } from '../page-by/page-by-helper';
 
-import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import {
+  OperationData,
+  OperationState,
+} from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { PopupTypeEnum } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 
 import i18n from '../i18n';
@@ -14,9 +19,9 @@ import {
   errorMessageFactory,
   ErrorMessages,
   ErrorType,
+  getIsPageByRefreshError,
   httpStatusToErrorType,
   IncomingErrorStrings,
-  isPageByRefreshError,
   stringMessageToErrorType,
 } from './constants';
 
@@ -102,6 +107,7 @@ class ErrorService {
 
     if (errorType === ErrorType.OVERLAPPING_TABLES_ERR) {
       const popupData = {
+        type: PopupTypes.RANGE_TAKEN,
         objectWorkingId,
         title: errorMessage,
         message: details,
@@ -110,15 +116,31 @@ class ErrorService {
 
       officeReducerHelper.displayPopup(popupData);
     } else if (errorType === ErrorType.PAGE_BY_REFRESH_ERR) {
-      const selectedObjects = pageByHelper.getPageBySiblings(objectWorkingId);
+      let selectedObjects = null;
+
+      const allPageByObjects = pageByHelper.getAllPageByObjects(objectWorkingId);
+      const pageBySiblings = pageByHelper.getAllPageBySiblings(objectWorkingId);
+
+      const { operations } = this.reduxStore.getState().operationReducer as OperationState;
+      for (const sibling of pageBySiblings) {
+        const isOperationExistForSibling = operations.some(
+          operation => operation.objectWorkingId === sibling.objectWorkingId
+        );
+        if (isOperationExistForSibling) {
+          selectedObjects = allPageByObjects;
+        }
+      }
 
       const popupData = {
+        type: PopupTypes.FAILED_TO_REFRESH_PAGES,
         objectWorkingId,
         title: errorMessage,
         message: details,
         selectedObjects,
         callback,
       };
+
+      pageByHelper.clearOperationsForPageBySiblings(objectWorkingId);
 
       officeReducerHelper.displayPopup(popupData);
     } else {
@@ -331,7 +353,12 @@ class ErrorService {
       }
       return null;
     }
-    if (error?.response?.body?.message && isPageByRefreshError(error)) {
+    const operation = this.reduxStore.getState().operationReducer.operations[0];
+    const isPageByRefreshError =
+      operation?.operationType === OperationTypes.REFRESH_OPERATION &&
+      getIsPageByRefreshError(error);
+
+    if (error?.response?.body?.message && isPageByRefreshError) {
       return ErrorType.PAGE_BY_REFRESH_ERR;
     }
 

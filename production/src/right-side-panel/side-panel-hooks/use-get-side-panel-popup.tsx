@@ -39,12 +39,26 @@ export const useGetSidePanelPopup = ({
 
   useEffect(() => {
     if (popupData) {
-      sidePanelNotificationHelper.setRangeTakenPopup({
-        ...popupData,
-        setSidePanelPopup,
-        activeCellAddress,
-      });
-      // TODO: Add implementation to call setPageByRefreshErrorPopup for Page by refresh errors
+      const { type } = popupData;
+      switch (type) {
+        case PopupTypes.RANGE_TAKEN:
+          sidePanelNotificationHelper.setRangeTakenPopup({
+            ...popupData,
+            setSidePanelPopup,
+            activeCellAddress,
+          });
+          break;
+        case PopupTypes.FAILED_TO_REFRESH_PAGES:
+          sidePanelNotificationHelper.setPageByRefreshFailedPopup({
+            ...popupData,
+            setSidePanelPopup,
+            activeCellAddress,
+            edit: sidePanelService.edit,
+          });
+          break;
+        default:
+          break;
+      }
 
       // For the mulitiple reprompt workflow from the side panel, pass the popupData to the native dialog
       const { objectWorkingId } = popupData;
@@ -56,9 +70,10 @@ export const useGetSidePanelPopup = ({
       if ((isDossier || isReport) && isSidePanelBlocked && !isDataOverviewOpen) {
         popupController.sendMessageToDialog(JSON.stringify({ popupData }));
       }
-    }
-    // TODO: Add case for Page by refresh error popup
-    else if (sidePanelPopup?.type === PopupTypes.RANGE_TAKEN) {
+    } else if (
+      sidePanelPopup?.type === PopupTypes.RANGE_TAKEN ||
+      sidePanelPopup?.type === PopupTypes.FAILED_TO_REFRESH_PAGES
+    ) {
       setSidePanelPopup(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
