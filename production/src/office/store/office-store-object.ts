@@ -69,11 +69,10 @@ class OfficeStoreObject {
   };
 
   /**
-   * 
    * Merges filtered out formatted table objects back to redux store to maintain backward compatibility.
    * 
    * NOTE: Method @link {OfficeStoreRestoreObject.filterFormattedTableObjects()} used for filtering out objects,
-   * if Workbook API is not supported before initializing redux store.
+   * if Excel.Workbook insertWorksheetsFromBase64() API is not supported before initializing redux store.
    * 
    * @returns {Array} Contains objects definitions from excel document
    */
@@ -88,12 +87,11 @@ class OfficeStoreObject {
   };
 
   /**
-   * 
    * Merges filtered out objects to redux store. Ultimately sorts by objectWorkingId.
    * 
    * @returns {Array} Contains objects definitions from excel document
    */
-  mergeStoreObjectsToRedux = (objects: any, objectImportType: any): any => {
+  private mergeStoreObjectsToRedux = (objects: any, objectImportType: any): any => {
     const settings = officeStoreHelper.getOfficeSettings();
     const objectsInOfficeStore: ObjectData[] = settings.get(OfficeSettingsEnum.storedObjects);
 
@@ -120,10 +118,10 @@ class OfficeStoreObject {
     const { objects: objectsInRedux } = this.reduxStore.getState().objectReducer;
 
     let objects = [...objectsInRedux];
-    // Restore hidden formatted table objects before saving objects into office settings
+    // Restore hidden image objects before saving objects into office settings
     objects = this.mergeImageStoreObjectsToRedux(objects);
 
-    // Restore hidden image table objects before saving objects into office settings
+    // Restore hidden formatted table objects before saving objects into office settings
     objects = this.mergeFormattedTableStoreObjectsToRedux(objects);
 
     const settings = officeStoreHelper.getOfficeSettings();

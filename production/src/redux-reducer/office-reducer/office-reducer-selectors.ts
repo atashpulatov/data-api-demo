@@ -64,7 +64,7 @@ const selectIsSettingsPanelLoaded = createSelector(
 export const officeSelectors = {
   selectIsPivotTableSupported,
   selectIsShapeAPISupported,
-  selectIsInsertWorksheetAPISupported
+  selectIsInsertWorksheetAPISupported,
   selectReusePromptAnswers,
   selectIsSecured,
   selectActiveCellAddress,

@@ -18,7 +18,7 @@ import { OperationSteps } from '../../operation/operation-steps';
 import mstrObjectEnum from '../mstr-object-type-enum';
 import dossierInstanceDefinition from './dossier-instance-definition';
 import { ErrorMessages } from '../../error/constants';
-import { ImportOperationStepDict, ObjectImportType } from '../constants';
+import { ImportOperationStepDict, ObjectImportType, objectTableImportType } from '../constants';
 
 class StepGetInstanceDefinition {
   /**
@@ -67,7 +67,7 @@ class StepGetInstanceDefinition {
       let startCell: string;
       let instanceDefinition = preparedInstanceDefinition;
       let shouldRenameExcelWorksheet = false;
-      const currentActiveWorksheet = excelContext.workbook.worksheets.getActiveWorksheet();
+      const currentActiveWorksheet = officeApiHelper.getCurrentExcelSheet(excelContext);
 
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
         ({ body, visualizationInfo, instanceDefinition } =
@@ -163,7 +163,7 @@ class StepGetInstanceDefinition {
         insertNewWorksheet: importType === ObjectImportType.PIVOT_TABLE || insertNewWorksheet,
       };
 
-      if (importType === ObjectImportType.TABLE || importType === ObjectImportType.PIVOT_TABLE || importType === ObjectImportType.FORMATTED_TABLE) {
+      if (objectTableImportType.has(importType)) {
         // update table specific props
         updatedObject.crosstabHeaderDimensions = mstrTable.crosstabHeaderDimensions;
         updatedObject.isCrosstab = mstrTable.isCrosstab;

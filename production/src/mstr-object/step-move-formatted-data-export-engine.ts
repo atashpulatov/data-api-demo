@@ -13,7 +13,7 @@ class StepMoveFormattedDataExportEngine {
     console.time('Total');
 
     try {
-      const { startCell, instanceDefinition, targetWorksheetId, sourceWorksheetId } = operationData;
+      const { startCell, instanceDefinition, targetWorksheetId, sourceWorksheetId, excelContext } = operationData;
       const { objectWorkingId, mstrObjectType } = objectData;
 
       const isDossier = mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
@@ -22,7 +22,6 @@ class StepMoveFormattedDataExportEngine {
       const tableRange = officeApiHelper.getRange(columns, isDossier ? 'A3' : 'A1', rows);
       const targetTableRange = officeApiHelper.getRange(columns, startCell, rows);
 
-      const excelContext = await officeApiHelper.getExcelContext();
       const finalWorksheet = excelContext.workbook.worksheets.getItemOrNullObject(targetWorksheetId);
       finalWorksheet.load('id, name, position');
 

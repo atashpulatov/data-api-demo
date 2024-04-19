@@ -37,11 +37,11 @@ class OfficeStoreRestoreObject {
     settings.set(OfficeSettingsEnum.storedObjects, objects);
 
     // Do filter image objects if the shape api is not supported
-    // and only reflect udated objects in redux store and not back into office store.
+    // and only reflect updated objects in redux store and not back into office store.
     objects = this.filterImageObjects(objects);
 
-    // Do filter formatted table objects if the shape api is not supported
-    // and only reflect udated objects in redux store and not back into office store.
+    // Do filter formatted table objects if the Excel.Workbook insertWorksheetsFromBase64() api is not supported
+    // and only reflect updated objects in redux store and not back into office store.
     objects = this.filterFormattedTableObjects(objects);
 
     // @ts-expect-error
@@ -65,11 +65,12 @@ class OfficeStoreRestoreObject {
   };
 
   /**
- * Filters out formatted table objects if insertWorksheetsFromBase64() api is not supported in current version in order to maintain the backward compatibility.
- *
- * @param objects
- * @returns objects object definitions from excel document
- */
+   * Filters out formatted table objects if Excel.Workbook insertWorksheetsFromBase64() api is not supported 
+   * in current version in order to maintain the backward compatibility.
+   *
+   * @param objects
+   * @returns objects object definitions from excel document
+   */
   filterFormattedTableObjects = (objects: ObjectData[]): ObjectData[] => {
     const { isInsertWorksheetAPISupported } = this.reduxStore.getState().officeReducer;
 

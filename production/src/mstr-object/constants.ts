@@ -3,10 +3,16 @@ export const DEFAULT_CELL_POSITION = 'A1';
 
 export enum ObjectImportType {
   TABLE = 'table',
-  FORMATTED_TABLE = 'formattedTable',
   PIVOT_TABLE = 'pivot-table',
+  FORMATTED_TABLE = 'formattedTable',
   IMAGE = 'image',
 }
+
+export const objectTableImportType = new Set([
+  ObjectImportType.TABLE,
+  ObjectImportType.PIVOT_TABLE,
+  ObjectImportType.FORMATTED_TABLE
+]);
 
 export enum ImportOperationStepDict {
   GET_OFFICE_TABLE_IMPORT = ObjectImportType.TABLE,

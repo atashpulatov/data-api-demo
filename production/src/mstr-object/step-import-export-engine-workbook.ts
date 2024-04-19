@@ -7,6 +7,8 @@ import { ObjectData } from '../types/object-types';
 import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 
+const workbookBase64StartIndentationLength = 7;
+
 class StepImportExportEngineWorkbook {
   importExportEngineWorkbook = async (objectData: ObjectData, operationData: OperationData): Promise<void> => {
     console.group('Importing export engine workbook');
@@ -45,9 +47,9 @@ class StepImportExportEngineWorkbook {
         const fileData = reader.result.toString();
 
         try {
-          const activeWorksheet = excelContext.workbook.worksheets.getActiveWorksheet();
+          const activeWorksheet = officeApiHelper.getCurrentExcelSheet(excelContext);
 
-          const externalWorkbook = fileData.substring(fileData.indexOf('base64,') + 7);
+          const externalWorkbook = fileData.substring(fileData.indexOf('base64,') + workbookBase64StartIndentationLength);
           const newSheetsIds = excelContext.workbook.insertWorksheetsFromBase64(externalWorkbook);
 
           activeWorksheet.activate();

@@ -53,10 +53,10 @@ class OfficeContext {
   }
 
   /**
-   * Checks whether the Excel.Workbook insertWorksheetsFromBase64() API is supported in the current office environment
-   * and updates the redux store with the API support status
+   * Checks whether the Excel.Workbook insertWorksheetsFromBase64() API is supported in the current 
+   * office environment and updates the redux store with the API support status.
    *
-   * @returns {Boolean} true if the Excel Shape API is supported
+   * @returns {Boolean} true if the Excel.Workbook insertWorksheetsFromBase64() API is supported
    */
   isInsertWorksheetAPISupported(): boolean {
     return this.isSetSupported(EXCEL_INSERT_WORKSHEET_API_VERSION);
