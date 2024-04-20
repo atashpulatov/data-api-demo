@@ -57,7 +57,7 @@ type DataTemplate = {
   }[];
 };
 
-export type ReportFiltersDefinition = {
+export type ReportDefinition = {
   grid: {
     viewTemplate: ViewTemplate;
     viewFilter: ViewFilter;
@@ -73,4 +73,33 @@ export type ReportFiltersText = {
   reportLimitsText: string;
   viewFilterText: string;
   metricLimitsText: string;
+};
+
+type DossierFilter = {
+  key: string;
+  name: string;
+  summary: string;
+  source: unknown;
+  synchronizedAcrossChapter: boolean;
+  selectorType: string;
+  displayStyle: string;
+  hasAllOption: boolean;
+  targets: any[];
+  multiSelectionAllowed: boolean;
+  currentSelection: unknown;
+};
+
+type DossierChapter = {
+  key: string;
+  name: string;
+  pages: unknown[];
+  filters: DossierFilter[];
+};
+
+export type DossierDefinition = {
+  id: string;
+  name: string;
+  datasets: unknown[];
+  currentChapter: string;
+  chapters: DossierChapter[];
 };

@@ -2,6 +2,7 @@ import request from 'superagent';
 
 import mstrAttributeFormHelper from './helper/mstr-attribute-form-helper';
 import mstrAttributeMetricHelper from './helper/mstr-attribute-metric-helper';
+import { DossierDefinition, ReportDefinition } from './object-filter-helper-types';
 import officeConverterServiceV2 from './office-converter-service-v2';
 
 import { ReduxStore } from '../store';
@@ -571,15 +572,16 @@ class MstrObjectRestService {
       .then(res => parseInstanceDefinition(res, attrforms));
   };
 
-  getObjectDefinition = (
-    objectId: string,
-    projectId: string,
-    mstrObjectType: MstrObjectTypes = reportObjectType
-  ): any => {
+  /**
+   * Retrieves the definition of a dossier.
+   * @param dossierId - The ID of the dossier object.
+   * @param projectId - The ID of the project.
+   * @returns A Promise that resolves to the DossierDefinition object.
+   */
+  getDossierDefinition = (dossierId: string, projectId: string): Promise<DossierDefinition> => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const api = API_VERSION > 1 ? 'v2/' : '';
-    const fullPath = `${envUrl}/${api}${mstrObjectType.request}/${objectId}`;
+    const fullPath = `${envUrl}/v2/dossiers/${dossierId}/definition`;
 
     return request
       .get(fullPath)
@@ -911,7 +913,7 @@ class MstrObjectRestService {
    * @param projectId unique identifier of the mstr project
    * @returns object containing the report's definition which includes "information", "sourceType", "dataSource", "grid" and perhaps "advancedProperties" and "timezone" if exist
    */
-  getReportDefinition = (reportId: string, projectId: string): any => {
+  getReportDefinition = (reportId: string, projectId: string): Promise<ReportDefinition> => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/model/reports/${reportId}?showFilterTokens=true`;

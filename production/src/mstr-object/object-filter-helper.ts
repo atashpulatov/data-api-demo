@@ -1,6 +1,11 @@
 import { t } from 'i18next';
 
-import { ReportFiltersDefinition, ReportFiltersText, Token } from './object-filter-helper-types';
+import {
+  DossierDefinition,
+  ReportDefinition,
+  ReportFiltersText,
+  Token,
+} from './object-filter-helper-types';
 
 /**
  * Converts an array of filter tokens to a string representation of the filter.
@@ -31,18 +36,18 @@ const convertTokensToString = (tokens: Token[]): string =>
 
 /**
  * Generates the report filter text, report limits text, view filter text, and metric limits text based on the provided filter data.
- * @param filterData - The filter data object which is the response from the API call to get the report filter data.
+ * @param reportDefinition - The filter data object which is the response from the API call to get the report filter data.
  * @returns An object containing the generated report filter text, report limits text, view filter text, and metric limits text.
  */
-export const generateReportFilterText = (
-  filterData: ReportFiltersDefinition
+export const generateReportFilterTexts = (
+  reportDefinition: ReportDefinition
 ): ReportFiltersText => {
-  const reportFilter = filterData?.dataSource?.filter;
-  const reportLimits = filterData?.dataSource?.dataTemplate?.units.find(
+  const reportFilter = reportDefinition?.dataSource?.filter;
+  const reportLimits = reportDefinition?.dataSource?.dataTemplate?.units.find(
     unit => unit.type === 'metrics'
   ).limit;
-  const viewFilter = filterData?.grid?.viewFilter;
-  const metricLimits = filterData?.grid?.viewTemplate?.columns?.units.find(
+  const viewFilter = reportDefinition?.grid?.viewFilter;
+  const metricLimits = reportDefinition?.grid?.viewTemplate?.columns?.units.find(
     unit => unit.type === 'metrics'
   ).elements;
 
@@ -57,4 +62,22 @@ export const generateReportFilterText = (
     viewFilterText,
     metricLimitsText,
   };
+};
+
+/**
+ * Generates the filter text for a dossier based on the provided filter data.
+ * @param dossierDefinition - The filter data for the dossier.
+ * @returns The generated filter text.
+ */
+export const generateDossierFilterText = (dossierDefinition: DossierDefinition): string => {
+  const currentChapterKey = dossierDefinition.currentChapter;
+  const selectedChapter = dossierDefinition.chapters.find(
+    chapter => chapter.key === currentChapterKey
+  );
+
+  const dossierFilterSummary = `( ${selectedChapter.filters
+    .map(filter => filter.summary)
+    .join(` ) ${t('and').toUpperCase()} ( `)} )`;
+
+  return dossierFilterSummary;
 };
