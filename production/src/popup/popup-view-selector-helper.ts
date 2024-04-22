@@ -11,6 +11,14 @@ import { DisplayAttrFormNames } from '../mstr-object/constants';
 const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
 class PopupViewSelectorHelper {
+  isPopupTypeRepromptPopup(popupType: PopupTypeEnum): boolean {
+    return (
+      popupType === PopupTypeEnum.repromptingWindow ||
+      popupType === PopupTypeEnum.repromptReportDataOverview ||
+      popupType === PopupTypeEnum.repromptDossierDataOverview
+    );
+  }
+
   setPopupType(props: any, popupType: PopupTypeEnum): PopupTypeEnum {
     const { importRequested, dossierOpenRequested, isPrompted } = props;
     const arePromptsAnswered = this.arePromptsAnswered(props);
@@ -32,11 +40,7 @@ class PopupViewSelectorHelper {
       // when editing a prompted report.
       if (this.isInstanceWithPromptsAnswered(props)) {
         // Handle the case when the user is editing a prompted report or dossier.
-        if (
-          popupType === PopupTypeEnum.repromptingWindow ||
-          popupType === PopupTypeEnum.repromptReportDataOverview ||
-          popupType === PopupTypeEnum.repromptDossierDataOverview
-        ) {
+        if (this.isPopupTypeRepromptPopup(popupType)) {
           return getPromptedReportPopupType();
         }
       } else {

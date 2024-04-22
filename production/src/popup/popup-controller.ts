@@ -211,6 +211,39 @@ class PopupController {
     this.dialog?.messageChild && this.dialog?.messageChild(message);
   };
 
+  /**
+   * Handles the action command for the overview based on the dialog type and command.
+   * If the dialog type is one of the valid types (importedDataOverview, repromptReportDataOverview,
+   * repromptDossierDataOverview) and either the dialog type is importedDataOverview or the command is
+   * RANGE_TAKEN_OK or RANGE_TAKEN_CLOSE, it calls the handleOverviewActionCommand method of the
+   * overviewHelper with the provided response.
+   *
+   * @param dialogType - indicates type of the dialog to be opened, value from PopupTypeEnum
+   * @param command - action command from the dialog
+   * @param response - message received from the dialog
+   */
+  async handleOverviewAction(
+    dialogType: PopupTypeEnum,
+    command: string,
+    response: DialogResponse
+  ): Promise<void> {
+    const { RANGE_TAKEN_CLOSE, RANGE_TAKEN_OK } = OverviewActionCommands;
+    const validDialogTypes = [
+      PopupTypeEnum.importedDataOverview,
+      PopupTypeEnum.repromptReportDataOverview,
+      PopupTypeEnum.repromptDossierDataOverview,
+    ];
+
+    if (
+      validDialogTypes.includes(dialogType) &&
+      (dialogType === PopupTypeEnum.importedDataOverview ||
+        command === RANGE_TAKEN_OK ||
+        command === RANGE_TAKEN_CLOSE)
+    ) {
+      await this.overviewHelper.handleOverviewActionCommand(response);
+    }
+  }
+
   onMessageFromPopup = async (
     dialog: Office.Dialog,
     reportParams: ReportParams,
@@ -253,27 +286,7 @@ class PopupController {
       }
       await authenticationHelper.validateAuthToken();
 
-      // Handles the action command for the overview based on the dialog type and command.
-      // If the dialog type is one of the valid types (importedDataOverview, repromptReportDataOverview,
-      // repromptDossierDataOverview) and either the dialog type is importedDataOverview or the command is
-      // RANGE_TAKEN_OK or RANGE_TAKEN_CLOSE, it calls the handleOverviewActionCommand method of the
-      // overviewHelper with the provided response.
-      const { RANGE_TAKEN_CLOSE, RANGE_TAKEN_OK } = OverviewActionCommands;
-      const validDialogTypes = [
-        PopupTypeEnum.importedDataOverview,
-        PopupTypeEnum.repromptReportDataOverview,
-        PopupTypeEnum.repromptDossierDataOverview,
-      ];
-
-      if (
-        validDialogTypes.includes(dialogType) &&
-        (dialogType === PopupTypeEnum.importedDataOverview ||
-          command === RANGE_TAKEN_OK ||
-          command === RANGE_TAKEN_CLOSE)
-      ) {
-        await this.overviewHelper.handleOverviewActionCommand(response);
-        return;
-      }
+      await this.handleOverviewAction(dialogType, command, response);
 
       if (
         dialogType === PopupTypeEnum.dossierWindow ||
