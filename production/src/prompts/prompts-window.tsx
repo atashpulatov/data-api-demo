@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
-import { ObjectWindowTitle, Popup } from '@mstr/connector-components';
+import { ObjectWindowTitle } from '@mstr/connector-components';
 import { Spinner } from '@mstr/rc';
 
 import { authenticationHelper } from '../authentication/authentication-helper';
@@ -11,7 +11,6 @@ import {
   preparePromptedReport,
 } from '../helpers/prompts-handling-helper';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
-import overviewHelper from '../popup/overview/overview-helper';
 import { popupHelper } from '../popup/popup-helper';
 import { popupViewSelectorHelper } from '../popup/popup-view-selector-helper';
 import { EXTEND_SESSION, sessionHelper } from '../storage/session-helper';
@@ -54,7 +53,6 @@ interface PromptsWindowProps {
   promptObjects?: any[]; // Replace 'any' with the appropriate type
   repromptsQueue?: RepromptsQueueState;
   isMultipleRepromptWithReuse?: boolean;
-  popupData: { objectWorkingId: number };
 }
 
 const { microstrategy } = window;
@@ -76,13 +74,11 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
     isPreparedDataRequested,
     isMultipleRepromptWithReuse,
     repromptsQueue,
-    popupData,
   } = props;
   const { chosenObjectId, chosenObjectName } = mstrData;
   // isReprompt will be true for both Edit AND Reprompt workflows
   // isEdit will only be true for the Edit workflow
   const { isReprompt, isEdit } = popupState;
-  const [dialogPopup, setDialogPopup] = React.useState(null);
 
   const { installSessionProlongingHandler } = sessionHelper;
 
@@ -134,17 +130,6 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
 
     return () => window.removeEventListener('message', messageReceived);
   }, [messageReceived]);
-
-  useEffect(() => {
-    if (popupData) {
-      overviewHelper.setRangeTakenPopup({
-        objectWorkingIds: [popupData.objectWorkingId],
-        setDialogPopup,
-      });
-    } else {
-      setDialogPopup(null);
-    }
-  }, [popupData]);
 
   /**
    * Handler that is called when a prompt is answered in the Prompts dialog (UI)
@@ -439,36 +424,27 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
   const objectName = editedObject.chosenObjectName || chosenObjectName;
 
   return (
-    <>
-      {!dialogPopup && (
-        <div className='prompts-window'>
-          <ObjectWindowTitle
-            objectType={mstrObjectEnum.mstrObjectType.report.name}
-            objectName={objectName}
-            isReprompt={isReprompt}
-            isEdit={isEdit}
-            index={repromptsQueue.index}
-            total={repromptsQueue.total}
-          />
-          <Spinner className='loading-spinner' type='large'>
-            {t('Loading...')}
-          </Spinner>
-          <PromptsContainer postMount={onPromptsContainerMount} />
-          <PopupButtons
-            handleOk={handleRun}
-            handleCancel={closePopup}
-            hideSecondary
-            handleBack={!isReprompt && handleBack}
-            disableActiveActions={isPromptLoading}
-          />
-        </div>
-      )}
-      {!!dialogPopup && (
-        <div className='standalone-popup'>
-          <Popup {...dialogPopup} />
-        </div>
-      )}
-    </>
+    <div className='prompts-window'>
+      <ObjectWindowTitle
+        objectType={mstrObjectEnum.mstrObjectType.report.name}
+        objectName={objectName}
+        isReprompt={isReprompt}
+        isEdit={isEdit}
+        index={repromptsQueue.index}
+        total={repromptsQueue.total}
+      />
+      <Spinner className='loading-spinner' type='large'>
+        {t('Loading...')}
+      </Spinner>
+      <PromptsContainer postMount={onPromptsContainerMount} />
+      <PopupButtons
+        handleOk={handleRun}
+        handleCancel={closePopup}
+        hideSecondary
+        handleBack={!isReprompt && handleBack}
+        disableActiveActions={isPromptLoading}
+      />
+    </div>
   );
 };
 
@@ -492,7 +468,7 @@ export const mapStateToProps = (state: RootState): any => {
     ...mstrData
   } = navigationTree;
   const { answers } = answersReducer;
-  const { supportForms, reusePromptAnswers, popupData } = officeReducer;
+  const { supportForms, reusePromptAnswers } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
   const isReport =
     popupState && popupState.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
@@ -526,7 +502,6 @@ export const mapStateToProps = (state: RootState): any => {
     isPreparedDataRequested, // State flag indicating whether prepared data is requested for import
     repromptsQueue: { ...repromptsQueueReducer },
     isMultipleRepromptWithReuse: reusePromptAnswers && repromptsQueueReducer.total > 1,
-    popupData,
   };
 };
 

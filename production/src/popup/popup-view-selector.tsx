@@ -34,7 +34,6 @@ const renderProperComponent = (popupType: PopupTypeEnum): any => {
     case PopupTypeEnum.promptsWindow:
     case PopupTypeEnum.repromptingWindow:
     case PopupTypeEnum.repromptReportDataOverview:
-      // @ts-expect-error
       return <PromptsWindow />;
     case PopupTypeEnum.dossierWindow:
     case PopupTypeEnum.repromptDossierDataOverview:
