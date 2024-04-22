@@ -13,7 +13,7 @@ class StepMoveFormattedDataExportEngine {
     console.time('Total');
 
     try {
-      const { startCell, instanceDefinition, targetWorksheetId, sourceWorksheetId, excelContext } = operationData;
+      const { startCell, instanceDefinition, sourceWorksheetId, excelContext } = operationData;
       const { objectWorkingId, mstrObjectType } = objectData;
 
       const isDossier = mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
@@ -22,16 +22,20 @@ class StepMoveFormattedDataExportEngine {
       const tableRange = officeApiHelper.getRange(columns, isDossier ? 'A3' : 'A1', rows);
       const targetTableRange = officeApiHelper.getRange(columns, startCell, rows);
 
-      const finalWorksheet = excelContext.workbook.worksheets.getItemOrNullObject(targetWorksheetId);
-      finalWorksheet.load('id, name, position');
+      const targetWorksheet = officeApiHelper.getExcelSheetById(
+        excelContext,
+        objectData.worksheet.id
+      );
 
-      const orginalWorksheet = excelContext.workbook.worksheets.getItemOrNullObject(sourceWorksheetId);
-      orginalWorksheet.load('id, name, position');
+      const sourceWorksheet = officeApiHelper.getExcelSheetById(
+        excelContext,
+        sourceWorksheetId
+      );
 
-      finalWorksheet.getRange(targetTableRange).copyFrom(orginalWorksheet.getRange(tableRange));
+      targetWorksheet.getRange(targetTableRange).copyFrom(sourceWorksheet.getRange(tableRange));
       await excelContext.sync();
 
-      orginalWorksheet.delete();
+      sourceWorksheet.delete();
       await excelContext.sync();
 
       operationStepDispatcher.completeMoveFormattedDataExportEngine(objectWorkingId);

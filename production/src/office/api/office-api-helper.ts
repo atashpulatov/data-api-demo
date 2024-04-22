@@ -259,6 +259,18 @@ class OfficeApiHelper {
   }
 
   /**
+   * Retrieves the excel sheet by sheet id.
+   *
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param worksheetId Worksheet id
+   * 
+   * @returns Reference to active Excel Worksheet
+   */
+  getExcelSheetById(excelContext: Excel.RequestContext, worksheetId: string): Excel.Worksheet {
+    return excelContext.workbook.worksheets.getItemOrNullObject(worksheetId);
+  }
+
+  /**
    * Converts number of column to Excel column name.
    *
    * @param headerCount Number of rows

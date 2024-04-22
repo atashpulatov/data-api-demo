@@ -67,7 +67,6 @@ class StepGetInstanceDefinition {
       let startCell: string;
       let instanceDefinition = preparedInstanceDefinition;
       let shouldRenameExcelWorksheet = false;
-      const currentActiveWorksheet = officeApiHelper.getCurrentExcelSheet(excelContext);
 
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
         ({ body, visualizationInfo, instanceDefinition } =
@@ -171,10 +170,6 @@ class StepGetInstanceDefinition {
         updatedOperation.startCell = startCell;
         updatedOperation.oldBindId = bindId;
         updatedOperation.totalRows = instanceDefinition.rows;
-      }
-
-      if (importType === ObjectImportType.FORMATTED_TABLE) {
-        updatedOperation.targetWorksheetId = currentActiveWorksheet.id;
       }
 
       if (mstrTable.rows.length === 0) {
