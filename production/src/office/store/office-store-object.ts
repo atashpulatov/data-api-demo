@@ -51,57 +51,24 @@ class OfficeStoreObject {
   };
 
   /**
-   * Merges filtered out image objects back to redux store to maintain backward compatibility.
+   * Merges previouslt filtered out objects to redux store to maintain backward compatibility. 
+   * Ultimately sorts concatenated objects by objectWorkingId.
    * 
-   * NOTE: Method @link {OfficeStoreRestoreObject.filterImageObjects()} used for filtering out objects,
-   * if Shape API is not supported before initializing redux store.
-   *
-   * @returns {Array} Contains objects definitions from excel document
+   * @returns Contains the objects definitions from excel document
    */
-  mergeImageStoreObjectsToRedux = (objects: any): ObjectData[] => {
-    const { isShapeAPISupported } = this.reduxStore.getState().officeReducer;
+  mergeStoreObjectsToRedux = (isExcelApiSupported: boolean, objects: ObjectData[], objectImportType: ObjectImportType): any => {
+    if (!isExcelApiSupported) {
+      const settings = officeStoreHelper.getOfficeSettings();
+      const objectsInOfficeStore: ObjectData[] = settings.get(OfficeSettingsEnum.storedObjects);
 
-    if (!isShapeAPISupported) {
-      this.mergeStoreObjectsToRedux(objects, ObjectImportType.IMAGE);
-    }
+      if (objectsInOfficeStore?.length > 0) {
+        const filteredObjects = objectsInOfficeStore.filter(
+          (object: any) => object?.importType === objectImportType
+        );
 
-    return objects;
-  };
-
-  /**
-   * Merges filtered out formatted table objects back to redux store to maintain backward compatibility.
-   * 
-   * NOTE: Method @link {OfficeStoreRestoreObject.filterFormattedTableObjects()} used for filtering out objects,
-   * if Excel.Workbook insertWorksheetsFromBase64() API is not supported before initializing redux store.
-   * 
-   * @returns {Array} Contains objects definitions from excel document
-   */
-  mergeFormattedTableStoreObjectsToRedux = (objects: any): ObjectData[] => {
-    const { isInsertWorksheetAPISupported } = this.reduxStore.getState().officeReducer;
-
-    if (!isInsertWorksheetAPISupported) {
-      return this.mergeStoreObjectsToRedux(objects, ObjectImportType.FORMATTED_TABLE);
-    }
-
-    return objects;
-  };
-
-  /**
-   * Merges filtered out objects to redux store. Ultimately sorts by objectWorkingId.
-   * 
-   * @returns {Array} Contains objects definitions from excel document
-   */
-  private mergeStoreObjectsToRedux = (objects: any, objectImportType: any): any => {
-    const settings = officeStoreHelper.getOfficeSettings();
-    const objectsInOfficeStore: ObjectData[] = settings.get(OfficeSettingsEnum.storedObjects);
-
-    if (objectsInOfficeStore?.length > 0) {
-      const filteredObjects = objectsInOfficeStore.filter(
-        (object: any) => object?.importType === objectImportType
-      );
-
-      if (filteredObjects?.length > 0) {
-        return objects.concat(filteredObjects).sort((a: { objectWorkingId: number; }, b: { objectWorkingId: number; }) => b.objectWorkingId - a.objectWorkingId);
+        if (filteredObjects?.length > 0) {
+          return objects.concat(filteredObjects).sort((a: ObjectData, b: ObjectData) => b.objectWorkingId - a.objectWorkingId);
+        }
       }
     }
 
@@ -116,13 +83,14 @@ class OfficeStoreObject {
     // Make sure that objects are merged before saving in Office Settings
     // to maintain backward compatibility and include image objects if Shape API is not supported.
     const { objects: objectsInRedux } = this.reduxStore.getState().objectReducer;
+    const { isShapeAPISupported, isInsertWorksheetAPISupported } = this.reduxStore.getState().officeReducer;
 
     let objects = [...objectsInRedux];
     // Restore hidden image objects before saving objects into office settings
-    objects = this.mergeImageStoreObjectsToRedux(objects);
+    objects = this.mergeStoreObjectsToRedux(isShapeAPISupported, objects, ObjectImportType.IMAGE);
 
     // Restore hidden formatted table objects before saving objects into office settings
-    objects = this.mergeFormattedTableStoreObjectsToRedux(objects);
+    objects = this.mergeStoreObjectsToRedux(isInsertWorksheetAPISupported, objects, ObjectImportType.FORMATTED_TABLE);
 
     const settings = officeStoreHelper.getOfficeSettings();
     settings.set(OfficeSettingsEnum.storedObjects, objects);
