@@ -226,7 +226,8 @@ class PopupController {
     dialogType: PopupTypeEnum,
     command: string,
     response: DialogResponse
-  ): Promise<void> {
+  ): Promise<boolean> {
+    let wasHandledByOverview = false;
     const { RANGE_TAKEN_CLOSE, RANGE_TAKEN_OK } = OverviewActionCommands;
     const validDialogTypes = [
       PopupTypeEnum.importedDataOverview,
@@ -241,7 +242,10 @@ class PopupController {
         command === RANGE_TAKEN_CLOSE)
     ) {
       await this.overviewHelper.handleOverviewActionCommand(response);
+      wasHandledByOverview = true;
     }
+
+    return wasHandledByOverview;
   }
 
   onMessageFromPopup = async (
@@ -286,7 +290,9 @@ class PopupController {
       }
       await authenticationHelper.validateAuthToken();
 
-      await this.handleOverviewAction(dialogType, command, response);
+      if (await this.handleOverviewAction(dialogType, command, response)) {
+        return;
+      }
 
       if (
         dialogType === PopupTypeEnum.dossierWindow ||
