@@ -76,12 +76,7 @@ export async function answerDossierPromptsHelper(
       ignoreValidateRequiredCheck: true,
     };
 
-    // Applying prompt answers to current instead of forcing the instance to execute the prompts.
-    // as indicated in:
-    // https://microstrategy.github.io/rest-api-docs/common-workflows/analytics/use-prompts-objects/answer-prompts/#nested-prompts
-    count > 0
-      ? await mstrObjectRestService.applyDossierPrompts(config)
-      : await mstrObjectRestService.answerDossierPrompts(config);
+    await mstrObjectRestService.answerDossierPrompts(config);
 
     let dossierStatusResponse = await mstrObjectRestService.getDossierStatus(
       objectId,
