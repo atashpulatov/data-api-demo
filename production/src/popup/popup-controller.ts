@@ -222,7 +222,7 @@ class PopupController {
    * @param command - action command from the dialog
    * @param response - message received from the dialog
    */
-  async handleOverviewAction(
+  async handleOverviewActionForOverviewPopups(
     dialogType: PopupTypeEnum,
     command: string,
     response: DialogResponse
@@ -290,7 +290,9 @@ class PopupController {
       }
       await authenticationHelper.validateAuthToken();
 
-      if (await this.handleOverviewAction(dialogType, command, response)) {
+      // Handle overview action for overview popups such as importedDataOverview, repromptReportDataOverview,
+      // and repromptDossierDataOverview and if processed then stop further processing and return.
+      if (await this.handleOverviewActionForOverviewPopups(dialogType, command, response)) {
         return;
       }
 
