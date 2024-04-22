@@ -2,9 +2,10 @@ import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { pageByHelper } from './page-by-helper';
 
-import { reduxStore } from '../store';
+import { reduxStore, RootState } from '../store';
 
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectAndWorksheetNamingOption } from '../right-side-panel/settings-side-panel/settings-side-panel-types';
 import { ObjectData } from '../types/object-types';
 import { PageByData, PageByDisplayType } from './page-by-types';
 
@@ -152,7 +153,7 @@ describe('Page-by helper', () => {
     expect(pageByHelper.getPageByDataForDefaultPage).toHaveBeenCalledTimes(1);
   });
 
-  it('should return all page by siblings based on passed source object', () => {
+  it('should return all page by objects based on passed source object', () => {
     // given
     const mockedPageByData = {
       pageByDisplayType: PageByDisplayType.ALL_PAGES,
@@ -182,9 +183,37 @@ describe('Page-by helper', () => {
       .mockReturnValueOnce(mockedObjectData[0]);
 
     // when
-    const siblings = pageByHelper.getPageBySiblings(mockedObjectData[0].objectWorkingId);
+    const { sourceObject } = pageByHelper.getAllPageByObjects(mockedObjectData[0].objectWorkingId);
 
     // then
-    expect(siblings).toHaveLength(3);
+    expect(sourceObject.objectWorkingId).toEqual(mockedObjectData[0].objectWorkingId);
   });
+
+  it.each`
+    objectName | pageByData                          | objectAndWorksheetNamingSetting                             | expectedResult
+    ${'Test'}  | ${{ elements: [{ value: 'pop' }] }} | ${ObjectAndWorksheetNamingOption.REPORT_NAME}               | ${'Test'}
+    ${'Test'}  | ${{ elements: [{ value: 'pop' }] }} | ${ObjectAndWorksheetNamingOption.PAGE_NAME}                 | ${'pop'}
+    ${'Test'}  | ${{ elements: [{ value: 'pop' }] }} | ${ObjectAndWorksheetNamingOption.REPORT_NAME_AND_PAGE_NAME} | ${'Test - pop'}
+    ${'Test'}  | ${{ elements: [{ value: 'pop' }] }} | ${ObjectAndWorksheetNamingOption.PAGE_NAME_AND_REPORT_NAME} | ${'pop - Test'}
+  `(
+    'prepareNameBasedOnPageBySettings should return proper name',
+    async ({ objectName, pageByData, objectAndWorksheetNamingSetting, expectedResult }) => {
+      // given
+
+      jest.spyOn(reduxStore, 'getState').mockImplementation(
+        () =>
+          ({
+            settingsReducer: { objectAndWorksheetNamingSetting },
+          }) as RootState
+      );
+      // when
+      const worksheetName = await pageByHelper.prepareNameBasedOnPageBySettings(
+        objectName,
+        pageByData
+      );
+
+      // then
+      expect(worksheetName).toEqual(expectedResult);
+    }
+  );
 });

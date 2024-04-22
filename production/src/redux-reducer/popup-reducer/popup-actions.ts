@@ -9,8 +9,6 @@ import { DisplayAttrFormNames } from '../../mstr-object/constants';
 class PopupActions {
   errorService: any;
 
-  officeApiHelper: any;
-
   officeReducerHelper: any;
 
   popupHelper: any;
@@ -23,7 +21,6 @@ class PopupActions {
 
   init = (
     errorService: any,
-    officeApiHelper: any,
     officeReducerHelper: any,
     popupHelper: any,
     mstrObjectRestService: any,
@@ -31,7 +28,6 @@ class PopupActions {
     visualizationInfoService: any
   ): void => {
     this.errorService = errorService;
-    this.officeApiHelper = officeApiHelper;
     this.officeReducerHelper = officeReducerHelper;
     this.popupHelper = popupHelper;
     this.mstrObjectRestService = mstrObjectRestService;
@@ -39,43 +35,25 @@ class PopupActions {
     this.visualizationInfoService = visualizationInfoService;
   };
 
-  callForReprompt = (reportParams: any) => async (dispatch: Dispatch<any>) => {
-    try {
-      await this.officeApiHelper.checkStatusOfSessions();
-      const editedObject = this.officeReducerHelper.getObjectFromObjectReducerByBindId(
-        reportParams.bindId
-      );
-      editedObject.objectType = editedObject.mstrObjectType;
-
-      dispatch({
-        type: PopupActionTypes.SET_REPORT_N_FILTERS,
-        editedObject,
-      });
-      this.popupController.runRepromptPopup(reportParams, false);
-    } catch (error) {
-      return this.errorService.handleError(error);
-    }
+  callForReprompt = (objectData: ObjectData) => async (dispatch: Dispatch<any>) => {
+    objectData.objectType = objectData.mstrObjectType;
+    dispatch({
+      type: PopupActionTypes.SET_REPORT_N_FILTERS,
+      editedObject: objectData,
+    });
+    this.popupController.runRepromptPopup(objectData, false);
   };
 
-  callForEdit = (reportParams: any) => async (dispatch: Dispatch<any>) => {
-    try {
-      await this.officeApiHelper.checkStatusOfSessions();
-      const editedObject = this.officeReducerHelper.getObjectFromObjectReducerByBindId(
-        reportParams.bindId
-      );
-      editedObject.objectType = editedObject.mstrObjectType;
-
-      dispatch({
-        type: PopupActionTypes.SET_REPORT_N_FILTERS,
-        editedObject,
-      });
-      if (editedObject.isPrompted) {
-        this.popupController.runRepromptPopup(reportParams);
-      } else {
-        this.popupController.runEditFiltersPopup(reportParams);
-      }
-    } catch (error) {
-      return this.errorService.handleError(error);
+  callForEdit = (objectData: ObjectData) => async (dispatch: Dispatch<any>) => {
+    objectData.objectType = objectData.mstrObjectType;
+    dispatch({
+      type: PopupActionTypes.SET_REPORT_N_FILTERS,
+      editedObject: objectData,
+    });
+    if (objectData.isPrompted) {
+      this.popupController.runRepromptPopup(objectData);
+    } else {
+      this.popupController.runEditFiltersPopup(objectData);
     }
   };
 
@@ -87,46 +65,31 @@ class PopupActions {
         chosenObjectData,
       });
 
-  callForRepromptDossier = (reportParams: any) => async (dispatch: Dispatch<any>) => {
+  callForRepromptDossier = (objectData: ObjectData) => async (dispatch: Dispatch<any>) => {
     try {
-      await this.officeApiHelper.checkStatusOfSessions();
-      const repromptedDossier = this.officeReducerHelper.getObjectFromObjectReducerByBindId(
-        reportParams.bindId
-      );
-
-      try {
-        await this.prepareDossierForReprompt(repromptedDossier);
-      } catch (error) {
-        // Report error in console and continue with reprompting and let operation handle the error
-        // so it is propagated to the user in SidePanel or/and Overview dialog if opened.
-        console.error('Error during preparing dossier for reprompt', error);
-      }
-
-      dispatch({
-        type: PopupActionTypes.SET_REPORT_N_FILTERS,
-        editedObject: repromptedDossier,
-      });
-      this.popupController.runRepromptDossierPopup(reportParams);
+      await this.prepareDossierForReprompt(objectData);
     } catch (error) {
-      error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
-      return this.errorService.handleError(error);
+      // Report error in console and continue with reprompting and let operation handle the error
+      // so it is propagated to the user in SidePanel or/and Overview dialog if opened.
+      console.error('Error during preparing dossier for reprompt', error);
     }
+
+    dispatch({
+      type: PopupActionTypes.SET_REPORT_N_FILTERS,
+      editedObject: objectData,
+    });
+    this.popupController.runRepromptDossierPopup(objectData);
   };
 
-  callForEditDossier = (reportParams: any) => async (dispatch: Dispatch<any>) => {
+  callForEditDossier = (objectData: ObjectData) => async (dispatch: Dispatch<any>) => {
     try {
-      await this.officeApiHelper.checkStatusOfSessions();
-      const editedDossier = this.officeReducerHelper.getObjectFromObjectReducerByBindId(
-        reportParams.bindId
-      );
-
-      await this.prepareDossierForEdit(editedDossier);
+      await this.prepareDossierForEdit(objectData);
 
       dispatch({
         type: PopupActionTypes.SET_REPORT_N_FILTERS,
-        editedObject: editedDossier,
+        editedObject: objectData,
       });
-      this.popupController.runEditDossierPopup(reportParams);
+      this.popupController.runEditDossierPopup(objectData);
     } catch (error) {
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
       return this.errorService.handleError(error);
@@ -141,30 +104,29 @@ class PopupActions {
    *
    * @param object - Data of duplicated object.
    */
-  callForDuplicate = (object: ObjectData) => async (dispatch: Dispatch<any>) => {
+  callForDuplicate = (objectData: ObjectData) => async (dispatch: Dispatch<any>) => {
     const isDossier =
-      object.mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
+      objectData.mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
     try {
-      await this.officeApiHelper.checkStatusOfSessions();
-      object.objectType = object.mstrObjectType;
+      objectData.objectType = objectData.mstrObjectType;
 
       if (isDossier) {
-        await this.prepareDossierForEdit(object);
+        await this.prepareDossierForEdit(objectData);
       }
 
       dispatch({
         type: PopupActionTypes.SET_REPORT_N_FILTERS,
-        editedObject: object,
+        editedObject: objectData,
       });
 
       const reportParams = {
         duplicateMode: true,
-        object,
+        object: objectData,
       };
 
       if (isDossier) {
         this.popupController.runEditDossierPopup(reportParams);
-      } else if (object.isPrompted) {
+      } else if (objectData.isPrompted) {
         this.popupController.runRepromptPopup(reportParams);
       } else {
         this.popupController.runEditFiltersPopup(reportParams);

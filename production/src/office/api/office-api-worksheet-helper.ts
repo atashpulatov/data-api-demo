@@ -1,7 +1,7 @@
+import { pageByHelper } from '../../page-by/page-by-helper';
 import { officeApiHelper } from './office-api-helper';
 
 import { PageByData } from '../../page-by/page-by-types';
-import { ObjectAndWorksheetNamingOption } from '../../right-side-panel/settings-side-panel/settings-side-panel-types';
 
 import { ProtectedSheetError } from '../../error/protected-sheets-error';
 import { ObjectImportType } from '../../mstr-object/constants';
@@ -157,39 +157,6 @@ class OfficeApiWorksheetHelper {
   }
 
   /**
-   * Generates a worksheet name based on naming conventions and pageBy value
-   * @param objectName Name of the object added to the new worksheet
-   * @param pageByData Contains information about page-by elements
-   * @param currentNamingSetting name setting chosed by user
-   * @return Generated worksheet name.
-   */
-  prepareNameBasedOnPageBySettings(reportName: string, pageByData: PageByData): string {
-    const pageByElement = pageByData.elements.map(element => element.value).join(', ');
-    const { settingsReducer } = this.reduxStore.getState();
-    const currentNamingSetting = settingsReducer.objectAndWorksheetNamingSetting;
-
-    let newSheetName;
-    switch (currentNamingSetting) {
-      case ObjectAndWorksheetNamingOption.REPORT_NAME:
-        newSheetName = reportName;
-        break;
-      case ObjectAndWorksheetNamingOption.PAGE_NAME:
-        newSheetName = pageByElement;
-        break;
-      case ObjectAndWorksheetNamingOption.PAGE_NAME_AND_REPORT_NAME:
-        newSheetName = `${pageByElement} - ${reportName}`;
-        break;
-      case ObjectAndWorksheetNamingOption.REPORT_NAME_AND_PAGE_NAME:
-        newSheetName = `${reportName} - ${pageByElement}`;
-        break;
-      default:
-        break;
-    }
-
-    return newSheetName;
-  }
-
-  /**
    * Prepares new Excel wooksheet name. Maximum name length is 31.
    * If name is over the limit '...' are added at the end.
    * If name already exists, counter is added at the end of the name.
@@ -212,14 +179,14 @@ class OfficeApiWorksheetHelper {
     await excelContext.sync();
     const sheetsNames = sheets.items.map(item => item.name);
 
-    let newSheetName = objectName.replace(/[:?*\\/\][]/g, '_');
+    let newSheetName = objectName?.replace(/[:?*\\/\][]/g, '_');
 
     if (pageByData) {
-      newSheetName = this.prepareNameBasedOnPageBySettings(newSheetName, pageByData);
+      newSheetName = pageByHelper.prepareNameBasedOnPageBySettings(newSheetName, pageByData);
     }
 
     // if objectName only contains whitespaces replace it with _
-    if (!newSheetName.replace(/\s/g, '').length) {
+    if (!newSheetName?.replace(/\s/g, '').length) {
       newSheetName = '_';
     }
 

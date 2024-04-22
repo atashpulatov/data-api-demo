@@ -11,8 +11,10 @@ import { sidePanelNotificationHelper } from '../side-panel-services/side-panel-n
 
 import { rootReducer } from '../../store';
 
+import { ObjectData } from '../../types/object-types';
+
 describe('useGetSidePanelPopup', () => {
-  it('should call sidePanelNotificationHelper.setDuplicatePopup when conditions are met', () => {
+  it('should call setRangeTakenPopup when conditions are met', () => {
     // Given
     const sidePanelPopupMock = { type: PopupTypes.RANGE_TAKEN };
     const setSidePanelPopupMock = jest.fn();
@@ -21,6 +23,58 @@ describe('useGetSidePanelPopup', () => {
       officeReducer: {
         popupData: { type: PopupTypes.RANGE_TAKEN },
         activeCellAddress: 'A1',
+        isSecured: false,
+        isClearDataFailed: false,
+      },
+      popupStateReducer: {
+        isDataOverviewOpen: false,
+      },
+      repromptsQueueReducer: {
+        repromptsQueue: [] as any,
+      },
+    };
+
+    // @ts-expect-error
+    const store = createStore(rootReducer, initialState);
+
+    const setRangeTakenPopupMock = jest
+      .spyOn(sidePanelNotificationHelper, 'setRangeTakenPopup')
+      .mockImplementation(() => {});
+
+    const objectData = {
+      mstrObjectType: {
+        name: 'visualization',
+      },
+    };
+    jest
+      .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId')
+      .mockReturnValue(objectData as any);
+
+    // When
+    renderHook(
+      () =>
+        useGetSidePanelPopup({
+          sidePanelPopup: sidePanelPopupMock,
+          setSidePanelPopup: setSidePanelPopupMock,
+        }),
+      {
+        wrapper: ({ children }) => <Provider store={store}>{children}</Provider>,
+      }
+    );
+
+    // Then
+    expect(setRangeTakenPopupMock).toHaveBeenCalled();
+  });
+
+  it('should call setPageByRefreshFailedPopup  when conditions are met', () => {
+    // Given
+    const sidePanelPopupMock = { type: PopupTypes.RANGE_TAKEN };
+    const setSidePanelPopupMock = jest.fn();
+
+    const initialState = {
+      officeReducer: {
+        popupData: { type: PopupTypes.FAILED_TO_REFRESH_PAGES },
+        selectedObjects: [] as unknown as ObjectData[],
         isSecured: false,
         isClearDataFailed: false,
       },

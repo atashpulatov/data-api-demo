@@ -44,9 +44,12 @@ describe('SidePanelHelper', () => {
     const objectWorkingIds = 1;
     const mockedPageByObjects = [{ objectWorkingId: 1 }, { objectWorkingId: 2 }] as ObjectData[];
 
-    const mockedGetPageBySiblings = jest
-      .spyOn(pageByHelper, 'getPageBySiblings')
-      .mockReturnValueOnce(mockedPageByObjects);
+    const mockedGetPageByObjects = jest
+      .spyOn(pageByHelper, 'getAllPageByObjects')
+      .mockReturnValueOnce({
+        sourceObject: mockedPageByObjects[0],
+        pageBySiblings: mockedPageByObjects,
+      });
     const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
     const mockedRefreshRequested = jest
       .spyOn(operationActions, 'refreshRequested')
@@ -55,7 +58,7 @@ describe('SidePanelHelper', () => {
     // when
     sidePanelHelper.refreshMultiplePagesForPageBy(objectWorkingIds);
     // then
-    expect(mockedGetPageBySiblings).toHaveBeenCalled();
+    expect(mockedGetPageByObjects).toHaveBeenCalled();
     expect(mockedDispatch).toBeCalledTimes(mockedPageByObjects.length);
     expect(mockedRefreshRequested).toBeCalledTimes(mockedPageByObjects.length);
   });
@@ -65,9 +68,12 @@ describe('SidePanelHelper', () => {
     const objectWorkingIds = 1;
     const mockedPageByObjects = [{ objectWorkingId: 1 }, { objectWorkingId: 2 }] as ObjectData[];
 
-    const mockedGetPageBySiblings = jest
-      .spyOn(pageByHelper, 'getPageBySiblings')
-      .mockReturnValueOnce(mockedPageByObjects);
+    const mockedGetPageByObjects = jest
+      .spyOn(pageByHelper, 'getAllPageByObjects')
+      .mockReturnValueOnce({
+        sourceObject: mockedPageByObjects[0],
+        pageBySiblings: mockedPageByObjects,
+      });
     const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
     const mockedRemoveRequested = jest
       .spyOn(operationActions, 'removeRequested')
@@ -77,7 +83,7 @@ describe('SidePanelHelper', () => {
     sidePanelHelper.removeMultiplePagesForPageBy(objectWorkingIds);
 
     // then
-    expect(mockedGetPageBySiblings).toHaveBeenCalled();
+    expect(mockedGetPageByObjects).toHaveBeenCalled();
     expect(mockedDispatch).toBeCalledTimes(mockedPageByObjects.length);
     expect(mockedRemoveRequested).toBeCalledTimes(mockedPageByObjects.length);
   });
