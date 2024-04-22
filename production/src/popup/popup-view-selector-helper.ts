@@ -31,7 +31,12 @@ class PopupViewSelectorHelper {
       // action triggered by the Prompts dialog, it could lead to a cyclical loop in the prompts page
       // when editing a prompted report.
       if (this.isInstanceWithPromptsAnswered(props)) {
-        if (popupType === PopupTypeEnum.repromptingWindow) {
+        // Handle the case when the user is editing a prompted report or dossier.
+        if (
+          popupType === PopupTypeEnum.repromptingWindow ||
+          popupType === PopupTypeEnum.repromptReportDataOverview ||
+          popupType === PopupTypeEnum.repromptDossierDataOverview
+        ) {
           return getPromptedReportPopupType();
         }
       } else {
