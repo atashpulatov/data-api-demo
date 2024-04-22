@@ -13,6 +13,8 @@ import { PopupTypeEnum } from '../redux-reducer/popup-state-reducer/popup-state-
 import i18n from '../i18n';
 import { getNotificationButtons } from '../notification/notification-buttons';
 import { OperationTypes } from '../operation/operation-type-names';
+import { deleteObjectNotification } from '../redux-reducer/notification-reducer/notification-action-creators';
+import { cancelOperation } from '../redux-reducer/operation-reducer/operation-actions';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import {
@@ -95,7 +97,7 @@ class ErrorService {
   handleObjectBasedError = async (
     objectWorkingId: number,
     error: any,
-    callback: Function,
+    callback: () => Promise<void>,
     operationData: OperationData
   ): Promise<void> => {
     const errorType = this.getErrorType(error, operationData);
@@ -116,33 +118,7 @@ class ErrorService {
 
       officeReducerHelper.displayPopup(popupData);
     } else if (errorType === ErrorType.PAGE_BY_REFRESH_ERR) {
-      let selectedObjects = null;
-
-      const allPageByObjects = pageByHelper.getAllPageByObjects(objectWorkingId);
-      const pageBySiblings = pageByHelper.getAllPageBySiblings(objectWorkingId);
-
-      const { operations } = this.reduxStore.getState().operationReducer as OperationState;
-      for (const sibling of pageBySiblings) {
-        const isOperationExistForSibling = operations.some(
-          operation => operation.objectWorkingId === sibling.objectWorkingId
-        );
-        if (isOperationExistForSibling) {
-          selectedObjects = allPageByObjects;
-        }
-      }
-
-      const popupData = {
-        type: PopupTypes.FAILED_TO_REFRESH_PAGES,
-        objectWorkingId,
-        title: errorMessage,
-        message: details,
-        selectedObjects,
-        callback,
-      };
-
-      pageByHelper.clearOperationsForPageBySiblings(objectWorkingId);
-
-      officeReducerHelper.displayPopup(popupData);
+      this.handlePageByRefreshError(objectWorkingId, errorMessage, details, callback);
     } else {
       const { isDataOverviewOpen } = this.reduxStore?.getState()?.popupStateReducer || {};
 
@@ -160,6 +136,62 @@ class ErrorService {
         message: details,
         callback,
       });
+    }
+  };
+
+  handlePageByRefreshError = (
+    objectWorkingId: number,
+    errorMessage: string,
+    details: string,
+    callback: () => Promise<void>
+  ): void => {
+    let selectedObjects = null;
+
+    const { pageBySiblings, sourceObject } = pageByHelper.getAllPageByObjects(objectWorkingId);
+    const allPageByObjects = [sourceObject, ...pageBySiblings];
+
+    const { operations } = this.reduxStore.getState().operationReducer as OperationState;
+    for (const sibling of pageBySiblings) {
+      const isThereOperationForSibling = operations.some(
+        operation => operation.objectWorkingId === sibling.objectWorkingId
+      );
+      if (isThereOperationForSibling) {
+        selectedObjects = allPageByObjects;
+      }
+    }
+
+    const popupData = {
+      type: PopupTypes.FAILED_TO_REFRESH_PAGES,
+      objectWorkingId,
+      title: errorMessage,
+      message: details,
+      selectedObjects,
+      callback,
+    };
+
+    this.clearOperationsForPageBySiblings(objectWorkingId);
+
+    officeReducerHelper.displayPopup(popupData);
+  };
+
+  /**
+   * Clears operations for all Page-by siblings of the source object
+   *
+   * @param objectWorkingId Unique Id of the object allowing to reference specific object
+   */
+  clearOperationsForPageBySiblings = (objectWorkingId: number): void => {
+    const { pageBySiblings } = pageByHelper.getAllPageByObjects(objectWorkingId);
+
+    const { operations } = this.reduxStore.getState().operationReducer;
+
+    for (const sibling of pageBySiblings) {
+      const isThereOperationForSibling = operations.some(
+        (operation: OperationData) => operation.objectWorkingId === sibling.objectWorkingId
+      );
+      if (isThereOperationForSibling) {
+        this.reduxStore.dispatch(cancelOperation(sibling.objectWorkingId));
+        this.reduxStore.dispatch(deleteObjectNotification(sibling.objectWorkingId));
+      }
     }
   };
 

@@ -46,7 +46,10 @@ describe('SidePanelHelper', () => {
 
     const mockedGetPageByObjects = jest
       .spyOn(pageByHelper, 'getAllPageByObjects')
-      .mockReturnValueOnce(mockedPageByObjects);
+      .mockReturnValueOnce({
+        sourceObject: mockedPageByObjects[0],
+        pageBySiblings: mockedPageByObjects,
+      });
     const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
     const mockedRefreshRequested = jest
       .spyOn(operationActions, 'refreshRequested')
@@ -67,7 +70,10 @@ describe('SidePanelHelper', () => {
 
     const mockedGetPageByObjects = jest
       .spyOn(pageByHelper, 'getAllPageByObjects')
-      .mockReturnValueOnce(mockedPageByObjects);
+      .mockReturnValueOnce({
+        sourceObject: mockedPageByObjects[0],
+        pageBySiblings: mockedPageByObjects,
+      });
     const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
     const mockedRemoveRequested = jest
       .spyOn(operationActions, 'removeRequested')

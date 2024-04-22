@@ -159,7 +159,7 @@ class SidePanelNotificationHelper {
     objectWorkingId: number;
     activeCellAddress: string;
     setSidePanelPopup: Function;
-    callback: Function;
+    callback: () => () => Promise<void>;
   }): void => {
     const onCancel = (): void => {
       this.clearPopupDataAndRunCallback(callback);
@@ -198,34 +198,41 @@ class SidePanelNotificationHelper {
     objectWorkingId: number;
     selectedObjects: ObjectData[];
     setSidePanelPopup: Function;
-    callback: Function;
+    callback: () => Promise<void>;
     edit: (objectWorkingId: number) => void;
   }): void => {
     const onCancel = (): void => {
       this.clearPopupDataAndRunCallback(callback);
     };
 
+    const onOk = (refreshFailedOptions: PageByRefreshFailedOptions): void => {
+      this.clearPopupDataAndRunCallback(callback);
+      switch (refreshFailedOptions) {
+        case PageByRefreshFailedOptions.EDIT_AND_REIMPORT:
+          edit(objectWorkingId);
+          break;
+        case PageByRefreshFailedOptions.DELETE_FROM_WORKSHEET:
+          sidePanelHelper.removeMultiplePagesForPageBy(objectWorkingId);
+          break;
+        default:
+          break;
+      }
+    };
+
     setSidePanelPopup({
       type: PopupTypes.FAILED_TO_REFRESH_PAGES,
       selectedObjects,
-      onOk: (refreshFailedOptions: PageByRefreshFailedOptions): void => {
-        this.clearPopupDataAndRunCallback(callback);
-        switch (refreshFailedOptions) {
-          case PageByRefreshFailedOptions.EDIT_AND_REIMPORT:
-            edit(objectWorkingId);
-            break;
-          case PageByRefreshFailedOptions.DELETE_FROM_WORKSHEET:
-            sidePanelHelper.removeMultiplePagesForPageBy(objectWorkingId);
-            break;
-          default:
-            break;
-        }
-      },
+      onOk: (refreshFailedOptions: PageByRefreshFailedOptions): void => onOk(refreshFailedOptions),
       onClose: onCancel,
     });
   };
 
-  clearPopupDataAndRunCallback = (callback: Function): void => {
+  /**
+   * Clears the rendered popup data and runs the provided callback.
+   *
+   * @param callback Callback to run after clearing the popup data.
+   */
+  clearPopupDataAndRunCallback = (callback: () => void): void => {
     officeReducerHelper.clearPopupData();
     callback();
   };
