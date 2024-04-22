@@ -4,6 +4,7 @@ import { authenticationHelper } from '../authentication/authentication-helper';
 import instanceDefinitionHelper from '../mstr-object/instance/instance-definition-helper';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { pageByHelper } from '../page-by/page-by-helper';
+import { OverviewActionCommands } from './overview/overview-helper';
 
 import { PageByDataElement, PageByDisplayType } from '../page-by/page-by-types';
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
@@ -251,7 +252,25 @@ class PopupController {
         await officeApiHelper.getExcelSessionStatus(); // checking excel session status
       }
       await authenticationHelper.validateAuthToken();
-      if (dialogType === PopupTypeEnum.importedDataOverview) {
+
+      // Handles the action command for the overview based on the dialog type and command.
+      // If the dialog type is one of the valid types (importedDataOverview, repromptReportDataOverview,
+      // repromptDossierDataOverview) and either the dialog type is importedDataOverview or the command is
+      // RANGE_TAKEN_OK or RANGE_TAKEN_CLOSE, it calls the handleOverviewActionCommand method of the
+      // overviewHelper with the provided response.
+      const { RANGE_TAKEN_CLOSE, RANGE_TAKEN_OK } = OverviewActionCommands;
+      const validDialogTypes = [
+        PopupTypeEnum.importedDataOverview,
+        PopupTypeEnum.repromptReportDataOverview,
+        PopupTypeEnum.repromptDossierDataOverview,
+      ];
+
+      if (
+        validDialogTypes.includes(dialogType) &&
+        (dialogType === PopupTypeEnum.importedDataOverview ||
+          command === RANGE_TAKEN_OK ||
+          command === RANGE_TAKEN_CLOSE)
+      ) {
         await this.overviewHelper.handleOverviewActionCommand(response);
         return;
       }
