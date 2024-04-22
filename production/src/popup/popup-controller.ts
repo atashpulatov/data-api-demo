@@ -227,7 +227,6 @@ class PopupController {
     command: string,
     response: DialogResponse
   ): Promise<boolean> {
-    let wasHandledByOverview = false;
     const { RANGE_TAKEN_CLOSE, RANGE_TAKEN_OK } = OverviewActionCommands;
     const validDialogTypes = [
       PopupTypeEnum.importedDataOverview,
@@ -242,10 +241,17 @@ class PopupController {
         command === RANGE_TAKEN_CLOSE)
     ) {
       await this.overviewHelper.handleOverviewActionCommand(response);
-      wasHandledByOverview = true;
+      return true;
     }
 
-    return wasHandledByOverview;
+    if (
+      dialogType === PopupTypeEnum.dossierWindow ||
+      dialogType === PopupTypeEnum.repromptingWindow
+    ) {
+      await this.overviewHelper.handleOverviewActionCommand(response);
+    }
+
+    return false;
   }
 
   onMessageFromPopup = async (
@@ -279,8 +285,11 @@ class PopupController {
       this.resetDialogStates();
     }
 
+    const isMultipleRepromptNotDataOverviewOpen =
+      isMultipleRepromptQueueEmpty && !isDataOverviewOpen;
+
     try {
-      if (isMultipleRepromptQueueEmpty && !isDataOverviewOpen) {
+      if (isMultipleRepromptNotDataOverviewOpen) {
         // We will only close dialog if not in Multiple Reprompt workflow
         // or if the Multiple Reprompt queue has been cleared up.
         this.closeDialog(dialog);
@@ -294,13 +303,6 @@ class PopupController {
       // and repromptDossierDataOverview and if processed then stop further processing and return.
       if (await this.handleOverviewActionForOverviewPopups(dialogType, command, response)) {
         return;
-      }
-
-      if (
-        dialogType === PopupTypeEnum.dossierWindow ||
-        dialogType === PopupTypeEnum.repromptingWindow
-      ) {
-        await this.overviewHelper.handleOverviewActionCommand(response);
       }
 
       switch (command) {
@@ -349,7 +351,7 @@ class PopupController {
     } finally {
       // always reset this.reportParams to prevent reusing old references in future popups
       this.reportParams = null;
-      if (isMultipleRepromptQueueEmpty && !isDataOverviewOpen) {
+      if (isMultipleRepromptNotDataOverviewOpen) {
         // We will only reset popup related states when not in Multiple Reprompt workflow
         // or if the Multiple Reprompt queue has been cleared up.
         this.resetDialogStates();
