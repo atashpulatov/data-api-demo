@@ -153,7 +153,7 @@ describe('Page-by helper', () => {
     expect(pageByHelper.getPageByDataForDefaultPage).toHaveBeenCalledTimes(1);
   });
 
-  it('should return all page by siblings based on passed source object', () => {
+  it('should return all page by objects based on passed source object', () => {
     // given
     const mockedPageByData = {
       pageByDisplayType: PageByDisplayType.ALL_PAGES,
@@ -183,10 +183,10 @@ describe('Page-by helper', () => {
       .mockReturnValueOnce(mockedObjectData[0]);
 
     // when
-    const siblings = pageByHelper.getPageBySiblings(mockedObjectData[0].objectWorkingId);
+    const { sourceObject } = pageByHelper.getAllPageByObjects(mockedObjectData[0].objectWorkingId);
 
     // then
-    expect(siblings).toHaveLength(3);
+    expect(sourceObject.objectWorkingId).toEqual(mockedObjectData[0].objectWorkingId);
   });
 
   it.each`

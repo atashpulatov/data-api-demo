@@ -144,8 +144,8 @@ export const errorCodes = {
   ERR009: 'ERR009',
 };
 
-export const isPageByRefreshError = (error: any): boolean => {
-  const errorString = error.response.body.message;
+export const getIsPageByRefreshError = (error: any): boolean => {
+  const errorString = error?.response?.body?.message;
 
   const pageByAttributeChangedErrorPattern =
     /The report has \d+ page-by units but you have input \d+ page-by selected elements\./;

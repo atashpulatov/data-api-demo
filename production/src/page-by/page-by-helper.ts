@@ -22,12 +22,14 @@ import {
 
 class PageByHelper {
   /**
-   * Gets Page-by siblings of the source object
+   * Gets all Page-by elements of the source object
    *
    * @param objectWorkingId Unique Id of the object allowing to reference specific object
-   * @returns Array of objects containing information about the Page-by siblings
+   * @returns Array of objects containing information about the all Page-by objects
    */
-  getPageBySiblings = (objectWorkingId: number): ObjectData[] => {
+  getAllPageByObjects = (
+    objectWorkingId: number
+  ): { sourceObject: ObjectData; pageBySiblings: ObjectData[] } => {
     const sourceObject =
       officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
     const { objects } = reduxStore.getState().objectReducer;
@@ -35,7 +37,13 @@ class PageByHelper {
     const pageByObjects = objects.filter(
       object => object?.pageByData?.pageByLinkId === sourceObject.pageByData?.pageByLinkId
     );
-    return pageByObjects.sort((a, b) => a.objectWorkingId - b.objectWorkingId);
+    pageByObjects.sort((a, b) => a.objectWorkingId - b.objectWorkingId);
+
+    const pageBySiblings = pageByObjects.filter(
+      sibling => sibling.objectWorkingId !== objectWorkingId
+    );
+
+    return { sourceObject, pageBySiblings };
   };
 
   /**
@@ -156,9 +164,10 @@ class PageByHelper {
    * @param objectWorkingId Unique identifier of the object
    */
   handleRefreshingMultiplePages = (objectWorkingId: number): void => {
-    const pageByObjects = this.getPageBySiblings(objectWorkingId);
+    const { pageBySiblings, sourceObject } = this.getAllPageByObjects(objectWorkingId);
+    pageBySiblings.push(sourceObject);
 
-    pageByObjects.forEach((pageByObject: ObjectData) => {
+    pageBySiblings.forEach((pageByObject: ObjectData) => {
       reduxStore.dispatch(refreshRequested(pageByObject.objectWorkingId, pageByObject?.importType));
     });
   };
@@ -168,10 +177,12 @@ class PageByHelper {
    *
    * @param objectWorkingId Unique identifier of the object
    */
+  // TODO: combine with handleRefreshingMultiplePages
   handleRemovingMultiplePages = (objectWorkingId: number): void => {
-    const pageByObjects = this.getPageBySiblings(objectWorkingId);
+    const { pageBySiblings, sourceObject } = this.getAllPageByObjects(objectWorkingId);
+    pageBySiblings.push(sourceObject);
 
-    pageByObjects.forEach((pageByObject: ObjectData) => {
+    pageBySiblings.forEach((pageByObject: ObjectData) => {
       reduxStore.dispatch(removeRequested(pageByObject.objectWorkingId, pageByObject?.importType));
     });
   };

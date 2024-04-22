@@ -3,6 +3,9 @@ import { sidePanelService } from './side-panel-service';
 
 import { reduxStore } from '../../store';
 
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
+
 describe('SidePanelService', () => {
   afterEach(() => {
     jest.restoreAllMocks();
@@ -23,6 +26,30 @@ describe('SidePanelService', () => {
       activeCellAddress,
       setSidePanelPopup,
       callback,
+    });
+    // then
+    expect(setSidePanelPopup).toBeCalledTimes(1);
+  });
+
+  it('setPageByRefreshFailedPopup should set up range taken popup', () => {
+    // given
+    const objectWorkingId = 1;
+    const selectedObjects = [
+      { objectWorkingId: 1 },
+      { objectWorkingId: 2 },
+    ] as unknown as ObjectData[];
+    const setSidePanelPopup = jest.fn();
+    const callback = jest.fn();
+
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+
+    // when
+    sidePanelNotificationHelper.setPageByRefreshFailedPopup({
+      objectWorkingId,
+      selectedObjects,
+      setSidePanelPopup,
+      callback,
+      edit: jest.fn(),
     });
     // then
     expect(setSidePanelPopup).toBeCalledTimes(1);
@@ -76,9 +103,11 @@ describe('SidePanelService', () => {
   it('injectNotificationsToObjects should set up range taken popup', () => {
     // given
     const objectWorkingId = 1;
-    const loadedObjects = [{ objectWorkingId }];
+    const loadedObjects = [{ objectWorkingId }] as unknown as ObjectData[];
     const notifications = [{ objectWorkingId, notificationData: 'data' }];
-    const operations = [{ objectWorkingId, operationType: 'EDIT_OPERATION' }];
+    const operations = [
+      { objectWorkingId, operationType: 'EDIT_OPERATION' },
+    ] as unknown as OperationData[];
 
     const expectedObjects = [
       {
@@ -110,6 +139,7 @@ describe('SidePanelService', () => {
     ({ isSecured, isClearDataFailed, popupType }) => {
       // given
       const mockedDispatch = jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({
+        // @ts-expect-error
         officeReducer: { isSecured, isClearDataFailed },
       });
       const mockedViewData = jest.spyOn(sidePanelService, 'viewData').mockImplementation();
@@ -119,6 +149,7 @@ describe('SidePanelService', () => {
         type: popupType,
       };
       // when
+      // @ts-expect-error
       const popup = sidePanelNotificationHelper.setClearDataPopups(mockedViewData);
       // then
       expect({ ...popup }).toMatchObject(expectedObject);
@@ -139,7 +170,7 @@ describe('SidePanelService', () => {
     'shouldGenerateProgressPercentage should return correct boolean for operation type',
     ({ operationType, expectedResult }) => {
       // given
-      const objectOperation = { operationType };
+      const objectOperation = { operationType } as unknown as OperationData;
 
       // when
       const returnedValue =
