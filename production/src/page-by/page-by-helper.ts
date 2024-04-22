@@ -37,24 +37,14 @@ class PageByHelper {
     const pageByObjects = objects.filter(
       object => object?.pageByData?.pageByLinkId === sourceObject.pageByData?.pageByLinkId
     );
-    const sortedPageByObjects = pageByObjects.sort((a, b) => a.objectWorkingId - b.objectWorkingId);
-    const pageBySiblings = sortedPageByObjects.filter(
+    pageByObjects.sort((a, b) => a.objectWorkingId - b.objectWorkingId);
+
+    const pageBySiblings = pageByObjects.filter(
       sibling => sibling.objectWorkingId !== objectWorkingId
     );
 
     return { sourceObject, pageBySiblings };
   };
-
-  /**
-   * Gets all Page-by siblings of the source object
-   *
-   * @param objectWorkingId Unique Id of the object allowing to reference specific object
-   * @returns Array of objects containing information about the Page-by siblings
-   */
-  /* getAllPageBySiblings = (objectWorkingId: number): ObjectData[] => {
-    const allPageByElements = this.getAllPageByObjects(objectWorkingId);
-    return allPageByElements.filter(sibling => sibling.objectWorkingId !== objectWorkingId);
-  }; */
 
   /**
    * Gets valid combinations of Report's Page-by elements
