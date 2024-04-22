@@ -139,6 +139,14 @@ class ErrorService {
     }
   };
 
+  /**
+   * Handles page by refresh error
+   *
+   * @param objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param errorMessage Error message string
+   * @param details Error message details
+   * @param callback Function to be called after click on warning notification
+   */
   handlePageByRefreshError = (
     objectWorkingId: number,
     errorMessage: string,
@@ -389,7 +397,7 @@ class ErrorService {
       operation?.operationType === OperationTypes.REFRESH_OPERATION &&
       getIsPageByRefreshError(error);
 
-    if (error?.response?.body?.message && isPageByRefreshError) {
+    if (isPageByRefreshError) {
       return ErrorType.PAGE_BY_REFRESH_ERR;
     }
 

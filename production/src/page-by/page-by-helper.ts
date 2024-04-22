@@ -177,6 +177,7 @@ class PageByHelper {
    *
    * @param objectWorkingId Unique identifier of the object
    */
+  // TODO: combine with handleRefreshingMultiplePages
   handleRemovingMultiplePages = (objectWorkingId: number): void => {
     const { pageBySiblings, sourceObject } = this.getAllPageByObjects(objectWorkingId);
     pageBySiblings.push(sourceObject);

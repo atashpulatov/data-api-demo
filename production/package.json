@@ -10,7 +10,6 @@
     "build": "react-scripts build",
     "test": "jest --silent",
     "test:watch": "jest --watchAll",
-    "test:debug": "react-scripts test --debug",
     "test:coverage": "CI=true jest --silent --coverage --noStackTrace --forceExit --ci --json --outputFile=./coverage/test-results.json",
     "eslint": "eslint ./src --ext .js,.jsx,.ts,.tsx --max-warnings=0",
     "eslint:json": "eslint ./src --ext .js,.jsx,.ts,.tsx --max-warnings=0 --format json --output-file ./coverage/eslint.json",
