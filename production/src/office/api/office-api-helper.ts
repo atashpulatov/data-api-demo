@@ -271,6 +271,50 @@ class OfficeApiHelper {
   }
 
   /**
+   * Retrieves the excel sheet by sheet id.
+   *
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param worksheetId Worksheet id
+   * 
+   * @returns Reference to active Excel Worksheet
+   */
+  async copyRangeFromSourceWorksheet(rangeMigrationInfo: any, excelContext: Excel.RequestContext): Promise<void> {
+    const { sourceTableRange, sourceWorksheet, targetTableRange, targetWorksheet } = rangeMigrationInfo;
+
+    targetWorksheet.getRange(targetTableRange).copyFrom(sourceWorksheet.getRange(sourceTableRange));
+    await excelContext.sync();
+  }
+
+  /**
+   * Retrieves the excel sheet by sheet id.
+   *
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param worksheetId Worksheet id
+   * 
+   * @returns Reference to active Excel Worksheet
+   */
+  async hideExcelWorksheet(worksheetId: string, excelContext: Excel.RequestContext): Promise<Excel.Worksheet> {
+    const worksheet = excelContext.workbook.worksheets.getItem(worksheetId);
+    worksheet.visibility = Excel.SheetVisibility.hidden;
+
+    await excelContext.sync();
+
+    return worksheet;
+  }
+
+  /**
+   * Inserts the list of excel worksheets into current functional workbook.
+   *
+   * @param externalWorkbookBase64 Export engine workbook encoded in base 64
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * 
+   * @returns Reference to active Excel Worksheet
+   */
+  inserExcelWorksheets(externalWorkbookBase64: string, excelContext: Excel.RequestContext): any {
+    return excelContext.workbook.insertWorksheetsFromBase64(externalWorkbookBase64);
+  }
+
+  /**
    * Converts number of column to Excel column name.
    *
    * @param headerCount Number of rows

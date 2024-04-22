@@ -929,7 +929,7 @@ class MstrObjectRestService {
   /**
    * Fetches the workbook where the specific visualization exported to excel using export engine.
    * 
-   * @param docId unique identifier of dossier
+   * @param dossierId unique identifier of dossier
    * @param dossierInstanceId unique identifier of dossier instance
    * @param visualizationKey visualization key
    * @param projectId unique identifier of the mstr project
@@ -937,14 +937,20 @@ class MstrObjectRestService {
    * @returns Readable stream(blob)
    */
   getWorksheetBinary = async (
-    docId: string,
-    dossierInstanceId: string,
-    visualizationKey: string,
-    projectId: string
+    { dossierId,
+      dossierInstanceId,
+      visualizationKey,
+      projectId
+    }: {
+      dossierId: string,
+      dossierInstanceId: string,
+      visualizationKey: string,
+      projectId: string
+    }
   ): Promise<any> => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/documents/${docId}/instances/${dossierInstanceId}/excel`;
+    const fullPath = `${envUrl}/documents/${dossierId}/instances/${dossierInstanceId}/excel`;
 
     const body = { pageOption: 'DEFAULT', pagePerSheet: false, keys: [visualizationKey] };
 
@@ -952,12 +958,11 @@ class MstrObjectRestService {
       method: 'POST',
       credentials: 'include' as RequestCredentials,
       headers: {
-        ...(dossierInstanceId && { 'X-MSTR-MS-Instance': dossierInstanceId }),
+        ...(dossierInstanceId && { 'x-mstr-ms-instance': dossierInstanceId }),
         Accept: 'application/octet-stream',
         'Content-type': 'application/json; charset=utf-8',
         ...(projectId && { 'x-mstr-projectId': projectId }),
-        ...(authToken && { 'X-MSTR-AuthToken': authToken }),
-
+        ...(authToken && { 'x-mstr-authtoken': authToken }),
       },
       body: JSON.stringify(body),
     };
