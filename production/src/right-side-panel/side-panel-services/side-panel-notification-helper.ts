@@ -1,4 +1,4 @@
-import { PopupTypes } from '@mstr/connector-components';
+import { PageByRefreshFailedOptions, PopupTypes } from '@mstr/connector-components';
 
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
@@ -159,11 +159,10 @@ class SidePanelNotificationHelper {
     objectWorkingId: number;
     activeCellAddress: string;
     setSidePanelPopup: Function;
-    callback: Function;
+    callback: () => () => Promise<void>;
   }): void => {
     const onCancel = (): void => {
-      officeReducerHelper.clearPopupData();
-      callback();
+      this.clearPopupDataAndRunCallback(callback);
     };
 
     setSidePanelPopup({
@@ -176,6 +175,66 @@ class SidePanelNotificationHelper {
       onCancel,
       onClose: onCancel,
     });
+  };
+
+  /**
+   * Creates or updates pageby refresh failed popup.
+   * Saves the popup and the objectWorkingId in state of RightSidePanel.
+   * Called after value in redux is changed
+   *
+   * @param data  Data required to create and update pageby refresh failed popup.
+   * @param data.objectWorkingId  Uniqe id of source object for duplication.
+   * @param data.selectedObjects  List of objects to be displayed in the popup.
+   * @param data.callback  Callback to cancel operation
+   * @param data.setSidePanelPopup Callback to save popup in state of RightSidePanel.
+   */
+  setPageByRefreshFailedPopup = ({
+    objectWorkingId,
+    selectedObjects,
+    setSidePanelPopup,
+    callback,
+    edit,
+  }: {
+    objectWorkingId: number;
+    selectedObjects: ObjectData[];
+    setSidePanelPopup: Function;
+    callback: () => Promise<void>;
+    edit: (objectWorkingId: number) => void;
+  }): void => {
+    const onCancel = (): void => {
+      this.clearPopupDataAndRunCallback(callback);
+    };
+
+    const onOk = (refreshFailedOptions: PageByRefreshFailedOptions): void => {
+      this.clearPopupDataAndRunCallback(callback);
+      switch (refreshFailedOptions) {
+        case PageByRefreshFailedOptions.EDIT_AND_REIMPORT:
+          edit(objectWorkingId);
+          break;
+        case PageByRefreshFailedOptions.DELETE_FROM_WORKSHEET:
+          sidePanelHelper.removeMultiplePagesForPageBy(objectWorkingId);
+          break;
+        default:
+          break;
+      }
+    };
+
+    setSidePanelPopup({
+      type: PopupTypes.FAILED_TO_REFRESH_PAGES,
+      selectedObjects,
+      onOk: (refreshFailedOptions: PageByRefreshFailedOptions): void => onOk(refreshFailedOptions),
+      onClose: onCancel,
+    });
+  };
+
+  /**
+   * Clears the rendered popup data and runs the provided callback.
+   *
+   * @param callback Callback to run after clearing the popup data.
+   */
+  clearPopupDataAndRunCallback = (callback: () => void): void => {
+    officeReducerHelper.clearPopupData();
+    callback();
   };
 
   /**

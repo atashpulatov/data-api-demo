@@ -175,7 +175,7 @@ class OperationErrorHandler {
    * @param objectData Unique Id of the object allowing to reference specific object
    * @param operationData Contains informatons about current operation
    */
-  getCallback(objectData: ObjectData, operationData: OperationData): Function {
+  getCallback(objectData: ObjectData, operationData: OperationData): () => Promise<void> {
     const { operationType } = operationData;
 
     let callback;
