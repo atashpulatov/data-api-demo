@@ -7,7 +7,7 @@ import { ObjectData } from '../types/object-types';
 import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 
-const workbookBase64StartIndentationLength = 7;
+const base64BlobFileDataSubstring = 'base64,';
 
 class StepExportExcelToCurrentWorkbook {
   /**
@@ -76,7 +76,8 @@ class StepExportExcelToCurrentWorkbook {
         try {
           const activeWorksheet = officeApiHelper.getCurrentExcelSheet(excelContext);
 
-          const externalWorkbookBase64 = fileData.substring(fileData.indexOf('base64,') + workbookBase64StartIndentationLength);
+          // slice the actual worbook encoded in base 64 from file data starting the last index of 'base64,' substring indicator
+          const externalWorkbookBase64 = fileData.substring(fileData.indexOf(base64BlobFileDataSubstring) + base64BlobFileDataSubstring.length);
           const insertedWorksheets = officeApiHelper.inserExcelWorksheets(externalWorkbookBase64, excelContext);
 
           activeWorksheet.activate();
