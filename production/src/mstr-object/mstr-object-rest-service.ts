@@ -958,7 +958,6 @@ class MstrObjectRestService {
       method: 'POST',
       credentials: 'include' as RequestCredentials,
       headers: {
-        ...(dossierInstanceId && { 'x-mstr-ms-instance': dossierInstanceId }),
         Accept: 'application/octet-stream',
         'Content-type': 'application/json; charset=utf-8',
         ...(projectId && { 'x-mstr-projectId': projectId }),
