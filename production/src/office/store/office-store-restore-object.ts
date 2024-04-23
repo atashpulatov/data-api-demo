@@ -59,7 +59,7 @@ class OfficeStoreRestoreObject {
   excludeObjects = (objects: ObjectData[], objectImportType: ObjectImportType): ObjectData[] => {
     const isExcelApiSupported = officeReducerHelper.identifyExcelApiSupport(objectImportType);
 
-    if (!isExcelApiSupported && objects?.filter) {
+    if (!isExcelApiSupported) {
       return objects.filter(object => object?.importType !== objectImportType);
     }
 
