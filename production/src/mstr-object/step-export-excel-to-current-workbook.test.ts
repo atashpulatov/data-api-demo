@@ -1,9 +1,10 @@
+import { officeApiHelper } from '../office/api/office-api-helper';
+import { mstrObjectRestService } from './mstr-object-rest-service';
+
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../types/object-types';
 
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
-import { officeApiHelper } from '../office/api/office-api-helper';
-import { mstrObjectRestService } from './mstr-object-rest-service';
 import stepExportExcelToCurrentWorkbook from './step-export-excel-to-current-workbook';
 
 describe('StepExportExcelToCurrentWorkbook', () => {

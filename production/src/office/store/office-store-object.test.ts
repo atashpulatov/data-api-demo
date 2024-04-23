@@ -149,12 +149,12 @@ describe('OfficeStoreObject', () => {
     jest.spyOn(settingsMock, 'get').mockReturnValue(objectsInOfficeStore);
 
     // when
-    const objects = officeStoreObject.mergeStoreObjectsToRedux(false, objectInRedux, ObjectImportType.FORMATTED_TABLE);
+    const objects = officeStoreObject.mergeStoreObjectsToRedux(objectInRedux, ObjectImportType.FORMATTED_TABLE);
 
     // then
     expect(officeStoreHelper.getOfficeSettings).toHaveBeenCalled();
     expect(settingsMock.get).toHaveBeenCalled();
-    expect(objects.length).toEqual(2);
+    expect(objects).toHaveLength(2);
   });
 
   it('saveObjectsInExcelStore should work as expected', async () => {
