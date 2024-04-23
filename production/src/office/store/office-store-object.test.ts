@@ -6,6 +6,7 @@ import officeStoreObject from './office-store-object';
 
 import { errorService } from '../../error/error-handler';
 import * as objectActions from '../../redux-reducer/object-reducer/object-actions';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 const internalData = {} as any;
 
@@ -139,15 +140,35 @@ describe('OfficeStoreObject', () => {
     expect(officeStoreObject.removeObjectInExcelStore).toHaveBeenCalledWith(2137);
   });
 
+  it('mergeStoreObjectsToRedux should work as expected', async () => {
+    // given
+    const objectsInOfficeStore = [{ objectWorkingId: 12345673, importType: ObjectImportType.FORMATTED_TABLE }];
+    const objectInRedux: any = [{ objectWorkingId: 62345674, importType: ObjectImportType.TABLE }];
+
+    jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
+    jest.spyOn(settingsMock, 'get').mockReturnValue(objectsInOfficeStore);
+
+    // when
+    const objects = officeStoreObject.mergeStoreObjectsToRedux(false, objectInRedux, ObjectImportType.FORMATTED_TABLE);
+
+    // then
+    expect(officeStoreHelper.getOfficeSettings).toHaveBeenCalled();
+    expect(settingsMock.get).toHaveBeenCalled();
+    expect(objects.length).toEqual(2);
+  });
+
   it('saveObjectsInExcelStore should work as expected', async () => {
     // given
+    const objects = ['objectsTest'];
 
     jest
       .spyOn(reduxStore, 'getState')
       // @ts-expect-error
-      .mockReturnValue({ objectReducer: { objects: ['objectsTest'] }, officeReducer: { isShapeAPISupported: true, isInsertWorksheetAPISupported: true } });
+      .mockReturnValue({ objectReducer: { objects }, officeReducer: { isShapeAPISupported: true, isInsertWorksheetAPISupported: true } });
 
     jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
+
+    jest.spyOn(officeStoreObject, 'mergeStoreObjectsToRedux').mockReturnValue(objects);
 
     // when
     officeStoreObject.saveObjectsInExcelStore();
@@ -155,7 +176,9 @@ describe('OfficeStoreObject', () => {
     // then
     expect(officeStoreHelper.getOfficeSettings).toHaveBeenCalledTimes(1);
 
-    expect(settingsMock.get('storedObjects')).toEqual(['objectsTest']);
+    expect(settingsMock.get('storedObjects')).toEqual(objects);
+
+    expect(officeStoreObject.mergeStoreObjectsToRedux).toHaveBeenCalledTimes(2);
 
     expect(settingsMock.saveAsync).toHaveBeenCalledTimes(1);
   });

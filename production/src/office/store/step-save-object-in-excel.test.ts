@@ -105,4 +105,44 @@ describe('StepSaveObjectInExcel', () => {
     expect(officeStoreObject.saveObjectsInExcelStore).toBeCalledTimes(1);
     expect(officeStoreObject.saveObjectsInExcelStore).toBeCalledWith();
   });
+
+  it('saveObject should work as expected', async () => {
+    // given
+    const objectDataMock = {
+      objectWorkingId: 2137,
+      preparedInstanceId: 'preparedInstanceIdTest',
+      details: {},
+      importType: 'table',
+    } as unknown as ObjectData;
+
+    jest.spyOn(officeStoreObject, 'saveObjectsInExcelStore').mockImplementation();
+
+    jest.spyOn(operationStepDispatcher, 'completeSaveObjectInExcel').mockImplementation();
+
+    // @ts-expect-error
+    stepSaveObjectInExcel.init({ dispatch: jest.fn() });
+    // when
+    await stepSaveObjectInExcel.saveObject(objectDataMock, {
+      instanceDefinition: {
+        rows: 5,
+        columns: 'columnsTest',
+        mstrTable: {},
+      },
+    } as unknown as OperationData);
+
+    // then
+    expect(objectDataMock.previousTableDimensions).toEqual({
+      rows: 5,
+      columns: 'columnsTest',
+    });
+    expect(objectDataMock.details.excelTableSize).toEqual({
+      rows: 6,
+      columns: 'columnsTest',
+    });
+    expect(objectDataMock.refreshDate).toEqual('nowTest');
+    expect(objectDataMock).not.toHaveProperty('preparedInstanceId');
+
+    expect(officeStoreObject.saveObjectsInExcelStore).toBeCalledTimes(1);
+    expect(officeStoreObject.saveObjectsInExcelStore).toBeCalledWith();
+  });
 });
