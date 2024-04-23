@@ -36,7 +36,7 @@ class StepExportExcelToCurrentWorkbook {
 
       // @ts-expect-error
       const { visualizationKey } = visualizationInfo;
-      const response = await mstrObjectRestService.exportExcelForDossier(
+      const response = await mstrObjectRestService.exportDossierToExcel(
         {
           dossierId: objectId,
           dossierInstanceId: instanceDefinition.instanceId,

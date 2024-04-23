@@ -936,7 +936,7 @@ class MstrObjectRestService {
    * 
    * @returns Readable stream(blob)
    */
-  exportExcelForDossier = async (
+  exportDossierToExcel = async (
     { dossierId,
       dossierInstanceId,
       visualizationKey,
