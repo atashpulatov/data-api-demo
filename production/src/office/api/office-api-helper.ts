@@ -271,7 +271,7 @@ class OfficeApiHelper {
   }
 
   /**
-   * Retrieves the excel sheet by sheet id.
+   * Copies the range from source worksheet to target worksheet.
    *
    * @param excelContext Reference to Excel Context used by Excel API functions
    * @param worksheetId Worksheet id
@@ -286,7 +286,7 @@ class OfficeApiHelper {
   }
 
   /**
-   * Retrieves the excel sheet by sheet id.
+   * Hides the excel worksheet as soft hidden.
    *
    * @param excelContext Reference to Excel Context used by Excel API functions
    * @param worksheetId Worksheet id
@@ -295,7 +295,7 @@ class OfficeApiHelper {
    */
   async hideExcelWorksheet(worksheetId: string, excelContext: Excel.RequestContext): Promise<Excel.Worksheet> {
     const worksheet = excelContext.workbook.worksheets.getItem(worksheetId);
-    worksheet.visibility = Excel.SheetVisibility.veryHidden;
+    worksheet.visibility = Excel.SheetVisibility.hidden;
 
     await excelContext.sync();
 
