@@ -10,6 +10,8 @@ import { errorService } from '../../error/error-handler';
 import * as answersActions from '../../redux-reducer/answers-reducer/answers-actions';
 import * as objectActions from '../../redux-reducer/object-reducer/object-actions';
 import { OfficeSettingsEnum } from '../../constants/office-constants';
+import officeReducerHelper from './office-reducer-helper'
+import { ObjectImportType } from '../../mstr-object/constants';
 
 const internalData = {} as any;
 
@@ -88,12 +90,16 @@ describe.each`
         .mockResolvedValue(restoredFromExcelObject);
       jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
+      jest.spyOn(officeStoreRestoreObject, 'excludeObjects').mockReturnValue(restoredFromExcelObject);
+
       // when
       await officeStoreRestoreObject.restoreObjectsFromExcelStore();
 
       // then
       expect(officeStoreHelper.getOfficeSettings).toBeCalledTimes(1);
       expect(officeStoreHelper.getOfficeSettings).toBeCalledWith();
+
+      expect(officeStoreRestoreObject.excludeObjects).toHaveBeenCalledTimes(2);
 
       expect(officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore).toBeCalledTimes(1);
       expect(officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore).toBeCalledWith(
@@ -153,6 +159,9 @@ describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
 
     jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
+    const objects: any = ['excludedObjects'];
+    jest.spyOn(officeStoreRestoreObject, 'excludeObjects').mockReturnValue(objects);
+
     // when
     await officeStoreRestoreObject.restoreObjectsFromExcelStore();
 
@@ -161,6 +170,7 @@ describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
     expect(officeStoreHelper.getOfficeSettings).toBeCalledWith();
 
     expect(officeStoreRestoreObject.restoreLegacyObjectsWithNewProps).toBeCalledTimes(1);
+    expect(officeStoreRestoreObject.excludeObjects).toHaveBeenCalledTimes(2);
 
     expect(reduxStore.dispatch).toBeCalledTimes(1);
   });
@@ -559,5 +569,52 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
     // then
     expect(officeStoreHelper.getOfficeSettings).toBeCalledTimes(1);
     expect(result).toEqual(value);
+  });
+  it('getExcelSettingValue works as expected', () => {
+    // given
+    const key = 'settingsKey';
+    const value = 'value';
+    settingsMock.saveAsync = jest.fn();
+    settingsMock.set(key, value);
+    jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
+
+    // when
+    const result = officeStoreRestoreObject.getExcelSettingValue(key);
+
+    // then
+    expect(officeStoreHelper.getOfficeSettings).toBeCalledTimes(1);
+    expect(result).toEqual(value);
+  });
+
+  describe('OfficeStoreRestoreObject excludeObjects()', () => {
+    it('excludeObjects works as expected and filters out formatted_table object', () => {
+      // given
+      const objects: any = [{ objectWorkingId: 12345673, importType: ObjectImportType.FORMATTED_TABLE }];
+
+      jest.spyOn(officeReducerHelper, 'identifyExcelApiSupport').mockReturnValue(false);
+
+      // when
+      const result = officeStoreRestoreObject.excludeObjects(objects, ObjectImportType.FORMATTED_TABLE);
+
+      // then
+      expect(officeReducerHelper.identifyExcelApiSupport).toHaveBeenCalled()
+
+      expect(result).toHaveLength(0);
+    });
+
+    it('excludeObjects works as expected and does not filter out formatted_table object', () => {
+      // given
+      const objects: any = [{ objectWorkingId: 12345673, importType: ObjectImportType.FORMATTED_TABLE }];
+
+      jest.spyOn(officeReducerHelper, 'identifyExcelApiSupport').mockReturnValue(true);
+
+      // when
+      const result = officeStoreRestoreObject.excludeObjects(objects, ObjectImportType.FORMATTED_TABLE);
+
+      // then
+      expect(officeReducerHelper.identifyExcelApiSupport).toHaveBeenCalled()
+
+      expect(result).toHaveLength(1);
+    });
   });
 });
