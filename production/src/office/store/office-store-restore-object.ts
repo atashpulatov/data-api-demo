@@ -11,7 +11,7 @@ import { restoreAllAnswers } from '../../redux-reducer/answers-reducer/answers-a
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
 import officeApiDataLoader from '../api/office-api-data-loader';
 import { OfficeSettingsEnum } from '../../constants/office-constants';
-import { excelApiSupportedObjectImportTypes,ObjectImportType } from '../../mstr-object/constants';
+import { excelApiSupportedObjectImportTypes, ObjectImportType } from '../../mstr-object/constants';
 
 class OfficeStoreRestoreObject {
   reduxStore: ReduxStore;
@@ -57,7 +57,7 @@ class OfficeStoreRestoreObject {
    * @returns Contains the objects object definitions from excel document
    */
   excludeObjects = (objects: ObjectData[], objectImportType: ObjectImportType): ObjectData[] => {
-    const isExcelApiSupported = officeReducerHelper.isExcelApiSupported(objectImportType);
+    const isExcelApiSupported = officeReducerHelper.identifyExcelApiSupport(objectImportType);
 
     if (!isExcelApiSupported && objects?.filter) {
       return objects.filter(object => object?.importType !== objectImportType);

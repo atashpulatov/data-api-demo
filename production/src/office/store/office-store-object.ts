@@ -8,7 +8,7 @@ import { ObjectData } from '../../types/object-types';
 import { errorService } from '../../error/error-handler';
 import { removeObject } from '../../redux-reducer/object-reducer/object-actions';
 import { OfficeSettingsEnum } from '../../constants/office-constants';
-import { excelApiSupportedObjectImportTypes,ObjectImportType } from '../../mstr-object/constants';
+import { excelApiSupportedObjectImportTypes, ObjectImportType } from '../../mstr-object/constants';
 
 class OfficeStoreObject {
   reduxStore: ReduxStore;
@@ -62,7 +62,7 @@ class OfficeStoreObject {
    * @returns Contains the objects definitions from excel document
    */
   mergeStoreObjectsToRedux = (objects: ObjectData[], objectImportType: ObjectImportType): any => {
-    const isExcelApiSupported = officeReducerHelper.isExcelApiSupported(objectImportType);
+    const isExcelApiSupported = officeReducerHelper.identifyExcelApiSupport(objectImportType);
 
     if (!isExcelApiSupported) {
       const settings = officeStoreHelper.getOfficeSettings();
