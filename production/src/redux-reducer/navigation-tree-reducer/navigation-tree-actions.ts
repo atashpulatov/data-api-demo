@@ -20,6 +20,16 @@ function requestImport(data: any) {
     dispatch({ type: NavigationTreeActionTypes.REQUEST_IMPORT, data });
 }
 
+function requestPageByModalOpen(data: any) {
+  return (dispatch: Dispatch<any>) =>
+    dispatch({ type: NavigationTreeActionTypes.REQUEST_PAGE_BY_MODAL_OPEN, data });
+}
+
+function requestPageByModalClose() {
+  return (dispatch: Dispatch<any>) =>
+    dispatch({ type: NavigationTreeActionTypes.REQUEST_PAGE_BY_MODAL_CLOSE });
+}
+
 function promptsAnswered(data: any) {
   return (dispatch: Dispatch<any>) =>
     dispatch({ type: NavigationTreeActionTypes.PROMPTS_ANSWERED, data });
@@ -67,6 +77,8 @@ function updateSelectedMenu(data: any) {
 export const navigationTreeActions = {
   selectObject,
   requestImport,
+  requestPageByModalOpen,
+  requestPageByModalClose,
   promptsAnswered,
   cancelImportRequest,
   startImport,

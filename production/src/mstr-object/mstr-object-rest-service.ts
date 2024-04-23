@@ -385,11 +385,10 @@ class MstrObjectRestService {
   }: {
     objectId: string;
     projectId: string;
-    mstrObjectType: MstrObjectTypes;
-    dossierData: DossierData;
-    body: any;
-    limit: number;
-    displayAttrFormNames: DisplayAttrFormNames;
+    mstrObjectType?: MstrObjectTypes;
+    body?: any;
+    limit?: number;
+    displayAttrFormNames?: DisplayAttrFormNames;
   }): Promise<InstanceDefinition> => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
@@ -507,11 +506,10 @@ class MstrObjectRestService {
   }: {
     objectId: string;
     projectId: string;
-    mstrObjectType: MstrObjectTypes;
-    dossierData: DossierData;
-    body: any;
+    mstrObjectType?: MstrObjectTypes;
+    body?: any;
     instanceId: string;
-    displayAttrFormNames: DisplayAttrFormNames;
+    displayAttrFormNames?: DisplayAttrFormNames;
   }): Promise<InstanceDefinition> => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;

@@ -110,6 +110,12 @@ const objectList: { [key: string]: Partial<ObjectData> } = {
     objectId: 'B570B68011EA637625CE0080EF65F1FA',
     projectId: 'B7CA92F04B9FAE8D941C3E9B7E0CD754',
   },
+  PageByDerivedElement: {
+    name: 'View Report - Derived Element in the Page-by',
+    mstrObjectType: mstrObjectType.mstrObjectType.report,
+    objectId: '6E105112477A4D178B1F59BAA3314210',
+    projectId: 'B7CA92F04B9FAE8D941C3E9B7E0CD754',
+  },
 };
 
 export const DevelopmentImportList = (): React.ReactElement => {

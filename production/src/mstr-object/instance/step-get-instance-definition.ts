@@ -83,7 +83,6 @@ class StepGetInstanceDefinition {
       } else if (!instanceDefinition) {
         body = instanceDefinitionHelper.setupBodyTemplate(body);
 
-        // @ts-expect-error
         instanceDefinition = await mstrObjectRestService.createInstance(objectData);
       }
 

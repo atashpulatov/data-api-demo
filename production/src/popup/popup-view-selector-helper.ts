@@ -1,8 +1,15 @@
+import { PageByConfiguration } from '@mstr/connector-components';
+
 import { ObjectExecutionStatus } from '../helpers/prompts-handling-helper';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { popupHelper } from './popup-helper';
 
+import { reduxStore } from '../store';
+
+import { PageBy } from '../page-by/page-by-types';
+import { RequestPageByModalOpenData } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer-types';
 import { PopupTypeEnum } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
+import { PageByDisplayOption } from '../right-side-panel/settings-side-panel/settings-side-panel-types';
 
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
@@ -12,9 +19,10 @@ const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
 class PopupViewSelectorHelper {
   setPopupType(props: any, popupType: PopupTypeEnum): PopupTypeEnum {
-    const { importRequested, dossierOpenRequested, isPrompted } = props;
+    const { importRequested, dossierOpenRequested, isPrompted, pageBy } = props;
     const arePromptsAnswered = this.arePromptsAnswered(props);
-    const shouldProceedToImport = importRequested && (!isPrompted || arePromptsAnswered);
+    const shouldProceedToImport =
+      importRequested && (!isPrompted || arePromptsAnswered) && !pageBy?.length;
     const getPromptedReportPopupType = (): PopupTypeEnum =>
       // If we are in Multiple Reprompt workflow and get to this point, we are in
       // the transition period waiting for the next object to be reprompted.
@@ -138,6 +146,17 @@ class PopupViewSelectorHelper {
       body,
     };
     props.preparePromptedReport(instanceDefinition.instanceId, preparedReport);
+
+    const { pageBy } = instanceDefinition.definition?.grid || {};
+    const { pageByDisplaySetting } = reduxStore.getState().settingsReducer;
+
+    if (props.popupType === PopupTypeEnum.libraryWindow) {
+      if (pageBy?.length && pageByDisplaySetting === PageByDisplayOption.SELECT_PAGES) {
+        this.handleRequestPageByModalOpen({ ...props, pageBy });
+      } else {
+        props.requestImport();
+      }
+    }
   }
 
   // TODO: get this method from library
@@ -222,6 +241,7 @@ class PopupViewSelectorHelper {
       displayAttrFormNames: props.displayAttrFormNames || DisplayAttrFormNames.AUTOMATIC,
       dossierData: null as any,
       body: null as any,
+      pageByConfigurations: props.pageByConfigurations,
     };
     if (props.dossierData) {
       message.dossierData = {
@@ -238,6 +258,25 @@ class PopupViewSelectorHelper {
     }
     props.startImport();
     popupHelper.officeMessageParent(message);
+  }
+
+  /**
+   * Handles the request to open the Page By modal.
+   *
+   * @param pageBy Contains information about page-by elements
+   * @param requestPageByModalOpen Function to request the Page By modal to open
+   */
+  handleRequestPageByModalOpen(props: {
+    pageBy: PageBy[];
+    requestPageByModalOpen: (data: RequestPageByModalOpenData) => void;
+  }): void {
+    const { pageBy, requestPageByModalOpen } = props;
+
+    requestPageByModalOpen({
+      pageBy,
+      importPageByConfigurations: (pageByConfigurations: PageByConfiguration[][]) =>
+        this.proceedToImport({ ...props, pageByConfigurations }),
+    });
   }
 }
 

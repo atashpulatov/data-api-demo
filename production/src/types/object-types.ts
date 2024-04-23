@@ -1,3 +1,5 @@
+import { PageByConfiguration } from '@mstr/connector-components';
+
 import { Attribute } from '../mstr-object/mstr-object-response-types';
 import { MstrObjectTypes } from '../mstr-object/mstr-object-types';
 import { PageByData } from '../page-by/page-by-types';
@@ -126,6 +128,7 @@ export interface ObjectData {
   // TODO fix type
   visualizationInfo?: false | VisualizationInfo;
   objectSettings?: ObjectSettings;
+  pageByConfigurations?: PageByConfiguration[][];
 }
 
 export interface ObjectSettings {

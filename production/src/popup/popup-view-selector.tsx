@@ -1,5 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
+import { PageBy } from '@mstr/connector-components';
 
 import { ObtainInstanceHelper } from './obtain-instance-helper';
 import { popupHelper } from './popup-helper';
@@ -13,6 +14,7 @@ import { LibraryWindow } from '../embedded/library/library-window';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { PromptsWindow } from '../prompts/prompts-window';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { navigationTreeSelectors } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer-selectors';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import { MultipleRepromptTransitionPage } from './multiple-reprompt-transition-page/multiple-reprompt-transition-page';
 import { OverviewWindow } from './overview/overview-window';
@@ -20,6 +22,7 @@ import { OverviewWindow } from './overview/overview-window';
 interface PopupViewSelectorProps {
   authToken?: string;
   popupType?: PopupTypeEnum;
+  requestPageByModalClose?: () => void;
 }
 
 const renderProperComponent = (popupType: PopupTypeEnum): any => {
@@ -51,13 +54,37 @@ const renderProperComponent = (popupType: PopupTypeEnum): any => {
 };
 
 export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = props => {
-  const { authToken, popupType: popupTypeProps } = props;
+  const { authToken, popupType: popupTypeProps, requestPageByModalClose } = props;
+
+  const isPageByModalOpenRequested = useSelector(
+    navigationTreeSelectors.selectIsPageByModalOpenRequested
+  );
+  const pageBy = useSelector(navigationTreeSelectors.selectPageBy);
+  const chosenObjectName = useSelector(navigationTreeSelectors.selectChosenObjectName);
+  const importPageByConfigurations = useSelector(
+    navigationTreeSelectors.selectImportPageByConfigurations
+  );
+
   if (!authToken) {
     console.info('Waiting for token to be passed');
     return null;
   }
+
   const popupType = popupViewSelectorHelper.setPopupType(props, popupTypeProps);
-  return renderProperComponent(popupType);
+
+  return (
+    <div>
+      {isPageByModalOpenRequested && (
+        <PageBy
+          pageByData={pageBy}
+          objectName={chosenObjectName}
+          onImport={pageByConfigurations => importPageByConfigurations(pageByConfigurations)}
+          onCancel={() => requestPageByModalClose()}
+        />
+      )}
+      {renderProperComponent(popupType)}
+    </div>
+  );
 };
 
 function mapStateToProps(state: any): any {
@@ -93,6 +120,9 @@ function mapStateToProps(state: any): any {
 const mapDispatchToProps = {
   ...navigationTreeActions,
   preparePromptedReport: popupActions.preparePromptedReport,
+  requestPageByModalOpen: navigationTreeActions.requestPageByModalOpen,
+  requestPageByModalClose: navigationTreeActions.requestPageByModalClose,
+  requestImport: navigationTreeActions.requestImport,
 };
 
 export const PopupViewSelector = connect(
