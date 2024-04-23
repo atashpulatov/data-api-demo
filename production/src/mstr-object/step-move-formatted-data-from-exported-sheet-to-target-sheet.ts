@@ -5,7 +5,7 @@ import { ObjectData } from '../types/object-types';
 
 import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
-import mstrObjectEnum from './mstr-object-type-enum';
+import { VISUALIZATION_TITLE_EXCLUDED_DEFAULT_CELL_POSITION } from './constants';
 
 class StepMoveFormattedDataFromExportedSheetToTargetSheet {
   /**
@@ -29,12 +29,11 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
 
     try {
       const { startCell, instanceDefinition, sourceWorksheetId, excelContext } = operationData;
-      const { objectWorkingId, mstrObjectType } = objectData;
-
-      const isDossier = mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
+      const { objectWorkingId } = objectData;
 
       const { rows, columns } = instanceDefinition;
-      const sourceTableRange = officeApiHelper.getRange(columns, isDossier ? 'A3' : 'A1', rows);
+      // Get range starting from 'A3', to exclude the visualization title 
+      const sourceTableRange = officeApiHelper.getRange(columns, VISUALIZATION_TITLE_EXCLUDED_DEFAULT_CELL_POSITION, rows);
       const targetTableRange = officeApiHelper.getRange(columns, startCell, rows);
 
       const targetWorksheet = officeApiHelper.getExcelSheetById(
