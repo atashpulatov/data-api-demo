@@ -11,7 +11,7 @@ import { DisplayAttrFormNames } from '../mstr-object/constants';
 const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
 class PopupViewSelectorHelper {
-  isPopupTypeRepromptPopup(popupType: PopupTypeEnum): boolean {
+  isRepromptPopupType(popupType: PopupTypeEnum): boolean {
     return (
       popupType === PopupTypeEnum.repromptingWindow ||
       popupType === PopupTypeEnum.repromptReportDataOverview ||
@@ -40,7 +40,7 @@ class PopupViewSelectorHelper {
       // when editing a prompted report.
       if (this.isInstanceWithPromptsAnswered(props)) {
         // Handle the case when the user is editing a prompted report or dossier.
-        if (this.isPopupTypeRepromptPopup(popupType)) {
+        if (this.isRepromptPopupType(popupType)) {
           return getPromptedReportPopupType();
         }
       } else {
