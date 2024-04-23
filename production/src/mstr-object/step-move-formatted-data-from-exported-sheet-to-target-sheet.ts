@@ -7,7 +7,7 @@ import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 import mstrObjectEnum from './mstr-object-type-enum';
 
-class StepMoveFormattedDataExportEngine {
+class StepMoveFormattedDataFromExportedSheetToTargetSheet {
   /**
    * Moves formatted table from export engine worksheet to current active worksheet.
    * Ultimately deletes the source worksheet(export engine worksheet) after copying 
@@ -23,7 +23,7 @@ class StepMoveFormattedDataExportEngine {
    * @param operationData.sourceWorksheetId Source worksheet id to copy the range from
    * @param operationData.excelContext Reference to Excel Context used by Excel API functions
    */
-  moveFormattedDataFromExportEngine = async (objectData: ObjectData, operationData: OperationData): Promise<void> => {
+  moveFormattedDataFromExportedSheetToTargetSheet = async (objectData: ObjectData, operationData: OperationData): Promise<void> => {
     console.group('Moving exported formatted data to the selected worksheet');
     console.time('Total');
 
@@ -58,7 +58,7 @@ class StepMoveFormattedDataExportEngine {
       sourceWorksheet.delete();
       await excelContext.sync();
 
-      operationStepDispatcher.completeMoveFormattedDataExportEngine(objectWorkingId);
+      operationStepDispatcher.completeMoveFormattedDataFromExportedSheetToTargetSheet(objectWorkingId);
     } catch (error) {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
@@ -69,5 +69,5 @@ class StepMoveFormattedDataExportEngine {
   }
 }
 
-const stepMoveFormattedDataExportEngine = new StepMoveFormattedDataExportEngine();
-export default stepMoveFormattedDataExportEngine;
+const stepMoveFormattedDataFromExportedSheetToTargetSheet = new StepMoveFormattedDataFromExportedSheetToTargetSheet();
+export default stepMoveFormattedDataFromExportedSheetToTargetSheet;

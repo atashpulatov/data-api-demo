@@ -2,9 +2,9 @@ import stepSaveObjectInExcel from '../office/store/step-save-object-in-excel';
 
 import stepGetInstanceDefinition from '../mstr-object/instance/step-get-instance-definition';
 import stepGetObjectSettings from '../mstr-object/settings/step-get-object-settings';
+import stepExportExcelToCurrentWorkBook from '../mstr-object/step-export-excel-to-current-workbook';
 import stepGetObjectDetails from '../mstr-object/step-get-object-details';
-import stepImportExportEngineWorkbook from '../mstr-object/step-import-export-engine-workbook';
-import stepMoveFormattedDataExportEngine from '../mstr-object/step-move-formatted-data-export-engine';
+import stepMoveFormattedDataFromExportedSheetToTargetSheet from '../mstr-object/step-move-formatted-data-from-exported-sheet-to-target-sheet';
 import stepDisplayNotificationCompleted from '../notification/step-display-notification-completed';
 import stepNotificationInProgress from '../notification/step-notification-in-progress';
 import stepBackupObjectData from '../office/backup-object-data/step-backup-object-data';
@@ -115,12 +115,12 @@ class SubscribeSteps {
       stepCompleteClearData.completeClearData
     );
     operationBus.subscribe(
-      OperationSteps.IMPORT_EXPORT_ENGINE_WORKBOOK,
-      stepImportExportEngineWorkbook.importExportEngineWorkbook
+      OperationSteps.EXPORT_EXCEL_TO_CURRENT_WORKBOOK,
+      stepExportExcelToCurrentWorkBook.exportExcelToCurrentWorkBook
     );
     operationBus.subscribe(
-      OperationSteps.MOVE_FORMATTED_DATA_FROM_EXPORT_ENGINE,
-      stepMoveFormattedDataExportEngine.moveFormattedDataFromExportEngine
+      OperationSteps.MOVE_FORMATTED_DATA_FROM_EXPORTED_SHEET_TO_TARGET_SHEET,
+      stepMoveFormattedDataFromExportedSheetToTargetSheet.moveFormattedDataFromExportedSheetToTargetSheet
     );
     operationBus.subscribe(
       OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,

@@ -9,7 +9,7 @@ import operationStepDispatcher from '../operation/operation-step-dispatcher';
 
 const workbookBase64StartIndentationLength = 7;
 
-class StepImportExportEngineWorkbook {
+class StepExportExcelToCurrentWorkbook {
   /**
    * Fetches the excel workbook as blob data from export engine and inserts the extracted
    * worksheet into current functional workbook.
@@ -23,7 +23,7 @@ class StepImportExportEngineWorkbook {
    * @param objectData.projectId Id of the MSTR project from which we fetch data
    * @param operationData.instanceDefinition Object containing information about MSTR object
    */
-  importExportEngineWorkbook = async (objectData: ObjectData, operationData: OperationData): Promise<void> => {
+  exportExcelToCurrentWorkBook = async (objectData: ObjectData, operationData: OperationData): Promise<void> => {
     console.group('Importing export engine workbook');
     console.time('Total');
 
@@ -36,7 +36,7 @@ class StepImportExportEngineWorkbook {
 
       // @ts-expect-error
       const { visualizationKey } = visualizationInfo;
-      const response = await mstrObjectRestService.getWorksheetBinary(
+      const response = await mstrObjectRestService.exportExcelForDossier(
         {
           dossierId: objectId,
           dossierInstanceId: instanceDefinition.instanceId,
@@ -50,7 +50,7 @@ class StepImportExportEngineWorkbook {
       operationData.sourceWorksheetId = exportEngineWorksheet.id;
 
       operationStepDispatcher.updateOperation(operationData);
-      operationStepDispatcher.completeImportExportEngineWorkbook(objectWorkingId);
+      operationStepDispatcher.completeExportToCurrentWorkbook(objectWorkingId);
     } catch (error) {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
@@ -67,9 +67,9 @@ class StepImportExportEngineWorkbook {
    * @param excelContext Reference to Excel Context used by Excel API functions
    */
   private async loadExportEngineWorksheet(blob: any, excelContext: Excel.RequestContext): Promise<any> {
-    const reader = new FileReader();
-
     return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
       reader.onload = async () => {
         const fileData = reader.result.toString();
 
@@ -96,5 +96,5 @@ class StepImportExportEngineWorkbook {
 
 }
 
-const stepImportExportEngineWorkbook = new StepImportExportEngineWorkbook();
-export default stepImportExportEngineWorkbook;
+const stepExportExcelToCurrentWorkbook = new StepExportExcelToCurrentWorkbook();
+export default stepExportExcelToCurrentWorkbook;

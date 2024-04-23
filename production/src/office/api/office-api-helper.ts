@@ -295,7 +295,7 @@ class OfficeApiHelper {
    */
   async hideExcelWorksheet(worksheetId: string, excelContext: Excel.RequestContext): Promise<Excel.Worksheet> {
     const worksheet = excelContext.workbook.worksheets.getItem(worksheetId);
-    worksheet.visibility = Excel.SheetVisibility.hidden;
+    worksheet.visibility = Excel.SheetVisibility.veryHidden;
 
     await excelContext.sync();
 
