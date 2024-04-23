@@ -54,6 +54,10 @@ class OfficeStoreObject {
    * Merges previouslt filtered out objects to redux store to maintain backward compatibility. 
    * Ultimately sorts concatenated objects by objectWorkingId.
    * 
+   * @param isExcelApiSupported Indicated whether given excel api is supported
+   * @param objects Objects stored in office settings
+   * @param importType Type of the import that is being made
+   * 
    * @returns Contains the objects definitions from excel document
    */
   mergeStoreObjectsToRedux = (isExcelApiSupported: boolean, objects: ObjectData[], objectImportType: ObjectImportType): any => {

@@ -46,7 +46,7 @@ class StepExportExcelToCurrentWorkbook {
       );
       const excelBlob = await response.blob();
 
-      const exportEngineWorksheet = await this.loadExportEngineWorksheet(excelBlob, excelContext);
+      const exportEngineWorksheet = await this.insertExcelWorksheet(excelBlob, excelContext);
       operationData.sourceWorksheetId = exportEngineWorksheet.id;
 
       operationStepDispatcher.updateOperation(operationData);
@@ -66,7 +66,7 @@ class StepExportExcelToCurrentWorkbook {
    * @param blob Worksheet blob exported by export engine
    * @param excelContext Reference to Excel Context used by Excel API functions
    */
-  private async loadExportEngineWorksheet(blob: any, excelContext: Excel.RequestContext): Promise<any> {
+  private async insertExcelWorksheet(blob: any, excelContext: Excel.RequestContext): Promise<any> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
 

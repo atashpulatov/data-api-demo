@@ -36,46 +36,32 @@ class OfficeStoreRestoreObject {
 
     settings.set(OfficeSettingsEnum.storedObjects, objects);
 
+    const { isShapeAPISupported, isInsertWorksheetAPISupported } = this.reduxStore.getState().officeReducer;
+
     // Do filter image objects if the shape api is not supported
     // and only reflect updated objects in redux store and not back into office store.
-    objects = this.filterImageObjects(objects);
+    objects = this.excludeObjects(isShapeAPISupported, objects, ObjectImportType.IMAGE);
 
     // Do filter formatted table objects if the Excel.Workbook insertWorksheetsFromBase64() api is not supported
     // and only reflect updated objects in redux store and not back into office store.
-    objects = this.filterFormattedTableObjects(objects);
+    objects = this.excludeObjects(isInsertWorksheetAPISupported, objects, ObjectImportType.FORMATTED_TABLE);
 
     // @ts-expect-error
     objects && this.reduxStore.dispatch(restoreAllObjects(objects));
   };
 
   /**
-   * Filters out image objects if the shape api is not supported in current version in order to maintain the backward compatibility.
+   * Filters out objects given excel api is not supported in current version in order to maintain the backward compatibility.
    *
-   * @param objects
-   * @returns objects object definitions from excel document
+   * @param isExcelApiSupported Indicated whether given excel api is supported
+   * @param objects Objects stored in office settings
+   * @param importType Type of the import that is being made
+   * 
+   * @returns Contains the objects object definitions from excel document
    */
-  filterImageObjects = (objects: ObjectData[]): ObjectData[] => {
-    const { isShapeAPISupported } = this.reduxStore.getState().officeReducer;
-
-    if (!isShapeAPISupported && objects?.filter) {
-      return objects.filter(object => object?.importType !== ObjectImportType.IMAGE);
-    }
-
-    return objects;
-  };
-
-  /**
-   * Filters out formatted table objects if Excel.Workbook insertWorksheetsFromBase64() api is not supported 
-   * in current version in order to maintain the backward compatibility.
-   *
-   * @param objects
-   * @returns objects object definitions from excel document
-   */
-  filterFormattedTableObjects = (objects: ObjectData[]): ObjectData[] => {
-    const { isInsertWorksheetAPISupported } = this.reduxStore.getState().officeReducer;
-
-    if (!isInsertWorksheetAPISupported && objects?.filter) {
-      return objects.filter(object => object?.importType !== ObjectImportType.FORMATTED_TABLE);
+  excludeObjects = (isExcelApiSupported: boolean, objects: ObjectData[], objectImportType: ObjectImportType): ObjectData[] => {
+    if (!isExcelApiSupported && objects?.filter) {
+      return objects.filter(object => object?.importType !== objectImportType);
     }
 
     return objects;
