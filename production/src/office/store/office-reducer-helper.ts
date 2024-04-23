@@ -100,7 +100,15 @@ class OfficeReducerHelper {
     this.reduxStore.dispatch(officeActions.clearPopupData());
   };
 
-  isExcelApiSupported = (objectImportType: ObjectImportType): boolean => {
+  /**
+   * Performs excel api version check and identifies the excel api support 
+   * in current version based on import type.
+   * 
+   * @param importType Type of the import that is being made
+   * 
+   * @return Flag indicating whether correspoding excel api to import type is supported
+   */
+  identifyExcelApiSupport = (objectImportType: ObjectImportType): boolean => {
     const { isShapeAPISupported, isInsertWorksheetAPISupported } = this.reduxStore.getState().officeReducer;
 
     let isExcelApiSupported: boolean;
