@@ -212,35 +212,38 @@ class PopupController {
   };
 
   /**
-   * Handles the action command for the overview based on the dialog type and command.
-   * If the dialog type is one of the valid types (importedDataOverview, repromptReportDataOverview,
+   * Delegates response to overviewHelper.handleOverviewActionCommand when applicable.
+   * If the dialog type is one of the valid types (repromptReportDataOverview or
    * repromptDossierDataOverview) and either the dialog type is importedDataOverview or the command is
    * RANGE_TAKEN_OK or RANGE_TAKEN_CLOSE, it calls the handleOverviewActionCommand method of the
    * overviewHelper with the provided response.
+   * It returns true if command is either RANGE_TAKEN_OK or RANGE_TAKEN_CLOSE and re-prompt in
+   * Overview dialog is triggered.
    *
    * @param dialogType - indicates type of the dialog to be opened, value from PopupTypeEnum
    * @param command - action command from the dialog
    * @param response - message received from the dialog
+   * @returns boolean - true if the command is either RANGE_TAKEN_OK or RANGE_TAKEN_CLOSE and re-prompt in Overview dialog.
    */
-  async handleOverviewActionForOverviewPopups(
+  async isOverviewActionHandledForOverviewPopups(
     dialogType: PopupTypeEnum,
     command: string,
     response: DialogResponse
   ): Promise<boolean> {
     const { RANGE_TAKEN_CLOSE, RANGE_TAKEN_OK } = OverviewActionCommands;
     const validDialogTypes = [
-      PopupTypeEnum.importedDataOverview,
       PopupTypeEnum.repromptReportDataOverview,
       PopupTypeEnum.repromptDossierDataOverview,
     ];
 
     if (
-      validDialogTypes.includes(dialogType) &&
-      (dialogType === PopupTypeEnum.importedDataOverview ||
-        command === RANGE_TAKEN_OK ||
-        command === RANGE_TAKEN_CLOSE)
+      dialogType === PopupTypeEnum.importedDataOverview ||
+      (validDialogTypes.includes(dialogType) &&
+        (command === RANGE_TAKEN_OK || command === RANGE_TAKEN_CLOSE))
     ) {
       await this.overviewHelper.handleOverviewActionCommand(response);
+      // Return true to indicate that command was either RANGE_TAKEN_OK or RANGE_TAKEN_CLOSE
+      // and current dialog is either repromptReportDataOverview or repromptDossierDataOverview.
       return true;
     }
 
@@ -299,9 +302,11 @@ class PopupController {
       }
       await authenticationHelper.validateAuthToken();
 
-      // Handle overview action for overview popups such as importedDataOverview, repromptReportDataOverview,
-      // and repromptDossierDataOverview and if processed then stop further processing and return.
-      if (await this.handleOverviewActionForOverviewPopups(dialogType, command, response)) {
+      // Call overviewHelper.handleOverviewActionCommand if applicable, however, if the command is
+      // either RANGE_TAKEN_OK or RANGE_TAKEN_CLOSE and the dialog type is any of the reprompt
+      // workflows triggered inside the Overview dialog, then do not proceed with the rest of the logic
+      // and return.
+      if (await this.isOverviewActionHandledForOverviewPopups(dialogType, command, response)) {
         return;
       }
 

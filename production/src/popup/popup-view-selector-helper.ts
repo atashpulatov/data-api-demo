@@ -18,6 +18,14 @@ import { DisplayAttrFormNames } from '../mstr-object/constants';
 const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
 class PopupViewSelectorHelper {
+  /**
+   * Checks if the provided popup type is one of the reprompt types.
+   * Returns true if the popup type is either repromptingWindow,
+   * repromptReportDataOverview, or repromptDossierDataOverview. Otherwise, returns false.
+   *
+   * @param popupType - The type of the popup to check.
+   * @returns {boolean} - returns true if the popup type is one of the reprompt types.
+   */
   isRepromptPopupType(popupType: PopupTypeEnum): boolean {
     return (
       popupType === PopupTypeEnum.repromptingWindow ||
