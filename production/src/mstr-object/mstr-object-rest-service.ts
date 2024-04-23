@@ -952,14 +952,18 @@ class MstrObjectRestService {
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${dossierId}/instances/${dossierInstanceId}/excel`;
 
-    const body = { pageOption: 'DEFAULT', pagePerSheet: false, keys: [visualizationKey] };
+    const body = {
+      pageOption: 'DEFAULT',
+      pagePerSheet: false,
+      keys: [visualizationKey],
+    };
 
     const options = {
       method: 'POST',
       credentials: 'include' as RequestCredentials,
       headers: {
         Accept: 'application/octet-stream',
-        'Content-type': 'application/json; charset=utf-8',
+        'Content-type': 'application/json',
         ...(projectId && { 'x-mstr-projectId': projectId }),
         ...(authToken && { 'x-mstr-authtoken': authToken }),
       },
