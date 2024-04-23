@@ -15,6 +15,11 @@ export const objectTableImportType = new Set([
   ObjectImportType.FORMATTED_TABLE
 ]);
 
+export const excelApiSupportedObjectImportTypes = [
+  ObjectImportType.IMAGE,
+  ObjectImportType.FORMATTED_TABLE
+]
+
 export enum ImportOperationStepDict {
   GET_OFFICE_TABLE_IMPORT = ObjectImportType.TABLE,
   MANIPULATE_VISUALIZATION_IMAGE = ObjectImportType.IMAGE,

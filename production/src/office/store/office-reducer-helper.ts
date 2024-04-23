@@ -3,6 +3,7 @@ import { ObjectData } from '../../types/object-types';
 
 import { OperationTypes } from '../../operation/operation-type-names';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 class OfficeReducerHelper {
   reduxStore: any;
@@ -98,6 +99,25 @@ class OfficeReducerHelper {
   clearPopupData = (): void => {
     this.reduxStore.dispatch(officeActions.clearPopupData());
   };
+
+  isExcelApiSupported = (objectImportType: ObjectImportType): boolean => {
+    const { isShapeAPISupported, isInsertWorksheetAPISupported } = this.reduxStore.getState().officeReducer;
+
+    let isExcelApiSupported: boolean;
+
+    switch (objectImportType) {
+      case ObjectImportType.IMAGE:
+        isExcelApiSupported = isShapeAPISupported;
+        break;
+      case ObjectImportType.FORMATTED_TABLE:
+        isExcelApiSupported = isInsertWorksheetAPISupported;
+        break;
+      default:
+        isExcelApiSupported = true;
+    }
+
+    return isExcelApiSupported;
+  }
 }
 
 const officeReducerHelper = new OfficeReducerHelper();

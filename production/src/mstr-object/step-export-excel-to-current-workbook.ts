@@ -29,9 +29,7 @@ class StepExportExcelToCurrentWorkbook {
 
     try {
       const { instanceDefinition } = operationData;
-
       const { objectWorkingId, objectId, visualizationInfo, projectId } = objectData;
-
       const excelContext = await officeApiHelper.getExcelContext();
 
       // @ts-expect-error
@@ -78,7 +76,7 @@ class StepExportExcelToCurrentWorkbook {
 
           // slice the actual worbook encoded in base 64 from file data starting the last index of 'base64,' substring indicator
           const externalWorkbookBase64 = fileData.substring(fileData.indexOf(base64BlobFileDataSubstring) + base64BlobFileDataSubstring.length);
-          const insertedWorksheets = officeApiHelper.inserExcelWorksheets(externalWorkbookBase64, excelContext);
+          const insertedWorksheets = officeApiHelper.insertExcelWorksheets(externalWorkbookBase64, excelContext);
 
           activeWorksheet.activate();
           await excelContext.sync();

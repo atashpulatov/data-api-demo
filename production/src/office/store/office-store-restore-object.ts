@@ -1,4 +1,5 @@
 import { officeApiHelper } from '../api/office-api-helper';
+import officeReducerHelper from './office-reducer-helper';
 import officeStoreHelper from './office-store-helper';
 
 import { ReduxStore } from '../../store';
@@ -10,7 +11,7 @@ import { restoreAllAnswers } from '../../redux-reducer/answers-reducer/answers-a
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
 import officeApiDataLoader from '../api/office-api-data-loader';
 import { OfficeSettingsEnum } from '../../constants/office-constants';
-import { ObjectImportType } from '../../mstr-object/constants';
+import { excelApiSupportedObjectImportTypes,ObjectImportType } from '../../mstr-object/constants';
 
 class OfficeStoreRestoreObject {
   reduxStore: ReduxStore;
@@ -36,15 +37,11 @@ class OfficeStoreRestoreObject {
 
     settings.set(OfficeSettingsEnum.storedObjects, objects);
 
-    const { isShapeAPISupported, isInsertWorksheetAPISupported } = this.reduxStore.getState().officeReducer;
-
-    // Do filter image objects if the shape api is not supported
-    // and only reflect updated objects in redux store and not back into office store.
-    objects = this.excludeObjects(isShapeAPISupported, objects, ObjectImportType.IMAGE);
-
-    // Do filter formatted table objects if the Excel.Workbook insertWorksheetsFromBase64() api is not supported
-    // and only reflect updated objects in redux store and not back into office store.
-    objects = this.excludeObjects(isInsertWorksheetAPISupported, objects, ObjectImportType.FORMATTED_TABLE);
+    // Do filter out objects if the corresponding excel api to import type is not supported.
+    // Only reflect updated objects in redux store and not back into office store.
+    excelApiSupportedObjectImportTypes.forEach(objectImportType => {
+      objects = this.excludeObjects(objects, objectImportType);
+    });
 
     // @ts-expect-error
     objects && this.reduxStore.dispatch(restoreAllObjects(objects));
@@ -59,7 +56,9 @@ class OfficeStoreRestoreObject {
    * 
    * @returns Contains the objects object definitions from excel document
    */
-  excludeObjects = (isExcelApiSupported: boolean, objects: ObjectData[], objectImportType: ObjectImportType): ObjectData[] => {
+  excludeObjects = (objects: ObjectData[], objectImportType: ObjectImportType): ObjectData[] => {
+    const isExcelApiSupported = officeReducerHelper.isExcelApiSupported(objectImportType);
+
     if (!isExcelApiSupported && objects?.filter) {
       return objects.filter(object => object?.importType !== objectImportType);
     }

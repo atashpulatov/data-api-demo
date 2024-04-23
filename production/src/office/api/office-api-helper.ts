@@ -310,7 +310,7 @@ class OfficeApiHelper {
    * 
    * @returns Reference to active Excel Worksheet
    */
-  inserExcelWorksheets(externalWorkbookBase64: string, excelContext: Excel.RequestContext): any {
+  insertExcelWorksheets(externalWorkbookBase64: string, excelContext: Excel.RequestContext): any {
     return excelContext.workbook.insertWorksheetsFromBase64(externalWorkbookBase64);
   }
 
