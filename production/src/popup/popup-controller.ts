@@ -385,20 +385,18 @@ class PopupController {
    * @param reportParams Contains information about the currently selected object
    */
   onCommandUpdate = async (response: DialogResponse, reportParams: ReportParams): Promise<void> => {
-    const { objectWorkingId, pageByData } = response;
+    const { pageByData } = response;
 
-    if (!reportParams) {
+    if (
+      !reportParams ||
+      (pageByData && pageByData.pageByDisplayType !== PageByDisplayType.DEFAULT_PAGE)
+    ) {
+      // TODO: Add error handling for re-importing Page-by on Edit
       return this.handleUpdateCommand(response);
     }
 
     if (reportParams.duplicateMode) {
       return this.reduxStore.dispatch(duplicateRequested(reportParams.object, response));
-    }
-
-    // TODO: Add error handling for re-importing Page-by on Edit
-    if (pageByData && pageByData.pageByDisplayType !== PageByDisplayType.DEFAULT_PAGE) {
-      pageByHelper.handleRemovingMultiplePages(objectWorkingId);
-      return this.handleUpdateCommand(response);
     }
 
     const reportPreviousState = this.getObjectPreviousState(reportParams);
@@ -413,6 +411,7 @@ class PopupController {
   handleUpdateCommand = async (response: DialogResponse): Promise<void> => {
     const objectData = {
       name: response.chosenObjectName,
+      objectWorkingId: response.objectWorkingId,
       objectId: response.chosenObjectId,
       projectId: response.projectId,
       mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(response.chosenObjectSubtype),
@@ -425,6 +424,8 @@ class PopupController {
       subtotalsInfo: response.subtotalsInfo,
       displayAttrFormNames: response.displayAttrFormNames,
       definition: { filters: response.filterDetails },
+      pageByData: response.pageByData,
+      pageByConfigurations: response.pageByConfigurations,
     };
 
     await this.handleImport(objectData);
@@ -450,6 +451,7 @@ class PopupController {
         preparedInstanceId: response.preparedInstanceId,
         definition: { filters: response.filterDetails },
         displayAttrFormNames: response.displayAttrFormNames,
+        pageByConfigurations: response.pageByConfigurations,
       };
 
       await this.handleImport(objectData);
@@ -463,7 +465,7 @@ class PopupController {
    * @param objectData Contains information about the MSTR object
    */
   handleImport = async (objectData: ObjectData): Promise<void> => {
-    const { mstrObjectType } = objectData;
+    const { mstrObjectType, pageByData, pageByConfigurations } = objectData;
 
     let preparedInstanceDefinition;
 
@@ -480,34 +482,44 @@ class PopupController {
     }
 
     const pageByLinkId = uuidv4();
+
     const { settingsReducer } = this.reduxStore.getState();
     const { pageByDisplaySetting } = settingsReducer;
+
+    const selectedPageByDisplayType = pageByData?.pageByDisplayType || pageByDisplaySetting;
+
+    const parsedPageByConfigurations =
+      pageByConfigurations && pageByHelper.parseSelectedPageByConfigurations(pageByConfigurations);
 
     const validPageByData = await pageByHelper.getValidPageByData(
       objectData,
       preparedInstanceDefinition
     );
 
-    switch (pageByDisplaySetting) {
+    switch (selectedPageByDisplayType) {
       case PageByDisplayOption.DEFAULT_PAGE:
         return this.handleDefaultPageImport(
           pageByLinkId,
           objectData,
           preparedInstanceDefinition,
-          pageByDisplaySetting
+          selectedPageByDisplayType
         );
       case PageByDisplayOption.ALL_PAGES:
-        return this.handleAllPagesImport(
+        return this.handleMultiplePagesImport(
           pageByLinkId,
           validPageByData,
           objectData,
           preparedInstanceDefinition,
-          pageByDisplaySetting
+          selectedPageByDisplayType
         );
       case PageByDisplayOption.SELECT_PAGES:
-        // Set Page-by modal state to open
-        // Logic for parsing data and passing to the Page-by component
-        break;
+        return this.handleMultiplePagesImport(
+          pageByLinkId,
+          parsedPageByConfigurations,
+          objectData,
+          preparedInstanceDefinition,
+          selectedPageByDisplayType
+        );
       default:
         break;
     }
@@ -530,6 +542,7 @@ class PopupController {
     const pageByData = {
       pageByLinkId,
       pageByDisplayType,
+      elements: [] as PageByDataElement[],
     };
 
     return this.reduxStore.dispatch(
@@ -538,22 +551,28 @@ class PopupController {
   };
 
   /**
-   * Method used for handling import of all valid Page-by attributes combinations of the object.
+   * Method used for handling import multiple valid Page-by attributes combinations of the object.
    *
    * @param pageByLinkId Unique identifier of the Page-by sibling
-   * @param validPageByData Contains information about the valid Page-by elements combinations
+   * @param pageByCombinations Contains information about the valid Page-by elements combinations
    * @param objectData Contains information about the MSTR object
    * @param preparedInstanceDefinition Contains information about the object's instance
    * @param pageByDisplayType Contains information about the currently selected Page-by display setting
    */
-  handleAllPagesImport = (
+  handleMultiplePagesImport = (
     pageByLinkId: string,
-    validPageByData: PageByDataElement[][],
+    pageByCombinations: PageByDataElement[][],
     objectData: ObjectData,
     preparedInstanceDefinition: InstanceDefinition,
     pageByDisplayType: PageByDisplayType
   ): void => {
-    validPageByData.forEach((validCombination, pageByIndex) => {
+    const { objectWorkingId } = objectData;
+
+    if (objectWorkingId) {
+      pageByHelper.handleRemovingMultiplePages(objectWorkingId);
+    }
+
+    pageByCombinations.forEach((validCombination, pageByIndex) => {
       const pageByData = {
         pageByLinkId,
         pageByDisplayType,

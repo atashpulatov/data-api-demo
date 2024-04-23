@@ -31,10 +31,34 @@ const selectIsEdit = createSelector(
   navigationTree => navigationTree.isEdit
 );
 
+const selectPageBy = createSelector(
+  [getNavigationTreeState],
+  navigationTree => navigationTree.pageBy
+);
+
+const selectChosenObjectName = createSelector(
+  [getNavigationTreeState],
+  navigationTree => navigationTree.chosenObjectName
+);
+
+const selectIsPageByModalOpenRequested = createSelector(
+  [getNavigationTreeState],
+  navigationTree => navigationTree.pageByModalOpenRequested
+);
+
+const selectImportPageByConfigurations = createSelector(
+  [getNavigationTreeState],
+  navigationTree => navigationTree.importPageByConfigurations
+);
+
 export const navigationTreeSelectors = {
   selectMstrObjectType,
   selectIsObjectSelected,
   selectIsDossierOpenRequested,
   selectArePromptAnswered,
   selectIsEdit,
+  selectPageBy,
+  selectChosenObjectName,
+  selectIsPageByModalOpenRequested,
+  selectImportPageByConfigurations,
 };

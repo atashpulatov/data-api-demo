@@ -5,6 +5,7 @@ import {
   NavigationTreeActions,
   NavigationTreeActionTypes,
   NavigationTreeState,
+  RequestPageByModalOpenData,
 } from './navigation-tree-reducer-types';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
@@ -16,6 +17,7 @@ export const initialState: NavigationTreeState = {
   chosenObjectName: DEFAULT_PROJECT_NAME,
   isPrompted: false,
   importRequested: false,
+  pageByModalOpenRequested: false,
   dossierData: null,
   promptsAnswers: null,
   mstrObjectType: null,
@@ -43,6 +45,12 @@ export const navigationTree = (
 
     case NavigationTreeActionTypes.REQUEST_IMPORT:
       return requestImport(state, action.data);
+
+    case NavigationTreeActionTypes.REQUEST_PAGE_BY_MODAL_OPEN:
+      return requestPageByModalOpen(state, action.data);
+
+    case NavigationTreeActionTypes.REQUEST_PAGE_BY_MODAL_CLOSE:
+      return requestPageByModalClose(state);
 
     case NavigationTreeActionTypes.PROMPTS_ANSWERED:
       return promptsAnswered(state, action.data);
@@ -129,10 +137,32 @@ const requestImport = (
 ): NavigationTreeState => {
   const newState = { ...state };
   newState.importRequested = true;
-  newState.isPrompted = data.isPrompted;
   if (!!data && data.promptObjects) {
     newState.promptObjects = data.promptObjects;
   }
+
+  if (!!data && data.isPrompted) {
+    newState.isPrompted = data.isPrompted;
+  }
+  return newState;
+};
+
+const requestPageByModalOpen = (
+  state: NavigationTreeState,
+  data: RequestPageByModalOpenData
+): NavigationTreeState => {
+  const newState = { ...state };
+  newState.pageByModalOpenRequested = true;
+  newState.pageBy = data.pageBy;
+  newState.importPageByConfigurations = data.importPageByConfigurations;
+  return newState;
+};
+
+const requestPageByModalClose = (state: NavigationTreeState): NavigationTreeState => {
+  const newState = { ...state };
+  newState.pageByModalOpenRequested = false;
+  newState.importRequested = false;
+  newState.pageBy = [];
   return newState;
 };
 
@@ -142,6 +172,7 @@ const promptsAnswered = (
 ): NavigationTreeState => {
   const newState = { ...state };
   if (data) {
+    newState.importRequested = false;
     newState.promptsAnswers = data.promptsAnswers;
     newState.dossierData = data.dossierData;
   }

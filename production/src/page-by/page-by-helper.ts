@@ -1,3 +1,5 @@
+import { PageByConfiguration } from '@mstr/connector-components';
+
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 
@@ -218,6 +220,19 @@ class PageByHelper {
 
     return newSheetName;
   }
+
+  /**
+   * Parses Page-by combinations selected in the Page-by modal
+   *
+   * @param pageByConfigurations Array of selected Page-by configurations
+   * @returns Two-dimensional array of selected page-by elements
+   */
+  parseSelectedPageByConfigurations = (
+    pageByConfigurations: PageByConfiguration[][]
+  ): PageByDataElement[][] =>
+    pageByConfigurations.map(combination =>
+      combination.map(({ name, value, id }) => ({ name, value, valueId: id }))
+    );
 }
 
 export const pageByHelper = new PageByHelper();
