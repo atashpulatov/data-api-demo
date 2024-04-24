@@ -19,12 +19,12 @@ const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
 class PopupViewSelectorHelper {
   /**
-   * Checks if the provided popup type is one of the reprompt types.
-   * Returns true if the popup type is either repromptingWindow,
-   * repromptReportDataOverview, or repromptDossierDataOverview. Otherwise, returns false.
+   * Determines whether the current opened dialog is showing prompts editor either
+   * for a report or a dossier regardless of where it was triggered from, the SidePanel
+   * or Overview dialog.
    *
    * @param popupType - The type of the popup to check.
-   * @returns {boolean} - returns true if the popup type is one of the reprompt types.
+   * @returns - returns true if the popup type is one of the possible reprompt types.
    */
   isRepromptPopupType(popupType: DialogType): boolean {
     return (
@@ -34,18 +34,25 @@ class PopupViewSelectorHelper {
     );
   }
 
+  /**
+   * Determines the type of the Prompted popup to show based on the workflow.
+   * If we are in the Multiple Reprompt workflow, it means we are in the transition period
+   * waiting for the next object to be reprompted. In this case, it returns 'multipleRepromptTransitionPage'.
+   * Otherwise, we are in the final step of the Prepare Data or Edit workflow, and it returns 'editFilters'.
+   *
+   * @param props - collection of properties passsed that contains repromptsQueueProps property
+   * @returns - returns the type of the Prompted popup type to show
+   */
+  getPromptedReportPopupType = (props: any): DialogType =>
+    this.isMultipleReprompt(props)
+      ? DialogType.multipleRepromptTransitionPage
+      : DialogType.editFilters;
+
   setPopupType(props: any, popupType: DialogType): DialogType {
     const { importRequested, dossierOpenRequested, isPrompted, pageBy } = props;
     const arePromptsAnswered = this.arePromptsAnswered(props);
     const shouldProceedToImport =
       importRequested && (!isPrompted || arePromptsAnswered) && !pageBy?.length;
-    const getPromptedReportPopupType = (): DialogType =>
-      // If we are in Multiple Reprompt workflow and get to this point, we are in
-      // the transition period waiting for the next object to be reprompted.
-      // Otherwise, we are in the final step of Prepare Data or Edit workflow.
-      this.isMultipleReprompt(props)
-        ? DialogType.multipleRepromptTransitionPage
-        : DialogType.editFilters;
 
     if (shouldProceedToImport) {
       this.proceedToImport(props);
@@ -57,7 +64,7 @@ class PopupViewSelectorHelper {
       if (this.isInstanceWithPromptsAnswered(props)) {
         // Handle the case when the user is editing a prompted report or dossier.
         if (this.isRepromptPopupType(popupType)) {
-          return getPromptedReportPopupType();
+          return this.getPromptedReportPopupType(props);
         }
       } else {
         return DialogType.obtainInstanceHelper;

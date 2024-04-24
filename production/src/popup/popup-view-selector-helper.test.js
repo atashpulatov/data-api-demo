@@ -111,4 +111,28 @@ describe('PopupViewSelectorHelper', () => {
       expect(popupViewSelectorHelper.isRepromptPopupType(nonRepromptPopupType)).toBe(false);
     });
   });
+
+  it('should return multipleRepromptTransitionPage for multiple reprompt', () => {
+    const props = {
+      repromptsQueueProps: {
+        total: 2,
+      },
+    };
+
+    const result = popupViewSelectorHelper.getPromptedReportPopupType(props);
+
+    expect(result).toBe(DialogType.multipleRepromptTransitionPage);
+  });
+
+  it('should return editFilters for non-multiple reprompt', () => {
+    const props = {
+      repromptsQueueProps: {
+        total: 0,
+      },
+    };
+
+    const result = popupViewSelectorHelper.getPromptedReportPopupType(props);
+
+    expect(result).toBe(DialogType.editFilters);
+  });
 });
