@@ -4,7 +4,7 @@ import { Action } from 'redux';
 import { MstrObjectTypes } from '../../mstr-object/mstr-object-types';
 import { PageBy } from '../../page-by/page-by-types';
 import { PromptsAnswer } from '../answers-reducer/answers-reducer-types';
-import { PopupTypeEnum } from '../popup-state-reducer/popup-state-reducer-types';
+import { DialogType } from '../popup-state-reducer/popup-state-reducer-types';
 
 import { DisplayAttrFormNames } from '../../mstr-object/constants';
 
@@ -126,7 +126,7 @@ export interface UpdateSelectedMenuAction extends Action {
 
 interface SetPopupTypeAction extends Action {
   type: NavigationTreeActionTypes.SET_POPUP_TYPE;
-  popupType: PopupTypeEnum;
+  popupType: DialogType;
 }
 
 export type NavigationTreeActions =

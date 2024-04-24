@@ -3,7 +3,9 @@ import { Action } from 'redux';
 import { ObjectImportType } from '../../mstr-object/constants';
 
 export interface PopupStateState {
-  popupType?: PopupTypeEnum;
+  popupType?: DialogType;
+  // Should be removed when popupType works correctly, and control view displayed in dialog
+  dialogType?: DialogType;
   isDataOverviewOpen?: boolean;
   filteredPageByLinkId?: string;
   isReprompt?: boolean;
@@ -13,6 +15,7 @@ export interface PopupStateState {
 
 export enum PopupStateActionTypes {
   SET_POPUP_TYPE = 'POPUP_STATE_SET_POPUP_TYPE',
+  POPUP_STATE_SET_DIALOG_TYPE = 'POPUP_STATE_SET_DIALOG_TYPE',
   SET_MSTR_DATA = 'POPUP_STATE_SET_MSTR_DATA',
   SET_OBJECT_DATA = 'POPUP_STATE_SET_OBJECT_DATA',
   ON_POPUP_BACK = 'POPUP_STATE_ON_POPUP_BACK',
@@ -22,7 +25,7 @@ export enum PopupStateActionTypes {
   SET_IMPORT_TYPE = 'POPUP_STATE_SET_IMPORT_TYPE',
 }
 
-export enum PopupTypeEnum {
+export enum DialogType {
   dataPreparation = 'data-preparation',
   editFilters = 'edit-filters',
   loadingPage = 'loading-page',
@@ -40,7 +43,12 @@ export enum PopupTypeEnum {
 
 interface SetPopupTypeAction extends Action {
   type: PopupStateActionTypes.SET_POPUP_TYPE;
-  popupType: PopupTypeEnum;
+  popupType: DialogType;
+}
+
+interface SetDialogTypeAction extends Action {
+  type: PopupStateActionTypes.POPUP_STATE_SET_DIALOG_TYPE;
+  dialogType: DialogType;
 }
 
 interface SetMstrDataAction extends Action {
@@ -78,6 +86,7 @@ interface SetImportTypeAction extends Action {
 
 export type PopupStateActions =
   | SetPopupTypeAction
+  | SetDialogTypeAction
   | SetMstrDataAction
   | SetObjectDataAction
   | OnPopupBackAction

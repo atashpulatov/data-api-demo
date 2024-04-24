@@ -8,7 +8,7 @@ import { reduxStore } from '../store';
 
 import { PageBy } from '../page-by/page-by-types';
 import { RequestPageByModalOpenData } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer-types';
-import { PopupTypeEnum } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
+import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 import { PageByDisplayOption } from '../right-side-panel/settings-side-panel/settings-side-panel-types';
 
 import { selectorProperties } from '../attribute-selector/selector-properties';
@@ -18,18 +18,18 @@ import { DisplayAttrFormNames } from '../mstr-object/constants';
 const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
 class PopupViewSelectorHelper {
-  setPopupType(props: any, popupType: PopupTypeEnum): PopupTypeEnum {
+  setPopupType(props: any, popupType: DialogType): DialogType {
     const { importRequested, dossierOpenRequested, isPrompted, pageBy } = props;
     const arePromptsAnswered = this.arePromptsAnswered(props);
     const shouldProceedToImport =
       importRequested && (!isPrompted || arePromptsAnswered) && !pageBy?.length;
-    const getPromptedReportPopupType = (): PopupTypeEnum =>
+    const getPromptedReportPopupType = (): DialogType =>
       // If we are in Multiple Reprompt workflow and get to this point, we are in
       // the transition period waiting for the next object to be reprompted.
       // Otherwise, we are in the final step of Prepare Data or Edit workflow.
       this.isMultipleReprompt(props)
-        ? PopupTypeEnum.multipleRepromptTransitionPage
-        : PopupTypeEnum.editFilters;
+        ? DialogType.multipleRepromptTransitionPage
+        : DialogType.editFilters;
 
     if (shouldProceedToImport) {
       this.proceedToImport(props);
@@ -39,17 +39,17 @@ class PopupViewSelectorHelper {
       // action triggered by the Prompts dialog, it could lead to a cyclical loop in the prompts page
       // when editing a prompted report.
       if (this.isInstanceWithPromptsAnswered(props)) {
-        if (popupType === PopupTypeEnum.repromptingWindow) {
+        if (popupType === DialogType.repromptingWindow) {
           return getPromptedReportPopupType();
         }
       } else {
-        return PopupTypeEnum.obtainInstanceHelper;
+        return DialogType.obtainInstanceHelper;
       }
     } else if (this.promptedReportSubmitted(props)) {
-      return PopupTypeEnum.promptsWindow;
+      return DialogType.promptsWindow;
     } else if (dossierOpenRequested) {
       // open dossier without prompts
-      return PopupTypeEnum.dossierWindow;
+      return DialogType.dossierWindow;
     }
     return popupType;
   }
@@ -78,7 +78,7 @@ class PopupViewSelectorHelper {
     const isPromptedReportSubmitted =
       !!(finalIsPrompted || props.isPrompted) &&
       props.mstrObjectType?.name === mstrObjectEnum.mstrObjectType.report.name &&
-      (props.importRequested || props.popupType === PopupTypeEnum.dataPreparation);
+      (props.importRequested || props.popupType === DialogType.dataPreparation);
 
     return isPromptedReportSubmitted;
   }
@@ -150,7 +150,7 @@ class PopupViewSelectorHelper {
     const { pageBy } = instanceDefinition.definition?.grid || {};
     const { pageByDisplaySetting } = reduxStore.getState().settingsReducer;
 
-    if (props.popupType === PopupTypeEnum.libraryWindow) {
+    if (props.popupType === DialogType.libraryWindow) {
       if (pageBy?.length && pageByDisplaySetting === PageByDisplayOption.SELECT_PAGES) {
         this.handleRequestPageByModalOpen({ ...props, pageBy });
       } else {

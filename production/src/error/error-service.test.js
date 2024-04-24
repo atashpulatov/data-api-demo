@@ -4,7 +4,7 @@ import { sessionHelper } from '../storage/session-helper';
 
 import { reduxStore } from '../store';
 
-import { PopupTypeEnum } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
+import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupController } from '../popup/popup-controller';
@@ -531,7 +531,7 @@ describe('ErrorService', () => {
 
       // When
       errorService.handleError(error, {
-        dialogType: PopupTypeEnum.importedDataOverview,
+        dialogType: DialogType.importedDataOverview,
       });
 
       // Then

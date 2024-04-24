@@ -7,7 +7,7 @@ import { pageByHelper } from '../page-by/page-by-helper';
 
 import { PageByDataElement, PageByDisplayType } from '../page-by/page-by-types';
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
-import { PopupTypeEnum } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
+import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 import { PageByDisplayOption } from '../right-side-panel/settings-side-panel/settings-side-panel-types';
 import { ObjectData } from '../types/object-types';
 import { DialogResponse, ReportParams } from './popup-controller-types';
@@ -75,11 +75,11 @@ class PopupController {
 
   runPopupNavigation = async (): Promise<void> => {
     this.clearPopupStateIfNeeded();
-    await this.runPopup(PopupTypeEnum.libraryWindow, 80, 80);
+    await this.runPopup(DialogType.libraryWindow, 80, 80);
   };
 
   runEditFiltersPopup = async (reportParams: ReportParams): Promise<void> => {
-    await this.runPopup(PopupTypeEnum.editFilters, 80, 80, reportParams);
+    await this.runPopup(DialogType.editFilters, 80, 80, reportParams);
   };
 
   /**
@@ -92,10 +92,10 @@ class PopupController {
    */
   runRepromptPopup = async (reportParams: any, isEdit = true): Promise<void> => {
     const { popupType } = this.reduxStore.getState().popupStateReducer;
-    const isOverviewReprompt = popupType && popupType === PopupTypeEnum.repromptReportDataOverview;
+    const isOverviewReprompt = popupType && popupType === DialogType.repromptReportDataOverview;
     this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: true, isEdit }));
     await this.runPopup(
-      isOverviewReprompt ? popupType : PopupTypeEnum.repromptingWindow,
+      isOverviewReprompt ? popupType : DialogType.repromptingWindow,
       80,
       80,
       reportParams
@@ -108,10 +108,10 @@ class PopupController {
    */
   runRepromptDossierPopup = async (reportParams: any): Promise<void> => {
     const { popupType } = this.reduxStore.getState().popupStateReducer;
-    const isOverviewReprompt = popupType && popupType === PopupTypeEnum.repromptDossierDataOverview;
+    const isOverviewReprompt = popupType && popupType === DialogType.repromptDossierDataOverview;
     this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: true }));
     await this.runPopup(
-      isOverviewReprompt ? popupType : PopupTypeEnum.dossierWindow,
+      isOverviewReprompt ? popupType : DialogType.dossierWindow,
       80,
       80,
       reportParams
@@ -119,12 +119,12 @@ class PopupController {
   };
 
   runEditDossierPopup = async (reportParams: ReportParams): Promise<void> => {
-    await this.runPopup(PopupTypeEnum.dossierWindow, 80, 80, reportParams);
+    await this.runPopup(DialogType.dossierWindow, 80, 80, reportParams);
   };
 
   runImportedDataOverviewPopup = async (): Promise<void> => {
     this.clearPopupStateIfNeeded();
-    await this.runPopup(PopupTypeEnum.importedDataOverview, 80, 80, null);
+    await this.runPopup(DialogType.importedDataOverview, 80, 80, null);
   };
 
   runPopup = async (
@@ -251,15 +251,12 @@ class PopupController {
         await officeApiHelper.getExcelSessionStatus(); // checking excel session status
       }
       await authenticationHelper.validateAuthToken();
-      if (dialogType === PopupTypeEnum.importedDataOverview) {
+      if (dialogType === DialogType.importedDataOverview) {
         await this.overviewHelper.handleOverviewActionCommand(response);
         return;
       }
 
-      if (
-        dialogType === PopupTypeEnum.dossierWindow ||
-        dialogType === PopupTypeEnum.repromptingWindow
-      ) {
+      if (dialogType === DialogType.dossierWindow || dialogType === DialogType.repromptingWindow) {
         await this.overviewHelper.handleOverviewActionCommand(response);
       }
 
@@ -554,7 +551,7 @@ class PopupController {
   loadPending =
     (wrapped: any) =>
     async (...args: any) => {
-      this.runPopup(PopupTypeEnum.loadingPage, 30, 40);
+      this.runPopup(DialogType.loadingPage, 30, 40);
       return wrapped(...args);
     };
 
@@ -618,9 +615,9 @@ class PopupController {
       this.resetDialogStates();
     } else if (
       isDataOverviewOpen &&
-      (dialogType === PopupTypeEnum.repromptDossierDataOverview ||
-        dialogType === PopupTypeEnum.repromptReportDataOverview ||
-        dialogType === PopupTypeEnum.libraryWindow)
+      (dialogType === DialogType.repromptDossierDataOverview ||
+        dialogType === DialogType.repromptReportDataOverview ||
+        dialogType === DialogType.libraryWindow)
     ) {
       // Show overview table if cancel was triggered during Multiple Reprompt workflow.
       this.runImportedDataOverviewPopup();
