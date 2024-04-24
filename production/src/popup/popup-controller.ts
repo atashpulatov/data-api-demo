@@ -220,24 +220,24 @@ class PopupController {
    * It returns true if command is either RANGE_TAKEN_OK or RANGE_TAKEN_CLOSE and re-prompt in
    * Overview dialog is triggered.
    *
-   * @param dialogType - indicates type of the dialog to be opened, value from PopupTypeEnum
+   * @param dialogType - indicates type of the dialog to be opened, value from DialogType
    * @param command - action command from the dialog
    * @param response - message received from the dialog
    * @returns boolean - true if the command is either RANGE_TAKEN_OK or RANGE_TAKEN_CLOSE and re-prompt in Overview dialog.
    */
   async isOverviewActionHandledForOverviewPopups(
-    dialogType: PopupTypeEnum,
+    dialogType: DialogType,
     command: string,
     response: DialogResponse
   ): Promise<boolean> {
     const { RANGE_TAKEN_CLOSE, RANGE_TAKEN_OK } = OverviewActionCommands;
     const validDialogTypes = [
-      PopupTypeEnum.repromptReportDataOverview,
-      PopupTypeEnum.repromptDossierDataOverview,
+      DialogType.repromptReportDataOverview,
+      DialogType.repromptDossierDataOverview,
     ];
 
     if (
-      dialogType === PopupTypeEnum.importedDataOverview ||
+      dialogType === DialogType.importedDataOverview ||
       (validDialogTypes.includes(dialogType) &&
         (command === RANGE_TAKEN_OK || command === RANGE_TAKEN_CLOSE))
     ) {
@@ -247,10 +247,7 @@ class PopupController {
       return true;
     }
 
-    if (
-      dialogType === PopupTypeEnum.dossierWindow ||
-      dialogType === PopupTypeEnum.repromptingWindow
-    ) {
+    if (dialogType === DialogType.dossierWindow || dialogType === DialogType.repromptingWindow) {
       await this.overviewHelper.handleOverviewActionCommand(response);
     }
 

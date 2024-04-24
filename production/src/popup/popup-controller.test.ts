@@ -631,8 +631,8 @@ describe('PopupController', () => {
       .mockImplementation(async () => {});
 
     const validPopupTypes = [
-      PopupTypeEnum.repromptReportDataOverview,
-      PopupTypeEnum.repromptDossierDataOverview,
+      DialogType.repromptReportDataOverview,
+      DialogType.repromptDossierDataOverview,
     ];
 
     validPopupTypes.forEach(popupType => {
@@ -650,7 +650,7 @@ describe('PopupController', () => {
   });
 
   it('should return false for invalid overview popup types', () => {
-    const invalidPopupType = PopupTypeEnum.dataPreparation;
+    const invalidPopupType = DialogType.dataPreparation;
     popupController
       .isOverviewActionHandledForOverviewPopups(invalidPopupType, 'command', null)
       .then(result => {

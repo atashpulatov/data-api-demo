@@ -1,5 +1,6 @@
-import { PopupTypeEnum } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 import { popupViewSelectorHelper } from './popup-view-selector-helper';
+
+import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 
 describe('PopupViewSelectorHelper', () => {
   describe('composeFilter', () => {
@@ -94,9 +95,9 @@ describe('PopupViewSelectorHelper', () => {
 
     it('should return true for reprompt popup types', () => {
       const repromptPopupTypes = [
-        PopupTypeEnum.repromptingWindow,
-        PopupTypeEnum.repromptReportDataOverview,
-        PopupTypeEnum.repromptDossierDataOverview,
+        DialogType.repromptingWindow,
+        DialogType.repromptReportDataOverview,
+        DialogType.repromptDossierDataOverview,
       ];
 
       repromptPopupTypes.forEach(popupType => {

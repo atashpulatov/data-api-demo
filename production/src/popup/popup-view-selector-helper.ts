@@ -26,15 +26,15 @@ class PopupViewSelectorHelper {
    * @param popupType - The type of the popup to check.
    * @returns {boolean} - returns true if the popup type is one of the reprompt types.
    */
-  isRepromptPopupType(popupType: PopupTypeEnum): boolean {
+  isRepromptPopupType(popupType: DialogType): boolean {
     return (
-      popupType === PopupTypeEnum.repromptingWindow ||
-      popupType === PopupTypeEnum.repromptReportDataOverview ||
-      popupType === PopupTypeEnum.repromptDossierDataOverview
+      popupType === DialogType.repromptingWindow ||
+      popupType === DialogType.repromptReportDataOverview ||
+      popupType === DialogType.repromptDossierDataOverview
     );
   }
 
-  setPopupType(props: any, popupType: PopupTypeEnum): PopupTypeEnum {
+  setPopupType(props: any, popupType: DialogType): DialogType {
     const { importRequested, dossierOpenRequested, isPrompted, pageBy } = props;
     const arePromptsAnswered = this.arePromptsAnswered(props);
     const shouldProceedToImport =
