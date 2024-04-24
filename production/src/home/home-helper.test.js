@@ -183,9 +183,9 @@ describe('HomeHelper', () => {
 
       homeHelper.init(reduxStore, {}, {});
       // when
-      homeHelper.initIsShapeAPISupported();
-      expect(officeContext.isSetSupported).toBeCalled();
-      expect(homeHelper.reduxStore.dispatch).toBeCalled();
+      homeHelper.initSupportedFeaturesFlags();
+      expect(officeContext.isSetSupported).toHaveBeenCalled();
+      expect(homeHelper.reduxStore.dispatch).toHaveBeenCalled();
     });
   });
 
