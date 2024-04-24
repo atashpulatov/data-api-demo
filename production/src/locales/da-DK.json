@@ -276,5 +276,10 @@
    "Page-By Information": "Page-By-oplysninger",
    "and": "og",
    "or": "eller",
-   "not": "ikke"
+   "not": "ikke",
+   "Data Formatting": "Dataformatering",
+   "Import data as text": "Importer data som tekst",
+   "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "Hvis det er aktiveret, importeres attributværdierne som tekst med bevarelse af formateringen fra MicroStrategy. Dette kan påvirke Excel-formler.",
+   "Merge columns": "Flet kolonner",
+   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Hvis det er aktiveret, flettes tilstødende kolonneoverskrifter med identiske værdier. Gælder kun for krydstabelrapporter."
 }

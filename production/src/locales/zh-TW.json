@@ -276,5 +276,10 @@
    "Page-By Information": "逐頁分組資訊",
    "and": "和",
    "or": "或",
-   "not": "非"
+   "not": "非",
+   "Data Formatting": "資料格式",
+   "Import data as text": "將資料匯入為文字",
+   "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "若啟用屬性值將會匯入為文字並維持 MicroStrategy 中的格式。這可能會影響 Excel 公式。",
+   "Merge columns": "合併欄",
+   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "若已啟用具有相同值的相鄰欄標頭將會合併。僅適用於交叉表報告。"
 }

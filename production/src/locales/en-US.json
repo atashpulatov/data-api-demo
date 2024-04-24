@@ -276,5 +276,10 @@
    "Page-By Information": "Page-By Information",
    "and": "and",
    "or": "or",
-   "not": "not"
+   "not": "not",
+   "Data Formatting": "Data Formatting",
+   "Import data as text": "Import data as text",
+   "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.",
+   "Merge columns": "Merge columns",
+   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports."
 }

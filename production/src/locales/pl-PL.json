@@ -276,5 +276,10 @@
    "Page-By Information": "Informacje o stronicowaniu",
    "and": "oraz",
    "or": "lub",
-   "not": "nie"
+   "not": "nie",
+   "Data Formatting": "Formatowanie danych",
+   "Import data as text": "Importuj dane jako tekst",
+   "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "Jeśli jest włączona, wartości atrybutów będą zaimportowane jako tekst z zachowaniem formatowania z MicroStrategy. Może to mieć wpływ na formuły programu Excel.",
+   "Merge columns": "Połącz kolumny",
+   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Jeśli jest włączona, sąsiednie nagłówki kolumn z identycznymi wartościami zostaną scalone. Ma zastosowanie tylko do raportów krzyżowych."
 }
