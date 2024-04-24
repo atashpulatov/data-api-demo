@@ -15,8 +15,10 @@ export const objectTableImportType = new Set([
   ObjectImportType.FORMATTED_TABLE
 ]);
 
-export const excelApiSupportedObjectImportTypes = [
+// Excludable object import types based on corresponding excel api support
+export const excludableObjectImportTypes = [
   ObjectImportType.IMAGE,
+  ObjectImportType.PIVOT_TABLE,
   ObjectImportType.FORMATTED_TABLE
 ]
 

@@ -108,23 +108,24 @@ class OfficeReducerHelper {
    * 
    * @return Flag indicating whether correspoding excel api to import type is supported
    */
-  identifyExcelApiSupport = (objectImportType: ObjectImportType): boolean => {
-    const { isShapeAPISupported, isInsertWorksheetAPISupported } = this.reduxStore.getState().officeReducer;
-
-    let isExcelApiSupported: boolean;
+  checkExcelApiSupport = (objectImportType: ObjectImportType): boolean => {
+    const {
+      isShapeAPISupported,
+      isInsertWorksheetAPISupported,
+      isPivotTableSupported
+    } = this.reduxStore.getState().officeReducer;
 
     switch (objectImportType) {
       case ObjectImportType.IMAGE:
-        isExcelApiSupported = isShapeAPISupported;
-        break;
+        return isShapeAPISupported;
       case ObjectImportType.FORMATTED_TABLE:
-        isExcelApiSupported = isInsertWorksheetAPISupported;
-        break;
+        return isInsertWorksheetAPISupported;
+      case ObjectImportType.PIVOT_TABLE:
+        return isPivotTableSupported;
+      case ObjectImportType.TABLE:
       default:
-        isExcelApiSupported = true;
+        return true;
     }
-
-    return isExcelApiSupported;
   }
 }
 

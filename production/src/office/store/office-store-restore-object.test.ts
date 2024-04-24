@@ -576,13 +576,13 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
       // given
       const objects: any = [{ objectWorkingId: 12345673, importType: ObjectImportType.FORMATTED_TABLE }];
 
-      jest.spyOn(officeReducerHelper, 'identifyExcelApiSupport').mockReturnValue(false);
+      jest.spyOn(officeReducerHelper, 'checkExcelApiSupport').mockReturnValue(false);
 
       // when
       const result = officeStoreRestoreObject.excludeObjects(objects, ObjectImportType.FORMATTED_TABLE);
 
       // then
-      expect(officeReducerHelper.identifyExcelApiSupport).toHaveBeenCalled()
+      expect(officeReducerHelper.checkExcelApiSupport).toHaveBeenCalled()
 
       expect(result).toHaveLength(0);
     });
@@ -591,13 +591,13 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
       // given
       const objects: any = [{ objectWorkingId: 12345673, importType: ObjectImportType.FORMATTED_TABLE }];
 
-      jest.spyOn(officeReducerHelper, 'identifyExcelApiSupport').mockReturnValue(true);
+      jest.spyOn(officeReducerHelper, 'checkExcelApiSupport').mockReturnValue(true);
 
       // when
       const result = officeStoreRestoreObject.excludeObjects(objects, ObjectImportType.FORMATTED_TABLE);
 
       // then
-      expect(officeReducerHelper.identifyExcelApiSupport).toHaveBeenCalled()
+      expect(officeReducerHelper.checkExcelApiSupport).toHaveBeenCalled()
 
       expect(result).toHaveLength(1);
     });
