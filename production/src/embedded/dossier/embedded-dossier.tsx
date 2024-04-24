@@ -42,7 +42,7 @@ interface MstrData {
   dossierId?: string;
   projectId?: string;
   instanceId?: string;
-  promptsAnswers?: any; // Replace 'any' with the appropriate type
+  promptsAnswers?: PromptsAnswer[];
   selectedViz?: string;
   visualizationInfo?: VisualizationInfo;
 }
