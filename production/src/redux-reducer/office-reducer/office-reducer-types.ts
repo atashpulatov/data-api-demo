@@ -135,5 +135,5 @@ export type OfficeActions =
   | SetPopupDataAction
   | ClearPopupDataAction
   | SetIsShapeAPISupportedAction
-  | SetIsInsertWorksheetAPISupportedAction;
+  | SetIsInsertWorksheetAPISupportedAction
   | SetIsPivotTableSupported;
