@@ -1,4 +1,5 @@
 import { officeApiHelper } from '../api/office-api-helper';
+import officeReducerHelper from './office-reducer-helper';
 import officeStoreHelper from './office-store-helper';
 
 import { ReduxStore } from '../../store';
@@ -9,9 +10,8 @@ import { errorService } from '../../error/error-handler';
 import { restoreAllAnswers } from '../../redux-reducer/answers-reducer/answers-actions';
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
 import officeApiDataLoader from '../api/office-api-data-loader';
-import { officeContext } from '../office-context';
 import { OfficeSettingsEnum } from '../../constants/office-constants';
-import { ObjectImportType } from '../../mstr-object/constants';
+import { excludableObjectImportTypes, ObjectImportType } from '../../mstr-object/constants';
 
 class OfficeStoreRestoreObject {
   reduxStore: ReduxStore;
@@ -37,24 +37,30 @@ class OfficeStoreRestoreObject {
 
     settings.set(OfficeSettingsEnum.storedObjects, objects);
 
-    // Do filter image objects if the shape api is not supported
-    // and only reflect udated objects in redux store and not back into office store.
-    objects = this.filterImageObjectsIfNoShapeAPI(objects);
+    // Do filter out objects if the corresponding excel api to import type is not supported.
+    // Only reflect updated objects in redux store and not back into office store.
+    excludableObjectImportTypes.forEach(objectImportType => {
+      objects = this.excludeObjects(objects, objectImportType);
+    });
+
     // @ts-expect-error
     objects && this.reduxStore.dispatch(restoreAllObjects(objects));
   };
 
   /**
-   * Filters out image objects if the shape api is not supported in current version in order to maintain the backward compatibility.
+   * Filters out objects given excel api is not supported in current version in order to maintain the backward compatibility.
    *
-   * @param objects
-   * @returns objects object definitions from excel document
+   * @param isExcelApiSupported Indicated whether given excel api is supported
+   * @param objects Objects stored in office settings
+   * @param importType Type of the import that is being made
+   * 
+   * @returns Contains the objects object definitions from excel document
    */
-  filterImageObjectsIfNoShapeAPI = (objects: ObjectData[]): ObjectData[] => {
-    const isShapeAPISupported = officeContext.isShapeAPISupported();
+  excludeObjects = (objects: ObjectData[], objectImportType: ObjectImportType): ObjectData[] => {
+    const isExcelApiSupported = officeReducerHelper.checkExcelApiSupport(objectImportType);
 
-    if (!isShapeAPISupported && objects?.filter) {
-      return objects.filter(object => object?.importType !== ObjectImportType.IMAGE);
+    if (!isExcelApiSupported) {
+      return objects.filter(object => object?.importType !== objectImportType);
     }
 
     return objects;

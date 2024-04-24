@@ -18,7 +18,7 @@ import { OperationSteps } from '../../operation/operation-steps';
 import mstrObjectEnum from '../mstr-object-type-enum';
 import dossierInstanceDefinition from './dossier-instance-definition';
 import { ErrorMessages } from '../../error/constants';
-import { ImportOperationStepDict, ObjectImportType } from '../constants';
+import { ImportOperationStepDict, ObjectImportType, objectTableImportType } from '../constants';
 
 class StepGetInstanceDefinition {
   /**
@@ -117,7 +117,6 @@ class StepGetInstanceDefinition {
       );
 
       if (importType !== ObjectImportType.PIVOT_TABLE && futureStep in ImportOperationStepDict) {
-        // FIXME: below flow should not be part of this step
         if (insertNewWorksheet) {
           const worksheet = await officeApiWorksheetHelper.createNewWorksheet({
             excelContext,
@@ -167,7 +166,7 @@ class StepGetInstanceDefinition {
         insertNewWorksheet: importType === ObjectImportType.PIVOT_TABLE || insertNewWorksheet,
       };
 
-      if (importType === ObjectImportType.TABLE || importType === ObjectImportType.PIVOT_TABLE) {
+      if (objectTableImportType.has(importType)) {
         // update table specific props
         updatedObject.crosstabHeaderDimensions = mstrTable.crosstabHeaderDimensions;
         updatedObject.isCrosstab = mstrTable.isCrosstab;
