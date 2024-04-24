@@ -36,6 +36,7 @@ export enum OperationSteps {
   SAVE_IMAGE_DETAILS = 'SAVE_IMAGE_DETAILS',
   // pivot-table steps
   CREATE_PIVOT_TABLE = 'CREATE_PIVOT_TABLE',
+  REMOVE_PIVOT_TABLE = 'REMOVE_PIVOT_TABLE',
 }
 
 const operationStepsMapTable = {
@@ -217,6 +218,9 @@ const operationStepsMapPivotTable = {
 
   [OperationTypes.REMOVE_OPERATION]: [
     OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
+    OperationSteps.REMOVE_OBJECT_TABLE,
+    OperationSteps.REMOVE_OBJECT_BINDING,
+    OperationSteps.REMOVE_PIVOT_TABLE,
     OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
   ],
 
