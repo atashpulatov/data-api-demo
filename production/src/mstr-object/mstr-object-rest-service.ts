@@ -385,11 +385,10 @@ class MstrObjectRestService {
   }: {
     objectId: string;
     projectId: string;
-    mstrObjectType: MstrObjectTypes;
-    dossierData: DossierData;
-    body: any;
-    limit: number;
-    displayAttrFormNames: DisplayAttrFormNames;
+    mstrObjectType?: MstrObjectTypes;
+    body?: any;
+    limit?: number;
+    displayAttrFormNames?: DisplayAttrFormNames;
   }): Promise<InstanceDefinition> => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
@@ -507,11 +506,10 @@ class MstrObjectRestService {
   }: {
     objectId: string;
     projectId: string;
-    mstrObjectType: MstrObjectTypes;
-    dossierData: DossierData;
-    body: any;
+    mstrObjectType?: MstrObjectTypes;
+    body?: any;
     instanceId: string;
-    displayAttrFormNames: DisplayAttrFormNames;
+    displayAttrFormNames?: DisplayAttrFormNames;
   }): Promise<InstanceDefinition> => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
@@ -874,6 +872,54 @@ class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .withCredentials()
       .then(res => res.body);
+  }
+
+  /**
+   * Fetches the workbook where the specific visualization exported to excel using export engine.
+   * 
+   * @param dossierId unique identifier of dossier
+   * @param dossierInstanceId unique identifier of dossier instance
+   * @param visualizationKey visualization key
+   * @param projectId unique identifier of the mstr project
+   * 
+   * @returns Readable stream(blob)
+   */
+  exportDossierToExcel = async (
+    { dossierId,
+      dossierInstanceId,
+      visualizationKey,
+      projectId
+    }: {
+      dossierId: string,
+      dossierInstanceId: string,
+      visualizationKey: string,
+      projectId: string
+    }
+  ): Promise<any> => {
+    const storeState = this.reduxStore.getState();
+    const { envUrl, authToken } = storeState.sessionReducer;
+    const fullPath = `${envUrl}/documents/${dossierId}/instances/${dossierInstanceId}/excel`;
+
+    const body = {
+      pageOption: 'DEFAULT',
+      pagePerSheet: false,
+      keys: [visualizationKey],
+    };
+
+    const options = {
+      method: 'POST',
+      credentials: 'include' as RequestCredentials,
+      headers: {
+        Accept: 'application/octet-stream',
+        'Content-type': 'application/json',
+        ...(projectId && { 'x-mstr-projectId': projectId }),
+        ...(authToken && { 'x-mstr-authtoken': authToken }),
+      },
+      body: JSON.stringify(body),
+    };
+
+    const response = await fetch(fullPath, options);
+    return response;
   };
 }
 

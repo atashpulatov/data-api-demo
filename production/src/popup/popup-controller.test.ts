@@ -9,7 +9,7 @@ import overviewHelper, { OverviewActionCommands } from './overview/overview-help
 
 import { reduxStore, RootState } from '../store';
 
-import { PopupTypeEnum } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
+import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 import { ObjectData } from '../types/object-types';
 import { ReportParams } from './popup-controller-types';
 
@@ -43,7 +43,7 @@ describe('PopupController', () => {
 
   it('should run popup with proper settings when called for navigation', () => {
     // given
-    const popupType = PopupTypeEnum.libraryWindow;
+    const popupType = DialogType.libraryWindow;
     const size = 80;
     const runPopupSpy = jest
       .spyOn(popupController, 'runPopup')
@@ -59,7 +59,7 @@ describe('PopupController', () => {
 
   it('should call displayDialogAsync on runPopup invocation', async () => {
     // given
-    const popupType = PopupTypeEnum.editFilters;
+    const popupType = DialogType.editFilters;
     jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementationOnce(async () => {});
     jest.spyOn(popupController, 'onMessageFromPopup').mockImplementationOnce(async () => {});
     jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementationOnce(async () => true);
@@ -72,7 +72,7 @@ describe('PopupController', () => {
   it('should run edit popup with proper settings', () => {
     // given
     const reportParams: ReportParams = { bindId: 'bindId' };
-    const popupType = PopupTypeEnum.editFilters;
+    const popupType = DialogType.editFilters;
     const size = 80;
     const runPopupSpy = jest
       .spyOn(popupController, 'runPopup')
@@ -89,7 +89,7 @@ describe('PopupController', () => {
   it('should run edit dossier popup with proper settings', () => {
     // given
     const reportParams: ReportParams = { bindId: 'bindId' };
-    const popupType = PopupTypeEnum.dossierWindow;
+    const popupType = DialogType.dossierWindow;
     const size = 80;
     const runPopupSpy = jest
       .spyOn(popupController, 'runPopup')
@@ -106,7 +106,7 @@ describe('PopupController', () => {
   it('should run reprompt popup with proper settings', () => {
     // given
     const reportParams = 'chosenObjectData';
-    const popupType = PopupTypeEnum.repromptingWindow;
+    const popupType = DialogType.repromptingWindow;
     const size = 80;
     const runPopupSpy = jest
       .spyOn(popupController, 'runPopup')
@@ -126,7 +126,7 @@ describe('PopupController', () => {
   it('should run repromptDossier popup with proper settings', () => {
     // given
     const reportParams = 'chosenObjectData';
-    const popupType = PopupTypeEnum.dossierWindow;
+    const popupType = DialogType.dossierWindow;
     const size = 80;
     const runPopupSpy = jest
       .spyOn(popupController, 'runPopup')
@@ -145,7 +145,7 @@ describe('PopupController', () => {
 
   it('should run importedDataOverview popup', () => {
     // given
-    const popupType = PopupTypeEnum.importedDataOverview;
+    const popupType = DialogType.importedDataOverview;
     const size = 80;
     const runPopupSpy = jest
       .spyOn(popupController, 'runPopup')
@@ -481,7 +481,7 @@ describe('PopupController', () => {
       .mockImplementation(async () => {});
 
     jest.spyOn(reduxStore, 'getState').mockReturnValue({
-      popupStateReducer: { popupType: PopupTypeEnum.importedDataOverview },
+      popupStateReducer: { popupType: DialogType.importedDataOverview },
     } as RootState);
     jest.spyOn(popupController, 'getIsMultipleRepromptQueueEmpty').mockReturnValue(true);
     jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementation(async () => true);
@@ -559,7 +559,7 @@ describe('PopupController', () => {
     jest.spyOn(reduxStore, 'dispatch').mockImplementation();
     jest.spyOn(reduxStore, 'getState').mockReturnValue({
       popupStateReducer: {
-        popupType: PopupTypeEnum.repromptDossierDataOverview,
+        popupType: DialogType.repromptDossierDataOverview,
         isDataOverviewOpen: true,
       },
     } as RootState);
@@ -610,7 +610,7 @@ describe('PopupController', () => {
     jest.spyOn(reduxStore, 'dispatch').mockImplementation();
     jest.spyOn(reduxStore, 'getState').mockReturnValue({
       popupStateReducer: {
-        popupType: PopupTypeEnum.repromptDossierDataOverview,
+        popupType: DialogType.repromptDossierDataOverview,
         isDataOverviewOpen: true,
       },
     } as RootState);

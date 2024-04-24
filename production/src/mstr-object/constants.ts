@@ -1,14 +1,29 @@
 export const DEFAULT_RANGE_POSITION = { top: 0, left: 0 };
 export const DEFAULT_CELL_POSITION = 'A1';
+export const VISUALIZATION_TITLE_EXCLUDED_DEFAULT_CELL_POSITION = 'A3';
 
 export enum ObjectImportType {
   TABLE = 'table',
   PIVOT_TABLE = 'pivot-table',
+  FORMATTED_TABLE = 'formattedTable',
   IMAGE = 'image',
 }
 
+export const objectTableImportType = new Set([
+  ObjectImportType.TABLE,
+  ObjectImportType.PIVOT_TABLE,
+  ObjectImportType.FORMATTED_TABLE
+]);
+
+// Excludable object import types based on corresponding excel api support
+export const excludableObjectImportTypes = [
+  ObjectImportType.IMAGE,
+  ObjectImportType.PIVOT_TABLE,
+  ObjectImportType.FORMATTED_TABLE
+]
+
 export enum ImportOperationStepDict {
-  GET_OFFICE_TABLE_IMPORT = ObjectImportType.IMAGE,
+  GET_OFFICE_TABLE_IMPORT = ObjectImportType.TABLE,
   MANIPULATE_VISUALIZATION_IMAGE = ObjectImportType.IMAGE,
 }
 

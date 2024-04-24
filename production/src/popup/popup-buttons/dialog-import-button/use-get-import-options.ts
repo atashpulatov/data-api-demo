@@ -19,6 +19,7 @@ import { optionsDictionary } from './import-button-constants';
 const useGetImportOptions = (): ImportButtonOptionsType[] => {
   const isPivotTableSupported = useSelector(officeSelectors.selectIsPivotTableSupported);
   const isShapeAPISupported = useSelector(officeSelectors.selectIsShapeAPISupported);
+  const isInsertWorksheetAPISupported = useSelector(officeSelectors.selectIsInsertWorksheetAPISupported);
   const selectedMstrObjectType = useSelector(navigationTreeSelectors.selectMstrObjectType);
   const isEdit = useSelector(navigationTreeSelectors.selectIsEdit);
   const editedObject = useSelector(popupSelectors.selectEditedObject);
@@ -31,6 +32,10 @@ const useGetImportOptions = (): ImportButtonOptionsType[] => {
   }
 
   options.push(optionsDictionary[ObjectImportType.TABLE]);
+
+  if (isInsertWorksheetAPISupported) {
+    options.push(optionsDictionary[ObjectImportType.FORMATTED_TABLE]);
+  }
 
   if (isShapeAPISupported && selectedMstrObjectType === mstrObjectType.mstrObjectType.dossier) {
     options.push(optionsDictionary[ObjectImportType.IMAGE]);

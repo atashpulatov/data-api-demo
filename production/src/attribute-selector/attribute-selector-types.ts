@@ -1,4 +1,5 @@
 import { PageByData } from '../page-by/page-by-types';
+import { RequestPageByModalOpenData } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer-types';
 
 export interface AttributeSelectorNotConnectedProps {
   title: string;
@@ -47,6 +48,7 @@ export interface EditedObjectProps {
   chosenObjectName: string;
   displayAttrFormNames: string;
   subtotalsInfo: SubtotalsInfoProps;
+  objectId: string;
   projectId: string;
   instanceId: string;
   promptsAnswers: Array<Object>;
@@ -94,6 +96,7 @@ export interface AttributeSelectorWindowNotConnectedProps {
   importSubtotal: boolean;
   displayAttrFormNames: string;
   editedObject: EditedObjectProps;
+  requestPageByModalOpen: (data: RequestPageByModalOpenData) => void;
 }
 
 export interface ObjectTypeProps {

@@ -2,7 +2,9 @@ import stepSaveObjectInExcel from '../office/store/step-save-object-in-excel';
 
 import stepGetInstanceDefinition from '../mstr-object/instance/step-get-instance-definition';
 import stepGetObjectSettings from '../mstr-object/settings/step-get-object-settings';
+import stepExportExcelToCurrentWorkBook from '../mstr-object/step-export-excel-to-current-workbook';
 import stepGetObjectDetails from '../mstr-object/step-get-object-details';
+import stepMoveFormattedDataFromExportedSheetToTargetSheet from '../mstr-object/step-move-formatted-data-from-exported-sheet-to-target-sheet';
 import stepDisplayNotificationCompleted from '../notification/step-display-notification-completed';
 import stepNotificationInProgress from '../notification/step-notification-in-progress';
 import stepBackupObjectData from '../office/backup-object-data/step-backup-object-data';
@@ -17,6 +19,7 @@ import stepFormatTable from '../office/format/step-format-table';
 import stepHighlightObject from '../office/highlight/step-highlight-object';
 import stepFetchInsertDataIntoExcel from '../office/import/step-fetch-insert-data-into-excel';
 import stepCreatePivotTable from '../office/pivot-table/step-create-pivot-table';
+import stepRemovePivotTable from '../office/pivot-table/step-remove-pivot-table';
 import stepRemoveObjectBinding from '../office/remove/step-remove-object-binding';
 import stepRemoveObjectTable from '../office/remove/step-remove-object-table';
 import stepAddVisualizationPlaceholder from '../office/shapes/step-add-visualization-placeholder';
@@ -112,7 +115,14 @@ class SubscribeSteps {
       OperationSteps.COMPLETE_CLEAR_DATA,
       stepCompleteClearData.completeClearData
     );
-
+    operationBus.subscribe(
+      OperationSteps.EXPORT_EXCEL_TO_CURRENT_WORKBOOK,
+      stepExportExcelToCurrentWorkBook.exportExcelToCurrentWorkBook
+    );
+    operationBus.subscribe(
+      OperationSteps.MOVE_FORMATTED_DATA_FROM_EXPORTED_SHEET_TO_TARGET_SHEET,
+      stepMoveFormattedDataFromExportedSheetToTargetSheet.moveFormattedDataFromExportedSheetToTargetSheet
+    );
     operationBus.subscribe(
       OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
       stepNotificationInProgress.moveNotificationToInProgress
@@ -150,6 +160,11 @@ class SubscribeSteps {
     operationBus.subscribe(
       OperationSteps.CREATE_PIVOT_TABLE,
       stepCreatePivotTable.createPivotTable
+    );
+
+    operationBus.subscribe(
+      OperationSteps.REMOVE_PIVOT_TABLE,
+      stepRemovePivotTable.removePivotTable
     );
   };
 }

@@ -26,35 +26,24 @@ const useGetImportButtonProps = (
   const isObjectSelected = useSelector(navigationTreeSelectors.selectIsObjectSelected);
   const selectedMstrObjectType = useSelector(navigationTreeSelectors.selectMstrObjectType);
   const isDossierOpenRequested = useSelector(navigationTreeSelectors.selectIsDossierOpenRequested);
-  const arePromptAnswered = useSelector(navigationTreeSelectors.selectArePromptAnswered);
   const isPromptDialog = useSelector(popupStateSelectors.selectIsPromptDialog);
-  const isObjectPrompted = useSelector(popupStateSelectors.selectIsObjectPrompted);
-
-  // We want to display apply button only for reprompt and prompt view
-  const shouldDisplayApplyButton = useMemo(
-    () => isPromptDialog || (isObjectPrompted && !arePromptAnswered),
-    [isPromptDialog, isObjectPrompted, arePromptAnswered]
-  );
 
   const shouldDisplayOptions = useMemo(
     () =>
       options.length > 1 &&
       isObjectSelected &&
-      !shouldDisplayApplyButton &&
+      !isPromptDialog &&
       (selectedMstrObjectType !== mstrObjectType.mstrObjectType.dossier || isDossierOpenRequested),
     [
-      options,
+      options.length,
       isObjectSelected,
-      shouldDisplayApplyButton,
+      isPromptDialog,
       selectedMstrObjectType,
       isDossierOpenRequested,
     ]
   );
 
-  const importButtonProps = dialogButtonHelper.getImportButtonProps(
-    shouldDisplayApplyButton,
-    importType
-  );
+  const importButtonProps = dialogButtonHelper.getImportButtonProps(isPromptDialog, importType);
 
   return { shouldDisplayOptions, importButtonProps };
 };

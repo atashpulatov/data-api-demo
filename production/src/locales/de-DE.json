@@ -256,9 +256,9 @@
    "Overview": "Übersicht",
    "Object and Worksheet Naming": "Objekt- und Arbeitsblattbenennung",
    "Use page name": "Seitennamen verwenden",
-   "Use source report name": "Namen des Quellberichts verwenden",
+   "Use source report name": "Quellberichtsnamen verwenden",
    "Use source report name and page name": "Quellberichtsnamen und Seitennamen verwenden",
-   "Use page name and source report name": "Seitennamen und Namen des Quellberichts verwenden",
+   "Use page name and source report name": "Seitennamen und Quellberichtsnamen verwenden",
    "Page-by Display": "Page-By-Anzeige",
    "Prompt to select pages": "Eingabeaufforderung zum Auswählen von Seiten",
    "Import default page": "Standardseite importieren",
@@ -276,5 +276,10 @@
    "Page-By Information": "Page-By-Informationen",
    "and": "und",
    "or": "oder",
-   "not": "nicht"
+   "not": "nicht",
+   "Data Formatting": "Datenformatierung",
+   "Import data as text": "Daten als Text importieren",
+   "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "Bei aktivierter Option werden die Attributwerte als Text unter Beibehaltung der Formatierung von MicroStrategy importiert. Dies kann sich auf Excel-Formeln auswirken.",
+   "Merge columns": "Spalten zusammenführen",
+   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Bei aktivierter Option werden benachbarte Spaltenkopfzeilen mit identischen Werten zusammengeführt. Gilt nur für Kreuztabellenberichte."
 }

@@ -276,5 +276,10 @@
    "Page-By Information": "Informations de saut de page",
    "and": "et",
    "or": "ou en",
-   "not": "non"
+   "not": "non",
+   "Data Formatting": "Formatage des données",
+   "Import data as text": "Importer les données sous forme de texte",
+   "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "Si l'option est activée, les valeurs d'attributs seront importées sous forme de texte, en conservant la mise en forme de MicroStrategy. Cela peut avoir un impact sur les formules Excel.",
+   "Merge columns": "Fusionner les colonnes",
+   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Si l'option est activée, les en-têtes de colonne adjacents avec des valeurs identiques seront fusionnés. S'applique uniquement aux rapports entre les onglets."
 }

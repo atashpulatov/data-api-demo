@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { connect, useDispatch } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { ObjectWindowTitle } from '@mstr/connector-components';
 import { Spinner } from '@mstr/rc';
 
@@ -8,8 +8,10 @@ import { authenticationHelper } from '../../authentication/authentication-helper
 import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { popupHelper } from '../../popup/popup-helper';
+import { popupViewSelectorHelper } from '../../popup/popup-view-selector-helper';
 import { EXTEND_SESSION, sessionHelper } from '../../storage/session-helper';
 
+import { PageByDisplayOption } from '../../right-side-panel/settings-side-panel/settings-side-panel-types';
 import { ItemType, LibraryWindowProps } from './library-window-types';
 
 import { selectorProperties } from '../../attribute-selector/selector-properties';
@@ -18,7 +20,9 @@ import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
+import { settingsReducerSelectors } from '../../redux-reducer/settings-reducer/settings-reducer-selectors';
 import { EmbeddedLibrary } from './embedded-library';
+import { DisplayAttrFormNames } from '../../mstr-object/constants';
 
 import './library.css';
 
@@ -35,6 +39,8 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
   const dispatch = useDispatch();
   const [isPublished, setIsPublished] = useState(true);
   const [t] = useTranslation('common', { i18n });
+
+  const pageByDisplaySetting = useSelector(settingsReducerSelectors.selectPageByDisplaySetting);
 
   const {
     chosenObjectId,
@@ -118,6 +124,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
    */
   const handleOk = async (): Promise<void> => {
     let promptedResponse = {};
+
     try {
       const chosenMstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
       if (chosenMstrObjectType === mstrObjectEnum.mstrObjectType.report) {
@@ -126,6 +133,18 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
           chosenProjectId,
           chosenMstrObjectType.name
         );
+
+        const instance = await mstrObjectRestService.createInstance({
+          objectId: chosenObjectId,
+          projectId: chosenProjectId,
+          displayAttrFormNames: DisplayAttrFormNames.AUTOMATIC,
+        });
+
+        const { pageBy } = instance.definition?.grid || {};
+
+        if (pageBy?.length && pageByDisplaySetting === PageByDisplayOption.SELECT_PAGES) {
+          popupViewSelectorHelper.handleRequestPageByModalOpen({ ...props, pageBy });
+        }
       } else if (chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dossier) {
         // Creating instance without shortcut information to pull prompts definition.
         const instance = await createDossierInstance(chosenProjectId, chosenObjectId, {});
@@ -172,6 +191,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
           chosenProjectId,
           chosenMstrObjectType.name
         );
+
         setObjectData({ isPrompted: isPromptedResponse });
       }
       handlePrepare();
@@ -275,6 +295,7 @@ const mapActionsToProps = {
   selectObject: navigationTreeActions.selectObject,
   requestDossierOpen: navigationTreeActions.requestDossierOpen,
   requestImport: navigationTreeActions.requestImport,
+  requestPageByModalOpen: navigationTreeActions.requestPageByModalOpen,
   handlePrepare: popupStateActions.onPrepareData,
   setObjectData: popupStateActions.setObjectData,
 };

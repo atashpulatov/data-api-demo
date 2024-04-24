@@ -197,6 +197,18 @@ class OperationStepDispatcher {
   completeCreatePivotTable(objectWorkingId: number): void {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.CREATE_PIVOT_TABLE));
   }
+
+  completeExportToCurrentWorkbook(objectWorkingId: number): void {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.EXPORT_EXCEL_TO_CURRENT_WORKBOOK));
+  }
+
+  completeMoveFormattedDataFromExportedSheetToTargetSheet(objectWorkingId: number): void {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.MOVE_FORMATTED_DATA_FROM_EXPORTED_SHEET_TO_TARGET_SHEET));
+  }
+  
+  completeRemovePivotTable(objectWorkingId: number): void {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.REMOVE_PIVOT_TABLE));
+  }
 }
 
 const operationStepDispatcher = new OperationStepDispatcher();

@@ -1,3 +1,4 @@
+import officeReducerHelper from './office-reducer-helper'
 import officeStoreHelper from './office-store-helper';
 
 import { ReduxStore } from '../../store';
@@ -6,9 +7,8 @@ import { ObjectData } from '../../types/object-types';
 
 import { errorService } from '../../error/error-handler';
 import { removeObject } from '../../redux-reducer/object-reducer/object-actions';
-import { officeContext } from '../office-context';
 import { OfficeSettingsEnum } from '../../constants/office-constants';
-import { ObjectImportType } from '../../mstr-object/constants';
+import { excludableObjectImportTypes, ObjectImportType } from '../../mstr-object/constants';
 
 class OfficeStoreObject {
   reduxStore: ReduxStore;
@@ -52,33 +52,32 @@ class OfficeStoreObject {
   };
 
   /**
-   * Prepares objects before saving in Office Settings. It merges objects from redux with image objects from Office Store
-   * if Shape API is not supported and image objects are present in Office Store.
-   *
-   * @returns {Array} Contains objects definitions from excel document
+   * Merges previously filtered out objects to redux store to maintain backward compatibility. 
+   * Ultimately sorts concatenated objects by objectWorkingId.
+   * 
+   * @param isExcelApiSupported Indicated whether given excel api is supported
+   * @param objects Objects stored in office settings
+   * @param importType Type of the import that is being made
+   * 
+   * @returns Contains the objects definitions from excel document
    */
-  mergeReduxToExcelStoreObjectsIfShapeApiNotSupported = (): ObjectData[] => {
-    const { objects } = this.reduxStore.getState().objectReducer;
-    const isShapeAPISupported = officeContext.isShapeAPISupported();
+  mergeStoreObjectsToRedux = (objects: ObjectData[], objectImportType: ObjectImportType): any => {
+    const isExcelApiSupported = officeReducerHelper.checkExcelApiSupport(objectImportType);
 
-    if (!isShapeAPISupported) {
-      // Restore objects from Office Store that contain image objects.
+    if (!isExcelApiSupported) {
       const settings = officeStoreHelper.getOfficeSettings();
       const objectsInOfficeStore: ObjectData[] = settings.get(OfficeSettingsEnum.storedObjects);
 
       if (objectsInOfficeStore?.length > 0) {
-        // Grab image objects from Office Store
-        const imageObjects = objectsInOfficeStore.filter(
-          object => object?.importType === ObjectImportType.IMAGE
+        const filteredObjects = objectsInOfficeStore.filter(
+          (object: any) => object?.importType === objectImportType
         );
 
-        // Merge imageObjects with objects from redux based and sort descendng on objectWorkingId property in object.
-        if (imageObjects?.length > 0) {
-          return objects.concat(imageObjects).sort((a, b) => b.objectWorkingId - a.objectWorkingId);
+        if (filteredObjects?.length > 0) {
+          return objects.concat(filteredObjects).sort((a: ObjectData, b: ObjectData) => b.objectWorkingId - a.objectWorkingId);
         }
       }
     }
-
     return objects;
   };
 
@@ -89,7 +88,15 @@ class OfficeStoreObject {
   saveObjectsInExcelStore = (): void => {
     // Make sure that objects are merged before saving in Office Settings
     // to maintain backward compatibility and include image objects if Shape API is not supported.
-    const objects = this.mergeReduxToExcelStoreObjectsIfShapeApiNotSupported();
+    const { objects: objectsInRedux } = this.reduxStore.getState().objectReducer;
+
+    let objects = [...objectsInRedux];
+
+    // Restore hidden image objects before saving objects into office settings
+    excludableObjectImportTypes.forEach(objectImportType => {
+      objects = this.mergeStoreObjectsToRedux(objects, objectImportType);
+    });
+
     const settings = officeStoreHelper.getOfficeSettings();
     settings.set(OfficeSettingsEnum.storedObjects, objects);
     settings.saveAsync();

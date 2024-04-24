@@ -7,6 +7,7 @@ import { popupViewSelectorHelper } from './popup-view-selector-helper';
 
 import i18n from '../i18n';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 
 const ObtainInstanceHelperNotConnected: React.FC = props => {
@@ -29,6 +30,7 @@ function mapStateToProps(state: any): any {
     popupReducer: { editedObject },
     sessionReducer: { attrFormPrivilege },
     officeReducer,
+    popupStateReducer: { popupType },
   } = state;
   const { promptsAnswers } = navigationTree;
   const { supportForms } = officeReducer;
@@ -40,11 +42,15 @@ function mapStateToProps(state: any): any {
     editedObject: {
       ...popupHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege),
     },
+    popupType,
   };
 }
 
 const mapDispatchToProps = {
   preparePromptedReport: popupActions.preparePromptedReport,
+  requestPageByModalOpen: navigationTreeActions.requestPageByModalOpen,
+  requestImport: navigationTreeActions.requestImport,
+  startImport: navigationTreeActions.startImport,
 };
 
 export const ObtainInstanceHelper = connect(

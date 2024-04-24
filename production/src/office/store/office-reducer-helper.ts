@@ -3,6 +3,7 @@ import { ObjectData } from '../../types/object-types';
 
 import { OperationTypes } from '../../operation/operation-type-names';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 class OfficeReducerHelper {
   reduxStore: any;
@@ -98,6 +99,34 @@ class OfficeReducerHelper {
   clearPopupData = (): void => {
     this.reduxStore.dispatch(officeActions.clearPopupData());
   };
+
+  /**
+   * Performs excel api version check and identifies the excel api support 
+   * in current version based on import type.
+   * 
+   * @param importType Type of the import that is being made
+   * 
+   * @return Flag indicating whether correspoding excel api to import type is supported
+   */
+  checkExcelApiSupport = (objectImportType: ObjectImportType): boolean => {
+    const {
+      isShapeAPISupported,
+      isInsertWorksheetAPISupported,
+      isPivotTableSupported
+    } = this.reduxStore.getState().officeReducer;
+
+    switch (objectImportType) {
+      case ObjectImportType.IMAGE:
+        return isShapeAPISupported;
+      case ObjectImportType.FORMATTED_TABLE:
+        return isInsertWorksheetAPISupported;
+      case ObjectImportType.PIVOT_TABLE:
+        return isPivotTableSupported;
+      case ObjectImportType.TABLE:
+      default:
+        return true;
+    }
+  }
 }
 
 const officeReducerHelper = new OfficeReducerHelper();

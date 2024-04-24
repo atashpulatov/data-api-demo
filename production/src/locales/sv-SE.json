@@ -276,5 +276,10 @@
    "Page-By Information": "Siduppdelad information",
    "and": "och",
    "or": "eller",
-   "not": "inte"
+   "not": "inte",
+   "Data Formatting": "Dataformatering",
+   "Import data as text": "Importera data som text",
+   "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "Om detta aktiveras kommer attributvärden att importeras som text, med bibehållen formatering från MicroStrategy. Detta kan påverka Excel-formler.",
+   "Merge columns": "Slå samman kolumner",
+   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Om detta aktiveras kommer intilliggande kolumnrubriker med identiska värden att slås samman. Gäller endast korsfliksrapporter."
 }

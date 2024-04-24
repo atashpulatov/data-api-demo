@@ -276,5 +276,10 @@
    "Page-By Information": "Op pagina-informatie",
    "and": "en",
    "or": "of",
-   "not": "niet"
+   "not": "niet",
+   "Data Formatting": "Gegevensindeling",
+   "Import data as text": "Gegevens importeren als tekst",
+   "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "Als deze optie is ingeschakeld, worden attribuutwaarden geïmporteerd als tekst met behoud van de opmaak van MicroStrategy. Dit kan invloed hebben op Excel-formules.",
+   "Merge columns": "Kolommen samenvoegen",
+   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Als deze optie is ingeschakeld, worden aangrenzende kolomkoppen met identieke waarden samengevoegd. Alleen van toepassing op kruistabelrapporten."
 }
