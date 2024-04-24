@@ -7,6 +7,7 @@ import { ObjectData } from '../../types/object-types';
 
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 class StepRemoveObjectTable {
   /**
@@ -28,6 +29,7 @@ class StepRemoveObjectTable {
       bindId,
       isCrosstab = false,
       crosstabHeaderDimensions = {},
+      importType,
     } = objectData;
 
     let excelContext;
@@ -42,32 +44,39 @@ class StepRemoveObjectTable {
       } else {
         const officeTable = excelContext.workbook.tables.getItem(bindId);
 
-        // Move crosstab logic to separete step
-        const { validColumnsY, validRowsX } =
-          await officeApiCrosstabHelper.getCrosstabHeadersSafely(
-            crosstabHeaderDimensions,
+        if (importType === ObjectImportType.PIVOT_TABLE) {
+          const { worksheet } = officeTable;
+          worksheet.visibility = Excel.SheetVisibility.hidden;
+          worksheet.delete();
+          await excelContext.sync();
+        } else {
+          // Move crosstab logic to separete step
+          const { validColumnsY, validRowsX } =
+            await officeApiCrosstabHelper.getCrosstabHeadersSafely(
+              crosstabHeaderDimensions,
+              officeTable,
+              excelContext
+            );
+
+          const validCrosstabHeaderDimnesions = {
+            ...crosstabHeaderDimensions,
+            columnsY: validColumnsY,
+            rowsX: validRowsX,
+          };
+
+          await officeApiCrosstabHelper.clearCrosstabRange(
             officeTable,
-            excelContext
+            {
+              crosstabHeaderDimensions: {},
+              isCrosstab,
+              prevCrosstabDimensions: validCrosstabHeaderDimnesions,
+            },
+            excelContext,
+            false
           );
 
-        const validCrosstabHeaderDimnesions = {
-          ...crosstabHeaderDimensions,
-          columnsY: validColumnsY,
-          rowsX: validRowsX,
-        };
-
-        await officeApiCrosstabHelper.clearCrosstabRange(
-          officeTable,
-          {
-            crosstabHeaderDimensions: {},
-            isCrosstab,
-            prevCrosstabDimensions: validCrosstabHeaderDimnesions,
-          },
-          excelContext,
-          false
-        );
-
-        await officeRemoveHelper.removeExcelTable(officeTable, excelContext, false);
+          await officeRemoveHelper.removeExcelTable(officeTable, excelContext, false);
+        }
 
         operationStepDispatcher.completeRemoveObjectTable(objectWorkingId);
       }

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { PromptsAnswer } from '../answers-reducer/answers-reducer-types';
-import { PopupTypeEnum } from '../popup-state-reducer/popup-state-reducer-types';
+import { DialogType } from '../popup-state-reducer/popup-state-reducer-types';
 import {
   NavigationTreeActions,
   NavigationTreeActionTypes,
@@ -242,11 +242,8 @@ const updateSelectedMenu = (state: NavigationTreeState, data: any): NavigationTr
   return makeSelection(newState, {} as NavigationTreeState);
 };
 
-const setPopupType = (
-  state: NavigationTreeState,
-  popupType: PopupTypeEnum
-): NavigationTreeState => {
+const setPopupType = (state: NavigationTreeState, popupType: DialogType): NavigationTreeState => {
   const newState = { ...state };
-  newState.isPreparedDataRequested = !!popupType && popupType === PopupTypeEnum.dataPreparation;
+  newState.isPreparedDataRequested = !!popupType && popupType === DialogType.dataPreparation;
   return newState;
 };

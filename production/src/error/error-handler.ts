@@ -8,7 +8,7 @@ import {
   OperationData,
   OperationState,
 } from '../redux-reducer/operation-reducer/operation-reducer-types';
-import { PopupTypeEnum } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
+import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 
 import i18n from '../i18n';
 import { getNotificationButtons } from '../notification/notification-buttons';
@@ -226,7 +226,7 @@ class ErrorService {
     });
 
     const shouldClosePopup =
-      dialogType === PopupTypeEnum.importedDataOverview &&
+      dialogType === DialogType.importedDataOverview &&
       [ErrorType.UNAUTHORIZED_ERR, ErrorType.CONNECTION_BROKEN_ERR].includes(errorType);
 
     await this.closePopupIfOpen(shouldClosePopup);
@@ -493,12 +493,10 @@ class ErrorService {
       // while reprompting dossier/report in Overview window only.
       if (
         total > 0 &&
-        (popupType === PopupTypeEnum.repromptDossierDataOverview ||
-          popupType === PopupTypeEnum.repromptReportDataOverview)
+        (popupType === DialogType.repromptDossierDataOverview ||
+          popupType === DialogType.repromptReportDataOverview)
       ) {
-        this.reduxStore.dispatch(
-          popupStateActions.setPopupType(PopupTypeEnum.importedDataOverview)
-        );
+        this.reduxStore.dispatch(popupStateActions.setPopupType(DialogType.importedDataOverview));
         this.popupController.runImportedDataOverviewPopup();
       }
     }

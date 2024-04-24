@@ -5,7 +5,7 @@ import { popupHelper } from '../popup-helper';
 
 import { reduxStore } from '../../store';
 
-import { PopupTypeEnum } from '../../redux-reducer/popup-state-reducer/popup-state-reducer-types';
+import { DialogType } from '../../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 
 import { selectorProperties } from '../../attribute-selector/selector-properties';
 import {
@@ -23,7 +23,7 @@ const useStateSyncOnDialogMessage = (): void => {
       const { popupType } = message;
       const { setActiveCellAddress } = officeActions;
 
-      if (popupType === PopupTypeEnum.importedDataOverview) {
+      if (popupType === DialogType.importedDataOverview) {
         const {
           objects: objectsToSync,
           notifications: notificationsToSync,

@@ -1,16 +1,22 @@
 import { Dispatch } from 'redux';
 
-import { PopupStateActionTypes, PopupTypeEnum } from './popup-state-reducer-types';
+import { DialogType, PopupStateActionTypes } from './popup-state-reducer-types';
 
 import { navigationTreeActions } from '../navigation-tree-reducer/navigation-tree-actions';
 import { popupActions } from '../popup-reducer/popup-actions';
 import { ObjectImportType } from '../../mstr-object/constants';
 
 class PopupStateActions {
-  setPopupType = (popupType: PopupTypeEnum) => (dispatch: Dispatch<any>) =>
+  setPopupType = (popupType: DialogType) => (dispatch: Dispatch<any>) =>
     dispatch({
       type: PopupStateActionTypes.SET_POPUP_TYPE,
       popupType,
+    });
+
+  setDialogType = (dialogType: DialogType) => (dispatch: Dispatch<any>) =>
+    dispatch({
+      type: PopupStateActionTypes.POPUP_STATE_SET_DIALOG_TYPE,
+      dialogType,
     });
 
   setMstrData = (payload: any) => (dispatch: Dispatch<any>) =>
@@ -28,7 +34,7 @@ class PopupStateActions {
   onPrepareData = () => (dispatch: Dispatch<any>) => {
     dispatch({
       type: PopupStateActionTypes.SET_POPUP_TYPE,
-      popupType: PopupTypeEnum.dataPreparation,
+      popupType: DialogType.dataPreparation,
     });
   };
 
