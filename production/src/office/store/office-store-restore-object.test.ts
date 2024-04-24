@@ -1,4 +1,5 @@
 /* eslint-disable no-import-assign */
+import officeReducerHelper from './office-reducer-helper'
 import officeStoreHelper from './office-store-helper';
 
 import { reduxStore } from '../../store';
@@ -10,7 +11,6 @@ import { errorService } from '../../error/error-handler';
 import * as answersActions from '../../redux-reducer/answers-reducer/answers-actions';
 import * as objectActions from '../../redux-reducer/object-reducer/object-actions';
 import { OfficeSettingsEnum } from '../../constants/office-constants';
-import officeReducerHelper from './office-reducer-helper'
 import { ObjectImportType } from '../../mstr-object/constants';
 
 const internalData = {} as any;
@@ -554,21 +554,6 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
     expect(errorService.handleError).not.toBeCalled();
 
     expect(result).toEqual([42]);
-  });
-  it('getExcelSettingValue works as expected', () => {
-    // given
-    const key = 'settingsKey';
-    const value = 'value';
-    settingsMock.saveAsync = jest.fn();
-    settingsMock.set(key, value);
-    jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
-
-    // when
-    const result = officeStoreRestoreObject.getExcelSettingValue(key);
-
-    // then
-    expect(officeStoreHelper.getOfficeSettings).toBeCalledTimes(1);
-    expect(result).toEqual(value);
   });
   it('getExcelSettingValue works as expected', () => {
     // given
