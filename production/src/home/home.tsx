@@ -84,10 +84,6 @@ export const HomeNotConnected: React.FC<HomeProps> = props => {
   useEffect(() => {
     async function initializeHome(): Promise<void> {
       try {
-        // initialize shape API support status in store
-        homeHelper.initIsShapeAPISupported();
-        // initialize Excel.Workbook insertWorksheetsFromBase64() API support status in store
-        homeHelper.initIsInsertWorksheetAPISupported();
         homeHelper.initSupportedFeaturesFlags();
         await officeStoreRestoreObject.restoreObjectsFromExcelStore();
         officeStoreRestoreObject.restoreAnswersFromExcelStore();
