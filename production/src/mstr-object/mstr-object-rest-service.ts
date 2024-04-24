@@ -626,7 +626,7 @@ class MstrObjectRestService {
     objectId: string,
     projectId: string,
     instanceId: string,
-    includeClosedPrompts = false
+    includeClosedPrompts?: boolean
   ): any => {
     let query = '';
     if (includeClosedPrompts) {
