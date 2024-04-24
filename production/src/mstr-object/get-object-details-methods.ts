@@ -24,9 +24,9 @@ export const getObjectPrompts = async (
   if (
     mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name
       ? !manipulationsXML.promptAnswers
-      : !promptsAnswers
+      : !promptsAnswers?.length
   ) {
-    return null;
+    return [];
   }
   const unfilteredPrompts = await mstrObjectRestService.getObjectPrompts(
     objectId,
@@ -44,7 +44,7 @@ export const populateDefinition = (
 ): ObjectData => ({
   ...objectData.definition,
   sourceName: name,
-  ...(prompts ? { prompts } : {}),
+  ...(prompts?.length ? { prompts } : {}),
 });
 
 export const populateDetails = (

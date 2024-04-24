@@ -1,5 +1,5 @@
 /* eslint-disable no-import-assign */
-import officeReducerHelper from './office-reducer-helper'
+import officeReducerHelper from './office-reducer-helper';
 import officeStoreHelper from './office-store-helper';
 
 import { reduxStore } from '../../store';
@@ -86,11 +86,16 @@ describe.each`
         .spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsFromExcelStore')
         .mockReturnValue(restoredFromExcelObject);
       jest
+        .spyOn(officeStoreRestoreObject, 'restoreLegacyPromptedAnswersToArrayInDossiers')
+        .mockReturnValue(restoredFromExcelObject);
+      jest
         .spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsWithNewProps')
         .mockResolvedValue(restoredFromExcelObject);
       jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
-      jest.spyOn(officeStoreRestoreObject, 'excludeObjects').mockReturnValue(restoredFromExcelObject);
+      jest
+        .spyOn(officeStoreRestoreObject, 'excludeObjects')
+        .mockReturnValue(restoredFromExcelObject);
 
       // when
       await officeStoreRestoreObject.restoreObjectsFromExcelStore();
@@ -99,14 +104,18 @@ describe.each`
       expect(officeStoreHelper.getOfficeSettings).toBeCalledTimes(1);
       expect(officeStoreHelper.getOfficeSettings).toBeCalledWith();
 
-      expect(officeStoreRestoreObject.excludeObjects).toHaveBeenCalledTimes(excludableObjectImportTypes.length);
+      expect(officeStoreRestoreObject.excludeObjects).toHaveBeenCalledTimes(
+        excludableObjectImportTypes.length
+      );
 
       expect(officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore).toBeCalledTimes(1);
       expect(officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore).toBeCalledWith(
         settingsMock,
         expectedObjectsFromProperties
       );
-
+      expect(
+        officeStoreRestoreObject.restoreLegacyPromptedAnswersToArrayInDossiers
+      ).toBeCalledTimes(1);
       expect(officeStoreRestoreObject.restoreLegacyObjectsWithNewProps).toBeCalledTimes(1);
 
       expect(reduxStore.dispatch).toBeCalledTimes(expectedDispatchCallNo);
@@ -155,8 +164,10 @@ describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
     jest
       .spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsFromExcelStore')
       .mockReturnValue('restoredObjectFromExcelTest' as unknown as ObjectData[]);
+    jest
+      .spyOn(officeStoreRestoreObject, 'restoreLegacyPromptedAnswersToArrayInDossiers')
+      .mockReturnValue('restoredFromExcelObject' as unknown as ObjectData[]);
     jest.spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsWithNewProps').mockResolvedValue();
-
     jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
     const objects: any = ['excludedObjects'];
@@ -170,7 +181,9 @@ describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
     expect(officeStoreHelper.getOfficeSettings).toBeCalledWith();
 
     expect(officeStoreRestoreObject.restoreLegacyObjectsWithNewProps).toBeCalledTimes(1);
-    expect(officeStoreRestoreObject.excludeObjects).toHaveBeenCalledTimes(excludableObjectImportTypes.length);
+    expect(officeStoreRestoreObject.excludeObjects).toHaveBeenCalledTimes(
+      excludableObjectImportTypes.length
+    );
 
     expect(reduxStore.dispatch).toBeCalledTimes(1);
   });
@@ -570,34 +583,61 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
     expect(officeStoreHelper.getOfficeSettings).toBeCalledTimes(1);
     expect(result).toEqual(value);
   });
+  it('should transform prompted objects with mstrObjectType 55 and non-array promptsAnswers into array', () => {
+    const objects = [
+      { isPrompted: true, promptsAnswers: 'test', mstrObjectType: { type: 55 } },
+      { isPrompted: false, mstrObjectType: { type: 55 } },
+      { isPrompted: true, promptsAnswers: ['test'], mstrObjectType: { type: 55 } },
+      { isPrompted: true, promptsAnswers: 'test', mstrObjectType: { type: 3 } },
+    ];
+
+    const result = officeStoreRestoreObject.restoreLegacyPromptedAnswersToArrayInDossiers(objects);
+
+    expect(result).toEqual([
+      { isPrompted: true, promptsAnswers: ['test'], mstrObjectType: { type: 55 } },
+      { isPrompted: false, promptsAnswers: [], mstrObjectType: { type: 55 } },
+      { isPrompted: true, promptsAnswers: ['test'], mstrObjectType: { type: 55 } },
+      { isPrompted: true, promptsAnswers: 'test', mstrObjectType: { type: 3 } },
+    ]);
+  });
 
   describe('OfficeStoreRestoreObject excludeObjects()', () => {
     it('excludeObjects works as expected and filters out formatted_table object', () => {
       // given
-      const objects: any = [{ objectWorkingId: 12345673, importType: ObjectImportType.FORMATTED_TABLE }];
+      const objects: any = [
+        { objectWorkingId: 12345673, importType: ObjectImportType.FORMATTED_TABLE },
+      ];
 
       jest.spyOn(officeReducerHelper, 'checkExcelApiSupport').mockReturnValue(false);
 
       // when
-      const result = officeStoreRestoreObject.excludeObjects(objects, ObjectImportType.FORMATTED_TABLE);
+      const result = officeStoreRestoreObject.excludeObjects(
+        objects,
+        ObjectImportType.FORMATTED_TABLE
+      );
 
       // then
-      expect(officeReducerHelper.checkExcelApiSupport).toHaveBeenCalled()
+      expect(officeReducerHelper.checkExcelApiSupport).toHaveBeenCalled();
 
       expect(result).toHaveLength(0);
     });
 
     it('excludeObjects works as expected and does not filter out formatted_table object', () => {
       // given
-      const objects: any = [{ objectWorkingId: 12345673, importType: ObjectImportType.FORMATTED_TABLE }];
+      const objects: any = [
+        { objectWorkingId: 12345673, importType: ObjectImportType.FORMATTED_TABLE },
+      ];
 
       jest.spyOn(officeReducerHelper, 'checkExcelApiSupport').mockReturnValue(true);
 
       // when
-      const result = officeStoreRestoreObject.excludeObjects(objects, ObjectImportType.FORMATTED_TABLE);
+      const result = officeStoreRestoreObject.excludeObjects(
+        objects,
+        ObjectImportType.FORMATTED_TABLE
+      );
 
       // then
-      expect(officeReducerHelper.checkExcelApiSupport).toHaveBeenCalled()
+      expect(officeReducerHelper.checkExcelApiSupport).toHaveBeenCalled();
 
       expect(result).toHaveLength(1);
     });
