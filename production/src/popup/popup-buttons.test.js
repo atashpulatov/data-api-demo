@@ -80,7 +80,7 @@ describe('PopupButtons', () => {
       </Provider>
     );
 
-    const button = getByText('Import');
+    const button = getByText('Import Data');
     fireEvent.focus(button);
 
     // then
@@ -95,7 +95,7 @@ describe('PopupButtons', () => {
       </Provider>
     );
 
-    const button = getByText('Import');
+    const button = getByText('Import Data');
     fireEvent.focus(button);
 
     // then
@@ -134,7 +134,7 @@ describe('PopupButtons', () => {
       </Provider>
     );
     // then
-    expect(getByText('Import')).toBeInTheDocument();
+    expect(getByText('Import Data')).toBeInTheDocument();
     expect(getByText('Cancel')).toBeInTheDocument();
   });
 
@@ -148,7 +148,7 @@ describe('PopupButtons', () => {
       </Provider>
     );
     // then
-    expect(getByText('Import')).toBeInTheDocument();
+    expect(getByText('Import Data')).toBeInTheDocument();
     expect(getByText('Cancel')).toBeInTheDocument();
   });
 
@@ -162,7 +162,7 @@ describe('PopupButtons', () => {
       </Provider>
     );
     // then
-    expect(getByText('Import')).toBeInTheDocument();
+    expect(getByText('Import Data')).toBeInTheDocument();
     expect(getByText('Cancel')).toBeInTheDocument();
   });
 });
