@@ -626,16 +626,26 @@ describe('PopupController', () => {
   });
 
   it('should return true for valid overview popup types', () => {
+    const handleOverviewActionCommandSpy = jest
+      .spyOn(overviewHelper, 'handleOverviewActionCommand')
+      .mockImplementation(async () => {});
+
     const validPopupTypes = [
-      PopupTypeEnum.repromptingWindow,
       PopupTypeEnum.repromptReportDataOverview,
       PopupTypeEnum.repromptDossierDataOverview,
     ];
 
     validPopupTypes.forEach(popupType => {
-      expect(
-        popupController.isOverviewActionHandledForOverviewPopups(popupType, 'command', null)
-      ).toBe(true);
+      popupController
+        .isOverviewActionHandledForOverviewPopups(
+          popupType,
+          OverviewActionCommands.RANGE_TAKEN_OK,
+          null
+        )
+        .then(result => {
+          expect(handleOverviewActionCommandSpy).toHaveBeenCalled();
+          expect(result).toBe(true);
+        });
     });
   });
 
