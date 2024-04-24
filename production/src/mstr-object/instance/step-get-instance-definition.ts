@@ -117,7 +117,6 @@ class StepGetInstanceDefinition {
       );
 
       if (importType !== ObjectImportType.PIVOT_TABLE && futureStep in ImportOperationStepDict) {
-        // FIXME: below flow should not be part of this step
         if (insertNewWorksheet) {
           const worksheet = await officeApiWorksheetHelper.createNewWorksheet({
             excelContext,
