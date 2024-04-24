@@ -43,12 +43,17 @@ function importRequested(state: AnswersState, payload: any): AnswersState {
   const isDossier =
     (payloadObject.mstrObjectType && payloadObject.mstrObjectType.name) ===
     mstrObjectEnum.mstrObjectType.visualization.name;
-  // for dossiers, check promptsAnswers directly. for reports, check isPrompted flag directly
-  if ((isDossier && payloadObject.promptsAnswers) || payloadObject.isPrompted) {
-    const { answers } = isDossier ? payloadObject.promptsAnswers : payloadObject.promptsAnswers[0];
+  if (isDossier && payloadObject.promptsAnswers?.length > 0) {
+    const { answers } = payloadObject.promptsAnswers[0];
     newAnswers = getMergedAnswers(state.answers, answers);
+  } else if (payloadObject.isPrompted && Array.isArray(payloadObject.promptsAnswers)) {
+    payloadObject.promptsAnswers.forEach((promptsAnswer: any) => {
+      const { answers } = promptsAnswer;
+      if (answers) {
+        newAnswers = getMergedAnswers(newAnswers, answers);
+      }
+    });
   }
-
   return { answers: newAnswers };
 }
 
@@ -74,13 +79,17 @@ function updateAnswers(state: AnswersState, payload: any): AnswersState {
   let newAnswers = [...state.answers];
   const isDossier = !!(payloadEditedObject && payloadEditedObject.visualizationInfo);
   // for dossiers, check promptsAnswers directly. for reports, check isPrompted flag directly
-  if ((isDossier && payloadEditedObject.promptsAnswers) || payloadEditedObject.isPrompted) {
-    const { answers } = isDossier
-      ? payloadEditedObject.promptsAnswers
-      : payloadEditedObject.promptsAnswers[0];
+  if (isDossier && payloadEditedObject.promptsAnswers?.length > 0) {
+    const { answers } = payloadEditedObject.promptsAnswers[0];
     newAnswers = getMergedAnswers(state.answers, answers);
+  } else if (payloadEditedObject.isPrompted && Array.isArray(payloadEditedObject.promptsAnswers)) {
+    payloadEditedObject.promptsAnswers.forEach((promptsAnswer: any) => {
+      const { answers } = promptsAnswer;
+      if (answers) {
+        newAnswers = getMergedAnswers(newAnswers, answers);
+      }
+    });
   }
-
   return { answers: newAnswers };
 }
 

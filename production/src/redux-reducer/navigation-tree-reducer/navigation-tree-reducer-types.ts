@@ -30,7 +30,7 @@ export interface NavigationTreeState {
   isPrompted: boolean;
   importRequested: boolean;
   dossierData: any | null; // Replace 'any' with the appropriate type
-  promptsAnswers: any | null; // Replace 'any' with the appropriate type
+  promptsAnswers: any | []; // Replace 'any' with the appropriate type
   mstrObjectType: MstrObjectTypes | null;
   chosenChapterKey: string | null;
   chosenVisualizationKey: string | null;

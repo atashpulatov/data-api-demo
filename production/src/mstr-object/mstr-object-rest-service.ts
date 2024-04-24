@@ -628,9 +628,15 @@ class MstrObjectRestService {
     instanceId: string,
     includeClosedPrompts = false
   ): any => {
+    let query = '';
+    if (includeClosedPrompts) {
+      query = '?closed=true';
+    } else if (includeClosedPrompts === false) {
+      query = '?closed=false';
+    }
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts${includeClosedPrompts ? '?closed=true' : ''}`;
+    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts${query}`;
 
     return request
       .get(fullPath)

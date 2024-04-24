@@ -17,7 +17,7 @@ export const initialState: NavigationTreeState = {
   isPrompted: false,
   importRequested: false,
   dossierData: null,
-  promptsAnswers: null,
+  promptsAnswers: [],
   mstrObjectType: null,
   chosenChapterKey: null,
   chosenVisualizationKey: null,
@@ -151,7 +151,7 @@ const promptsAnswered = (
 
 const clearPromptsAnswers = (state: NavigationTreeState): NavigationTreeState => {
   const newState = { ...state };
-  newState.promptsAnswers = null;
+  newState.promptsAnswers = [];
   newState.dossierData = null;
   return newState;
 };

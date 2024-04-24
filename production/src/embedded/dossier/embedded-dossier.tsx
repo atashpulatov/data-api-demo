@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import {
+  mergeAnswersWithPromptsDefined,
   ObjectExecutionStatus,
   prepareGivenPromptAnswers,
   preparePromptedDossier,
@@ -41,7 +42,7 @@ interface MstrData {
   dossierId?: string;
   projectId?: string;
   instanceId?: string;
-  promptsAnswers?: PromptsAnswer[]; // Replace 'any' with the appropriate type
+  promptsAnswers?: any; // Replace 'any' with the appropriate type
   selectedViz?: string;
   visualizationInfo?: VisualizationInfo;
 }
@@ -246,18 +247,26 @@ export default class EmbeddedDossierNotConnected extends React.Component {
    * @param dossierId
    * @param projectId
    * @param givenPromptsAnswers
+   * @param {*} previousPromptsAnswers
    * @returns
    */
   prepareAndHandlePromptAnswers = async (
     instance: any,
     dossierId: string,
     projectId: string,
-    givenPromptsAnswers: any
+    givenPromptsAnswers: any,
+    previousPromptsAnswers: any
   ): Promise<any> => {
     // Prepare the Dossier's instance to apply previous answers if necessary.
     if (givenPromptsAnswers.length > 0 && givenPromptsAnswers[0].answers.length > 0) {
       // Proceed with answering prompts if there are prompts to answer, including nested prompts.
-      instance = await preparePromptedDossier(instance, dossierId, projectId, givenPromptsAnswers);
+      instance = await preparePromptedDossier(
+        instance,
+        dossierId,
+        projectId,
+        givenPromptsAnswers,
+        previousPromptsAnswers
+      );
     }
     return instance;
   };
@@ -343,13 +352,14 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       // or when multiple reprompt is triggered, in this case, use mstrData's (edited object) prompts answers.
       const givenPromptsAnswers = shouldPreparePromptAnswers
         ? prepareGivenPromptAnswers(promptObjectAnswers, previousPromptsAnswers)
-        : { ...promptsAnswers };
+        : [...(promptsAnswers || [])];
 
       instance = await this.prepareAndHandlePromptAnswers(
         instance,
         dossierId,
         projectId,
-        givenPromptsAnswers
+        givenPromptsAnswers,
+        previousPromptsAnswers
       );
 
       // Proceed with opening prompt dialog if applicable.
@@ -534,24 +544,39 @@ export default class EmbeddedDossierNotConnected extends React.Component {
    * Update the selectedViz in parent component in case of simple reprompt
    * to keep the import button enabled.
    *
-   * @param promptsAnswers
+   * * @param {Object} promptsAnswersPayloadObject - answers sent from embedded api, entered by user.
    */
-  async promptsAnsweredHandler(promptsAnswers: any): Promise<void> {
-    const { handlePromptAnswer }: any = this.props;
+  async promptsAnsweredHandler(promptsAnswersPayloadObject: any): Promise<void> {
+    const { handlePromptAnswer, mstrData }: any = this.props;
+    const dupPromptsAnswersPayloadObject = { ...promptsAnswersPayloadObject };
 
-    // Create reference to previous answers. This function called again after
-    // nested re-prompting the dossier, so we need to keep previous answers along with new ones
-    const tempAnswers = this.dossierData.promptsAnswers?.answers
-      ? this.dossierData.promptsAnswers.answers
-      : [];
-    // Combined the prompt answers.
-    promptsAnswers.answers = embeddedDossierHelper.combineArraysByObjectKey(
-      tempAnswers,
-      promptsAnswers.answers
+    // Create reference to current prompted object's answers. This function called again after
+    // nested re-prompting the dossier, so we need to keep previous answers along with new ones.
+    // previousPromptLevelAnswers will be a collection of answers for each prompt level.
+    const previousPromptLevelAnswers = this.dossierData.promptsAnswers?.[0]?.answers || [];
+
+    // Combined the new answers with the previous ones for the current prompt object.
+    dupPromptsAnswersPayloadObject.answers = embeddedDossierHelper.combineArraysByObjectKey(
+      previousPromptLevelAnswers,
+      dupPromptsAnswersPayloadObject.answers
     );
 
-    this.dossierData.promptsAnswers = promptsAnswers;
-    handlePromptAnswer(promptsAnswers);
+    // Proceed with merging answers with prompts defined if there are prompts to answer.
+    // TODO: Remove this method in m2021 branch as we no longer need to merge answers with prompts defined.
+    await mergeAnswersWithPromptsDefined(
+      mstrData.dossierId,
+      mstrData.projectId,
+      this.dossierData.instanceId,
+      dupPromptsAnswersPayloadObject.answers,
+      false
+    );
+
+    // If not defined or null then create new array with promptsAnswers as first element;
+    // otherwise add new promptsAnswers to the array
+    this.dossierData.promptsAnswers = [dupPromptsAnswersPayloadObject];
+
+    // Persist in Redux only the answers for the current prompt object.
+    handlePromptAnswer(this.dossierData.promptsAnswers);
 
     if (this.embeddedDossier) {
       const payload = await this.embeddedDossier.getSelectedVizKeys();

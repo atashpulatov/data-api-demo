@@ -15,19 +15,19 @@ describe('Get Object Details Methods', () => {
     it('should return falsy if there are no promptAnswers', async () => {
       // given
       const mockedObjectDataWithoutPrompts = {
-        promptsAnswers: false,
+        promptsAnswers: [],
         mstrObjectType: { name: 'report' },
       } as unknown as ObjectData;
       // when
       // @ts-expect-error
       const objectPrompts = await getObjectPrompts(mockedObjectDataWithoutPrompts);
       // then
-      expect(objectPrompts).toBeFalsy();
+      expect(objectPrompts).toHaveLength(0);
     });
     it('should call mstrObjectRestService to get object prompts with provided arguments', async () => {
       // given
       const mockedObjectData = {
-        promptsAnswers: true,
+        promptsAnswers: [{ someProp: 'some value' }],
         mstrObjectType: { name: 'report' },
         manipulationsXML: { promptAnswers: {} },
       } as unknown as ObjectData;
@@ -57,7 +57,7 @@ describe('Get Object Details Methods', () => {
 
       beforeEach(() => {
         mockedObjectData = {
-          promptsAnswers: true,
+          promptsAnswers: [{ someProp: 'some value' }],
           mstrObjectType: { name: 'report' },
           manipulationsXML: { promptAnswers: {} },
         } as unknown as ObjectData;
@@ -232,7 +232,7 @@ describe('Get Object Details Methods', () => {
       const mockedObjectData = {
         definition: { someProperty: 'some definition' },
       } as unknown as ObjectData;
-      const mockedPrompts = { someProperty: 'some data' };
+      const mockedPrompts = [{ someProperty: 'some data' }];
       const expectedResult = {
         ...mockedObjectData.definition,
         prompts: mockedPrompts,

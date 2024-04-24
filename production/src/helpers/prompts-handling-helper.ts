@@ -16,36 +16,37 @@ export const ObjectExecutionStatus = {
  * This function is used to prepare the prompts answers to be used in answering the prompted Dossier's instance.
  * It will loop through both the prompts objects (instance) and previously given answers (persisted)
  * to prepare final collection of prompt answers.
- * @param promptObjects
- * @param previousPromptsAnswers
+ * @param {*} promptObjects prompts from instance if the object is being imported otherwise from the object
+ * reducer based on the condition checked in prompt-window's loadEmbeddedDossier: updatedPromptObjects
+ * @param {*} previousPromptsAnswers are obtained from the persisted answers
  * @returns
  */
 export function prepareGivenPromptAnswers(
   promptObjects: any[],
   previousPromptsAnswers: PromptsAnswer[]
 ): any[] {
-  const givenPromptsAnswers: any[] = [{ messageName: 'New Dossier', answers: [] }];
-
+  const resAnswers: any[] = [];
   // Loop through the prompts objects and find the corresponding answer from the persisted answers.
   // and assign the 'type' property to the answer. Also, mark the answer as 'useDefault'
   // if it is not required and has no values.
-  promptObjects?.forEach(promptObject => {
-    const previousPromptIndex = previousPromptsAnswers.findIndex(
-      answerPrmpt => answerPrmpt && answerPrmpt.key === promptObject.key
-    );
-    if (previousPromptIndex >= 0) {
-      const tempAnswer = {
-        ...previousPromptsAnswers[previousPromptIndex],
-        type: promptObject.type,
-      };
-      if (!promptObject.required && tempAnswer.values.length === 0) {
-        tempAnswer.useDefault = true;
+  if (promptObjects.length > 0) {
+    promptObjects?.forEach(promptObject => {
+      const previousPromptIndex = previousPromptsAnswers.findIndex(
+        answerPrmpt => answerPrmpt && answerPrmpt.key === promptObject.key
+      );
+      if (previousPromptIndex >= 0) {
+        const tempAnswer = { ...previousPromptsAnswers[previousPromptIndex] };
+        if (!promptObject.required && tempAnswer.values.length === 0) {
+          tempAnswer.useDefault = true;
+        }
+        resAnswers.push(tempAnswer);
+      } else {
+        // Use the value defined in prompted object instead.
+        resAnswers.push(promptObject);
       }
-      givenPromptsAnswers[0].answers.push(tempAnswer);
-    }
-  });
-
-  return givenPromptsAnswers;
+    });
+  }
+  return [{ messageName: 'New Dossier', answers: resAnswers }];
 }
 
 /**
@@ -54,14 +55,53 @@ export function prepareGivenPromptAnswers(
  * @param {*} instanceDefinition
  * @param {*} objectId
  * @param {*} projectId
- * @param {*} promptsAnswers
+ * @param {*} promptsAnswers - is in the following format,
+ * representing the preparedPromptAnswers, or the object cached prompt answers, or answers from instance
+[
+  {
+    messageName: 'New Dossier',
+    answers: [
+      {
+        key: '2C8E58F049B088D631DE75B4C1F25EAB@0@10',
+        values: [
+          '<rsl lcl="1033"><pa key="2C8E58F049B088D631DE75B4C1F25EAB@0@10"><exp >
+          <nd et="14" nt="4" dmt="1" ddt="-1"><nd et="5" nt="4" dmt="1" ddt="-1"><nd et="1" nt="5" dmt="1" ddt="-1">
+          <at did="8D679D3811D3E4981000E787EC6DE8A4" tp="12" stp="3072" n="Country" disp_n="Country"></at>
+          </nd><nd et="1" nt="2" dmt="1" ddt="-1"><mi ><es >
+          <at did="8D679D3811D3E4981000E787EC6DE8A4" tp="12" stp="3072" n="Country" disp_n="Country"></at>
+          <e ei="8D679D3811D3E4981000E787EC6DE8A4:1" emt="1" disp_n="USA"></e></es></mi></nd><op fnt="22"></op></nd>
+          <op fnt="19"></op></nd></exp></pa></rsl>'
+        ],
+        useDefault: false,
+        answers?: [...] , //optional; TODO for m2021: the REST API rejects this as it is not needed. Should be removed.
+        type?: string // optional; TODO for m2021: the REST API rejects this as it is not needed. Should be removed.
+      }
+    ]
+  },
+  {
+    messageName: 'New Dossier',
+    answers: [
+      {
+        key: '607711684CA10A102176B097D5EFA39F@0@10',
+        values: [
+          '8D679D4B11D3E4981000E787EC6DE8A4:4~1048576~Central'
+        ],
+        useDefault: false,
+        answers?: [...] , //optional;  TODO for m2021: the REST API rejects this as it is not needed. Should be removed.
+        type?: string // optional  TODO for m2021: the REST API rejects this as it is not needed. Should be removed.
+      }
+    ]
+  }
+]
+ * @param {*} previousPromptAnswers - persisted answers from answer reducer
  * @returns
  */
 export async function answerDossierPromptsHelper(
   instanceDefinition: any,
   objectId: string,
   projectId: string,
-  promptsAnswers: PromptsAnswer[]
+  promptsAnswers: PromptsAnswer[],
+  previousPromptAnswers: any
 ): Promise<any> {
   const currentInstanceDefinition = { ...instanceDefinition };
   let count = 0;
@@ -72,11 +112,27 @@ export async function answerDossierPromptsHelper(
       objectId,
       projectId,
       instanceId: currentInstanceDefinition.mid,
-      promptsAnswers: promptsAnswers[count] ? promptsAnswers[count] : ({ answers: [] } as any),
+      promptsAnswers: promptsAnswers[count]
+        ? promptsAnswers[count]
+        : {
+            messageName: 'New Dossier',
+            answers: [] as any[],
+          },
       ignoreValidateRequiredCheck: true,
     };
 
-    await mstrObjectRestService.answerDossierPrompts(config);
+    if (promptsAnswers[count] !== undefined) {
+      await mstrObjectRestService.answerDossierPrompts(config);
+    } else {
+      const prompts = await mstrObjectRestService.getObjectPrompts(
+        objectId,
+        projectId,
+        config.instanceId
+      );
+      const [preparedAnswers] = prepareGivenPromptAnswers(prompts, previousPromptAnswers);
+      config.promptsAnswers = preparedAnswers;
+      await mstrObjectRestService.answerDossierPrompts(config);
+    }
 
     let dossierStatusResponse = await mstrObjectRestService.getDossierStatus(
       objectId,
@@ -117,7 +173,8 @@ export async function preparePromptedDossier(
   instanceDefinition: any,
   dossierId: string,
   projectId: string,
-  promptsAnswers: PromptsAnswer[]
+  promptsAnswers: PromptsAnswer[],
+  previousPromptsAnswers: any
 ): Promise<any> {
   let dossierInstanceDefinition = { ...instanceDefinition };
   if (dossierInstanceDefinition?.status === ObjectExecutionStatus.PROMPTED) {
@@ -135,7 +192,8 @@ export async function preparePromptedDossier(
         dossierInstanceDefinition,
         dossierId,
         projectId,
-        promptsAnswers
+        promptsAnswers,
+        previousPromptsAnswers
       );
     } catch (error) {
       console.error('Error applying prompt answers:', error);
@@ -205,7 +263,8 @@ async function resetDossierInstance(
 export async function preparePromptedReport(
   chosenObjectIdLocal: string,
   projectId: string,
-  promptsAnswers: any[]
+  promptsAnswers: any[],
+  previousAnswers: any
 ): Promise<any> {
   const config: any = { objectId: chosenObjectIdLocal, projectId };
   const instanceDefinition = await mstrObjectRestService.createInstance(config);
@@ -230,7 +289,8 @@ export async function preparePromptedReport(
         dossierInstanceDefinition,
         chosenObjectIdLocal,
         projectId,
-        promptsAnswers
+        promptsAnswers,
+        previousAnswers
       );
     } catch (error) {
       console.error('Error applying prompt answers:', error);
@@ -261,4 +321,84 @@ export async function preparePromptedReport(
   }
 
   return dossierInstanceDefinition;
+}
+
+/**
+ * Updates saved answers by appending the corresponding JSON-based answers and prompt types from server definitions.
+ * @param {} answers
+ * @param {*} answerDefMap
+ */
+function addDefDataToAnswers(answers: any, answerDefMap: any): void {
+  answers.forEach((answer: any) => {
+    const answerDef = answerDefMap.get(answer.key);
+
+    answerDef?.answers && (answer.answers = answerDef.answers);
+    answerDef?.type && (answer.type = answerDef.type);
+  });
+}
+
+/**
+ * Append the server's version of the answers to the promptsAnswers object.
+ * This version of answers will be used to invoke the REST API endpoint when
+ * importing or re-prompting a report/dossier.
+ * @param {*} currentAnswers - An array of answers to be updated, passed in as reference object
+ * @param {*} promptsAnsDef
+ * @param {*} areReportAnswers - if true, will update answers for nested answers.
+ */
+function updateAnswersWithPromptsDef(
+  currentAnswers: any,
+  promptsAnsDef: any,
+  areReportAnswers: boolean
+): void {
+  const answerDefMap = new Map(promptsAnsDef.map((prompt: any) => [prompt.key, prompt]));
+
+  if (areReportAnswers) {
+    // Reports, one level deep down
+    currentAnswers.forEach((currentAnswer: any) => {
+      const { answers } = currentAnswer;
+      addDefDataToAnswers(answers, answerDefMap);
+    });
+  } else {
+    // Dossiers
+    addDefDataToAnswers(currentAnswers, answerDefMap);
+  }
+}
+
+/**
+ * Merges the answers from the server with the answers from the Embedded API.
+ * Dossiers and Reports have different ways to structure the answers; hence, the need
+ * to use flag to indicate whether the answers are deep (Reports) or not (Dossiers).
+ * @param {*} objectId
+ * @param {*} projectId
+ * @param {*} instanceId
+ * @param {*} currentAnswers - reference to array with answers to be updated
+ * @param {*} areReportAnswers - if true, will process Report's JSON structure for answers.
+ */
+export async function mergeAnswersWithPromptsDefined(
+  objectId: string,
+  projectId: string,
+  instanceId: string,
+  currentAnswers: any[],
+  areReportAnswers = true
+): Promise<any> {
+  // Do nothing if there are no answers to be updated
+  if (currentAnswers?.length === 0) {
+    return;
+  }
+
+  // Get the answers applied to the current dossier's instance from the server.
+  // Need to incorporate these answers because they're formatted differently than the ones
+  // returned by the Embedded API. The REST API endpoint expects the answers to be in a
+  // different format than the Embedded API.
+  const promptsAnsDef = await mstrObjectRestService.getObjectPrompts(
+    objectId,
+    projectId,
+    instanceId,
+    true
+  );
+
+  // Update answers based on promptsAnsDef to insert JSON answers from server
+  // this JSON structure is expected by the REST API endpoint
+  promptsAnsDef?.length > 0 &&
+    updateAnswersWithPromptsDef(currentAnswers, promptsAnsDef, areReportAnswers);
 }

@@ -402,7 +402,7 @@ class PopupController {
         projectId: response.chosenProject,
         mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(response.chosenSubtype),
         importType: response.importType,
-        isPrompted: response.isPrompted || response.promptsAnswers?.answers?.length > 0,
+        isPrompted: response.isPrompted || response.promptsAnswers[0].answers?.length > 0,
         promptsAnswers: response.promptsAnswers,
         visualizationInfo: response.visualizationInfo,
         preparedInstanceId: response.preparedInstanceId,

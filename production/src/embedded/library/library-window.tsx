@@ -134,7 +134,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
         const prompts =
           instance.status !== ObjectExecutionStatus.PROMPTED
             ? []
-            : await getObjectPrompts(chosenObjectId, chosenProjectId, instance.mid);
+            : await getObjectPrompts(chosenObjectId, chosenProjectId, instance.mid, null);
 
         // Updated state with prompts definition, if any.
         promptedResponse = {

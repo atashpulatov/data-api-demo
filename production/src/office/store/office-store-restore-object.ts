@@ -21,6 +21,33 @@ class OfficeStoreRestoreObject {
   }
 
   /**
+   * Transforms an array of objects by ensuring that the `promptsAnswers` property of each object is an array.
+   * If an object is prompted, its `promptsAnswers` property is not an array, and its `mstrObjectType` is 55,
+   * a new object is returned with the same properties as the original object,
+   * but with `promptsAnswers` transformed into an array.
+   * If an object does not meet these conditions, it is included in the returned array as is.
+   *
+   * @param {Array} objects - The array of objects to transform.
+   * @returns {Array} The transformed array of objects.
+   */
+  restoreLegacyPromptedAnswersToArrayInDossiers = (objects: any[]): ObjectData[] =>
+    objects.map((object: any) => {
+      if (!object.promptsAnswers) {
+        return { ...object, promptsAnswers: [] };
+      }
+
+      if (
+        object.isPrompted &&
+        !Array.isArray(object.promptsAnswers) &&
+        object.mstrObjectType?.type === 55
+      ) {
+        return { ...object, promptsAnswers: [object.promptsAnswers] };
+      }
+
+      return object;
+    });
+
+  /**
    * Retrieves information about object imported in previous versions,
    * maps them to new format of data and stores them in Redux and Office Settings,
    * and then remove the previously stored information from Office settings
@@ -32,6 +59,10 @@ class OfficeStoreRestoreObject {
     if (objects?.filter) {
       objects = objects.filter((object: any) => !object.doNotPersist);
     }
+
+    // Make sure previously saved prompted objects have `promptsAnswers` as an array
+    // for dossier objects only.
+    objects = this.restoreLegacyPromptedAnswersToArrayInDossiers(objects);
 
     await this.restoreLegacyObjectsWithNewProps(objects);
 

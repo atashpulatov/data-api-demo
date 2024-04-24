@@ -84,6 +84,9 @@ describe.each`
         .spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsFromExcelStore')
         .mockReturnValue(restoredFromExcelObject);
       jest
+        .spyOn(officeStoreRestoreObject, 'restoreLegacyPromptedAnswersToArrayInDossiers')
+        .mockReturnValue(restoredFromExcelObject);
+      jest
         .spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsWithNewProps')
         .mockResolvedValue(restoredFromExcelObject);
       jest.spyOn(reduxStore, 'dispatch').mockImplementation();
@@ -100,7 +103,9 @@ describe.each`
         settingsMock,
         expectedObjectsFromProperties
       );
-
+      expect(
+        officeStoreRestoreObject.restoreLegacyPromptedAnswersToArrayInDossiers
+      ).toBeCalledTimes(1);
       expect(officeStoreRestoreObject.restoreLegacyObjectsWithNewProps).toBeCalledTimes(1);
 
       expect(reduxStore.dispatch).toBeCalledTimes(expectedDispatchCallNo);
@@ -149,8 +154,10 @@ describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
     jest
       .spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsFromExcelStore')
       .mockReturnValue('restoredObjectFromExcelTest' as unknown as ObjectData[]);
+    jest
+      .spyOn(officeStoreRestoreObject, 'restoreLegacyPromptedAnswersToArrayInDossiers')
+      .mockReturnValue('restoredFromExcelObject' as unknown as ObjectData[]);
     jest.spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsWithNewProps').mockResolvedValue();
-
     jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
     // when
@@ -559,5 +566,22 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
     // then
     expect(officeStoreHelper.getOfficeSettings).toBeCalledTimes(1);
     expect(result).toEqual(value);
+  });
+  it('should transform prompted objects with mstrObjectType 55 and non-array promptsAnswers into array', () => {
+    const objects = [
+      { isPrompted: true, promptsAnswers: 'test', mstrObjectType: { type: 55 } },
+      { isPrompted: false, mstrObjectType: { type: 55 } },
+      { isPrompted: true, promptsAnswers: ['test'], mstrObjectType: { type: 55 } },
+      { isPrompted: true, promptsAnswers: 'test', mstrObjectType: { type: 3 } },
+    ];
+
+    const result = officeStoreRestoreObject.restoreLegacyPromptedAnswersToArrayInDossiers(objects);
+
+    expect(result).toEqual([
+      { isPrompted: true, promptsAnswers: ['test'], mstrObjectType: { type: 55 } },
+      { isPrompted: false, promptsAnswers: [], mstrObjectType: { type: 55 } },
+      { isPrompted: true, promptsAnswers: ['test'], mstrObjectType: { type: 55 } },
+      { isPrompted: true, promptsAnswers: 'test', mstrObjectType: { type: 3 } },
+    ]);
   });
 });
