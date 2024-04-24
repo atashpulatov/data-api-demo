@@ -11,7 +11,7 @@ import { errorService } from '../../error/error-handler';
 import * as answersActions from '../../redux-reducer/answers-reducer/answers-actions';
 import * as objectActions from '../../redux-reducer/object-reducer/object-actions';
 import { OfficeSettingsEnum } from '../../constants/office-constants';
-import { ObjectImportType } from '../../mstr-object/constants';
+import { excludableObjectImportTypes, ObjectImportType } from '../../mstr-object/constants';
 
 const internalData = {} as any;
 
@@ -99,7 +99,7 @@ describe.each`
       expect(officeStoreHelper.getOfficeSettings).toBeCalledTimes(1);
       expect(officeStoreHelper.getOfficeSettings).toBeCalledWith();
 
-      expect(officeStoreRestoreObject.excludeObjects).toHaveBeenCalledTimes(2);
+      expect(officeStoreRestoreObject.excludeObjects).toHaveBeenCalledTimes(excludableObjectImportTypes.length);
 
       expect(officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore).toBeCalledTimes(1);
       expect(officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore).toBeCalledWith(
@@ -170,7 +170,7 @@ describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
     expect(officeStoreHelper.getOfficeSettings).toBeCalledWith();
 
     expect(officeStoreRestoreObject.restoreLegacyObjectsWithNewProps).toBeCalledTimes(1);
-    expect(officeStoreRestoreObject.excludeObjects).toHaveBeenCalledTimes(2);
+    expect(officeStoreRestoreObject.excludeObjects).toHaveBeenCalledTimes(excludableObjectImportTypes.length);
 
     expect(reduxStore.dispatch).toBeCalledTimes(1);
   });

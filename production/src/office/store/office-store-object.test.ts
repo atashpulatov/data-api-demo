@@ -6,7 +6,7 @@ import officeStoreObject from './office-store-object';
 
 import { errorService } from '../../error/error-handler';
 import * as objectActions from '../../redux-reducer/object-reducer/object-actions';
-import { ObjectImportType } from '../../mstr-object/constants';
+import { excludableObjectImportTypes, ObjectImportType } from '../../mstr-object/constants';
 
 const internalData = {} as any;
 
@@ -178,7 +178,7 @@ describe('OfficeStoreObject', () => {
 
     expect(settingsMock.get('storedObjects')).toEqual(objects);
 
-    expect(officeStoreObject.mergeStoreObjectsToRedux).toHaveBeenCalledTimes(2);
+    expect(officeStoreObject.mergeStoreObjectsToRedux).toHaveBeenCalledTimes(excludableObjectImportTypes.length);
 
     expect(settingsMock.saveAsync).toHaveBeenCalledTimes(1);
   });
