@@ -204,8 +204,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
       chosenObject: chosenObjectId,
       chosenProject: chosenProjectId,
       chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
-      // @ts-expect-error
-      isPrompted: promptsAnswers?.answers?.length > 0,
+      isPrompted: promptsAnswers?.length > 0,
       promptsAnswers,
       importType,
       visualizationInfo: {

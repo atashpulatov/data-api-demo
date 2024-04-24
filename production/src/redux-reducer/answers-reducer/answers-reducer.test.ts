@@ -55,10 +55,12 @@ describe('answersReducer', () => {
           mstrObjectType: {
             name: 'visualization',
           },
-          promptsAnswers: {
-            messageName: 'someMessageName',
-            answers: [{ key: '1', values: ['1'] }],
-          },
+          promptsAnswers: [
+            {
+              messageName: 'someMessageName',
+              answers: [{ key: '1', values: ['1'] }],
+            },
+          ],
         },
       },
     };
@@ -117,10 +119,12 @@ describe('answersReducer', () => {
             visualizationInfo: {
               name: 'visualization',
             },
-            promptsAnswers: {
-              messageName: 'someMessageName',
-              answers: [{ key: '1', values: ['2'] }],
-            },
+            promptsAnswers: [
+              {
+                messageName: 'someMessageName',
+                answers: [{ key: '1', values: ['2'] }],
+              },
+            ],
           },
         },
       },
