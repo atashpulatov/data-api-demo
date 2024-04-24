@@ -39,12 +39,12 @@ class StepGetObjectDetails {
     try {
       const { objectWorkingId, objectId, projectId, mstrObjectType } = objectData;
 
-      const { ancestors, certifiedInfo, dateModified, owner, name } =
+      const { ancestors, certifiedInfo, modifiedDate, owner, name } =
         await mstrObjectRestService.getObjectInfo(objectId, projectId, mstrObjectType);
 
       const prompts = await getObjectPrompts(objectData, objectId, projectId, operationData);
 
-      const details = populateDetails(ancestors, certifiedInfo, dateModified, owner);
+      const details = populateDetails(ancestors, certifiedInfo, modifiedDate, owner);
       const definition = populateDefinition(objectData, prompts, name);
 
       const updatedObject = {

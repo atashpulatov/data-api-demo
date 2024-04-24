@@ -20,7 +20,7 @@ describe('StepGetObjectDetails', () => {
   const mockedReturn = {
     ancestors: { mockedProp: 'some ancestors' },
     certifiedInfo: { mockedProp: 'some certified info' },
-    dateModified: { mockedProp: 'some date modified' },
+    modifiedDate: { mockedProp: 'some date modified' },
     owner: { mockedProp: 'some owner' },
     name: 'testName',
   };
@@ -78,7 +78,7 @@ describe('StepGetObjectDetails', () => {
     expect(objectDetailsMethods.populateDetails).toBeCalledWith(
       mockedReturn.ancestors,
       mockedReturn.certifiedInfo,
-      mockedReturn.dateModified,
+      mockedReturn.modifiedDate,
       mockedReturn.owner
     );
   });

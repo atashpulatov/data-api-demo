@@ -50,12 +50,12 @@ export const populateDefinition = (
 export const populateDetails = (
   ancestors: any,
   certifiedInfo: boolean,
-  dateModified: string,
+  modifiedDate: string,
   owner: string
 ): ObjectDetails => ({
   ancestors,
   certified: certifiedInfo,
-  modifiedDate: dateModified,
+  modifiedDate: modifiedDate,
   owner,
   importedBy: authenticationHelper.getCurrentMstrUserFullName(),
 });
