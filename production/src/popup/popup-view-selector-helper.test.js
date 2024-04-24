@@ -1,3 +1,4 @@
+import { PopupTypeEnum } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 import { popupViewSelectorHelper } from './popup-view-selector-helper';
 
 describe('PopupViewSelectorHelper', () => {
@@ -90,5 +91,23 @@ describe('PopupViewSelectorHelper', () => {
       }
     );
     /* eslint-enable indent */
+
+    it('should return true for reprompt popup types', () => {
+      const repromptPopupTypes = [
+        PopupTypeEnum.repromptingWindow,
+        PopupTypeEnum.repromptReportDataOverview,
+        PopupTypeEnum.repromptDossierDataOverview,
+      ];
+
+      repromptPopupTypes.forEach(popupType => {
+        expect(popupViewSelectorHelper.isRepromptPopupType(popupType)).toBe(true);
+      });
+    });
+
+    it('should return false for non-reprompt popup types', () => {
+      const nonRepromptPopupType = 'nonRepromptPopupType';
+
+      expect(popupViewSelectorHelper.isRepromptPopupType(nonRepromptPopupType)).toBe(false);
+    });
   });
 });

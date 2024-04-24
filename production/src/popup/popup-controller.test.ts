@@ -624,4 +624,27 @@ describe('PopupController', () => {
     expect(handleErrorSpy).toHaveBeenCalled();
     expect(runImportedDataOverviewPopupSpy).toHaveBeenCalled();
   });
+
+  it('should return true for valid overview popup types', () => {
+    const validPopupTypes = [
+      PopupTypeEnum.repromptingWindow,
+      PopupTypeEnum.repromptReportDataOverview,
+      PopupTypeEnum.repromptDossierDataOverview,
+    ];
+
+    validPopupTypes.forEach(popupType => {
+      expect(
+        popupController.isOverviewActionHandledForOverviewPopups(popupType, 'command', null)
+      ).toBe(true);
+    });
+  });
+
+  it('should return false for invalid overview popup types', () => {
+    const invalidPopupType = PopupTypeEnum.dataPreparation;
+    popupController
+      .isOverviewActionHandledForOverviewPopups(invalidPopupType, 'command', null)
+      .then(result => {
+        expect(result).toBe(false);
+      });
+  });
 });
