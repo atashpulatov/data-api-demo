@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
+import { PageByConfiguration } from '@mstr/connector-components';
 
+import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { popupHelper } from '../popup/popup-helper';
 
 import { RootState } from '../store';
 
+import { PageByDisplayOption } from '../right-side-panel/settings-side-panel/settings-side-panel-types';
 import { AttributeSelectorWindowNotConnectedProps } from './attribute-selector-types';
 
 import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
+import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
+import { settingsReducerSelectors } from '../redux-reducer/settings-reducer/settings-reducer-selectors';
 import { AttributeSelector } from './attribute-selector';
 import { selectorProperties } from './selector-properties';
 import { DisplayAttrFormNames } from '../mstr-object/constants';
@@ -23,9 +28,56 @@ export const AttributeSelectorWindowNotConnected: React.FC<
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [attributesSelected, setAttributesSelected] = useState(false);
+  const [selectedPageByConfigurations, setSelectedPageByConfigurations] = useState([]);
 
-  const handleOk = (): void => {
-    setTriggerUpdate(true);
+  const pageByDisplaySetting = useSelector(settingsReducerSelectors.selectPageByDisplaySetting);
+
+  const handleOk = async (): Promise<void> => {
+    const {
+      chosenObject,
+      editedObject,
+      requestPageByModalOpen,
+      displayAttrFormNames: chosenDisplayAttrFormNames,
+    } = props;
+
+    const objectId = editedObject?.objectId || chosenObject.chosenObjectId;
+    const projectId = editedObject?.projectId || chosenObject.chosenProjectId;
+    const instanceId = editedObject?.instanceId;
+    const displayAttrFormNames = (editedObject?.displayAttrFormNames ||
+      chosenDisplayAttrFormNames) as DisplayAttrFormNames;
+
+    let instance;
+
+    if (!editedObject?.instanceId) {
+      instance = await mstrObjectRestService.createInstance({
+        objectId,
+        projectId,
+        displayAttrFormNames,
+      });
+    } else {
+      instance = await mstrObjectRestService.getInstance({
+        objectId,
+        projectId,
+        instanceId,
+        displayAttrFormNames,
+      });
+    }
+
+    const { pageBy } = instance.definition?.grid || {};
+    const selectedPageByDisplaySetting =
+      editedObject?.pageByData?.pageByDisplayType || pageByDisplaySetting;
+
+    if (pageBy?.length && selectedPageByDisplaySetting === PageByDisplayOption.SELECT_PAGES) {
+      requestPageByModalOpen({
+        pageBy,
+        importPageByConfigurations: (pageByConfigurations: PageByConfiguration[][]) => {
+          setTriggerUpdate(true);
+          setSelectedPageByConfigurations(pageByConfigurations);
+        },
+      });
+    } else {
+      setTriggerUpdate(true);
+    }
   };
 
   const handleCancel = (): void => {
@@ -72,6 +124,7 @@ export const AttributeSelectorWindowNotConnected: React.FC<
       displayAttrFormNames: displayAttrFormNamesSet,
       filterDetails,
       pageByData: editedObject?.pageByData,
+      pageByConfigurations: selectedPageByConfigurations,
     };
     popupHelper.officeMessageParent(message);
   };
@@ -138,6 +191,7 @@ const mapStateToProps = (state: RootState): any => {
 const mapDispatchToProps = {
   handleBack: popupStateActions.onPopupBack,
   handlePrepare: popupStateActions.onPrepareData,
+  requestPageByModalOpen: navigationTreeActions.requestPageByModalOpen,
 };
 
 export const AttributeSelectorWindow = connect(

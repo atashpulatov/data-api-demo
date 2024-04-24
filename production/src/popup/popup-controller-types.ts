@@ -1,3 +1,5 @@
+import { PageByConfiguration } from '@mstr/connector-components';
+
 import { PageByData } from '../page-by/page-by-types';
 import { Body, DossierData, SubtotalsInfo, VisualizationInfo } from '../types/object-types';
 
@@ -32,6 +34,7 @@ export interface DialogResponse {
   error?: any;
   filterDetails?: FilterDetails[];
   pageByData?: PageByData;
+  pageByConfigurations?: PageByConfiguration[][];
 }
 
 export interface FilterDetails {

@@ -2,11 +2,13 @@ import { createSelector } from 'reselect';
 
 import { RootState } from '../../store';
 
-import { PopupStateState, PopupTypeEnum } from './popup-state-reducer-types';
+import { DialogType, PopupStateState } from './popup-state-reducer-types';
 
 const getPopupState = (state: RootState): PopupStateState => state.popupStateReducer;
 
 const selectPopupType = createSelector([getPopupState], popupState => popupState.popupType);
+
+const selectDialogType = createSelector([getPopupState], popupState => popupState.dialogType);
 
 const selectIsDataOverviewOpen = createSelector(
   [getPopupState],
@@ -21,15 +23,11 @@ const selectImportType = createSelector(
 const selectIsPromptDialog = createSelector(
   [getPopupState],
   (popupState: PopupStateState) =>
-    popupState.popupType === PopupTypeEnum.promptsWindow ||
-    popupState.popupType === PopupTypeEnum.repromptingWindow ||
-    popupState.popupType === PopupTypeEnum.repromptReportDataOverview
-);
-
-const selectIsObjectPrompted = createSelector(
-  [getPopupState],
-  // TODO fix reducer structure
-  (popupState: PopupStateState) => popupState.isPrompted?.isPrompted
+    popupState.dialogType === DialogType.promptsWindow ||
+    popupState.dialogType === DialogType.repromptingWindow ||
+    popupState.dialogType === DialogType.repromptDossierDataOverview ||
+    popupState.dialogType === DialogType.repromptReportDataOverview ||
+    popupState.dialogType === DialogType.multipleRepromptTransitionPage
 );
 
 export const popupStateSelectors = {
@@ -37,5 +35,5 @@ export const popupStateSelectors = {
   selectIsDataOverviewOpen,
   selectImportType,
   selectIsPromptDialog,
-  selectIsObjectPrompted,
+  selectDialogType,
 };

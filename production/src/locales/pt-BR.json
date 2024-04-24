@@ -276,5 +276,10 @@
    "Page-By Information": "Informações de seleção de dados que cabem na página",
    "and": "e",
    "or": "ou",
-   "not": "não"
+   "not": "não",
+   "Data Formatting": "Formatação de dados",
+   "Import data as text": "Importar dados como texto",
+   "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "Caso habilitado, os valores de atributos serão importados como texto, mantendo a formatação do MicroStrategy. Isso pode afetar as fórmulas do Excel.",
+   "Merge columns": "Mesclar colunas",
+   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Caso habilitado, os cabeçalhos das colunas adjacentes com valores idênticos serão mesclados. Aplica-se somente a relatórios entre abas."
 }

@@ -385,11 +385,10 @@ class MstrObjectRestService {
   }: {
     objectId: string;
     projectId: string;
-    mstrObjectType: MstrObjectTypes;
-    dossierData: DossierData;
-    body: any;
-    limit: number;
-    displayAttrFormNames: DisplayAttrFormNames;
+    mstrObjectType?: MstrObjectTypes;
+    body?: any;
+    limit?: number;
+    displayAttrFormNames?: DisplayAttrFormNames;
   }): Promise<InstanceDefinition> => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
@@ -507,11 +506,10 @@ class MstrObjectRestService {
   }: {
     objectId: string;
     projectId: string;
-    mstrObjectType: MstrObjectTypes;
-    dossierData: DossierData;
-    body: any;
+    mstrObjectType?: MstrObjectTypes;
+    body?: any;
     instanceId: string;
-    displayAttrFormNames: DisplayAttrFormNames;
+    displayAttrFormNames?: DisplayAttrFormNames;
   }): Promise<InstanceDefinition> => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
@@ -701,37 +699,6 @@ class MstrObjectRestService {
       .then(res => res.body);
   };
 
-  /**
-   * Answer specified prompts on the document/dossier instance,
-   * prompts can either be answered with default answers(if available)
-   * @param  param0
-   * @returns
-   */
-  updateDossierPrompts = ({
-    objectId,
-    projectId,
-    instanceId,
-    promptsAnswers,
-    ignoreValidateRequiredCheck = false,
-  }: {
-    objectId: string;
-    projectId: string;
-    instanceId: string;
-    promptsAnswers: any;
-    ignoreValidateRequiredCheck: boolean;
-  }): any => {
-    const storeState = this.reduxStore.getState();
-    const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts/answers${ignoreValidateRequiredCheck ? '?ignoreValidateRequiredCheck=true' : ''}`;
-    return request
-      .put(fullPath)
-      .set('X-MSTR-AuthToken', authToken)
-      .set('X-MSTR-ProjectID', projectId)
-      .send({ prompts: promptsAnswers.answers })
-      .withCredentials()
-      .then(res => res.status);
-  };
-
   updateReportPrompts = ({
     objectId,
     projectId,
@@ -753,31 +720,6 @@ class MstrObjectRestService {
       .set('X-MSTR-AuthToken', authToken)
       .set('X-MSTR-ProjectID', projectId)
       .send({ prompts: promptsAnswers })
-      .withCredentials()
-      .then(res => res.status);
-  };
-
-  applyDossierPrompts = ({
-    objectId,
-    projectId,
-    instanceId,
-    promptsAnswers,
-    ignoreValidateRequiredCheck = false,
-  }: {
-    objectId: string;
-    projectId: string;
-    instanceId: string;
-    promptsAnswers: any;
-    ignoreValidateRequiredCheck: boolean;
-  }): any => {
-    const storeState = this.reduxStore.getState();
-    const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/dossiers/${objectId}/instances/${instanceId}/answerPrompts${ignoreValidateRequiredCheck ? '?ignoreValidateRequiredCheck=true' : ''}`;
-    return request
-      .post(fullPath)
-      .set('X-MSTR-AuthToken', authToken)
-      .set('X-MSTR-ProjectID', projectId)
-      .send(promptsAnswers)
       .withCredentials()
       .then(res => res.status);
   };

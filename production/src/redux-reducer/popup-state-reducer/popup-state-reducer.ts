@@ -1,8 +1,8 @@
 import {
+  DialogType,
   PopupStateActions,
   PopupStateActionTypes,
   PopupStateState,
-  PopupTypeEnum,
 } from './popup-state-reducer-types';
 
 export const initialState: PopupStateState = {};
@@ -20,6 +20,12 @@ export const popupStateReducer = (
         popupType: action.popupType,
       };
     }
+    case PopupStateActionTypes.POPUP_STATE_SET_DIALOG_TYPE: {
+      return {
+        ...state,
+        dialogType: action.dialogType,
+      };
+    }
     case PopupStateActionTypes.SET_MSTR_DATA:
     case PopupStateActionTypes.SET_OBJECT_DATA: {
       return {
@@ -30,7 +36,7 @@ export const popupStateReducer = (
     case PopupStateActionTypes.ON_POPUP_BACK: {
       return {
         ...state,
-        popupType: PopupTypeEnum.libraryWindow,
+        popupType: DialogType.libraryWindow,
       };
     }
     case PopupStateActionTypes.CLEAR_POPUP_STATE: {

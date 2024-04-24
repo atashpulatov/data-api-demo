@@ -276,5 +276,10 @@
    "Page-By Information": "ページバイ情報",
    "and": "および",
    "or": "または",
-   "not": "Not"
+   "not": "Not",
+   "Data Formatting": "データの書式設定",
+   "Import data as text": "データをテキストとしてインポート",
+   "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "有効化されている場合、MicroStrategy の書式設定を維持したまま、アトリビュート値はテキストとしてインポートされます。 Excel 式に影響する場合があります。",
+   "Merge columns": "列を結合",
+   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "有効にすると、同じ値を持つ隣接する列ヘッダーが結合されます。クロス集計レポートにのみ適用されます。"
 }

@@ -146,12 +146,15 @@ export class HomeHelper {
   }
 
   /**
-   * Checks whether the Excel Shape API is supported in the current office environment
+   * Checks whether the Excel API supports plugin features
    * and updates the redux store with the API support status
    */
-  initIsShapeAPISupported(): void {
+  initSupportedFeaturesFlags(): void {
     const isShapeAPISupported = officeContext.isShapeAPISupported();
+    const isPivotTableSupported = officeContext.isPivotTableSupported();
+
     this.reduxStore.dispatch(officeActions.setIsShapeAPISupported(isShapeAPISupported));
+    this.reduxStore.dispatch(officeActions.setIsPivotTableSupported(isPivotTableSupported));
   }
 
   initIsInsertWorksheetAPISupported(): void {

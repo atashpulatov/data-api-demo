@@ -7,6 +7,8 @@ import {
   PromptsAnsweredAction,
   RequestDossierOpenAction,
   RequestImportAction,
+  RequestPageByModalCloseAction,
+  RequestPageByModalOpenAction,
   SelectObjectAction,
   SetPromptObjectsAction,
   StartImportAction,
@@ -63,6 +65,29 @@ describe('NavigationTree Reducer', () => {
     const newState = navigationTree({} as NavigationTreeState, action);
     // then
     expect(newState.importRequested).toBe(true);
+  });
+
+  it('should set pageByModalOpenRequested flag within state on REQUEST_PAGE_BY_MODAL_OPEN action', () => {
+    // given
+    const action: RequestPageByModalOpenAction = {
+      type: NavigationTreeActionTypes.REQUEST_PAGE_BY_MODAL_OPEN,
+      data: {} as any,
+    };
+    // when
+    const newState = navigationTree({} as NavigationTreeState, action);
+    // then
+    expect(newState.pageByModalOpenRequested).toBe(true);
+  });
+
+  it('should set pageByModalOpenRequested flag within state on REQUEST_PAGE_BY_MODAL_CLOSE action', () => {
+    // given
+    const action: RequestPageByModalCloseAction = {
+      type: NavigationTreeActionTypes.REQUEST_PAGE_BY_MODAL_CLOSE,
+    };
+    // when
+    const newState = navigationTree({} as NavigationTreeState, action);
+    // then
+    expect(newState.pageByModalOpenRequested).toBe(false);
   });
 
   it('should set request import flag on REQUEST_IMPORT action', () => {

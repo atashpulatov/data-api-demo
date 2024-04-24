@@ -1,14 +1,18 @@
+import { PageByConfiguration } from '@mstr/connector-components';
 import { Action } from 'redux';
 
 import { MstrObjectTypes } from '../../mstr-object/mstr-object-types';
+import { PageBy } from '../../page-by/page-by-types';
 import { PromptsAnswer } from '../answers-reducer/answers-reducer-types';
-import { PopupTypeEnum } from '../popup-state-reducer/popup-state-reducer-types';
+import { DialogType } from '../popup-state-reducer/popup-state-reducer-types';
 
 import { DisplayAttrFormNames } from '../../mstr-object/constants';
 
 export enum NavigationTreeActionTypes {
   SELECT_OBJECT = 'NAV_TREE_SELECT_OBJECT',
   REQUEST_IMPORT = 'NAV_TREE_REQUEST_IMPORT',
+  REQUEST_PAGE_BY_MODAL_OPEN = 'NAV_TREE_REQUEST_PAGE_BY_MODAL_OPEN',
+  REQUEST_PAGE_BY_MODAL_CLOSE = 'NAV_TREE_REQUEST_PAGE_BY_MODAL_CLOSE',
   PROMPTS_ANSWERED = 'NAV_TREE_PROMPTS_ANSWERED',
   CANCEL_REQUEST_IMPORT = 'NAV_TREE_CANCEL_REQUEST_IMPORT',
   START_IMPORT = 'NAV_TREE_START_IMPORT',
@@ -29,6 +33,7 @@ export interface NavigationTreeState {
   chosenObjectName: string;
   isPrompted: boolean;
   importRequested: boolean;
+  pageByModalOpenRequested: boolean;
   dossierData: any | null; // Replace 'any' with the appropriate type
   promptsAnswers: any | null; // Replace 'any' with the appropriate type
   mstrObjectType: MstrObjectTypes | null;
@@ -45,6 +50,13 @@ export interface NavigationTreeState {
   displayAttrFormNames?: DisplayAttrFormNames;
   importSubtotal?: string;
   promptObjects?: string[];
+  pageBy?: PageBy[];
+  importPageByConfigurations?: (pageByConfigurations: PageByConfiguration[][]) => void;
+}
+
+export interface RequestPageByModalOpenData {
+  pageBy: PageBy[];
+  importPageByConfigurations: (pageByConfigurations: PageByConfiguration[][]) => void;
 }
 
 export interface SelectObjectAction extends Action {
@@ -60,6 +72,15 @@ export interface SetPromptObjectsAction extends Action {
 export interface RequestImportAction extends Action {
   type: NavigationTreeActionTypes.REQUEST_IMPORT;
   data: { isPrompted: boolean; promptObjects: any[] };
+}
+
+export interface RequestPageByModalOpenAction extends Action {
+  type: NavigationTreeActionTypes.REQUEST_PAGE_BY_MODAL_OPEN;
+  data: RequestPageByModalOpenData;
+}
+
+export interface RequestPageByModalCloseAction extends Action {
+  type: NavigationTreeActionTypes.REQUEST_PAGE_BY_MODAL_CLOSE;
 }
 
 export interface PromptsAnsweredAction extends Action {
@@ -105,13 +126,15 @@ export interface UpdateSelectedMenuAction extends Action {
 
 interface SetPopupTypeAction extends Action {
   type: NavigationTreeActionTypes.SET_POPUP_TYPE;
-  popupType: PopupTypeEnum;
+  popupType: DialogType;
 }
 
 export type NavigationTreeActions =
   | SelectObjectAction
   | SetPromptObjectsAction
   | RequestImportAction
+  | RequestPageByModalOpenAction
+  | RequestPageByModalCloseAction
   | PromptsAnsweredAction
   | ClearPromptsAnswersAction
   | CancelRequestImportAction

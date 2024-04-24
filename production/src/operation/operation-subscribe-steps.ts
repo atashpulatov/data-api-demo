@@ -19,6 +19,7 @@ import stepFormatTable from '../office/format/step-format-table';
 import stepHighlightObject from '../office/highlight/step-highlight-object';
 import stepFetchInsertDataIntoExcel from '../office/import/step-fetch-insert-data-into-excel';
 import stepCreatePivotTable from '../office/pivot-table/step-create-pivot-table';
+import stepRemovePivotTable from '../office/pivot-table/step-remove-pivot-table';
 import stepRemoveObjectBinding from '../office/remove/step-remove-object-binding';
 import stepRemoveObjectTable from '../office/remove/step-remove-object-table';
 import stepAddVisualizationPlaceholder from '../office/shapes/step-add-visualization-placeholder';
@@ -159,6 +160,11 @@ class SubscribeSteps {
     operationBus.subscribe(
       OperationSteps.CREATE_PIVOT_TABLE,
       stepCreatePivotTable.createPivotTable
+    );
+
+    operationBus.subscribe(
+      OperationSteps.REMOVE_PIVOT_TABLE,
+      stepRemovePivotTable.removePivotTable
     );
   };
 }

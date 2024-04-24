@@ -6,7 +6,7 @@ import officeStoreHelper from '../../office/store/office-store-helper';
 import { pageByHelper } from '../../page-by/page-by-helper';
 
 import { MstrObjectTypes } from '../../mstr-object/mstr-object-types';
-import { PopupTypeEnum } from '../../redux-reducer/popup-state-reducer/popup-state-reducer-types';
+import { DialogType } from '../../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 import { ObjectData } from '../../types/object-types';
 
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
@@ -77,8 +77,8 @@ class SidePanelHelper {
 
         if (isFromDataOverviewDialog) {
           const popupType = isDossier
-            ? PopupTypeEnum.repromptDossierDataOverview
-            : PopupTypeEnum.repromptReportDataOverview;
+            ? DialogType.repromptDossierDataOverview
+            : DialogType.repromptReportDataOverview;
           this.reduxStore.dispatch(popupStateActions.setPopupType(popupType));
         }
 
