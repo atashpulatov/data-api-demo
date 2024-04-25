@@ -637,7 +637,7 @@ describe('PopupController', () => {
 
     validPopupTypes.forEach(popupType => {
       popupController
-        .isOverviewActionHandledForOverviewPopups(
+        .isActionCommandHandledForOverviewPopups(
           popupType,
           OverviewActionCommands.RANGE_TAKEN_OK,
           null
@@ -652,7 +652,7 @@ describe('PopupController', () => {
   it('should return false for invalid overview popup types', () => {
     const invalidPopupType = DialogType.dataPreparation;
     popupController
-      .isOverviewActionHandledForOverviewPopups(invalidPopupType, 'command', null)
+      .isActionCommandHandledForOverviewPopups(invalidPopupType, 'command', null)
       .then(result => {
         expect(result).toBe(false);
       });
