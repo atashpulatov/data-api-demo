@@ -37,6 +37,7 @@ export enum OperationSteps {
   // pivot-table steps
   CREATE_PIVOT_TABLE = 'CREATE_PIVOT_TABLE',
   REMOVE_PIVOT_TABLE = 'REMOVE_PIVOT_TABLE',
+  REFRESH_PIVOT_TABLE = 'REFRESH_PIVOT_TABLE',
   // formatted-table steps
   EXPORT_EXCEL_TO_CURRENT_WORKBOOK = 'EXPORT_EXCEL_TO_CURRENT_WORKBOOK',
   MOVE_FORMATTED_DATA_FROM_EXPORTED_SHEET_TO_TARGET_SHEET = 'MOVE_FORMATTED_DATA_FROM_EXPORTED_SHEET_TO_TARGET_SHEET',
@@ -174,7 +175,6 @@ const operationStepsMapFormattedTable = {
     OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
   ],
 
-
   [OperationTypes.DUPLICATE_OPERATION]: [
     OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
     OperationSteps.MODIFY_OBJECT,
@@ -272,6 +272,7 @@ const operationStepsMapImage = {
 const operationStepsMapPivotTable = {
   [OperationTypes.IMPORT_OPERATION]: [
     OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
+    OperationSteps.GET_OBJECT_SETTINGS,
     OperationSteps.GET_INSTANCE_DEFINITION,
     OperationSteps.GET_OBJECT_DETAILS,
     OperationSteps.GET_OFFICE_TABLE_IMPORT,
@@ -284,6 +285,15 @@ const operationStepsMapPivotTable = {
 
   [OperationTypes.REFRESH_OPERATION]: [
     OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
+    OperationSteps.BACKUP_OBJECT_DATA,
+    OperationSteps.GET_OBJECT_SETTINGS,
+    OperationSteps.GET_INSTANCE_DEFINITION,
+    OperationSteps.GET_OBJECT_DETAILS,
+    OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH,
+    OperationSteps.FETCH_INSERT_DATA,
+    OperationSteps.REFRESH_PIVOT_TABLE,
+    OperationSteps.BIND_OFFICE_TABLE,
+    OperationSteps.SAVE_OBJECT_IN_EXCEL,
     OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
   ],
 
@@ -309,6 +319,11 @@ const operationStepsMapPivotTable = {
 
   [OperationTypes.CLEAR_DATA_OPERATION]: [
     OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
+    OperationSteps.CHECK_OBJECT_STATUS,
+    OperationSteps.CLEAR_CROSSTAB_HEADERS,
+    OperationSteps.CLEAR_TABLE_DATA,
+    OperationSteps.REFRESH_PIVOT_TABLE,
+    OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
     OperationSteps.COMPLETE_CLEAR_DATA,
   ],
 };
