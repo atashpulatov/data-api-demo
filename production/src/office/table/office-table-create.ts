@@ -65,7 +65,8 @@ class OfficeTableCreate {
       objectData.importType,
       name,
       pageByData,
-      prevOfficeTable
+      prevOfficeTable,
+      insertNewWorksheet
     );
 
     if (insertNewWorksheet) {
