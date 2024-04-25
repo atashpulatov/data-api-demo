@@ -283,11 +283,11 @@ class PopupController {
       this.resetDialogStates();
     }
 
-    const isRepromptQueueEmptyAndOverviewClosed =
+    const isMultipleRepromptQueueEmptyAndOverviewClosed =
       isMultipleRepromptQueueEmpty && !isDataOverviewOpen;
 
     try {
-      if (isRepromptQueueEmptyAndOverviewClosed) {
+      if (isMultipleRepromptQueueEmptyAndOverviewClosed) {
         // We will only close dialog if not in Multiple Reprompt workflow
         // or if the Multiple Reprompt queue has been cleared up.
         this.closeDialog(dialog);
@@ -355,7 +355,7 @@ class PopupController {
     } finally {
       // always reset this.reportParams to prevent reusing old references in future popups
       this.reportParams = null;
-      if (isRepromptQueueEmptyAndOverviewClosed) {
+      if (isMultipleRepromptQueueEmptyAndOverviewClosed) {
         // We will only reset popup related states when not in Multiple Reprompt workflow
         // or if the Multiple Reprompt queue has been cleared up.
         this.resetDialogStates();
