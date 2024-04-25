@@ -2,6 +2,7 @@ import { authenticationHelper } from '../authentication/authentication-helper';
 import { mstrObjectRestService } from './mstr-object-rest-service';
 
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectInfoSetting } from '../redux-reducer/settings-reducer/settings-reducer-types';
 import { ObjectData, ObjectDetails } from '../types/object-types';
 
 import mstrObjectEnum from './mstr-object-type-enum';
@@ -59,3 +60,37 @@ export const populateDetails = (
   owner,
   importedBy: authenticationHelper.getCurrentMstrUserFullName(),
 });
+
+/**
+ * Calculates the offset value for object details information based on the provided objectInfoSettings.
+ * Object details information is placed above the table.
+ * @param objectInfoSettings - An array of ObjectInfoSetting objects.
+ * @returns The calculated offset value.
+ */
+export const calculateOffsetForObjectInfoSettings = (
+  objectInfoSettings: ObjectInfoSetting[]
+): number => {
+  let offset = 0;
+  // TODO: receive object type and determine spaces accordingly
+  const defaultOffset = 3;
+  const offsetForFilter = 9;
+  const offsetForName = 2;
+
+  for (const item of objectInfoSettings) {
+    if (item.toggleChecked) {
+      switch (item.key) {
+        case 'name':
+          offset += offsetForName;
+          break;
+        case 'filter':
+          offset += offsetForFilter;
+          break;
+        default:
+          offset += defaultOffset;
+          break;
+      }
+    }
+  }
+
+  return offset;
+};
