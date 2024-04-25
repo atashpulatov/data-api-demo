@@ -209,6 +209,12 @@ class OperationStepDispatcher {
   completeRemovePivotTable(objectWorkingId: number): void {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.REMOVE_PIVOT_TABLE));
   }
+
+  completeRefreshPivotTable(objectWorkingId: number): void {
+    this.reduxStore.dispatch(
+      markStepCompleted(objectWorkingId, OperationSteps.REFRESH_PIVOT_TABLE)
+    );
+  }
 }
 
 const operationStepDispatcher = new OperationStepDispatcher();
