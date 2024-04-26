@@ -1,5 +1,7 @@
 import { PageByConfiguration } from '@mstr/connector-components';
 
+import { FiltersText } from '../mstr-object/object-filter-helper-types';
+
 import { Attribute } from '../mstr-object/mstr-object-response-types';
 import { MstrObjectTypes } from '../mstr-object/mstr-object-types';
 import { PageByData } from '../page-by/page-by-types';
@@ -7,12 +9,32 @@ import { PageByData } from '../page-by/page-by-types';
 import { DisplayAttrFormNames, ObjectImportType } from '../mstr-object/constants';
 
 export interface ObjectDetails {
+  [key: string]: string | boolean | TableDimensions | FiltersText;
   ancestors: any;
   certified: boolean;
+  createdDate: string;
+  description?: string;
+  excelTableSize?: TableDimensions;
+  filters: FiltersText;
+  importedBy: string;
   modifiedDate: string;
   owner: string;
+  version: string;
+}
+
+export interface WorksheetObjectDetails {
+  [key: string]: string | boolean | TableDimensions | FiltersText | PageByData;
+  ancestors: any;
+  createdDate: string;
+  description: string;
+  id: string;
   importedBy: string;
-  excelTableSize?: TableDimensions;
+  modifiedDate: string;
+  name: string;
+  owner: string;
+  pageBy: PageByData;
+  filters: FiltersText;
+  nonReportFilter: string;
 }
 
 export interface TableDimensions {
