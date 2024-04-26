@@ -236,7 +236,6 @@ class SidePanelNotificationHelper {
    * @param data.errorDetails  Details of the error that occurred during import.
    */
   setPageByImportFailedPopup = ({
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     objectWorkingId,
     setSidePanelPopup,
     errorDetails,

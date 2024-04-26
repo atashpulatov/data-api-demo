@@ -183,6 +183,7 @@ class PageByHelper {
   handleRemovingMultiplePages = (objectWorkingId: number): void => {
     const { pageBySiblings, sourceObject } = this.getAllPageByObjects(objectWorkingId);
     pageBySiblings.push(sourceObject);
+
     pageBySiblings.forEach((pageByObject: ObjectData) => {
       reduxStore.dispatch(removeRequested(pageByObject.objectWorkingId, pageByObject?.importType));
     });

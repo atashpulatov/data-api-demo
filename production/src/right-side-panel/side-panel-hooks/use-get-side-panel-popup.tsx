@@ -71,9 +71,8 @@ export const useGetSidePanelPopup = ({
       const objectData =
         officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
       const isDossier =
-        objectData?.mstrObjectType.name === mstrObjectEnum?.mstrObjectType.visualization.name;
-      const isReport =
-        objectData?.mstrObjectType.name === mstrObjectEnum?.mstrObjectType.report.name;
+        objectData.mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
+      const isReport = objectData.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
       if ((isDossier || isReport) && isSidePanelBlocked && !isDataOverviewOpen) {
         popupController.sendMessageToDialog(JSON.stringify({ popupData }));
       }
