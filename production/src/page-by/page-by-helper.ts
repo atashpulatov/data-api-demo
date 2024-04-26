@@ -90,7 +90,8 @@ class PageByHelper {
     validPageByElements?.items?.forEach(combination => {
       const pageByDataElement: PageByDataElement[] = combination.map((value, index) => ({
         name: pageBy[index].name,
-        value: pageBy[index].elements[value].formValues[0],
+        value:
+          pageBy[index].elements[value].formValues?.[0] ?? pageBy[index].elements[value].name ?? '',
         valueId: pageBy[index].elements[value].id,
       }));
 
