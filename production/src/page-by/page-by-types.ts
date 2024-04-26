@@ -14,7 +14,8 @@ interface PageByForm {
 
 interface PageByElement {
   id: string;
-  formValues: string[];
+  formValues?: string[];
+  name?: string;
 }
 
 export interface PageBy {

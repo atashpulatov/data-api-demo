@@ -88,11 +88,15 @@ class PageByHelper {
     const validPageByData: PageByDataElement[][] = [];
 
     validPageByElements?.items?.forEach(combination => {
-      const pageByDataElement: PageByDataElement[] = combination.map((value, index) => ({
-        name: pageBy[index].name,
-        value: pageBy[index].elements[value].formValues[0],
-        valueId: pageBy[index].elements[value].id,
-      }));
+      const pageByDataElement: PageByDataElement[] = combination.map((value, index) => {
+        const { name: pageByItemName, elements } = pageBy[index];
+        const { name: elementName, id, formValues } = elements[value];
+        return {
+          name: pageByItemName,
+          value: formValues?.[0] ?? elementName ?? '',
+          valueId: id,
+        }
+      });
 
       validPageByData.push(pageByDataElement);
     });
