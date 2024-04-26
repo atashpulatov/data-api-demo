@@ -99,6 +99,12 @@ class OperationStepDispatcher {
     );
   }
 
+  completeRemoveObjectDetails(objectWorkingId: number): void {
+    this.reduxStore.dispatch(
+      markStepCompleted(objectWorkingId, OperationSteps.REMOVE_OBJECT_DETAILS)
+    );
+  }
+
   completeCheckObjectStatus(objectWorkingId: number): void {
     this.reduxStore.dispatch(
       markStepCompleted(objectWorkingId, OperationSteps.CHECK_OBJECT_STATUS)
@@ -199,13 +205,20 @@ class OperationStepDispatcher {
   }
 
   completeExportToCurrentWorkbook(objectWorkingId: number): void {
-    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.EXPORT_EXCEL_TO_CURRENT_WORKBOOK));
+    this.reduxStore.dispatch(
+      markStepCompleted(objectWorkingId, OperationSteps.EXPORT_EXCEL_TO_CURRENT_WORKBOOK)
+    );
   }
 
   completeMoveFormattedDataFromExportedSheetToTargetSheet(objectWorkingId: number): void {
-    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.MOVE_FORMATTED_DATA_FROM_EXPORTED_SHEET_TO_TARGET_SHEET));
+    this.reduxStore.dispatch(
+      markStepCompleted(
+        objectWorkingId,
+        OperationSteps.MOVE_FORMATTED_DATA_FROM_EXPORTED_SHEET_TO_TARGET_SHEET
+      )
+    );
   }
-  
+
   completeRemovePivotTable(objectWorkingId: number): void {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.REMOVE_PIVOT_TABLE));
   }

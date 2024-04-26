@@ -22,6 +22,7 @@ import stepCreatePivotTable from '../office/pivot-table/step-create-pivot-table'
 import stepRefreshPivotTable from '../office/pivot-table/step-refresh-pivot-table';
 import stepRemovePivotTable from '../office/pivot-table/step-remove-pivot-table';
 import stepRemoveObjectBinding from '../office/remove/step-remove-object-binding';
+import stepRemoveObjectDetails from '../office/remove/step-remove-object-details';
 import stepRemoveObjectTable from '../office/remove/step-remove-object-table';
 import stepAddVisualizationPlaceholder from '../office/shapes/step-add-visualization-placeholder';
 import stepManipulateVisualizationImage from '../office/shapes/step-manipulate-visualization-image';
@@ -96,6 +97,12 @@ class SubscribeSteps {
       OperationSteps.REMOVE_OBJECT_BINDING,
       stepRemoveObjectBinding.removeObjectBinding
     );
+
+    operationBus.subscribe(
+      OperationSteps.REMOVE_OBJECT_DETAILS,
+      stepRemoveObjectDetails.removeObjectDetails
+    );
+
     operationBus.subscribe(
       OperationSteps.REMOVE_OBJECT_TABLE,
       stepRemoveObjectTable.removeObjectTable
