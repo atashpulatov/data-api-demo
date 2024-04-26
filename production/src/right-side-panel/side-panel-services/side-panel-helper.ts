@@ -3,7 +3,6 @@ import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-
 import { officeShapeApiHelper } from '../../office/shapes/office-shape-api-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import officeStoreHelper from '../../office/store/office-store-helper';
-import { pageByHelper } from '../../page-by/page-by-helper';
 
 import { MstrObjectTypes } from '../../mstr-object/mstr-object-types';
 import { DialogType } from '../../redux-reducer/popup-state-reducer/popup-state-reducer-types';
@@ -33,24 +32,6 @@ class SidePanelHelper {
    */
   clearRepromptTask(): void {
     this.reduxStore.dispatch(clearRepromptTask());
-  }
-
-  /**
-   * Handles the refresh of multiple pages for page-by object.
-   *
-   * @param objectWorkingId Contains unique Id of the object, allowing to reference source object.
-   */
-  refreshMultiplePagesForPageBy(objectWorkingId: number): void {
-    pageByHelper.handleRefreshingMultiplePages(objectWorkingId);
-  }
-
-  /**
-   * Handles the remove of multiple pages for page-by object.
-   *
-   * @param objectWorkingId Contains unique Id of the object, allowing to reference source object.
-   */
-  removeMultiplePagesForPageBy(objectWorkingId: number): void {
-    pageByHelper.handleRemovingMultiplePages(objectWorkingId);
   }
 
   /**
