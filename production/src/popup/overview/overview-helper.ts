@@ -327,18 +327,15 @@ class OverviewHelper {
         officeReducerHelper.clearPopupData();
         break;
       case OverviewActionCommands.PAGE_BY_REFRESH_FAILED_CLOSE:
-        await callback();
-        officeReducerHelper.clearPopupData();
+        sidePanelNotificationHelper.clearPopupDataAndRunCallback(callback);
         break;
       case OverviewActionCommands.PAGE_BY_REFRESH_FAILED_EDIT:
-        await callback();
-        officeReducerHelper.clearPopupData();
+        sidePanelNotificationHelper.clearPopupDataAndRunCallback(callback);
         await this.sidePanelService.edit(response.objectWorkingId);
         break;
       case OverviewActionCommands.PAGE_BY_REFRESH_FAILED_REMOVE:
-        await callback();
-        officeReducerHelper.clearPopupData();
-        await pageByHelper.handleRemovingMultiplePages(response.objectWorkingId);
+        sidePanelNotificationHelper.clearPopupDataAndRunCallback(callback);
+        pageByHelper.handleRemovingMultiplePages(response.objectWorkingId);
         break;
       case OverviewActionCommands.RENAME:
         this.sidePanelService.rename(response.objectWorkingId, response.newName);
