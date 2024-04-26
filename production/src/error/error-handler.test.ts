@@ -38,6 +38,7 @@ describe('ErrorService', () => {
         officeReducer: { isDialogOpen: false },
         operationReducer: { operations: [{ operationType: OperationTypes.REFRESH_OPERATION }] },
       }),
+      dispatch: jest.fn(),
     };
 
     jest.spyOn(errorService, 'closePromptsDialogInOverview').mockImplementation();
