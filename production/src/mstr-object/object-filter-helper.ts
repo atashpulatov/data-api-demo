@@ -2,8 +2,8 @@ import { t } from 'i18next';
 
 import {
   DossierDefinition,
+  FiltersText,
   ReportDefinition,
-  ReportFiltersText,
   Token,
 } from './object-filter-helper-types';
 
@@ -39,9 +39,7 @@ const convertTokensToString = (tokens: Token[]): string =>
  * @param reportDefinition - The filter data object which is the response from the API call to get the report filter data.
  * @returns An object containing the generated report filter text, report limits text, view filter text, and metric limits text.
  */
-export const generateReportFilterTexts = (
-  reportDefinition: ReportDefinition
-): ReportFiltersText => {
+export const generateReportFilterTexts = (reportDefinition: ReportDefinition): FiltersText => {
   const reportFilter = reportDefinition?.dataSource?.filter;
   const reportLimits = reportDefinition?.dataSource?.dataTemplate?.units.find(
     unit => unit.type === 'metrics'
