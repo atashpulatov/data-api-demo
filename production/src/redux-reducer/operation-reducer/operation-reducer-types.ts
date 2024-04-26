@@ -69,6 +69,7 @@ export interface OperationData {
   preparedInstanceDefinition?: any;
   isTotalsRowVisible?: boolean;
   objectExist?: boolean;
+  sourceWorksheetId?: string;
 }
 
 export interface OperationState {

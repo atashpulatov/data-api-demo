@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Settings, SettingsPanel, SettingsSection } from '@mstr/connector-components';
 
+import { formattingSettingsHelper } from './formatting-settings/formatting-settings-helper';
 import { settingsSidePanelHelper } from './settings-side-panel-helper';
 
 import { officeSelectors } from '../../redux-reducer/office-reducer/office-reducer-selectors';
@@ -27,8 +28,16 @@ const SettingsSidePanel: React.FC<any> = () => {
     settingsReducerSelectors.selectWorksheetMainSwitchValue
   );
 
+  const importAttributesAsText = useSelector(settingsReducerSelectors.selectImportAttributesAsText);
+
+  const mergeCrosstabColumns = useSelector(settingsReducerSelectors.selectMergeCrosstabColumns);
+
   const { getPromptSection, getObjectInfoSection, getPageBySection } = settingsSidePanelHelper;
+
+  const { getImportFormattingSection } = formattingSettingsHelper;
+
   const settingsSections: SettingsSection[] = [
+    getImportFormattingSection(importAttributesAsText, mergeCrosstabColumns),
     getPromptSection(reusePromptAnswers),
     getPageBySection(objectAndWorksheetNamingSetting, pageByDisplaySetting),
     getObjectInfoSection(

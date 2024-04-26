@@ -5,6 +5,8 @@ import {
   OfficeState,
   SetActiveCellAddressAction,
   SetIsDialogLoadedAction,
+  SetIsInsertWorksheetAPISupportedAction,
+  SetIsPivotTableSupported,
   SetIsShapeAPISupportedAction,
   SetPopupDataAction,
   ToggleIsClearDataFailedFlagAction,
@@ -26,9 +28,10 @@ const initialState: OfficeState = {
   isDialogLoaded: false,
   settingsPanelLoaded: false,
   reusePromptAnswers: false,
-  isShapeAPISupported: false,
   isSecured: false,
   isClearDataFailed: false,
+  isShapeAPISupported: false,
+  isInsertWorksheetAPISupported: false,
   isPivotTableSupported: false,
 };
 
@@ -80,6 +83,11 @@ export const officeReducer = (state = initialState, action: OfficeActions): Offi
     case OfficeActionsTypes.SET_SHAPE_API_SUPPORTED:
       return setIsShapeAPISupported(state, action);
 
+    case OfficeActionsTypes.SET_INSERT_WORKSHEET_API_SUPPORTED:
+      return setIsInsertWorksheetAPISupported(state, action);
+      
+    case OfficeActionsTypes.SET_PIVOT_TABLE_SUPPORTED:
+      return setIsPivotTableSupported(state, action);
     default:
       break;
   }
@@ -202,5 +210,26 @@ function setIsShapeAPISupported(
   return {
     ...state,
     isShapeAPISupported: action.isShapeAPISupported,
+  };
+}
+
+function setIsInsertWorksheetAPISupported(
+  state: OfficeState,
+  action: SetIsInsertWorksheetAPISupportedAction
+): OfficeState {
+  return {
+    ...state,
+    isInsertWorksheetAPISupported: action.isInsertWorksheetAPISupported,
+
+  };
+}
+
+function setIsPivotTableSupported(
+  state: OfficeState,
+  action: SetIsPivotTableSupported
+): OfficeState {
+  return {
+    ...state,
+    isPivotTableSupported: action.isPivotTableSupported,
   };
 }

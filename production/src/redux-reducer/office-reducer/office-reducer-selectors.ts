@@ -36,6 +36,11 @@ const selectIsShapeAPISupported = createSelector(
   (officeReducer: OfficeState) => officeReducer.isShapeAPISupported
 );
 
+const selectIsInsertWorksheetAPISupported = createSelector(
+  [getOfficeState],
+  (officeReducer: OfficeState) => officeReducer.isInsertWorksheetAPISupported
+);
+
 const selectReusePromptAnswers = createSelector(
   [getOfficeState],
   officeState => officeState.reusePromptAnswers
@@ -59,6 +64,7 @@ const selectIsSettingsPanelLoaded = createSelector(
 export const officeSelectors = {
   selectIsPivotTableSupported,
   selectIsShapeAPISupported,
+  selectIsInsertWorksheetAPISupported,
   selectReusePromptAnswers,
   selectIsSecured,
   selectActiveCellAddress,

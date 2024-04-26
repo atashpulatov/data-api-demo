@@ -8,6 +8,7 @@ import { useGetUpdatedDuplicatePopup } from './side-panel-hooks/use-get-updated-
 
 import { notificationService } from '../notification/notification-service';
 import officeReducerHelper from '../office/store/office-reducer-helper';
+import { formattingSettingsHelper } from './settings-side-panel/formatting-settings/formatting-settings-helper';
 import { settingsSidePanelHelper } from './settings-side-panel/settings-side-panel-helper';
 import { sidePanelEventHelper } from './side-panel-services/side-panel-event-helper';
 import { sidePanelHelper } from './side-panel-services/side-panel-helper';
@@ -57,10 +58,12 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   const isDialogOpen = useSelector(officeSelectors.selectIsDialogOpen);
 
   useEffect(() => {
+    // TODO - move this to a separate hook
     async function initializeSidePanel(): Promise<void> {
       try {
         await sidePanelEventHelper.addRemoveObjectListener();
         await sidePanelEventHelper.initializeActiveCellChangedListener(updateActiveCellAddress);
+        await formattingSettingsHelper.initImportFormattingSettings();
         await settingsSidePanelHelper.initReusePromptAnswers();
         await settingsSidePanelHelper.initPageByDisplayAnswers();
         await settingsSidePanelHelper.initWorksheetNamingAnswers();

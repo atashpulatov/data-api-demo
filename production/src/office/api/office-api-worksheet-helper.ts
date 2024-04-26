@@ -120,6 +120,7 @@ class OfficeApiWorksheetHelper {
    * @param name Name of the object
    * @param pageByData Contains information about page-by elements
    * @param prevOfficeTable Previous office table
+   * @param insertNewWorksheet Flag indicating whether new worksheet should be created
    * @return Excel worksheet
    */
   async getWorksheet(
@@ -127,29 +128,31 @@ class OfficeApiWorksheetHelper {
     importType: ObjectImportType,
     name: string,
     pageByData: PageByData,
-    prevOfficeTable: Excel.Table
+    prevOfficeTable: Excel.Table,
+    insertNewWorksheet: boolean
   ): Promise<Excel.Worksheet> {
+    const isPivotTableImport = importType === ObjectImportType.PIVOT_TABLE;
     let worksheet;
 
-    if (importType === ObjectImportType.PIVOT_TABLE) {
+    if (insertNewWorksheet) {
       worksheet = await this.createNewWorksheet({
         excelContext,
-        worksheetName: `${name} data source`,
+        worksheetName: isPivotTableImport ? `${name} data source` : name,
         pageByData,
-        visibility: Excel.SheetVisibility.veryHidden,
+        visibility: isPivotTableImport
+          ? Excel.SheetVisibility.veryHidden
+          : Excel.SheetVisibility.visible,
       });
 
-      return worksheet;
-    }
-
-    if (prevOfficeTable) {
+      if (!isPivotTableImport) {
+        worksheet.activate();
+        await excelContext.sync();
+      }
+    } else if (prevOfficeTable) {
       worksheet = prevOfficeTable.worksheet;
     } else {
       worksheet = excelContext.workbook.worksheets.getActiveWorksheet();
     }
-
-    worksheet.activate();
-    await excelContext.sync();
 
     return worksheet;
   }

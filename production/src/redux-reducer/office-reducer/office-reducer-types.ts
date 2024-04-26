@@ -14,6 +14,7 @@ export type OfficeState = {
   settingsPanelLoaded: boolean;
   reusePromptAnswers: boolean;
   isShapeAPISupported: boolean;
+  isInsertWorksheetAPISupported: boolean;
   isPivotTableSupported: boolean;
 };
 
@@ -33,6 +34,8 @@ export enum OfficeActionsTypes {
   SET_POPUP_DATA = 'OFFICE_SET_POPUP_DATA',
   CLEAR_POPUP_DATA = 'OFFICE_CLEAR_POPUP_DATA',
   SET_SHAPE_API_SUPPORTED = 'OFFICE_SET_SHAPE_API_SUPPORTED',
+  SET_INSERT_WORKSHEET_API_SUPPORTED = 'SET_INSERT_WORKSHEET_API_SUPPORTED',
+  SET_PIVOT_TABLE_SUPPORTED = 'SET_PIVOT_TABLE_SUPPORTED',
 }
 
 export interface ShowDialogAction extends Action {
@@ -106,6 +109,16 @@ export interface SetIsShapeAPISupportedAction extends Action {
   isShapeAPISupported: boolean;
 }
 
+export interface SetIsInsertWorksheetAPISupportedAction extends Action {
+  type: OfficeActionsTypes.SET_INSERT_WORKSHEET_API_SUPPORTED;
+  isInsertWorksheetAPISupported: boolean;
+}
+
+export interface SetIsPivotTableSupported extends Action {
+  type: OfficeActionsTypes.SET_PIVOT_TABLE_SUPPORTED;
+  isPivotTableSupported: boolean;
+}
+
 export type OfficeActions =
   | ShowDialogAction
   | HideDialogAction
@@ -121,4 +134,6 @@ export type OfficeActions =
   | SetActiveCellAddressAction
   | SetPopupDataAction
   | ClearPopupDataAction
-  | SetIsShapeAPISupportedAction;
+  | SetIsShapeAPISupportedAction
+  | SetIsInsertWorksheetAPISupportedAction
+  | SetIsPivotTableSupported;

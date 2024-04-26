@@ -128,7 +128,7 @@ describe('NavigationTree Reducer', () => {
       action
     );
     // then
-    expect(newState.promptsAnswers).toEqual(null);
+    expect(newState.promptsAnswers).toEqual([]);
     expect(newState.dossierData).toEqual(null);
   });
 
