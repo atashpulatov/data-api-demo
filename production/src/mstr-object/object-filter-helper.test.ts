@@ -144,6 +144,8 @@ describe('generateDossierFilterText', () => {
     } as DossierDefinition;
 
     const expectedOutput = '( filter1 ) AND ( filter2 )';
-    expect(generateDossierFilterText(mockDossierDefinition)).toBe(expectedOutput);
+    expect(
+      generateDossierFilterText(mockDossierDefinition, mockDossierDefinition.chapters[0].key)
+    ).toBe(expectedOutput);
   });
 });
