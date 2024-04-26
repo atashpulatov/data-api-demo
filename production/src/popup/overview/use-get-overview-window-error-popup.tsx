@@ -21,17 +21,17 @@ const useGetOverviewWindowErrorPopup = ({
 
   useEffect(() => {
     if (popupData) {
-      const { type } = popupData;
+      const { type, objectWorkingId } = popupData;
       switch (type) {
         case PopupTypes.RANGE_TAKEN:
           overviewHelper.setRangeTakenPopup({
-            objectWorkingIds: [popupData.objectWorkingId],
+            objectWorkingIds: [objectWorkingId],
             setDialogPopup,
           });
           break;
         case PopupTypes.FAILED_TO_REFRESH_PAGES:
           overviewHelper.setPageByRefreshFailedPopup({
-            objectWorkingIds: [popupData.objectWorkingId],
+            objectWorkingIds: [objectWorkingId],
             setDialogPopup,
           });
           break;
