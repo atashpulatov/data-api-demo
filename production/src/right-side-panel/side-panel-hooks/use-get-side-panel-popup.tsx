@@ -83,6 +83,12 @@ export const useGetSidePanelPopup = ({
     ) {
       setSidePanelPopup(null);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeCellAddress, popupData, isSecured, isClearDataFailed]);
+  }, [
+    activeCellAddress,
+    popupData,
+    sidePanelPopup?.type,
+    isSidePanelBlocked,
+    isDataOverviewOpen,
+    setSidePanelPopup,
+  ]);
 };

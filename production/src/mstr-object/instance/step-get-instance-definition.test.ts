@@ -22,7 +22,7 @@ import mstrObjectEnum from '../mstr-object-type-enum';
 import dossierInstanceDefinition from './dossier-instance-definition';
 import stepGetInstanceDefinition from './step-get-instance-definition';
 import { ErrorMessages } from '../../error/constants';
-import { DEFAULT_CELL_POSITION, DisplayAttrFormNames } from '../constants';
+import { DisplayAttrFormNames } from '../constants';
 
 describe('StepGetInstanceDefinition', () => {
   afterEach(() => {
@@ -128,25 +128,23 @@ describe('StepGetInstanceDefinition', () => {
   );
 
   it.each`
-    expectedVisualizationInfo         | expectedStartCell        | expectedGetSelectedCellCallsNo | visualizationInfoParam            | nextStepParam                                   | manipulationsXMLParam
-    ${false}                          | ${undefined}             | ${0}                           | ${undefined}                      | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
-    ${false}                          | ${undefined}             | ${0}                           | ${false}                          | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
-    ${'visualizationInfoDossierTest'} | ${undefined}             | ${0}                           | ${'visualizationInfoDossierTest'} | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
-    ${false}                          | ${DEFAULT_CELL_POSITION} | ${1}                           | ${undefined}                      | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}       | ${undefined}
-    ${false}                          | ${DEFAULT_CELL_POSITION} | ${1}                           | ${false}                          | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}       | ${undefined}
-    ${'visualizationInfoDossierTest'} | ${DEFAULT_CELL_POSITION} | ${1}                           | ${'visualizationInfoDossierTest'} | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}       | ${undefined}
-    ${false}                          | ${undefined}             | ${0}                           | ${undefined}                      | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
-    ${false}                          | ${undefined}             | ${0}                           | ${false}                          | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
-    ${'visualizationInfoDossierTest'} | ${undefined}             | ${0}                           | ${'visualizationInfoDossierTest'} | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
-    ${false}                          | ${DEFAULT_CELL_POSITION} | ${1}                           | ${undefined}                      | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
-    ${false}                          | ${DEFAULT_CELL_POSITION} | ${1}                           | ${false}                          | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
-    ${'visualizationInfoDossierTest'} | ${DEFAULT_CELL_POSITION} | ${1}                           | ${'visualizationInfoDossierTest'} | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
+    expectedVisualizationInfo         | visualizationInfoParam            | nextStepParam                                   | manipulationsXMLParam
+    ${false}                          | ${undefined}                      | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
+    ${false}                          | ${false}                          | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
+    ${'visualizationInfoDossierTest'} | ${'visualizationInfoDossierTest'} | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
+    ${false}                          | ${undefined}                      | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}       | ${undefined}
+    ${false}                          | ${false}                          | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}       | ${undefined}
+    ${'visualizationInfoDossierTest'} | ${'visualizationInfoDossierTest'} | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}       | ${undefined}
+    ${false}                          | ${undefined}                      | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
+    ${false}                          | ${false}                          | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
+    ${'visualizationInfoDossierTest'} | ${'visualizationInfoDossierTest'} | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
+    ${false}                          | ${undefined}                      | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
+    ${false}                          | ${false}                          | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
+    ${'visualizationInfoDossierTest'} | ${'visualizationInfoDossierTest'} | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
   `(
     'getInstanceDefinition should work as expected for visualization',
     async ({
       expectedVisualizationInfo,
-      expectedStartCell,
-      expectedGetSelectedCellCallsNo,
       visualizationInfoParam,
       nextStepParam,
       manipulationsXMLParam,
@@ -168,11 +166,6 @@ describe('StepGetInstanceDefinition', () => {
         name: 'nameTest',
         importType: 'table',
       } as unknown as ObjectData;
-
-      // const worksheet = { activate: jest.fn() };
-      // jest
-      //   .spyOn(officeApiWorksheetHelper, 'createNewWorksheet')
-      //   .mockResolvedValue(worksheet as any);
 
       const excelContext = { sync: jest.fn() };
       jest
@@ -232,8 +225,6 @@ describe('StepGetInstanceDefinition', () => {
       jest.spyOn(pageByHelper, 'getPageByDataForDisplayType').mockImplementation();
 
       jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
-
-      jest.spyOn(officeApiHelper, 'getSelectedCell').mockResolvedValue(DEFAULT_CELL_POSITION);
 
       jest.spyOn(officeApiWorksheetHelper, 'isActiveWorksheetEmpty').mockResolvedValue(false);
 
@@ -320,11 +311,6 @@ describe('StepGetInstanceDefinition', () => {
         'table'
       );
 
-      expect(officeApiHelper.getSelectedCell).toBeCalledTimes(expectedGetSelectedCellCallsNo);
-      if (expectedGetSelectedCellCallsNo === 1) {
-        expect(officeApiHelper.getSelectedCell).toBeCalledWith(excelContext);
-      }
-
       expect(authenticationHelper.getCurrentMstrContext).toBeCalledTimes(1);
 
       expect(operationStepDispatcher.updateOperation).toBeCalledTimes(1);
@@ -338,7 +324,6 @@ describe('StepGetInstanceDefinition', () => {
         oldBindId: 'bindIdTest',
         shouldRenameExcelWorksheet: false,
         objectWorkingId: 'objectWorkingIdTest',
-        startCell: expectedStartCell,
         totalRows: 'rowsModifyInstanceWithPromptTest',
       });
 
@@ -372,22 +357,16 @@ describe('StepGetInstanceDefinition', () => {
   );
 
   it.each`
-    expectedVisualizationInfo         | expectedStartCell        | expectedGetSelectedCellCallsNo | visualizationInfoParam            | nextStepParam
-    ${false}                          | ${undefined}             | ${0}                           | ${undefined}                      | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH}
-    ${false}                          | ${undefined}             | ${0}                           | ${false}                          | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH}
-    ${'visualizationInfoDossierTest'} | ${undefined}             | ${0}                           | ${'visualizationInfoDossierTest'} | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH}
-    ${false}                          | ${DEFAULT_CELL_POSITION} | ${1}                           | ${undefined}                      | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}
-    ${false}                          | ${DEFAULT_CELL_POSITION} | ${1}                           | ${false}                          | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}
-    ${'visualizationInfoDossierTest'} | ${DEFAULT_CELL_POSITION} | ${1}                           | ${'visualizationInfoDossierTest'} | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}
+    expectedVisualizationInfo         | visualizationInfoParam            | nextStepParam
+    ${false}                          | ${undefined}                      | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH}
+    ${false}                          | ${false}                          | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH}
+    ${'visualizationInfoDossierTest'} | ${'visualizationInfoDossierTest'} | ${OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH}
+    ${false}                          | ${undefined}                      | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}
+    ${false}                          | ${false}                          | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}
+    ${'visualizationInfoDossierTest'} | ${'visualizationInfoDossierTest'} | ${OperationSteps.GET_OFFICE_TABLE_IMPORT}
   `(
     'getInstanceDefinition should work as expected for NO visualization',
-    async ({
-      expectedVisualizationInfo,
-      expectedStartCell,
-      expectedGetSelectedCellCallsNo,
-      visualizationInfoParam,
-      nextStepParam,
-    }) => {
+    async ({ expectedVisualizationInfo, visualizationInfoParam, nextStepParam }) => {
       // given
       const objectData = {
         objectWorkingId: 'objectWorkingIdTest',
@@ -450,8 +429,6 @@ describe('StepGetInstanceDefinition', () => {
       jest.spyOn(pageByHelper, 'getPageByDataForDisplayType').mockImplementation();
 
       jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
-
-      jest.spyOn(officeApiHelper, 'getSelectedCell').mockResolvedValue(DEFAULT_CELL_POSITION);
 
       jest.spyOn(officeApiWorksheetHelper, 'isActiveWorksheetEmpty').mockResolvedValue(false);
 
@@ -534,11 +511,6 @@ describe('StepGetInstanceDefinition', () => {
         'table'
       );
 
-      expect(officeApiHelper.getSelectedCell).toBeCalledTimes(expectedGetSelectedCellCallsNo);
-      if (expectedGetSelectedCellCallsNo === 1) {
-        expect(officeApiHelper.getSelectedCell).toBeCalledWith('excelContextTest');
-      }
-
       expect(authenticationHelper.getCurrentMstrContext).toBeCalledTimes(1);
 
       expect(operationStepDispatcher.updateOperation).toBeCalledTimes(1);
@@ -558,7 +530,6 @@ describe('StepGetInstanceDefinition', () => {
         oldBindId: 'bindIdTest',
         shouldRenameExcelWorksheet: false,
         objectWorkingId: 'objectWorkingIdTest',
-        startCell: expectedStartCell,
         totalRows: 'rowsModifyInstanceWithPromptTest',
       });
 

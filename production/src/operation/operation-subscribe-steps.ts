@@ -19,8 +19,10 @@ import stepFormatTable from '../office/format/step-format-table';
 import stepHighlightObject from '../office/highlight/step-highlight-object';
 import stepFetchInsertDataIntoExcel from '../office/import/step-fetch-insert-data-into-excel';
 import stepCreatePivotTable from '../office/pivot-table/step-create-pivot-table';
+import stepRefreshPivotTable from '../office/pivot-table/step-refresh-pivot-table';
 import stepRemovePivotTable from '../office/pivot-table/step-remove-pivot-table';
 import stepRemoveObjectBinding from '../office/remove/step-remove-object-binding';
+import stepRemoveObjectDetails from '../office/remove/step-remove-object-details';
 import stepRemoveObjectTable from '../office/remove/step-remove-object-table';
 import stepAddVisualizationPlaceholder from '../office/shapes/step-add-visualization-placeholder';
 import stepManipulateVisualizationImage from '../office/shapes/step-manipulate-visualization-image';
@@ -95,6 +97,12 @@ class SubscribeSteps {
       OperationSteps.REMOVE_OBJECT_BINDING,
       stepRemoveObjectBinding.removeObjectBinding
     );
+
+    operationBus.subscribe(
+      OperationSteps.REMOVE_OBJECT_DETAILS,
+      stepRemoveObjectDetails.removeObjectDetails
+    );
+
     operationBus.subscribe(
       OperationSteps.REMOVE_OBJECT_TABLE,
       stepRemoveObjectTable.removeObjectTable
@@ -165,6 +173,11 @@ class SubscribeSteps {
     operationBus.subscribe(
       OperationSteps.REMOVE_PIVOT_TABLE,
       stepRemovePivotTable.removePivotTable
+    );
+
+    operationBus.subscribe(
+      OperationSteps.REFRESH_PIVOT_TABLE,
+      stepRefreshPivotTable.refreshPivotTable
     );
   };
 }

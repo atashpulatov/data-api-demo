@@ -18,7 +18,7 @@ import { OperationSteps } from '../../operation/operation-steps';
 import mstrObjectEnum from '../mstr-object-type-enum';
 import dossierInstanceDefinition from './dossier-instance-definition';
 import { ErrorMessages } from '../../error/constants';
-import { ImportOperationStepDict, ObjectImportType, objectTableImportType } from '../constants';
+import { ObjectImportType, objectTableImportType } from '../constants';
 
 class StepGetInstanceDefinition {
   /**
@@ -115,19 +115,6 @@ class StepGetInstanceDefinition {
         futureStep,
         importType
       );
-
-      if (importType !== ObjectImportType.PIVOT_TABLE && futureStep in ImportOperationStepDict) {
-        if (insertNewWorksheet) {
-          const worksheet = await officeApiWorksheetHelper.createNewWorksheet({
-            excelContext,
-            worksheetName: name,
-            pageByData,
-          });
-          worksheet.activate();
-          await excelContext.sync();
-        }
-        startCell = await officeApiHelper.getSelectedCell(excelContext);
-      }
 
       if (insertNewWorksheet) {
         delete objectData.insertNewWorksheet;

@@ -31,7 +31,7 @@ describe('SidePanelService', () => {
     expect(setSidePanelPopup).toBeCalledTimes(1);
   });
 
-  it('setPageByRefreshFailedPopup should set up range taken popup', () => {
+  it('should call setSidePanelPopup when setPageByRefreshFailedPopup is triggered', () => {
     // given
     const objectWorkingId = 1;
     const selectedObjects = [

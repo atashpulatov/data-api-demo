@@ -11,13 +11,9 @@ import {
   ObjectInfoSetting,
 } from '../../redux-reducer/settings-reducer/settings-reducer-types';
 import {
-  EXCEL_OBJECT_INFO_SIDE_PANEL_PREFERENCES,
-  EXCEL_OBJECT_INFO_WORKSHEET_PREFERENCES,
-  EXCEL_PAGE_BY_AND_WORKSHEET_NAMING,
-  EXCEL_PAGE_BY_SELECTION,
-  EXCEL_REUSE_PROMPT_ANSWERS,
   ObjectAndWorksheetNamingOption,
   PageByDisplayOption,
+  UserPreferenceKey,
 } from './settings-side-panel-types';
 
 import i18n from '../../i18n';
@@ -43,7 +39,9 @@ class SettingsSidePanelHelper {
    * @returns A promise that resolves when the initialization is complete.
    */
   initReusePromptAnswers = async (): Promise<void> => {
-    const { value } = await userRestService.getUserPreference(EXCEL_REUSE_PROMPT_ANSWERS);
+    const { value } = await userRestService.getUserPreference(
+      UserPreferenceKey.EXCEL_REUSE_PROMPT_ANSWERS
+    );
     const reusePromptAnswersFlag = !Number.isNaN(+value)
       ? !!parseInt(value, 10)
       : JSON.parse(value);
@@ -57,7 +55,10 @@ class SettingsSidePanelHelper {
    * @returns A Promise that resolves when the user preference is updated.
    */
   toggleReusePromptAnswers = async (reusePromptAnswers: boolean): Promise<void> => {
-    await userRestService.setUserPreference(EXCEL_REUSE_PROMPT_ANSWERS, reusePromptAnswers);
+    await userRestService.setUserPreference(
+      UserPreferenceKey.EXCEL_REUSE_PROMPT_ANSWERS,
+      reusePromptAnswers
+    );
 
     reduxStore.dispatch(officeActions.toggleReusePromptAnswersFlag(reusePromptAnswers) as any);
   };
@@ -109,14 +110,14 @@ class SettingsSidePanelHelper {
 
     // Load side panel object info settings
     await this.loadSettings(
-      EXCEL_OBJECT_INFO_SIDE_PANEL_PREFERENCES,
+      UserPreferenceKey.EXCEL_OBJECT_INFO_SIDE_PANEL_PREFERENCES,
       sidePanelObjectInfoSettings,
       settingsActions.loadSidePanelObjectInfoSettings
     );
 
     // Load worksheet object info settings
     await this.loadSettings(
-      EXCEL_OBJECT_INFO_WORKSHEET_PREFERENCES,
+      UserPreferenceKey.EXCEL_OBJECT_INFO_WORKSHEET_PREFERENCES,
       worksheetObjectInfoSettings,
       settingsActions.loadWorksheetObjectInfoSettings
     );
@@ -164,7 +165,7 @@ class SettingsSidePanelHelper {
     const sidePanelSettings = reduxStore.getState().settingsReducer.sidePanelObjectInfoSettings;
 
     await userRestService.setUserPreference(
-      EXCEL_OBJECT_INFO_SIDE_PANEL_PREFERENCES,
+      UserPreferenceKey.EXCEL_OBJECT_INFO_SIDE_PANEL_PREFERENCES,
       encodeURI(
         this.getUpdatedSettingsString(sidePanelSettings, {
           key,
@@ -185,7 +186,7 @@ class SettingsSidePanelHelper {
     const sidePanelSettings = reduxStore.getState().settingsReducer.sidePanelObjectInfoSettings;
 
     await userRestService.setUserPreference(
-      EXCEL_OBJECT_INFO_SIDE_PANEL_PREFERENCES,
+      UserPreferenceKey.EXCEL_OBJECT_INFO_SIDE_PANEL_PREFERENCES,
       encodeURI(this.getUpdatedSettingsString(sidePanelSettings, value))
     );
 
@@ -202,7 +203,7 @@ class SettingsSidePanelHelper {
     const worksheetSettings = reduxStore.getState().settingsReducer.worksheetObjectInfoSettings;
 
     await userRestService.setUserPreference(
-      EXCEL_OBJECT_INFO_WORKSHEET_PREFERENCES,
+      UserPreferenceKey.EXCEL_OBJECT_INFO_WORKSHEET_PREFERENCES,
       encodeURI(this.getUpdatedSettingsString(worksheetSettings, { key, value }))
     );
 
@@ -218,7 +219,7 @@ class SettingsSidePanelHelper {
     const worksheetSettings = reduxStore.getState().settingsReducer.worksheetObjectInfoSettings;
 
     await userRestService.setUserPreference(
-      EXCEL_OBJECT_INFO_WORKSHEET_PREFERENCES,
+      UserPreferenceKey.EXCEL_OBJECT_INFO_WORKSHEET_PREFERENCES,
       encodeURI(this.getUpdatedSettingsString(worksheetSettings, value))
     );
 
@@ -242,7 +243,7 @@ class SettingsSidePanelHelper {
     }, [] as ObjectInfoSetting[]);
 
     await userRestService.setUserPreference(
-      EXCEL_OBJECT_INFO_WORKSHEET_PREFERENCES,
+      UserPreferenceKey.EXCEL_OBJECT_INFO_WORKSHEET_PREFERENCES,
       encodeURI(JSON.stringify(orderedList))
     );
 
@@ -259,7 +260,7 @@ class SettingsSidePanelHelper {
   ): Promise<void> {
     reduxStore.dispatch(settingsActions.setWorksheetNamingSetting(worksheetNamingOption));
     await userRestService.setUserPreference(
-      EXCEL_PAGE_BY_AND_WORKSHEET_NAMING,
+      UserPreferenceKey.EXCEL_PAGE_BY_AND_WORKSHEET_NAMING,
       worksheetNamingOption
     );
   }
@@ -270,7 +271,10 @@ class SettingsSidePanelHelper {
    */
   async handlePageByDisplayChange(pageByDisplayOption: PageByDisplayOption): Promise<void> {
     reduxStore.dispatch(settingsActions.setPageByDisplaySetting(pageByDisplayOption));
-    await userRestService.setUserPreference(EXCEL_PAGE_BY_SELECTION, pageByDisplayOption);
+    await userRestService.setUserPreference(
+      UserPreferenceKey.EXCEL_PAGE_BY_SELECTION,
+      pageByDisplayOption
+    );
   }
 
   /**
@@ -279,7 +283,9 @@ class SettingsSidePanelHelper {
    * updates the redux store with the retrieved value.
    */
   async initPageByDisplayAnswers(): Promise<void> {
-    const { value } = await userRestService.getUserPreference(EXCEL_PAGE_BY_SELECTION);
+    const { value } = await userRestService.getUserPreference(
+      UserPreferenceKey.EXCEL_PAGE_BY_SELECTION
+    );
     reduxStore.dispatch(settingsActions.setPageByDisplaySetting(value));
   }
 
@@ -289,7 +295,9 @@ class SettingsSidePanelHelper {
    * updates the redux store with the retrieved value.
    */
   async initWorksheetNamingAnswers(): Promise<void> {
-    const { value } = await userRestService.getUserPreference(EXCEL_PAGE_BY_AND_WORKSHEET_NAMING);
+    const { value } = await userRestService.getUserPreference(
+      UserPreferenceKey.EXCEL_PAGE_BY_AND_WORKSHEET_NAMING
+    );
     reduxStore.dispatch(settingsActions.setWorksheetNamingSetting(value));
   }
 
