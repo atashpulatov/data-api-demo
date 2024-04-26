@@ -194,8 +194,6 @@ describe('overview-helper', () => {
     const objectWorkingId = 1;
     const setDialogPopup = jest.fn();
 
-    /* jest.spyOn(reduxStore, 'dispatch').mockImplementation(); */
-
     // when
     overviewHelper.setPageByRefreshFailedPopup({
       objectWorkingIds: [objectWorkingId],
