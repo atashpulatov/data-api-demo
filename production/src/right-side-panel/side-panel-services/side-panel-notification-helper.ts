@@ -228,6 +228,38 @@ class SidePanelNotificationHelper {
   };
 
   /**
+   * Creates pageby import failed popup.
+   *
+   * @param data  Data required to create and update pageby refresh failed popup.
+   * @param data.objectWorkingId  Uniqe id of source object for duplication.
+   * @param data.setSidePanelPopup Callback to save popup in state of RightSidePanel.
+   * @param data.errorDetails  Details of the error that occurred during import.
+   */
+  setPageByImportFailedPopup = ({
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    objectWorkingId,
+    setSidePanelPopup,
+    errorDetails,
+  }: {
+    objectWorkingId: number;
+    setSidePanelPopup: Function;
+    errorDetails: string;
+  }): void => {
+    const onOk = (): void => {
+      officeReducerHelper.clearPopupData();
+      console.log(this.reduxStore.getState());
+      // sidePanelHelper.removeMultiplePagesForPageBy(objectWorkingId);
+      sidePanelHelper.removeMultipleObjectsPagesForPageBy(objectWorkingId);
+    };
+
+    setSidePanelPopup({
+      type: PopupTypes.FAILED_TO_IMPORT,
+      errorDetails,
+      onOk,
+    });
+  };
+
+  /**
    * Clears the rendered popup data and runs the provided callback.
    *
    * @param callback Callback to run after clearing the popup data.

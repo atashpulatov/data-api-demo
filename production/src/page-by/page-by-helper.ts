@@ -17,6 +17,7 @@ import {
 } from './page-by-types';
 
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { removeObject } from '../redux-reducer/object-reducer/object-actions';
 import {
   refreshRequested,
   removeRequested,
@@ -183,9 +184,24 @@ class PageByHelper {
   handleRemovingMultiplePages = (objectWorkingId: number): void => {
     const { pageBySiblings, sourceObject } = this.getAllPageByObjects(objectWorkingId);
     pageBySiblings.push(sourceObject);
-
+    console.log(pageBySiblings);
     pageBySiblings.forEach((pageByObject: ObjectData) => {
       reduxStore.dispatch(removeRequested(pageByObject.objectWorkingId, pageByObject?.importType));
+    });
+  };
+
+  handleRemovingMultipleObjectPages = (objectWorkingId: number): void => {
+    const { pageBySiblings, sourceObject } = this.getAllPageByObjects(objectWorkingId);
+    pageBySiblings.push(sourceObject);
+    console.log(pageBySiblings);
+    pageBySiblings.forEach((pageByObject: ObjectData) => {
+      if (pageByObject.bindId) {
+        reduxStore.dispatch(
+          removeRequested(pageByObject.objectWorkingId, pageByObject?.importType)
+        );
+      } else {
+        reduxStore.dispatch(removeObject(pageByObject.objectWorkingId));
+      }
     });
   };
 

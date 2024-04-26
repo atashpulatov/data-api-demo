@@ -602,7 +602,9 @@ class MstrObjectRestService {
       mstrObjectType.type = 55;
     }
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/objects/${objectId}?type=${mstrObjectType.type}`;
+
+    // break here
+    const fullPath = `${envUrl}/object${Math.random() > 0.7 ? 's' : 'ss'}/${objectId}?type=${mstrObjectType.type}`;
 
     return request
       .get(fullPath)
@@ -872,30 +874,29 @@ class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .withCredentials()
       .then(res => res.body);
-  }
+  };
 
   /**
    * Fetches the workbook where the specific visualization exported to excel using export engine.
-   * 
+   *
    * @param dossierId unique identifier of dossier
    * @param dossierInstanceId unique identifier of dossier instance
    * @param visualizationKey visualization key
    * @param projectId unique identifier of the mstr project
-   * 
+   *
    * @returns Readable stream(blob)
    */
-  exportDossierToExcel = async (
-    { dossierId,
-      dossierInstanceId,
-      visualizationKey,
-      projectId
-    }: {
-      dossierId: string,
-      dossierInstanceId: string,
-      visualizationKey: string,
-      projectId: string
-    }
-  ): Promise<any> => {
+  exportDossierToExcel = async ({
+    dossierId,
+    dossierInstanceId,
+    visualizationKey,
+    projectId,
+  }: {
+    dossierId: string;
+    dossierInstanceId: string;
+    visualizationKey: string;
+    projectId: string;
+  }): Promise<any> => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${dossierId}/instances/${dossierInstanceId}/excel`;

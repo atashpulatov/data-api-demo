@@ -56,6 +56,12 @@ export const useGetSidePanelPopup = ({
             edit: sidePanelService.edit,
           });
           break;
+        case PopupTypes.FAILED_TO_IMPORT:
+          sidePanelNotificationHelper.setPageByImportFailedPopup({
+            ...popupData,
+            setSidePanelPopup,
+          });
+          break;
         default:
           break;
       }
@@ -65,14 +71,16 @@ export const useGetSidePanelPopup = ({
       const objectData =
         officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
       const isDossier =
-        objectData.mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
-      const isReport = objectData.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
+        objectData?.mstrObjectType.name === mstrObjectEnum?.mstrObjectType.visualization.name;
+      const isReport =
+        objectData?.mstrObjectType.name === mstrObjectEnum?.mstrObjectType.report.name;
       if ((isDossier || isReport) && isSidePanelBlocked && !isDataOverviewOpen) {
         popupController.sendMessageToDialog(JSON.stringify({ popupData }));
       }
     } else if (
       sidePanelPopup?.type === PopupTypes.RANGE_TAKEN ||
-      sidePanelPopup?.type === PopupTypes.FAILED_TO_REFRESH_PAGES
+      sidePanelPopup?.type === PopupTypes.FAILED_TO_REFRESH_PAGES ||
+      sidePanelPopup?.type === PopupTypes.FAILED_TO_IMPORT
     ) {
       setSidePanelPopup(null);
     }

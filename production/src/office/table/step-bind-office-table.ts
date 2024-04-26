@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import { officeApiHelper } from '../api/office-api-helper';
 
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
@@ -7,6 +8,18 @@ import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { OperationTypes } from '../../operation/operation-type-names';
 import officeApiDataLoader from '../api/office-api-data-loader';
+
+class CustomError extends Error {
+  public status;
+
+  public response;
+
+  constructor(message: string, status: number, response: string) {
+    super(message);
+    this.status = status;
+    this.response = response;
+  }
+}
 
 class StepBindOfficeTable {
   /**
@@ -56,6 +69,10 @@ class StepBindOfficeTable {
       await excelContext.sync();
 
       operationStepDispatcher.completeBindOfficeTable(objectWorkingId);
+      // if (Math.random() > 0.6) {
+      //   const error = new CustomError('IMPORT ERRORRORORORORO', 400, 'response');
+      //   throw error;
+      // }
     } catch (error) {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);

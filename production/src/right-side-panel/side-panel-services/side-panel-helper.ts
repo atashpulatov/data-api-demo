@@ -53,6 +53,10 @@ class SidePanelHelper {
     pageByHelper.handleRemovingMultiplePages(objectWorkingId);
   }
 
+  removeMultipleObjectsPagesForPageBy(objectWorkingId: number): void {
+    pageByHelper.handleRemovingMultipleObjectPages(objectWorkingId);
+  }
+
   /**
    * Creates a prompted task for the reprompt queue. Includes the callback to be executed.
    * @param bindId Unique Id of the object, allowing to reference source object.
