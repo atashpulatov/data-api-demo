@@ -41,24 +41,6 @@ class SidePanelHelper {
   }
 
   /**
-   * Handles the refresh of multiple pages for page-by object.
-   *
-   * @param objectWorkingId Contains unique Id of the object, allowing to reference source object.
-   */
-  refreshMultiplePagesForPageBy(objectWorkingId: number): void {
-    pageByHelper.handleRefreshingMultiplePages(objectWorkingId);
-  }
-
-  /**
-   * Handles the remove of multiple pages for page-by object.
-   *
-   * @param objectWorkingId Contains unique Id of the object, allowing to reference source object.
-   */
-  removeMultiplePagesForPageBy(objectWorkingId: number): void {
-    pageByHelper.handleRemovingMultiplePages(objectWorkingId);
-  }
-
-  /**
    * Revert PageBy Import: If already imported, removes from the Excel worksheet; if not yet imported, deletes from the Redux store.
    *
    * @param objectWorkingId Contains unique Id of the object, allowing to reference source object.
