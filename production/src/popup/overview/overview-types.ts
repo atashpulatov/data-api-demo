@@ -1,4 +1,4 @@
-import { PopupTypes } from '@mstr/connector-components';
+import { PageByRefreshFailedOptions, PopupTypes } from '@mstr/connector-components';
 
 export interface DuplicatePopup {
   type: PopupTypes;
@@ -14,9 +14,17 @@ export interface RangeTakenPopup {
   onClose: () => void;
 }
 
+export interface PageByRefreshFailedPopup {
+  type: PopupTypes;
+  onOk: (refreshFailedOptions?: PageByRefreshFailedOptions) => void;
+  onClose: () => void;
+}
+
 export interface DialogPopup {
   objectWorkingIds: number[];
-  setDialogPopup: (dialogPopup: DuplicatePopup | RangeTakenPopup) => void;
+  setDialogPopup: (
+    dialogPopup: DuplicatePopup | RangeTakenPopup | PageByRefreshFailedPopup
+  ) => void;
   activeCellAddress?: string;
   onDuplicate?: (
     objectWorkingIds: number[],
