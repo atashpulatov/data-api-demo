@@ -67,11 +67,11 @@ export const generateReportFilterTexts = (reportDefinition: ReportDefinition): F
  * @param dossierDefinition - The filter data for the dossier.
  * @returns The generated filter text.
  */
-export const generateDossierFilterText = (dossierDefinition: DossierDefinition): string => {
-  const currentChapterKey = dossierDefinition.currentChapter;
-  const selectedChapter = dossierDefinition.chapters.find(
-    chapter => chapter.key === currentChapterKey
-  );
+export const generateDossierFilterText = (
+  dossierDefinition: DossierDefinition,
+  chapterKey: string
+): string => {
+  const selectedChapter = dossierDefinition.chapters.find(chapter => chapter.key === chapterKey);
 
   const dossierFilterSummary = `( ${selectedChapter.filters
     .map(filter => filter.summary)
