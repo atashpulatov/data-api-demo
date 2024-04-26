@@ -602,9 +602,7 @@ class MstrObjectRestService {
       mstrObjectType.type = 55;
     }
     const { envUrl, authToken } = storeState.sessionReducer;
-
-    // break here
-    const fullPath = `${envUrl}/object${Math.random() > 0.7 ? 's' : 'ss'}/${objectId}?type=${mstrObjectType.type}`;
+    const fullPath = `${envUrl}/objects/${objectId}?type=${mstrObjectType.type}`;
 
     return request
       .get(fullPath)

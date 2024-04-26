@@ -247,9 +247,7 @@ class SidePanelNotificationHelper {
   }): void => {
     const onOk = (): void => {
       officeReducerHelper.clearPopupData();
-      console.log(this.reduxStore.getState());
-      // sidePanelHelper.removeMultiplePagesForPageBy(objectWorkingId);
-      sidePanelHelper.removeMultipleObjectsPagesForPageBy(objectWorkingId);
+      sidePanelHelper.revertPageByImport(objectWorkingId);
     };
 
     setSidePanelPopup({

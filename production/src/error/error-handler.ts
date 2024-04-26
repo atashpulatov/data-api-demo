@@ -207,8 +207,8 @@ class ErrorService {
    * @param objectWorkingId Unique Id of the object allowing to reference specific object
    */
   clearOperationsForPageBySiblings = (objectWorkingId: number): void => {
-    const { pageBySiblings } = pageByHelper.getAllPageByObjects(objectWorkingId);
-
+    const { pageBySiblings, sourceObject } = pageByHelper.getAllPageByObjects(objectWorkingId);
+    pageBySiblings.push(sourceObject);
     const { operations } = this.reduxStore.getState().operationReducer;
 
     for (const sibling of pageBySiblings) {
