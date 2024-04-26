@@ -1,6 +1,5 @@
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
-import { officeShapeApiHelper } from '../../office/shapes/office-shape-api-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import officeStoreHelper from '../../office/store/office-store-helper';
 
@@ -24,7 +23,6 @@ class SidePanelHelper {
 
     this.clearRepromptTask = this.clearRepromptTask.bind(this);
     this.createRepromptTask = this.createRepromptTask.bind(this);
-    this.highlightImageObject = this.highlightImageObject.bind(this);
   };
 
   /**
@@ -71,30 +69,6 @@ class SidePanelHelper {
         this.reduxStore.dispatch(popupAction);
       },
     };
-  }
-
-  /**
-   * Handles the editing of object.
-   * Gets object data from reducer and opens popup depending of the type of object.
-   *
-   * @param objectData Conatins information about the object.
-   */
-  async highlightImageObject(objectData: ObjectData): Promise<void> {
-    const excelContext = await officeApiHelper.getExcelContext();
-
-    const { bindId } = objectData;
-    const shapeInWorksheet: any =
-      bindId && (await officeShapeApiHelper.getShape(excelContext, bindId));
-
-    // Omit the highlight operation, if shape(visualization image) was removed manually from the worksheet.
-    if (!shapeInWorksheet) {
-      return;
-    }
-
-    const worksheet = excelContext.workbook.worksheets.getItem(shapeInWorksheet?.worksheetId);
-
-    worksheet.activate();
-    await excelContext.sync();
   }
 
   /**

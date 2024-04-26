@@ -1,4 +1,5 @@
 import { officeApiHelper } from '../api/office-api-helper';
+import { officeShapeApiHelper } from '../shapes/office-shape-api-helper';
 
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
@@ -6,46 +7,112 @@ import { ObjectData } from '../../types/object-types';
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import stepHighlightObject from './step-highlight-object';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 describe('StepHighlightObject', () => {
+  const operationData = {} as OperationData;
+  let objectData: ObjectData;
+  let activate: jest.Mock;
+  let sync: jest.Mock;
+  let getItem: jest.Mock;
+  let getExcelContext: jest.SpyInstance;
+
+  beforeEach(() => {
+    activate = jest.fn();
+    sync = jest.fn();
+
+    getItem = jest.fn();
+    getExcelContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockResolvedValue({
+      workbook: {
+        worksheets: { getItem },
+        pivotTables: { getItem },
+      },
+      sync,
+    } as any as Excel.RequestContext);
+
+    jest.spyOn(operationStepDispatcher, 'completeHighlightObject').mockImplementation();
+  });
+
   afterEach(() => {
     jest.restoreAllMocks();
   });
 
-  it('StepHighlightObject should highligh object', async () => {
+  it('should call onBindingObjectClick properly when importType is ObjectImportType.TABLE', async () => {
     // given
-    const objectData = { objectWorkingId: 1 } as ObjectData;
+    objectData = { importType: ObjectImportType.TABLE, objectWorkingId: 42 } as ObjectData;
 
-    const mockedOnObjectClick = jest
+    const onBindingObjectClick = jest
       .spyOn(officeApiHelper, 'onBindingObjectClick')
-      .mockImplementation();
-    const mockedCompleteStep = jest
-      .spyOn(operationStepDispatcher, 'completeHighlightObject')
       .mockImplementation();
 
     // when
-    await stepHighlightObject.highlightObject(objectData, {} as OperationData);
+    await stepHighlightObject.highlightObject(objectData, operationData);
 
     // then
-    expect(mockedOnObjectClick).toBeCalledTimes(1);
-    expect(mockedOnObjectClick).toBeCalledWith(objectData);
-    expect(mockedCompleteStep).toBeCalledTimes(1);
-    expect(mockedCompleteStep).toBeCalledWith(objectData.objectWorkingId);
+    expect(onBindingObjectClick).toHaveBeenCalledWith(objectData);
+    expect(operationStepDispatcher.completeHighlightObject).toHaveBeenCalledWith(
+      objectData.objectWorkingId
+    );
   });
 
-  it('should handle error on highligh object', async () => {
+  it('should call proper handlers when importType is ObjectImportType.PIVOT_TABLE', async () => {
     // given
-    const objectData = { objectWorkingId: 1 } as ObjectData;
-    const operationData = {} as OperationData;
+    objectData = {
+      importType: ObjectImportType.PIVOT_TABLE,
+      pivotTableId: 'pivotTableId',
+      objectWorkingId: 42,
+    } as ObjectData;
+
+    getItem.mockReturnValue({ worksheet: { activate } });
+
+    // when
+    await stepHighlightObject.highlightObject(objectData, operationData);
+
+    // then
+    expect(getExcelContext).toHaveBeenCalled();
+    expect(activate).toHaveBeenCalled();
+    expect(sync).toHaveBeenCalled();
+    expect(operationStepDispatcher.completeHighlightObject).toHaveBeenCalledWith(
+      objectData.objectWorkingId
+    );
+  });
+
+  it('should call proper handlers when importType is ObjectImportType.IMAGE', async () => {
+    // given
+    objectData = {
+      importType: ObjectImportType.IMAGE,
+      bindId: 'bindId',
+      objectWorkingId: 42,
+    } as ObjectData;
+    const shapeWorksheetId = 'someWorksheetId';
+
+    const getShape = jest
+      .spyOn(officeShapeApiHelper, 'getShape')
+      .mockResolvedValue({ worksheetId: shapeWorksheetId } as any);
+    getItem.mockReturnValue({ activate });
+
+    // when
+    await stepHighlightObject.highlightObject(objectData, operationData);
+
+    // then
+    expect(getExcelContext).toHaveBeenCalled();
+    expect(getShape).toHaveBeenCalled();
+    expect(getItem).toHaveBeenCalledWith(shapeWorksheetId);
+    expect(activate).toHaveBeenCalled();
+    expect(sync).toHaveBeenCalled();
+    expect(operationStepDispatcher.completeHighlightObject).toHaveBeenCalledWith(
+      objectData.objectWorkingId
+    );
+  });
+
+  it('should handle error properly', async () => {
+    // given
+    objectData = { bindId: 'bindId', objectWorkingId: 42 } as ObjectData;
+
     const error = new Error('error');
 
-    jest.spyOn(console, 'error').mockImplementation();
-    const mockedOnObjectClick = jest
-      .spyOn(officeApiHelper, 'onBindingObjectClick')
-      .mockImplementation(() => {
-        throw error;
-      });
-    const mockedHandleError = jest
+    getExcelContext.mockRejectedValue(error);
+    const handleOperationError = jest
       .spyOn(operationErrorHandler, 'handleOperationError')
       .mockImplementation();
 
@@ -53,9 +120,6 @@ describe('StepHighlightObject', () => {
     await stepHighlightObject.highlightObject(objectData, operationData);
 
     // then
-    expect(mockedOnObjectClick).toBeCalledTimes(1);
-    expect(mockedOnObjectClick).toBeCalledWith(objectData);
-    expect(mockedHandleError).toBeCalledTimes(1);
-    expect(mockedHandleError).toBeCalledWith(objectData, operationData, error);
+    expect(handleOperationError).toHaveBeenCalledWith(objectData, operationData, error);
   });
 });
