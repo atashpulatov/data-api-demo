@@ -100,7 +100,7 @@ class ErrorService {
     callback: () => Promise<void>,
     operationData: OperationData
   ): Promise<void> => {
-    const errorType = this.getErrorType(error, operationData, objectWorkingId);
+    const errorType = this.getErrorType(error, operationData);
     if (error.Code === 5012) {
       this.handleError(error);
     }
@@ -259,16 +259,11 @@ class ErrorService {
    *
    * @param error Error object that was thrown
    * @param operationData Data about the operation that was performed
-   * @param objectWorkingId Unique Id of the object allowing to reference specific object
    * @returns ErrorType
    */
-  getErrorType = (
-    error: any,
-    operationData?: OperationData,
-    objectWorkingId?: number
-  ): ErrorType => {
+  getErrorType = (error: any, operationData?: OperationData): ErrorType => {
     const updateError = this.getExcelError(error, operationData);
-    const pageByError = this.getPageByError(objectWorkingId, operationData);
+    const pageByError = this.getPageByError(operationData);
 
     return (
       pageByError ||
@@ -284,8 +279,10 @@ class ErrorService {
    * @param operationData Data about the operation that was performed
    * @returns ErrorType
    */
-  getPageByError = (objectWorkingId: number, operationData?: OperationData): ErrorType => {
-    const object = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
+  getPageByError = (operationData?: OperationData): ErrorType => {
+    const object = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(
+      operationData?.objectWorkingId
+    );
 
     if (operationData?.operationType === OperationTypes.IMPORT_OPERATION && object?.pageByData) {
       return ErrorType.PAGE_BY_IMPORT_ERR;

@@ -1,5 +1,6 @@
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
+import { officeRemoveHelper } from '../../office/remove/office-remove-helper';
 import { officeShapeApiHelper } from '../../office/shapes/office-shape-api-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import officeStoreHelper from '../../office/store/office-store-helper';
@@ -45,11 +46,13 @@ class SidePanelHelper {
    *
    * @param objectWorkingId Contains unique Id of the object, allowing to reference source object.
    */
-  revertPageByImport(objectWorkingId: number): void {
+  async revertPageByImport(objectWorkingId: number): Promise<void> {
+    const excelContext = await officeApiHelper.getExcelContext();
     const { pageBySiblings, sourceObject } = pageByHelper.getAllPageByObjects(objectWorkingId);
     pageBySiblings.push(sourceObject);
-    pageBySiblings.forEach((pageByObject: ObjectData) => {
-      if (pageByObject.bindId) {
+    pageBySiblings.forEach(async (pageByObject: ObjectData) => {
+      const objectExist = await officeRemoveHelper.checkIfObjectExist(pageByObject, excelContext);
+      if (objectExist) {
         this.reduxStore.dispatch(
           removeRequested(pageByObject.objectWorkingId, pageByObject?.importType)
         );

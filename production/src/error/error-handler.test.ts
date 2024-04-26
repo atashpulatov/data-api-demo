@@ -189,7 +189,10 @@ describe('ErrorService', () => {
         .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId')
         .mockReturnValue(objectFromObjectReducer);
       // when
-      const errorType = errorService.getPageByError(1, { operationType } as OperationData);
+      const errorType = errorService.getPageByError({
+        operationType,
+        objectWorkingId: 1,
+      } as OperationData);
 
       // then
       expect(officeReducerHelperMock).toHaveBeenCalled();
