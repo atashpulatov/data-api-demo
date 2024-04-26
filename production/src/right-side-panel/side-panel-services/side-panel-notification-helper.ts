@@ -212,7 +212,7 @@ class SidePanelNotificationHelper {
           edit(objectWorkingId);
           break;
         case PageByRefreshFailedOptions.DELETE_FROM_WORKSHEET:
-          sidePanelHelper.removeMultiplePagesForPageBy(objectWorkingId);
+          pageByHelper.handleRemovingMultiplePages(objectWorkingId);
           break;
         default:
           break;
