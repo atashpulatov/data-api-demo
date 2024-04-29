@@ -42,6 +42,10 @@ class SidePanelNotificationHelper {
     setSidePanelPopup: Function;
     setDuplicatedObjectId: Function;
   }): void {
+    const sourceObject =
+      officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
+    const isPageByObject = !!sourceObject?.pageByData?.pageByLinkId;
+
     const closePopup = (): void => {
       setSidePanelPopup(null);
       setDuplicatedObjectId(null);
@@ -54,10 +58,12 @@ class SidePanelNotificationHelper {
         sidePanelHelper.duplicateObject(objectWorkingId, !isActiveCellOptionSelected, false);
         closePopup();
       },
-      onEdit: (isActiveCellOptionSelected: boolean): void => {
-        sidePanelHelper.duplicateObject(objectWorkingId, !isActiveCellOptionSelected, true);
-        closePopup();
-      },
+      onEdit: !isPageByObject
+        ? (isActiveCellOptionSelected: boolean): void => {
+            sidePanelHelper.duplicateObject(objectWorkingId, !isActiveCellOptionSelected, true);
+            closePopup();
+          }
+        : undefined,
       onClose: closePopup,
     });
   }
