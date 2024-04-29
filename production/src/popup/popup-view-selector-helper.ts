@@ -19,25 +19,24 @@ const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
 class PopupViewSelectorHelper {
   /**
-   * Determines whether the current opened dialog is showing prompts editor either
-   * for a report or a dossier regardless of where it was triggered from, the SidePanel
-   * or Overview dialog.
+   * Determines whether the currently open dialog is displaying the prompts editor for a report
+   * in the Overview dialog, or from the SidePanel.
    *
    * @param popupType - The type of the popup to check.
-   * @returns - returns true if the popup type is one of the possible reprompt types.
+   * @returns - returns true if the popup type is a prompted report.
    */
-  isRepromptPopupType(popupType: DialogType): boolean {
+  isRepromptReportPopupType(popupType: DialogType): boolean {
     return (
       popupType === DialogType.repromptingWindow ||
-      popupType === DialogType.repromptReportDataOverview ||
-      popupType === DialogType.repromptDossierDataOverview
+      popupType === DialogType.repromptReportDataOverview
     );
   }
 
   /**
    * Determines the type of the Prompted popup to show based on the workflow.
-   * If we are in the Multiple Reprompt workflow, it means we are in the transition period
-   * waiting for the next object to be reprompted. In this case, it returns 'multipleRepromptTransitionPage'.
+   * If we are in the Multiple Reprompt workflow (reprompt queue isn't empty), and current prompted object being processed
+   * is a Report, then it means we are in the transition period waiting for the next prompted object to be reprompted.
+   * In this case, it returns 'multipleRepromptTransitionPage' (intermediate) for prompted reports only.
    * Otherwise, we are in the final step of the Prepare Data or Edit workflow, and it returns 'editFilters'.
    *
    * @param props - collection of properties passsed that contains repromptsQueueProps property
@@ -62,8 +61,13 @@ class PopupViewSelectorHelper {
       // action triggered by the Prompts dialog, it could lead to a cyclical loop in the prompts page
       // when editing a prompted report.
       if (this.isInstanceWithPromptsAnswered(props)) {
-        // Handle the case when the user is editing a prompted report or dossier.
-        if (this.isRepromptPopupType(popupType)) {
+        // Handle the case when the user is editing a prompted report from either SidePanel or Overview dialog.
+        if (this.isRepromptReportPopupType(popupType)) {
+          // Return whether the Multiple Reprompt Transition Page should be shown in
+          // the case of a having multiple prompted objects in the queue and current one is prompted report
+          // being processed. In the case of Dossiers, it will not show the Multiple Reprompt Transition Page.
+          // Note: both, multiple transition page and Dossier window, will render the popup notification when it's
+          // applicable, such as the range taken notification.
           return this.getPromptedReportPopupType(props);
         }
       } else {
