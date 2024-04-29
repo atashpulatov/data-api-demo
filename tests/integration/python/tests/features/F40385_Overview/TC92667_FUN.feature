@@ -1,4 +1,4 @@
-#@ci_pipeline_postmerge_windows_chrome
+@ci_pipeline_postmerge_windows_chrome
 Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
 
   Scenario: [TC92667] - Imported Data Overview window additional manipulations in Excel
@@ -12,6 +12,9 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
       And I selected "Books" as an answer for "1. Category" prompt - object prompt
       And I selected "Music" as an answer for "1. Category" prompt - object prompt
       And I clicked Run button
+      And I waited for object to be imported successfully
+      And I hover over import successfull message
+      Then I verified that cell "F2" has value "Phillip"
 
     #Import object 2: Page-by report
     #TODO: add steps for importing in separate worksheets in Page-by config window + general config, once Page-by TC's are done in US510006
@@ -19,12 +22,17 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
       And I clicked Add Data button
       And I found and selected object "Bursting Report - Multiple attribute in page-by"
       And I clicked import dossier without waiting for results
+      And I waited for object to be imported successfully
+      And I hover over import successfull message
 
     #Import object 3: Normal report
       And I added a new worksheet
       And I clicked Add Data button
       And I found and selected object "Report with Totals and Subtotals"
       And I clicked import dossier without waiting for results
+      And I waited for object to be imported successfully
+      And I hover over import successfull message
+      Then I verified that cell "C17" has value "Total"
 
     #Import object 4: Dossier viz as Image
       And I added a new worksheet
@@ -32,7 +40,9 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
       And I found and selected object "User Embedded Dashboard"
       And I clicked import dossier without waiting for results
       And I selected Visualization "Last 30 Days Trend"
-      And I clicked Import image button without checking results
+      And I selected import type "Import Visualization" and clicked import
+      And I waited for object to be imported successfully
+      And I hover over import successfull message
 
     #Import object 5: Normal report
       And I added a new worksheet
@@ -40,7 +50,10 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
       And I found and selected object "User Embedded Dashboard"
       And I clicked import dossier without waiting for results
       And I selected Visualization "Top 10 Objects by Total Runs for the Last 30 Days"
-      And I clicked Import button without checking results
+      And I selected import type "Import Data" and clicked import
+      And I waited for object to be imported successfully
+      And I hover over import successfull message
+      Then I verified that cell "A2" has value "Not Applicable"
 
      # Overview window verification
       And I clicked Overview settings menu option
@@ -50,10 +63,10 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
       And I clicked import dossier without waiting for results
       And I clicked OK button in Range Taken popup in Overview window
       And I found object "no_such_object" in Overview window
-      And I verified that object "subtotals" is NOT visible
+      And I verified that object "Subtotals" is NOT visible
       And I cleared search box in Overview window
-      And I found object "subtotals" in Overview window
-      And I verified that object "subtotals" is visible
+      And I found object "Subtotals" in Overview window
+      And I verified that object "Subtotals" is visible
       And I cleared search box in Overview window
 
      When I clicked select all checkbox in Overview window
@@ -72,16 +85,17 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
      Then I verified "Duplicate" button in Overview window is enabled
       And I clicked "Duplicate" button in Overview window
       And I verified that New Sheet is selected in Duplicate popup
-      And I clicked Import button in Duplicate popup
+      And I clicked Import button in Duplicate popup on overview
 
      When I selected object "4" using object checkbox in Overview window
-      And I selected object "6" using object checkbox in Overview window
+      And I selected object "5" using object checkbox in Overview window
       And I verified "Delete" button in Overview window is enabled
       And I clicked "Delete" button in Overview window
       And I verified that Delete confirmation popup is visible
       And I clicked Delete button in confirmation popup
 
-     When I clicked "Filter" button in Overview window
+     When I verified "Filter" button in Overview window is visible
+     And I clicked "Filter" button in Overview window
      Then I verified that Filter panel is visible in Overview window
       And I clicked "Name" filter in Filter panel
       And I selected "01 Basic Report" filter option
@@ -90,8 +104,7 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
       And I verified that filter details are visible in Overview window
 
      When I clicked "Clear All" in filter details
-     Then I verified that filter details are NOT visible in Overview window
-      And I verified that Filter panel is NOT visible in Overview window
+     Then I verified that Filter panel is NOT visible in Overview window
 
      When I clicked select all checkbox in Overview window
       And I clicked "Delete" button in Overview window

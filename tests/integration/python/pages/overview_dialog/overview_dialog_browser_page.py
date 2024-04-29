@@ -1,26 +1,32 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.webdriver.common.by import By
 
 class OverviewDialogBrowserPage(BaseBrowserPage):
     OVERVIEW_DIALOG = '.data-overview-wrapper'
     FILTER_BUTTON = '//button//span[text()="%s"]'
-    ACTION_BUTTON = '//button[text()="%s"]'
+    ACTION_BUTTON = '//span[text()="%s"]'
+    ADD_DATA = '//button[text()="%s"]'
+    CLOSE_BUTTON = '//button[text()="%s"]'
     SELECT_ALL_CHECKBOX = 'div[col-id="name"] > .ag-header-select-all'
     STATUS_COLUMN = '//div[@class="status-container"]'
     BUTTONS_SELECTOR = {
-        "Add Data": ACTION_BUTTON,
+        "Add Data": ADD_DATA,
         "Refresh": ACTION_BUTTON,
         "Re-Prompt": ACTION_BUTTON,
         "Duplicate": ACTION_BUTTON,
         "Delete": ACTION_BUTTON,
         "Filter": FILTER_BUTTON,
-        "Close": ACTION_BUTTON
+        "Close": CLOSE_BUTTON
     }
     ROW_CHECKBOX = '//div[@row-index="%s"]//div[@col-id="name"]//div[@class="ag-selection-checkbox"]'
     RANGE_OK_BUTTON = '//button[@aria-label="OK"]'
     SEARCH_FIELD_INPUT = '//input[@class="search-field__input"]'
     CLEAR_SEARCH_BOX = '//button[@aria-label="Clear search field"]'
-    OBJECT_ROW = '//span[text()="%s"]'
+    OBJECT_ROW = '//span[contains(text(), "%s")]'
     NEW_SHEET_ELEMENT_ID = 'new_sheet'
     DELETE_POPUP = '//dialog//div[contains(text(),"Delete")]'
     DELETE_POPUP_BUTTON = '//dialog//button[text()="Delete"]'
@@ -30,7 +36,8 @@ class OverviewDialogBrowserPage(BaseBrowserPage):
     FILTER_PANEL_APPLY_BUTTON = '//div[@class="mstr-rc-3-filter-panel__footer"]//button[text()="Apply"]'
     FILTER_DETAILS = '//span[text()="Filtered By:"]'
     FILTER_DETAILS_BUTTON = '//button[text()="%s"]'
-    OBJECT_ROW_NULL_STATUS = '//div[@class="ag-status-bar-left"]//span[text()="0"]'
+    OBJECT_ROW_NULL_STATUS = '//div[@class="ag-status-bar-left"]//div[@class="ag-status-name-value ag-status-panel ag-status-panel-total-and-filtered-row-count"]//span[text()="0"]'
+    IMPORT_DUPLICATE_POPUP = '//div[@class="base-popup"]//button[text()="Import"]'
 
     def check_if_overview_dialog_is_opened(self):
         self.focus_on_add_in_popup_frame()
@@ -63,19 +70,26 @@ class OverviewDialogBrowserPage(BaseBrowserPage):
 
         self.get_element_by_xpath(selector % button_text).click()
 
+    def click_import_button_in_duplicate_popup(self):
+        self.focus_on_add_in_popup_frame()
+
+        duplicate_popup_option = OverviewDialogBrowserPage.IMPORT_DUPLICATE_POPUP
+        self.get_element_by_xpath(duplicate_popup_option).click() 
+
     def wait_for_all_objects_to_refresh_successfully(self):
         self.focus_on_add_in_popup_frame()
 
         all_elements = self.get_elements_by_xpath(OverviewDialogBrowserPage.STATUS_COLUMN)
 
         for index in range(len(all_elements)):
-            selector = '//div[@row-id="%s"]/div[@aria-colindex="8"]//span[text()="Refresh successful"]' % index
+            selector = '//div[@row-id="%s"]/div[@aria-colindex="10"]//span[text()="Refresh successful"]' % index
             self.get_element_by_xpath(selector)
 
     def click_row_checkbox(self, row_index):
         self.focus_on_add_in_popup_frame()
 
-        self.get_element_by_xpath(OverviewDialogBrowserPage.ROW_CHECKBOX % row_index - 1).click()
+        row_xpath = OverviewDialogBrowserPage.ROW_CHECKBOX % (int(row_index) - 1)
+        self.get_element_by_xpath(row_xpath).click()
 
     def click_ok_in_range_taken_popup(self):
         self.focus_on_add_in_popup_frame()
@@ -95,9 +109,14 @@ class OverviewDialogBrowserPage(BaseBrowserPage):
 
     def is_object_row_visible(self, object_name):
         self.focus_on_add_in_popup_frame()
-        object_row = self.get_element_by_xpath(OverviewDialogBrowserPage.OBJECT_ROW % object_name)
 
-        return object_row.is_displayed()
+        try:
+            object_row = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.XPATH, OverviewDialogBrowserPage.OBJECT_ROW % object_name)))
+            return object_row.is_displayed()
+        except NoSuchElementException:
+            return False
+        except TimeoutException:
+            return False
 
     def is_new_sheet_selected(self):
         self.focus_on_add_in_popup_frame()
@@ -142,9 +161,19 @@ class OverviewDialogBrowserPage(BaseBrowserPage):
 
     def is_filter_details_visible(self):
         self.focus_on_add_in_popup_frame()
-        element = self.get_element_by_xpath(OverviewDialogBrowserPage.FILTER_DETAILS)
-
-        return element.is_displayed()
+        try:
+            element = self.get_element_by_xpath(OverviewDialogBrowserPage.FILTER_DETAILS)
+            return element.is_displayed()
+        except NoSuchElementException:
+            return False
+        
+    def is_not_filter_details_visible(self):
+        self.focus_on_add_in_popup_frame()
+        try:
+            element = self.get_element_by_xpath(OverviewDialogBrowserPage.FILTER_DETAILS)
+            return not element.is_displayed()
+        except NoSuchElementException:
+            return True
 
     def click_filter_details_button(self, filter_details_button):
         self.focus_on_add_in_popup_frame()
@@ -156,7 +185,3 @@ class OverviewDialogBrowserPage(BaseBrowserPage):
         element = self.get_element_by_xpath(OverviewDialogBrowserPage.OBJECT_ROW_NULL_STATUS)
 
         return element.is_displayed()
-
-
-
-

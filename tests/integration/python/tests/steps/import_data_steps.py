@@ -49,6 +49,9 @@ def step_impl(context, object_name):
 def step_impl(context, object_id, object_name):
     context.pages.import_data_page().find_and_select_object_by_id(object_name, object_id)
 
+@step('I selected import type "{import_type}" and clicked import')
+def step_impl(context, import_type):
+    context.pages.import_data_page().expand_and_select_import_type(import_type)
 
 @step('I clicked Import button')
 def step_impl(context):
