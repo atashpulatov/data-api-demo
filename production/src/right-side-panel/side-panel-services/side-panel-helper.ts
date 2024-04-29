@@ -44,7 +44,7 @@ class SidePanelHelper {
    *
    * @param objectWorkingId Contains unique Id of the object, allowing to reference source object.
    */
-  async revertPageByImport(objectWorkingId: number): Promise<void> {
+  async revertPageByImportForSiblings(objectWorkingId: number): Promise<void> {
     const excelContext = await officeApiHelper.getExcelContext();
     const { pageBySiblings } = pageByHelper.getAllPageByObjects(objectWorkingId);
     pageBySiblings.forEach(async (pageByObject: ObjectData) => {

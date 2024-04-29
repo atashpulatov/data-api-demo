@@ -107,6 +107,7 @@ class ErrorService {
     const errorMessage = errorMessageFactory(errorType)({ error });
     const details = this.getErrorDetails(error, errorMessage);
 
+    // todo: convert this to a switch case and move the implementations inside to separate functions
     if (errorType === ErrorType.OVERLAPPING_TABLES_ERR) {
       const popupData = {
         type: PopupTypes.RANGE_TAKEN,
@@ -289,24 +290,20 @@ class ErrorService {
       operationData?.objectWorkingId
     );
 
-    let errorType;
-
     switch (operationData?.operationType) {
       case OperationTypes.REFRESH_OPERATION:
         if (getIsPageByRefreshError(error)) {
-          errorType = ErrorType.PAGE_BY_REFRESH_ERR;
+          return ErrorType.PAGE_BY_REFRESH_ERR;
         }
         break;
       case OperationTypes.IMPORT_OPERATION:
         if (object?.pageByData) {
-          errorType = ErrorType.PAGE_BY_IMPORT_ERR;
+          return ErrorType.PAGE_BY_IMPORT_ERR;
         }
         break;
       default:
         break;
     }
-
-    return errorType;
   };
 
   /**

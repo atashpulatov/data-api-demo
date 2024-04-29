@@ -247,7 +247,7 @@ class SidePanelNotificationHelper {
     callback: () => Promise<void>;
   }): void => {
     const onOk = async (): Promise<void> => {
-      await sidePanelHelper.revertPageByImport(objectWorkingId);
+      await sidePanelHelper.revertPageByImportForSiblings(objectWorkingId);
       this.clearPopupDataAndRunCallback(callback);
     };
 
