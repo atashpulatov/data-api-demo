@@ -14,6 +14,12 @@ const renameSettingsKeys = (detailsSettings: ObjectInfoSetting[]): ObjectInfoSet
     if (setting.key === 'filter') {
       return { ...setting, key: 'filters' };
     }
+    if (setting.key === 'dateModified') {
+      return { ...setting, key: 'modifiedDate' };
+    }
+    if (setting.key === 'dateCreated') {
+      return { ...setting, key: 'createdDate' };
+    }
     return setting;
   });
 
@@ -33,9 +39,8 @@ const useGetWorksheetDetailsSettings = (): ObjectInfoSetting[] => {
 
 const useGetObjects = (): ObjectData[] => useSelector(selectObjects);
 
-export const useGetFilteredObjectListForSidePanelDetails = (): Partial<ObjectData>[] => {
+export const useGetFilteredObjectListForSidePanelDetails = (objects: ObjectData[]): ObjectData[] => {
   const sidePanelDetailsSettings = useGetSidePanelDetailsSettings();
-  const objects = useGetObjects();
 
   const disabledSidePanelDetailsSettings = sidePanelDetailsSettings.filter(
     setting => !setting.toggleChecked
@@ -44,34 +49,36 @@ export const useGetFilteredObjectListForSidePanelDetails = (): Partial<ObjectDat
     setting => setting.key
   );
 
-  const filteredObjects = objects.map(object => {
-    const filteredObject = { ...object };
+  return objects.map(object => {
+    const copiedObject = JSON.parse(JSON.stringify(object));
+
     disabledSidePanelDetailsSettingsKeys.forEach(key => {
       if (key === 'id') {
-        delete filteredObject.objectId;
-      } else {
-        delete filteredObject.details[key];
+        delete copiedObject.objectId;
+      } else if (copiedObject.details) {
+        delete copiedObject.details[key];
       }
     });
-    return filteredObject;
+
+    return { ...object, details: copiedObject.details, objectId: copiedObject.objectId };
   });
-  return filteredObjects;
 };
 
+// TODO: This should not be hook. Move it to utils and call it during inserting object details to worksheet
 export const useGetObjectDetailsForWorksheetDetails = (): Partial<WorksheetObjectDetails>[] => {
-  const sidePanelDetailsSettings = useGetWorksheetDetailsSettings();
+  const worksheetDetailsSettings = useGetWorksheetDetailsSettings();
   const objects = useGetObjects();
 
-  const enabledSidePanelDetailsSettings = sidePanelDetailsSettings.filter(
+  const enabledWorksheetDetailsSettings = worksheetDetailsSettings.filter(
     setting => setting.toggleChecked
   );
-  const enabledSidePanelDetailsSettingsKeys = enabledSidePanelDetailsSettings.map(
+  const enabledWorksheetDetailsSettingsKeys = enabledWorksheetDetailsSettings.map(
     setting => setting.key
   );
 
   const filteredObjectDetails = objects.map(object => {
     const filteredSingleObjectDetails: Partial<WorksheetObjectDetails> = {};
-    enabledSidePanelDetailsSettingsKeys.forEach(key => {
+    enabledWorksheetDetailsSettingsKeys.forEach(key => {
       switch (key) {
         case 'name':
           filteredSingleObjectDetails[key] = object.name;

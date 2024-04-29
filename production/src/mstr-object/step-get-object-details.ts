@@ -94,7 +94,6 @@ class StepGetObjectDetails {
         version
       );
       const definition = populateDefinition(objectData, prompts, name);
-      console.log('🚀 ~ StepGetObjectDetails ~ definition:', definition);
 
       const updatedObject = {
         ...objectData,

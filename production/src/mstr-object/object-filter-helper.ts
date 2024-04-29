@@ -15,7 +15,7 @@ import {
  */
 const convertTokensToString = (tokens: Token[]): string =>
   // slice(1) to remove the first token which is the root token, "%"
-  tokens
+  tokens?.length && tokens
     .slice(1)
     .map(token => {
       if (token.type === 'function') {
@@ -49,10 +49,11 @@ export const generateReportFilterTexts = (reportDefinition: ReportDefinition): F
     unit => unit.type === 'metrics'
   ).elements;
 
-  const reportFilterText = convertTokensToString(reportFilter.tokens);
-  const reportLimitsText = convertTokensToString(reportLimits.tokens);
-  const viewFilterText = convertTokensToString(viewFilter.tokens);
-  const metricLimitsText = `( ${metricLimits.map(element => element.limit.text).join(` ) ${t('and').toUpperCase()} ( `)} )`;
+  const reportFilterText = convertTokensToString(reportFilter.tokens) || "-";
+  const reportLimitsText = convertTokensToString(reportLimits.tokens) || "-";
+  const viewFilterText = convertTokensToString(viewFilter.tokens) || "-";
+  const metricLimitsText = metricLimits.some(element => element.limit?.text) ?
+    `( ${metricLimits.map(element => element.limit.text).join(` ) ${t('and').toUpperCase()} ( `)} )` : "-";
 
   return {
     reportFilterText,

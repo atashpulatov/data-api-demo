@@ -118,7 +118,7 @@ describe('generateReportFilterTexts', () => {
 
     // when
     const result = generateReportFilterTexts(filterData);
-    console.log(result);
+
     // then
     expect(result.reportFilterText).toBe('NOT ( filter1 AND filter2 )');
     expect(result.reportLimitsText).toBe('NOT ( limit1 OR limit2 )');
