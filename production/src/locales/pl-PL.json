@@ -264,8 +264,8 @@
    "Import default page": "Importuj stronę domyślną",
    "Import all pages": "Importuj wszystkie strony",
    "Prompt": "Prompt",
-   "Reuse Prompt Answers": "Użyj ponownie odpowiedzi na prompty",
-   "When this function is enabled, previously given answers to prompts will be shared automatically across dashboards and reports.": "Gdy ta funkcja jest włączona, wcześniej udzielone odpowiedzi na prompty będą automatycznie udostępniane w dashboardach i raportach.",
+   "Reuse Prompt Answers": "Zachowaj odpowiedzi na prompty",
+   "When this function is enabled, previously given answers to prompts will be shared automatically across dashboards and reports.": "Gdy ta funkcja jest włączona, udzielone wcześniej odpowiedzi na prompty zostaną automatycznie zastosowane w innych dashboardach i raportach.",
    "Imported By": "Zaimportowane z",
    "Date Modified": "Data modyfikacji",
    "Date Created": "Data utworzenia",
@@ -274,12 +274,12 @@
    "ID": "ID",
    "Filter": "Filtr",
    "Page-By Information": "Informacje o stronicowaniu",
-   "and": "oraz",
+   "and": "i",
    "or": "lub",
    "not": "nie",
    "Data Formatting": "Formatowanie danych",
    "Import data as text": "Importuj dane jako tekst",
-   "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "Jeśli jest włączona, wartości atrybutów będą zaimportowane jako tekst z zachowaniem formatowania z MicroStrategy. Może to mieć wpływ na formuły programu Excel.",
+   "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "Jeśli ta opcja jest włączona, wartości atrybutów będą zaimportowane jako tekst z zachowaniem formatowania z MicroStrategy. Może to mieć wpływ na formuły programu Excel.",
    "Merge columns": "Połącz kolumny",
-   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Jeśli jest włączona, sąsiednie nagłówki kolumn z identycznymi wartościami zostaną scalone. Ma zastosowanie tylko do raportów krzyżowych."
+   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Jeśli ta opcja jest włączona, sąsiadujące nagłówki kolumn z identycznymi wartościami zostaną scalone. Ma zastosowanie tylko do raportów krzyżowych."
 }
