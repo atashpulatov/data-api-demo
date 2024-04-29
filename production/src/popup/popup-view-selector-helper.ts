@@ -6,8 +6,8 @@ import { popupHelper } from './popup-helper';
 
 import { reduxStore } from '../store';
 
-import { PageBy } from '../page-by/page-by-types';
 import { RequestPageByModalOpenData } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer-types';
+import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 import { PageByDisplayOption } from '../right-side-panel/settings-side-panel/settings-side-panel-types';
 
@@ -99,8 +99,8 @@ class PopupViewSelectorHelper {
     return props.repromptsQueueProps?.total > 1;
   }
 
-  async obtainInstanceWithPromptsAnswers(props: any): Promise<void> {
-    const { editedObject, chosenProjectId, chosenObjectId } = props;
+  async obtainInstanceWithPromptsAnswers(props: any): Promise<InstanceDefinition> {
+    const { editedObject, chosenProjectId, chosenObjectId, requestPageByModalOpen } = props;
     const projectId =
       chosenProjectId || editedObject.chosenProjectId || (editedObject.projectId as string);
     const objectId = chosenObjectId || (editedObject.chosenObjectId as string);
@@ -152,11 +152,20 @@ class PopupViewSelectorHelper {
 
     if (props.popupType === DialogType.libraryWindow) {
       if (pageBy?.length && pageByDisplaySetting === PageByDisplayOption.SELECT_PAGES) {
-        this.handleRequestPageByModalOpen({ ...props, pageBy });
+        await this.handleRequestPageByModalOpen({
+          objectId,
+          projectId,
+          instanceId: instanceDefinition.instanceId,
+          requestPageByModalOpen,
+          importCallback: pageByConfigurations =>
+            this.proceedToImport({ ...props, pageByConfigurations }),
+        });
       } else {
         props.requestImport();
       }
     }
+
+    return instanceDefinition;
   }
 
   // TODO: get this method from library
@@ -263,19 +272,37 @@ class PopupViewSelectorHelper {
   /**
    * Handles the request to open the Page By modal.
    *
-   * @param pageBy Contains information about page-by elements
+   * @param objectId Unique identifier of the object
+   * @param projectId Unique identifier of the project
+   * @param instanceId Unique identifier of the object instance
    * @param requestPageByModalOpen Function to request the Page By modal to open
+   * @param importCallback Callback function to import the Page By configurations
    */
-  handleRequestPageByModalOpen(props: {
-    pageBy: PageBy[];
+  async handleRequestPageByModalOpen(props: {
+    objectId: string;
+    projectId: string;
+    instanceId: string;
     requestPageByModalOpen: (data: RequestPageByModalOpenData) => void;
-  }): void {
-    const { pageBy, requestPageByModalOpen } = props;
+    importCallback: (pageByConfigurations: PageByConfiguration[][]) => void;
+  }): Promise<void> {
+    const { objectId, projectId, instanceId, requestPageByModalOpen, importCallback } = props;
+
+    let instance;
+
+    if (!instanceId) {
+      instance = await this.obtainInstanceWithPromptsAnswers(props);
+    }
+
+    const { pageBy } = await mstrObjectRestService.getPageByElements(
+      objectId,
+      projectId,
+      instanceId || instance.instanceId
+    );
 
     requestPageByModalOpen({
       pageBy,
       importPageByConfigurations: (pageByConfigurations: PageByConfiguration[][]) =>
-        this.proceedToImport({ ...props, pageByConfigurations }),
+        importCallback(pageByConfigurations),
     });
   }
 }
