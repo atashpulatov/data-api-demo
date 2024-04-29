@@ -2,9 +2,11 @@ import { authenticationHelper } from '../authentication/authentication-helper';
 import { mstrObjectRestService } from './mstr-object-rest-service';
 
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectInfoSetting } from '../redux-reducer/settings-reducer/settings-reducer-types';
 import { ObjectData } from '../types/object-types';
 
 import {
+  calculateOffsetForObjectInfoSettings,
   getObjectPrompts,
   populateDefinition,
   populateDetails,
@@ -15,19 +17,19 @@ describe('Get Object Details Methods', () => {
     it('should return falsy if there are no promptAnswers', async () => {
       // given
       const mockedObjectDataWithoutPrompts = {
-        promptsAnswers: false,
+        promptsAnswers: [],
         mstrObjectType: { name: 'report' },
       } as unknown as ObjectData;
       // when
       // @ts-expect-error
       const objectPrompts = await getObjectPrompts(mockedObjectDataWithoutPrompts);
       // then
-      expect(objectPrompts).toBeFalsy();
+      expect(objectPrompts).toHaveLength(0);
     });
     it('should call mstrObjectRestService to get object prompts with provided arguments', async () => {
       // given
       const mockedObjectData = {
-        promptsAnswers: true,
+        promptsAnswers: [{ someProp: 'some value' }],
         mstrObjectType: { name: 'report' },
         manipulationsXML: { promptAnswers: {} },
       } as unknown as ObjectData;
@@ -57,7 +59,7 @@ describe('Get Object Details Methods', () => {
 
       beforeEach(() => {
         mockedObjectData = {
-          promptsAnswers: true,
+          promptsAnswers: [{ someProp: 'some value' }],
           mstrObjectType: { name: 'report' },
           manipulationsXML: { promptAnswers: {} },
         } as unknown as ObjectData;
@@ -232,7 +234,7 @@ describe('Get Object Details Methods', () => {
       const mockedObjectData = {
         definition: { someProperty: 'some definition' },
       } as unknown as ObjectData;
-      const mockedPrompts = { someProperty: 'some data' };
+      const mockedPrompts = [{ someProperty: 'some data' }];
       const expectedResult = {
         ...mockedObjectData.definition,
         prompts: mockedPrompts,
@@ -283,6 +285,52 @@ describe('Get Object Details Methods', () => {
       );
       // then
       expect(details).toEqual(expectedDetails);
+    });
+  });
+
+  describe('calculateOffsetForObjectInfoSettings', () => {
+    it('should calculate the offset correctly based on the objectInfoSettings', () => {
+      // given
+      const objectInfoSettings = [
+        { key: 'name', toggleChecked: true },
+        { key: 'filter', toggleChecked: true },
+        { key: 'property1', toggleChecked: true },
+        { key: 'property2', toggleChecked: false },
+      ] as ObjectInfoSetting[];
+      const expectedOffset = 14;
+
+      // when
+      const offset = calculateOffsetForObjectInfoSettings(objectInfoSettings);
+
+      // then
+      expect(offset).toEqual(expectedOffset);
+    });
+
+    it('should return 0 if no toggleChecked items are present in objectInfoSettings', () => {
+      // given
+      const objectInfoSettings = [
+        { key: 'property1', toggleChecked: false },
+        { key: 'property2', toggleChecked: false },
+      ] as ObjectInfoSetting[];
+      const expectedOffset = 0;
+
+      // when
+      const offset = calculateOffsetForObjectInfoSettings(objectInfoSettings);
+
+      // then
+      expect(offset).toEqual(expectedOffset);
+    });
+
+    it('should return 0 if objectInfoSettings is empty', () => {
+      // given
+      const objectInfoSettings: ObjectInfoSetting[] = [];
+      const expectedOffset = 0;
+
+      // when
+      const offset = calculateOffsetForObjectInfoSettings(objectInfoSettings);
+
+      // then
+      expect(offset).toEqual(expectedOffset);
     });
   });
 });

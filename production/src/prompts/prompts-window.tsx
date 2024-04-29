@@ -243,9 +243,10 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
 
   /**
    *
-   * @param promptObjs
-   * @param previousAnswers
-   * @param shouldUseSavedPromptAnswers
+   * @param {*} promptObjs - prompts from instance if the object is being imported otherwise from the object
+   * reducer based on the condition checked in prompt-window's loadEmbeddedDossier: updatedPromptObjects
+   * @param {*} previousAnswers - answers from the reducer
+   * @param {*} shouldUseSavedPromptAnswers
    * @returns
    */
   const prepareAndHandlePromptAnswers = useCallback(
@@ -253,8 +254,10 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
       if (shouldUseSavedPromptAnswers) {
         return prepareGivenPromptAnswers(promptObjs, previousAnswers);
       }
-
-      return mstrData.promptsAnswers || editedObject.promptsAnswers;
+      if (mstrData.promptsAnswers?.length > 0) {
+        return mstrData.promptsAnswers;
+      }
+      return editedObject.promptsAnswers;
     },
     [mstrData.promptsAnswers, editedObject.promptsAnswers]
   );
@@ -312,10 +315,13 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
         if (isReprompt || isImportOrPrepateWithPrevAnswers || isMultipleRepromptWithReuse) {
           // If it is multiple re-prompt, then we need to replaced edited report's answers in definition
           // with saved prompt answers if any.
-          const updatedPromptObjects = isMultipleRepromptWithReuse
+          const answersFromEditedObject = editedObject.promptsAnswers?.[0]?.answers?.length
             ? editedObject.promptsAnswers[0].answers
-            : promptObjects;
-
+            : [];
+          const answersFromPromptObjects = promptObjects?.length > 0 ? promptObjects : [];
+          const updatedPromptObjects = isMultipleRepromptWithReuse
+            ? answersFromEditedObject
+            : answersFromPromptObjects;
           // Update givenPromptsAnswers collection with previous prompt answers if importing
           // a report/dossier or preparing data on a report; and reusePromptAnswers flag is enabled.
           // Indicate to try to use saved prompt answers if any when multiple reprompt is in progress.
@@ -328,7 +334,8 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
           documentProps.instance = await preparePromptedReport(
             chosenObjectIdLocal,
             projectId,
-            givenPromptsAnswers
+            givenPromptsAnswers,
+            previousPromptsAnswers
           );
         }
 

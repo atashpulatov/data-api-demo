@@ -45,7 +45,7 @@ class PopupHelper {
       chosenObjectName: popupState.name,
       chosenObjectType: popupState.mstrObjectType,
       chosenObjectSubtype: popupState.mstrObjectType.name === 'report' ? 768 : 779,
-      promptsAnswers: promptsAnswers || popupState.promptsAnswers,
+      promptsAnswers: promptsAnswers.length ? promptsAnswers : popupState.promptsAnswers,
       subtotalsInfo: popupState.subtotalsInfo,
       isEdit: popupState.isEdit,
       visualizationInfo,

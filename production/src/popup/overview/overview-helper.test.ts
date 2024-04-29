@@ -138,6 +138,71 @@ describe('overview-helper', () => {
     });
   });
 
+  it('should send handlePageByRefreshFailedClose request to side panel', () => {
+    // Given
+    const objectWorkingId = objectWorkingIds[0];
+    const officeMessageParentMock = jest
+      .spyOn(popupHelper, 'officeMessageParent')
+      .mockImplementation();
+
+    // When
+    overviewHelper.handlePageByRefreshFailedClose(objectWorkingId);
+
+    // Then
+    expect(officeMessageParentMock).toHaveBeenCalledWith({
+      command: OverviewActionCommands.PAGE_BY_REFRESH_FAILED_CLOSE,
+      objectWorkingId,
+    });
+  });
+
+  it('should send handlePageByRefreshFailedEdit request to side panel', () => {
+    // Given
+    const objectWorkingId = objectWorkingIds[0];
+    const officeMessageParentMock = jest
+      .spyOn(popupHelper, 'officeMessageParent')
+      .mockImplementation();
+
+    // When
+    overviewHelper.handlePageByRefreshFailedEdit(objectWorkingId);
+
+    // Then
+    expect(officeMessageParentMock).toHaveBeenCalledWith({
+      command: OverviewActionCommands.PAGE_BY_REFRESH_FAILED_EDIT,
+      objectWorkingId,
+    });
+  });
+
+  it('should send handlePageByRefreshFailedRemove request to side panel', () => {
+    // Given
+    const objectWorkingId = objectWorkingIds[0];
+    const officeMessageParentMock = jest
+      .spyOn(popupHelper, 'officeMessageParent')
+      .mockImplementation();
+
+    // When
+    overviewHelper.handlePageByRefreshFailedRemove(objectWorkingId);
+
+    // Then
+    expect(officeMessageParentMock).toHaveBeenCalledWith({
+      command: OverviewActionCommands.PAGE_BY_REFRESH_FAILED_REMOVE,
+      objectWorkingId,
+    });
+  });
+
+  it('should call setDialogPopup when setPageByRefreshFailedPopup is triggered', () => {
+    // given
+    const objectWorkingId = 1;
+    const setDialogPopup = jest.fn();
+
+    // when
+    overviewHelper.setPageByRefreshFailedPopup({
+      objectWorkingIds: [objectWorkingId],
+      setDialogPopup,
+    });
+    // then
+    expect(setDialogPopup).toBeCalledTimes(1);
+  });
+
   it('should send rename request to side panel', () => {
     // Given
     const objectWorkingId = objectWorkingIds[0];

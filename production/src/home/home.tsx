@@ -31,6 +31,7 @@ interface HomeProps {
   hideDialog?: () => void;
   toggleIsSettingsFlag?: (flag: boolean) => void;
   clearDialogState?: () => void;
+  setPopupData?: (popupData: any) => void;
 }
 
 const IS_DEVELOPMENT = sessionHelper.isDevelopment();
@@ -44,8 +45,15 @@ async function getUserData(authToken: string | boolean): Promise<void> {
 }
 
 export const HomeNotConnected: React.FC<HomeProps> = props => {
-  const { loading, isDialogOpen, authToken, hideDialog, toggleIsSettingsFlag, clearDialogState } =
-    props;
+  const {
+    loading,
+    isDialogOpen,
+    authToken,
+    hideDialog,
+    toggleIsSettingsFlag,
+    clearDialogState,
+    setPopupData,
+  } = props;
 
   const canUseOffice = useOfficePrivilege(authToken as string);
 
@@ -84,8 +92,7 @@ export const HomeNotConnected: React.FC<HomeProps> = props => {
   useEffect(() => {
     async function initializeHome(): Promise<void> {
       try {
-        // initialize shape API support status in store
-        homeHelper.initIsShapeAPISupported();
+        homeHelper.initSupportedFeaturesFlags();
         await officeStoreRestoreObject.restoreObjectsFromExcelStore();
         officeStoreRestoreObject.restoreAnswersFromExcelStore();
         homeHelper.saveLoginValues();
@@ -93,13 +100,14 @@ export const HomeNotConnected: React.FC<HomeProps> = props => {
         hideDialog(); // hide error popup if visible
         toggleIsSettingsFlag(false); // hide settings menu if visible
         clearDialogState();
+        setPopupData(null);
         sessionActions.disableLoading();
       } catch (error) {
         console.error(error);
       }
     }
     initializeHome();
-  }, [hideDialog, toggleIsSettingsFlag, clearDialogState]);
+  }, [hideDialog, toggleIsSettingsFlag, clearDialogState, setPopupData]);
 
   useEffect(() => {
     getUserData(authToken);
@@ -146,6 +154,7 @@ const mapDispatchToProps = {
   hideDialog: officeActions.hideDialog,
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
   clearDialogState: popupStateActions.onClearPopupState,
+  setPopupData: officeActions.setPopupData,
 };
 
 export const Home = connect(mapStateToProps, mapDispatchToProps)(HomeNotConnected);

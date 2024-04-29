@@ -39,6 +39,16 @@ const selectPageByDisplaySetting = createSelector(
   settingsState => settingsState.pageByDisplaySetting
 );
 
+const selectImportAttributesAsText = createSelector(
+  [getSettingsState],
+  settingsState => settingsState.importAttributesAsText
+);
+
+const selectMergeCrosstabColumns = createSelector(
+  [getSettingsState],
+  settingsState => settingsState.mergeCrosstabColumns
+);
+
 export const settingsReducerSelectors = {
   selectSidePanelObjectInfoSettings,
   selectSidePanelMainSwitchValue,
@@ -47,4 +57,6 @@ export const settingsReducerSelectors = {
   selectImportType,
   selectObjectAndWorksheetNamingSetting,
   selectPageByDisplaySetting,
+  selectImportAttributesAsText,
+  selectMergeCrosstabColumns,
 };

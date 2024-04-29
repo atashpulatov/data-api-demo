@@ -3,7 +3,6 @@ import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import officeStoreHelper from '../../office/store/office-store-helper';
-import { pageByHelper } from '../../page-by/page-by-helper';
 import { sidePanelHelper } from './side-panel-helper';
 
 import { reduxStore } from '../../store';
@@ -37,55 +36,6 @@ describe('SidePanelHelper', () => {
     // @ts-ignore
     operationActions.duplicateRequested = duplicateRequestedOriginal;
     popupActions.callForDuplicate = callForDuplicateOriginal;
-  });
-
-  it('should refresh objects for multiple pages, when requested', () => {
-    // given
-    const objectWorkingIds = 1;
-    const mockedPageByObjects = [{ objectWorkingId: 1 }, { objectWorkingId: 2 }] as ObjectData[];
-
-    const mockedGetPageByObjects = jest
-      .spyOn(pageByHelper, 'getAllPageByObjects')
-      .mockReturnValueOnce({
-        sourceObject: mockedPageByObjects[0],
-        pageBySiblings: mockedPageByObjects,
-      });
-    const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
-    const mockedRefreshRequested = jest
-      .spyOn(operationActions, 'refreshRequested')
-      .mockImplementation();
-
-    // when
-    sidePanelHelper.refreshMultiplePagesForPageBy(objectWorkingIds);
-    // then
-    expect(mockedGetPageByObjects).toHaveBeenCalled();
-    expect(mockedDispatch).toBeCalledTimes(mockedPageByObjects.length);
-    expect(mockedRefreshRequested).toBeCalledTimes(mockedPageByObjects.length);
-  });
-
-  it('should remove multiple Page-by pages', () => {
-    // given
-    const objectWorkingIds = 1;
-    const mockedPageByObjects = [{ objectWorkingId: 1 }, { objectWorkingId: 2 }] as ObjectData[];
-
-    const mockedGetPageByObjects = jest
-      .spyOn(pageByHelper, 'getAllPageByObjects')
-      .mockReturnValueOnce({
-        sourceObject: mockedPageByObjects[0],
-        pageBySiblings: mockedPageByObjects,
-      });
-    const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
-    const mockedRemoveRequested = jest
-      .spyOn(operationActions, 'removeRequested')
-      .mockImplementation();
-
-    // when
-    sidePanelHelper.removeMultiplePagesForPageBy(objectWorkingIds);
-
-    // then
-    expect(mockedGetPageByObjects).toHaveBeenCalled();
-    expect(mockedDispatch).toBeCalledTimes(mockedPageByObjects.length);
-    expect(mockedRemoveRequested).toBeCalledTimes(mockedPageByObjects.length);
   });
 
   it('should dispatch duplicateRequested for duplicate with import', () => {
