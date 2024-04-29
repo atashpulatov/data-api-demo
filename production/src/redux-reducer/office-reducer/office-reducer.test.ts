@@ -34,6 +34,7 @@ describe('officeReducer', () => {
       isDialogLoaded: false,
       settingsPanelLoaded: false,
       isShapeAPISupported: false,
+      isInsertWorksheetAPISupported: false,
       reusePromptAnswers: false,
       isClearDataFailed: false,
       isSecured: false,

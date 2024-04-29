@@ -25,7 +25,6 @@ class StepGetObjectDetails {
    *
    * @param objectData.objectWorkingId Unique Id of the object allowing to reference specific object
    * @param objectData.displayAttrFormNames The style in which attribute form will be displayed
-   * @param objectData.insertNewWorksheet Determines if the object will be displayed in a new spreadsheet
    * @param objectData.subtotalsInfo Determines if subtotals will be displayed and stores subtotal addresses
    * @param objectData.bindId Unique Id of the Office table used for referencing the table in Excel
    * @param objectData.visualizationInfo Contains information about location of visualization in dossier

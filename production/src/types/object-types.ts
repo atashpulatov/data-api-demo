@@ -156,4 +156,5 @@ export interface ObjectData {
 export interface ObjectSettings {
   mergeCrosstabColumns?: boolean;
   importAttributesAsText?: boolean;
+  objectDetailsSize?: number;
 }

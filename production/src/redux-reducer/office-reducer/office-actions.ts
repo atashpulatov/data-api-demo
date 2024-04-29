@@ -6,6 +6,8 @@ import {
   OfficeActionsTypes,
   SetActiveCellAddressAction,
   SetIsDialogLoadedAction,
+  SetIsInsertWorksheetAPISupportedAction,
+  SetIsPivotTableSupported,
   SetIsShapeAPISupportedAction,
   SetPopupDataAction,
   ShowDialogAction,
@@ -93,9 +95,19 @@ const setPopupData = (popupData: any): SetPopupDataAction => ({
 
 const clearPopupData = (): SetPopupDataAction => ({ type: OfficeActionsTypes.SET_POPUP_DATA });
 
-const setIsShapeAPISupported = (isShapeAPISupported: any): SetIsShapeAPISupportedAction => ({
+const setIsShapeAPISupported = (isShapeAPISupported: boolean): SetIsShapeAPISupportedAction => ({
   type: OfficeActionsTypes.SET_SHAPE_API_SUPPORTED,
   isShapeAPISupported,
+});
+
+const setIsInsertWorksheetAPISupported = (isInsertWorksheetAPISupported: boolean): SetIsInsertWorksheetAPISupportedAction => ({
+  type: OfficeActionsTypes.SET_INSERT_WORKSHEET_API_SUPPORTED,
+  isInsertWorksheetAPISupported,
+});
+
+const setIsPivotTableSupported = (isPivotTableSupported: boolean): SetIsPivotTableSupported => ({
+  type: OfficeActionsTypes.SET_PIVOT_TABLE_SUPPORTED,
+  isPivotTableSupported,
 });
 
 export const officeActions = {
@@ -115,4 +127,6 @@ export const officeActions = {
   setPopupData,
   clearPopupData,
   setIsShapeAPISupported,
+  setIsInsertWorksheetAPISupported,
+  setIsPivotTableSupported,
 };

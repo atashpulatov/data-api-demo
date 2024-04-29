@@ -11,8 +11,19 @@ export enum PageByDisplayOption {
   SELECT_PAGES = 'selectPages',
 }
 
-export const EXCEL_REUSE_PROMPT_ANSWERS = 'excelReusePromptAnswers';
-export const EXCEL_OBJECT_INFO_SIDE_PANEL_PREFERENCES = 'excelObjectInfoSidePanelPreferences';
-export const EXCEL_OBJECT_INFO_WORKSHEET_PREFERENCES = 'excelObjectInfoWorksheetPreferences';
-export const EXCEL_PAGE_BY_SELECTION = 'excelPageBySelection';
-export const EXCEL_PAGE_BY_AND_WORKSHEET_NAMING = 'excelPageByObjectAndWorksheetNaming';
+export enum ImportFormattingOption {
+  IMPORT_ATTRIBUTES_AS_TEXT = 'importAttributesAsText',
+  MERGE_CROSSTAB_COLUMNS = 'mergeCrosstabColumns',
+}
+
+export enum UserPreferenceKey {
+  EXCEL_REUSE_PROMPT_ANSWERS = 'excelReusePromptAnswers',
+  EXCEL_OBJECT_INFO_SIDE_PANEL_PREFERENCES = 'excelObjectInfoSidePanelPreferences',
+  EXCEL_OBJECT_INFO_WORKSHEET_PREFERENCES = 'excelObjectInfoWorksheetPreferences',
+  EXCEL_PAGE_BY_SELECTION = 'excelPageBySelection',
+  EXCEL_PAGE_BY_AND_WORKSHEET_NAMING = 'excelPageByObjectAndWorksheetNaming',
+  EXCEL_IMPORT_MERGE_CROSSTAB_COLUMNS = 'excelImportMergeCrosstabColumns',
+  EXCEL_IMPORT_ATTRIBUTES_AS_TEXT = 'excelImportAttributesAsText',
+}
+
+export const EXCEL_IMPORT_ATTRIBUTES_AS_TEXT = 'excelImportAttributesAsText';

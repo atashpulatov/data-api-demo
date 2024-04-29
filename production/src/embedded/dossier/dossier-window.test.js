@@ -27,7 +27,7 @@ describe('Dossierwindow', () => {
     );
 
     // then
-    expect(getByText('Import')).toBeInTheDocument();
+    expect(getByText('Import Data')).toBeInTheDocument();
     expect(getByText('Cancel')).toBeInTheDocument();
   });
 

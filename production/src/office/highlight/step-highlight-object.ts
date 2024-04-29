@@ -1,5 +1,5 @@
-import { sidePanelHelper } from '../../right-side-panel/side-panel-services/side-panel-helper';
 import { officeApiHelper } from '../api/office-api-helper';
+import { officeShapeApiHelper } from '../shapes/office-shape-api-helper';
 
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
@@ -14,16 +14,41 @@ class StepHighlightObject {
    * Gets object from reducer based on objectWorkingId and
    * calls officeApiHelper.onBindingObjectClick to highlight object on Excel worksheet
    *
-   * @param objectData Contaisn data about object on which operation was called
+   * @param objectData Contains data about object on which operation was called
    * @param operationData.objectWorkingId Unique Id of the object allowing to reference specific object
    */
   async highlightObject(objectData: ObjectData, operationData: OperationData): Promise<void> {
     try {
-      // Highlight operation is not supported for images as Excel API does not support shape selection as of now
-      if (objectData?.importType === ObjectImportType.IMAGE) {
-        sidePanelHelper.highlightImageObject(objectData);
-      } else {
+      // Highlight operation is not supported for images and pivot tables as Excel API does not support shape and pivot table object selection and as of now
+      const { importType, pivotTableId, bindId } = objectData;
+
+      if (importType === ObjectImportType.TABLE) {
         await officeApiHelper.onBindingObjectClick(objectData);
+      } else {
+        const excelContext = await officeApiHelper.getExcelContext();
+
+        let worksheet;
+
+        if (importType === ObjectImportType.PIVOT_TABLE) {
+          const pivotTable = excelContext.workbook.pivotTables.getItem(pivotTableId);
+          worksheet = pivotTable.worksheet;
+        }
+
+        if (importType === ObjectImportType.IMAGE) {
+          const shapeInWorksheet: any =
+            bindId && (await officeShapeApiHelper.getShape(excelContext, bindId));
+
+          // Omit the highlight operation, if shape(visualization image) was removed manually from the worksheet.
+          if (!shapeInWorksheet) {
+            operationStepDispatcher.completeHighlightObject(objectData.objectWorkingId);
+            return;
+          }
+
+          worksheet = excelContext.workbook.worksheets.getItem(shapeInWorksheet?.worksheetId);
+        }
+
+        worksheet.activate();
+        await excelContext.sync();
       }
 
       operationStepDispatcher.completeHighlightObject(objectData.objectWorkingId);
