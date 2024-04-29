@@ -52,6 +52,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
     handlePrepare,
     setObjectData,
     mstrObjectType,
+    requestPageByModalOpen,
   } = props;
 
   const disableActiveActions = !isPublished;
@@ -143,7 +144,14 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
         const { pageBy } = instance.definition?.grid || {};
 
         if (pageBy?.length && pageByDisplaySetting === PageByDisplayOption.SELECT_PAGES) {
-          popupViewSelectorHelper.handleRequestPageByModalOpen({ ...props, pageBy });
+          await popupViewSelectorHelper.handleRequestPageByModalOpen({
+            objectId: chosenObjectId,
+            projectId: chosenProjectId,
+            instanceId: instance.instanceId,
+            requestPageByModalOpen,
+            importCallback: pageByConfigurations =>
+              popupViewSelectorHelper.proceedToImport({ ...props, pageByConfigurations }),
+          });
         }
       } else if (chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dossier) {
         // Creating instance without shortcut information to pull prompts definition.

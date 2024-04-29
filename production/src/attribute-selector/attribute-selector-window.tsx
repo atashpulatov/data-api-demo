@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { connect, useSelector } from 'react-redux';
-import { PageByConfiguration } from '@mstr/connector-components';
 
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { popupHelper } from '../popup/popup-helper';
+import { popupViewSelectorHelper } from '../popup/popup-view-selector-helper';
 
 import { RootState } from '../store';
 
@@ -36,8 +36,8 @@ export const AttributeSelectorWindowNotConnected: React.FC<
     const {
       chosenObject,
       editedObject,
-      requestPageByModalOpen,
       displayAttrFormNames: chosenDisplayAttrFormNames,
+      requestPageByModalOpen,
     } = props;
 
     const objectId = editedObject?.objectId || chosenObject.chosenObjectId;
@@ -64,13 +64,17 @@ export const AttributeSelectorWindowNotConnected: React.FC<
     }
 
     const { pageBy } = instance.definition?.grid || {};
+
     const selectedPageByDisplaySetting =
       editedObject?.pageByData?.pageByDisplayType || pageByDisplaySetting;
 
     if (pageBy?.length && selectedPageByDisplaySetting === PageByDisplayOption.SELECT_PAGES) {
-      requestPageByModalOpen({
-        pageBy,
-        importPageByConfigurations: (pageByConfigurations: PageByConfiguration[][]) => {
+      await popupViewSelectorHelper.handleRequestPageByModalOpen({
+        objectId,
+        projectId,
+        instanceId: instance.instanceId,
+        requestPageByModalOpen,
+        importCallback: pageByConfigurations => {
           setTriggerUpdate(true);
           setSelectedPageByConfigurations(pageByConfigurations);
         },

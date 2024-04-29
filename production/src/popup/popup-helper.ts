@@ -38,12 +38,13 @@ class PopupHelper {
       }
     }
     const chosenObjectData = {
+      objectWorkingId: popupState.objectWorkingId,
       chosenObjectId: popupState.id || popupState.objectId,
       instanceId: popupState.instanceId,
       projectId: popupState.projectId,
       chosenObjectName: popupState.name,
       chosenObjectType: popupState.mstrObjectType,
-      chosenObjectSubtype: popupState.mstrObjectType === 'report' ? 768 : 779,
+      chosenObjectSubtype: popupState.mstrObjectType.name === 'report' ? 768 : 779,
       promptsAnswers: promptsAnswers || popupState.promptsAnswers,
       subtotalsInfo: popupState.subtotalsInfo,
       isEdit: popupState.isEdit,
@@ -51,6 +52,7 @@ class PopupHelper {
       dossierName,
       selectedViz: `${chapterKey}:${visualizationKey}`,
       displayAttrFormNames: popupState.displayAttrFormNames,
+      pageByData: popupState.pageByData,
     };
 
     return this.restoreFilters(popupState.body, chosenObjectData, formsPrivilege);

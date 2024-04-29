@@ -1,3 +1,4 @@
+import { PageByData } from '@mstr/connector-components/lib/loaded-objects/object-tile/object-details/source-object-info/source-object-info';
 import { Action } from 'redux';
 
 import { MstrObjectTypes } from '../../mstr-object/mstr-object-types';
@@ -16,6 +17,7 @@ export interface MstrData {
 }
 
 export interface EditedObject {
+  objectWorkingId?: number;
   name?: string;
   chosenObjectId?: string;
   projectId?: string;
@@ -31,6 +33,7 @@ export interface EditedObject {
   selectedFilters?: any | any[]; // Replace 'any' with the appropriate type
   importType: ObjectImportType;
   mstrObjectType: MstrObjectTypes;
+  pageByData?: PageByData;
 }
 export interface PopupState {
   editedObject?: EditedObject;

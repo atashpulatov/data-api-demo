@@ -321,7 +321,7 @@ class PopupController {
    * @param reportParams Contains information about the currently selected object
    */
   onCommandOk = async (response: DialogResponse, reportParams: ReportParams): Promise<void> => {
-    if (!reportParams) {
+    if (!reportParams || response.pageByConfigurations) {
       return this.handleOkCommand(response);
     }
 
@@ -344,6 +344,7 @@ class PopupController {
 
     if (
       !reportParams ||
+      response.pageByConfigurations ||
       (pageByData && pageByData.pageByDisplayType !== PageByDisplayType.DEFAULT_PAGE)
     ) {
       // TODO: Add error handling for re-importing Page-by on Edit
