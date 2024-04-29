@@ -120,7 +120,7 @@ class ErrorService {
     } else if (errorType === ErrorType.PAGE_BY_REFRESH_ERR) {
       this.handlePageByRefreshError(objectWorkingId, errorMessage, details, callback);
     } else if (errorType === ErrorType.PAGE_BY_IMPORT_ERR) {
-      this.handlePageByImportError(objectWorkingId, errorMessage);
+      this.handlePageByImportError(objectWorkingId, errorMessage, callback);
     } else {
       const { isDataOverviewOpen } = this.reduxStore?.getState()?.popupStateReducer || {};
 
@@ -188,12 +188,18 @@ class ErrorService {
    * Handles page by import error
    * @param objectWorkingId Unique Id of the object allowing to reference specific object
    * @param errorMessage Error message details
+   * @param callback Function to be called after click on warning notification
    */
-  handlePageByImportError = (objectWorkingId: number, errorMessage: string): void => {
+  handlePageByImportError = (
+    objectWorkingId: number,
+    errorMessage: string,
+    callback: () => Promise<void>
+  ): void => {
     const popupData = {
       type: PopupTypes.FAILED_TO_IMPORT,
       errorDetails: errorMessage,
       objectWorkingId,
+      callback,
     };
 
     this.clearOperationsForPageBySiblings(objectWorkingId);
@@ -207,8 +213,7 @@ class ErrorService {
    * @param objectWorkingId Unique Id of the object allowing to reference specific object
    */
   clearOperationsForPageBySiblings = (objectWorkingId: number): void => {
-    const { pageBySiblings, sourceObject } = pageByHelper.getAllPageByObjects(objectWorkingId);
-    pageBySiblings.push(sourceObject);
+    const { pageBySiblings } = pageByHelper.getAllPageByObjects(objectWorkingId);
     const { operations } = this.reduxStore.getState().operationReducer;
 
     for (const sibling of pageBySiblings) {
@@ -263,7 +268,7 @@ class ErrorService {
    */
   getErrorType = (error: any, operationData?: OperationData): ErrorType => {
     const updateError = this.getExcelError(error, operationData);
-    const pageByError = this.getPageByError(operationData);
+    const pageByError = this.getPageByError(updateError, operationData);
 
     return (
       pageByError ||
@@ -274,19 +279,34 @@ class ErrorService {
   };
 
   /**
-   * Return ErrorType based on the error
-   * @param objectWorkingId Unique Id of the object allowing to reference specific object
+   * Return ErrorType based on the error and operation type
+   * @param error Error object that was thrown
    * @param operationData Data about the operation that was performed
    * @returns ErrorType
    */
-  getPageByError = (operationData?: OperationData): ErrorType => {
+  getPageByError = (error: any, operationData?: OperationData): ErrorType => {
     const object = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(
       operationData?.objectWorkingId
     );
 
-    if (operationData?.operationType === OperationTypes.IMPORT_OPERATION && object?.pageByData) {
-      return ErrorType.PAGE_BY_IMPORT_ERR;
+    let errorType;
+
+    switch (operationData?.operationType) {
+      case OperationTypes.REFRESH_OPERATION:
+        if (getIsPageByRefreshError(error)) {
+          errorType = ErrorType.PAGE_BY_REFRESH_ERR;
+        }
+        break;
+      case OperationTypes.IMPORT_OPERATION:
+        if (object?.pageByData) {
+          errorType = ErrorType.PAGE_BY_IMPORT_ERR;
+        }
+        break;
+      default:
+        break;
     }
+
+    return errorType;
   };
 
   /**
@@ -431,14 +451,6 @@ class ErrorService {
         return ErrorType.CONNECTION_BROKEN_ERR;
       }
       return null;
-    }
-    const operation = this.reduxStore.getState().operationReducer.operations[0];
-    const isPageByRefreshError =
-      operation?.operationType === OperationTypes.REFRESH_OPERATION &&
-      getIsPageByRefreshError(error);
-
-    if (isPageByRefreshError) {
-      return ErrorType.PAGE_BY_REFRESH_ERR;
     }
 
     const status = error.status || (error.response ? error.response.status : null);

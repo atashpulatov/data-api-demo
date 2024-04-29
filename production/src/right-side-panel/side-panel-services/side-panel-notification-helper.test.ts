@@ -68,6 +68,7 @@ describe('SidePanelService', () => {
       objectWorkingId,
       setSidePanelPopup,
       errorDetails,
+      callback: jest.fn(),
     });
     // then
     expect(setSidePanelPopup).toBeCalledTimes(1);

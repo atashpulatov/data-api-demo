@@ -46,8 +46,7 @@ class SidePanelHelper {
    */
   async revertPageByImport(objectWorkingId: number): Promise<void> {
     const excelContext = await officeApiHelper.getExcelContext();
-    const { pageBySiblings, sourceObject } = pageByHelper.getAllPageByObjects(objectWorkingId);
-    pageBySiblings.push(sourceObject);
+    const { pageBySiblings } = pageByHelper.getAllPageByObjects(objectWorkingId);
     pageBySiblings.forEach(async (pageByObject: ObjectData) => {
       const objectExist = await officeRemoveHelper.checkIfObjectExist(pageByObject, excelContext);
       if (objectExist) {

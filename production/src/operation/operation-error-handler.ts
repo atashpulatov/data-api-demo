@@ -3,6 +3,8 @@ import { officeRemoveHelper } from '../office/remove/office-remove-helper';
 import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 
+import officeStoreObject from '../office/store/office-store-object';
+
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../types/object-types';
 
@@ -84,6 +86,7 @@ class OperationErrorHandler {
       await officeShapeApiHelper.deleteImage(excelContext, bindId);
     }
 
+    officeStoreObject.removeObjectInExcelStore(objectWorkingId);
     this.clearFailedObjectFromRedux(objectWorkingId);
   }
 

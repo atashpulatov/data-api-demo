@@ -29,7 +29,7 @@ describe('ErrorService', () => {
       },
     };
     const callback = jest.fn();
-    const operationData = {} as OperationData;
+    const operationData = { operationType: OperationTypes.REFRESH_OPERATION } as OperationData;
 
     errorService.getErrorDetails = jest.fn().mockReturnValue('error details');
     errorService.reduxStore = {
@@ -189,7 +189,7 @@ describe('ErrorService', () => {
         .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId')
         .mockReturnValue(objectFromObjectReducer);
       // when
-      const errorType = errorService.getPageByError({
+      const errorType = errorService.getPageByError({}, {
         operationType,
         objectWorkingId: 1,
       } as OperationData);

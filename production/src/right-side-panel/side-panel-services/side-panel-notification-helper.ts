@@ -239,14 +239,16 @@ class SidePanelNotificationHelper {
     objectWorkingId,
     setSidePanelPopup,
     errorDetails,
+    callback,
   }: {
     objectWorkingId: number;
     setSidePanelPopup: Function;
     errorDetails: string;
+    callback: () => Promise<void>;
   }): void => {
-    const onOk = (): void => {
-      officeReducerHelper.clearPopupData();
-      sidePanelHelper.revertPageByImport(objectWorkingId);
+    const onOk = async (): Promise<void> => {
+      await sidePanelHelper.revertPageByImport(objectWorkingId);
+      this.clearPopupDataAndRunCallback(callback);
     };
 
     setSidePanelPopup({
