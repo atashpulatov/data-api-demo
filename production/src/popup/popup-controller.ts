@@ -212,45 +212,25 @@ class PopupController {
   };
 
   /**
-   * It delegates response to Overview Helper to handles proper Overview dialog action command based on the response.
-   * This method focuses on 2 cases that if met, the action/command is handled by Overview Helper:
-   * 1) When the dialog type is either for importing data for reports or dossiers,
-   * 2) When the dialog type is for reprompting data for reports or dossiers and the command is
-   * either the command has to do with data overlapping in the new data range to be occupied in worksheet.
-   *
-   * In either of these 2 cases, the function returns true indicating that the action/command was handled by
-   * the Overview helper; otherwise, it returns false.
+   * It indicates when the dialog type is for reprompting data for reports or dossiers triggered in the Overview dialog
+   * and the command has to do with data overlapping in the new data range to be occupied in worksheet.
    *
    * @param dialogType - indicates type of the dialog to be opened, value from DialogType
    * @param command - action command from the dialog
-   * @param response - message received from the dialog
    * @returns boolean - true if the command is either RANGE_TAKEN_OK or RANGE_TAKEN_CLOSE and re-prompt in Overview dialog.
    */
-  async isActionCommandHandledForOverviewPopups(
-    dialogType: DialogType,
-    command: string,
-    response: DialogResponse
-  ): Promise<boolean> {
+  isDataRangeCommandForRepromptDialogInOverview(dialogType: DialogType, command: string): boolean {
     const { RANGE_TAKEN_CLOSE, RANGE_TAKEN_OK } = OverviewActionCommands;
     const validDialogTypes = [
       DialogType.repromptReportDataOverview,
       DialogType.repromptDossierDataOverview,
     ];
-
-    let isHandled = false;
-
-    if (
-      dialogType === DialogType.importedDataOverview ||
-      (validDialogTypes.includes(dialogType) &&
-        (command === RANGE_TAKEN_OK || command === RANGE_TAKEN_CLOSE))
-    ) {
-      await this.overviewHelper.handleOverviewActionCommand(response);
-      // Return true to indicate that command was either RANGE_TAKEN_OK or RANGE_TAKEN_CLOSE
-      // and current dialog is either repromptReportDataOverview or repromptDossierDataOverview.
-      isHandled = true;
-    }
-
-    return isHandled;
+    // Return true to indicate that command was either RANGE_TAKEN_OK or RANGE_TAKEN_CLOSE
+    // and current dialog is either repromptReportDataOverview or repromptDossierDataOverview.
+    return (
+      validDialogTypes.includes(dialogType) &&
+      (command === RANGE_TAKEN_OK || command === RANGE_TAKEN_CLOSE)
+    );
   }
 
   onMessageFromPopup = async (
@@ -301,10 +281,14 @@ class PopupController {
       // Attempt to delegate the response to Overview helper to handle the action command for
       // the Overview dialog, if the command is either RANGE_TAKEN_OK or RANGE_TAKEN_CLOSE and
       // the dialog type is either re-prompt for reports or dossiers triggered from Overview dialog.
-      // Also, delegate the response to Overview helper if the dialog type is for importing data
-      // for reports or dossiers. If any of these conditions are met, then the execution
+      // Also, delegate the response to Overview helper if the dialog type is for imported data overview
+      // (a.k.a. Overview dialog and supported actions). If any of these conditions are met, then the execution
       // of this method will be stopped here.
-      if (await this.isActionCommandHandledForOverviewPopups(dialogType, command, response)) {
+      if (
+        dialogType === DialogType.importedDataOverview ||
+        this.isDataRangeCommandForRepromptDialogInOverview(dialogType, command)
+      ) {
+        await this.overviewHelper.handleOverviewActionCommand(response);
         return;
       }
 

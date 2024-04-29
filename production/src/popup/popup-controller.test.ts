@@ -626,35 +626,27 @@ describe('PopupController', () => {
   });
 
   it('should return true for valid overview popup types', () => {
-    const handleOverviewActionCommandSpy = jest
-      .spyOn(overviewHelper, 'handleOverviewActionCommand')
-      .mockImplementation(async () => {});
-
     const validPopupTypes = [
       DialogType.repromptReportDataOverview,
       DialogType.repromptDossierDataOverview,
     ];
 
     validPopupTypes.forEach(popupType => {
-      popupController
-        .isActionCommandHandledForOverviewPopups(
-          popupType,
-          OverviewActionCommands.RANGE_TAKEN_OK,
-          null
-        )
-        .then(result => {
-          expect(handleOverviewActionCommandSpy).toHaveBeenCalled();
-          expect(result).toBe(true);
-        });
+      const result = popupController.isDataRangeCommandForRepromptDialogInOverview(
+        popupType,
+        'overview-range-taken-ok'
+      );
+      expect(result).toBe(true);
     });
   });
 
   it('should return false for invalid overview popup types', () => {
     const invalidPopupType = DialogType.dataPreparation;
-    popupController
-      .isActionCommandHandledForOverviewPopups(invalidPopupType, 'command', null)
-      .then(result => {
-        expect(result).toBe(false);
-      });
+    const result = popupController.isDataRangeCommandForRepromptDialogInOverview(
+      invalidPopupType,
+      'command'
+    );
+
+    expect(result).toBe(false);
   });
 });
