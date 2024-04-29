@@ -317,14 +317,13 @@ class OverviewHelper {
         });
         break;
       case OverviewActionCommands.RANGE_TAKEN_OK:
-        sidePanelNotificationHelper.importInNewRange(response.objectWorkingId, null, true);
         officeReducerHelper.clearPopupData();
+        sidePanelNotificationHelper.importInNewRange(response.objectWorkingId, null, true);
         break;
       case OverviewActionCommands.RANGE_TAKEN_CLOSE:
-        await callback();
-
-        this.store.dispatch(executeNextRepromptTask());
         officeReducerHelper.clearPopupData();
+        await callback();
+        this.store.dispatch(executeNextRepromptTask());
         break;
       case OverviewActionCommands.PAGE_BY_REFRESH_FAILED_CLOSE:
         sidePanelNotificationHelper.clearPopupDataAndRunCallback(callback);
