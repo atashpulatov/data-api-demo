@@ -212,14 +212,21 @@ class PopupController {
   };
 
   /**
-   * It indicates when the dialog type is for reprompting data for reports or dossiers triggered in the Overview dialog
-   * and the command has to do with data overlapping in the new data range to be occupied in worksheet.
+   * It indicates when the dialog type is for multiple reprompting data for reports and/or dossiers triggered in
+   * the Overview dialog and the command has to do with data overlapping in the new data range to be occupied in worksheet.
+   *
+   * Note: Only handling data range commands for multiple re-prompting workflow in the Overview dialog, rather than delegating all
+   * possible commands associated with re-prompting. This approach minimizes the risk of introducing bugs in the future by
+   * limiting scope to data range overlapping commands only.
    *
    * @param dialogType - indicates type of the dialog to be opened, value from DialogType
    * @param command - action command from the dialog
    * @returns boolean - true if the command is either RANGE_TAKEN_OK or RANGE_TAKEN_CLOSE and re-prompt in Overview dialog.
    */
-  isDataRangeCommandForRepromptDialogInOverview(dialogType: DialogType, command: string): boolean {
+  isDataRangeCommandForMultipleRepromptDialogInOverview(
+    dialogType: DialogType,
+    command: string
+  ): boolean {
     const { RANGE_TAKEN_CLOSE, RANGE_TAKEN_OK } = OverviewActionCommands;
     const validDialogTypes = [
       DialogType.repromptReportDataOverview,
@@ -286,7 +293,7 @@ class PopupController {
       // of this method will be stopped here.
       if (
         dialogType === DialogType.importedDataOverview ||
-        this.isDataRangeCommandForRepromptDialogInOverview(dialogType, command)
+        this.isDataRangeCommandForMultipleRepromptDialogInOverview(dialogType, command)
       ) {
         await this.overviewHelper.handleOverviewActionCommand(response);
         return;

@@ -632,7 +632,7 @@ describe('PopupController', () => {
     ];
 
     validPopupTypes.forEach(popupType => {
-      const result = popupController.isDataRangeCommandForRepromptDialogInOverview(
+      const result = popupController.isDataRangeCommandForMultipleRepromptDialogInOverview(
         popupType,
         'overview-range-taken-ok'
       );
@@ -642,7 +642,7 @@ describe('PopupController', () => {
 
   it('should return false for invalid overview popup types', () => {
     const invalidPopupType = DialogType.dataPreparation;
-    const result = popupController.isDataRangeCommandForRepromptDialogInOverview(
+    const result = popupController.isDataRangeCommandForMultipleRepromptDialogInOverview(
       invalidPopupType,
       'command'
     );
