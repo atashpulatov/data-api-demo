@@ -4,6 +4,7 @@ import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { sidePanelService } from './side-panel-service';
 
 import { officeContext } from '../../office/office-context';
+import initializationErrorDecorator from '../settings-side-panel/initialization-error-decorator';
 
 class SidePanelEventHelper {
   eventRemove: any;
@@ -36,6 +37,7 @@ class SidePanelEventHelper {
    *
    * @param {Function} setActiveCellAddress Callback to modify the activeCellAddress in state of RightSidePanel
    */
+  @initializationErrorDecorator.initializationWrapper
   async initializeActiveCellChangedListener(setActiveCellAddress: Function): Promise<void> {
     const excelContext = await officeApiHelper.getExcelContext();
     const initialCellAddress = await officeApiHelper.getSelectedCell(excelContext);

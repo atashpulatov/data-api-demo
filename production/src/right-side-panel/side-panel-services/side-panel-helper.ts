@@ -15,6 +15,7 @@ import { duplicateRequested } from '../../redux-reducer/operation-reducer/operat
 import { popupActions } from '../../redux-reducer/popup-reducer/popup-actions';
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
 import { clearRepromptTask } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
+import initializationErrorDecorator from '../settings-side-panel/initialization-error-decorator';
 import { ObjectImportType } from '../../mstr-object/constants';
 
 class SidePanelHelper {
@@ -155,6 +156,7 @@ class SidePanelHelper {
     }
   }
 
+  @initializationErrorDecorator.initializationWrapper
   initializeClearDataFlags(): void {
     officeStoreHelper.isFileSecured() &&
       this.reduxStore.dispatch(officeActions.toggleSecuredFlag(true));

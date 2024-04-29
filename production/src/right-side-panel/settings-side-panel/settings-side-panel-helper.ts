@@ -19,6 +19,7 @@ import {
 import i18n from '../../i18n';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 import { settingsActions } from '../../redux-reducer/settings-reducer/settings-actions';
+import initializationErrorDecorator from './initialization-error-decorator';
 
 class SettingsSidePanelHelper {
   // COMMON SETTINGS
@@ -38,7 +39,8 @@ class SettingsSidePanelHelper {
    * updates the redux store with the retrieved value.
    * @returns A promise that resolves when the initialization is complete.
    */
-  initReusePromptAnswers = async (): Promise<void> => {
+  @initializationErrorDecorator.initializationWrapper
+  async initReusePromptAnswers(): Promise<void> {
     const { value } = await userRestService.getUserPreference(
       UserPreferenceKey.EXCEL_REUSE_PROMPT_ANSWERS
     );
@@ -47,7 +49,7 @@ class SettingsSidePanelHelper {
       : JSON.parse(value);
 
     reduxStore.dispatch(officeActions.toggleReusePromptAnswersFlag(reusePromptAnswersFlag) as any);
-  };
+  }
 
   /**
    * Toggles the reuse prompt answers flag and updates the user preference.
@@ -89,22 +91,23 @@ class SettingsSidePanelHelper {
    * @param defaultValue - The default value for the settings.
    * @param action - The action to be dispatched with the loaded settings.
    */
-  loadSettings = async (
+  async loadSettings(
     preferenceKey: string,
     defaultValue: ObjectInfoSetting[],
     action: (
       settings: ObjectInfoSetting[]
     ) => LoadSidePanelObjectInfoSettingAction | LoadWorksheetObjectInfoSettingAction
-  ): Promise<void> => {
+  ): Promise<void> {
     const { value } = await userRestService.getUserPreference(preferenceKey);
     const settings = this.jsonParseWithDefault(value, defaultValue);
     reduxStore.dispatch(action(settings));
-  };
+  }
 
   /**
    * Initializes the object info settings for the side panel and worksheet.
    */
-  initObjectInfoSettings = async (): Promise<void> => {
+  @initializationErrorDecorator.initializationWrapper
+  async initObjectInfoSettings(): Promise<void> {
     const { sidePanelObjectInfoSettings, worksheetObjectInfoSettings } =
       reduxStore.getState().settingsReducer;
 
@@ -121,7 +124,7 @@ class SettingsSidePanelHelper {
       worksheetObjectInfoSettings,
       settingsActions.loadWorksheetObjectInfoSettings
     );
-  };
+  }
 
   /**
    * Returns the updated settings string based on the provided settings and setting value.
@@ -282,6 +285,7 @@ class SettingsSidePanelHelper {
    * Retrieves the user preference for the page by display from the userRestService,
    * updates the redux store with the retrieved value.
    */
+  @initializationErrorDecorator.initializationWrapper
   async initPageByDisplayAnswers(): Promise<void> {
     const { value } = await userRestService.getUserPreference(
       UserPreferenceKey.EXCEL_PAGE_BY_SELECTION
@@ -294,6 +298,7 @@ class SettingsSidePanelHelper {
    * Retrieves the user preference for the worksheet naming from the userRestService,
    * updates the redux store with the retrieved value.
    */
+  @initializationErrorDecorator.initializationWrapper
   async initWorksheetNamingAnswers(): Promise<void> {
     const { value } = await userRestService.getUserPreference(
       UserPreferenceKey.EXCEL_PAGE_BY_AND_WORKSHEET_NAMING

@@ -5,13 +5,10 @@ import { OfficeApplicationType, SidePanel } from '@mstr/connector-components';
 import { useDialogPanelCommunication } from './side-panel-hooks/use-dialog-panel-communication';
 import { useGetSidePanelPopup } from './side-panel-hooks/use-get-side-panel-popup';
 import { useGetUpdatedDuplicatePopup } from './side-panel-hooks/use-get-updated-duplicate-popup';
+import useInitializeSidePanel from './side-panel-hooks/use-initialize-side-panel';
 
 import { notificationService } from '../notification/notification-service';
 import officeReducerHelper from '../office/store/office-reducer-helper';
-import { formattingSettingsHelper } from './settings-side-panel/formatting-settings/formatting-settings-helper';
-import { settingsSidePanelHelper } from './settings-side-panel/settings-side-panel-helper';
-import { sidePanelEventHelper } from './side-panel-services/side-panel-event-helper';
-import { sidePanelHelper } from './side-panel-services/side-panel-helper';
 import { sidePanelNotificationHelper } from './side-panel-services/side-panel-notification-helper';
 import { sidePanelService } from './side-panel-services/side-panel-service';
 
@@ -56,26 +53,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   const notifications = useSelector(notificationReducerSelectors.selectNotifications);
   const isSidePanelBlocked = useSelector(repromptsQueueSelector.doesRepromptQueueContainItems);
   const isDialogOpen = useSelector(officeSelectors.selectIsDialogOpen);
-
-  useEffect(() => {
-    // TODO - move this to a separate hook
-    async function initializeSidePanel(): Promise<void> {
-      try {
-        await sidePanelEventHelper.addRemoveObjectListener();
-        await sidePanelEventHelper.initializeActiveCellChangedListener(updateActiveCellAddress);
-        await formattingSettingsHelper.initImportFormattingSettings();
-        await settingsSidePanelHelper.initReusePromptAnswers();
-        await settingsSidePanelHelper.initPageByDisplayAnswers();
-        await settingsSidePanelHelper.initWorksheetNamingAnswers();
-        await settingsSidePanelHelper.initObjectInfoSettings();
-        sidePanelHelper.clearRepromptTask();
-        sidePanelHelper.initializeClearDataFlags();
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    initializeSidePanel();
-  }, [updateActiveCellAddress]);
+  useInitializeSidePanel(updateActiveCellAddress);
 
   useDialogPanelCommunication();
   useGetSidePanelPopup({ setSidePanelPopup, sidePanelPopup });

@@ -8,6 +8,7 @@ import { ImportFormattingOption, UserPreferenceKey } from '../settings-side-pane
 
 import i18n from '../../../i18n';
 import { settingsActions } from '../../../redux-reducer/settings-reducer/settings-actions';
+import initializationErrorDecorator from '../initialization-error-decorator';
 
 class FormattingSettingsHelper {
   /**
@@ -15,17 +16,18 @@ class FormattingSettingsHelper {
    * @param preferenceKey name of the preference
    * @returns A Promise that resolves with the boolean value of the preference.
    */
-  getBooleanUserPreference = async (preferenceKey: UserPreferenceKey): Promise<boolean> => {
+  async getBooleanUserPreference(preferenceKey: UserPreferenceKey): Promise<boolean> {
     const { value } = await userRestService.getUserPreference(preferenceKey);
     return !Number.isNaN(+value) ? !!parseInt(value, 10) : JSON.parse(value);
-  };
+  }
 
   /**
    * Initializes the import formatting section
    * Retrieves the user preference for the importing as a text and merge crosstab columns from the userRestService,
    * updates the redux store with the retrieved value.
    */
-  initImportFormattingSettings = async (): Promise<void> => {
+  @initializationErrorDecorator.initializationWrapper
+  async initImportFormattingSettings(): Promise<void> {
     const importAttributesAsText = await this.getBooleanUserPreference(
       UserPreferenceKey.EXCEL_IMPORT_ATTRIBUTES_AS_TEXT
     );
@@ -41,7 +43,7 @@ class FormattingSettingsHelper {
     reduxStore.dispatch(
       settingsActions.toggleMergeCrosstabColumnsFlag(mergeCrosstabColumns) as any
     );
-  };
+  }
 
   /**
    * Toggles the importAttributeAsText flag
