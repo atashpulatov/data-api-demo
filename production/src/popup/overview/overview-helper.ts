@@ -443,6 +443,16 @@ class OverviewHelper {
     onDuplicate,
     setDialogPopup,
   }: DialogPopup): void {
+    const sourceObject = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(
+      objectWorkingIds[0]
+    );
+    const isPageByObject = !!sourceObject?.pageByData?.pageByLinkId;
+
+    const onEdit = (isActiveCellOptionSelected: boolean): void => {
+      onDuplicate(objectWorkingIds, !isActiveCellOptionSelected, true);
+      setDialogPopup(null);
+    };
+
     setDialogPopup({
       type: PopupTypes.DUPLICATE,
       activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
@@ -450,10 +460,9 @@ class OverviewHelper {
         onDuplicate(objectWorkingIds, !isActiveCellOptionSelected, false);
         setDialogPopup(null);
       },
-      onEdit: isActiveCellOptionSelected => {
-        onDuplicate(objectWorkingIds, !isActiveCellOptionSelected, true);
-        setDialogPopup(null);
-      },
+      onEdit: !isPageByObject
+        ? isActiveCellOptionSelected => onEdit(isActiveCellOptionSelected)
+        : undefined,
       onClose: () => setDialogPopup(null),
     });
   }
