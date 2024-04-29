@@ -285,7 +285,7 @@ class ErrorService {
    * @param operationData Data about the operation that was performed
    * @returns ErrorType
    */
-  getPageByError = (error: any, operationData?: OperationData): ErrorType => {
+  getPageByError = (operationData: OperationData, error: any): ErrorType => {
     const object = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(
       operationData?.objectWorkingId
     );
