@@ -322,6 +322,7 @@ class OverviewHelper {
         break;
       case OverviewActionCommands.RANGE_TAKEN_CLOSE:
         await callback();
+
         this.store.dispatch(executeNextRepromptTask());
         officeReducerHelper.clearPopupData();
         break;
