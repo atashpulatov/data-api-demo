@@ -156,9 +156,9 @@ class PopupViewSelectorHelper {
       count += 1;
     }
     const body = this.createBody(
-      props.editedObject && props.editedObject.selectedAttributes,
-      props.editedObject && props.editedObject.selectedMetrics,
-      props.editedObject && props.editedObject.selectedFilters
+      props.editedObject?.selectedAttributes,
+      props.editedObject?.selectedMetrics,
+      props.editedObject?.selectedFilters
     );
     const preparedReport = {
       id: objectId,
