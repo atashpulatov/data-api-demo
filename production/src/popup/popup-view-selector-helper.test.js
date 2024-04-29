@@ -97,18 +97,17 @@ describe('PopupViewSelectorHelper', () => {
       const repromptPopupTypes = [
         DialogType.repromptingWindow,
         DialogType.repromptReportDataOverview,
-        DialogType.repromptDossierDataOverview,
       ];
 
       repromptPopupTypes.forEach(popupType => {
-        expect(popupViewSelectorHelper.isRepromptPopupType(popupType)).toBe(true);
+        expect(popupViewSelectorHelper.isRepromptReportPopupType(popupType)).toBe(true);
       });
     });
 
     it('should return false for non-reprompt popup types', () => {
       const nonRepromptPopupType = 'nonRepromptPopupType';
 
-      expect(popupViewSelectorHelper.isRepromptPopupType(nonRepromptPopupType)).toBe(false);
+      expect(popupViewSelectorHelper.isRepromptReportPopupType(nonRepromptPopupType)).toBe(false);
     });
   });
 
