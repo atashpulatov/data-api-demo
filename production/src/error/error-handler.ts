@@ -269,7 +269,7 @@ class ErrorService {
    */
   getErrorType = (error: any, operationData?: OperationData): ErrorType => {
     const updateError = this.getExcelError(error, operationData);
-    const pageByError = this.getPageByError(updateError, operationData);
+    const pageByError = this.getPageByError(operationData, updateError);
 
     return (
       pageByError ||
