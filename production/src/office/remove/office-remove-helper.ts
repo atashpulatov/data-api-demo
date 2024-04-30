@@ -120,6 +120,9 @@ class OfficeRemoveHelper {
    */
   async checkIfObjectExist(object: any, excelContext: Excel.RequestContext): Promise<boolean> {
     try {
+      if (!object.bindId) {
+        return false;
+      }
       officeApiHelper.getTable(excelContext, object.bindId);
       await excelContext.sync();
       return true;
