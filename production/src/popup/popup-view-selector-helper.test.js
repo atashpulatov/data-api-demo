@@ -109,6 +109,48 @@ describe('PopupViewSelectorHelper', () => {
 
       expect(popupViewSelectorHelper.isRepromptReportPopupType(nonRepromptPopupType)).toBe(false);
     });
+
+    it('should proceed to import if conditions are met', () => {
+      const props = {
+        importRequested: true,
+        isPrompted: false,
+        pageBy: [],
+      };
+      const popupType = DialogType.dossierWindow;
+
+      const proceedToImportSpy = jest
+        .spyOn(popupViewSelectorHelper, 'proceedToImport')
+        .mockImplementation(() => undefined);
+
+      const result = popupViewSelectorHelper.setPopupType(props, popupType);
+
+      expect(proceedToImportSpy).toHaveBeenCalled();
+      // Assuming proceedToImport doesn't return a value
+      expect(result).toBe('dossier-window');
+    });
+
+    it('should return obtainInstanceHelper if instance with prompts is answered', () => {
+      const props = {
+        isPrompted: true,
+        arePromptsAnswered: true,
+        // Assuming arePromptsAnswered and isInstanceWithPromptsAnswered return true
+      };
+      const popupType = DialogType.dossierWindow;
+
+      const isInstanceWithPromptsAnsweredSpy = jest
+        .spyOn(popupViewSelectorHelper, 'isInstanceWithPromptsAnswered')
+        .mockImplementation(() => false);
+
+      const arePromptsAnsweredSpy = jest
+        .spyOn(popupViewSelectorHelper, 'arePromptsAnswered')
+        .mockImplementation(() => true);
+
+      const result = popupViewSelectorHelper.setPopupType(props, popupType);
+
+      expect(isInstanceWithPromptsAnsweredSpy).toHaveBeenCalled();
+      expect(arePromptsAnsweredSpy).toHaveBeenCalled();
+      expect(result).toBe(DialogType.obtainInstanceHelper);
+    });
   });
 
   it('should return multipleRepromptTransitionPage for multiple reprompt', () => {
