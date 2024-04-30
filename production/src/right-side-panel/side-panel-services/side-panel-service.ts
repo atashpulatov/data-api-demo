@@ -178,7 +178,7 @@ export class SidePanelService {
       // is already added to the dispatchTasks
       if (
         isPrompted &&
-        (!dispatchTasks.length ||
+        (!pageByData ||
           dispatchTasks.every((task: any) => {
             const object = officeReducerHelper.getObjectFromObjectReducerByBindId(task.bindId);
             return object.pageByData?.pageByLinkId !== pageByData?.pageByLinkId;

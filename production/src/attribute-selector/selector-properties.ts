@@ -15,4 +15,5 @@ export const selectorProperties = {
   commandBrowseUpdate: 'commandBrowseUpdate',
   commandDialogLoaded: 'commandDialogLoaded',
   commandCloseDialog: 'commandCloseDialog',
+  commandExecuteNextRepromptTask: 'commandExecuteNextRepromptTask',
 };
