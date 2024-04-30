@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { OfficeApplicationType, SidePanel } from '@mstr/connector-components';
 
+import { useGetFilteredObjectListForSidePanelDetails } from '../redux-reducer/settings-reducer/settings-hooks';
 import { useDialogPanelCommunication } from './side-panel-hooks/use-dialog-panel-communication';
 import { useGetSidePanelPopup } from './side-panel-hooks/use-get-side-panel-popup';
 import { useGetUpdatedDuplicatePopup } from './side-panel-hooks/use-get-updated-duplicate-popup';
@@ -58,6 +59,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   useDialogPanelCommunication();
   useGetSidePanelPopup({ setSidePanelPopup, sidePanelPopup });
   const duplicatePopupParams = useGetUpdatedDuplicatePopup({ sidePanelPopup, setSidePanelPopup });
+  const filteredObjects = useGetFilteredObjectListForSidePanelDetails(loadedObjectsWrapped);
 
   useEffect(() => {
     setLoadedObjectsWrapped(
@@ -77,7 +79,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
       ) : (
         <SidePanel
           activeGroupKey={0}
-          loadedObjects={loadedObjectsWrapped as any}
+          loadedObjects={filteredObjects as any}
           onAddData={sidePanelService.addData}
           onTileClick={sidePanelService.highlightObject}
           onDuplicateClick={objectWorkingId =>

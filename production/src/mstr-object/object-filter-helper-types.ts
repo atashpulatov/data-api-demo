@@ -68,11 +68,11 @@ export type ReportDefinition = {
   };
 };
 
-export type ReportFiltersText = {
-  reportFilterText: string;
-  reportLimitsText: string;
-  viewFilterText: string;
-  metricLimitsText: string;
+export type FiltersText = {
+  reportFilterText?: string;
+  reportLimitsText?: string;
+  viewFilterText?: string;
+  metricLimitsText?: string;
 };
 
 type DossierFilter = {

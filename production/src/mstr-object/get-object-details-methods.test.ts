@@ -254,7 +254,7 @@ describe('Get Object Details Methods', () => {
         .spyOn(authenticationHelper, 'getCurrentMstrUserFullName')
         .mockImplementation(() => mockedUserName);
       // when
-      populateDetails({}, true, '', '');
+      populateDetails({}, true, '', '', '', {}, '', '');
       // then
       expect(authenticationHelper.getCurrentMstrUserFullName).toBeCalled();
     });
@@ -268,20 +268,32 @@ describe('Get Object Details Methods', () => {
       const mockedAncestors = 'Some ancestors';
       const mockedCertifiedInfo = true;
       const mockedDateModified = 'Some date';
+      const mockedDateCreated = 'Some date';
+      const mockedDescription = 'Some description';
       const mockedOwner = 'Some owner';
+      const mockedVersion = 'Some version';
+      const mockedFilters = {};
       const expectedDetails = {
         ancestors: mockedAncestors,
         certified: mockedCertifiedInfo,
+        createdDate: mockedDateCreated,
+        description: mockedDescription,
+        filters: mockedFilters,
+        importedBy: mockedUserName,
         modifiedDate: mockedDateModified,
         owner: mockedOwner,
-        importedBy: mockedUserName,
+        version: mockedVersion,
       };
       // when
       const details = populateDetails(
         mockedAncestors,
         mockedCertifiedInfo,
+        mockedDateCreated,
         mockedDateModified,
-        mockedOwner
+        mockedDescription,
+        mockedFilters,
+        mockedOwner,
+        mockedVersion
       );
       // then
       expect(details).toEqual(expectedDetails);

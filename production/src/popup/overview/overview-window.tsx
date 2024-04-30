@@ -8,6 +8,7 @@ import {
 } from '@mstr/connector-components';
 import { Button } from '@mstr/rc';
 
+import useGetOverviewWindowErrorPopup from './use-get-overview-window-error-popup';
 import useStateSyncOnDialogMessage from './use-state-sync-on-dialog-message';
 
 import { popupHelper } from '../popup-helper';
@@ -24,7 +25,6 @@ import './overview-window.scss';
 
 export const OverviewWindow: React.FC = () => {
   const activeCellAddress = useSelector(officeSelectors.selectActiveCellAddress);
-  const popupData = useSelector(officeSelectors.selectPopupData);
   const objects = useSelector(selectObjects);
   const globalNotification = useSelector(notificationReducerSelectors.selectGlobalNotification);
   const notifications = useSelector(notificationReducerSelectors.selectNotifications);
@@ -75,17 +75,7 @@ export const OverviewWindow: React.FC = () => {
       }
     });
 
-  // TODO: Move logic for controlling popup visibility to Redux
-  useEffect(() => {
-    if (popupData) {
-      overviewHelper.setRangeTakenPopup({
-        objectWorkingIds: [popupData.objectWorkingId],
-        setDialogPopup,
-      });
-    } else {
-      setDialogPopup(null);
-    }
-  }, [popupData]);
+  useGetOverviewWindowErrorPopup({ setDialogPopup });
 
   useEffect(() => {
     notifications.forEach(notification => {

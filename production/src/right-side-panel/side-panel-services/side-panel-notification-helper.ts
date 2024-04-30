@@ -42,6 +42,10 @@ class SidePanelNotificationHelper {
     setSidePanelPopup: Function;
     setDuplicatedObjectId: Function;
   }): void {
+    const sourceObject =
+      officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
+    const isPageByObject = !!sourceObject?.pageByData?.pageByLinkId;
+
     const closePopup = (): void => {
       setSidePanelPopup(null);
       setDuplicatedObjectId(null);
@@ -54,10 +58,12 @@ class SidePanelNotificationHelper {
         sidePanelHelper.duplicateObject(objectWorkingId, !isActiveCellOptionSelected, false);
         closePopup();
       },
-      onEdit: (isActiveCellOptionSelected: boolean): void => {
-        sidePanelHelper.duplicateObject(objectWorkingId, !isActiveCellOptionSelected, true);
-        closePopup();
-      },
+      onEdit: !isPageByObject
+        ? (isActiveCellOptionSelected: boolean): void => {
+            sidePanelHelper.duplicateObject(objectWorkingId, !isActiveCellOptionSelected, true);
+            closePopup();
+          }
+        : undefined,
       onClose: closePopup,
     });
   }
@@ -212,7 +218,7 @@ class SidePanelNotificationHelper {
           edit(objectWorkingId);
           break;
         case PageByRefreshFailedOptions.DELETE_FROM_WORKSHEET:
-          sidePanelHelper.removeMultiplePagesForPageBy(objectWorkingId);
+          pageByHelper.handleRemovingMultiplePages(objectWorkingId);
           break;
         default:
           break;
@@ -224,6 +230,37 @@ class SidePanelNotificationHelper {
       selectedObjects,
       onOk: (refreshFailedOptions: PageByRefreshFailedOptions): void => onOk(refreshFailedOptions),
       onClose: onCancel,
+    });
+  };
+
+  /**
+   * Creates pageby import failed popup.
+   *
+   * @param data  Data required to create and update pageby refresh failed popup.
+   * @param data.objectWorkingId  Uniqe id of source object for duplication.
+   * @param data.setSidePanelPopup Callback to save popup in state of RightSidePanel.
+   * @param data.errorDetails  Details of the error that occurred during import.
+   */
+  setPageByImportFailedPopup = ({
+    objectWorkingId,
+    setSidePanelPopup,
+    errorDetails,
+    callback,
+  }: {
+    objectWorkingId: number;
+    setSidePanelPopup: Function;
+    errorDetails: string;
+    callback: () => Promise<void>;
+  }): void => {
+    const onOk = async (): Promise<void> => {
+      await sidePanelHelper.revertPageByImportForSiblings(objectWorkingId);
+      this.clearPopupDataAndRunCallback(callback);
+    };
+
+    setSidePanelPopup({
+      type: PopupTypes.FAILED_TO_IMPORT,
+      errorDetails,
+      onOk,
     });
   };
 

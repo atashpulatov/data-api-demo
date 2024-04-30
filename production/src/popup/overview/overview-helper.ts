@@ -1,11 +1,13 @@
 import {
   GlobalNotificationTypes,
   ObjectNotificationTypes,
+  PageByRefreshFailedOptions,
   PopupTypes,
 } from '@mstr/connector-components';
 
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
+import { pageByHelper } from '../../page-by/page-by-helper';
 import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-services/side-panel-notification-helper';
 import { popupHelper } from '../popup-helper';
 
@@ -28,6 +30,9 @@ export enum OverviewActionCommands {
   REPROMPT = 'overview-reprompt',
   RANGE_TAKEN_OK = 'overview-range-taken-ok',
   RANGE_TAKEN_CLOSE = 'overview-range-taken-close',
+  PAGE_BY_REFRESH_FAILED_CLOSE = 'overview-page-by-refresh-failed-close',
+  PAGE_BY_REFRESH_FAILED_EDIT = 'overview-page-by-refresh-failed-edit',
+  PAGE_BY_REFRESH_FAILED_REMOVE = 'overview-page-by-refresh-failed-remove',
   RENAME = 'overview-rename',
   GO_TO_WORKSHEET = 'overview-go-to-worksheet',
   DISMISS_NOTIFICATION = 'overview-dismiss-notification',
@@ -179,6 +184,42 @@ class OverviewHelper {
   };
 
   /**
+   * Sends message with pageByRefreshFailedClose command to the Side Panel
+   *
+   * @param objectWorkingId Unique Id of the object allowing to reference specific object
+   */
+  handlePageByRefreshFailedClose = (objectWorkingId: number): void => {
+    popupHelper.officeMessageParent({
+      command: OverviewActionCommands.PAGE_BY_REFRESH_FAILED_CLOSE,
+      objectWorkingId,
+    });
+  };
+
+  /**
+   * Sends message with pageByRefreshFailedEdit command to the Side Panel
+   *
+   * @param objectWorkingId Unique Id of the object allowing to reference specific object
+   */
+  handlePageByRefreshFailedEdit = (objectWorkingId: number): void => {
+    popupHelper.officeMessageParent({
+      command: OverviewActionCommands.PAGE_BY_REFRESH_FAILED_EDIT,
+      objectWorkingId,
+    });
+  };
+
+  /**
+   * Sends message with handlePageByRefreshFailedRemove command to the Side Panel
+   *
+   * @param objectWorkingId Unique Id of the object allowing to reference specific object
+   */
+  handlePageByRefreshFailedRemove = (objectWorkingId: number): void => {
+    popupHelper.officeMessageParent({
+      command: OverviewActionCommands.PAGE_BY_REFRESH_FAILED_REMOVE,
+      objectWorkingId,
+    });
+  };
+
+  /**
    * Sends message with rename command to the Side Panel
    *
    * @param objectWorkingId Unique Id of the object allowing to reference specific object
@@ -246,6 +287,9 @@ class OverviewHelper {
       this.handleDismissNotifications(response.objectWorkingIds);
     }
 
+    // eslint-disable-next-line no-case-declarations
+    const { callback } = this.store.getState().officeReducer?.popupData || {};
+
     switch (response.command) {
       case OverviewActionCommands.IMPORT:
         await this.sidePanelService.addData();
@@ -277,12 +321,21 @@ class OverviewHelper {
         officeReducerHelper.clearPopupData();
         break;
       case OverviewActionCommands.RANGE_TAKEN_CLOSE:
-        // eslint-disable-next-line no-case-declarations
-        const { callback } = this.store.getState().officeReducer?.popupData || {};
         await callback();
 
         this.store.dispatch(executeNextRepromptTask());
         officeReducerHelper.clearPopupData();
+        break;
+      case OverviewActionCommands.PAGE_BY_REFRESH_FAILED_CLOSE:
+        sidePanelNotificationHelper.clearPopupDataAndRunCallback(callback);
+        break;
+      case OverviewActionCommands.PAGE_BY_REFRESH_FAILED_EDIT:
+        sidePanelNotificationHelper.clearPopupDataAndRunCallback(callback);
+        await this.sidePanelService.edit(response.objectWorkingId);
+        break;
+      case OverviewActionCommands.PAGE_BY_REFRESH_FAILED_REMOVE:
+        sidePanelNotificationHelper.clearPopupDataAndRunCallback(callback);
+        pageByHelper.handleRemovingMultiplePages(response.objectWorkingId);
         break;
       case OverviewActionCommands.RENAME:
         this.sidePanelService.rename(response.objectWorkingId, response.newName);
@@ -390,6 +443,16 @@ class OverviewHelper {
     onDuplicate,
     setDialogPopup,
   }: DialogPopup): void {
+    const sourceObject = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(
+      objectWorkingIds[0]
+    );
+    const isPageByObject = !!sourceObject?.pageByData?.pageByLinkId;
+
+    const onEdit = (isActiveCellOptionSelected: boolean): void => {
+      onDuplicate(objectWorkingIds, !isActiveCellOptionSelected, true);
+      setDialogPopup(null);
+    };
+
     setDialogPopup({
       type: PopupTypes.DUPLICATE,
       activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
@@ -397,10 +460,9 @@ class OverviewHelper {
         onDuplicate(objectWorkingIds, !isActiveCellOptionSelected, false);
         setDialogPopup(null);
       },
-      onEdit: isActiveCellOptionSelected => {
-        onDuplicate(objectWorkingIds, !isActiveCellOptionSelected, true);
-        setDialogPopup(null);
-      },
+      onEdit: !isPageByObject
+        ? isActiveCellOptionSelected => onEdit(isActiveCellOptionSelected)
+        : undefined,
       onClose: () => setDialogPopup(null),
     });
   }
@@ -422,6 +484,38 @@ class OverviewHelper {
         this.handleRangeTakenClose(objectWorkingIds[0]);
         officeReducerHelper.clearPopupData();
       },
+    });
+  }
+
+  /**
+   * Sets Range Taken popup for Overview dialog
+   *
+   * @param objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param setDialogPopup Function used as a callback for seting Overview dialog popup
+   */
+  setPageByRefreshFailedPopup({ objectWorkingIds, setDialogPopup }: DialogPopup): void {
+    const onCancel = (): void => {
+      this.handlePageByRefreshFailedClose(objectWorkingIds[0]);
+      officeReducerHelper.clearPopupData();
+    };
+
+    const onOk = (refreshFailedOptions: PageByRefreshFailedOptions): void => {
+      switch (refreshFailedOptions) {
+        case PageByRefreshFailedOptions.EDIT_AND_REIMPORT:
+          this.handlePageByRefreshFailedEdit(objectWorkingIds[0]);
+          break;
+        case PageByRefreshFailedOptions.DELETE_FROM_WORKSHEET:
+          this.handlePageByRefreshFailedRemove(objectWorkingIds[0]);
+          break;
+        default:
+          break;
+      }
+    };
+
+    setDialogPopup({
+      type: PopupTypes.FAILED_TO_REFRESH_PAGES_OVERVIEW,
+      onOk: (refreshFailedOptions: PageByRefreshFailedOptions): void => onOk(refreshFailedOptions),
+      onClose: onCancel,
     });
   }
 

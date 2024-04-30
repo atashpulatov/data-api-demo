@@ -2,8 +2,8 @@ import { t } from 'i18next';
 
 import {
   DossierDefinition,
+  FiltersText,
   ReportDefinition,
-  ReportFiltersText,
   Token,
 } from './object-filter-helper-types';
 
@@ -15,7 +15,7 @@ import {
  */
 const convertTokensToString = (tokens: Token[]): string =>
   // slice(1) to remove the first token which is the root token, "%"
-  tokens
+  tokens?.length && tokens
     .slice(1)
     .map(token => {
       if (token.type === 'function') {
@@ -39,9 +39,7 @@ const convertTokensToString = (tokens: Token[]): string =>
  * @param reportDefinition - The filter data object which is the response from the API call to get the report filter data.
  * @returns An object containing the generated report filter text, report limits text, view filter text, and metric limits text.
  */
-export const generateReportFilterTexts = (
-  reportDefinition: ReportDefinition
-): ReportFiltersText => {
+export const generateReportFilterTexts = (reportDefinition: ReportDefinition): FiltersText => {
   const reportFilter = reportDefinition?.dataSource?.filter;
   const reportLimits = reportDefinition?.dataSource?.dataTemplate?.units.find(
     unit => unit.type === 'metrics'
@@ -51,10 +49,11 @@ export const generateReportFilterTexts = (
     unit => unit.type === 'metrics'
   ).elements;
 
-  const reportFilterText = convertTokensToString(reportFilter.tokens);
-  const reportLimitsText = convertTokensToString(reportLimits.tokens);
-  const viewFilterText = convertTokensToString(viewFilter.tokens);
-  const metricLimitsText = `( ${metricLimits.map(element => element.limit.text).join(` ) ${t('and').toUpperCase()} ( `)} )`;
+  const reportFilterText = convertTokensToString(reportFilter.tokens) || "-";
+  const reportLimitsText = convertTokensToString(reportLimits.tokens) || "-";
+  const viewFilterText = convertTokensToString(viewFilter.tokens) || "-";
+  const metricLimitsText = metricLimits.some(element => element.limit?.text) ?
+    `( ${metricLimits.map(element => element.limit.text).join(` ) ${t('and').toUpperCase()} ( `)} )` : "-";
 
   return {
     reportFilterText,
@@ -67,13 +66,14 @@ export const generateReportFilterTexts = (
 /**
  * Generates the filter text for a dossier based on the provided filter data.
  * @param dossierDefinition - The filter data for the dossier.
+ * @param chapterKey - The chapter key of the dossier to generate the filter text for.
  * @returns The generated filter text.
  */
-export const generateDossierFilterText = (dossierDefinition: DossierDefinition): string => {
-  const currentChapterKey = dossierDefinition.currentChapter;
-  const selectedChapter = dossierDefinition.chapters.find(
-    chapter => chapter.key === currentChapterKey
-  );
+export const generateDossierFilterText = (
+  dossierDefinition: DossierDefinition,
+  chapterKey: string
+): string => {
+  const selectedChapter = dossierDefinition.chapters.find(chapter => chapter.key === chapterKey);
 
   const dossierFilterSummary = `( ${selectedChapter.filters
     .map(filter => filter.summary)

@@ -31,7 +31,7 @@ describe('SidePanelService', () => {
     expect(setSidePanelPopup).toBeCalledTimes(1);
   });
 
-  it('setPageByRefreshFailedPopup should set up range taken popup', () => {
+  it('should call setSidePanelPopup when setPageByRefreshFailedPopup is triggered', () => {
     // given
     const objectWorkingId = 1;
     const selectedObjects = [
@@ -50,6 +50,25 @@ describe('SidePanelService', () => {
       setSidePanelPopup,
       callback,
       edit: jest.fn(),
+    });
+    // then
+    expect(setSidePanelPopup).toBeCalledTimes(1);
+  });
+
+  it('setPageByImportFailedPopup should set up range taken popup', () => {
+    // given
+    const objectWorkingId = 1;
+    const setSidePanelPopup = jest.fn();
+    const errorDetails = 'errorDetails';
+
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+
+    // when
+    sidePanelNotificationHelper.setPageByImportFailedPopup({
+      objectWorkingId,
+      setSidePanelPopup,
+      errorDetails,
+      callback: jest.fn(),
     });
     // then
     expect(setSidePanelPopup).toBeCalledTimes(1);
