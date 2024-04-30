@@ -8,15 +8,16 @@ class InitializationErrorDecorator {
    * @returns  Descriptor with modified method
    */
   initializationWrapper(
-    target: unknown,
+    _target: unknown,
     _propertyKey: string,
     descriptor: PropertyDescriptor
   ): PropertyDescriptor {
     const originalMethod = descriptor.value;
 
-    descriptor.value = async (...args: unknown[]) => {
+    // eslint-disable-next-line func-names
+    descriptor.value = async function (...args: unknown[]) {
       try {
-        return await originalMethod.apply(target, args);
+        return await originalMethod.apply(this, args);
       } catch (error) {
         // TODO: For now we are just logging the error - as to not stop other initialization operations,
         // but we should handle it properly
