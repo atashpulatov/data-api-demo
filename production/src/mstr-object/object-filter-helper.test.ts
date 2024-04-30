@@ -118,7 +118,7 @@ describe('generateReportFilterTexts', () => {
 
     // when
     const result = generateReportFilterTexts(filterData);
-    console.log(result);
+
     // then
     expect(result.reportFilterText).toBe('NOT ( filter1 AND filter2 )');
     expect(result.reportLimitsText).toBe('NOT ( limit1 OR limit2 )');
@@ -144,6 +144,8 @@ describe('generateDossierFilterText', () => {
     } as DossierDefinition;
 
     const expectedOutput = '( filter1 ) AND ( filter2 )';
-    expect(generateDossierFilterText(mockDossierDefinition)).toBe(expectedOutput);
+    expect(
+      generateDossierFilterText(mockDossierDefinition, mockDossierDefinition.chapters[0].key)
+    ).toBe(expectedOutput);
   });
 });

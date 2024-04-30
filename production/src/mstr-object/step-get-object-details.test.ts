@@ -20,8 +20,12 @@ describe('StepGetObjectDetails', () => {
   const mockedReturn = {
     ancestors: { mockedProp: 'some ancestors' },
     certifiedInfo: { mockedProp: 'some certified info' },
-    dateModified: { mockedProp: 'some date modified' },
-    owner: { mockedProp: 'some owner' },
+    dateCreated: 'some date created',
+    dateModified: 'some date modified',
+    description: 'some description',
+    owner: 'some owner',
+    objectFilters: { viewFilter: undefined as any },
+    version: "1.0",
     name: 'testName',
   };
 
@@ -71,6 +75,7 @@ describe('StepGetObjectDetails', () => {
     jest
       .spyOn(objectDetailsMethods, 'populateDetails')
       .mockImplementation(() => ({}) as ObjectDetails);
+
     // when
     await stepGetObjectDetails.getObjectDetails(objectDataMock, operationDataMock);
     // then
@@ -78,8 +83,12 @@ describe('StepGetObjectDetails', () => {
     expect(objectDetailsMethods.populateDetails).toBeCalledWith(
       mockedReturn.ancestors,
       mockedReturn.certifiedInfo,
+      mockedReturn.dateCreated,
       mockedReturn.dateModified,
-      mockedReturn.owner
+      mockedReturn.description,
+      mockedReturn.objectFilters,
+      mockedReturn.owner,
+      mockedReturn.version
     );
   });
 

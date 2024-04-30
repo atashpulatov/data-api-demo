@@ -1,5 +1,6 @@
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { mstrObjectRestService } from './mstr-object-rest-service';
+import { FiltersText } from './object-filter-helper-types';
 
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectInfoSetting } from '../redux-reducer/settings-reducer/settings-reducer-types';
@@ -51,14 +52,22 @@ export const populateDefinition = (
 export const populateDetails = (
   ancestors: any,
   certifiedInfo: boolean,
-  dateModified: string,
-  owner: string
+  createdDate: string,
+  modifiedDate: string,
+  description: string,
+  filters: FiltersText,
+  owner: string,
+  version: string
 ): ObjectDetails => ({
   ancestors,
   certified: certifiedInfo,
-  modifiedDate: dateModified,
-  owner,
+  createdDate,
+  description,
   importedBy: authenticationHelper.getCurrentMstrUserFullName(),
+  modifiedDate,
+  filters,
+  owner,
+  version,
 });
 
 /**

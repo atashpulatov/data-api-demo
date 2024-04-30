@@ -1,7 +1,9 @@
 import { mstrObjectRestService } from './mstr-object-rest-service';
+import { generateDossierFilterText, generateReportFilterTexts } from './object-filter-helper';
+import { FiltersText } from './object-filter-helper-types';
 
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
-import { ObjectData } from '../types/object-types';
+import { ObjectData, VisualizationInfo } from '../types/object-types';
 
 import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
@@ -38,12 +40,59 @@ class StepGetObjectDetails {
     try {
       const { objectWorkingId, objectId, projectId, mstrObjectType } = objectData;
 
-      const { ancestors, certifiedInfo, dateModified, owner, name } =
-        await mstrObjectRestService.getObjectInfo(objectId, projectId, mstrObjectType);
+      const {
+        ancestors,
+        certifiedInfo,
+        dateCreated,
+        dateModified,
+        description,
+        owner,
+        name,
+        version,
+      } = await mstrObjectRestService.getObjectInfo(objectId, projectId, mstrObjectType);
 
       const prompts = await getObjectPrompts(objectData, objectId, projectId, operationData);
 
-      const details = populateDetails(ancestors, certifiedInfo, dateModified, owner);
+      const getFilterInformation = async (): Promise<FiltersText> => {
+        let filtersText;
+        switch (mstrObjectType.name) {
+          case 'report': {
+            const reportDefinition = await mstrObjectRestService.getReportDefinition(
+              objectId,
+              projectId
+            );
+            return generateReportFilterTexts(reportDefinition);
+          }
+          case 'dossier': {
+            const dossierDefinition = await mstrObjectRestService.getDossierDefinition(
+              objectId,
+              projectId
+            );
+            const { chapterKey } = objectData.visualizationInfo as VisualizationInfo;
+            filtersText = {
+              viewFilterText: generateDossierFilterText(dossierDefinition, chapterKey),
+            };
+            break;
+          }
+          default:
+            // TODO: transform to string, cause it returns {operands: any[], operator: string}
+            filtersText = { viewFilter: objectData.body?.viewFilter } as FiltersText;
+        }
+        return filtersText;
+      };
+
+      const objectFilters = await getFilterInformation();
+
+      const details = populateDetails(
+        ancestors,
+        certifiedInfo,
+        dateCreated,
+        dateModified,
+        description,
+        objectFilters,
+        owner,
+        version
+      );
       const definition = populateDefinition(objectData, prompts, name);
 
       const updatedObject = {
