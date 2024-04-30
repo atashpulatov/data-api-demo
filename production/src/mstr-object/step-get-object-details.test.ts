@@ -25,7 +25,7 @@ describe('StepGetObjectDetails', () => {
     description: 'some description',
     owner: 'some owner',
     objectFilters: { viewFilter: undefined as any },
-    version: "1.0",
+    version: '1.0',
     name: 'testName',
   };
 
@@ -101,7 +101,7 @@ describe('StepGetObjectDetails', () => {
       .mockImplementation(() => ({}) as ObjectDetails);
     jest
       .spyOn(objectDetailsMethods, 'populateDefinition')
-      .mockImplementation(() => ({}) as ObjectData & { sourceName: string });
+      .mockImplementation(() => ({}) as ObjectData);
 
     // when
     await stepGetObjectDetails.getObjectDetails(objectDataMock, operationDataMock);
@@ -123,7 +123,7 @@ describe('StepGetObjectDetails', () => {
       .mockImplementation(() => mockedDetailsReturn as unknown as ObjectDetails);
     jest
       .spyOn(objectDetailsMethods, 'populateDefinition')
-      .mockImplementation(() => ({}) as ObjectData & { sourceName: string });
+      .mockImplementation(() => ({}) as ObjectData);
     // when
     await stepGetObjectDetails.getObjectDetails(objectDataMock, operationDataMock);
     // then
@@ -132,6 +132,7 @@ describe('StepGetObjectDetails', () => {
       definition: {},
       ...objectDataMock,
       details: mockedDetailsReturn,
+      name: 'testName',
     });
   });
 
@@ -147,9 +148,7 @@ describe('StepGetObjectDetails', () => {
       .mockImplementation(() => mockedDetailsReturn as unknown as ObjectDetails);
     jest
       .spyOn(objectDetailsMethods, 'populateDefinition')
-      .mockImplementation(
-        () => mockedPopulateDefinitionReturn as unknown as ObjectData & { sourceName: string }
-      );
+      .mockImplementation(() => mockedPopulateDefinitionReturn as unknown as ObjectData);
     // when
     await stepGetObjectDetails.getObjectDetails(objectDataMock, operationDataMock);
     // then
@@ -158,6 +157,7 @@ describe('StepGetObjectDetails', () => {
       ...objectDataMock,
       details: mockedDetailsReturn,
       definition: mockedPopulateDefinitionReturn,
+      name: 'testName',
     });
   });
 });

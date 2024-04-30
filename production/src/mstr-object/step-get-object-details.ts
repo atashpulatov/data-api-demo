@@ -96,9 +96,13 @@ class StepGetObjectDetails {
       );
       const definition = populateDefinition(objectData, prompts, name);
 
-      const newObjectName =
-        pageByData &&
-        pageByHelper.prepareNameBasedOnPageBySettings(definition.sourceName, pageByData);
+      let newObjectName = name;
+      if (pageByData) {
+        newObjectName = pageByHelper.prepareNameBasedOnPageBySettings(
+          definition.sourceName,
+          pageByData
+        );
+      }
 
       const updatedObject = {
         ...objectData,

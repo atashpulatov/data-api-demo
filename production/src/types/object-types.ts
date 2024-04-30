@@ -151,6 +151,7 @@ export interface ObjectData {
   visualizationInfo?: false | VisualizationInfo;
   objectSettings?: ObjectSettings;
   pageByConfigurations?: PageByConfiguration[][];
+  sourceName?: string;
 }
 
 export interface ObjectSettings {

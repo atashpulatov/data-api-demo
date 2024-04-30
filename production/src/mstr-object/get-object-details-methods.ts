@@ -43,7 +43,7 @@ export const populateDefinition = (
   objectData: ObjectData,
   prompts?: any,
   name?: string
-): ObjectData & { sourceName: string } => ({
+): ObjectData => ({
   ...objectData.definition,
   sourceName: name,
   ...(prompts?.length ? { prompts } : {}),
