@@ -23,7 +23,10 @@ import {
   importRequested,
 } from '../redux-reducer/operation-reducer/operation-actions';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
-import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
+import {
+  clearRepromptTask,
+  executeNextRepromptTask,
+} from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import { DisplayAttrFormNames } from '../mstr-object/constants';
 
 const URL = `${window.location.href}`;
@@ -257,6 +260,7 @@ class PopupController {
       commandError,
       commandDialogLoaded,
       commandCloseDialog,
+      commandExecuteNextRepromptTask,
     } = selectorProperties;
 
     const dialogType = this.reduxStore.getState().popupStateReducer.popupType;
@@ -269,6 +273,10 @@ class PopupController {
     if (command === commandCloseDialog) {
       this.closeDialog(dialog);
       this.resetDialogStates();
+    }
+
+    if (command === commandExecuteNextRepromptTask) {
+      this.reduxStore.dispatch(executeNextRepromptTask());
     }
 
     const isMultipleRepromptQueueEmptyAndOverviewClosed =
@@ -364,7 +372,7 @@ class PopupController {
    * @param reportParams Contains information about the currently selected object
    */
   onCommandOk = async (response: DialogResponse, reportParams: ReportParams): Promise<void> => {
-    if (!reportParams) {
+    if (!reportParams || response.pageByConfigurations?.length) {
       return this.handleOkCommand(response);
     }
 
@@ -387,6 +395,7 @@ class PopupController {
 
     if (
       !reportParams ||
+      response.pageByConfigurations?.length ||
       (pageByData && pageByData.pageByDisplayType !== PageByDisplayType.DEFAULT_PAGE)
     ) {
       // TODO: Add error handling for re-importing Page-by on Edit

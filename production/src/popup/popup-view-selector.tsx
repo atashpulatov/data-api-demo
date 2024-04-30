@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { PageBy } from '@mstr/connector-components';
 
+import { handleExecuteNextRepromptTask } from '../helpers/prompts-handling-helper';
 import { ObtainInstanceHelper } from './obtain-instance-helper';
 import { popupHelper } from './popup-helper';
 import { popupViewSelectorHelper } from './popup-view-selector-helper';
@@ -85,8 +86,14 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
         <PageBy
           pageByData={pageBy}
           objectName={chosenObjectName}
-          onImport={pageByConfigurations => importPageByConfigurations(pageByConfigurations)}
-          onCancel={() => requestPageByModalClose()}
+          onImport={pageByConfigurations => {
+            importPageByConfigurations(pageByConfigurations);
+            requestPageByModalClose();
+          }}
+          onCancel={() => {
+            requestPageByModalClose();
+            handleExecuteNextRepromptTask();
+          }}
         />
       )}
       {renderProperComponent(popupType)}

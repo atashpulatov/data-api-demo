@@ -1,6 +1,9 @@
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
+import { popupHelper } from '../popup/popup-helper';
 
 import { PromptsAnswer } from '../redux-reducer/answers-reducer/answers-reducer-types';
+
+import { selectorProperties } from '../attribute-selector/selector-properties';
 
 const sleep = (milliseconds: number): Promise<void> =>
   new Promise(resolve => {
@@ -402,3 +405,12 @@ export async function mergeAnswersWithPromptsDefined(
   promptsAnsDef?.length > 0 &&
     updateAnswersWithPromptsDef(currentAnswers, promptsAnsDef, areReportAnswers);
 }
+
+/**
+ * Sends a message to the sidepanel in order to execute the next reprompt task.
+ */
+export const handleExecuteNextRepromptTask = (): void => {
+  const { commandExecuteNextRepromptTask } = selectorProperties;
+  const message = { command: commandExecuteNextRepromptTask };
+  popupHelper.officeMessageParent(message);
+};
