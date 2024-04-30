@@ -101,7 +101,7 @@ describe('StepGetObjectDetails', () => {
       .mockImplementation(() => ({}) as ObjectDetails);
     jest
       .spyOn(objectDetailsMethods, 'populateDefinition')
-      .mockImplementation(() => ({}) as ObjectData);
+      .mockImplementation(() => ({}) as ObjectData & { sourceName: string });
 
     // when
     await stepGetObjectDetails.getObjectDetails(objectDataMock, operationDataMock);
@@ -123,7 +123,7 @@ describe('StepGetObjectDetails', () => {
       .mockImplementation(() => mockedDetailsReturn as unknown as ObjectDetails);
     jest
       .spyOn(objectDetailsMethods, 'populateDefinition')
-      .mockImplementation(() => ({}) as ObjectData);
+      .mockImplementation(() => ({}) as ObjectData & { sourceName: string });
     // when
     await stepGetObjectDetails.getObjectDetails(objectDataMock, operationDataMock);
     // then
@@ -147,7 +147,9 @@ describe('StepGetObjectDetails', () => {
       .mockImplementation(() => mockedDetailsReturn as unknown as ObjectDetails);
     jest
       .spyOn(objectDetailsMethods, 'populateDefinition')
-      .mockImplementation(() => mockedPopulateDefinitionReturn as unknown as ObjectData);
+      .mockImplementation(
+        () => mockedPopulateDefinitionReturn as unknown as ObjectData & { sourceName: string }
+      );
     // when
     await stepGetObjectDetails.getObjectDetails(objectDataMock, operationDataMock);
     // then
