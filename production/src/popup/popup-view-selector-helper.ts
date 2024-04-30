@@ -18,18 +18,40 @@ import { DisplayAttrFormNames } from '../mstr-object/constants';
 const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
 class PopupViewSelectorHelper {
+  /**
+   * Determines whether the currently open dialog is displaying the prompts editor for a report
+   * in the Overview dialog, or from the SidePanel.
+   *
+   * @param popupType - The type of the popup to check.
+   * @returns - returns true if the popup type is a prompted report.
+   */
+  isRepromptReportPopupType(popupType: DialogType): boolean {
+    return (
+      popupType === DialogType.repromptingWindow ||
+      popupType === DialogType.repromptReportDataOverview
+    );
+  }
+
+  /**
+   * Determines the type of the Prompted popup to show based on the workflow.
+   * If we are in the Multiple Reprompt workflow (reprompt queue isn't empty), and current prompted object being processed
+   * is a Report, then it means we are in the transition period waiting for the next prompted object to be reprompted.
+   * In this case, it returns 'multipleRepromptTransitionPage' (intermediate) for prompted reports only.
+   * Otherwise, we are in the final step of the Prepare Data or Edit workflow, and it returns 'editFilters'.
+   *
+   * @param props - collection of properties passsed that contains repromptsQueueProps property
+   * @returns - returns the type of the Prompted popup type to show
+   */
+  getPromptedReportPopupType = (props: any): DialogType =>
+    this.isMultipleReprompt(props)
+      ? DialogType.multipleRepromptTransitionPage
+      : DialogType.editFilters;
+
   setPopupType(props: any, popupType: DialogType): DialogType {
     const { importRequested, dossierOpenRequested, isPrompted, pageBy } = props;
     const arePromptsAnswered = this.arePromptsAnswered(props);
     const shouldProceedToImport =
       importRequested && (!isPrompted || arePromptsAnswered) && !pageBy?.length;
-    const getPromptedReportPopupType = (): DialogType =>
-      // If we are in Multiple Reprompt workflow and get to this point, we are in
-      // the transition period waiting for the next object to be reprompted.
-      // Otherwise, we are in the final step of Prepare Data or Edit workflow.
-      this.isMultipleReprompt(props)
-        ? DialogType.multipleRepromptTransitionPage
-        : DialogType.editFilters;
 
     if (shouldProceedToImport) {
       this.proceedToImport(props);
@@ -39,8 +61,14 @@ class PopupViewSelectorHelper {
       // action triggered by the Prompts dialog, it could lead to a cyclical loop in the prompts page
       // when editing a prompted report.
       if (this.isInstanceWithPromptsAnswered(props)) {
-        if (popupType === DialogType.repromptingWindow) {
-          return getPromptedReportPopupType();
+        // Handle the case when the user is editing a prompted report from either SidePanel or Overview dialog.
+        if (this.isRepromptReportPopupType(popupType)) {
+          // Return whether the Multiple Reprompt Transition Page should be shown in
+          // the case of a having multiple prompted objects in the queue and current one is prompted report
+          // being processed. In the case of Dossiers, it will not show the Multiple Reprompt Transition Page.
+          // Note: both, multiple transition page and Dossier window, will render the popup notification when it's
+          // applicable, such as the range taken notification.
+          return this.getPromptedReportPopupType(props);
         }
       } else {
         return DialogType.obtainInstanceHelper;
@@ -132,9 +160,9 @@ class PopupViewSelectorHelper {
       count += 1;
     }
     const body = this.createBody(
-      props.editedObject && props.editedObject.selectedAttributes,
-      props.editedObject && props.editedObject.selectedMetrics,
-      props.editedObject && props.editedObject.selectedFilters
+      props.editedObject?.selectedAttributes,
+      props.editedObject?.selectedMetrics,
+      props.editedObject?.selectedFilters
     );
     const preparedReport = {
       id: objectId,

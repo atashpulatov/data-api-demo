@@ -624,4 +624,29 @@ describe('PopupController', () => {
     expect(handleErrorSpy).toHaveBeenCalled();
     expect(runImportedDataOverviewPopupSpy).toHaveBeenCalled();
   });
+
+  it('should return true for valid overview popup types', () => {
+    const validPopupTypes = [
+      DialogType.repromptReportDataOverview,
+      DialogType.repromptDossierDataOverview,
+    ];
+
+    validPopupTypes.forEach(popupType => {
+      const result = popupController.isDataRangeCommandForMultipleRepromptDialogInOverview(
+        popupType,
+        'overview-range-taken-ok'
+      );
+      expect(result).toBe(true);
+    });
+  });
+
+  it('should return false for invalid overview popup types', () => {
+    const invalidPopupType = DialogType.dataPreparation;
+    const result = popupController.isDataRangeCommandForMultipleRepromptDialogInOverview(
+      invalidPopupType,
+      'command'
+    );
+
+    expect(result).toBe(false);
+  });
 });
