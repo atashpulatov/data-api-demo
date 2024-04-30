@@ -5,6 +5,8 @@
   overflow: hidden;
   min-width: 100%;
   overflow-x: auto;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .library-window .title-bar {
