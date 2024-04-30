@@ -28,6 +28,7 @@ export enum ErrorType {
   INVALID_VIZ_KEY = 'invalidVizKey',
   EXCEEDS_EXCEL_API_LIMITS = 'exceedExcelApiLimit',
   PAGE_BY_REFRESH_ERR = 'pageByRefresh',
+  PAGE_BY_IMPORT_ERR = 'pageByImport',
 }
 
 export enum IncomingErrorStrings {

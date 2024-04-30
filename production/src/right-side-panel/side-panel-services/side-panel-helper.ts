@@ -1,7 +1,11 @@
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
+import { officeRemoveHelper } from '../../office/remove/office-remove-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import officeStoreHelper from '../../office/store/office-store-helper';
+import { pageByHelper } from '../../page-by/page-by-helper';
+
+import officeStoreObject from '../../office/store/office-store-object';
 
 import { MstrObjectTypes } from '../../mstr-object/mstr-object-types';
 import { DialogType } from '../../redux-reducer/popup-state-reducer/popup-state-reducer-types';
@@ -9,7 +13,10 @@ import { ObjectData } from '../../types/object-types';
 
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
-import { duplicateRequested } from '../../redux-reducer/operation-reducer/operation-actions';
+import {
+  duplicateRequested,
+  removeRequested,
+} from '../../redux-reducer/operation-reducer/operation-actions';
 import { popupActions } from '../../redux-reducer/popup-reducer/popup-actions';
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
 import { clearRepromptTask } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
@@ -30,6 +37,26 @@ class SidePanelHelper {
    */
   clearRepromptTask(): void {
     this.reduxStore.dispatch(clearRepromptTask());
+  }
+
+  /**
+   * Revert PageBy Import: If already imported, removes from the Excel worksheet; if not yet imported, deletes from the Redux store.
+   *
+   * @param objectWorkingId Contains unique Id of the object, allowing to reference source object.
+   */
+  async revertPageByImportForSiblings(objectWorkingId: number): Promise<void> {
+    const excelContext = await officeApiHelper.getExcelContext();
+    const { pageBySiblings } = pageByHelper.getAllPageByObjects(objectWorkingId);
+    pageBySiblings.forEach(async (pageByObject: ObjectData) => {
+      const objectExist = await officeRemoveHelper.checkIfObjectExist(pageByObject, excelContext);
+      if (objectExist) {
+        this.reduxStore.dispatch(
+          removeRequested(pageByObject.objectWorkingId, pageByObject?.importType)
+        );
+      } else {
+        officeStoreObject.removeObjectFromStore(pageByObject.objectWorkingId);
+      }
+    });
   }
 
   /**

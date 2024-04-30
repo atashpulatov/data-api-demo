@@ -117,4 +117,47 @@ describe('useGetSidePanelPopup', () => {
     // Then
     expect(setRangeTakenPopupMock).toHaveBeenCalled();
   });
+
+  it('should call setPageByImportFailedPopup when conditions are met', () => {
+    // Given
+    const sidePanelPopupMock = { type: PopupTypes.FAILED_TO_IMPORT };
+    const setSidePanelPopupMock = jest.fn();
+
+    const initialState = {
+      officeReducer: {
+        popupData: { type: PopupTypes.FAILED_TO_IMPORT },
+        selectedObjects: [] as unknown as ObjectData[],
+        isSecured: false,
+        isClearDataFailed: false,
+      },
+      popupStateReducer: {
+        isDataOverviewOpen: false,
+      },
+      repromptsQueueReducer: {
+        repromptsQueue: [] as any,
+      },
+    };
+
+    // @ts-expect-error
+    const store = createStore(rootReducer, initialState);
+
+    const setPageByImportFailedPopupMock = jest
+      .spyOn(sidePanelNotificationHelper, 'setPageByImportFailedPopup')
+      .mockImplementation(() => {});
+
+    // When
+    renderHook(
+      () =>
+        useGetSidePanelPopup({
+          sidePanelPopup: sidePanelPopupMock,
+          setSidePanelPopup: setSidePanelPopupMock,
+        }),
+      {
+        wrapper: ({ children }) => <Provider store={store}>{children}</Provider>,
+      }
+    );
+
+    // Then
+    expect(setPageByImportFailedPopupMock).toHaveBeenCalled();
+  });
 });

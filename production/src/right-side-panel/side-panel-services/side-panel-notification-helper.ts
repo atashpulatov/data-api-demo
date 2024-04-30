@@ -234,6 +234,37 @@ class SidePanelNotificationHelper {
   };
 
   /**
+   * Creates pageby import failed popup.
+   *
+   * @param data  Data required to create and update pageby refresh failed popup.
+   * @param data.objectWorkingId  Uniqe id of source object for duplication.
+   * @param data.setSidePanelPopup Callback to save popup in state of RightSidePanel.
+   * @param data.errorDetails  Details of the error that occurred during import.
+   */
+  setPageByImportFailedPopup = ({
+    objectWorkingId,
+    setSidePanelPopup,
+    errorDetails,
+    callback,
+  }: {
+    objectWorkingId: number;
+    setSidePanelPopup: Function;
+    errorDetails: string;
+    callback: () => Promise<void>;
+  }): void => {
+    const onOk = async (): Promise<void> => {
+      await sidePanelHelper.revertPageByImportForSiblings(objectWorkingId);
+      this.clearPopupDataAndRunCallback(callback);
+    };
+
+    setSidePanelPopup({
+      type: PopupTypes.FAILED_TO_IMPORT,
+      errorDetails,
+      onOk,
+    });
+  };
+
+  /**
    * Clears the rendered popup data and runs the provided callback.
    *
    * @param callback Callback to run after clearing the popup data.

@@ -8,9 +8,8 @@ import { ObjectData } from '../types/object-types';
 
 import { OperationTypes } from '../operation/operation-type-names';
 import { errorService } from './error-handler';
+import { ErrorType } from './constants';
 
-jest.mock('../office/store/office-reducer-helper');
-jest.mock('../store');
 jest.mock('../notification/notification-service');
 
 describe('ErrorService', () => {
@@ -30,7 +29,7 @@ describe('ErrorService', () => {
       },
     };
     const callback = jest.fn();
-    const operationData = {} as OperationData;
+    const operationData = { operationType: OperationTypes.REFRESH_OPERATION } as OperationData;
 
     errorService.getErrorDetails = jest.fn().mockReturnValue('error details');
     errorService.reduxStore = {
@@ -39,6 +38,7 @@ describe('ErrorService', () => {
         officeReducer: { isDialogOpen: false },
         operationReducer: { operations: [{ operationType: OperationTypes.REFRESH_OPERATION }] },
       }),
+      dispatch: jest.fn(),
     };
 
     jest.spyOn(errorService, 'closePromptsDialogInOverview').mockImplementation();
@@ -175,4 +175,31 @@ describe('ErrorService', () => {
     expect(notificationService.showObjectWarning).not.toHaveBeenCalled();
     expect(officeReducerHelper.displayPopup).not.toHaveBeenCalled();
   });
+
+  it.each`
+    operationType                          | objectFromObjectReducer | expectedErrorType
+    ${OperationTypes.IMPORT_OPERATION}     | ${{}}                   | ${undefined}
+    ${OperationTypes.CLEAR_DATA_OPERATION} | ${{ pageByData: {} }}   | ${undefined}
+    ${OperationTypes.IMPORT_OPERATION}     | ${{ pageByData: {} }}   | ${ErrorType.PAGE_BY_IMPORT_ERR}
+  `(
+    'getPageByError should work properly',
+    ({ operationType, objectFromObjectReducer, expectedErrorType }) => {
+      // given
+      const officeReducerHelperMock = jest
+        .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId')
+        .mockReturnValue(objectFromObjectReducer);
+      // when
+      const errorType = errorService.getPageByError(
+        {
+          operationType,
+          objectWorkingId: 1,
+        } as OperationData,
+        {}
+      );
+
+      // then
+      expect(officeReducerHelperMock).toHaveBeenCalled();
+      expect(errorType).toEqual(expectedErrorType);
+    }
+  );
 });
