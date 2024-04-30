@@ -49,11 +49,14 @@ export const generateReportFilterTexts = (reportDefinition: ReportDefinition): F
     unit => unit.type === 'metrics'
   ).elements;
 
+  const joinDelimiter = ` ) ${t('and').toUpperCase()} ( `;
   const reportFilterText = convertTokensToString(reportFilter.tokens) || "-";
   const reportLimitsText = convertTokensToString(reportLimits.tokens) || "-";
+  const definedMetricLimits = metricLimits.filter(element => element.limit);
+  const metricLimitsText = definedMetricLimits.length ?
+    `( ${definedMetricLimits.map(element => element.limit.text).join(joinDelimiter)} )` : "-";
+
   const viewFilterText = convertTokensToString(viewFilter.tokens) || "-";
-  const metricLimitsText = metricLimits.some(element => element.limit?.text) ?
-    `( ${metricLimits.map(element => element.limit.text).join(` ) ${t('and').toUpperCase()} ( `)} )` : "-";
 
   return {
     reportFilterText,

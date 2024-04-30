@@ -4,7 +4,7 @@ import { FiltersText } from './object-filter-helper-types';
 
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectInfoSetting } from '../redux-reducer/settings-reducer/settings-reducer-types';
-import { ObjectData, ObjectDetails } from '../types/object-types';
+import { ObjectData, ObjectDetails, Owner } from '../types/object-types';
 
 import mstrObjectEnum from './mstr-object-type-enum';
 
@@ -56,7 +56,7 @@ export const populateDetails = (
   modifiedDate: string,
   description: string,
   filters: FiltersText,
-  owner: string,
+  owner: Owner,
   version: string
 ): ObjectDetails => ({
   ancestors,

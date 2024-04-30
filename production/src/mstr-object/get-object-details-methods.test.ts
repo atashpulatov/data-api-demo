@@ -254,7 +254,7 @@ describe('Get Object Details Methods', () => {
         .spyOn(authenticationHelper, 'getCurrentMstrUserFullName')
         .mockImplementation(() => mockedUserName);
       // when
-      populateDetails({}, true, '', '', '', {}, '', '');
+      populateDetails({}, true, '', '', '', {}, null, '');
       // then
       expect(authenticationHelper.getCurrentMstrUserFullName).toBeCalled();
     });
@@ -270,7 +270,7 @@ describe('Get Object Details Methods', () => {
       const mockedDateModified = 'Some date';
       const mockedDateCreated = 'Some date';
       const mockedDescription = 'Some description';
-      const mockedOwner = 'Some owner';
+      const mockedOwner = { name: 'Some owner', id: 'Some id', expired: false };
       const mockedVersion = 'Some version';
       const mockedFilters = {};
       const expectedDetails = {

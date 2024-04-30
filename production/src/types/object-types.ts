@@ -8,8 +8,13 @@ import { PageByData } from '../page-by/page-by-types';
 
 import { DisplayAttrFormNames, ObjectImportType } from '../mstr-object/constants';
 
+export interface Owner {
+  name: string;
+  id: string;
+  expired: boolean;
+}
+
 export interface ObjectDetails {
-  [key: string]: string | boolean | TableDimensions | FiltersText;
   ancestors: any;
   certified: boolean;
   createdDate: string;
@@ -18,7 +23,7 @@ export interface ObjectDetails {
   filters: FiltersText;
   importedBy: string;
   modifiedDate: string;
-  owner: string;
+  owner: Owner;
   version: string;
 }
 

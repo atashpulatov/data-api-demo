@@ -1,3 +1,4 @@
+import { getObjectDetailsForWorksheet } from '../../mstr-object/object-info-helper';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 import { officeApiWorksheetHelper } from '../api/office-api-worksheet-helper';
@@ -75,12 +76,34 @@ class OfficeTableCreate {
       startCell = await officeApiHelper.getSelectedCell(excelContext);
     }
 
+    const { objectDetailsSize } = objectData.objectSettings;
+
+    if (objectDetailsSize > 0) {
+      // Offset the start cell by the number of rows needed for the object details
+      const lastCellOfDetails = officeApiHelper.offsetCellBy(
+        startCell,
+        objectDetailsSize - 1,
+        0
+      );
+      const tableDetailsAddress = `${startCell}:${lastCellOfDetails}`;
+      const tableDetailsRange = worksheet.getRange(tableDetailsAddress);
+
+      tableDetailsRange.values = getObjectDetailsForWorksheet(objectData);
+      startCell = officeApiHelper.offsetCellBy(startCell, objectDetailsSize, 0);
+    }
+
+
     const tableStartCell = this.getTableStartCell(
       startCell,
       instanceDefinition,
       prevOfficeTable,
       tableChanged
     );
+
+    console.log('-----> tableStartCell', tableStartCell);
+
+    console.log('-----> detilase gore degistirilmis startCell', startCell);
+
 
     const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
     const range = this.getObjectRange(tableStartCell, worksheet, tableRange, mstrTable);
@@ -115,6 +138,7 @@ class OfficeTableCreate {
       mstrTable,
       worksheet,
       excelContext,
+      newStartCell: startCell,
     });
   }
 
@@ -219,12 +243,14 @@ class OfficeTableCreate {
     mstrTable,
     worksheet,
     excelContext,
+    newStartCell,
   }: {
     officeTable: Excel.Table;
     newOfficeTableName: string;
     mstrTable: any;
     worksheet: Excel.Worksheet;
     excelContext: Excel.RequestContext;
+    newStartCell: string;
   }): Promise<any> {
     const { isCrosstab } = mstrTable;
     try {
@@ -255,6 +281,7 @@ class OfficeTableCreate {
         tableName: newOfficeTableName,
         worksheet: { id, name, index },
         groupData: { key: index, title: name },
+        newStartCell,
       };
     } catch (error) {
       await excelContext.sync();

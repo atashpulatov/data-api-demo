@@ -66,7 +66,7 @@ class StepRemoveObjectDetails {
 
         // delete the object details only if the table is not moved
         if (currentCell === startCell) {
-          headerCell.getRowsAbove(objectDetailsSize + 2).clear('Contents');
+          headerCell.getRowsAbove(objectDetailsSize).clear('Contents');
         }
 
         await excelContext.sync();

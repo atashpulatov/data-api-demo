@@ -50,6 +50,7 @@ class StepGetObjectDetails {
         name,
         version,
       } = await mstrObjectRestService.getObjectInfo(objectId, projectId, mstrObjectType);
+      console.log('objectData', objectData);
 
       const prompts = await getObjectPrompts(objectData, objectId, projectId, operationData);
 

@@ -26,7 +26,7 @@ class StepGetOfficeTableImport {
       const { objectWorkingId, excelContext, instanceDefinition, startCell, insertNewWorksheet } =
         operationData;
 
-      const { officeTable, bindId, tableName, worksheet, groupData } =
+      const { officeTable, bindId, tableName, worksheet, groupData, newStartCell } =
         await officeTableCreate.createOfficeTable({
           excelContext,
           instanceDefinition,
@@ -57,6 +57,7 @@ class StepGetOfficeTableImport {
           ...updatedObject,
           worksheet,
           groupData,
+          startCell: newStartCell,
         };
       }
 
