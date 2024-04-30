@@ -125,17 +125,12 @@ class StepGetInstanceDefinition {
 
       const { mstrTable } = instanceDefinition;
 
-      let objectName = name || mstrTable.name;
-      if (pageByData) {
-        objectName = pageByHelper.prepareNameBasedOnPageBySettings(objectName, pageByData);
-      }
-
       const updatedObject: Partial<ObjectData> = {
         objectWorkingId,
         envUrl: authenticationHelper.getCurrentMstrContext(),
         body,
         visualizationInfo: visualizationInfo || false,
-        name: objectName,
+        name: name || mstrTable.name,
         manipulationsXML: instanceDefinition.manipulationsXML || false,
         definition: {
           ...definition,

@@ -1,3 +1,4 @@
+import { pageByHelper } from '../page-by/page-by-helper';
 import { mstrObjectRestService } from './mstr-object-rest-service';
 import { generateDossierFilterText, generateReportFilterTexts } from './object-filter-helper';
 import { FiltersText } from './object-filter-helper-types';
@@ -38,7 +39,7 @@ class StepGetObjectDetails {
     console.time('Total');
 
     try {
-      const { objectWorkingId, objectId, projectId, mstrObjectType } = objectData;
+      const { objectWorkingId, objectId, projectId, mstrObjectType, pageByData } = objectData;
 
       const {
         ancestors,
@@ -95,8 +96,17 @@ class StepGetObjectDetails {
       );
       const definition = populateDefinition(objectData, prompts, name);
 
+      let newObjectName = name;
+      if (pageByData) {
+        newObjectName = pageByHelper.prepareNameBasedOnPageBySettings(
+          definition.sourceName,
+          pageByData
+        );
+      }
+
       const updatedObject = {
         ...objectData,
+        name: newObjectName,
         ...(details ? { details } : {}),
         ...(definition ? { definition } : {}),
       };

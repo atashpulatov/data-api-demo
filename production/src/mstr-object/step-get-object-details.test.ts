@@ -25,7 +25,7 @@ describe('StepGetObjectDetails', () => {
     description: 'some description',
     owner: 'some owner',
     objectFilters: { viewFilter: undefined as any },
-    version: "1.0",
+    version: '1.0',
     name: 'testName',
   };
 
@@ -132,6 +132,7 @@ describe('StepGetObjectDetails', () => {
       definition: {},
       ...objectDataMock,
       details: mockedDetailsReturn,
+      name: 'testName',
     });
   });
 
@@ -156,6 +157,7 @@ describe('StepGetObjectDetails', () => {
       ...objectDataMock,
       details: mockedDetailsReturn,
       definition: mockedPopulateDefinitionReturn,
+      name: 'testName',
     });
   });
 });
