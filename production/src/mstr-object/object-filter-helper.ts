@@ -66,6 +66,7 @@ export const generateReportFilterTexts = (reportDefinition: ReportDefinition): F
 /**
  * Generates the filter text for a dossier based on the provided filter data.
  * @param dossierDefinition - The filter data for the dossier.
+ * @param chapterKey - The chapter key of the dossier to generate the filter text for.
  * @returns The generated filter text.
  */
 export const generateDossierFilterText = (

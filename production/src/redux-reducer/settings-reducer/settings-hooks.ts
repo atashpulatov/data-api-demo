@@ -6,23 +6,31 @@ import { ObjectInfoSetting } from './settings-reducer-types';
 import { selectObjects } from '../object-reducer/object-reducer-selectors';
 import { settingsReducerSelectors } from './settings-reducer-selectors';
 
+/**
+ * Renames the keys of the given detailsSettings array based on specific mappings.
+ * @param detailsSettings - The array of ObjectInfoSetting objects to be processed.
+ * @returns The updated array of ObjectInfoSetting objects with renamed keys.
+ */
 const renameSettingsKeys = (detailsSettings: ObjectInfoSetting[]): ObjectInfoSetting[] =>
   detailsSettings.map(setting => {
-    if (setting.key === 'location') {
-      return { ...setting, key: 'ancestors' };
+    switch (setting.key) {
+      case 'location':
+        return { ...setting, key: 'ancestors' };
+      case 'filter':
+        return { ...setting, key: 'filters' };
+      case 'dateModified':
+        return { ...setting, key: 'modifiedDate' };
+      case 'dateCreated':
+        return { ...setting, key: 'createdDate' };
+      default:
+        return setting;
     }
-    if (setting.key === 'filter') {
-      return { ...setting, key: 'filters' };
-    }
-    if (setting.key === 'dateModified') {
-      return { ...setting, key: 'modifiedDate' };
-    }
-    if (setting.key === 'dateCreated') {
-      return { ...setting, key: 'createdDate' };
-    }
-    return setting;
   });
 
+/**
+ * Retrieves the side panel details settings from the Redux store and renames the keys.
+ * @returns An array of ObjectInfoSetting objects.
+ */
 const useGetSidePanelDetailsSettings = (): ObjectInfoSetting[] => {
   const sidePanelDetailsSettings = useSelector(
     settingsReducerSelectors.selectSidePanelObjectInfoSettings
@@ -30,6 +38,10 @@ const useGetSidePanelDetailsSettings = (): ObjectInfoSetting[] => {
   return renameSettingsKeys(sidePanelDetailsSettings);
 };
 
+/**
+ * Retrieves the worksheet details settings from the Redux store.
+ * @returns An array of ObjectInfoSetting objects representing the worksheet details settings.
+ */
 const useGetWorksheetDetailsSettings = (): ObjectInfoSetting[] => {
   const worksheetDetailsSettings = useSelector(
     settingsReducerSelectors.selectWorksheetObjectInfoSettings
@@ -39,6 +51,11 @@ const useGetWorksheetDetailsSettings = (): ObjectInfoSetting[] => {
 
 const useGetObjects = (): ObjectData[] => useSelector(selectObjects);
 
+/**
+ * Retrieves a filtered list of objects for the side panel details based on the provided settings.
+ * @param objects - The list of objects to filter.
+ * @returns The filtered list of objects for the side panel details.
+ */
 export const useGetFilteredObjectListForSidePanelDetails = (objects: ObjectData[]): ObjectData[] => {
   const sidePanelDetailsSettings = useGetSidePanelDetailsSettings();
 
