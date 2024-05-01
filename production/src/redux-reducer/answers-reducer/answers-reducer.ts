@@ -6,8 +6,6 @@ import {
   PromptsAnswer,
 } from './answers-reducer-types';
 
-import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-
 const initialState: AnswersState = { answers: [] };
 // eslint-disable-next-line default-param-last
 export const answersReducer = (state = initialState, action: AnswerActions): AnswersState => {
@@ -40,13 +38,7 @@ export const answersReducer = (state = initialState, action: AnswerActions): Ans
 function importRequested(state: AnswersState, payload: any): AnswersState {
   const { object: payloadObject = {} } = payload;
   let newAnswers = [...state.answers];
-  const isDossier =
-    (payloadObject.mstrObjectType && payloadObject.mstrObjectType.name) ===
-    mstrObjectEnum.mstrObjectType.visualization.name;
-  if (isDossier && payloadObject.promptsAnswers?.length > 0) {
-    const { answers } = payloadObject.promptsAnswers[0];
-    newAnswers = getMergedAnswers(state.answers, answers);
-  } else if (payloadObject.isPrompted && Array.isArray(payloadObject.promptsAnswers)) {
+  if (payloadObject.isPrompted && Array.isArray(payloadObject.promptsAnswers)) {
     payloadObject.promptsAnswers.forEach((promptsAnswer: any) => {
       const { answers } = promptsAnswer;
       if (answers) {
@@ -77,12 +69,7 @@ function restoreAllAnswers(payload: PromptsAnswer[] = []): AnswersState {
 function updateAnswers(state: AnswersState, payload: any): AnswersState {
   const { objectEditedData: payloadEditedObject = {} } = (payload && payload.operation) || {};
   let newAnswers = [...state.answers];
-  const isDossier = !!(payloadEditedObject && payloadEditedObject.visualizationInfo);
-  // for dossiers, check promptsAnswers directly. for reports, check isPrompted flag directly
-  if (isDossier && payloadEditedObject.promptsAnswers?.length > 0) {
-    const { answers } = payloadEditedObject.promptsAnswers[0];
-    newAnswers = getMergedAnswers(state.answers, answers);
-  } else if (payloadEditedObject.isPrompted && Array.isArray(payloadEditedObject.promptsAnswers)) {
+  if (payloadEditedObject.isPrompted && Array.isArray(payloadEditedObject.promptsAnswers)) {
     payloadEditedObject.promptsAnswers.forEach((promptsAnswer: any) => {
       const { answers } = promptsAnswer;
       if (answers) {

@@ -1,7 +1,11 @@
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { popupHelper } from '../popup/popup-helper';
 
-import { PromptsAnswer } from '../redux-reducer/answers-reducer/answers-reducer-types';
+import {
+  AnswersState,
+  PromptObject,
+  PromptsAnswer,
+} from '../redux-reducer/answers-reducer/answers-reducer-types';
 
 import { selectorProperties } from '../attribute-selector/selector-properties';
 
@@ -25,10 +29,10 @@ export const ObjectExecutionStatus = {
  * @returns
  */
 export function prepareGivenPromptAnswers(
-  promptObjects: any[],
+  promptObjects: PromptObject[],
   previousPromptsAnswers: PromptsAnswer[]
-): any[] {
-  const resAnswers: any[] = [];
+): AnswersState[] {
+  const resAnswers: PromptsAnswer[] = [];
   // Loop through the prompts objects and find the corresponding answer from the persisted answers.
   // and assign the 'type' property to the answer. Also, mark the answer as 'useDefault'
   // if it is not required and has no values.
@@ -45,7 +49,7 @@ export function prepareGivenPromptAnswers(
         resAnswers.push(tempAnswer);
       } else {
         // Use the value defined in prompted object instead.
-        resAnswers.push(promptObject);
+        resAnswers.push(promptObject.answers);
       }
     });
   }
@@ -103,8 +107,8 @@ export async function answerDossierPromptsHelper(
   instanceDefinition: any,
   objectId: string,
   projectId: string,
-  promptsAnswers: PromptsAnswer[],
-  previousPromptAnswers: any
+  promptsAnswers: AnswersState[],
+  previousPromptAnswers: PromptsAnswer[]
 ): Promise<any> {
   const currentInstanceDefinition = { ...instanceDefinition };
   let count = 0;
@@ -176,8 +180,8 @@ export async function preparePromptedDossier(
   instanceDefinition: any,
   dossierId: string,
   projectId: string,
-  promptsAnswers: PromptsAnswer[],
-  previousPromptsAnswers: any
+  promptsAnswers: AnswersState[],
+  previousPromptsAnswers: PromptsAnswer[]
 ): Promise<any> {
   let dossierInstanceDefinition = { ...instanceDefinition };
   if (dossierInstanceDefinition?.status === ObjectExecutionStatus.PROMPTED) {
@@ -266,8 +270,8 @@ async function resetDossierInstance(
 export async function preparePromptedReport(
   chosenObjectIdLocal: string,
   projectId: string,
-  promptsAnswers: any[],
-  previousAnswers: any
+  promptsAnswers: AnswersState[],
+  previousAnswers: PromptsAnswer[]
 ): Promise<any> {
   const config: any = { objectId: chosenObjectIdLocal, projectId };
   const instanceDefinition = await mstrObjectRestService.createInstance(config);
@@ -324,86 +328,6 @@ export async function preparePromptedReport(
   }
 
   return dossierInstanceDefinition;
-}
-
-/**
- * Updates saved answers by appending the corresponding JSON-based answers and prompt types from server definitions.
- * @param {} answers
- * @param {*} answerDefMap
- */
-function addDefDataToAnswers(answers: any, answerDefMap: any): void {
-  answers.forEach((answer: any) => {
-    const answerDef = answerDefMap.get(answer.key);
-
-    answerDef?.answers && (answer.answers = answerDef.answers);
-    answerDef?.type && (answer.type = answerDef.type);
-  });
-}
-
-/**
- * Append the server's version of the answers to the promptsAnswers object.
- * This version of answers will be used to invoke the REST API endpoint when
- * importing or re-prompting a report/dossier.
- * @param {*} currentAnswers - An array of answers to be updated, passed in as reference object
- * @param {*} promptsAnsDef
- * @param {*} areReportAnswers - if true, will update answers for nested answers.
- */
-function updateAnswersWithPromptsDef(
-  currentAnswers: any,
-  promptsAnsDef: any,
-  areReportAnswers: boolean
-): void {
-  const answerDefMap = new Map(promptsAnsDef.map((prompt: any) => [prompt.key, prompt]));
-
-  if (areReportAnswers) {
-    // Reports, one level deep down
-    currentAnswers.forEach((currentAnswer: any) => {
-      const { answers } = currentAnswer;
-      addDefDataToAnswers(answers, answerDefMap);
-    });
-  } else {
-    // Dossiers
-    addDefDataToAnswers(currentAnswers, answerDefMap);
-  }
-}
-
-/**
- * Merges the answers from the server with the answers from the Embedded API.
- * Dossiers and Reports have different ways to structure the answers; hence, the need
- * to use flag to indicate whether the answers are deep (Reports) or not (Dossiers).
- * @param {*} objectId
- * @param {*} projectId
- * @param {*} instanceId
- * @param {*} currentAnswers - reference to array with answers to be updated
- * @param {*} areReportAnswers - if true, will process Report's JSON structure for answers.
- */
-export async function mergeAnswersWithPromptsDefined(
-  objectId: string,
-  projectId: string,
-  instanceId: string,
-  currentAnswers: any[],
-  areReportAnswers = true
-): Promise<any> {
-  // Do nothing if there are no answers to be updated
-  if (currentAnswers?.length === 0) {
-    return;
-  }
-
-  // Get the answers applied to the current dossier's instance from the server.
-  // Need to incorporate these answers because they're formatted differently than the ones
-  // returned by the Embedded API. The REST API endpoint expects the answers to be in a
-  // different format than the Embedded API.
-  const promptsAnsDef = await mstrObjectRestService.getObjectPrompts(
-    objectId,
-    projectId,
-    instanceId,
-    true
-  );
-
-  // Update answers based on promptsAnsDef to insert JSON answers from server
-  // this JSON structure is expected by the REST API endpoint
-  promptsAnsDef?.length > 0 &&
-    updateAnswersWithPromptsDef(currentAnswers, promptsAnsDef, areReportAnswers);
 }
 
 /**
