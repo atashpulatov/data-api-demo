@@ -47,9 +47,6 @@ export function prepareGivenPromptAnswers(
           tempAnswer.useDefault = true;
         }
         resAnswers.push(tempAnswer);
-      } else {
-        // Use the value defined in prompted object instead.
-        resAnswers.push(promptObject.answers);
       }
     });
   }

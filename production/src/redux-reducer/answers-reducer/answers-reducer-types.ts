@@ -15,16 +15,11 @@ export interface AnswersState {
 export interface PromptObject {
   id: string;
   key: string;
-  name: string;
-  title: string;
+  name?: string;
+  title?: string;
   type: string;
-  required: boolean;
+  required?: boolean;
   closed: boolean;
-  max: number;
-  min: number;
-  defaultAnswer: any;
-  answers: any;
-  maxElementsPerSelection: number;
 }
 
 export enum AnswerActionTypes {
