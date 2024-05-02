@@ -8,7 +8,7 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
     #Import object 1: Prompted report
       And I clicked Import Data button
       And I found and selected object "Prompted_report"
-      And I clicked import dossier without waiting for results
+      And I selected import type "Import Data" and clicked import
       And I selected "Books" as an answer for "1. Category" prompt - object prompt
       And I selected "Music" as an answer for "1. Category" prompt - object prompt
       And I clicked Run button
@@ -21,7 +21,8 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
       And I added a new worksheet
       And I clicked Add Data button
       And I found and selected object "Bursting Report - Multiple attribute in page-by"
-      And I clicked import dossier without waiting for results
+      And I selected import type "Import Data" and clicked import
+      #TODO new step for new page-by window
       And I waited for object to be imported successfully
       And I hover over import successfull message
 
@@ -29,7 +30,7 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
       And I added a new worksheet
       And I clicked Add Data button
       And I found and selected object "Report with Totals and Subtotals"
-      And I clicked import dossier without waiting for results
+      And I selected import type "Import Data" and clicked import
       And I waited for object to be imported successfully
       And I hover over import successfull message
       Then I verified that cell "C17" has value "Total"
@@ -60,7 +61,7 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
      Then I verified Overview window is opened
       And I clicked "Add Data" button in Overview window
       And I found and selected object "01 Basic Report"
-      And I clicked import dossier without waiting for results
+      And I selected import type "Import Data" and clicked import
       And I clicked OK button in Range Taken popup in Overview window
       And I found object "no_such_object" in Overview window
       And I verified that object "Subtotals" is NOT visible
