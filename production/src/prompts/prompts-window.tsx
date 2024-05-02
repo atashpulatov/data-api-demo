@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
-import { ObjectWindowTitle } from '@mstr/connector-components';
+import { ObjectWindowTitle, PageByConfiguration } from '@mstr/connector-components';
 import { Spinner } from '@mstr/rc';
 
 import { authenticationHelper } from '../authentication/authentication-helper';
@@ -30,6 +30,7 @@ import i18n from '../i18n';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { PromptsContainer } from './prompts-container';
 import { ErrorMessages } from '../error/constants';
@@ -168,6 +169,33 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
     }
   };
 
+  const initializeImportForReprompt = (
+    chosenObjectIdLocal: string,
+    projectId: string,
+    pageByConfigurations?: PageByConfiguration[][]
+  ): void =>
+    popupHelper.officeMessageParent({
+      command: selectorProperties.commandOnUpdate,
+      chosenObjectId: chosenObjectIdLocal,
+      projectId,
+      chosenObjectSubtype: editedObject.chosenObjectSubtype,
+      body: popupViewSelectorHelper.createBody(
+        editedObject.selectedAttributes,
+        editedObject.selectedMetrics,
+        editedObject.selectedFilters,
+        // @ts-expect-error
+        editedObject.instanceId
+      ),
+      chosenObjectName: editedObject.chosenObjectName,
+      objectWorkingId: editedObject.objectWorkingId,
+      instanceId: editedObject.instanceId,
+      promptsAnswers: newPromptsAnswers.current,
+      isPrompted: !!newPromptsAnswers.current.length,
+      subtotalsInfo: editedObject.subtotalsInfo,
+      displayAttrFormNames: editedObject.displayAttrFormNames,
+      pageByConfigurations,
+    });
+
   /**
    * This function is called at the end of the Reprompt (only Reprompt, not Edit) workflow,
    * after user applies new answers. It will bypass the Edit Filters step and update the Excel data
@@ -178,32 +206,27 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
    * @returns {void}
    */
   const finishRepromptWithoutEditFilters = useCallback(
-    (chosenObjectIdLocal: string, projectId: string) => {
+    (chosenObjectIdLocal: string, projectId: string, dossierData: any, currentAnswers: any[]) => {
       // for the Reprompt workflow only, skip edit filter screen.
       if (!isReprompt || isEdit) {
         return;
       }
 
-      popupHelper.officeMessageParent({
-        command: selectorProperties.commandOnUpdate,
-        chosenObjectId: chosenObjectIdLocal,
-        projectId,
-        chosenObjectSubtype: editedObject.chosenObjectSubtype,
-        body: popupViewSelectorHelper.createBody(
-          editedObject.selectedAttributes,
-          editedObject.selectedMetrics,
-          editedObject.selectedFilters,
-          // @ts-expect-error
-          editedObject.instanceId
-        ),
-        chosenObjectName: editedObject.chosenObjectName,
-        instanceId: editedObject.instanceId,
-        promptsAnswers: newPromptsAnswers.current,
-        isPrompted: !!newPromptsAnswers.current.length,
-        subtotalsInfo: editedObject.subtotalsInfo,
-        displayAttrFormNames: editedObject.displayAttrFormNames,
-      });
+      if (editedObject.pageByData) {
+        popupViewSelectorHelper.handleRequestPageByModalOpen({
+          ...props,
+          objectId: chosenObjectIdLocal,
+          projectId,
+          dossierData,
+          promptsAnswers: currentAnswers,
+          importCallback: (pageByConfigurations: PageByConfiguration[][]) =>
+            initializeImportForReprompt(chosenObjectIdLocal, projectId, pageByConfigurations),
+        } as any);
+      } else {
+        initializeImportForReprompt(chosenObjectIdLocal, projectId);
+      }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       editedObject.chosenObjectSubtype,
       editedObject.selectedAttributes,
@@ -346,7 +369,12 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
           // dossierData should eventually be removed as data should be gathered via REST from report, not dossier
           promptsAnswered({ dossierData, promptsAnswers: currentAnswers });
 
-          finishRepromptWithoutEditFilters(chosenObjectIdLocal, projectId);
+          finishRepromptWithoutEditFilters(
+            chosenObjectIdLocal,
+            projectId,
+            dossierData,
+            currentAnswers
+          );
         });
       } catch (error) {
         console.error({ error });
@@ -516,6 +544,9 @@ const mapDispatchToProps = {
   promptsAnswered: navigationTreeActions.promptsAnswered,
   cancelImportRequest: navigationTreeActions.cancelImportRequest,
   onPopupBack: popupStateActions.onPopupBack,
+  preparePromptedReport: popupActions.preparePromptedReport,
+  requestPageByModalOpen: navigationTreeActions.requestPageByModalOpen,
+  startImport: navigationTreeActions.startImport,
 };
 
 export const PromptsWindow = connect(

@@ -6,8 +6,8 @@ import { popupHelper } from './popup-helper';
 
 import { reduxStore } from '../store';
 
-import { PageBy } from '../page-by/page-by-types';
 import { RequestPageByModalOpenData } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer-types';
+import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 import { PageByDisplayOption } from '../right-side-panel/settings-side-panel/settings-side-panel-types';
 
@@ -18,18 +18,40 @@ import { DisplayAttrFormNames } from '../mstr-object/constants';
 const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
 class PopupViewSelectorHelper {
+  /**
+   * Determines whether the currently open dialog is displaying the prompts editor for a report
+   * in the Overview dialog, or from the SidePanel.
+   *
+   * @param popupType - The type of the popup to check.
+   * @returns - returns true if the popup type is a prompted report.
+   */
+  isRepromptReportPopupType(popupType: DialogType): boolean {
+    return (
+      popupType === DialogType.repromptingWindow ||
+      popupType === DialogType.repromptReportDataOverview
+    );
+  }
+
+  /**
+   * Determines the type of the Prompted popup to show based on the workflow.
+   * If we are in the Multiple Reprompt workflow (reprompt queue isn't empty), and current prompted object being processed
+   * is a Report, then it means we are in the transition period waiting for the next prompted object to be reprompted.
+   * In this case, it returns 'multipleRepromptTransitionPage' (intermediate) for prompted reports only.
+   * Otherwise, we are in the final step of the Prepare Data or Edit workflow, and it returns 'editFilters'.
+   *
+   * @param props - collection of properties passsed that contains repromptsQueueProps property
+   * @returns - returns the type of the Prompted popup type to show
+   */
+  getPromptedReportPopupType = (props: any): DialogType =>
+    this.isMultipleReprompt(props)
+      ? DialogType.multipleRepromptTransitionPage
+      : DialogType.editFilters;
+
   setPopupType(props: any, popupType: DialogType): DialogType {
     const { importRequested, dossierOpenRequested, isPrompted, pageBy } = props;
     const arePromptsAnswered = this.arePromptsAnswered(props);
     const shouldProceedToImport =
       importRequested && (!isPrompted || arePromptsAnswered) && !pageBy?.length;
-    const getPromptedReportPopupType = (): DialogType =>
-      // If we are in Multiple Reprompt workflow and get to this point, we are in
-      // the transition period waiting for the next object to be reprompted.
-      // Otherwise, we are in the final step of Prepare Data or Edit workflow.
-      this.isMultipleReprompt(props)
-        ? DialogType.multipleRepromptTransitionPage
-        : DialogType.editFilters;
 
     if (shouldProceedToImport) {
       this.proceedToImport(props);
@@ -39,8 +61,14 @@ class PopupViewSelectorHelper {
       // action triggered by the Prompts dialog, it could lead to a cyclical loop in the prompts page
       // when editing a prompted report.
       if (this.isInstanceWithPromptsAnswered(props)) {
-        if (popupType === DialogType.repromptingWindow) {
-          return getPromptedReportPopupType();
+        // Handle the case when the user is editing a prompted report from either SidePanel or Overview dialog.
+        if (this.isRepromptReportPopupType(popupType)) {
+          // Return whether the Multiple Reprompt Transition Page should be shown in
+          // the case of a having multiple prompted objects in the queue and current one is prompted report
+          // being processed. In the case of Dossiers, it will not show the Multiple Reprompt Transition Page.
+          // Note: both, multiple transition page and Dossier window, will render the popup notification when it's
+          // applicable, such as the range taken notification.
+          return this.getPromptedReportPopupType(props);
         }
       } else {
         return DialogType.obtainInstanceHelper;
@@ -99,8 +127,8 @@ class PopupViewSelectorHelper {
     return props.repromptsQueueProps?.total > 1;
   }
 
-  async obtainInstanceWithPromptsAnswers(props: any): Promise<void> {
-    const { editedObject, chosenProjectId, chosenObjectId } = props;
+  async obtainInstanceWithPromptsAnswers(props: any): Promise<InstanceDefinition> {
+    const { editedObject, chosenProjectId, chosenObjectId, requestPageByModalOpen } = props;
     const projectId =
       chosenProjectId || editedObject.chosenProjectId || (editedObject.projectId as string);
     const objectId = chosenObjectId || (editedObject.chosenObjectId as string);
@@ -132,9 +160,9 @@ class PopupViewSelectorHelper {
       count += 1;
     }
     const body = this.createBody(
-      props.editedObject && props.editedObject.selectedAttributes,
-      props.editedObject && props.editedObject.selectedMetrics,
-      props.editedObject && props.editedObject.selectedFilters
+      props.editedObject?.selectedAttributes,
+      props.editedObject?.selectedMetrics,
+      props.editedObject?.selectedFilters
     );
     const preparedReport = {
       id: objectId,
@@ -152,11 +180,20 @@ class PopupViewSelectorHelper {
 
     if (props.popupType === DialogType.libraryWindow) {
       if (pageBy?.length && pageByDisplaySetting === PageByDisplayOption.SELECT_PAGES) {
-        this.handleRequestPageByModalOpen({ ...props, pageBy });
+        await this.handleRequestPageByModalOpen({
+          objectId,
+          projectId,
+          instanceId: instanceDefinition.instanceId,
+          requestPageByModalOpen,
+          importCallback: pageByConfigurations =>
+            this.proceedToImport({ ...props, pageByConfigurations }),
+        });
       } else {
         props.requestImport();
       }
     }
+
+    return instanceDefinition;
   }
 
   // TODO: get this method from library
@@ -263,19 +300,37 @@ class PopupViewSelectorHelper {
   /**
    * Handles the request to open the Page By modal.
    *
-   * @param pageBy Contains information about page-by elements
+   * @param objectId Unique identifier of the object
+   * @param projectId Unique identifier of the project
+   * @param instanceId Unique identifier of the object instance
    * @param requestPageByModalOpen Function to request the Page By modal to open
+   * @param importCallback Callback function to import the Page By configurations
    */
-  handleRequestPageByModalOpen(props: {
-    pageBy: PageBy[];
+  async handleRequestPageByModalOpen(props: {
+    objectId: string;
+    projectId: string;
+    instanceId: string;
     requestPageByModalOpen: (data: RequestPageByModalOpenData) => void;
-  }): void {
-    const { pageBy, requestPageByModalOpen } = props;
+    importCallback: (pageByConfigurations: PageByConfiguration[][]) => void;
+  }): Promise<void> {
+    const { objectId, projectId, instanceId, requestPageByModalOpen, importCallback } = props;
+
+    let instance;
+
+    if (!instanceId) {
+      instance = await this.obtainInstanceWithPromptsAnswers(props);
+    }
+
+    const { pageBy } = await mstrObjectRestService.getPageByElements(
+      objectId,
+      projectId,
+      instanceId || instance.instanceId
+    );
 
     requestPageByModalOpen({
       pageBy,
       importPageByConfigurations: (pageByConfigurations: PageByConfiguration[][]) =>
-        this.proceedToImport({ ...props, pageByConfigurations }),
+        importCallback(pageByConfigurations),
     });
   }
 }

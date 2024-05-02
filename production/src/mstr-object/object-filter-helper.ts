@@ -8,31 +8,43 @@ import {
 } from './object-filter-helper-types';
 
 /**
+ * Returns the string representation of a token.
+ * If the token is a function, it returns the uppercase translation of the function name.
+ * Otherwise, it returns the string representation of the token value.
+ *
+ * @param token - The token to get the string representation of.
+ * @returns The string representation of the token.
+ */
+const getTokenString = (token: Token): string => {
+  if (token.type === 'function') {
+    if (token.value === 'And') {
+      return t('and').toUpperCase();
+    }
+    if (token.value === 'Or') {
+      return t('or').toUpperCase();
+    }
+    if (token.value === 'Not') {
+      return t('not').toUpperCase();
+    }
+  }
+  return token.value.toString();
+};
+
+/**
  * Converts an array of filter tokens to a string representation of the filter.
  *
  * @param tokens - The array of tokens to convert.
  * @returns The string representation of the tokens.
  */
 const convertTokensToString = (tokens: Token[]): string =>
-  // slice(1) to remove the first token which is the root token, "%"
-  tokens?.length && tokens
-    .slice(1)
-    .map(token => {
-      if (token.type === 'function') {
-        if (token.value === 'And') {
-          return t('and').toUpperCase();
-        }
-        if (token.value === 'Or') {
-          return t('or').toUpperCase();
-        }
-        if (token.value === 'Not') {
-          return t('not').toUpperCase();
-        }
-      }
-      return token.value;
-    })
-    .join(' ')
-    .trim();
+  tokens?.length
+    ? // slice(1) to remove the first token which is the root token, "%"
+    tokens
+      .slice(1)
+      .map(token => getTokenString(token))
+      .join(' ')
+      .trim()
+    : '-';
 
 /**
  * Generates the report filter text, report limits text, view filter text, and metric limits text based on the provided filter data.
@@ -41,23 +53,23 @@ const convertTokensToString = (tokens: Token[]): string =>
  */
 export const generateReportFilterTexts = (reportDefinition: ReportDefinition): FiltersText => {
   const reportFilter = reportDefinition?.dataSource?.filter;
-  const reportLimits = reportDefinition?.dataSource?.dataTemplate?.units.find(
+  const reportLimits = reportDefinition?.dataSource?.dataTemplate?.units?.find(
     unit => unit.type === 'metrics'
-  ).limit;
+  )?.limit;
   const viewFilter = reportDefinition?.grid?.viewFilter;
-  const metricLimits = reportDefinition?.grid?.viewTemplate?.columns?.units.find(
+  const metricLimits = reportDefinition?.grid?.viewTemplate?.columns?.units?.find(
     unit => unit.type === 'metrics'
-  ).elements;
+  )?.elements;
 
+  const reportFilterText = convertTokensToString(reportFilter?.tokens);
+  const reportLimitsText = convertTokensToString(reportLimits?.tokens);
+  const viewFilterText = convertTokensToString(viewFilter?.tokens);
+
+  const definedMetricLimits = metricLimits?.filter(element => element.limit);
   const joinDelimiter = ` ) ${t('and').toUpperCase()} ( `;
-  const reportFilterText = convertTokensToString(reportFilter.tokens) || "-";
-  const reportLimitsText = convertTokensToString(reportLimits.tokens) || "-";
-  const definedMetricLimits = metricLimits.filter(element => element.limit);
-  const metricLimitsText = definedMetricLimits.length ?
-    `( ${definedMetricLimits.map(element => element.limit.text).join(joinDelimiter)} )` : "-";
-
-  const viewFilterText = convertTokensToString(viewFilter.tokens) || "-";
-
+  const metricLimitsText = definedMetricLimits?.length
+    ? `( ${definedMetricLimits.map(element => element.limit.text || '').join(joinDelimiter)} )`
+    : '-';
   return {
     reportFilterText,
     reportLimitsText,
@@ -77,10 +89,10 @@ export const generateDossierFilterText = (
   chapterKey: string
 ): string => {
   const selectedChapter = dossierDefinition.chapters.find(chapter => chapter.key === chapterKey);
-
+  const joinDelimiter = ` ) ${t('and').toUpperCase()} ( `;
   const dossierFilterSummary = `( ${selectedChapter.filters
     .map(filter => filter.summary)
-    .join(` ) ${t('and').toUpperCase()} ( `)} )`;
+    .join(joinDelimiter)} )`;
 
   return dossierFilterSummary;
 };

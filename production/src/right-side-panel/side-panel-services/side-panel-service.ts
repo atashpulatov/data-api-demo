@@ -171,10 +171,19 @@ export class SidePanelService {
     objectWorkingIds.forEach(objectWorkingId => {
       const objectData =
         officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
-      const { bindId, mstrObjectType, isPrompted } = objectData;
+      const { bindId, mstrObjectType, isPrompted, pageByData } = objectData;
 
       // Add a task to the queue only if the object is prompted
-      if (isPrompted) {
+      // For Page-by objects, don't push the task if the report with the same page-by link Id
+      // is already added to the dispatchTasks
+      if (
+        isPrompted &&
+        (!pageByData ||
+          dispatchTasks.every((task: any) => {
+            const object = officeReducerHelper.getObjectFromObjectReducerByBindId(task.bindId);
+            return object.pageByData?.pageByLinkId !== pageByData?.pageByLinkId;
+          }))
+      ) {
         dispatchTasks.push(
           sidePanelHelper.createRepromptTask(bindId, mstrObjectType, isFromDataOverviewDialog)
         );

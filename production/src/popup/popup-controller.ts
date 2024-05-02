@@ -4,6 +4,7 @@ import { authenticationHelper } from '../authentication/authentication-helper';
 import instanceDefinitionHelper from '../mstr-object/instance/instance-definition-helper';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { pageByHelper } from '../page-by/page-by-helper';
+import { OverviewActionCommands } from './overview/overview-helper';
 
 import { PageByDataElement, PageByDisplayType } from '../page-by/page-by-types';
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
@@ -22,7 +23,10 @@ import {
   importRequested,
 } from '../redux-reducer/operation-reducer/operation-actions';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
-import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
+import {
+  clearRepromptTask,
+  executeNextRepromptTask,
+} from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import { DisplayAttrFormNames } from '../mstr-object/constants';
 
 const URL = `${window.location.href}`;
@@ -210,6 +214,35 @@ class PopupController {
     this.dialog?.messageChild && this.dialog?.messageChild(message);
   };
 
+  /**
+   * It indicates when the dialog type is for multiple reprompting data for reports and/or dossiers triggered in
+   * the Overview dialog and the command has to do with data overlapping in the new data range to be occupied in worksheet.
+   *
+   * Note: Only handling data range commands for multiple re-prompting workflow in the Overview dialog, rather than delegating all
+   * possible commands associated with re-prompting. This approach minimizes the risk of introducing bugs in the future by
+   * limiting scope to data range overlapping commands only.
+   *
+   * @param dialogType - indicates type of the dialog to be opened, value from DialogType
+   * @param command - action command from the dialog
+   * @returns boolean - true if the command is either RANGE_TAKEN_OK or RANGE_TAKEN_CLOSE and re-prompt in Overview dialog.
+   */
+  isDataRangeCommandForMultipleRepromptDialogInOverview(
+    dialogType: DialogType,
+    command: string
+  ): boolean {
+    const { RANGE_TAKEN_CLOSE, RANGE_TAKEN_OK } = OverviewActionCommands;
+    const validDialogTypes = [
+      DialogType.repromptReportDataOverview,
+      DialogType.repromptDossierDataOverview,
+    ];
+    // Return true to indicate that command was either RANGE_TAKEN_OK or RANGE_TAKEN_CLOSE
+    // and current dialog is either repromptReportDataOverview or repromptDossierDataOverview.
+    return (
+      validDialogTypes.includes(dialogType) &&
+      (command === RANGE_TAKEN_OK || command === RANGE_TAKEN_CLOSE)
+    );
+  }
+
   onMessageFromPopup = async (
     dialog: Office.Dialog,
     reportParams: ReportParams,
@@ -227,6 +260,7 @@ class PopupController {
       commandError,
       commandDialogLoaded,
       commandCloseDialog,
+      commandExecuteNextRepromptTask,
     } = selectorProperties;
 
     const dialogType = this.reduxStore.getState().popupStateReducer.popupType;
@@ -241,8 +275,15 @@ class PopupController {
       this.resetDialogStates();
     }
 
+    if (command === commandExecuteNextRepromptTask) {
+      this.reduxStore.dispatch(executeNextRepromptTask());
+    }
+
+    const isMultipleRepromptQueueEmptyAndOverviewClosed =
+      isMultipleRepromptQueueEmpty && !isDataOverviewOpen;
+
     try {
-      if (isMultipleRepromptQueueEmpty && !isDataOverviewOpen) {
+      if (isMultipleRepromptQueueEmptyAndOverviewClosed) {
         // We will only close dialog if not in Multiple Reprompt workflow
         // or if the Multiple Reprompt queue has been cleared up.
         this.closeDialog(dialog);
@@ -251,7 +292,17 @@ class PopupController {
         await officeApiHelper.getExcelSessionStatus(); // checking excel session status
       }
       await authenticationHelper.validateAuthToken();
-      if (dialogType === DialogType.importedDataOverview) {
+
+      // Attempt to delegate the response to Overview helper to handle the action command for
+      // the Overview dialog, if the command is either RANGE_TAKEN_OK or RANGE_TAKEN_CLOSE and
+      // the dialog type is either re-prompt for reports or dossiers triggered from Overview dialog.
+      // Also, delegate the response to Overview helper if the dialog type is for imported data overview
+      // (a.k.a. Overview dialog and supported actions). If any of these conditions are met, then the execution
+      // of this method will be stopped here.
+      if (
+        dialogType === DialogType.importedDataOverview ||
+        this.isDataRangeCommandForMultipleRepromptDialogInOverview(dialogType, command)
+      ) {
         await this.overviewHelper.handleOverviewActionCommand(response);
         return;
       }
@@ -306,7 +357,7 @@ class PopupController {
     } finally {
       // always reset this.reportParams to prevent reusing old references in future popups
       this.reportParams = null;
-      if (isMultipleRepromptQueueEmpty && !isDataOverviewOpen) {
+      if (isMultipleRepromptQueueEmptyAndOverviewClosed) {
         // We will only reset popup related states when not in Multiple Reprompt workflow
         // or if the Multiple Reprompt queue has been cleared up.
         this.resetDialogStates();
@@ -321,7 +372,7 @@ class PopupController {
    * @param reportParams Contains information about the currently selected object
    */
   onCommandOk = async (response: DialogResponse, reportParams: ReportParams): Promise<void> => {
-    if (!reportParams) {
+    if (!reportParams || response.pageByConfigurations?.length) {
       return this.handleOkCommand(response);
     }
 
@@ -344,6 +395,7 @@ class PopupController {
 
     if (
       !reportParams ||
+      response.pageByConfigurations?.length ||
       (pageByData && pageByData.pageByDisplayType !== PageByDisplayType.DEFAULT_PAGE)
     ) {
       // TODO: Add error handling for re-importing Page-by on Edit

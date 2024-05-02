@@ -1,5 +1,7 @@
 import { popupViewSelectorHelper } from './popup-view-selector-helper';
 
+import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
+
 describe('PopupViewSelectorHelper', () => {
   describe('composeFilter', () => {
     const filter1 = 'filter1';
@@ -90,5 +92,88 @@ describe('PopupViewSelectorHelper', () => {
       }
     );
     /* eslint-enable indent */
+
+    it('should return true for reprompt popup types', () => {
+      const repromptPopupTypes = [
+        DialogType.repromptingWindow,
+        DialogType.repromptReportDataOverview,
+      ];
+
+      repromptPopupTypes.forEach(popupType => {
+        expect(popupViewSelectorHelper.isRepromptReportPopupType(popupType)).toBe(true);
+      });
+    });
+
+    it('should return false for non-reprompt popup types', () => {
+      const nonRepromptPopupType = 'nonRepromptPopupType';
+
+      expect(popupViewSelectorHelper.isRepromptReportPopupType(nonRepromptPopupType)).toBe(false);
+    });
+
+    it('should proceed to import if conditions are met', () => {
+      const props = {
+        importRequested: true,
+        isPrompted: false,
+        pageBy: [],
+      };
+      const popupType = DialogType.dossierWindow;
+
+      const proceedToImportSpy = jest
+        .spyOn(popupViewSelectorHelper, 'proceedToImport')
+        .mockImplementation(() => undefined);
+
+      const result = popupViewSelectorHelper.setPopupType(props, popupType);
+
+      expect(proceedToImportSpy).toHaveBeenCalled();
+      // Assuming proceedToImport doesn't return a value
+      expect(result).toBe('dossier-window');
+    });
+
+    it('should return obtainInstanceHelper if instance with prompts is answered', () => {
+      const props = {
+        isPrompted: true,
+        arePromptsAnswered: true,
+        // Assuming arePromptsAnswered and isInstanceWithPromptsAnswered return true
+      };
+      const popupType = DialogType.dossierWindow;
+
+      const isInstanceWithPromptsAnsweredSpy = jest
+        .spyOn(popupViewSelectorHelper, 'isInstanceWithPromptsAnswered')
+        .mockImplementation(() => false);
+
+      const arePromptsAnsweredSpy = jest
+        .spyOn(popupViewSelectorHelper, 'arePromptsAnswered')
+        .mockImplementation(() => true);
+
+      const result = popupViewSelectorHelper.setPopupType(props, popupType);
+
+      expect(isInstanceWithPromptsAnsweredSpy).toHaveBeenCalled();
+      expect(arePromptsAnsweredSpy).toHaveBeenCalled();
+      expect(result).toBe(DialogType.obtainInstanceHelper);
+    });
+  });
+
+  it('should return multipleRepromptTransitionPage for multiple reprompt', () => {
+    const props = {
+      repromptsQueueProps: {
+        total: 2,
+      },
+    };
+
+    const result = popupViewSelectorHelper.getPromptedReportPopupType(props);
+
+    expect(result).toBe(DialogType.multipleRepromptTransitionPage);
+  });
+
+  it('should return editFilters for non-multiple reprompt', () => {
+    const props = {
+      repromptsQueueProps: {
+        total: 0,
+      },
+    };
+
+    const result = popupViewSelectorHelper.getPromptedReportPopupType(props);
+
+    expect(result).toBe(DialogType.editFilters);
   });
 });

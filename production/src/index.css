@@ -172,8 +172,13 @@ button.floating-button[disabled]:hover {
   position: fixed;
 }
 
-.attribute-selector-window .popup-footer {
-  min-width: 650px;
+.attribute-selector-window {
+  user-select: none;
+  -webkit-user-select: none;
+
+  .popup-footer {
+    min-width: 650px;
+  }
 }
 
 .loading-spinner {
