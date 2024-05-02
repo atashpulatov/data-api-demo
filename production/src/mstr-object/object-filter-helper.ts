@@ -42,7 +42,6 @@ const convertTokensToString = (tokens: Token[]): string =>
  * @returns An object containing the generated report filter text, report limits text, view filter text, and metric limits text.
  */
 export const generateReportFilterTexts = (reportDefinition: ReportDefinition): FiltersText => {
-  console.log('generateReportFilterTexts', reportDefinition);
   const reportFilter = reportDefinition?.dataSource?.filter;
   const reportLimits = reportDefinition?.dataSource?.dataTemplate?.units?.find(
     unit => unit.type === 'metrics'
