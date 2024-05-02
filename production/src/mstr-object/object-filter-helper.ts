@@ -8,6 +8,29 @@ import {
 } from './object-filter-helper-types';
 
 /**
+ * Returns the string representation of a token.
+ * If the token is a function, it returns the uppercase translation of the function name.
+ * Otherwise, it returns the string representation of the token value.
+ *
+ * @param token - The token to get the string representation of.
+ * @returns The string representation of the token.
+ */
+const getTokenString = (token: Token): string => {
+  if (token.type === 'function') {
+    if (token.value === 'And') {
+      return t('and').toUpperCase();
+    }
+    if (token.value === 'Or') {
+      return t('or').toUpperCase();
+    }
+    if (token.value === 'Not') {
+      return t('not').toUpperCase();
+    }
+  }
+  return token.value.toString();
+};
+
+/**
  * Converts an array of filter tokens to a string representation of the filter.
  *
  * @param tokens - The array of tokens to convert.
@@ -18,20 +41,7 @@ const convertTokensToString = (tokens: Token[]): string =>
     ? // slice(1) to remove the first token which is the root token, "%"
       tokens
         .slice(1)
-        .map(token => {
-          if (token.type === 'function') {
-            if (token.value === 'And') {
-              return t('and').toUpperCase();
-            }
-            if (token.value === 'Or') {
-              return t('or').toUpperCase();
-            }
-            if (token.value === 'Not') {
-              return t('not').toUpperCase();
-            }
-          }
-          return token.value;
-        })
+        .map(token => getTokenString(token))
         .join(' ')
         .trim()
     : '-';
@@ -79,10 +89,10 @@ export const generateDossierFilterText = (
   chapterKey: string
 ): string => {
   const selectedChapter = dossierDefinition.chapters.find(chapter => chapter.key === chapterKey);
-
+  const joinDelimiter = ` ) ${t('and').toUpperCase()} ( `;
   const dossierFilterSummary = `( ${selectedChapter.filters
     .map(filter => filter.summary)
-    .join(` ) ${t('and').toUpperCase()} ( `)} )`;
+    .join(joinDelimiter)} )`;
 
   return dossierFilterSummary;
 };
