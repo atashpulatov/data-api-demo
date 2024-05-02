@@ -499,7 +499,9 @@ class OfficeApiHelper {
     isAnyPopupOrSettingsDisplayed: boolean
   ): Promise<OfficeExtension.EventHandlerResult<Excel.SelectionChangedEventArgs>> {
     const eventResult = excelContext.workbook.onSelectionChanged.add(async () => {
+      // active cell address will always be updated
       const activeCellAddress = await this.getSelectedCell(excelContext);
+      setActiveCellAddress(activeCellAddress);
       // only read + update active sheet index if no popup (notifications, Office dialog, etc.) or settings visible
       if (!isAnyPopupOrSettingsDisplayed) {
         const activeWorksheet = this.getCurrentExcelSheet(excelContext);
@@ -509,9 +511,6 @@ class OfficeApiHelper {
 
         setActiveSheetIndex(activeWorksheet.position);
       }
-
-      // active cell address will always be updated
-      setActiveCellAddress(activeCellAddress);
     });
     await excelContext.sync();
 
