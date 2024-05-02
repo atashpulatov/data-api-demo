@@ -14,25 +14,27 @@ import {
  * @returns The string representation of the tokens.
  */
 const convertTokensToString = (tokens: Token[]): string =>
-  // slice(1) to remove the first token which is the root token, "%"
-  tokens?.length && tokens
-    .slice(1)
-    .map(token => {
-      if (token.type === 'function') {
-        if (token.value === 'And') {
-          return t('and').toUpperCase();
-        }
-        if (token.value === 'Or') {
-          return t('or').toUpperCase();
-        }
-        if (token.value === 'Not') {
-          return t('not').toUpperCase();
-        }
-      }
-      return token.value;
-    })
-    .join(' ')
-    .trim();
+  tokens?.length
+    ? // slice(1) to remove the first token which is the root token, "%"
+      tokens
+        .slice(1)
+        .map(token => {
+          if (token.type === 'function') {
+            if (token.value === 'And') {
+              return t('and').toUpperCase();
+            }
+            if (token.value === 'Or') {
+              return t('or').toUpperCase();
+            }
+            if (token.value === 'Not') {
+              return t('not').toUpperCase();
+            }
+          }
+          return token.value;
+        })
+        .join(' ')
+        .trim()
+    : '-';
 
 /**
  * Generates the report filter text, report limits text, view filter text, and metric limits text based on the provided filter data.
@@ -40,21 +42,25 @@ const convertTokensToString = (tokens: Token[]): string =>
  * @returns An object containing the generated report filter text, report limits text, view filter text, and metric limits text.
  */
 export const generateReportFilterTexts = (reportDefinition: ReportDefinition): FiltersText => {
+  console.log('generateReportFilterTexts', reportDefinition);
   const reportFilter = reportDefinition?.dataSource?.filter;
-  const reportLimits = reportDefinition?.dataSource?.dataTemplate?.units.find(
+  const reportLimits = reportDefinition?.dataSource?.dataTemplate?.units?.find(
     unit => unit.type === 'metrics'
-  ).limit;
+  )?.limit;
   const viewFilter = reportDefinition?.grid?.viewFilter;
-  const metricLimits = reportDefinition?.grid?.viewTemplate?.columns?.units.find(
+  const metricLimits = reportDefinition?.grid?.viewTemplate?.columns?.units?.find(
     unit => unit.type === 'metrics'
-  ).elements;
+  )?.elements;
 
-  const reportFilterText = convertTokensToString(reportFilter.tokens) || "-";
-  const reportLimitsText = convertTokensToString(reportLimits.tokens) || "-";
-  const viewFilterText = convertTokensToString(viewFilter.tokens) || "-";
-  const metricLimitsText = metricLimits.some(element => element.limit?.text) ?
-    `( ${metricLimits.map(element => element.limit.text).join(` ) ${t('and').toUpperCase()} ( `)} )` : "-";
+  const reportFilterText = convertTokensToString(reportFilter?.tokens);
+  const reportLimitsText = convertTokensToString(reportLimits?.tokens);
+  const viewFilterText = convertTokensToString(viewFilter?.tokens);
 
+  const definedMetricLimits = metricLimits?.filter(element => element.limit);
+  const joinDelimiter = ` ) ${t('and').toUpperCase()} ( `;
+  const metricLimitsText = definedMetricLimits?.length
+    ? `( ${definedMetricLimits.map(element => element.limit.text || '').join(joinDelimiter)} )`
+    : '-';
   return {
     reportFilterText,
     reportLimitsText,

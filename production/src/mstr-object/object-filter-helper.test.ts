@@ -125,6 +125,183 @@ describe('generateReportFilterTexts', () => {
     expect(result.viewFilterText).toBe('NOT ( viewFilter1 OR viewFilter2 )');
     expect(result.metricLimitsText).toBe('( reference1 > 10 ) AND ( reference2 > 10 )');
   });
+
+  describe('error handling', () => {
+    it('should return "-" when reportDefinition is an empty object', () => {
+      // given
+      const filterData = {} as ReportDefinition;
+
+      // when
+      const result = generateReportFilterTexts(filterData);
+
+      // then
+      expect(result.reportFilterText).toBe('-');
+      expect(result.reportLimitsText).toBe('-');
+      expect(result.viewFilterText).toBe('-');
+      expect(result.metricLimitsText).toBe('-');
+    });
+
+    it('should return "-" when reportDefinition is undefined', () => {
+      // given
+      const reportDefinition: ReportDefinition = undefined;
+
+      // when
+      const result = generateReportFilterTexts(reportDefinition);
+
+      // then
+      expect(result.reportFilterText).toBe('-');
+      expect(result.reportLimitsText).toBe('-');
+      expect(result.viewFilterText).toBe('-');
+      expect(result.metricLimitsText).toBe('-');
+    });
+
+    it('should return "-" when reportDefinition has no dataSource', () => {
+      // given
+      const reportDefinition = {
+        grid: {},
+      } as ReportDefinition;
+
+      // when
+      const result = generateReportFilterTexts(reportDefinition);
+
+      // then
+      expect(result.reportFilterText).toBe('-');
+      expect(result.reportLimitsText).toBe('-');
+      expect(result.viewFilterText).toBe('-');
+      expect(result.metricLimitsText).toBe('-');
+    });
+
+    it('should return "-" when reportDefinition has no dataTemplate', () => {
+      // given
+      const reportDefinition = {
+        dataSource: {},
+        grid: {},
+      } as ReportDefinition;
+
+      // when
+      const result = generateReportFilterTexts(reportDefinition);
+
+      // then
+      expect(result.reportFilterText).toBe('-');
+      expect(result.reportLimitsText).toBe('-');
+      expect(result.viewFilterText).toBe('-');
+      expect(result.metricLimitsText).toBe('-');
+    });
+
+    it('should return "-" when reportDefinition has no viewFilter', () => {
+      // given
+      const reportDefinition = {
+        dataSource: {
+          dataTemplate: {},
+        },
+        grid: {},
+      } as ReportDefinition;
+
+      // when
+      const result = generateReportFilterTexts(reportDefinition);
+
+      // then
+      expect(result.reportFilterText).toBe('-');
+      expect(result.reportLimitsText).toBe('-');
+      expect(result.viewFilterText).toBe('-');
+      expect(result.metricLimitsText).toBe('-');
+    });
+
+    it('should return "-" when reportDefinition has no viewTemplate', () => {
+      // given
+      const reportDefinition = {
+        dataSource: {
+          dataTemplate: {},
+        },
+        grid: {
+          viewFilter: {},
+        },
+      } as ReportDefinition;
+
+      // when
+      const result = generateReportFilterTexts(reportDefinition);
+
+      // then
+      expect(result.reportFilterText).toBe('-');
+      expect(result.reportLimitsText).toBe('-');
+      expect(result.viewFilterText).toBe('-');
+      expect(result.metricLimitsText).toBe('-');
+    });
+
+    it('should return "-" when reportDefinition has no columns', () => {
+      // given
+      const reportDefinition = {
+        dataSource: {
+          dataTemplate: {},
+        },
+        grid: {
+          viewFilter: {},
+          viewTemplate: {},
+        },
+      } as ReportDefinition;
+
+      // when
+      const result = generateReportFilterTexts(reportDefinition);
+
+      // then
+      expect(result.reportFilterText).toBe('-');
+      expect(result.reportLimitsText).toBe('-');
+      expect(result.viewFilterText).toBe('-');
+      expect(result.metricLimitsText).toBe('-');
+    });
+
+    it('should return "-" when reportDefinition has no units', () => {
+      // given
+      const reportDefinition = {
+        dataSource: {
+          dataTemplate: {},
+        },
+        grid: {
+          viewFilter: {},
+          viewTemplate: {
+            columns: {},
+          },
+        },
+      } as ReportDefinition;
+
+      // when
+      const result = generateReportFilterTexts(reportDefinition);
+
+      // then
+      expect(result.reportFilterText).toBe('-');
+      expect(result.reportLimitsText).toBe('-');
+      expect(result.viewFilterText).toBe('-');
+      expect(result.metricLimitsText).toBe('-');
+    });
+
+    it('should return "-" when reportDefinition has no metrics units', () => {
+      // given
+      const reportDefinition = {
+        dataSource: {
+          dataTemplate: {
+            units: [{ type: 'other_type_to_be_ignored' }],
+          },
+        },
+        grid: {
+          viewFilter: {},
+          viewTemplate: {
+            columns: {
+              units: [{ type: 'other_type_to_be_ignored' }],
+            },
+          },
+        },
+      } as ReportDefinition;
+
+      // when
+      const result = generateReportFilterTexts(reportDefinition);
+
+      // then
+      expect(result.reportFilterText).toBe('-');
+      expect(result.reportLimitsText).toBe('-');
+      expect(result.viewFilterText).toBe('-');
+      expect(result.metricLimitsText).toBe('-');
+    });
+  });
 });
 
 describe('generateDossierFilterText', () => {
