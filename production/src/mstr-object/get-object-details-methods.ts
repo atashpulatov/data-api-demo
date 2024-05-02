@@ -5,6 +5,7 @@ import { FiltersText } from './object-filter-helper-types';
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectInfoSetting } from '../redux-reducer/settings-reducer/settings-reducer-types';
 import { ObjectData, ObjectDetails, Owner } from '../types/object-types';
+import { MstrObjectTypes } from './mstr-object-types';
 
 import mstrObjectEnum from './mstr-object-type-enum';
 
@@ -77,12 +78,13 @@ export const populateDetails = (
  * @returns The calculated offset value.
  */
 export const calculateOffsetForObjectInfoSettings = (
-  objectInfoSettings: ObjectInfoSetting[]
+  objectInfoSettings: ObjectInfoSetting[],
+  objectType: MstrObjectTypes
 ): number => {
+  const isReport = objectType.name === 'report';
+
   let offset = 0;
-  // TODO: receive object type and determine spaces accordingly
   const defaultOffset = 3;
-  const offsetForFilter = 9;
   const offsetForName = 2;
 
   for (const item of objectInfoSettings) {
@@ -92,7 +94,10 @@ export const calculateOffsetForObjectInfoSettings = (
           offset += offsetForName;
           break;
         case 'filter':
-          offset += offsetForFilter;
+          offset += isReport ? defaultOffset * 3 : defaultOffset;
+          break;
+        case 'pageBy':
+          offset += isReport ? defaultOffset : 0;
           break;
         default:
           offset += defaultOffset;

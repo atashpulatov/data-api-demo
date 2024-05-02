@@ -1,4 +1,4 @@
-import { getObjectDetailsForWorksheet } from '../../mstr-object/object-info-helper';
+import { insertAndFormatObjectDetails } from '../../mstr-object/object-info-helper';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 import { officeApiWorksheetHelper } from '../api/office-api-worksheet-helper';
@@ -83,19 +83,16 @@ class OfficeTableCreate {
     const { objectDetailsSize } = objectData.objectSettings;
 
     if (objectDetailsSize > 0) {
-      // Offset the start cell by the number of rows needed for the object details
-      const lastCellOfDetails = officeApiHelper.offsetCellBy(
+      await insertAndFormatObjectDetails({
+        objectDetailsSize,
         startCell,
-        objectDetailsSize - 1,
-        0
-      );
-      const tableDetailsAddress = `${startCell}:${lastCellOfDetails}`;
-      const tableDetailsRange = worksheet.getRange(tableDetailsAddress);
+        objectData,
+        worksheet,
+        excelContext,
+      });
 
-      tableDetailsRange.values = getObjectDetailsForWorksheet(objectData);
       startCell = officeApiHelper.offsetCellBy(startCell, objectDetailsSize, 0);
     }
-
 
     const tableStartCell = this.getTableStartCell(
       startCell,
@@ -103,11 +100,6 @@ class OfficeTableCreate {
       prevOfficeTable,
       tableChanged
     );
-
-    console.log('-----> tableStartCell', tableStartCell);
-
-    console.log('-----> detilase gore degistirilmis startCell', startCell);
-
 
     const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
     const range = this.getObjectRange(tableStartCell, worksheet, tableRange, mstrTable);

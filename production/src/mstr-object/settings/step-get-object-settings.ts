@@ -28,7 +28,10 @@ class StepGetObjectSettings {
         worksheetObjectInfoSettings,
       } = this.reduxStore.getState().settingsReducer;
 
-      const objectDetailsOffset = calculateOffsetForObjectInfoSettings(worksheetObjectInfoSettings);
+      const objectDetailsOffset = calculateOffsetForObjectInfoSettings(
+        worksheetObjectInfoSettings,
+        objectData.mstrObjectType
+      );
 
       const updatedObjectSettings = {} as ObjectSettings;
       updatedObjectSettings.objectDetailsSize = objectDetailsOffset;
