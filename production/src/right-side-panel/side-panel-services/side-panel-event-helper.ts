@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 import { notificationService } from '../../notification/notification-service';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
@@ -38,11 +40,28 @@ class SidePanelEventHelper {
    * @param {Function} setActiveCellAddress Callback to modify the activeCellAddress in state of RightSidePanel
    */
   @initializationErrorDecorator.initializationWrapper
-  async initializeActiveCellChangedListener(setActiveCellAddress: Function): Promise<void> {
+  async initializeActiveSelectionChangedListener(
+    setActiveCellAddress: Function,
+    setActiveSheetIndex: Dispatch<SetStateAction<number>>,
+    isAnyPopupOrSettingsDisplayed: boolean
+  ): Promise<OfficeExtension.EventHandlerResult<Excel.SelectionChangedEventArgs>> {
     const excelContext = await officeApiHelper.getExcelContext();
     const initialCellAddress = await officeApiHelper.getSelectedCell(excelContext);
+    const activeWorksheet = officeApiHelper.getCurrentExcelSheet(excelContext);
+
+    activeWorksheet.load('position');
+    await excelContext.sync();
+
     setActiveCellAddress(initialCellAddress);
-    await officeApiHelper.addOnSelectionChangedListener(excelContext, setActiveCellAddress);
+    // only initialize active sheet index when no popup (notifications, Office dialog, sidepanel popup) or settings visible
+    !isAnyPopupOrSettingsDisplayed && setActiveSheetIndex(activeWorksheet.position);
+
+    return officeApiHelper.addOnSelectionChangedListener(
+      excelContext,
+      setActiveCellAddress,
+      setActiveSheetIndex,
+      isAnyPopupOrSettingsDisplayed
+    );
   }
 
   /**

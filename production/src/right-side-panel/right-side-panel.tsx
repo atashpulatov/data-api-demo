@@ -48,16 +48,23 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
 }) => {
   const [sidePanelPopup, setSidePanelPopup] = useState(null);
   const [loadedObjectsWrapped, setLoadedObjectsWrapped] = useState(loadedObjects);
+  const [activeSheetIndex, setActiveSheetIndex] = useState(-1);
 
   const operations = useSelector(selectOperations);
   const globalNotification = useSelector(notificationReducerSelectors.selectGlobalNotification);
   const notifications = useSelector(notificationReducerSelectors.selectNotifications);
   const isSidePanelBlocked = useSelector(repromptsQueueSelector.doesRepromptQueueContainItems);
   const isDialogOpen = useSelector(officeSelectors.selectIsDialogOpen);
-  useInitializeSidePanel(updateActiveCellAddress);
+  const popupData = useSelector(officeSelectors.selectPopupData);
 
+  // represents whether any popup (notifications, Office dialog, sidepanel popup) or settings are visible
+  const isAnyPopupOrSettingsDisplayed = sidePanelPopup || globalNotification?.type || isDialogOpen
+    || popupData || isSettings || settingsPanelLoaded;
+
+  useInitializeSidePanel(updateActiveCellAddress, setActiveSheetIndex, isAnyPopupOrSettingsDisplayed);
   useDialogPanelCommunication();
   useGetSidePanelPopup({ setSidePanelPopup, sidePanelPopup });
+
   const duplicatePopupParams = useGetUpdatedDuplicatePopup({ sidePanelPopup, setSidePanelPopup });
   const filteredObjects = useGetFilteredObjectListForSidePanelDetails(loadedObjectsWrapped);
 
@@ -78,7 +85,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
         <SettingsSidePanel />
       ) : (
         <SidePanel
-          activeGroupKey={0}
+          activeGroupKey={activeSheetIndex}
           loadedObjects={filteredObjects as any}
           onAddData={sidePanelService.addData}
           onTileClick={sidePanelService.highlightObject}
