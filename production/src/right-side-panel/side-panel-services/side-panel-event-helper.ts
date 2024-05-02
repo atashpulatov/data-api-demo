@@ -47,14 +47,17 @@ class SidePanelEventHelper {
   ): Promise<OfficeExtension.EventHandlerResult<Excel.SelectionChangedEventArgs>> {
     const excelContext = await officeApiHelper.getExcelContext();
     const initialCellAddress = await officeApiHelper.getSelectedCell(excelContext);
-    const activeWorksheet = officeApiHelper.getCurrentExcelSheet(excelContext);
-
-    activeWorksheet.load('position');
-    await excelContext.sync();
 
     setActiveCellAddress(initialCellAddress);
-    // only initialize active sheet index when no popup (notifications, Office dialog, sidepanel popup) or settings visible
-    !isAnyPopupOrSettingsDisplayed && setActiveSheetIndex(activeWorksheet.position);
+    // only read + init active sheet index when no popup (notifications, Office dialog, etc.) or settings visible
+    if (!isAnyPopupOrSettingsDisplayed) {
+      const activeWorksheet = officeApiHelper.getCurrentExcelSheet(excelContext);
+
+      activeWorksheet.load('position');
+      await excelContext.sync();
+
+      setActiveSheetIndex(activeWorksheet.position);
+    }
 
     return officeApiHelper.addOnSelectionChangedListener(
       excelContext,
