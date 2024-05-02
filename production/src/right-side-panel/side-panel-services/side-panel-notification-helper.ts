@@ -65,6 +65,7 @@ class SidePanelNotificationHelper {
           }
         : undefined,
       onClose: closePopup,
+      isImportPivotTable: sourceObject?.importType === ObjectImportType.PIVOT_TABLE,
     });
   }
 
