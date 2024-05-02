@@ -118,6 +118,7 @@ class OfficeTableCreate {
       newOfficeTableName,
       mstrTable,
       worksheet,
+      startCell,
       excelContext,
     });
   }
@@ -222,12 +223,14 @@ class OfficeTableCreate {
     newOfficeTableName,
     mstrTable,
     worksheet,
+    startCell,
     excelContext,
   }: {
     officeTable: Excel.Table;
     newOfficeTableName: string;
     mstrTable: any;
     worksheet: Excel.Worksheet;
+    startCell: string;
     excelContext: Excel.RequestContext;
   }): Promise<any> {
     const { isCrosstab } = mstrTable;
@@ -258,6 +261,7 @@ class OfficeTableCreate {
         bindId,
         tableName: newOfficeTableName,
         worksheet: { id, name, index },
+        startCell,
         groupData: { key: index, title: name },
       };
     } catch (error) {
