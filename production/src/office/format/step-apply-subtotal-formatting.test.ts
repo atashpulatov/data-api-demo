@@ -51,7 +51,7 @@ describe('StepApplySubtotalFormatting', () => {
 
   it('applySubtotalFormattingRedux should work as expected - subtotalsAddresses.length is defined', async () => {
     // given
-    const objectData = { importType: ObjectImportType.TABLE } as ObjectData;
+    const objectData = {} as ObjectData;
 
     const operationData = {
       objectWorkingId: 2137,
