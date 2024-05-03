@@ -4,7 +4,6 @@ import { ObjectData } from '../../types/object-types';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import officeFormatSubtotals from './office-format-subtotals';
 import stepApplySubtotalFormatting from './step-apply-subtotal-formatting';
-import { ObjectImportType } from '../../mstr-object/constants';
 
 describe('StepApplySubtotalFormatting', () => {
   afterEach(() => {
