@@ -2,6 +2,7 @@ import { MetricsPosition } from '../../mstr-object/mstr-object-response-types';
 import { CrosstabHeaderDimensions, ObjectData } from '../../types/object-types';
 
 import mstrNormalizedJsonHandler from '../../mstr-object/handler/mstr-normalized-json-handler';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 const EXCEL_XTABS_BORDER_COLOR = '#a5a5a5';
 
@@ -215,7 +216,6 @@ class OfficeApiCrosstabHelper {
    * @return Context.sync
    */
   createColumnsHeaders(officeTable: Excel.Table, columns: any[], objectData: ObjectData): void {
-    const { mergeCrosstabColumns } = objectData.objectSettings;
     const reportStartingCell = officeTable.getDataBodyRange().getCell(0, 0);
     const columnOffset = columns.length;
     const rowOffset = 0;
@@ -227,8 +227,12 @@ class OfficeApiCrosstabHelper {
     const headerRange = startingCell.getResizedRange(columns.length - 1, columns[0].length - 1);
     this.insertHeadersValues(headerRange, columns, 'columns');
 
-    if (mergeCrosstabColumns) {
-      this.createHeaders(columns, startingCell, directionVector);
+    if (objectData.importType !== ObjectImportType.FORMATTED_TABLE) {
+      const { mergeCrosstabColumns } = objectData.objectSettings;
+
+      if (mergeCrosstabColumns) {
+        this.createHeaders(columns, startingCell, directionVector);
+      }
     }
   }
 

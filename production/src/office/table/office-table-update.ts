@@ -8,6 +8,8 @@ import { ObjectData } from '../../types/object-types';
 
 import officeApiDataLoader from '../api/office-api-data-loader';
 import officeFormatSubtotals from '../format/office-format-subtotals';
+import { FORMATTED_TABLE_CROSSTAB_EXTRA_ROWS } from './office-table-create';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 class OfficeTableUpdate {
   /**
@@ -53,11 +55,19 @@ class OfficeTableUpdate {
 
       await excelContext.sync();
 
+
+      // Add extra rows to crosstab table to be able to track users manipulations, otherwise formatted table range 
+      // will entirely overlap and ultmately remove the underneath crosstab table
+      let rowsToPreserveCount: number = rows;
+      if (objectData.importType === ObjectImportType.FORMATTED_TABLE && isCrosstab) {
+        rowsToPreserveCount += FORMATTED_TABLE_CROSSTAB_EXTRA_ROWS;
+      }
+
       await officeRemoveHelper.deleteRowsInChunks(
         excelContext,
         prevOfficeTable,
         CONTEXT_LIMIT,
-        rows
+        rowsToPreserveCount
       );
 
       return prevOfficeTable;
