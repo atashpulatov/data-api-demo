@@ -1,6 +1,8 @@
 import { PageByData } from '../page-by/page-by-types';
 import { RequestPageByModalOpenData } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer-types';
 
+import { ObjectImportType } from '../mstr-object/constants';
+
 export interface AttributeSelectorNotConnectedProps {
   title: string;
   triggerUpdate: boolean;
@@ -91,6 +93,7 @@ export interface MstrError {
 export interface AttributeSelectorWindowNotConnectedProps {
   chosenObject: MstrDataProps;
   objectName: string;
+  importType: ObjectImportType;
   mstrData: MstrDataProps;
   handleBack: NonNullable<boolean | ((...args: any[]) => any)>;
   importSubtotal: boolean;

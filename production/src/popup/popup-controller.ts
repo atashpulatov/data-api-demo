@@ -425,6 +425,7 @@ class PopupController {
       body: response.body,
       dossierData: response.dossierData,
       promptsAnswers: response.promptsAnswers,
+      importType: response.importType,
       isPrompted:
         response.promptsAnswers?.length > 0 && response.promptsAnswers[0].answers?.length > 0,
       instanceId: response.instanceId,
@@ -602,10 +603,10 @@ class PopupController {
 
   loadPending =
     (wrapped: any) =>
-    async (...args: any) => {
-      this.runPopup(DialogType.loadingPage, 30, 40);
-      return wrapped(...args);
-    };
+      async (...args: any) => {
+        this.runPopup(DialogType.loadingPage, 30, 40);
+        return wrapped(...args);
+      };
 
   closeDialog = (dialog: Office.Dialog): void => {
     try {

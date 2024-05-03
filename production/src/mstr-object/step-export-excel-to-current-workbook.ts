@@ -2,10 +2,11 @@ import { officeApiHelper } from '../office/api/office-api-helper';
 import { mstrObjectRestService } from './mstr-object-rest-service';
 
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
-import { ObjectData } from '../types/object-types';
+import { ObjectData, VisualizationInfo } from '../types/object-types';
 
 import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
+import mstrObjectEnum from './mstr-object-type-enum';
 
 const base64BlobFileDataSubstring = 'base64,';
 
@@ -29,19 +30,28 @@ class StepExportExcelToCurrentWorkbook {
 
     try {
       const { instanceDefinition } = operationData;
-      const { objectWorkingId, objectId, visualizationInfo, projectId } = objectData;
+      const { objectWorkingId, objectId, visualizationInfo, projectId, mstrObjectType } = objectData;
       const excelContext = await officeApiHelper.getExcelContext();
 
-      // @ts-expect-error
-      const { visualizationKey } = visualizationInfo;
-      const response = await mstrObjectRestService.exportDossierToExcel(
-        {
-          dossierId: objectId,
-          dossierInstanceId: instanceDefinition.instanceId,
-          visualizationKey,
+      let response: Response;
+      if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+        const { visualizationKey } = visualizationInfo as VisualizationInfo;
+        response = await mstrObjectRestService.exportDossierToExcel(
+          {
+            dossierId: objectId,
+            dossierInstanceId: instanceDefinition.instanceId,
+            visualizationKey,
+            projectId
+          }
+        );
+      } else { // if mstrObjectType is a report type
+        response = await mstrObjectRestService.exportReportToExcel({
+          reportId: objectId,
+          reportInstanceId: instanceDefinition.instanceId,
           projectId
-        }
-      );
+        });
+      }
+
       const excelBlob = await response.blob();
 
       const exportEngineWorksheet = await this.insertExcelWorksheet(excelBlob, excelContext);
