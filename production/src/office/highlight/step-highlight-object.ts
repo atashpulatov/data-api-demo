@@ -22,7 +22,7 @@ class StepHighlightObject {
       // Highlight operation is not supported for images and pivot tables as Excel API does not support shape and pivot table object selection and as of now
       const { importType, pivotTableId, bindId } = objectData;
 
-      if (importType === ObjectImportType.TABLE) {
+      if (importType === ObjectImportType.TABLE || importType === ObjectImportType.FORMATTED_TABLE) {
         await officeApiHelper.onBindingObjectClick(objectData);
       } else {
         const excelContext = await officeApiHelper.getExcelContext();

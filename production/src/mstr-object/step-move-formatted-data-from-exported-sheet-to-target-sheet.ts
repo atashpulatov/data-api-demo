@@ -29,9 +29,16 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
 
     try {
       const { startCell, instanceDefinition, sourceWorksheetId, excelContext } = operationData;
-      const { objectWorkingId } = objectData;
+      const { isCrosstab, crosstabHeaderDimensions, objectWorkingId } = objectData;
 
-      const { rows, columns } = instanceDefinition;
+      let { rows, columns } = instanceDefinition;
+
+      if (isCrosstab) {
+        const { rowsX, rowsY, columnsX, columnsY } = crosstabHeaderDimensions;
+        rows = columnsY + rowsY;
+        columns = columnsX + rowsX;
+      }
+
       // Get range starting from 'A3', to exclude the visualization title 
       const sourceTableRange = officeApiHelper.getRange(columns, VISUALIZATION_TITLE_EXCLUDED_DEFAULT_CELL_POSITION, rows);
       const targetTableRange = officeApiHelper.getRange(columns, startCell, rows);
