@@ -45,26 +45,32 @@ class SidePanelEventHelper {
     setActiveSheetIndex: Dispatch<SetStateAction<number>>,
     isAnyPopupOrSettingsDisplayed: boolean
   ): Promise<OfficeExtension.EventHandlerResult<Excel.SelectionChangedEventArgs>> {
-    const excelContext = await officeApiHelper.getExcelContext();
-    const initialCellAddress = await officeApiHelper.getSelectedCell(excelContext);
+    try {
+      const excelContext = await officeApiHelper.getExcelContext();
+      const initialCellAddress = await officeApiHelper.getSelectedCell(excelContext);
 
-    setActiveCellAddress(initialCellAddress);
-    // only read + init active sheet index when no popup (notifications, Office dialog, etc.) or settings visible
-    if (!isAnyPopupOrSettingsDisplayed) {
-      const activeWorksheet = officeApiHelper.getCurrentExcelSheet(excelContext);
+      setActiveCellAddress(initialCellAddress);
+      // only read + init active sheet index when no popup (notifications, Office dialog, etc.) or settings visible
+      if (!isAnyPopupOrSettingsDisplayed) {
+        const activeWorksheet = officeApiHelper.getCurrentExcelSheet(excelContext);
 
-      activeWorksheet.load('position');
-      await excelContext.sync();
+        activeWorksheet.load('position');
+        await excelContext.sync();
 
-      setActiveSheetIndex(activeWorksheet.position);
+        activeWorksheet.position !== undefined &&
+          activeWorksheet.position !== null &&
+          setActiveSheetIndex(activeWorksheet.position);
+      }
+
+      return officeApiHelper.addOnSelectionChangedListener(
+        excelContext,
+        setActiveCellAddress,
+        setActiveSheetIndex,
+        isAnyPopupOrSettingsDisplayed
+      );
+    } catch (e) {
+      console.warn('Cannot initialize active selection changed listener');
     }
-
-    return officeApiHelper.addOnSelectionChangedListener(
-      excelContext,
-      setActiveCellAddress,
-      setActiveSheetIndex,
-      isAnyPopupOrSettingsDisplayed
-    );
   }
 
   /**
