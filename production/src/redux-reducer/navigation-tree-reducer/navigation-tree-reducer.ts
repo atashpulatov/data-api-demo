@@ -196,6 +196,8 @@ const cancelRequestImport = (state: NavigationTreeState): NavigationTreeState =>
 const startImport = (state: NavigationTreeState): NavigationTreeState => {
   const newState = { ...state };
   newState.importRequested = false;
+  newState.promptsAnswers = [];
+  newState.dossierData = null;
   return newState;
 };
 
