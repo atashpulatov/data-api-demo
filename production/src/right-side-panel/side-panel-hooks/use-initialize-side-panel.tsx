@@ -38,8 +38,11 @@ const useInitializeSidePanel = (
     }
     // Clear the event listener and sync context whenever dependencies change, prior to running next initialization
     function clearSidePanelActiveSelectionChangedListener(): void {
-      activeSelectionChangedListenerEventResult.current?.remove?.();
-      activeSelectionChangedListenerEventResult.current?.context?.sync?.();
+      // Extract the current value of the event result ref
+      const { current: eventResultCurrent } = activeSelectionChangedListenerEventResult;
+      // Remove the event listener and sync the context
+      eventResultCurrent?.remove?.();
+      eventResultCurrent?.context?.sync?.();
     }
 
     initializeSidePanelActiveSelectionChangedListener();
