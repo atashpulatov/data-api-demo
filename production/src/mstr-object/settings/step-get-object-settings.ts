@@ -20,7 +20,7 @@ class StepGetObjectSettings {
     operationData: OperationData
   ): Promise<void> => {
     try {
-      const { objectSettings } = objectData;
+      const { objectSettings, mstrObjectType } = objectData;
       const { operationType } = operationData;
       const {
         mergeCrosstabColumns: mergeCrosstabColumnsUserSetting,
@@ -30,7 +30,7 @@ class StepGetObjectSettings {
 
       const objectDetailsOffset = calculateOffsetForObjectInfoSettings(
         worksheetObjectInfoSettings,
-        objectData.mstrObjectType
+        mstrObjectType
       );
 
       const updatedObjectSettings = {} as ObjectSettings;

@@ -65,7 +65,7 @@ class OfficeTableCreate {
 
     const {
       definition: { sourceName },
-      importType
+      importType,
     } = objectData;
 
     const newOfficeTableName = getOfficeTableHelper.createTableName(mstrTable, tableName);
@@ -106,7 +106,7 @@ class OfficeTableCreate {
       tableChanged
     );
 
-    // Add extra rows to crosstab table to be able to track users manipulations, otherwise formatted table range 
+    // Add extra rows to crosstab table to be able to track users manipulations, otherwise formatted table range
     // will entirely overlap and ultmately remove the underneath crosstab table
     let tableRows: number = rows;
     if (importType === ObjectImportType.FORMATTED_TABLE && isCrosstab) {
@@ -147,7 +147,6 @@ class OfficeTableCreate {
       worksheet,
       startCell,
       excelContext,
-      newStartCell: startCell,
     });
   }
 
@@ -253,7 +252,6 @@ class OfficeTableCreate {
     worksheet,
     startCell,
     excelContext,
-    newStartCell,
   }: {
     officeTable: Excel.Table;
     newOfficeTableName: string;
@@ -261,7 +259,6 @@ class OfficeTableCreate {
     worksheet: Excel.Worksheet;
     startCell: string;
     excelContext: Excel.RequestContext;
-    newStartCell: string;
   }): Promise<any> {
     const { isCrosstab } = mstrTable;
     try {
@@ -293,7 +290,6 @@ class OfficeTableCreate {
         worksheet: { id, name, index },
         startCell,
         groupData: { key: index, title: name },
-        newStartCell,
       };
     } catch (error) {
       await excelContext.sync();
