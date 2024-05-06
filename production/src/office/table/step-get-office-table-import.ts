@@ -57,7 +57,6 @@ class StepGetOfficeTableImport {
           ...updatedObject,
           worksheet,
           groupData,
-          startCell,
         };
       }
 
