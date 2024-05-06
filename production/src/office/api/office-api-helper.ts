@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { officeApiCrosstabHelper } from './office-api-crosstab-helper';
 
@@ -263,7 +265,7 @@ class OfficeApiHelper {
    *
    * @param excelContext Reference to Excel Context used by Excel API functions
    * @param worksheetId Worksheet id
-   * 
+   *
    * @returns Reference to active Excel Worksheet
    */
   getExcelSheetById(excelContext: Excel.RequestContext, worksheetId: string): Excel.Worksheet {
@@ -275,11 +277,15 @@ class OfficeApiHelper {
    *
    * @param excelContext Reference to Excel Context used by Excel API functions
    * @param worksheetId Worksheet id
-   * 
+   *
    * @returns Reference to active Excel Worksheet
    */
-  async copyRangeFromSourceWorksheet(rangeMigrationInfo: any, excelContext: Excel.RequestContext): Promise<void> {
-    const { sourceTableRange, sourceWorksheet, targetTableRange, targetWorksheet } = rangeMigrationInfo;
+  async copyRangeFromSourceWorksheet(
+    rangeMigrationInfo: any,
+    excelContext: Excel.RequestContext
+  ): Promise<void> {
+    const { sourceTableRange, sourceWorksheet, targetTableRange, targetWorksheet } =
+      rangeMigrationInfo;
 
     targetWorksheet.getRange(targetTableRange).copyFrom(sourceWorksheet.getRange(sourceTableRange));
     await excelContext.sync();
@@ -290,10 +296,13 @@ class OfficeApiHelper {
    *
    * @param excelContext Reference to Excel Context used by Excel API functions
    * @param worksheetId Worksheet id
-   * 
+   *
    * @returns Reference to active Excel Worksheet
    */
-  async hideExcelWorksheet(worksheetId: string, excelContext: Excel.RequestContext): Promise<Excel.Worksheet> {
+  async hideExcelWorksheet(
+    worksheetId: string,
+    excelContext: Excel.RequestContext
+  ): Promise<Excel.Worksheet> {
     const worksheet = excelContext.workbook.worksheets.getItem(worksheetId);
     worksheet.visibility = Excel.SheetVisibility.hidden;
 
@@ -307,7 +316,7 @@ class OfficeApiHelper {
    *
    * @param externalWorkbookBase64 Export engine workbook encoded in base 64
    * @param excelContext Reference to Excel Context used by Excel API functions
-   * 
+   *
    * @returns Reference to active Excel Worksheet
    */
   insertExcelWorksheets(externalWorkbookBase64: string, excelContext: Excel.RequestContext): any {
@@ -485,13 +494,31 @@ class OfficeApiHelper {
    */
   async addOnSelectionChangedListener(
     excelContext: Excel.RequestContext,
-    setActiveCellAddress: Function
-  ): Promise<void> {
-    excelContext.workbook.onSelectionChanged.add(async () => {
-      const activeCellAddress = await this.getSelectedCell(excelContext);
-      setActiveCellAddress(activeCellAddress);
+    setActiveCellAddress: Function,
+    setActiveSheetIndex: Dispatch<SetStateAction<number>>,
+    isAnyPopupOrSettingsDisplayed: boolean
+  ): Promise<OfficeExtension.EventHandlerResult<Excel.SelectionChangedEventArgs>> {
+    const eventResult = excelContext.workbook.onSelectionChanged.add(async () => {
+      try {
+        // active cell address will always be updated
+        const activeCellAddress = await this.getSelectedCell(excelContext);
+        setActiveCellAddress(activeCellAddress);
+        // only read + update active sheet index if no popup (notifications, Office dialog, etc.) or settings visible
+        if (!isAnyPopupOrSettingsDisplayed) {
+          const activeWorksheet = this.getCurrentExcelSheet(excelContext);
+
+          activeWorksheet.load('position');
+          await excelContext.sync();
+
+          setActiveSheetIndex(activeWorksheet.position);
+        }
+      } catch (e) {
+        console.warn('Cannot update active selection');
+      }
     });
     await excelContext.sync();
+
+    return eventResult;
   }
 
   /**
