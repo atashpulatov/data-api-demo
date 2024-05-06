@@ -1,3 +1,5 @@
+import { localizeDate } from '@mstr/connector-components';
+
 import { officeApiHelper } from '../office/api/office-api-helper';
 
 import { reduxStore } from '../store';
@@ -30,16 +32,16 @@ const getObjectDetailsForWorksheet = (
   enabledWorksheetDetailsSettings.forEach(setting => {
     switch (setting.key) {
       case 'name':
-        valuesToFormat.push(object.name);
         objectDetailValues.push([object.name], ['']);
+        valuesToFormat.push(object.name);
         break;
       case 'owner':
-        valuesToFormat.push(setting.item);
         objectDetailValues.push([setting.item], [object.details?.owner.name], ['']);
+        valuesToFormat.push(setting.item);
         break;
       case 'description':
-        valuesToFormat.push(setting.item);
         objectDetailValues.push([setting.item], [object.details?.description || '-'], ['']);
+        valuesToFormat.push(setting.item);
         break;
       case 'filter':
         if (isReport) {
@@ -69,6 +71,7 @@ const getObjectDetailsForWorksheet = (
             [object.details?.filters.viewFilterText || '-'],
             ['']
           );
+          valuesToFormat.push(setting.item);
         }
         break;
       case 'importedBy':
@@ -76,11 +79,31 @@ const getObjectDetailsForWorksheet = (
         valuesToFormat.push(setting.item);
         break;
       case 'dateModified':
-        objectDetailValues.push([setting.item], [object.details?.modifiedDate], ['']);
+        objectDetailValues.push(
+          [setting.item],
+          [
+            localizeDate({
+              date: object.details?.modifiedDate,
+              locale: i18n.language,
+              toUTC: false,
+            }).string,
+          ],
+          ['']
+        );
         valuesToFormat.push(setting.item);
         break;
       case 'dateCreated':
-        objectDetailValues.push([setting.item], [object.details?.createdDate], ['']);
+        objectDetailValues.push(
+          [setting.item],
+          [
+            localizeDate({
+              date: object.details?.createdDate,
+              locale: i18n.language,
+              toUTC: false,
+            }).string,
+          ],
+          ['']
+        );
         valuesToFormat.push(setting.item);
         break;
       case 'id':

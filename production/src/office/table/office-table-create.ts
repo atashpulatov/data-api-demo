@@ -80,7 +80,7 @@ class OfficeTableCreate {
       startCell = await officeApiHelper.getSelectedCell(excelContext);
     }
 
-    const { objectDetailsSize } = objectData.objectSettings;
+    const { objectDetailsSize } = objectData.objectSettings || {};
 
     if (objectDetailsSize > 0) {
       await insertAndFormatObjectDetails({
