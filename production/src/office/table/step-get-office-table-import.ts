@@ -23,14 +23,14 @@ class StepGetOfficeTableImport {
   async getOfficeTableImport(objectData: ObjectData, operationData: OperationData): Promise<void> {
     try {
       console.time('Create or get table - import');
-      const { objectWorkingId, excelContext, instanceDefinition, startCell, insertNewWorksheet } =
+      const { objectWorkingId, excelContext, instanceDefinition, startCell: selectedCell, insertNewWorksheet } =
         operationData;
 
-      const { officeTable, bindId, tableName, worksheet, groupData, newStartCell } =
+      const { officeTable, bindId, tableName, worksheet, startCell, groupData } =
         await officeTableCreate.createOfficeTable({
           excelContext,
           instanceDefinition,
-          startCell,
+          startCell: selectedCell,
           insertNewWorksheet,
           pageByData: objectData.pageByData,
           objectData,
@@ -57,7 +57,7 @@ class StepGetOfficeTableImport {
           ...updatedObject,
           worksheet,
           groupData,
-          startCell: newStartCell,
+          startCell,
         };
       }
 

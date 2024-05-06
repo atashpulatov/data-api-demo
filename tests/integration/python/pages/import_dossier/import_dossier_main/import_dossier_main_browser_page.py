@@ -11,7 +11,7 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
     RESET_BUTTON = '.icon-tb_reset'
     RESET_CONFIRMATION_YES = '.mstrd-ConfirmationDialog-button'
 
-    IMPORT_BUTTON = 'import-data'
+    IMPORT_BUTTON = 'import'
 
     TILE_CONTEXT_MENU = '.hover-menu-btn'
     CONTEXT_MENU_SHOW_DATA = 'Show Data'

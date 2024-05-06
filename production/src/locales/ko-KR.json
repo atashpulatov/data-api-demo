@@ -281,5 +281,6 @@
    "Import data as text": "데이터를 텍스트로 가져오기",
    "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "활성화한 경우 애트리뷰트 값을 MicroStrategy의 형식을 유지하면서 텍스트로 가져옵니다. 이는 Excel 수식에 영향을 미칠 수 있습니다.",
    "Merge columns": "열 병합",
-   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "활성화한 경우 값이 동일한 인접한 열 헤더가 병합됩니다. 크로스탭 리포트에만 적용됩니다."
+   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "활성화한 경우 값이 동일한 인접한 열 헤더가 병합됩니다. 크로스탭 리포트에만 적용됩니다.",
+   "Paged-By": "페이지-바이"
 }

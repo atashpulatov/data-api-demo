@@ -47,14 +47,13 @@ describe('answersReducer', () => {
 
   it('Import operation for Dossier should update the state with newly-provided answers', () => {
     // given
-    const prevState = { answers: [] as PromptsAnswer[] };
+    // change prevState to type AnswersState
+    const prevState: AnswersState = { answers: [] };
     const action: ImportOperationAction = {
       type: AnswerActionTypes.IMPORT_OPERATION,
       payload: {
         object: {
-          mstrObjectType: {
-            name: 'visualization',
-          },
+          isPrompted: true,
           promptsAnswers: [
             {
               messageName: 'someMessageName',
@@ -116,9 +115,7 @@ describe('answersReducer', () => {
       payload: {
         operation: {
           objectEditedData: {
-            visualizationInfo: {
-              name: 'visualization',
-            },
+            isPrompted: true,
             promptsAnswers: [
               {
                 messageName: 'someMessageName',

@@ -10,8 +10,12 @@ import { InstanceDefinition } from '../../redux-reducer/operation-reducer/operat
 import { ObjectData } from '../../types/object-types';
 
 import officeApiDataLoader from '../api/office-api-data-loader';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 const DEFAULT_TABLE_STYLE = 'TableStyleLight11';
+
+// Pair of extra rows required to be appended to formatted crosstab table, in order to track the imported range
+export const FORMATTED_TABLE_CROSSTAB_EXTRA_ROWS = 2;
 
 class OfficeTableCreate {
   /**
@@ -61,6 +65,7 @@ class OfficeTableCreate {
 
     const {
       definition: { sourceName },
+      importType
     } = objectData;
 
     const newOfficeTableName = getOfficeTableHelper.createTableName(mstrTable, tableName);
@@ -101,7 +106,14 @@ class OfficeTableCreate {
       tableChanged
     );
 
-    const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
+    // Add extra rows to crosstab table to be able to track users manipulations, otherwise formatted table range 
+    // will entirely overlap and ultmately remove the underneath crosstab table
+    let tableRows: number = rows;
+    if (importType === ObjectImportType.FORMATTED_TABLE && isCrosstab) {
+      tableRows += FORMATTED_TABLE_CROSSTAB_EXTRA_ROWS;
+    }
+
+    const tableRange = officeApiHelper.getRange(columns, tableStartCell, tableRows);
     const range = this.getObjectRange(tableStartCell, worksheet, tableRange, mstrTable);
 
     excelContext.trackedObjects.add(range);
@@ -133,6 +145,7 @@ class OfficeTableCreate {
       newOfficeTableName,
       mstrTable,
       worksheet,
+      startCell,
       excelContext,
       newStartCell: startCell,
     });
@@ -238,6 +251,7 @@ class OfficeTableCreate {
     newOfficeTableName,
     mstrTable,
     worksheet,
+    startCell,
     excelContext,
     newStartCell,
   }: {
@@ -245,6 +259,7 @@ class OfficeTableCreate {
     newOfficeTableName: string;
     mstrTable: any;
     worksheet: Excel.Worksheet;
+    startCell: string;
     excelContext: Excel.RequestContext;
     newStartCell: string;
   }): Promise<any> {
@@ -276,6 +291,7 @@ class OfficeTableCreate {
         bindId,
         tableName: newOfficeTableName,
         worksheet: { id, name, index },
+        startCell,
         groupData: { key: index, title: name },
         newStartCell,
       };

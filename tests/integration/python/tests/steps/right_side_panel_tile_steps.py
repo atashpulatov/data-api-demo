@@ -181,6 +181,10 @@ def step_impl(context):
 def step_impl(context):
     context.pages.right_panel_tile_page().wait_for_import_object_to_finish_successfully()
 
+@step('I hover over import successfull message')
+def step_impl(context):
+    context.pages.right_panel_tile_page().hover_over_import_successful_message()
+
 
 @step('I waited for object to be duplicated successfully')
 def step_impl(context):
