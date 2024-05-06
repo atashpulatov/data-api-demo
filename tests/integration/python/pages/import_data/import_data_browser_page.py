@@ -5,6 +5,7 @@ from framework.pages_base.base_browser_page import BaseBrowserPage
 from framework.util.const import Const
 from framework.util.exception.mstr_exception import MstrException
 from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
+import time
 
 
 class ImportDataBrowserPage(BaseBrowserPage):
@@ -36,10 +37,14 @@ class ImportDataBrowserPage(BaseBrowserPage):
     ALL_OBJECTS_LIST = '.mstrd-SearchFilter li#searchFilterOption_all'
     FIRST_OBJECT_LIBRARY = '.mstrd-SearchResultsList li:nth-child(1)'
 
-    IMPORT_BUTTON_ELEM = 'import-data'
+    IMPORT_BUTTON_ELEM = 'import'
     IMPORT_BUTTON_DISABLED = 'disabled'
     PREPARE_BUTTON_ELEM = 'prepare'
     IMPORT_IMAGE_BUTTON_ELEM = 'import-image'
+    IMPORT_TYPE_BUTTON_XPATH = '//button[contains(@class, "mstr-rc-3-button-with-options__action-button") and contains(text(), "%s")]'
+    EXPAND_IMPORT_ARROW = '.mstr-rc-3-button-with-options__dropdown-button[aria-label="Show options"]'
+    SELECT_IMPORT_OPTION = '''li[aria-label='%s']'''
+    IMPORT_OPTION = '.mstr-rc-3-button-with-options > .mstr-rc-3-button-with-options__action-button'
 
     NOTIFICATION_TEXT_ELEM = '.selection-title'
     COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = 'Columns & Filters Selection'
@@ -141,12 +146,12 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
         :param object_name: object name to search for
         """
-        self.find_object(object_name)
-
-        self.go_to_all_objects_list()
-
-        self.select_object_by_name(object_name)
-
+        if self.find_object(object_name):
+            return self.select_object_by_name(object_name)
+        else:
+            self.go_to_all_objects_list()
+            return self.select_object_by_name(object_name)
+        
     def select_object_by_name(self, object_name):
         """
         Select object by name on the displayed objects list. This method does not verify ids and cannot handle
@@ -175,6 +180,12 @@ class ImportDataBrowserPage(BaseBrowserPage):
         name_object = self.find_element_in_list_by_text(name_object_selector, object_name)
         name_object.click()
 
+    def expand_and_select_import_type(self, import_type):
+        self.focus_on_add_in_popup_frame()
+        self.get_element_by_css(ImportDataBrowserPage.EXPAND_IMPORT_ARROW).click()
+        self.get_element_by_css(ImportDataBrowserPage.SELECT_IMPORT_OPTION % import_type).click()
+        self.get_element_by_css(ImportDataBrowserPage.IMPORT_OPTION).click()
+
     def click_import_button(self, not_used_reset_framework_method, not_used_context):
         self.focus_on_add_in_popup_frame()
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
@@ -188,7 +199,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
     def click_import_image_button_without_checking_results(self):
         self.focus_on_add_in_popup_frame()
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_IMAGE_BUTTON_ELEM).click()
-        
+
     def click_import_button_to_import_with_error(self, error_message):
         self.focus_on_add_in_popup_frame()
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
