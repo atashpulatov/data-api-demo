@@ -8,11 +8,7 @@ import { ObjectData } from '../types/object-types';
 
 import i18n from '../i18n';
 
-// TODO: Import localizeDate from connector components and use it for dates.
-// const parseDate = (dateToParse: string | undefined): string =>
-//     localizeDate({ date: dateToParse, locale: i18n.language, toUTC: false }).string;
-
-const getObjectDetailsForWorksheet = (
+export const getObjectDetailsForWorksheet = (
   object: ObjectData
 ): {
   objectDetailValues: string[][];
