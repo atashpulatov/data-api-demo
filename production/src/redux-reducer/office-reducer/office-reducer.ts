@@ -4,6 +4,7 @@ import {
   OfficeActionsTypes,
   OfficeState,
   SetActiveCellAddressAction,
+  SetIsAdvancedWorksheetTrackingSupported,
   SetIsDialogLoadedAction,
   SetIsInsertWorksheetAPISupportedAction,
   SetIsPivotTableSupported,
@@ -33,6 +34,7 @@ const initialState: OfficeState = {
   isShapeAPISupported: false,
   isInsertWorksheetAPISupported: false,
   isPivotTableSupported: false,
+  isAdvancedWorksheetTrackingSupported: false,
 };
 
 // eslint-disable-next-line default-param-last
@@ -85,9 +87,13 @@ export const officeReducer = (state = initialState, action: OfficeActions): Offi
 
     case OfficeActionsTypes.SET_INSERT_WORKSHEET_API_SUPPORTED:
       return setIsInsertWorksheetAPISupported(state, action);
-      
+
     case OfficeActionsTypes.SET_PIVOT_TABLE_SUPPORTED:
       return setIsPivotTableSupported(state, action);
+
+    case OfficeActionsTypes.SET_ADVANCED_WORKSHEET_TRACKING_SUPPORTED:
+      return setIsAdvancedWorksheetTrackingSupported(state, action);
+
     default:
       break;
   }
@@ -220,7 +226,6 @@ function setIsInsertWorksheetAPISupported(
   return {
     ...state,
     isInsertWorksheetAPISupported: action.isInsertWorksheetAPISupported,
-
   };
 }
 
@@ -231,5 +236,15 @@ function setIsPivotTableSupported(
   return {
     ...state,
     isPivotTableSupported: action.isPivotTableSupported,
+  };
+}
+
+function setIsAdvancedWorksheetTrackingSupported(
+  state: OfficeState,
+  action: SetIsAdvancedWorksheetTrackingSupported
+): OfficeState {
+  return {
+    ...state,
+    isAdvancedWorksheetTrackingSupported: action.isAdvancedWorksheetTrackingSupported,
   };
 }
