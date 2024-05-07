@@ -60,20 +60,16 @@ class OfficeTableCreate {
       rows,
       columns,
       mstrTable,
-      mstrTable: { isCrosstab, crosstabHeaderDimensions },
+      mstrTable: { isCrosstab, crosstabHeaderDimensions, name },
     } = instanceDefinition;
 
-    const {
-      definition: { sourceName },
-      importType,
-    } = objectData;
+    const { importType } = objectData;
 
     const newOfficeTableName = getOfficeTableHelper.createTableName(mstrTable, tableName);
-
     const worksheet = await officeApiWorksheetHelper.getWorksheet(
       excelContext,
       objectData.importType,
-      sourceName,
+      name,
       pageByData,
       prevOfficeTable,
       insertNewWorksheet

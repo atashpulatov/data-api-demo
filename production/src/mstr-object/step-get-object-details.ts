@@ -13,6 +13,7 @@ import {
   populateDefinition,
   populateDetails,
 } from './get-object-details-methods';
+import mstrObjectEnum from './mstr-object-type-enum';
 
 class StepGetObjectDetails {
   /**
@@ -102,6 +103,8 @@ class StepGetObjectDetails {
           definition.sourceName,
           pageByData
         );
+      } else if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+        newObjectName = objectData.name;
       }
 
       const updatedObject = {
