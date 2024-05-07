@@ -6,6 +6,7 @@ import { initialWorksheetObjectInfoSettings } from '../redux-reducer/settings-re
 
 describe('getObjectDetailsForWorksheet', () => {
   it('should return the object detail values and values to format', () => {
+    // given
     const object = {
       mstrObjectType: { name: 'report' },
       name: 'Test Report',
@@ -67,21 +68,13 @@ describe('getObjectDetailsForWorksheet', () => {
       [''],
     ];
 
-    const expectedValuesToFormat = [
-      'Test Report',
-      'Owner',
-      'Description',
-      'Report Filter',
-      'Report Limits',
-      'View Filter',
-      'Imported By',
-      'ID',
-      'Paged-By',
-    ];
+    const expectedIndexesToFormat = [0, 2, 5, 8, 11, 14, 17, 20, 23];
 
-    const { objectDetailValues, valuesToFormat } = getObjectDetailsForWorksheet(object);
+    // when
+    const { objectDetailValues, indexesToFormat } = getObjectDetailsForWorksheet(object);
 
+    // then
     expect(objectDetailValues).toEqual(expectedObjectDetailValues);
-    expect(valuesToFormat).toEqual(expectedValuesToFormat);
+    expect(indexesToFormat).toEqual(expectedIndexesToFormat);
   });
 });

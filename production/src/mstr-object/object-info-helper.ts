@@ -8,11 +8,16 @@ import { ObjectData } from '../types/object-types';
 
 import i18n from '../i18n';
 
+/**
+ * Retrieves object details and indexes to format specific value on worksheet.
+ * @param object - The object data.
+ * @returns An object containing the object detail values and indexes to format.
+ */
 export const getObjectDetailsForWorksheet = (
   object: ObjectData
 ): {
   objectDetailValues: string[][];
-  valuesToFormat: string[];
+  indexesToFormat: number[];
 } => {
   const isReport = object.mstrObjectType.name === 'report';
   const worksheetDetailsSettings =
@@ -23,21 +28,26 @@ export const getObjectDetailsForWorksheet = (
   );
 
   const objectDetailValues: string[][] = [];
-  const valuesToFormat: string[] = [];
+  const indexesToFormat: number[] = [];
+
+  let formatIndex = 0;
 
   enabledWorksheetDetailsSettings.forEach(setting => {
     switch (setting.key) {
       case 'name':
         objectDetailValues.push([object.name], ['']);
-        valuesToFormat.push(object.name);
+        indexesToFormat.push(formatIndex);
+        formatIndex += 2;
         break;
       case 'owner':
         objectDetailValues.push([setting.item], [object.details?.owner.name], ['']);
-        valuesToFormat.push(setting.item);
+        indexesToFormat.push(formatIndex);
+        formatIndex += 3;
         break;
       case 'description':
         objectDetailValues.push([setting.item], [object.details?.description || '-'], ['']);
-        valuesToFormat.push(setting.item);
+        indexesToFormat.push(formatIndex);
+        formatIndex += 3;
         break;
       case 'filter':
         if (isReport) {
@@ -58,21 +68,26 @@ export const getObjectDetailsForWorksheet = (
             ['']
           );
 
-          valuesToFormat.push(i18n.t('Report Filter'));
-          valuesToFormat.push(i18n.t('Report Limits'));
-          valuesToFormat.push(i18n.t('View Filter'));
+          indexesToFormat.push(formatIndex);
+          formatIndex += 3;
+          indexesToFormat.push(formatIndex);
+          formatIndex += 3;
+          indexesToFormat.push(formatIndex);
+          formatIndex += 3;
         } else {
           objectDetailValues.push(
             [setting.item],
             [object.details?.filters.viewFilterText || '-'],
             ['']
           );
-          valuesToFormat.push(setting.item);
+          indexesToFormat.push(formatIndex);
+          formatIndex += 3;
         }
         break;
       case 'importedBy':
         objectDetailValues.push([setting.item], [object.details?.importedBy], ['']);
-        valuesToFormat.push(setting.item);
+        indexesToFormat.push(formatIndex);
+        formatIndex += 3;
         break;
       case 'dateModified':
         objectDetailValues.push(
@@ -86,7 +101,8 @@ export const getObjectDetailsForWorksheet = (
           ],
           ['']
         );
-        valuesToFormat.push(setting.item);
+        indexesToFormat.push(formatIndex);
+        formatIndex += 3;
         break;
       case 'dateCreated':
         objectDetailValues.push(
@@ -100,11 +116,13 @@ export const getObjectDetailsForWorksheet = (
           ],
           ['']
         );
-        valuesToFormat.push(setting.item);
+        indexesToFormat.push(formatIndex);
+        formatIndex += 3;
         break;
       case 'id':
         objectDetailValues.push([setting.item], [object.objectId], ['']);
-        valuesToFormat.push(setting.item);
+        indexesToFormat.push(formatIndex);
+        formatIndex += 3;
         break;
       case 'pageBy':
         if (isReport) {
@@ -113,7 +131,8 @@ export const getObjectDetailsForWorksheet = (
             object.pageByData.elements.map(element => element.value).join(', ');
 
           objectDetailValues.push([i18n.t('Paged-By')], [pageByData || '-'], ['']);
-          valuesToFormat.push(i18n.t('Paged-By'));
+          indexesToFormat.push(formatIndex);
+          formatIndex += 3;
         }
         break;
       default:
@@ -121,9 +140,19 @@ export const getObjectDetailsForWorksheet = (
     }
   });
 
-  return { objectDetailValues, valuesToFormat };
+  return { objectDetailValues, indexesToFormat };
 };
 
+/**
+ * Inserts and formats object details in the worksheet.
+ *
+ * @param objectDetailsSize - The number of rows needed for the object details.
+ * @param startCell - The starting cell for inserting the object details.
+ * @param objectData - The object data.
+ * @param worksheet - The Excel worksheet.
+ * @param excelContext - The Excel request context.
+ * @returns A promise that resolves when the object details are inserted and formatted.
+ */
 export const insertAndFormatObjectDetails = async ({
   objectDetailsSize,
   startCell,
@@ -138,26 +167,22 @@ export const insertAndFormatObjectDetails = async ({
   excelContext: Excel.RequestContext;
 }): Promise<void> => {
   if (objectDetailsSize > 0) {
-    // Offset the start cell by the number of rows needed for the object details
     const lastCellOfDetails = officeApiHelper.offsetCellBy(startCell, objectDetailsSize - 1, 0);
     const tableDetailsAddress = `${startCell}:${lastCellOfDetails}`;
     const tableDetailsRange = worksheet.getRange(tableDetailsAddress);
 
-    const { objectDetailValues, valuesToFormat } = getObjectDetailsForWorksheet(objectData);
+    const { objectDetailValues, indexesToFormat } = getObjectDetailsForWorksheet(objectData);
+    tableDetailsRange.numberFormat = [['@']];
     tableDetailsRange.values = objectDetailValues;
 
-    for (const value of valuesToFormat) {
-      const conditionalFormat = tableDetailsRange.conditionalFormats.add(
-        Excel.ConditionalFormatType.cellValue
-      );
+    const dataRange = tableDetailsRange.load(['rowCount']);
+    excelContext.trackedObjects.add(dataRange);
+    await excelContext.sync();
 
-      const rule = {
-        formula1: `"${value}"`,
-        operator: Excel.ConditionalCellValueOperator.equalTo,
-      };
-
-      conditionalFormat.cellValue.rule = rule;
-      conditionalFormat.cellValue.format.font.bold = true;
+    for (let row = 0; row < dataRange.rowCount; row++) {
+      if (indexesToFormat.includes(row)) {
+        dataRange.getCell(row, 0).format.font.bold = true;
+      }
     }
 
     await excelContext.sync();
