@@ -17,6 +17,7 @@ import { PromptsWindow } from '../prompts/prompts-window';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { navigationTreeSelectors } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer-selectors';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
+import { popupSelectors } from '../redux-reducer/popup-reducer/popup-selectors';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { MultipleRepromptTransitionPage } from './multiple-reprompt-transition-page/multiple-reprompt-transition-page';
 import { OverviewWindow } from './overview/overview-window';
@@ -67,6 +68,7 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
   const importPageByConfigurations = useSelector(
     navigationTreeSelectors.selectImportPageByConfigurations
   );
+  const selectEditedObject = useSelector(popupSelectors.selectEditedObject);
 
   const popupType = popupViewSelectorHelper.setPopupType(props, popupTypeProps);
 
@@ -85,7 +87,7 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
       {isPageByModalOpenRequested && (
         <PageBy
           pageByData={pageBy}
-          objectName={chosenObjectName}
+          objectName={selectEditedObject?.name ?? chosenObjectName}
           onImport={pageByConfigurations => {
             importPageByConfigurations(pageByConfigurations);
             requestPageByModalClose();
