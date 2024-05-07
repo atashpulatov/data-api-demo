@@ -59,20 +59,16 @@ class OfficeTableCreate {
       rows,
       columns,
       mstrTable,
-      mstrTable: { isCrosstab, crosstabHeaderDimensions },
+      mstrTable: { isCrosstab, crosstabHeaderDimensions, name },
     } = instanceDefinition;
 
-    const {
-      definition: { sourceName },
-      importType
-    } = objectData;
+    const { importType } = objectData;
 
     const newOfficeTableName = getOfficeTableHelper.createTableName(mstrTable, tableName);
-
     const worksheet = await officeApiWorksheetHelper.getWorksheet(
       excelContext,
       objectData.importType,
-      sourceName,
+      name,
       pageByData,
       prevOfficeTable,
       insertNewWorksheet
@@ -91,7 +87,7 @@ class OfficeTableCreate {
       tableChanged
     );
 
-    // Add extra rows to crosstab table to be able to track users manipulations, otherwise formatted table range 
+    // Add extra rows to crosstab table to be able to track users manipulations, otherwise formatted table range
     // will entirely overlap and ultmately remove the underneath crosstab table
     let tableRows: number = rows;
     if (importType === ObjectImportType.FORMATTED_TABLE && isCrosstab) {
