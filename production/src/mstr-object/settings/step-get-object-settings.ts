@@ -6,7 +6,6 @@ import { ObjectData, ObjectSettings } from '../../types/object-types';
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { OperationTypes } from '../../operation/operation-type-names';
-import { calculateOffsetForObjectInfoSettings } from '../get-object-details-methods';
 
 class StepGetObjectSettings {
   private reduxStore;
@@ -20,21 +19,14 @@ class StepGetObjectSettings {
     operationData: OperationData
   ): Promise<void> => {
     try {
-      const { objectSettings, mstrObjectType } = objectData;
+      const { objectSettings } = objectData;
       const { operationType } = operationData;
       const {
         mergeCrosstabColumns: mergeCrosstabColumnsUserSetting,
         importAttributesAsText: importAttributesAsTextUserSetting,
-        worksheetObjectInfoSettings,
       } = this.reduxStore.getState().settingsReducer;
 
-      const objectDetailsOffset = calculateOffsetForObjectInfoSettings(
-        worksheetObjectInfoSettings,
-        mstrObjectType
-      );
-
       const updatedObjectSettings = {} as ObjectSettings;
-      updatedObjectSettings.objectDetailsSize = objectDetailsOffset;
 
       switch (operationType) {
         case OperationTypes.EDIT_OPERATION:
