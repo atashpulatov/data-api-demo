@@ -5,10 +5,13 @@ import { officeApiWorksheetHelper } from '../api/office-api-worksheet-helper';
 import getOfficeTableHelper from './get-office-table-helper';
 import officeTableHelperRange from './office-table-helper-range';
 
+import { reduxStore } from '../../store';
+
 import { PageByData } from '../../page-by/page-by-types';
 import { InstanceDefinition } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
 
+import { calculateOffsetForObjectInfoSettings } from '../../mstr-object/get-object-details-methods';
 import officeApiDataLoader from '../api/office-api-data-loader';
 import { ObjectImportType } from '../../mstr-object/constants';
 
@@ -80,8 +83,12 @@ class OfficeTableCreate {
     } else if (!startCell) {
       startCell = await officeApiHelper.getSelectedCell(excelContext);
     }
+    const { worksheetObjectInfoSettings } = reduxStore.getState().settingsReducer;
 
-    const { objectDetailsSize } = objectData.objectSettings || {};
+    const objectDetailsSize = calculateOffsetForObjectInfoSettings(
+      worksheetObjectInfoSettings,
+      objectData.mstrObjectType
+    );
 
     if (objectDetailsSize > 0) {
       await insertAndFormatObjectDetails({
@@ -143,6 +150,8 @@ class OfficeTableCreate {
       worksheet,
       startCell,
       excelContext,
+      newStartCell: startCell,
+      objectDetailsSize,
     });
   }
 
@@ -248,6 +257,8 @@ class OfficeTableCreate {
     worksheet,
     startCell,
     excelContext,
+    newStartCell,
+    objectDetailsSize,
   }: {
     officeTable: Excel.Table;
     newOfficeTableName: string;
@@ -255,6 +266,8 @@ class OfficeTableCreate {
     worksheet: Excel.Worksheet;
     startCell: string;
     excelContext: Excel.RequestContext;
+    newStartCell: string;
+    objectDetailsSize: number;
   }): Promise<any> {
     const { isCrosstab } = mstrTable;
     try {
@@ -286,6 +299,8 @@ class OfficeTableCreate {
         worksheet: { id, name, index },
         startCell,
         groupData: { key: index, title: name },
+        newStartCell,
+        objectDetailsSize,
       };
     } catch (error) {
       await excelContext.sync();
