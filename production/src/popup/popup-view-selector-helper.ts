@@ -19,20 +19,6 @@ const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
 class PopupViewSelectorHelper {
   /**
-   * Determines whether the currently open dialog is displaying the prompts editor for a report
-   * in the Overview dialog, or from the SidePanel.
-   *
-   * @param popupType - The type of the popup to check.
-   * @returns - returns true if the popup type is a prompted report.
-   */
-  isRepromptReportPopupType(popupType: DialogType): boolean {
-    return (
-      popupType === DialogType.repromptingWindow ||
-      popupType === DialogType.repromptReportDataOverview
-    );
-  }
-
-  /**
    * Determines the type of the Prompted popup to show based on the workflow.
    * If we are in the Multiple Reprompt workflow (reprompt queue isn't empty), and current prompted object being processed
    * is a Report, then it means we are in the transition period waiting for the next prompted object to be reprompted.
@@ -62,7 +48,7 @@ class PopupViewSelectorHelper {
       // when editing a prompted report.
       if (this.isInstanceWithPromptsAnswered(props)) {
         // Handle the case when the user is editing a prompted report from either SidePanel or Overview dialog.
-        if (this.isRepromptReportPopupType(popupType)) {
+        if (popupHelper.isRepromptReportPopupType(popupType)) {
           // Return whether the Multiple Reprompt Transition Page should be shown in
           // the case of a having multiple prompted objects in the queue and current one is prompted report
           // being processed. In the case of Dossiers, it will not show the Multiple Reprompt Transition Page.

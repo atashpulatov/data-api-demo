@@ -1,3 +1,5 @@
+import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
+
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { officeContext } from '../office/office-context';
 
@@ -115,6 +117,20 @@ class PopupHelper {
       filters[attrId] = !filters[attrId] ? [element] : [...filters[attrId], element];
       return filters;
     }, {});
+  }
+
+  /**
+   * Determines whether the currently open dialog is displaying the prompts editor for a report
+   * in the Overview dialog, or from the SidePanel.
+   *
+   * @param popupType - The type of the popup to check.
+   * @returns - returns true if the popup type is a prompted report.
+   */
+  isRepromptReportPopupType(popupType: DialogType): boolean {
+    return (
+      popupType === DialogType.repromptingWindow ||
+      popupType === DialogType.repromptReportDataOverview
+    );
   }
 }
 

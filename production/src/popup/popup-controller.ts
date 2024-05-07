@@ -277,6 +277,11 @@ class PopupController {
 
     if (command === commandExecuteNextRepromptTask) {
       this.reduxStore.dispatch(executeNextRepromptTask());
+
+      // If multiple reprompt queue is not empty, stop method here to prevent closing dialog.
+      if (!isMultipleRepromptQueueEmpty) {
+        return;
+      }
     }
 
     const isMultipleRepromptQueueEmptyAndOverviewClosed =
