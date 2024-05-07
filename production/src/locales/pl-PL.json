@@ -281,5 +281,6 @@
    "Import data as text": "Importuj dane jako tekst",
    "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "Jeśli ta opcja jest włączona, wartości atrybutów będą zaimportowane jako tekst z zachowaniem formatowania z MicroStrategy. Może to mieć wpływ na formuły programu Excel.",
    "Merge columns": "Połącz kolumny",
-   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Jeśli ta opcja jest włączona, sąsiadujące nagłówki kolumn z identycznymi wartościami zostaną scalone. Ma zastosowanie tylko do raportów krzyżowych."
+   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Jeśli ta opcja jest włączona, sąsiadujące nagłówki kolumn z identycznymi wartościami zostaną scalone. Ma zastosowanie tylko do raportów krzyżowych.",
+   "Paged-By": "Stronicowanie"
 }

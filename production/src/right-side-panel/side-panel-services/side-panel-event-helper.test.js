@@ -9,11 +9,12 @@ describe('SidePanelService', () => {
     jest.restoreAllMocks();
   });
 
-  it('should call excel contex methods form initializeActiveCellChangedListener', async () => {
+  it('should call excel contex methods form initializeActiveSelectionChangedListener', async () => {
     // given
     const mockSync = jest.fn();
     const mockContext = { sync: mockSync };
     const mockActiveCell = 'Sheet123!ABC123';
+    const mockActiveWorksheetPosition = 0;
 
     const spyGetExcelContext = jest
       .spyOn(officeApiHelper, 'getExcelContext')
@@ -23,19 +24,30 @@ describe('SidePanelService', () => {
       .spyOn(officeApiHelper, 'getSelectedCell')
       .mockImplementationOnce(() => mockActiveCell);
 
-    const stateSetterCallback = jest.fn();
+    const spyGetCurrentExcelSheet = jest
+      .spyOn(officeApiHelper, 'getCurrentExcelSheet')
+      .mockImplementationOnce(() => ({
+        load: jest.fn(),
+        position: mockActiveWorksheetPosition,
+      }));
+
+    const mockSetActiveCellAddress = jest.fn();
+    const mockSetActiveSheetIndex = jest.fn();
+    const mockIsAnyPopupOrSettingsDisplayed = false;
 
     const spyAddOnSelectionChangedListener = jest
       .spyOn(officeApiHelper, 'addOnSelectionChangedListener')
       .mockImplementationOnce(() => {});
 
     // when
-    await sidePanelEventHelper.initializeActiveCellChangedListener(stateSetterCallback);
+    await sidePanelEventHelper.initializeActiveSelectionChangedListener(mockSetActiveCellAddress, mockSetActiveSheetIndex, mockIsAnyPopupOrSettingsDisplayed);
     // then
     expect(spyGetExcelContext).toBeCalled();
     expect(spyGetSelectedCell).toBeCalledWith(mockContext);
-    expect(stateSetterCallback).toBeCalledWith(mockActiveCell);
-    expect(spyAddOnSelectionChangedListener).toBeCalledWith(mockContext, stateSetterCallback);
+    expect(spyGetCurrentExcelSheet).toBeCalledWith(mockContext);
+    expect(mockSetActiveCellAddress).toBeCalledWith(mockActiveCell);
+    expect(mockSetActiveSheetIndex).toBeCalledWith(mockActiveWorksheetPosition);
+    expect(spyAddOnSelectionChangedListener).toBeCalledWith(mockContext, mockSetActiveCellAddress, mockSetActiveSheetIndex, mockIsAnyPopupOrSettingsDisplayed);
   });
 
   it('should remove objects in setOnDeletedTablesEvent', async () => {

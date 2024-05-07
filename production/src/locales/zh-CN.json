@@ -281,5 +281,6 @@
    "Import data as text": "将数据以文本形式导入",
    "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "启用后，实体值将以文本形式导入，保留其在 MicroStrategy 中的格式。这可能会影响 Excel 公式。",
    "Merge columns": "合并列",
-   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "启用后，系统将合并具有相同值的相邻列标题。仅适用于交叉表报表。"
+   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "启用后，系统将合并具有相同值的相邻列标题。仅适用于交叉表报表。",
+   "Paged-By": "分页依据"
 }

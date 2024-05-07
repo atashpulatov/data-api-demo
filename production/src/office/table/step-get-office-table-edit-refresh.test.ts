@@ -91,6 +91,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
     jest.spyOn(officeTableCreate, 'createOfficeTable').mockImplementation(async () => ({
       officeTable: mockedOfficeTable,
       bindId: 'bindIdTest',
+      startCell: 'startCellTest',
     }));
 
     jest

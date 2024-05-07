@@ -64,7 +64,6 @@ class StepGetInstanceDefinition {
 
       const excelContext = await officeApiHelper.getExcelContext();
 
-      let startCell: string;
       let instanceDefinition = preparedInstanceDefinition;
       let shouldRenameExcelWorksheet = false;
 
@@ -153,7 +152,6 @@ class StepGetInstanceDefinition {
         updatedObject.crosstabHeaderDimensions = mstrTable.crosstabHeaderDimensions;
         updatedObject.isCrosstab = mstrTable.isCrosstab;
         updatedObject.subtotalsInfo = subtotalsInfo;
-        updatedOperation.startCell = startCell;
         updatedOperation.oldBindId = bindId;
         updatedOperation.totalRows = instanceDefinition.rows;
       }
