@@ -75,17 +75,19 @@ export const populateDetails = (
  * Calculates the offset value for object details information based on the provided objectInfoSettings.
  * Object details information is placed above the table.
  * @param objectInfoSettings - An array of ObjectInfoSetting objects.
+ * @param objectType - The type of the object.
  * @returns The calculated offset value.
  */
 export const calculateOffsetForObjectInfoSettings = (
   objectInfoSettings: ObjectInfoSetting[],
   objectType: MstrObjectTypes
 ): number => {
-  const isReport = objectType.name === 'report';
+  const isReport = objectType.name === mstrObjectEnum.mstrObjectType.report.name;
 
   let offset = 0;
   const defaultOffset = 3;
   const offsetForName = 2;
+  const offsetForReportFilters = 9; // Reports have report filter, report limits and view filter
 
   for (const item of objectInfoSettings) {
     if (item.toggleChecked) {
@@ -94,7 +96,7 @@ export const calculateOffsetForObjectInfoSettings = (
           offset += offsetForName;
           break;
         case 'filter':
-          offset += isReport ? defaultOffset * 3 : defaultOffset;
+          offset += isReport ? offsetForReportFilters : defaultOffset;
           break;
         case 'pageBy':
           offset += isReport ? defaultOffset : 0;
