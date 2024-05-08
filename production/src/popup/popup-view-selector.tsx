@@ -80,7 +80,7 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
   const importPageByConfigurations = useSelector(
     navigationTreeSelectors.selectImportPageByConfigurations
   );
-  const selectEditedObject = useSelector(popupSelectors.selectEditedObject);
+  const editedObject = useSelector(popupSelectors.selectEditedObject);
 
   const popupType = popupViewSelectorHelper.setPopupType(props, popupTypeProps);
 
@@ -110,7 +110,7 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
       {isPageByModalOpenRequested && (
         <PageBy
           pageByData={pageBy}
-          objectName={selectEditedObject?.name ?? chosenObjectName}
+          objectName={editedObject?.definition?.sourceName ?? chosenObjectName}
           onImport={pageByConfigurations => {
             importPageByConfigurations(pageByConfigurations);
             requestPageByModalClose();

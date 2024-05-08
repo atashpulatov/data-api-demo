@@ -182,10 +182,18 @@ const mapStateToProps = (state: RootState): any => {
   const { importSubtotal, displayAttrFormNames, ...chosenObject } = state.navigationTree;
   const { editedObject } = state.popupReducer;
 
+  let editedObjectName;
+
+  if (editedObject?.pageByData) {
+    editedObjectName = editedObject.definition?.sourceName;
+  } else if (editedObject?.name) {
+    editedObjectName = editedObject.name;
+  }
+
   return {
     mstrData: { ...state.popupStateReducer },
     chosenObject,
-    objectName: editedObject ? editedObject.name : chosenObject.chosenObjectName,
+    objectName: editedObjectName ?? chosenObject.chosenObjectName,
     importSubtotal,
     displayAttrFormNames,
     editedObject: state.popupReducer.editedObject,

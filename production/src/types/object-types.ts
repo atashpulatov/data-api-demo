@@ -2,7 +2,7 @@ import { PageByConfiguration } from '@mstr/connector-components';
 
 import { FiltersText } from '../mstr-object/object-filter-helper-types';
 
-import { Attribute } from '../mstr-object/mstr-object-response-types';
+import { Attribute, MetricElement } from '../mstr-object/mstr-object-response-types';
 import { MstrObjectTypes } from '../mstr-object/mstr-object-types';
 import { PageByData } from '../page-by/page-by-types';
 
@@ -100,6 +100,13 @@ export interface Body {
   promptAnswers?: string;
   requestedObjects?: RequestedObjects;
   template?: RequestedObjects;
+}
+
+export interface Definition {
+  attributes: Attribute[];
+  metrics: MetricElement[];
+  prompts: string[];
+  sourceName: string;
 }
 
 export interface Worksheet {

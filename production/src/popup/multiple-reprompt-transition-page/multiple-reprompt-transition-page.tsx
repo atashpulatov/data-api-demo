@@ -10,7 +10,6 @@ import overviewHelper from '../overview/overview-helper';
 import { MultipleRepromptTransitionPageTypes } from './multiple-reprompt-transition-page-types';
 
 import i18n from '../../i18n';
-import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 
 import './multiple-reprompt-transition-page.scss';
 
@@ -27,11 +26,19 @@ export const MultipleRepromptTransitionPageNotConnected: FC<
 > = ({ nextObjectBindId, nextObjectIndex, total, popupData, editedObject }) => {
   const nextObject: any =
     officeReducerHelper.getObjectFromObjectReducerByBindId(nextObjectBindId) || {};
+
   // retrieve object name based on next object type. reports vs dossiers have different name properties
-  const nextObjectName =
-    nextObject.objectType?.name === mstrObjectEnum.mstrObjectType.visualization.name
-      ? nextObject.definition?.sourceName
-      : nextObject.name;
+  const getNextObjectName = (): string => {
+    if (editedObject?.pageByData) {
+      return editedObject.definition?.sourceName;
+    }
+
+    if (editedObject?.name) {
+      return editedObject?.name;
+    }
+
+    return nextObject.definition?.sourceName;
+  };
 
   const [t] = useTranslation('common', { i18n });
   const [dialogPopup, setDialogPopup] = React.useState(null);
@@ -50,7 +57,7 @@ export const MultipleRepromptTransitionPageNotConnected: FC<
     <div className='multiple-reprompt-transition-page'>
       <ObjectWindowTitle
         objectType='' // not needed since multiple reprompt title doesn't show type
-        objectName={editedObject?.name ?? nextObjectName}
+        objectName={getNextObjectName()}
         isReprompt
         isEdit={false}
         index={nextObjectIndex}
