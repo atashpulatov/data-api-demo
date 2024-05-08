@@ -128,7 +128,7 @@ export const getObjectDetailsForWorksheet = (
         if (isReport) {
           const pageByData =
             object?.pageByData?.elements?.length &&
-            object.pageByData.elements.map(element => element.value).join(', ');
+            object.pageByData.elements.map(element => element.value).join('; ');
 
           objectDetailValues.push([i18n.t('Paged-By')], [pageByData || '-'], ['']);
           indexesToFormat.push(formatIndex);
