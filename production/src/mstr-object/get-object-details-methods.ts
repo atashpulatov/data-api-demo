@@ -4,7 +4,8 @@ import { FiltersText } from './object-filter-helper-types';
 
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectInfoSetting } from '../redux-reducer/settings-reducer/settings-reducer-types';
-import { ObjectData, ObjectDetails } from '../types/object-types';
+import { ObjectData, ObjectDetails, Owner } from '../types/object-types';
+import { MstrObjectTypes } from './mstr-object-types';
 
 import mstrObjectEnum from './mstr-object-type-enum';
 
@@ -56,7 +57,7 @@ export const populateDetails = (
   modifiedDate: string,
   description: string,
   filters: FiltersText,
-  owner: string,
+  owner: Owner,
   version: string
 ): ObjectDetails => ({
   ancestors,
@@ -74,16 +75,19 @@ export const populateDetails = (
  * Calculates the offset value for object details information based on the provided objectInfoSettings.
  * Object details information is placed above the table.
  * @param objectInfoSettings - An array of ObjectInfoSetting objects.
+ * @param objectType - The type of the object.
  * @returns The calculated offset value.
  */
 export const calculateOffsetForObjectInfoSettings = (
-  objectInfoSettings: ObjectInfoSetting[]
+  objectInfoSettings: ObjectInfoSetting[],
+  objectType: MstrObjectTypes
 ): number => {
+  const isReport = objectType.name === mstrObjectEnum.mstrObjectType.report.name;
+
   let offset = 0;
-  // TODO: receive object type and determine spaces accordingly
   const defaultOffset = 3;
-  const offsetForFilter = 9;
   const offsetForName = 2;
+  const offsetForReportFilters = 9; // Reports have report filter, report limits and view filter
 
   for (const item of objectInfoSettings) {
     if (item.toggleChecked) {
@@ -92,7 +96,10 @@ export const calculateOffsetForObjectInfoSettings = (
           offset += offsetForName;
           break;
         case 'filter':
-          offset += offsetForFilter;
+          offset += isReport ? offsetForReportFilters : defaultOffset;
+          break;
+        case 'pageBy':
+          offset += isReport ? defaultOffset : 0;
           break;
         default:
           offset += defaultOffset;

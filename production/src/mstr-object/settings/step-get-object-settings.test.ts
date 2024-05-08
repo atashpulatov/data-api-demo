@@ -33,7 +33,11 @@ describe('StepGetObjectSettings', () => {
       expectedSettings,
     }) => {
       // Given
-      const objectData = { objectWorkingId: 1, objectSettings } as ObjectData;
+      const objectData = {
+        objectWorkingId: 1,
+        objectSettings,
+        mstrObjectType: { name: 'report' },
+      } as ObjectData;
       const updateObjectMock = jest
         .spyOn(operationStepDispatcher, 'updateObject')
         .mockImplementation();
@@ -79,7 +83,11 @@ describe('StepGetObjectSettings', () => {
       expectedSettings,
     }) => {
       // Given
-      const objectData = { objectWorkingId: 1, objectSettings } as ObjectData;
+      const objectData = {
+        objectWorkingId: 1,
+        objectSettings,
+        mstrObjectType: { name: 'report' },
+      } as ObjectData;
       const updateObjectMock = jest
         .spyOn(operationStepDispatcher, 'updateObject')
         .mockImplementation();
@@ -125,7 +133,11 @@ describe('StepGetObjectSettings', () => {
       expectedSettings,
     }) => {
       // Given
-      const objectData = { objectWorkingId: 1, objectSettings } as ObjectData;
+      const objectData = {
+        objectWorkingId: 1,
+        objectSettings,
+        mstrObjectType: { name: 'report' },
+      } as ObjectData;
       const updateObjectMock = jest
         .spyOn(operationStepDispatcher, 'updateObject')
         .mockImplementation();
@@ -171,7 +183,11 @@ describe('StepGetObjectSettings', () => {
       expectedSettings,
     }) => {
       // Given
-      const objectData = { objectWorkingId: 1, objectSettings } as ObjectData;
+      const objectData = {
+        objectWorkingId: 1,
+        objectSettings,
+        mstrObjectType: { name: 'report' },
+      } as ObjectData;
       const updateObjectMock = jest
         .spyOn(operationStepDispatcher, 'updateObject')
         .mockImplementation();

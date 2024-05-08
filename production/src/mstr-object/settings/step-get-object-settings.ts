@@ -20,7 +20,7 @@ class StepGetObjectSettings {
     operationData: OperationData
   ): Promise<void> => {
     try {
-      const { objectSettings } = objectData;
+      const { objectSettings, mstrObjectType } = objectData;
       const { operationType } = operationData;
       const {
         mergeCrosstabColumns: mergeCrosstabColumnsUserSetting,
@@ -28,7 +28,10 @@ class StepGetObjectSettings {
         worksheetObjectInfoSettings,
       } = this.reduxStore.getState().settingsReducer;
 
-      const objectDetailsOffset = calculateOffsetForObjectInfoSettings(worksheetObjectInfoSettings);
+      const objectDetailsOffset = calculateOffsetForObjectInfoSettings(
+        worksheetObjectInfoSettings,
+        mstrObjectType
+      );
 
       const updatedObjectSettings = {} as ObjectSettings;
       updatedObjectSettings.objectDetailsSize = objectDetailsOffset;
