@@ -13,6 +13,7 @@ const useInitializeSidePanel = (
   useEffect(() => {
     async function initializeSidePanel(): Promise<void> {
       await sidePanelEventHelper.addRemoveObjectListener();
+      await sidePanelEventHelper.initObjectWorksheetTrackingListeners();
       await settingsSidePanelHelper.initReusePromptAnswers();
       await settingsSidePanelHelper.initPageByDisplayAnswers();
       await settingsSidePanelHelper.initWorksheetNamingAnswers();
@@ -30,7 +31,7 @@ const useInitializeSidePanel = (
   useEffect(() => {
     async function initializeSidePanelActiveSelectionChangedListener(): Promise<void> {
       activeSelectionChangedListenerEventResult.current =
-        await sidePanelEventHelper.initializeActiveSelectionChangedListener(
+        await sidePanelEventHelper.initActiveSelectionChangedListener(
           updateActiveCellAddress,
           setActiveSheetIndex,
           isAnyPopupOrSettingsDisplayed

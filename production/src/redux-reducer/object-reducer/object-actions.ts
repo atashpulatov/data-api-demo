@@ -5,11 +5,17 @@ import {
   RestoreAllObjectsAction,
   RestoreObjectBackupAction,
   UpdateObjectAction,
+  UpdateObjectsAction,
 } from './object-reducer-types';
 
 export const updateObject = (updatedObject: Partial<ObjectData>): UpdateObjectAction => ({
   type: ObjectActionTypes.UPDATE_OBJECT,
   payload: updatedObject,
+});
+
+export const updateObjects = (updatedObjects: Partial<ObjectData>[]): UpdateObjectsAction => ({
+  type: ObjectActionTypes.UPDATE_OBJECTS,
+  payload: updatedObjects,
 });
 
 export const removeObject = (objectWorkingId: number): RemoveObjectAction => ({
