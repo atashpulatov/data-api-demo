@@ -3,7 +3,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import {
-  mergeAnswersWithPromptsDefined,
   ObjectExecutionStatus,
   prepareGivenPromptAnswers,
   preparePromptedDossier,
@@ -17,7 +16,10 @@ import { embeddedDossierHelper } from './embedded-dossier-helper';
 
 import { RootState } from '../../store';
 
-import { PromptsAnswer } from '../../redux-reducer/answers-reducer/answers-reducer-types';
+import {
+  AnswersState,
+  PromptsAnswer,
+} from '../../redux-reducer/answers-reducer/answers-reducer-types';
 import { RepromptsQueueState } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer-types';
 import { VisualizationInfo } from '../../types/object-types';
 
@@ -254,8 +256,8 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     instance: any,
     dossierId: string,
     projectId: string,
-    givenPromptsAnswers: any,
-    previousPromptsAnswers: any
+    givenPromptsAnswers: AnswersState[],
+    previousPromptsAnswers: PromptsAnswer[]
   ): Promise<any> => {
     // Prepare the Dossier's instance to apply previous answers if necessary.
     if (givenPromptsAnswers.length > 0 && givenPromptsAnswers[0].answers.length > 0) {
@@ -358,7 +360,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         instance,
         dossierId,
         projectId,
-        givenPromptsAnswers,
+        givenPromptsAnswers as AnswersState[],
         previousPromptsAnswers
       );
 
@@ -547,7 +549,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
    * * @param {Object} promptsAnswersPayloadObject - answers sent from embedded api, entered by user.
    */
   async promptsAnsweredHandler(promptsAnswersPayloadObject: any): Promise<void> {
-    const { handlePromptAnswer, mstrData }: any = this.props;
+    const { handlePromptAnswer }: any = this.props;
     const dupPromptsAnswersPayloadObject = { ...promptsAnswersPayloadObject };
 
     // Create reference to current prompted object's answers. This function called again after
@@ -559,16 +561,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     dupPromptsAnswersPayloadObject.answers = embeddedDossierHelper.combineArraysByObjectKey(
       previousPromptLevelAnswers,
       dupPromptsAnswersPayloadObject.answers
-    );
-
-    // Proceed with merging answers with prompts defined if there are prompts to answer.
-    // TODO: Remove this method in m2021 branch as we no longer need to merge answers with prompts defined.
-    await mergeAnswersWithPromptsDefined(
-      mstrData.dossierId,
-      mstrData.projectId,
-      this.dossierData.instanceId,
-      dupPromptsAnswersPayloadObject.answers,
-      false
     );
 
     // If not defined or null then create new array with promptsAnswers as first element;

@@ -318,6 +318,16 @@ const operationStepsMapPivotTable = {
 
   [OperationTypes.DUPLICATE_OPERATION]: [
     OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
+    OperationSteps.GET_OBJECT_SETTINGS,
+    OperationSteps.MODIFY_OBJECT,
+    OperationSteps.GET_DUPLICATE_NAME,
+    OperationSteps.GET_INSTANCE_DEFINITION,
+    OperationSteps.GET_OBJECT_DETAILS,
+    OperationSteps.GET_OFFICE_TABLE_IMPORT,
+    OperationSteps.CREATE_PIVOT_TABLE,
+    OperationSteps.FETCH_INSERT_DATA,
+    OperationSteps.BIND_OFFICE_TABLE,
+    OperationSteps.SAVE_OBJECT_IN_EXCEL,
     OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
   ],
 

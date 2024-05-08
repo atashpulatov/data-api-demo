@@ -303,8 +303,7 @@ class PopupController {
         dialogType === DialogType.importedDataOverview ||
         this.isDataRangeCommandForMultipleRepromptDialogInOverview(dialogType, command)
       ) {
-        await this.overviewHelper.handleOverviewActionCommand(response);
-        return;
+        return this.overviewHelper.handleOverviewActionCommand(response);
       }
 
       if (dialogType === DialogType.dossierWindow || dialogType === DialogType.repromptingWindow) {

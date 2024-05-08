@@ -7,7 +7,19 @@ export interface PromptsAnswer {
 }
 
 export interface AnswersState {
+  messageName?: string;
   answers: PromptsAnswer[];
+  personalAnswers?: any[];
+}
+
+export interface PromptObject {
+  id: string;
+  key: string;
+  name?: string;
+  title?: string;
+  type: string;
+  required?: boolean;
+  closed: boolean;
 }
 
 export enum AnswerActionTypes {

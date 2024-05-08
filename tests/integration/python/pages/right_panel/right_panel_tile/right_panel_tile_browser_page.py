@@ -17,6 +17,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     TILES = '.object-tile-content'
 
     SIDE_PANEL_HEADER = '.side-panel > .header'
+    IMPORT_SUCCESSFUL_MESSAGE = '//span[text()="Import successful"]'
 
     RIGHT_PANEL_TILE = '.object-tile-list > article:nth-child(%s) > div > .object-tile-wrapper'
     RIGHT_PANEL_TILE_NOTIFICATION = '.object-tile-list > article:nth-child(%s) > div > .notification-container'
@@ -143,6 +144,16 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         for tile in tiles:
             other_container.move_to()
             tile.move_to()
+
+    def hover_over_import_successful_message(self):
+
+        self.focus_on_add_in_frame()
+
+        tiles = self.get_elements_by_css(RightPanelTileBrowserPage.TILES)
+        other_container = self.get_element_by_xpath(RightPanelTileBrowserPage.IMPORT_SUCCESSFUL_MESSAGE)
+
+        other_container.move_to()
+        tiles[0].move_to()
 
     def close_last_notification_on_hover(self, not_used_reset_framework_method, not_used_context):
         self.focus_on_add_in_frame()
