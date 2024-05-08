@@ -39,11 +39,11 @@ const getTokenString = (token: Token): string => {
 const convertTokensToString = (tokens: Token[]): string =>
   tokens?.length
     ? // slice(1) to remove the first token which is the root token, "%"
-      tokens
-        .slice(1)
-        .map(token => getTokenString(token))
-        .join(' ')
-        .trim()
+    tokens
+      .slice(1)
+      .map(token => getTokenString(token))
+      .join(' ')
+      .trim()
     : '-';
 
 /**

@@ -1,3 +1,4 @@
+import { insertAndFormatObjectDetails } from '../../mstr-object/object-info-helper';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 import { officeApiWorksheetHelper } from '../api/office-api-worksheet-helper';
@@ -78,6 +79,20 @@ class OfficeTableCreate {
       startCell = 'A1';
     } else if (!startCell) {
       startCell = await officeApiHelper.getSelectedCell(excelContext);
+    }
+
+    const { objectDetailsSize } = objectData.objectSettings || {};
+
+    if (objectDetailsSize > 0) {
+      await insertAndFormatObjectDetails({
+        objectDetailsSize,
+        startCell,
+        objectData,
+        worksheet,
+        excelContext,
+      });
+
+      startCell = officeApiHelper.offsetCellBy(startCell, objectDetailsSize, 0);
     }
 
     const tableStartCell = this.getTableStartCell(

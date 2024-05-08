@@ -4,6 +4,7 @@ import { mstrObjectRestService } from './mstr-object-rest-service';
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectInfoSetting } from '../redux-reducer/settings-reducer/settings-reducer-types';
 import { ObjectData } from '../types/object-types';
+import { MstrObjectTypes } from './mstr-object-types';
 
 import {
   calculateOffsetForObjectInfoSettings,
@@ -254,7 +255,7 @@ describe('Get Object Details Methods', () => {
         .spyOn(authenticationHelper, 'getCurrentMstrUserFullName')
         .mockImplementation(() => mockedUserName);
       // when
-      populateDetails({}, true, '', '', '', {}, '', '');
+      populateDetails({}, true, '', '', '', {}, null, '');
       // then
       expect(authenticationHelper.getCurrentMstrUserFullName).toBeCalled();
     });
@@ -270,7 +271,7 @@ describe('Get Object Details Methods', () => {
       const mockedDateModified = 'Some date';
       const mockedDateCreated = 'Some date';
       const mockedDescription = 'Some description';
-      const mockedOwner = 'Some owner';
+      const mockedOwner = { name: 'Some owner', id: 'Some id', expired: false };
       const mockedVersion = 'Some version';
       const mockedFilters = {};
       const expectedDetails = {
@@ -303,6 +304,8 @@ describe('Get Object Details Methods', () => {
   describe('calculateOffsetForObjectInfoSettings', () => {
     it('should calculate the offset correctly based on the objectInfoSettings', () => {
       // given
+      const objectType = { name: 'report' } as MstrObjectTypes;
+
       const objectInfoSettings = [
         { key: 'name', toggleChecked: true },
         { key: 'filter', toggleChecked: true },
@@ -312,7 +315,7 @@ describe('Get Object Details Methods', () => {
       const expectedOffset = 14;
 
       // when
-      const offset = calculateOffsetForObjectInfoSettings(objectInfoSettings);
+      const offset = calculateOffsetForObjectInfoSettings(objectInfoSettings, objectType);
 
       // then
       expect(offset).toEqual(expectedOffset);
@@ -320,6 +323,8 @@ describe('Get Object Details Methods', () => {
 
     it('should return 0 if no toggleChecked items are present in objectInfoSettings', () => {
       // given
+      const objectType = { name: 'report' } as MstrObjectTypes;
+
       const objectInfoSettings = [
         { key: 'property1', toggleChecked: false },
         { key: 'property2', toggleChecked: false },
@@ -327,7 +332,7 @@ describe('Get Object Details Methods', () => {
       const expectedOffset = 0;
 
       // when
-      const offset = calculateOffsetForObjectInfoSettings(objectInfoSettings);
+      const offset = calculateOffsetForObjectInfoSettings(objectInfoSettings, objectType);
 
       // then
       expect(offset).toEqual(expectedOffset);
@@ -335,11 +340,13 @@ describe('Get Object Details Methods', () => {
 
     it('should return 0 if objectInfoSettings is empty', () => {
       // given
+      const objectType = { name: 'report' } as MstrObjectTypes;
+
       const objectInfoSettings: ObjectInfoSetting[] = [];
       const expectedOffset = 0;
 
       // when
-      const offset = calculateOffsetForObjectInfoSettings(objectInfoSettings);
+      const offset = calculateOffsetForObjectInfoSettings(objectInfoSettings, objectType);
 
       // then
       expect(offset).toEqual(expectedOffset);
