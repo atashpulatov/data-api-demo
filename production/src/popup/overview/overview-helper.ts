@@ -396,7 +396,7 @@ class OverviewHelper {
 
       const page = pageByData?.elements
         ?.map((element: any) => `${element.name}: ${element.value}`)
-        .join(', ');
+        .join('; ');
 
       return {
         objectWorkingId,

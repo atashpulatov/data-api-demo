@@ -93,9 +93,9 @@ class PageByHelper {
         const { name: elementName, id, formValues } = elements[value];
         return {
           name: pageByItemName,
-          value: formValues?.[0] ?? elementName ?? '',
+          value: formValues?.join(', ') ?? elementName ?? '',
           valueId: id,
-        }
+        };
       });
 
       validPageByData.push(pageByDataElement);
@@ -200,7 +200,7 @@ class PageByHelper {
    * @return Generated worksheet name.
    */
   prepareNameBasedOnPageBySettings(objectName: string, pageByData: PageByData): string {
-    const pageByElement = pageByData.elements.map(element => element.value).join(', ');
+    const pageByElement = pageByData.elements.map(element => element.value).join('; ');
     const { settingsReducer } = reduxStore.getState();
     const currentNamingSetting = settingsReducer.objectAndWorksheetNamingSetting;
 
