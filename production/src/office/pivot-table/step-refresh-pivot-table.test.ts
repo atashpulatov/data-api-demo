@@ -1,3 +1,5 @@
+import { officeApiHelper } from '../api/office-api-helper';
+
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
 
@@ -30,12 +32,15 @@ describe('StepRefreshPivotTable', () => {
     } as OperationData;
 
     jest.spyOn(operationStepDispatcher, 'completeRefreshPivotTable');
+    const getPivotTable = jest
+      .spyOn(officeApiHelper, 'getPivotTable')
+      .mockResolvedValue({ isNullObject: false, refresh } as any);
 
     // when
     await stepRefreshPivotTable.refreshPivotTable(objectData, operationData);
 
     // then
-    expect(getItem).toHaveBeenCalledWith(objectData.pivotTableId);
+    expect(getPivotTable).toHaveBeenCalledWith(excelContext, objectData.pivotTableId);
     expect(refresh).toHaveBeenCalled();
     expect(sync).toHaveBeenCalled();
     expect(operationStepDispatcher.completeRefreshPivotTable).toHaveBeenCalledWith(

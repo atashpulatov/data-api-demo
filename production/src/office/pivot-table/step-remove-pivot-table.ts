@@ -26,14 +26,16 @@ class StepRemovePivotTable {
       const { objectWorkingId } = operationData;
       const { pivotTableId } = objectData;
       const excelContext = await officeApiHelper.getExcelContext();
-      const { pivotTables } = excelContext.workbook;
 
-      const pivotTable = pivotTables.getItem(pivotTableId);
-      pivotTable.delete();
-      await excelContext.sync();
+      const pivotTable = await officeApiHelper.getPivotTable(excelContext, pivotTableId);
 
-      const officeContext = await officeApiHelper.getOfficeContext();
-      officeContext.document.bindings.releaseByIdAsync(pivotTableId);
+      if (!pivotTable.isNullObject) {
+        pivotTable.delete();
+        await excelContext.sync();
+
+        const officeContext = await officeApiHelper.getOfficeContext();
+        officeContext.document.bindings.releaseByIdAsync(pivotTableId);
+      }
 
       operationStepDispatcher.completeRemovePivotTable(objectWorkingId);
     } catch (error) {
