@@ -901,7 +901,7 @@ class MstrObjectRestService {
     const fullPath = `${envUrl}/documents/${dossierId}/instances/${dossierInstanceId}/excel`;
 
     const body = {
-      pageOption: 'PAGE',
+      pageOption: 'DEFAULT',
       pagePerSheet: false,
       includePageByInfo: false,
       keys: [visualizationKey],
@@ -953,14 +953,16 @@ class MstrObjectRestService {
     const fullPath = `${envUrl}/reports/${reportId}/instances/${reportInstanceId}/excel`;
 
     const body = {
-      pageOption: "PAGE",
-      pagePerSheet: false,
-      includePageByInfo: false,
       sheet: {
         header: {
-          reportTitle: true,
-          filterDetails: false,
-        },
+          exportReportTitle: true,
+          exportFilterDetails: false,
+          exportPageByInfo: false
+        }
+      },
+      pageBy: {
+        pageOption: "DEFAULT",
+        pagePerSheet: false
       }
     };
 
