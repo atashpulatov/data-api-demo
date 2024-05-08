@@ -1,3 +1,4 @@
+import officeReducerHelper from '../office/store/office-reducer-helper';
 import { popupViewSelectorHelper } from './popup-view-selector-helper';
 
 import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
@@ -175,5 +176,35 @@ describe('PopupViewSelectorHelper', () => {
     const result = popupViewSelectorHelper.getPromptedReportPopupType(props);
 
     expect(result).toBe(DialogType.editFilters);
+  });
+
+  it('getPageByConfigurations should work properly', () => {
+    officeReducerHelper.reduxStore.getState = jest.fn().mockImplementation(() => ({
+      objectReducer: {
+        objects: [
+          {
+            objectWorkingId: 1,
+            pageByData: {
+              pageByLinkId: '2',
+              elements: [{ name: 'name1', value: 'value1', valueId: '1' }],
+            },
+          },
+          {
+            objectWorkingId: 2,
+            pageByData: {
+              pageByLinkId: '2',
+              elements: [{ name: 'name2', value: 'value2', valueId: '2' }],
+            },
+          },
+        ],
+      },
+    }));
+
+    const result = popupViewSelectorHelper.getPageByConfigurations(1);
+
+    expect(result).toEqual([
+      [{ id: '1', name: 'name1', value: 'value1' }],
+      [{ id: '2', name: 'name2', value: 'value2' }],
+    ]);
   });
 });

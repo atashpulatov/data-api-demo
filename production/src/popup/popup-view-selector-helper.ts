@@ -2,6 +2,7 @@ import { PageByConfiguration } from '@mstr/connector-components';
 
 import { ObjectExecutionStatus } from '../helpers/prompts-handling-helper';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
+import { pageByHelper } from '../page-by/page-by-helper';
 import { popupHelper } from './popup-helper';
 
 import { reduxStore } from '../store';
@@ -332,6 +333,29 @@ class PopupViewSelectorHelper {
       importPageByConfigurations: (pageByConfigurations: PageByConfiguration[][]) =>
         importCallback(pageByConfigurations),
     });
+  }
+
+  /**
+   * Create page by configurations
+   *
+   * @param objectWorkingId Unique identifier of the object
+   * @returns An array of arrays containing Page By configurations
+   */
+  getPageByConfigurations(objectWorkingId: number): PageByConfiguration[][] {
+    const { pageBySiblings, sourceObject } = pageByHelper.getAllPageByObjects(objectWorkingId);
+    const allPageByObjects = [sourceObject, ...pageBySiblings];
+    const pageByConfiguration = [];
+
+    for (const pageByObject of allPageByObjects) {
+      const pageByElements = pageByObject?.pageByData?.elements.map(({ name, value, valueId }) => ({
+        name,
+        value,
+        id: valueId,
+      }));
+      pageByElements && pageByConfiguration.push(pageByElements);
+    }
+
+    return pageByConfiguration;
   }
 }
 

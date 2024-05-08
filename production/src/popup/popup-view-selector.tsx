@@ -8,6 +8,7 @@ import { popupHelper } from './popup-helper';
 import { popupViewSelectorHelper } from './popup-view-selector-helper';
 
 import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
+import { ObjectData } from '../types/object-types';
 
 import { AttributeSelectorWindow } from '../attribute-selector/attribute-selector-window';
 import { DossierWindow } from '../embedded/dossier/dossier-window';
@@ -25,6 +26,7 @@ interface PopupViewSelectorProps {
   authToken?: string;
   requestPageByModalClose?: () => void;
   popupType?: DialogType;
+  editedObject?: ObjectData;
 }
 
 const renderProperComponent = (popupType: DialogType): any => {
@@ -57,7 +59,7 @@ const renderProperComponent = (popupType: DialogType): any => {
 
 export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = props => {
   const dispatch = useDispatch();
-  const { authToken, popupType: popupTypeProps, requestPageByModalClose } = props;
+  const { authToken, popupType: popupTypeProps, requestPageByModalClose, editedObject } = props;
 
   const isPageByModalOpenRequested = useSelector(
     navigationTreeSelectors.selectIsPageByModalOpenRequested
@@ -94,6 +96,9 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
             requestPageByModalClose();
             handleExecuteNextRepromptTask();
           }}
+          pageByConfiguration={popupViewSelectorHelper.getPageByConfigurations(
+            editedObject.objectWorkingId
+          )}
         />
       )}
       {renderProperComponent(popupType)}
