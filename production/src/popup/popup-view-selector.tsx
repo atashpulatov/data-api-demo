@@ -24,8 +24,12 @@ import { OverviewWindow } from './overview/overview-window';
 
 interface PopupViewSelectorProps {
   authToken?: string;
-  requestPageByModalClose?: () => void;
   popupType?: DialogType;
+  isPrompted?: boolean;
+  requestPageByModalClose?: () => void;
+  clearEditedObject?: () => void;
+  clearPromptAnswers?: () => void;
+  selectObject?: () => void;
 }
 
 const renderProperComponent = (popupType: DialogType): any => {
@@ -58,7 +62,15 @@ const renderProperComponent = (popupType: DialogType): any => {
 
 export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = props => {
   const dispatch = useDispatch();
-  const { authToken, popupType: popupTypeProps, requestPageByModalClose } = props;
+  const {
+    authToken,
+    popupType: popupTypeProps,
+    isPrompted,
+    requestPageByModalClose,
+    clearEditedObject,
+    clearPromptAnswers,
+    selectObject,
+  } = props;
 
   const isPageByModalOpenRequested = useSelector(
     navigationTreeSelectors.selectIsPageByModalOpenRequested
@@ -82,6 +94,17 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
     return null;
   }
 
+  const handlePageByModalClose = (): void => {
+    requestPageByModalClose();
+    handleExecuteNextRepromptTask();
+
+    if (isPrompted && popupType === DialogType.libraryWindow) {
+      clearEditedObject();
+      clearPromptAnswers();
+      selectObject();
+    }
+  };
+
   return (
     <div>
       {isPageByModalOpenRequested && (
@@ -92,10 +115,7 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
             importPageByConfigurations(pageByConfigurations);
             requestPageByModalClose();
           }}
-          onCancel={() => {
-            requestPageByModalClose();
-            handleExecuteNextRepromptTask();
-          }}
+          onCancel={handlePageByModalClose}
         />
       )}
       {renderProperComponent(popupType)}
@@ -112,7 +132,7 @@ function mapStateToProps(state: any): any {
     popupStateReducer,
     repromptsQueueReducer,
   } = state;
-  const { promptsAnswers } = navigationTree;
+  const { promptsAnswers, isPrompted } = navigationTree;
   const { supportForms } = officeReducer;
   const { popupType, importType } = popupStateReducer;
   const isReport =
@@ -130,6 +150,7 @@ function mapStateToProps(state: any): any {
     importType,
     formsPrivilege,
     repromptsQueueProps: { ...repromptsQueueReducer },
+    isPrompted,
   };
 }
 
@@ -139,6 +160,9 @@ const mapDispatchToProps = {
   requestPageByModalOpen: navigationTreeActions.requestPageByModalOpen,
   requestPageByModalClose: navigationTreeActions.requestPageByModalClose,
   requestImport: navigationTreeActions.requestImport,
+  clearEditedObject: popupActions.clearEditedObject,
+  clearPromptAnswers: navigationTreeActions.clearPromptAnswers,
+  selectObject: navigationTreeActions.selectObject,
 };
 
 export const PopupViewSelector = connect(

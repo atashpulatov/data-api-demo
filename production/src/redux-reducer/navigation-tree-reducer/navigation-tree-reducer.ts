@@ -184,6 +184,7 @@ const clearPromptsAnswers = (state: NavigationTreeState): NavigationTreeState =>
   const newState = { ...state };
   newState.promptsAnswers = [];
   newState.dossierData = null;
+  newState.isPrompted = false;
   return newState;
 };
 
