@@ -121,7 +121,7 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
   const pageByConfiguration = pageByHelper.getPageByConfigurations(
     editedObject?.objectWorkingId,
     pageByHelper.parseValidPageByElements(
-      pageByResponse.pageBy,
+      pageByResponse?.pageBy,
       pageByResponse?.validPageByElements
     )
   );

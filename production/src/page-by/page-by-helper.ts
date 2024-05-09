@@ -1,5 +1,6 @@
 import { PageByConfiguration } from '@mstr/connector-components';
 
+import { isArrayInNestedArrays } from '../helpers/array-helpers';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 
@@ -239,26 +240,6 @@ class PageByHelper {
     );
 
   /**
-   * Checks if a specific array of objects exists in an array of arrays.
-   *
-   * @param arrOfArrays An array of arrays of objects to search.
-   * @param arr The array of objects to search for.
-   * @returns A boolean indicating whether the array of arrays contains the specified array of objects.
-   */
-  isObjectInArrayOfArrays(arrOfArrays: PageByDataElement[][], arr: PageByDataElement[]): boolean {
-    return arrOfArrays.some(
-      innerArray =>
-        innerArray.length === arr.length &&
-        innerArray.every(
-          (innerObj, index) =>
-            innerObj.name === arr[index].name &&
-            innerObj.value === arr[index].value &&
-            innerObj.valueId === arr[index].valueId
-        )
-    );
-  }
-
-  /**
    * Create page by configurations
    *
    * @param objectWorkingId Unique identifier of the object
@@ -278,7 +259,7 @@ class PageByHelper {
     const pageByConfiguration = [];
 
     for (const pageByObject of allPageByObjects) {
-      if (!this.isObjectInArrayOfArrays(validPageByCombination, pageByObject.pageByData.elements)) {
+      if (!isArrayInNestedArrays(validPageByCombination, pageByObject.pageByData.elements)) {
         return [];
       }
       const pageByElements = pageByObject?.pageByData?.elements.map(({ name, value, valueId }) => ({
