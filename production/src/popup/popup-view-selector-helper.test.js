@@ -1,4 +1,3 @@
-import { popupHelper } from './popup-helper';
 import { popupViewSelectorHelper } from './popup-view-selector-helper';
 
 import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
@@ -101,14 +100,14 @@ describe('PopupViewSelectorHelper', () => {
       ];
 
       repromptPopupTypes.forEach(popupType => {
-        expect(popupHelper.isRepromptReportPopupType(popupType)).toBe(true);
+        expect(popupViewSelectorHelper.isRepromptReportPopupType(popupType)).toBe(true);
       });
     });
 
     it('should return false for non-reprompt popup types', () => {
       const nonRepromptPopupType = 'nonRepromptPopupType';
 
-      expect(popupHelper.isRepromptReportPopupType(nonRepromptPopupType)).toBe(false);
+      expect(popupViewSelectorHelper.isRepromptReportPopupType(nonRepromptPopupType)).toBe(false);
     });
 
     it('should proceed to import if conditions are met', () => {

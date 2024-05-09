@@ -1,8 +1,6 @@
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { popupHelper } from '../popup/popup-helper';
 
-import { reduxStore } from '../store';
-
 import {
   AnswersState,
   PromptObject,
@@ -331,15 +329,10 @@ export async function preparePromptedReport(
 
 /**
  * Sends a message to the sidepanel in order to execute the next reprompt task
- * only if the dialog is a reprompting window.
  */
 export const handleExecuteNextRepromptTask = (): void => {
-  const { popupType } = reduxStore.getState().popupStateReducer;
-
   const { commandExecuteNextRepromptTask } = selectorProperties;
   const message = { command: commandExecuteNextRepromptTask };
 
-  if (popupHelper.isRepromptReportPopupType(popupType)) {
-    popupHelper.officeMessageParent(message);
-  }
+  popupHelper.officeMessageParent(message);
 };
