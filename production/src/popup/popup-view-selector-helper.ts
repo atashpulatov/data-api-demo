@@ -2,12 +2,10 @@ import { PageByConfiguration } from '@mstr/connector-components';
 
 import { ObjectExecutionStatus } from '../helpers/prompts-handling-helper';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
-import { pageByHelper } from '../page-by/page-by-helper';
 import { popupHelper } from './popup-helper';
 
 import { reduxStore } from '../store';
 
-import { PageByDataElement } from '../page-by/page-by-types';
 import { RequestPageByModalOpenData } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer-types';
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
@@ -334,59 +332,6 @@ class PopupViewSelectorHelper {
       importPageByConfigurations: (pageByConfigurations: PageByConfiguration[][]) =>
         importCallback(pageByConfigurations),
     });
-  }
-
-  /**
-   * Checks if a specific array of objects exists in an array of arrays.
-   *
-   * @param arrOfArrays An array of arrays of objects to search.
-   * @param arr The array of objects to search for.
-   * @returns A boolean indicating whether the array of arrays contains the specified array of objects.
-   */
-  isObjectInArrayOfArrays(arrOfArrays: PageByDataElement[][], arr: PageByDataElement[]): boolean {
-    return arrOfArrays.some(
-      innerArray =>
-        innerArray.length === arr.length &&
-        innerArray.every(
-          (innerObj, index) =>
-            innerObj.name === arr[index].name &&
-            innerObj.value === arr[index].value &&
-            innerObj.valueId === arr[index].valueId
-        )
-    );
-  }
-
-  /**
-   * Create page by configurations
-   *
-   * @param objectWorkingId Unique identifier of the object
-   * @returns An array of arrays containing Page By configurations
-   */
-  getPageByConfigurations(
-    objectWorkingId: number,
-    validPageByCombination: PageByDataElement[][]
-  ): PageByConfiguration[][] {
-    if (!objectWorkingId) {
-      return [];
-    }
-
-    const { pageBySiblings, sourceObject } = pageByHelper.getAllPageByObjects(objectWorkingId);
-    const allPageByObjects = [sourceObject, ...pageBySiblings];
-    const pageByConfiguration = [];
-
-    for (const pageByObject of allPageByObjects) {
-      if (!this.isObjectInArrayOfArrays(validPageByCombination, pageByObject.pageByData.elements)) {
-        return [];
-      }
-      const pageByElements = pageByObject?.pageByData?.elements.map(({ name, value, valueId }) => ({
-        name,
-        value,
-        id: valueId,
-      }));
-      pageByElements && pageByConfiguration.push(pageByElements);
-    }
-
-    return pageByConfiguration;
   }
 }
 

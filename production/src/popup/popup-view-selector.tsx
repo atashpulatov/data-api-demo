@@ -118,6 +118,14 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
     validCombintations: pageByResponse?.validPageByElements.items,
   };
 
+  const pageByConfiguration = pageByHelper.getPageByConfigurations(
+    editedObject?.objectWorkingId,
+    pageByHelper.parseValidPageByElements(
+      pageByResponse.pageBy,
+      pageByResponse?.validPageByElements
+    )
+  );
+
   return (
     <div>
       {isPageByModalOpenRequested && (
@@ -129,13 +137,7 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
             requestPageByModalClose();
           }}
           onCancel={handlePageByModalClose}
-          pageByConfiguration={popupViewSelectorHelper.getPageByConfigurations(
-            editedObject?.objectWorkingId,
-            pageByHelper.parseValidPageByElements(
-              pageByResponse.pageBy,
-              pageByResponse?.validPageByElements
-            )
-          )}
+          pageByConfiguration={pageByConfiguration}
         />
       )}
       {renderProperComponent(popupType)}
