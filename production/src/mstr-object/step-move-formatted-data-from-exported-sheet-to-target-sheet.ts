@@ -5,7 +5,7 @@ import { ObjectData } from '../types/object-types';
 
 import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
-import { VISUALIZATION_TITLE_EXCLUDED_DEFAULT_CELL_POSITION } from './constants';
+import { TITLE_EXCLUDED_DEFAULT_CELL_POSITION } from './constants';
 
 class StepMoveFormattedDataFromExportedSheetToTargetSheet {
   /**
@@ -40,7 +40,7 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
       }
 
       // Get range starting from 'A3', to exclude the visualization title 
-      const sourceTableRange = officeApiHelper.getRange(columns, VISUALIZATION_TITLE_EXCLUDED_DEFAULT_CELL_POSITION, rows);
+      const sourceTableRange = officeApiHelper.getRange(columns, TITLE_EXCLUDED_DEFAULT_CELL_POSITION, rows);
       const targetTableRange = officeApiHelper.getRange(columns, startCell, rows);
 
       const targetWorksheet = officeApiHelper.getExcelSheetById(
