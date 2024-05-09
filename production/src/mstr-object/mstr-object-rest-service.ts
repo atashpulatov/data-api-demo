@@ -901,13 +901,9 @@ class MstrObjectRestService {
     const fullPath = `${envUrl}/documents/${dossierId}/instances/${dossierInstanceId}/excel`;
 
     const body = {
-      pageOption: 'DEFAULT',
-      pagePerSheet: false,
-      includePageByInfo: false,
       keys: [visualizationKey],
       sheet: {
         header: {
-          reportTitle: true,
           filterDetails: false,
         }
       }
