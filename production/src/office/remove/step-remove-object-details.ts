@@ -30,6 +30,7 @@ class StepRemoveObjectDetails {
       isCrosstab = false,
       crosstabHeaderDimensions = {},
       startCell,
+      objectDetailsSize,
     } = objectData;
 
     let excelContext;
@@ -38,8 +39,6 @@ class StepRemoveObjectDetails {
     try {
       excelContext = await officeApiHelper.getExcelContext();
       objectExist = await officeRemoveHelper.checkIfObjectExist(objectData, excelContext);
-
-      const objectDetailsSize = objectData.objectDetailsSize ?? 0;
 
       if (objectExist && objectDetailsSize > 0) {
         const officeTable = excelContext.workbook.tables.getItem(bindId);
