@@ -179,6 +179,7 @@ describe('PopupViewSelectorHelper', () => {
   });
 
   it('getPageByConfigurations should work properly', () => {
+    // given
     officeReducerHelper.reduxStore.getState = jest.fn().mockImplementation(() => ({
       objectReducer: {
         objects: [
@@ -200,8 +201,10 @@ describe('PopupViewSelectorHelper', () => {
       },
     }));
 
+    // when
     const result = popupViewSelectorHelper.getPageByConfigurations(1);
 
+    // then
     expect(result).toEqual([
       [{ id: '1', name: 'name1', value: 'value1' }],
       [{ id: '2', name: 'name2', value: 'value2' }],
