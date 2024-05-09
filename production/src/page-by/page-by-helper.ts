@@ -93,9 +93,9 @@ class PageByHelper {
         const { name: elementName, id, formValues } = elements[value];
         return {
           name: pageByItemName,
-          value: formValues?.[0] ?? elementName ?? '',
+          value: formValues?.join(', ') ?? elementName ?? '',
           valueId: id,
-        }
+        };
       });
 
       validPageByData.push(pageByDataElement);

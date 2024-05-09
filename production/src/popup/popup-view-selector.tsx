@@ -3,12 +3,12 @@ import { connect, useDispatch, useSelector } from 'react-redux';
 import { PageBy } from '@mstr/connector-components';
 
 import { handleExecuteNextRepromptTask } from '../helpers/prompts-handling-helper';
+import { pageByHelper } from '../page-by/page-by-helper';
 import { ObtainInstanceHelper } from './obtain-instance-helper';
 import { popupHelper } from './popup-helper';
 import { popupViewSelectorHelper } from './popup-view-selector-helper';
 
 import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
-import { ObjectData } from '../types/object-types';
 
 import { AttributeSelectorWindow } from '../attribute-selector/attribute-selector-window';
 import { DossierWindow } from '../embedded/dossier/dossier-window';
@@ -130,7 +130,11 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
           }}
           onCancel={handlePageByModalClose}
           pageByConfiguration={popupViewSelectorHelper.getPageByConfigurations(
-            editedObject.objectWorkingId
+            editedObject?.objectWorkingId,
+            pageByHelper.parseValidPageByElements(
+              pageByResponse.pageBy,
+              pageByResponse?.validPageByElements
+            )
           )}
         />
       )}

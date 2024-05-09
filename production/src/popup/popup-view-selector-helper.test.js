@@ -202,7 +202,10 @@ describe('PopupViewSelectorHelper', () => {
     }));
 
     // when
-    const result = popupViewSelectorHelper.getPageByConfigurations(1);
+    const result = popupViewSelectorHelper.getPageByConfigurations(1, [
+      [{ name: 'name1', value: 'value1', valueId: '1' }],
+      [{ name: 'name2', value: 'value2', valueId: '2' }],
+    ]);
 
     // then
     expect(result).toEqual([
