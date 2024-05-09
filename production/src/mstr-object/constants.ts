@@ -5,7 +5,7 @@ export const VISUALIZATION_TITLE_EXCLUDED_DEFAULT_CELL_POSITION = 'A3';
 export enum ObjectImportType {
   TABLE = 'table',
   PIVOT_TABLE = 'pivot-table',
-  FORMATTED_TABLE = 'formattedTable',
+  FORMATTED_TABLE = 'formatted-table',
   IMAGE = 'image',
 }
 

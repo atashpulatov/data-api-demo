@@ -7,6 +7,7 @@ import {
   LoadSidePanelObjectInfoSettingAction,
   LoadWorksheetObjectInfoSettingAction,
   ObjectInfoSetting,
+  SetDefaultImportTypeAction,
   SetPageByDisplaySettingAction,
   SettingsActionTypes,
   SetWorksheetNamingSettingAction,
@@ -17,6 +18,8 @@ import {
   ToggleSidePanelObjectInfoSettingAction,
   ToggleWorksheetObjectInfoSettingAction,
 } from './settings-reducer-types';
+
+import { ObjectImportType } from '../../mstr-object/constants';
 
 const toggleImportAttributesAsTextFlag = (
   importAttributesAsText: boolean
@@ -88,6 +91,11 @@ const setPageByDisplaySetting = (
   pageByDisplaySetting,
 });
 
+const setDefaultImportType = (importType: ObjectImportType): SetDefaultImportTypeAction => ({
+  type: SettingsActionTypes.SET_DEFAULT_IMPORT_TYPE,
+  defaultImportType: importType,
+});
+
 export const settingsActions = {
   toggleImportAttributesAsTextFlag,
   toggleMergeCrosstabColumnsFlag,
@@ -99,4 +107,5 @@ export const settingsActions = {
   toggleMainWorksheetObjectInfoSetting,
   setWorksheetNamingSetting,
   setPageByDisplaySetting,
+  setDefaultImportType,
 };
