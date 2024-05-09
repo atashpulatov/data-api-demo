@@ -3,6 +3,7 @@ import { connect, useDispatch, useSelector } from 'react-redux';
 import { PageBy } from '@mstr/connector-components';
 
 import { handleExecuteNextRepromptTask } from '../helpers/prompts-handling-helper';
+import { pageByHelper } from '../page-by/page-by-helper';
 import { ObtainInstanceHelper } from './obtain-instance-helper';
 import { popupHelper } from './popup-helper';
 import { popupViewSelectorHelper } from './popup-view-selector-helper';
@@ -117,6 +118,14 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
     validCombintations: pageByResponse?.validPageByElements.items,
   };
 
+  const pageByConfiguration = pageByHelper.getPageByConfigurations(
+    editedObject?.objectWorkingId,
+    pageByHelper.parseValidPageByElements(
+      pageByResponse?.pageBy,
+      pageByResponse?.validPageByElements
+    )
+  );
+
   return (
     <div>
       {isPageByModalOpenRequested && (
@@ -128,6 +137,7 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
             requestPageByModalClose();
           }}
           onCancel={handlePageByModalClose}
+          pageByConfiguration={pageByConfiguration}
         />
       )}
       {renderProperComponent(popupType)}
