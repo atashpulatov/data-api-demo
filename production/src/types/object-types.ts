@@ -145,6 +145,7 @@ export interface ObjectData {
   tableName?: string;
   worksheet?: Worksheet;
   startCell?: string;
+  objectDetailsSize?: number;
   response?: any;
   pageByData?: PageByData;
   groupData?: GroupData;
@@ -162,5 +163,4 @@ export interface ObjectData {
 export interface ObjectSettings {
   mergeCrosstabColumns?: boolean;
   importAttributesAsText?: boolean;
-  objectDetailsSize?: number;
 }

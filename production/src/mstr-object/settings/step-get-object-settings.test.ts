@@ -14,16 +14,15 @@ describe('StepGetObjectSettings', () => {
 
   const getObjectSettings = (
     mergeCrosstabColumns: boolean,
-    importAttributesAsText: boolean,
-    objectDetailsSize: number
-  ): ObjectSettings => ({ mergeCrosstabColumns, importAttributesAsText, objectDetailsSize });
+    importAttributesAsText: boolean
+  ): ObjectSettings => ({ mergeCrosstabColumns, importAttributesAsText });
 
   it.each`
-    mergeCrosstabColumnsUser | importAttributesAsTextUser | objectSettings                                | expectedSettings
-    ${true}                  | ${false}                   | ${getObjectSettings(false, false, 0)}         | ${getObjectSettings(true, false, 0)}
-    ${true}                  | ${false}                   | ${getObjectSettings(undefined, undefined, 0)} | ${getObjectSettings(true, false, 0)}
-    ${true}                  | ${true}                    | ${getObjectSettings(false, false, 0)}         | ${getObjectSettings(true, true, 0)}
-    ${false}                 | ${false}                   | ${getObjectSettings(true, true, 0)}           | ${getObjectSettings(false, false, 0)}
+    mergeCrosstabColumnsUser | importAttributesAsTextUser | objectSettings                             | expectedSettings
+    ${true}                  | ${false}                   | ${getObjectSettings(false, false)}         | ${getObjectSettings(true, false)}
+    ${true}                  | ${false}                   | ${getObjectSettings(undefined, undefined)} | ${getObjectSettings(true, false)}
+    ${true}                  | ${true}                    | ${getObjectSettings(false, false)}         | ${getObjectSettings(true, true)}
+    ${false}                 | ${false}                   | ${getObjectSettings(true, true)}           | ${getObjectSettings(false, false)}
   `(
     `should update object settings with user settings when operation type is IMPORT_OPERATION`,
     async ({
@@ -69,11 +68,11 @@ describe('StepGetObjectSettings', () => {
   );
 
   it.each`
-    mergeCrosstabColumnsUser | importAttributesAsTextUser | objectSettings                                | expectedSettings
-    ${true}                  | ${false}                   | ${getObjectSettings(false, false, 0)}         | ${getObjectSettings(true, false, 0)}
-    ${true}                  | ${false}                   | ${getObjectSettings(undefined, undefined, 0)} | ${getObjectSettings(true, false, 0)}
-    ${true}                  | ${true}                    | ${getObjectSettings(false, false, 0)}         | ${getObjectSettings(true, true, 0)}
-    ${false}                 | ${false}                   | ${getObjectSettings(true, true, 0)}           | ${getObjectSettings(false, false, 0)}
+    mergeCrosstabColumnsUser | importAttributesAsTextUser | objectSettings                             | expectedSettings
+    ${true}                  | ${false}                   | ${getObjectSettings(false, false)}         | ${getObjectSettings(true, false)}
+    ${true}                  | ${false}                   | ${getObjectSettings(undefined, undefined)} | ${getObjectSettings(true, false)}
+    ${true}                  | ${true}                    | ${getObjectSettings(false, false)}         | ${getObjectSettings(true, true)}
+    ${false}                 | ${false}                   | ${getObjectSettings(true, true)}           | ${getObjectSettings(false, false)}
   `(
     `should update object settings with user settings when operation type is EDIT_OPERATION`,
     async ({
@@ -119,11 +118,11 @@ describe('StepGetObjectSettings', () => {
   );
 
   it.each`
-    mergeCrosstabColumnsUser | importAttributesAsTextUser | objectSettings                                | expectedSettings
-    ${true}                  | ${false}                   | ${getObjectSettings(false, false, 0)}         | ${getObjectSettings(false, false, 0)}
-    ${true}                  | ${false}                   | ${getObjectSettings(undefined, undefined, 0)} | ${getObjectSettings(true, false, 0)}
-    ${true}                  | ${true}                    | ${getObjectSettings(false, false, 0)}         | ${getObjectSettings(false, false, 0)}
-    ${false}                 | ${false}                   | ${getObjectSettings(true, true, 0)}           | ${getObjectSettings(true, true, 0)}
+    mergeCrosstabColumnsUser | importAttributesAsTextUser | objectSettings                             | expectedSettings
+    ${true}                  | ${false}                   | ${getObjectSettings(false, false)}         | ${getObjectSettings(false, false)}
+    ${true}                  | ${false}                   | ${getObjectSettings(undefined, undefined)} | ${getObjectSettings(true, false)}
+    ${true}                  | ${true}                    | ${getObjectSettings(false, false)}         | ${getObjectSettings(false, false)}
+    ${false}                 | ${false}                   | ${getObjectSettings(true, true)}           | ${getObjectSettings(true, true)}
   `(
     `should update object settings with user settings when operation type is DUPLICATE_OPERATION`,
     async ({
@@ -169,11 +168,11 @@ describe('StepGetObjectSettings', () => {
   );
 
   it.each`
-    mergeCrosstabColumnsUser | importAttributesAsTextUser | objectSettings                                | expectedSettings
-    ${true}                  | ${false}                   | ${getObjectSettings(false, false, 0)}         | ${getObjectSettings(false, false, 0)}
-    ${true}                  | ${false}                   | ${getObjectSettings(undefined, undefined, 0)} | ${getObjectSettings(true, false, 0)}
-    ${true}                  | ${true}                    | ${getObjectSettings(false, false, 0)}         | ${getObjectSettings(false, false, 0)}
-    ${false}                 | ${false}                   | ${getObjectSettings(true, true, 0)}           | ${getObjectSettings(true, true, 0)}
+    mergeCrosstabColumnsUser | importAttributesAsTextUser | objectSettings                             | expectedSettings
+    ${true}                  | ${false}                   | ${getObjectSettings(false, false)}         | ${getObjectSettings(false, false)}
+    ${true}                  | ${false}                   | ${getObjectSettings(undefined, undefined)} | ${getObjectSettings(true, false)}
+    ${true}                  | ${true}                    | ${getObjectSettings(false, false)}         | ${getObjectSettings(false, false)}
+    ${false}                 | ${false}                   | ${getObjectSettings(true, true)}           | ${getObjectSettings(true, true)}
   `(
     `should update object settings with user settings when operation type is REFRESH_OPERATION`,
     async ({
