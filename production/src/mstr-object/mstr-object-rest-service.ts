@@ -901,9 +901,65 @@ class MstrObjectRestService {
     const fullPath = `${envUrl}/documents/${dossierId}/instances/${dossierInstanceId}/excel`;
 
     const body = {
-      pageOption: 'DEFAULT',
-      pagePerSheet: false,
       keys: [visualizationKey],
+      sheet: {
+        header: {
+          filterDetails: false,
+        }
+      }
+    };
+
+    const options = {
+      method: 'POST',
+      credentials: 'include' as RequestCredentials,
+      headers: {
+        Accept: 'application/octet-stream',
+        'Content-type': 'application/json',
+        ...(projectId && { 'x-mstr-projectId': projectId }),
+        ...(authToken && { 'x-mstr-authtoken': authToken }),
+      },
+      body: JSON.stringify(body),
+    };
+
+    const response = await fetch(fullPath, options);
+    return response;
+  };
+
+  /**
+   * Fetches the workbook exported to excel using export engine.
+   * 
+   * @param reportId unique identifier of report
+   * @param reportInstanceId unique identifier of report instance
+   * @param projectId unique identifier of the mstr project
+   * 
+   * @returns Readable stream(blob)
+   */
+  exportReportToExcel = async (
+    { reportId,
+      reportInstanceId,
+      projectId
+    }: {
+      reportId: string,
+      reportInstanceId: string,
+      projectId: string
+    }
+  ): Promise<any> => {
+    const storeState = this.reduxStore.getState();
+    const { envUrl, authToken } = storeState.sessionReducer;
+    const fullPath = `${envUrl}/reports/${reportId}/instances/${reportInstanceId}/excel`;
+
+    const body = {
+      sheet: {
+        header: {
+          exportReportTitle: true,
+          exportFilterDetails: false,
+          exportPageByInfo: false
+        }
+      },
+      pageBy: {
+        pageOption: "DEFAULT",
+        pagePerSheet: false
+      }
     };
 
     const options = {
