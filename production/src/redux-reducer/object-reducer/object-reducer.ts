@@ -26,6 +26,9 @@ export const objectReducer = (state = initialState, action: ObjectActions): Obje
     case ObjectActionTypes.UPDATE_OBJECT:
       return updateObject(state, action.payload);
 
+    case ObjectActionTypes.UPDATE_OBJECTS:
+      return updateObjects(state, action.payload);
+
     case ObjectActionTypes.REMOVE_OBJECT:
       return removeObject(state, action.payload);
 
@@ -57,24 +60,36 @@ function editRequested(state: ObjectState, payload: EditRequestedPayload): Objec
   return updateObject(state, props);
 }
 
+/**
+ * Updates single object in Redux Store state
+ * @param state Redux Store state
+ * @param updatedObjectProps New object properties
+ * @returns
+ */
 function updateObject(state: ObjectState, updatedObjectProps: Partial<ObjectData>): ObjectState {
-  const objectToUpdateIndex = getObjectIndex(state.objects, updatedObjectProps.objectWorkingId);
   const newObjects = [...state.objects];
 
-  // update visualization info explicitly to avoid losing the vizDimensions field
-  const oldVisualizationInfo = state.objects[objectToUpdateIndex].visualizationInfo;
-  const newVisualizationInfo = updatedObjectProps.visualizationInfo;
-  const visualizationInfo = (oldVisualizationInfo || newVisualizationInfo) && {
-    ...oldVisualizationInfo,
-    ...newVisualizationInfo,
-  };
+  replaceSingleObject(newObjects, updatedObjectProps.objectWorkingId, updatedObjectProps);
 
-  const updatedObject = {
-    ...state.objects[objectToUpdateIndex],
-    ...updatedObjectProps,
-    visualizationInfo,
-  };
-  newObjects.splice(objectToUpdateIndex, 1, updatedObject);
+  return { objects: newObjects };
+}
+
+/**
+ * Updates multiple objects in Redux Store state
+ * @param state Redux Store state
+ * @param updatedObjectsProps New objects properties
+ * @returns
+ */
+function updateObjects(
+  state: ObjectState,
+  updatedObjectsProps: Partial<ObjectData>[]
+): ObjectState {
+  const newObjects = [...state.objects];
+
+  updatedObjectsProps.forEach(updatedObjectProps => {
+    replaceSingleObject(newObjects, updatedObjectProps.objectWorkingId, updatedObjectProps);
+  });
+
   return { objects: newObjects };
 }
 
@@ -96,6 +111,35 @@ function restoreObjectBackup(state: ObjectState, backupObjectData: ObjectData): 
   const newObjects = [...state.objects];
   newObjects.splice(objectToUpdateIndex, 1, backupObjectData);
   return { objects: newObjects };
+}
+
+/**
+ * Replaces single object in place, mutating the array.
+ * @param objects Array of objects
+ * @param objectWorkingId Id of the object to be replaced
+ * @param newObjectProps New object properties
+ */
+function replaceSingleObject(
+  objects: ObjectData[],
+  objectWorkingId: number,
+  newObjectProps: Partial<ObjectData>
+): void {
+  const objectToUpdateIndex = getObjectIndex(objects, objectWorkingId);
+
+  // update visualization info explicitly to avoid losing the vizDimensions field
+  const oldVisualizationInfo = objects[objectToUpdateIndex].visualizationInfo;
+  const newVisualizationInfo = newObjectProps.visualizationInfo;
+  const visualizationInfo = (oldVisualizationInfo || newVisualizationInfo) && {
+    ...oldVisualizationInfo,
+    ...newVisualizationInfo,
+  };
+  const updatedObject = {
+    ...objects[objectToUpdateIndex],
+    ...newObjectProps,
+    visualizationInfo,
+  };
+
+  objects.splice(objectToUpdateIndex, 1, updatedObject);
 }
 
 function getObjectIndex(objects: ObjectData[], objectWorkingId: number): number {

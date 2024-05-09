@@ -2,7 +2,7 @@ import { PageByConfiguration } from '@mstr/connector-components';
 import { Action } from 'redux';
 
 import { MstrObjectTypes } from '../../mstr-object/mstr-object-types';
-import { PageBy } from '../../page-by/page-by-types';
+import { PageByResponse } from '../../page-by/page-by-types';
 import { PromptsAnswer } from '../answers-reducer/answers-reducer-types';
 import { DialogType } from '../popup-state-reducer/popup-state-reducer-types';
 
@@ -50,12 +50,12 @@ export interface NavigationTreeState {
   displayAttrFormNames?: DisplayAttrFormNames;
   importSubtotal?: string;
   promptObjects?: string[];
-  pageBy?: PageBy[];
+  pageByResponse?: PageByResponse;
   importPageByConfigurations?: (pageByConfigurations: PageByConfiguration[][]) => void;
 }
 
 export interface RequestPageByModalOpenData {
-  pageBy: PageBy[];
+  pageByResponse: PageByResponse;
   importPageByConfigurations: (pageByConfigurations: PageByConfiguration[][]) => void;
 }
 

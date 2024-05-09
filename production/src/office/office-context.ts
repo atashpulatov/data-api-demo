@@ -1,6 +1,7 @@
 const EXCEL_SHAPE_API_VERSION = 1.9;
 const EXCEL_INSERT_WORKSHEET_API_VERSION = 1.13;
 const EXCEL_PIVOT_TABLE_API_VERSION = 1.8;
+const EXCEL_ADVANCED_WORKSHEET_TRACKING_API_VERSION = 1.17;
 
 class OfficeContext {
   getOffice(): typeof Office {
@@ -54,7 +55,7 @@ class OfficeContext {
   }
 
   /**
-   * Checks whether the Excel.Workbook insertWorksheetsFromBase64() API is supported in the current 
+   * Checks whether the Excel.Workbook insertWorksheetsFromBase64() API is supported in the current
    * office environment and updates the redux store with the API support status.
    *
    * @returns true if the Excel.Workbook insertWorksheetsFromBase64() API is supported
@@ -62,7 +63,7 @@ class OfficeContext {
   isInsertWorksheetAPISupported(): boolean {
     return this.isSetSupported(EXCEL_INSERT_WORKSHEET_API_VERSION);
   }
-  
+
   /** Checks whether the Excel Pivot table API is supported in the current office environment
    * and updates the redux store with the API support status
    *
@@ -70,6 +71,16 @@ class OfficeContext {
    */
   isPivotTableSupported(): boolean {
     return this.isSetSupported(EXCEL_PIVOT_TABLE_API_VERSION);
+  }
+
+  /**
+   * Checks whether the Excel.WorksheetCollection onNameChanged() and onMoved() APIs are supported
+   * in the current Office environment and updates the redux store with the API support status.
+   *
+   * @returns true if the Excel.WorksheetCollection onNameChanged() and onMoved() APIs are supported
+   */
+  isAdvancedWorksheetTrackingSupported(): boolean {
+    return this.isSetSupported(EXCEL_ADVANCED_WORKSHEET_TRACKING_API_VERSION);
   }
 }
 

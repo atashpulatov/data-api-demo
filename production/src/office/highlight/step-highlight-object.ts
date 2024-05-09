@@ -22,7 +22,10 @@ class StepHighlightObject {
       // Highlight operation is not supported for images and pivot tables as Excel API does not support shape and pivot table object selection and as of now
       const { importType, pivotTableId, bindId } = objectData;
 
-      if (importType === ObjectImportType.TABLE || importType === ObjectImportType.FORMATTED_TABLE) {
+      if (
+        importType === ObjectImportType.TABLE ||
+        importType === ObjectImportType.FORMATTED_TABLE
+      ) {
         await officeApiHelper.onBindingObjectClick(objectData);
       } else {
         const excelContext = await officeApiHelper.getExcelContext();
@@ -30,7 +33,14 @@ class StepHighlightObject {
         let worksheet;
 
         if (importType === ObjectImportType.PIVOT_TABLE) {
-          const pivotTable = excelContext.workbook.pivotTables.getItem(pivotTableId);
+          const pivotTable = await officeApiHelper.getPivotTable(excelContext, pivotTableId);
+
+          // Omit the highlight operation, if the pivot table was removed manually from the worksheet.
+          if (pivotTable.isNullObject) {
+            operationStepDispatcher.completeHighlightObject(objectData.objectWorkingId);
+            return;
+          }
+
           worksheet = pivotTable.worksheet;
         }
 

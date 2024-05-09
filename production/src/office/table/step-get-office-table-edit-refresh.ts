@@ -8,6 +8,7 @@ import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import officeTableCreate from './office-table-create';
 import officeTableRefresh from './office-table-refresh';
 import officeTableUpdate from './office-table-update';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 class StepGetOfficeTableEditRefresh {
   /**
@@ -35,7 +36,8 @@ class StepGetOfficeTableEditRefresh {
   ): Promise<void> {
     try {
       console.time('Create or get table - edit or refresh');
-      const { tableName, previousTableDimensions, objectWorkingId, pageByData } = objectData;
+      const { tableName, previousTableDimensions, objectWorkingId, pageByData, importType } =
+        objectData;
       const { excelContext, instanceDefinition, oldBindId, objectEditedData, insertNewWorksheet } =
         operationData;
       let { tableChanged, startCell } = operationData;
@@ -73,7 +75,8 @@ class StepGetOfficeTableEditRefresh {
           prevOfficeTable,
           tableChanged,
           isRepeatStep,
-          insertNewWorksheet,
+          insertNewWorksheet:
+            ObjectImportType.PIVOT_TABLE === importType ? false : insertNewWorksheet,
           pageByData,
           objectData,
         }));
@@ -113,13 +116,19 @@ class StepGetOfficeTableEditRefresh {
 
       const { id, name, position } = officeTable.worksheet;
 
-      const updatedObject = {
+      let updatedObject: Partial<ObjectData> = {
         objectWorkingId,
         bindId,
         startCell,
-        worksheet: { id, name, index: position },
-        groupData: { key: position, title: name },
       };
+
+      if (importType !== ObjectImportType.PIVOT_TABLE) {
+        updatedObject = {
+          ...updatedObject,
+          worksheet: { id, name, index: position },
+          groupData: { key: position, title: name },
+        };
+      }
 
       operationStepDispatcher.updateOperation(updatedOperation);
       operationStepDispatcher.updateObject(updatedObject);

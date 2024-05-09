@@ -456,7 +456,13 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
     onPopupBack();
   };
 
-  const objectName = editedObject.chosenObjectName || chosenObjectName;
+  let objectName;
+
+  if (editedObject?.pageByData) {
+    objectName = editedObject.definition?.sourceName;
+  } else {
+    objectName = editedObject.chosenObjectName || chosenObjectName;
+  }
 
   return (
     <div className='prompts-window'>

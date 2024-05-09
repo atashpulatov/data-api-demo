@@ -12,6 +12,7 @@ export enum ObjectActionTypes {
   REMOVE_OBJECT = 'REMOVE_OBJECT',
   RESTORE_ALL_OBJECTS = 'RESTORE_ALL_OBJECTS',
   RESTORE_OBJECT_BACKUP = 'RESTORE_OBJECT_BACKUP',
+  UPDATE_OBJECTS = 'UPDATE_OBJECTS',
 }
 
 export interface ImportRequestedPayload {
@@ -39,6 +40,11 @@ export interface UpdateObjectAction extends Action {
   payload: Partial<ObjectData>;
 }
 
+export interface UpdateObjectsAction extends Action {
+  type: ObjectActionTypes.UPDATE_OBJECTS;
+  payload: Partial<ObjectData>[];
+}
+
 export interface RemoveObjectAction extends Action {
   type: ObjectActionTypes.REMOVE_OBJECT;
   payload: number;
@@ -58,6 +64,7 @@ export type ObjectActions =
   | ImportRequestedAction
   | EditRequestedAction
   | UpdateObjectAction
+  | UpdateObjectsAction
   | RemoveObjectAction
   | RestoreAllObjectsAction
   | RestoreObjectBackupAction;

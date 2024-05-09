@@ -49,10 +49,10 @@ class PopupViewSelectorHelper {
       : DialogType.editFilters;
 
   setPopupType(props: any, popupType: DialogType): DialogType {
-    const { importRequested, dossierOpenRequested, isPrompted, pageBy } = props;
+    const { importRequested, dossierOpenRequested, isPrompted, pageByResponse } = props;
     const arePromptsAnswered = this.arePromptsAnswered(props);
     const shouldProceedToImport =
-      importRequested && (!isPrompted || arePromptsAnswered) && !pageBy?.length;
+      importRequested && (!isPrompted || arePromptsAnswered) && !pageByResponse;
 
     if (shouldProceedToImport) {
       this.proceedToImport(props);
@@ -322,14 +322,14 @@ class PopupViewSelectorHelper {
       instance = await this.obtainInstanceWithPromptsAnswers(props);
     }
 
-    const { pageBy } = await mstrObjectRestService.getPageByElements(
+    const pageByResponse = await mstrObjectRestService.getPageByElements(
       objectId,
       projectId,
       instanceId || instance.instanceId
     );
 
     requestPageByModalOpen({
-      pageBy,
+      pageByResponse,
       importPageByConfigurations: (pageByConfigurations: PageByConfiguration[][]) =>
         importCallback(pageByConfigurations),
     });

@@ -23,10 +23,15 @@ class StepGetOfficeTableImport {
   async getOfficeTableImport(objectData: ObjectData, operationData: OperationData): Promise<void> {
     try {
       console.time('Create or get table - import');
-      const { objectWorkingId, excelContext, instanceDefinition, startCell: selectedCell, insertNewWorksheet } =
-        operationData;
+      const {
+        objectWorkingId,
+        excelContext,
+        instanceDefinition,
+        startCell: selectedCell,
+        insertNewWorksheet,
+      } = operationData;
 
-      const { officeTable, bindId, tableName, worksheet, startCell, groupData } =
+      const { officeTable, bindId, tableName, worksheet, startCell, groupData, objectDetailsSize } =
         await officeTableCreate.createOfficeTable({
           excelContext,
           instanceDefinition,
@@ -50,6 +55,7 @@ class StepGetOfficeTableImport {
         tableName,
         bindId,
         startCell,
+        objectDetailsSize,
       };
 
       if (objectData.importType !== ObjectImportType.PIVOT_TABLE) {
