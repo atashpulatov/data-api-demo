@@ -18,7 +18,8 @@ import { ObjectImportType } from '../../../mstr-object/constants';
  */
 const useGetImportButtonProps = (
   importType: ObjectImportType,
-  options: ImportButtonOptionsType[]
+  options: ImportButtonOptionsType[],
+  isDisabled: boolean
 ): {
   shouldDisplayOptions: boolean;
   importButtonProps: { id: string; actionType: string };
@@ -27,23 +28,25 @@ const useGetImportButtonProps = (
   const selectedMstrObjectType = useSelector(navigationTreeSelectors.selectMstrObjectType);
   const isDossierOpenRequested = useSelector(navigationTreeSelectors.selectIsDossierOpenRequested);
   const isPromptDialog = useSelector(popupStateSelectors.selectIsPromptDialog);
+  const isDashboardSelected = selectedMstrObjectType === mstrObjectType.mstrObjectType.dossier;
 
   const shouldDisplayOptions = useMemo(
     () =>
       options.length > 1 &&
       isObjectSelected &&
       !isPromptDialog &&
-      (selectedMstrObjectType !== mstrObjectType.mstrObjectType.dossier || isDossierOpenRequested),
+      (!isDashboardSelected || isDossierOpenRequested),
     [
       options.length,
       isObjectSelected,
       isPromptDialog,
-      selectedMstrObjectType,
+      isDashboardSelected,
       isDossierOpenRequested,
     ]
   );
 
-  const importButtonProps = dialogButtonHelper.getImportButtonProps(isPromptDialog, importType);
+  const isDefaultImportButton = isDashboardSelected && !isDossierOpenRequested || isDisabled
+  const importButtonProps = dialogButtonHelper.getImportButtonProps(isPromptDialog, isDefaultImportButton ? null : importType);
 
   return { shouldDisplayOptions, importButtonProps };
 };

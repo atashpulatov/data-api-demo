@@ -6,6 +6,7 @@ import {
 import {
   LoadSidePanelObjectInfoSettingAction,
   LoadWorksheetObjectInfoSettingAction,
+  SetDefaultImportTypeAction,
   SetPageByDisplaySettingAction,
   SettingsActions,
   SettingsActionTypes,
@@ -58,6 +59,8 @@ export const settingsReducer = (state = initialState, action: SettingsActions): 
       return setWorksheetNamingSetting(state, action);
     case SettingsActionTypes.SET_PAGE_BY_DISPLAY_SETTING:
       return setPageByDisplaySetting(state, action);
+    case SettingsActionTypes.SET_DEFAULT_IMPORT_TYPE:
+      return setDefaultImportType(state, action);
     default:
       return state;
   }
@@ -169,4 +172,11 @@ function setPageByDisplaySetting(
   action: SetPageByDisplaySettingAction
 ): SettingsState {
   return { ...state, pageByDisplaySetting: action.pageByDisplaySetting };
+}
+
+function setDefaultImportType(
+  state: SettingsState,
+  action: SetDefaultImportTypeAction
+): SettingsState {
+  return { ...state, importType: action.defaultImportType };
 }
