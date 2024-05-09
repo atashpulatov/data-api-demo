@@ -328,11 +328,10 @@ export async function preparePromptedReport(
 }
 
 /**
- * Sends a message to the sidepanel in order to execute the next reprompt task
+ * Sends a message to the sidepanel in order to execute the next reprompt task.
  */
 export const handleExecuteNextRepromptTask = (): void => {
   const { commandExecuteNextRepromptTask } = selectorProperties;
   const message = { command: commandExecuteNextRepromptTask };
-
   popupHelper.officeMessageParent(message);
 };
