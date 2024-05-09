@@ -10,7 +10,6 @@ import overviewHelper from '../overview/overview-helper';
 import { MultipleRepromptTransitionPageTypes } from './multiple-reprompt-transition-page-types';
 
 import i18n from '../../i18n';
-import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 
 import './multiple-reprompt-transition-page.scss';
 
@@ -24,14 +23,22 @@ import './multiple-reprompt-transition-page.scss';
  */
 export const MultipleRepromptTransitionPageNotConnected: FC<
   MultipleRepromptTransitionPageTypes
-> = ({ nextObjectBindId, nextObjectIndex, total, popupData }) => {
+> = ({ nextObjectBindId, nextObjectIndex, total, popupData, editedObject }) => {
   const nextObject: any =
     officeReducerHelper.getObjectFromObjectReducerByBindId(nextObjectBindId) || {};
+
   // retrieve object name based on next object type. reports vs dossiers have different name properties
-  const nextObjectName =
-    nextObject.objectType?.name === mstrObjectEnum.mstrObjectType.visualization.name
-      ? nextObject.definition?.sourceName
-      : nextObject.name;
+  const getNextObjectName = (): string => {
+    if (editedObject?.pageByData) {
+      return editedObject.definition?.sourceName;
+    }
+
+    if (editedObject?.name) {
+      return editedObject?.name;
+    }
+
+    return nextObject.definition?.sourceName;
+  };
 
   const [t] = useTranslation('common', { i18n });
   const [dialogPopup, setDialogPopup] = React.useState(null);
@@ -50,7 +57,7 @@ export const MultipleRepromptTransitionPageNotConnected: FC<
     <div className='multiple-reprompt-transition-page'>
       <ObjectWindowTitle
         objectType='' // not needed since multiple reprompt title doesn't show type
-        objectName={nextObjectName}
+        objectName={getNextObjectName()}
         isReprompt
         isEdit={false}
         index={nextObjectIndex}
@@ -77,15 +84,17 @@ const mapStateToProps = (state: {
     index: number;
     total: number;
   };
+  popupReducer: any;
 }): MultipleRepromptTransitionPageTypes => {
-  const { repromptsQueueReducer, officeReducer } = state;
+  const { repromptsQueueReducer, officeReducer, popupReducer } = state;
+  const { total, repromptsQueue } = repromptsQueueReducer;
 
   return {
-    nextObjectBindId: repromptsQueueReducer.repromptsQueue[0]?.bindId || '',
-    // + 1 since the next obj has not been processed yet, so index is behind 1
-    nextObjectIndex: repromptsQueueReducer.index + 1,
-    total: repromptsQueueReducer.total,
+    nextObjectBindId: repromptsQueue[0]?.bindId || '',
+    nextObjectIndex: total - repromptsQueue.length,
+    total,
     popupData: officeReducer.popupData,
+    editedObject: popupReducer.editedObject,
   };
 };
 

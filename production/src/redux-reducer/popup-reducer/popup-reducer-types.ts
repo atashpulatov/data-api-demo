@@ -2,7 +2,7 @@ import { PageByData } from '@mstr/connector-components/lib/loaded-objects/object
 import { Action } from 'redux';
 
 import { MstrObjectTypes } from '../../mstr-object/mstr-object-types';
-import { SubtotalsInfo } from '../../types/object-types';
+import { Definition, SubtotalsInfo } from '../../types/object-types';
 
 import { DisplayAttrFormNames, ObjectImportType } from '../../mstr-object/constants';
 
@@ -34,6 +34,7 @@ export interface EditedObject {
   importType: ObjectImportType;
   mstrObjectType: MstrObjectTypes;
   pageByData?: PageByData;
+  definition?: Definition;
 }
 export interface PopupState {
   editedObject?: EditedObject;

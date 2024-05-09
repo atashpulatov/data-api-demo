@@ -17,14 +17,21 @@ import { PromptsWindow } from '../prompts/prompts-window';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { navigationTreeSelectors } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer-selectors';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
+import { popupSelectors } from '../redux-reducer/popup-reducer/popup-selectors';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { MultipleRepromptTransitionPage } from './multiple-reprompt-transition-page/multiple-reprompt-transition-page';
 import { OverviewWindow } from './overview/overview-window';
 
 interface PopupViewSelectorProps {
   authToken?: string;
-  requestPageByModalClose?: () => void;
   popupType?: DialogType;
+  isPrompted?: boolean;
+  isReprompt?: boolean;
+  isEdit?: boolean;
+  requestPageByModalClose?: () => void;
+  clearEditedObject?: () => void;
+  clearPromptAnswers?: () => void;
+  selectObject?: () => void;
 }
 
 const renderProperComponent = (popupType: DialogType): any => {
@@ -57,7 +64,17 @@ const renderProperComponent = (popupType: DialogType): any => {
 
 export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = props => {
   const dispatch = useDispatch();
-  const { authToken, popupType: popupTypeProps, requestPageByModalClose } = props;
+  const {
+    authToken,
+    popupType: popupTypeProps,
+    isPrompted,
+    isReprompt,
+    isEdit,
+    requestPageByModalClose,
+    clearEditedObject,
+    clearPromptAnswers,
+    selectObject,
+  } = props;
 
   const isPageByModalOpenRequested = useSelector(
     navigationTreeSelectors.selectIsPageByModalOpenRequested
@@ -67,6 +84,7 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
   const importPageByConfigurations = useSelector(
     navigationTreeSelectors.selectImportPageByConfigurations
   );
+  const editedObject = useSelector(popupSelectors.selectEditedObject);
 
   const popupType = popupViewSelectorHelper.setPopupType(props, popupTypeProps);
 
@@ -80,20 +98,31 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
     return null;
   }
 
+  const handlePageByModalClose = (): void => {
+    requestPageByModalClose();
+
+    if (isReprompt && !isEdit) {
+      handleExecuteNextRepromptTask();
+    }
+
+    if (isPrompted && popupType === DialogType.libraryWindow) {
+      clearEditedObject();
+      clearPromptAnswers();
+      selectObject();
+    }
+  };
+
   return (
     <div>
       {isPageByModalOpenRequested && (
         <PageBy
           pageByData={pageBy}
-          objectName={chosenObjectName}
+          objectName={editedObject?.definition?.sourceName ?? chosenObjectName}
           onImport={pageByConfigurations => {
             importPageByConfigurations(pageByConfigurations);
             requestPageByModalClose();
           }}
-          onCancel={() => {
-            requestPageByModalClose();
-            handleExecuteNextRepromptTask();
-          }}
+          onCancel={handlePageByModalClose}
         />
       )}
       {renderProperComponent(popupType)}
@@ -110,9 +139,9 @@ function mapStateToProps(state: any): any {
     popupStateReducer,
     repromptsQueueReducer,
   } = state;
-  const { promptsAnswers } = navigationTree;
+  const { promptsAnswers, isPrompted } = navigationTree;
   const { supportForms } = officeReducer;
-  const { popupType, importType } = popupStateReducer;
+  const { popupType, importType, isReprompt, isEdit } = popupStateReducer;
   const isReport =
     editedObject && editedObject.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
@@ -128,6 +157,9 @@ function mapStateToProps(state: any): any {
     importType,
     formsPrivilege,
     repromptsQueueProps: { ...repromptsQueueReducer },
+    isPrompted,
+    isReprompt,
+    isEdit,
   };
 }
 
@@ -137,6 +169,9 @@ const mapDispatchToProps = {
   requestPageByModalOpen: navigationTreeActions.requestPageByModalOpen,
   requestPageByModalClose: navigationTreeActions.requestPageByModalClose,
   requestImport: navigationTreeActions.requestImport,
+  clearEditedObject: popupActions.clearEditedObject,
+  clearPromptAnswers: navigationTreeActions.clearPromptAnswers,
+  selectObject: navigationTreeActions.selectObject,
 };
 
 export const PopupViewSelector = connect(
