@@ -31,9 +31,9 @@ const selectIsEdit = createSelector(
   navigationTree => navigationTree.isEdit
 );
 
-const selectPageBy = createSelector(
+const selectPageByResponse = createSelector(
   [getNavigationTreeState],
-  navigationTree => navigationTree.pageBy
+  navigationTree => navigationTree.pageByResponse
 );
 
 const selectChosenObjectName = createSelector(
@@ -57,7 +57,7 @@ export const navigationTreeSelectors = {
   selectIsDossierOpenRequested,
   selectArePromptAnswered,
   selectIsEdit,
-  selectPageBy,
+  selectPageByResponse,
   selectChosenObjectName,
   selectIsPageByModalOpenRequested,
   selectImportPageByConfigurations,
