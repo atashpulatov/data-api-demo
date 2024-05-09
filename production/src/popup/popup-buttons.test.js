@@ -80,7 +80,7 @@ describe('PopupButtons', () => {
       </Provider>
     );
 
-    const button = getByText('Import Data');
+    const button = getByText('Import');
     fireEvent.focus(button);
 
     // then
@@ -95,7 +95,7 @@ describe('PopupButtons', () => {
       </Provider>
     );
 
-    const button = getByText('Import Data');
+    const button = getByText('Import');
     fireEvent.focus(button);
 
     // then
