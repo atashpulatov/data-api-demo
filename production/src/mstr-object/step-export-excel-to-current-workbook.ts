@@ -44,7 +44,7 @@ class StepExportExcelToCurrentWorkbook {
             projectId
           }
         );
-      } else { // if mstrObjectType is a report type
+      } else { // mstrObjectType is a report type
         response = await mstrObjectRestService.exportReportToExcel({
           reportId: objectId,
           reportInstanceId: instanceDefinition.instanceId,
