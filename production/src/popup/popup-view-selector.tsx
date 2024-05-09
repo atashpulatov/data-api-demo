@@ -26,6 +26,8 @@ interface PopupViewSelectorProps {
   authToken?: string;
   popupType?: DialogType;
   isPrompted?: boolean;
+  isReprompt?: boolean;
+  isEdit?: boolean;
   requestPageByModalClose?: () => void;
   clearEditedObject?: () => void;
   clearPromptAnswers?: () => void;
@@ -66,6 +68,8 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
     authToken,
     popupType: popupTypeProps,
     isPrompted,
+    isReprompt,
+    isEdit,
     requestPageByModalClose,
     clearEditedObject,
     clearPromptAnswers,
@@ -96,7 +100,10 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
 
   const handlePageByModalClose = (): void => {
     requestPageByModalClose();
-    handleExecuteNextRepromptTask();
+
+    if (isReprompt && !isEdit) {
+      handleExecuteNextRepromptTask();
+    }
 
     if (isPrompted && popupType === DialogType.libraryWindow) {
       clearEditedObject();
@@ -134,7 +141,7 @@ function mapStateToProps(state: any): any {
   } = state;
   const { promptsAnswers, isPrompted } = navigationTree;
   const { supportForms } = officeReducer;
-  const { popupType, importType } = popupStateReducer;
+  const { popupType, importType, isReprompt, isEdit } = popupStateReducer;
   const isReport =
     editedObject && editedObject.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
@@ -151,6 +158,8 @@ function mapStateToProps(state: any): any {
     formsPrivilege,
     repromptsQueueProps: { ...repromptsQueueReducer },
     isPrompted,
+    isReprompt,
+    isEdit,
   };
 }
 
