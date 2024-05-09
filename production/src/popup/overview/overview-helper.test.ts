@@ -630,7 +630,21 @@ describe('overview-helper', () => {
         owner: 'Owner 1',
         importedBy: 'User 1',
         isPrompted: true,
-        page: 'Category: Music; Subcategory: Pop',
+        pageByData: {
+          pageByLink: '324535767821234',
+          elements: [
+            {
+              name: 'Category',
+              'value': 'Music',
+              'valueId': 'h4;8D679D3711D3E4981000E787EC6DE8A4',
+            },
+            {
+              name: 'Subcategory',
+              'value': 'Pop',
+              'valueId': 'h44;8D679D4F11D3E4981000E787EC6DE8A4',
+            },
+          ],
+        },
       },
       {
         objectWorkingId: 2,

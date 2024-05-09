@@ -394,10 +394,6 @@ class OverviewHelper {
         isPrompted = object.isPrompted;
       }
 
-      const page = pageByData?.elements
-        ?.map((element: any) => `${element.name}: ${element.value}`)
-        .join('; ');
-
       return {
         objectWorkingId,
         mstrObjectType,
@@ -418,7 +414,7 @@ class OverviewHelper {
         importedBy: details?.importedBy,
         isPrompted,
         ...(pageByData && {
-          page,
+          pageByData,
           pageByLinkId: pageByData?.pageByLinkId,
           sourceName: definition?.sourceName,
         }),

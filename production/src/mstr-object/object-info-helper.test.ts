@@ -64,7 +64,7 @@ describe('getObjectDetailsForWorksheet', () => {
       ['123456789'],
       [''],
       ['Paged-By'],
-      ['Page 1; Page 2'],
+      ['Page 1, Page 2'],
       [''],
     ];
 

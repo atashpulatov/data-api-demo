@@ -91,9 +91,11 @@ class PageByHelper {
       const pageByDataElement: PageByDataElement[] = combination.map((value, index) => {
         const { name: pageByItemName, elements } = pageBy[index];
         const { name: elementName, id, formValues } = elements[value];
+        const formattedFormValues =
+          (formValues?.length || 0) > 1 ? `(${formValues?.join(', ')})` : formValues?.[0];
         return {
           name: pageByItemName,
-          value: formValues?.join(', ') ?? elementName ?? '',
+          value: formattedFormValues ?? elementName ?? '',
           valueId: id,
         };
       });
@@ -193,6 +195,12 @@ class PageByHelper {
     });
   };
 
+  getPageByElements(pageByData: PageByData): string {
+    return pageByData.elements
+      ?.map(element => (element.value.includes(',') ? `(${element.value})` : element.value))
+      .join(', ');
+  }
+
   /**
    * Generates a worksheet name based on naming conventions and pageBy value
    * @param objectName Name of the object added to the new worksheet
@@ -200,7 +208,7 @@ class PageByHelper {
    * @return Generated worksheet name.
    */
   prepareNameBasedOnPageBySettings(objectName: string, pageByData: PageByData): string {
-    const pageByElement = pageByData.elements.map(element => element.value).join('; ');
+    const pageByElement = this.getPageByElements(pageByData);
     const { settingsReducer } = reduxStore.getState();
     const currentNamingSetting = settingsReducer.objectAndWorksheetNamingSetting;
 
