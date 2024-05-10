@@ -1,5 +1,7 @@
 import { RequestPageByModalOpenData } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer-types';
 
+import { ObjectImportType } from '../../mstr-object/constants';
+
 export interface ItemType {
   id: string;
   name: string;
@@ -18,6 +20,7 @@ export interface LibraryWindowProps {
   requestDossierOpen: Function;
   handlePrepare: Function;
   setObjectData: Function;
+  importType: ObjectImportType;
   requestPageByModalOpen: (data: RequestPageByModalOpenData) => void;
   mstrObjectType: {
     type: number;

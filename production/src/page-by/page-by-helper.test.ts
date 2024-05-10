@@ -216,4 +216,40 @@ describe('Page-by helper', () => {
       expect(worksheetName).toEqual(expectedResult);
     }
   );
+
+  it('getPageByConfigurations should work properly', () => {
+    // given
+    officeReducerHelper.reduxStore.getState = jest.fn().mockImplementation(() => ({
+      objectReducer: {
+        objects: [
+          {
+            objectWorkingId: 1,
+            pageByData: {
+              pageByLinkId: '2',
+              elements: [{ name: 'name1', value: 'value1', valueId: '1' }],
+            },
+          },
+          {
+            objectWorkingId: 2,
+            pageByData: {
+              pageByLinkId: '2',
+              elements: [{ name: 'name2', value: 'value2', valueId: '2' }],
+            },
+          },
+        ],
+      },
+    }));
+
+    // when
+    const result = pageByHelper.getPageByConfigurations(1, [
+      [{ name: 'name1', value: 'value1', valueId: '1' }],
+      [{ name: 'name2', value: 'value2', valueId: '2' }],
+    ]);
+
+    // then
+    expect(result).toEqual([
+      [{ id: '1', name: 'name1', value: 'value1' }],
+      [{ id: '2', name: 'name2', value: 'value2' }],
+    ]);
+  });
 });

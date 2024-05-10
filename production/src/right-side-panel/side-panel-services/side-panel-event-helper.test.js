@@ -9,7 +9,7 @@ describe('SidePanelService', () => {
     jest.restoreAllMocks();
   });
 
-  it('should call excel contex methods form initializeActiveSelectionChangedListener', async () => {
+  it('should call excel contex methods form initActiveSelectionChangedListener', async () => {
     // given
     const mockSync = jest.fn();
     const mockContext = { sync: mockSync };
@@ -40,7 +40,7 @@ describe('SidePanelService', () => {
       .mockImplementationOnce(() => {});
 
     // when
-    await sidePanelEventHelper.initializeActiveSelectionChangedListener(mockSetActiveCellAddress, mockSetActiveSheetIndex, mockIsAnyPopupOrSettingsDisplayed);
+    await sidePanelEventHelper.initActiveSelectionChangedListener(mockSetActiveCellAddress, mockSetActiveSheetIndex, mockIsAnyPopupOrSettingsDisplayed);
     // then
     expect(spyGetExcelContext).toBeCalled();
     expect(spyGetSelectedCell).toBeCalledWith(mockContext);

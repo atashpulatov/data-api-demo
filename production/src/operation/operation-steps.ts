@@ -302,6 +302,17 @@ const operationStepsMapPivotTable = {
 
   [OperationTypes.EDIT_OPERATION]: [
     OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
+    OperationSteps.MODIFY_OBJECT,
+    OperationSteps.GET_INSTANCE_DEFINITION,
+    OperationSteps.GET_OBJECT_DETAILS,
+    OperationSteps.GET_OFFICE_TABLE_EDIT_REFRESH,
+    OperationSteps.FETCH_INSERT_DATA,
+    OperationSteps.REFRESH_PIVOT_TABLE,
+    OperationSteps.FORMAT_DATA,
+    OperationSteps.FORMAT_OFFICE_TABLE,
+    OperationSteps.FORMAT_SUBTOTALS,
+    OperationSteps.BIND_OFFICE_TABLE,
+    OperationSteps.SAVE_OBJECT_IN_EXCEL,
     OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
   ],
 
@@ -313,8 +324,8 @@ const operationStepsMapPivotTable = {
     OperationSteps.GET_INSTANCE_DEFINITION,
     OperationSteps.GET_OBJECT_DETAILS,
     OperationSteps.GET_OFFICE_TABLE_IMPORT,
-    OperationSteps.CREATE_PIVOT_TABLE,
     OperationSteps.FETCH_INSERT_DATA,
+    OperationSteps.CREATE_PIVOT_TABLE,
     OperationSteps.BIND_OFFICE_TABLE,
     OperationSteps.SAVE_OBJECT_IN_EXCEL,
     OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,

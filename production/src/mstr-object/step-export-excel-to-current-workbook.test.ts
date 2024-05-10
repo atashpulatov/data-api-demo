@@ -12,7 +12,7 @@ describe('StepExportExcelToCurrentWorkbook', () => {
         jest.restoreAllMocks();
     });
 
-    it('exportExcelToCurrentWorkBook should work as expected', async () => {
+    it('exportExcelToCurrentWorkBook should work as expected to export dossier to excel', async () => {
         // given
         const objectData = {
             objectWorkingId: 1234567,
@@ -20,7 +20,10 @@ describe('StepExportExcelToCurrentWorkbook', () => {
             visualizationInfo: {
                 visualizationKey: 'W36'
             },
-            projectId: 'projectId'
+            projectId: 'projectId',
+            mstrObjectType: {
+                name: 'visualization'
+            }
         } as ObjectData;
 
         const response = { blob: jest.fn().mockReturnValue } as any;
@@ -46,5 +49,44 @@ describe('StepExportExcelToCurrentWorkbook', () => {
         await stepExportExcelToCurrentWorkbook.exportExcelToCurrentWorkBook(objectData, operationData);
 
         expect(mstrObjectRestService.exportDossierToExcel).toHaveBeenCalled();
+    });
+
+    it('exportExcelToCurrentWorkBook should work as expected to export report to excel', async () => {
+        // given
+        const objectData = {
+            objectWorkingId: 1234567,
+            objectId: 'objectId',
+            visualizationInfo: {
+                visualizationKey: 'W36'
+            },
+            projectId: 'projectId',
+            mstrObjectType: {
+                name: 'report'
+            }
+        } as ObjectData;
+
+        const response = { blob: jest.fn().mockReturnValue } as any;
+
+        const operationData = {
+            objectWorkingId: 'objectWorkingIdTest',
+            excelContext: 'excelContextTest',
+            instanceDefinition: 'instanceDefinitionTest',
+            startCell: 'startCellTest',
+        } as unknown as OperationData;
+
+        jest.spyOn(mstrObjectRestService, 'exportReportToExcel').mockReturnValue(response);
+
+        jest
+            .spyOn(officeApiHelper, 'getExcelContext')
+            .mockImplementationOnce((): any => Promise.resolve({ sync: jest.fn() }));
+
+        jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
+
+        jest.spyOn(operationStepDispatcher, 'completeGetOfficeTableImport').mockImplementation();
+
+        // when
+        await stepExportExcelToCurrentWorkbook.exportExcelToCurrentWorkBook(objectData, operationData);
+
+        expect(mstrObjectRestService.exportReportToExcel).toHaveBeenCalled();
     });
 });

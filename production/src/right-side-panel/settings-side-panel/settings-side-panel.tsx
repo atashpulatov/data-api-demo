@@ -32,12 +32,14 @@ const SettingsSidePanel: React.FC<any> = () => {
 
   const mergeCrosstabColumns = useSelector(settingsReducerSelectors.selectMergeCrosstabColumns);
 
+  const defaultImportType = useSelector(settingsReducerSelectors.selectImportType);
+
   const { getPromptSection, getObjectInfoSection, getPageBySection } = settingsSidePanelHelper;
 
   const { getImportFormattingSection } = formattingSettingsHelper;
 
   const settingsSections: SettingsSection[] = [
-    getImportFormattingSection(importAttributesAsText, mergeCrosstabColumns),
+    getImportFormattingSection(importAttributesAsText, mergeCrosstabColumns, defaultImportType),
     getPromptSection(reusePromptAnswers),
     getPageBySection(objectAndWorksheetNamingSetting, pageByDisplaySetting),
     getObjectInfoSection(

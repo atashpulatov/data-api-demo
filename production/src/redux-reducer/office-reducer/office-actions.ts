@@ -5,6 +5,7 @@ import officeStoreHelper from '../../office/store/office-store-helper';
 import {
   OfficeActionsTypes,
   SetActiveCellAddressAction,
+  SetIsAdvancedWorksheetTrackingSupported,
   SetIsDialogLoadedAction,
   SetIsInsertWorksheetAPISupportedAction,
   SetIsPivotTableSupported,
@@ -100,7 +101,9 @@ const setIsShapeAPISupported = (isShapeAPISupported: boolean): SetIsShapeAPISupp
   isShapeAPISupported,
 });
 
-const setIsInsertWorksheetAPISupported = (isInsertWorksheetAPISupported: boolean): SetIsInsertWorksheetAPISupportedAction => ({
+const setIsInsertWorksheetAPISupported = (
+  isInsertWorksheetAPISupported: boolean
+): SetIsInsertWorksheetAPISupportedAction => ({
   type: OfficeActionsTypes.SET_INSERT_WORKSHEET_API_SUPPORTED,
   isInsertWorksheetAPISupported,
 });
@@ -108,6 +111,13 @@ const setIsInsertWorksheetAPISupported = (isInsertWorksheetAPISupported: boolean
 const setIsPivotTableSupported = (isPivotTableSupported: boolean): SetIsPivotTableSupported => ({
   type: OfficeActionsTypes.SET_PIVOT_TABLE_SUPPORTED,
   isPivotTableSupported,
+});
+
+const setIsAdvancedWorksheetTrackingSupported = (
+  isAdvancedWorksheetTrackingSupported: boolean
+): SetIsAdvancedWorksheetTrackingSupported => ({
+  type: OfficeActionsTypes.SET_ADVANCED_WORKSHEET_TRACKING_SUPPORTED,
+  isAdvancedWorksheetTrackingSupported,
 });
 
 export const officeActions = {
@@ -129,4 +139,5 @@ export const officeActions = {
   setIsShapeAPISupported,
   setIsInsertWorksheetAPISupported,
   setIsPivotTableSupported,
+  setIsAdvancedWorksheetTrackingSupported,
 };

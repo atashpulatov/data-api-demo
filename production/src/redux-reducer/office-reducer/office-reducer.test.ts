@@ -39,6 +39,7 @@ describe('officeReducer', () => {
       isClearDataFailed: false,
       isSecured: false,
       isPivotTableSupported: false,
+      isAdvancedWorksheetTrackingSupported: false,
     });
   });
 

@@ -5,7 +5,13 @@ import { officeApiHelper } from '../../office/api/office-api-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { sidePanelService } from './side-panel-service';
 
+import officeStoreObject from '../../office/store/office-store-object';
+import { reduxStore } from '../../store';
+
+import { ObjectData } from '../../types/object-types';
+
 import { officeContext } from '../../office/office-context';
+import { updateObjects } from '../../redux-reducer/object-reducer/object-actions';
 import initializationErrorDecorator from '../settings-side-panel/initialization-error-decorator';
 
 class SidePanelEventHelper {
@@ -40,36 +46,174 @@ class SidePanelEventHelper {
    * @param {Function} setActiveCellAddress Callback to modify the activeCellAddress in state of RightSidePanel
    */
   @initializationErrorDecorator.initializationWrapper
-  async initializeActiveSelectionChangedListener(
+  async initActiveSelectionChangedListener(
     setActiveCellAddress: Function,
     setActiveSheetIndex: Dispatch<SetStateAction<number>>,
     isAnyPopupOrSettingsDisplayed: boolean
   ): Promise<OfficeExtension.EventHandlerResult<Excel.SelectionChangedEventArgs>> {
-    try {
-      const excelContext = await officeApiHelper.getExcelContext();
-      const initialCellAddress = await officeApiHelper.getSelectedCell(excelContext);
+    const excelContext = await officeApiHelper.getExcelContext();
+    const initialCellAddress = await officeApiHelper.getSelectedCell(excelContext);
 
-      setActiveCellAddress(initialCellAddress);
-      // only read + init active sheet index when no popup (notifications, Office dialog, etc.) or settings visible
-      if (!isAnyPopupOrSettingsDisplayed) {
-        const activeWorksheet = officeApiHelper.getCurrentExcelSheet(excelContext);
+    setActiveCellAddress(initialCellAddress);
+    // only read + init active sheet index when no popup (notifications, Office dialog, etc.) or settings visible
+    if (!isAnyPopupOrSettingsDisplayed) {
+      const activeWorksheet = officeApiHelper.getCurrentExcelSheet(excelContext);
 
-        activeWorksheet.load('position');
-        await excelContext.sync();
+      activeWorksheet.load('position');
+      await excelContext.sync();
 
-        activeWorksheet.position !== undefined &&
-          activeWorksheet.position !== null &&
-          setActiveSheetIndex(activeWorksheet.position);
-      }
+      activeWorksheet.position !== undefined &&
+        activeWorksheet.position !== null &&
+        setActiveSheetIndex(activeWorksheet.position);
+    }
 
-      return officeApiHelper.addOnSelectionChangedListener(
-        excelContext,
-        setActiveCellAddress,
-        setActiveSheetIndex,
-        isAnyPopupOrSettingsDisplayed
-      );
-    } catch (e) {
-      console.warn('Cannot initialize active selection changed listener');
+    return officeApiHelper.addOnSelectionChangedListener(
+      excelContext,
+      setActiveCellAddress,
+      setActiveSheetIndex,
+      isAnyPopupOrSettingsDisplayed
+    );
+  }
+
+  /**
+   * Initializes listeners for tracking object worksheet changes (e.g. adding, removing, renaming, etc.).
+   * The listeners that are applied vary based on API support, with improved support available in ExcelAPI versions 1.17+.
+   */
+  @initializationErrorDecorator.initializationWrapper
+  async initObjectWorksheetTrackingListeners(): Promise<void> {
+    const { isAdvancedWorksheetTrackingSupported } = reduxStore.getState().officeReducer;
+    const excelContext = await officeApiHelper.getExcelContext();
+    const {
+      workbook: { worksheets },
+    } = excelContext;
+
+    if (isAdvancedWorksheetTrackingSupported) {
+      // advanced event listeners supported
+      // worksheet rename listener
+      worksheets.onNameChanged.add(async eventParams => {
+        // validate correct event type
+        if (eventParams?.type === Excel.EventType.worksheetNameChanged) {
+          const objects = officeReducerHelper.getObjectsListFromObjectReducer();
+          const updatedObjects: ObjectData[] = [];
+
+          // update worksheet name fields for affected objects
+          objects.forEach(object => {
+            if (object?.worksheet?.id === eventParams?.worksheetId) {
+              updatedObjects.push({
+                ...object,
+                worksheet: { ...object.worksheet, name: eventParams.nameAfter },
+                groupData: { ...object.groupData, title: eventParams.nameAfter },
+              });
+            }
+          });
+
+          reduxStore.dispatch(updateObjects(updatedObjects));
+          officeStoreObject.saveObjectsInExcelStore();
+        }
+      });
+      // worksheet moved listener
+      worksheets.onMoved.add(async eventParams => {
+        // validate correct event type
+        if (eventParams?.type === Excel.EventType.worksheetMoved) {
+          const { positionBefore, positionAfter } = eventParams;
+          const startIdx = Math.min(positionBefore, positionAfter);
+          const endIdx = Math.max(positionBefore, positionAfter);
+          const objects = officeReducerHelper.getObjectsListFromObjectReducer();
+          const updatedObjects: ObjectData[] = [];
+
+          worksheets.load('items');
+          await excelContext.sync();
+
+          for (let i = startIdx; i <= endIdx; i++) {
+            const worksheet = worksheets.items[i];
+
+            worksheet.load('id');
+            await excelContext.sync();
+
+            // update worksheet index fields for affected objects
+            objects.forEach(object => {
+              if (object?.worksheet?.id === worksheet?.id) {
+                updatedObjects.push({
+                  ...object,
+                  worksheet: { ...object.worksheet, index: i },
+                  groupData: { ...object.groupData, key: i },
+                });
+              }
+            });
+          }
+
+          reduxStore.dispatch(updateObjects(updatedObjects));
+          officeStoreObject.saveObjectsInExcelStore();
+        }
+      });
+      // worksheet added listener
+      worksheets.onAdded.add(async eventParams => {
+        // validate correct event type
+        if (eventParams?.type === Excel.EventType.worksheetAdded) {
+          const newWorksheet = worksheets.getItemOrNullObject(eventParams.worksheetId);
+          const objects = officeReducerHelper.getObjectsListFromObjectReducer();
+          const updatedObjects: ObjectData[] = [];
+
+          newWorksheet.load(['position', 'isNullObject']);
+          await excelContext.sync();
+
+          if (!newWorksheet.isNullObject) {
+            // update worksheet index fields for affected objects
+            objects.forEach(object => {
+              if (object?.worksheet?.index >= newWorksheet.position) {
+                updatedObjects.push({
+                  ...object,
+                  worksheet: { ...object.worksheet, index: object.worksheet.index + 1 },
+                  groupData: { ...object.groupData, key: object.groupData.key + 1 },
+                });
+              }
+            });
+
+            reduxStore.dispatch(updateObjects(updatedObjects));
+            officeStoreObject.saveObjectsInExcelStore();
+          }
+        }
+      });
+      // worksheet deleted listener
+      worksheets.onDeleted.add(async eventParams => {
+        // validate correct event type
+        if (eventParams?.type === Excel.EventType.worksheetDeleted) {
+          const objects = officeReducerHelper.getObjectsListFromObjectReducer();
+          const updatedObjects: ObjectData[] = [];
+
+          worksheets.load('items');
+          await excelContext.sync();
+
+          for (let i = 0; i < worksheets.items.length; i++) {
+            const worksheet = worksheets.items[i];
+
+            worksheet.load('id');
+            await excelContext.sync();
+
+            // update worksheet index fields for affected objects
+            objects.forEach(object => {
+              // if object's worksheet index is outdated, update it by removing 1 (since 1 worksheet was deleted)
+              if (object?.worksheet?.id === worksheet?.id && object?.worksheet?.index > i) {
+                updatedObjects.push({
+                  ...object,
+                  worksheet: { ...object.worksheet, index: object.worksheet.index - 1 },
+                  groupData: { ...object.groupData, key: object.groupData.key - 1 },
+                });
+              }
+            });
+          }
+
+          reduxStore.dispatch(updateObjects(updatedObjects));
+          officeStoreObject.saveObjectsInExcelStore();
+        }
+      });
+
+      await excelContext.sync();
+    }
+
+    if (officeContext.isSetSupported(1.7)) {
+      // basic event listeners supported
+      // TODO: add lower API support event listeners
     }
   }
 

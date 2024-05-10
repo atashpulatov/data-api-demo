@@ -153,7 +153,7 @@ const requestPageByModalOpen = (
 ): NavigationTreeState => {
   const newState = { ...state };
   newState.pageByModalOpenRequested = true;
-  newState.pageBy = data.pageBy;
+  newState.pageByResponse = data.pageByResponse;
   newState.importPageByConfigurations = data.importPageByConfigurations;
   return newState;
 };
@@ -162,7 +162,7 @@ const requestPageByModalClose = (state: NavigationTreeState): NavigationTreeStat
   const newState = { ...state };
   newState.pageByModalOpenRequested = false;
   newState.importRequested = false;
-  newState.pageBy = [];
+  newState.pageByResponse = null;
   return newState;
 };
 
@@ -184,6 +184,7 @@ const clearPromptsAnswers = (state: NavigationTreeState): NavigationTreeState =>
   const newState = { ...state };
   newState.promptsAnswers = [];
   newState.dossierData = null;
+  newState.isPrompted = false;
   return newState;
 };
 

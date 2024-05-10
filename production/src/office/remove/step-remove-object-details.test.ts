@@ -87,7 +87,7 @@ describe('StepRemoveObjectDetails', () => {
       bindId: 'bindIdTest',
       isCrosstab: isCrosstabParam,
       startCell: 'A1',
-      objectSettings: { objectDetailsSize: 2 },
+      objectDetailsSize: 2,
     } as unknown as ObjectData;
 
     // when
@@ -155,7 +155,7 @@ describe('StepRemoveObjectDetails', () => {
       bindId: 'bindIdTest',
       isCrosstab: isCrosstabParam,
       startCell: 'A1',
-      objectSettings: { objectDetailsSize: 2 },
+      objectDetailsSize: 2,
     } as unknown as ObjectData;
 
     // when

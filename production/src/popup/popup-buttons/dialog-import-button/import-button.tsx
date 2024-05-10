@@ -1,14 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Button, ButtonWithOptions, Tooltip } from '@mstr/rc';
 
 import useGetImportButtonProps from './use-get-import-button-props';
 import useGetImportOptions from './use-get-import-options';
+import useGetImportType from './use-get-import-type';
 
 import { popupStateActions } from '../../../redux-reducer/popup-state-reducer/popup-state-actions';
-import { popupStateSelectors } from '../../../redux-reducer/popup-state-reducer/popup-state-reducer-selectors';
-import { settingsReducerSelectors } from '../../../redux-reducer/settings-reducer/settings-reducer-selectors';
 import { ObjectImportType } from '../../../mstr-object/constants';
 
 interface ImportButtonProps {
@@ -25,14 +24,11 @@ export const ImportButton: React.FC<ImportButtonProps> = ({
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const defaultImportType = useSelector(settingsReducerSelectors.selectImportType);
-  const selectedImportType = useSelector(popupStateSelectors.selectImportType);
-
   const isDisabled = !!disableReason;
-  const importType = selectedImportType || defaultImportType;
-
+  
   const options = useGetImportOptions();
-  const { shouldDisplayOptions, importButtonProps } = useGetImportButtonProps(importType, options);
+  const importType = useGetImportType(options); 
+  const { shouldDisplayOptions, importButtonProps } = useGetImportButtonProps(importType, options, isDisabled);
 
   const handleOptionChange = (type: ObjectImportType): void => {
     dispatch(popupStateActions.setImportType(type) as any);

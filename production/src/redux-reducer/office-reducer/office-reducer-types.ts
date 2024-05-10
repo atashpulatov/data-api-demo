@@ -16,6 +16,7 @@ export type OfficeState = {
   isShapeAPISupported: boolean;
   isInsertWorksheetAPISupported: boolean;
   isPivotTableSupported: boolean;
+  isAdvancedWorksheetTrackingSupported: boolean;
 };
 
 export enum OfficeActionsTypes {
@@ -36,6 +37,7 @@ export enum OfficeActionsTypes {
   SET_SHAPE_API_SUPPORTED = 'OFFICE_SET_SHAPE_API_SUPPORTED',
   SET_INSERT_WORKSHEET_API_SUPPORTED = 'SET_INSERT_WORKSHEET_API_SUPPORTED',
   SET_PIVOT_TABLE_SUPPORTED = 'SET_PIVOT_TABLE_SUPPORTED',
+  SET_ADVANCED_WORKSHEET_TRACKING_SUPPORTED = 'SET_ADVANCED_WORKSHEET_TRACKING_SUPPORTED',
 }
 
 export interface ShowDialogAction extends Action {
@@ -119,6 +121,11 @@ export interface SetIsPivotTableSupported extends Action {
   isPivotTableSupported: boolean;
 }
 
+export interface SetIsAdvancedWorksheetTrackingSupported extends Action {
+  type: OfficeActionsTypes.SET_ADVANCED_WORKSHEET_TRACKING_SUPPORTED;
+  isAdvancedWorksheetTrackingSupported: boolean;
+}
+
 export type OfficeActions =
   | ShowDialogAction
   | HideDialogAction
@@ -136,4 +143,5 @@ export type OfficeActions =
   | ClearPopupDataAction
   | SetIsShapeAPISupportedAction
   | SetIsInsertWorksheetAPISupportedAction
-  | SetIsPivotTableSupported;
+  | SetIsPivotTableSupported
+  | SetIsAdvancedWorksheetTrackingSupported;

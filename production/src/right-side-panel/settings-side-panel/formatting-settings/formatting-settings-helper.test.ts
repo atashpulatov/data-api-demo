@@ -6,6 +6,7 @@ import { reduxStore } from '../../../store';
 import { UserPreferenceKey } from '../settings-side-panel-types';
 
 import { settingsActions } from '../../../redux-reducer/settings-reducer/settings-actions';
+import { ObjectImportType } from '../../../mstr-object/constants';
 
 describe('FormattingSettingsHelper', () => {
   beforeEach(() => {
@@ -39,6 +40,7 @@ describe('FormattingSettingsHelper', () => {
   it('initImportFormattingSettings should dispatch correct actions and get correct preferences', async () => {
     // Given
     jest.spyOn(formattingSettingsHelper, 'getBooleanUserPreference').mockResolvedValue(true);
+    jest.spyOn(userRestService, 'getUserPreference').mockResolvedValue({ value: ObjectImportType.TABLE });
     const dispatchSpy = jest.spyOn(reduxStore, 'dispatch');
 
     // When
@@ -52,13 +54,20 @@ describe('FormattingSettingsHelper', () => {
     expect(formattingSettingsHelper.getBooleanUserPreference).toHaveBeenCalledWith(
       UserPreferenceKey.EXCEL_IMPORT_MERGE_CROSSTAB_COLUMNS
     );
+    expect(userRestService.getUserPreference).toHaveBeenCalledTimes(1);
+    expect(userRestService.getUserPreference).toHaveBeenCalledWith(
+      UserPreferenceKey.EXCEL_DEFAULT_IMPORT_TYPE
+    );
 
-    expect(dispatchSpy).toHaveBeenCalledTimes(2);
+    expect(dispatchSpy).toHaveBeenCalledTimes(3);
     expect(dispatchSpy).toHaveBeenCalledWith(
       settingsActions.toggleImportAttributesAsTextFlag(true) as any
     );
     expect(dispatchSpy).toHaveBeenCalledWith(
       settingsActions.toggleMergeCrosstabColumnsFlag(true) as any
+    );
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      settingsActions.setDefaultImportType(ObjectImportType.TABLE) as any
     );
   });
 

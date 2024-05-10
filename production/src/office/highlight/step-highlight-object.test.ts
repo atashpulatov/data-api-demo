@@ -63,7 +63,10 @@ describe('StepHighlightObject', () => {
       objectWorkingId: 42,
     } as ObjectData;
 
-    getItem.mockReturnValue({ worksheet: { activate } });
+    jest.spyOn(officeApiHelper, 'getPivotTable').mockResolvedValue({
+      isNullObject: false,
+      worksheet: { activate },
+    } as any);
 
     // when
     await stepHighlightObject.highlightObject(objectData, operationData);
