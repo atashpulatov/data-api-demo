@@ -42,11 +42,10 @@ source .ecosystem
 export HATS=$HATS:rallytask
 rake pre_pipeline
 rake veracode
-rake upload_plugins
-
-#rake update_dep_db_from_file
+rake build
+rake upload_outputs_to_nexus[ci]
+rake post_build_info_to_rally
 rake update_ready_for_pr
-
 rake post_pipeline
 '
     end

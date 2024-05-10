@@ -3,7 +3,7 @@ job 'stage-0-monitor' do
 
   configure_common_items{}
 
-  assigned_node_string 'amazon_linux_T3'
+  assigned_node_string 'rhel8_vra_monitor'
 
   triggers do
     url_trigger do
