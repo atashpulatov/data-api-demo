@@ -38,7 +38,7 @@
         "upload_commit_hash_to_manifest_repo": "true"
       },
       "label": "ci",
-      "source_path": "production/build/office-loader-#{Common::Version.application_version}.zip"
+      "source_path": "office-loader/build/office-loader-#{Common::Version.application_version}.zip"
     }
   },
   "infra": {
