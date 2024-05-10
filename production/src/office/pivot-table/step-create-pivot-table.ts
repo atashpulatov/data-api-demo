@@ -1,6 +1,9 @@
 import { officeApiWorksheetHelper } from '../api/office-api-worksheet-helper';
 
-import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import {
+  MstrTable,
+  OperationData,
+} from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
 
 import operationErrorHandler from '../../operation/operation-error-handler';
@@ -26,7 +29,7 @@ class StepCreatePivotTable {
     console.group('Creating pivot table');
 
     try {
-      const { excelContext, officeTable, objectWorkingId } = operationData;
+      const { excelContext, officeTable, objectWorkingId, instanceDefinition } = operationData;
       const { name: objectName } = objectData;
 
       const worksheet = await officeApiWorksheetHelper.createNewWorksheet({
@@ -40,6 +43,10 @@ class StepCreatePivotTable {
       const pivotTableStartCell = worksheet.getRange('A3');
       const pivotTable = worksheet.pivotTables.add(objectName, officeTable, pivotTableStartCell);
 
+      const { mstrTable } = instanceDefinition;
+      this.populatePivotTableWithAttributes(pivotTable, mstrTable);
+      this.populatePivotTableWithMetrics(pivotTable, mstrTable);
+      
       const {
         name,
         id,
@@ -63,6 +70,24 @@ class StepCreatePivotTable {
       operationErrorHandler.handleOperationError(objectData, operationData, error);
     } finally {
       console.groupEnd();
+    }
+  };
+
+  populatePivotTableWithAttributes = async (
+    pivotTable: Excel.PivotTable,
+    mstrTable: MstrTable,
+  ): Promise<void> => {
+    for (const { name } of mstrTable.attributes) {
+      pivotTable.rowHierarchies.add(pivotTable.hierarchies.getItem(name));
+    }
+  };
+
+  populatePivotTableWithMetrics = async (
+    pivotTable: Excel.PivotTable,
+    mstrTable: MstrTable,
+  ): Promise<void> => {
+    for (const { name } of mstrTable.metrics) {
+      pivotTable.dataHierarchies.add(pivotTable.hierarchies.getItem(name));
     }
   };
 }
