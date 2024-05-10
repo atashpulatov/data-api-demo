@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { Settings, SettingsPanel, SettingsSection } from '@mstr/connector-components';
 
 import { formattingSettingsHelper } from './formatting-settings/formatting-settings-helper';
+import { pivotTableSettingsHelper } from './pivot-table-settings/pivot-table-settings-helper';
 import { settingsSidePanelHelper } from './settings-side-panel-helper';
 
 import { officeSelectors } from '../../redux-reducer/office-reducer/office-reducer-selectors';
@@ -34,9 +35,19 @@ const SettingsSidePanel: React.FC<any> = () => {
 
   const defaultImportType = useSelector(settingsReducerSelectors.selectImportType);
 
+  const pivotTableAddAttributesToColumns = useSelector(
+    settingsReducerSelectors.selectPivotTableAddAttributesToColumns
+  );
+
+  const pivotTableAddMetricsToValues = useSelector(
+    settingsReducerSelectors.selectPivotTableAddMetricsToValues
+  );
+
   const { getPromptSection, getObjectInfoSection, getPageBySection } = settingsSidePanelHelper;
 
   const { getImportFormattingSection } = formattingSettingsHelper;
+
+  const { getPivotTableSection } = pivotTableSettingsHelper;
 
   const settingsSections: SettingsSection[] = [
     getImportFormattingSection(importAttributesAsText, mergeCrosstabColumns, defaultImportType),
@@ -48,6 +59,7 @@ const SettingsSidePanel: React.FC<any> = () => {
       sidePanelMainSwitchValue,
       worksheetMainSwitchValue
     ),
+    getPivotTableSection(pivotTableAddAttributesToColumns, pivotTableAddMetricsToValues),
   ];
 
   return (

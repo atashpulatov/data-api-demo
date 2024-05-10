@@ -449,3 +449,15 @@ class SettingsSidePanelHelper {
   });
 }
 export const settingsSidePanelHelper = new SettingsSidePanelHelper();
+
+/**
+ * Gets the initial value of boolean setting preference. Assumes the received from the server value is "0" or "1" or "true" or "false".
+ * @param preferenceKey name of the preference
+ * @returns A Promise that resolves with the boolean value of the preference.
+ */
+export const getBooleanUserPreference = async (
+  preferenceKey: UserPreferenceKey
+): Promise<boolean> => {
+  const { value } = await userRestService.getUserPreference(preferenceKey);
+  return !Number.isNaN(+value) ? !!parseInt(value, 10) : JSON.parse(value);
+};
