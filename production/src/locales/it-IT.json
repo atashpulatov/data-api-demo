@@ -282,5 +282,11 @@
    "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "Se questa opzione è attivata, i valori degli attributi saranno importati come testo mantenendo la formattazione da MicroStrategy. Ciò potrebbe influire sulle formule di Excel.",
    "Merge columns": "Unisci colonne",
    "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Se questa opzione è attivata, le intestazioni di colonna adiacenti con valori identici verranno unite. Si applica solo ai report con tabelle incrociate.",
-   "Paged-By": "Raggruppamento a pagine"
+   "Paged-By": "Raggruppamento a pagine",
+   "Default import format:": "Formato di importazione predefinito:",
+   "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.": "Gli oggetti che non possono essere importati nel formato selezionato saranno importati come dati. È possibile modificare il formato durante l'importazione.",
+   "Data": "Dati",
+   "Data with formatting": "Dati con formattazione",
+   "Visualization": "Visualizzazione",
+   "Pivot Table": "Tabella pivot"
 }

@@ -282,5 +282,11 @@
    "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "Om detta aktiveras kommer attributvärden att importeras som text, med bibehållen formatering från MicroStrategy. Detta kan påverka Excel-formler.",
    "Merge columns": "Slå samman kolumner",
    "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Om detta aktiveras kommer intilliggande kolumnrubriker med identiska värden att slås samman. Gäller endast korsfliksrapporter.",
-   "Paged-By": "Siddöpt av"
+   "Paged-By": "Siddöpt av",
+   "Default import format:": "Standardimportformat:",
+   "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.": "Objekt som inte kan importeras i valt format kommer att importeras som data. Du kan ändra format vid import.",
+   "Data": "Data",
+   "Data with formatting": "Data med formatering",
+   "Visualization": "Visualisering",
+   "Pivot Table": "Pivottabell"
 }
