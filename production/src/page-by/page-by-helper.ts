@@ -273,7 +273,7 @@ class PageByHelper {
     const pageByConfiguration = [];
 
     for (const pageByObject of allPageByObjects) {
-      if (!isArrayInNestedArrays(validPageByCombination, pageByObject.pageByData.elements)) {
+      if (!isArrayInNestedArrays(validPageByCombination, pageByObject.pageByData?.elements)) {
         return [];
       }
       const pageByElements = pageByObject?.pageByData?.elements.map(({ name, value, valueId }) => ({
