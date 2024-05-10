@@ -1,6 +1,7 @@
 import { localizeDate } from '@mstr/connector-components';
 
 import { officeApiHelper } from '../office/api/office-api-helper';
+import { pageByHelper } from '../page-by/page-by-helper';
 
 import { reduxStore } from '../store';
 
@@ -128,7 +129,7 @@ export const getObjectDetailsForWorksheet = (
         if (isReport) {
           const pageByData =
             object?.pageByData?.elements?.length &&
-            object.pageByData.elements.map(element => element.value).join(', ');
+            pageByHelper.getPageByElements(object.pageByData);
 
           objectDetailValues.push([i18n.t('Paged-By')], [pageByData || '-'], ['']);
           indexesToFormat.push(formatIndex);
