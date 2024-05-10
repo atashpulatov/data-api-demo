@@ -93,7 +93,7 @@ class PageByHelper {
         const { name: pageByItemName, elements } = pageBy[index];
         const { name: elementName, id, formValues } = elements[value];
         const formattedFormValues =
-          (formValues?.length || 0) > 1 ? `(${formValues?.join(', ')})` : formValues?.[0];
+          formValues?.length > 1 ? `(${formValues?.join(', ')})` : formValues?.[0];
         return {
           name: pageByItemName,
           value: formattedFormValues ?? elementName ?? '',
