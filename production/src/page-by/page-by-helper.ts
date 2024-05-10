@@ -196,6 +196,12 @@ class PageByHelper {
     });
   };
 
+  /**
+   * Retrieves and formats page-by elements.
+   *
+   * @param pageByData Contains information about page-by elements.
+   * @returns A formatted string containing the page-by elements.
+   */
   getPageByElements(pageByData: PageByData): string {
     return pageByData.elements
       ?.map(element => (element.value.includes(',') ? `(${element.value})` : element.value))
