@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
 
 import { formattingSettingsHelper } from '../settings-side-panel/formatting-settings/formatting-settings-helper';
+import { pivotTableSettingsHelper } from '../settings-side-panel/pivot-table-settings/pivot-table-settings-helper';
 import { settingsSidePanelHelper } from '../settings-side-panel/settings-side-panel-helper';
 import { sidePanelEventHelper } from '../side-panel-services/side-panel-event-helper';
 import { sidePanelHelper } from '../side-panel-services/side-panel-helper';
@@ -19,13 +20,14 @@ const useInitializeSidePanel = (
       await settingsSidePanelHelper.initWorksheetNamingAnswers();
       await settingsSidePanelHelper.initObjectInfoSettings();
       await formattingSettingsHelper.initImportFormattingSettings();
+      await pivotTableSettingsHelper.initPivotTableSettings();
       sidePanelHelper.clearRepromptTask();
       sidePanelHelper.initializeClearDataFlags();
     }
 
     initializeSidePanel();
   }, []);
-  
+
   const activeSelectionChangedListenerEventResult =
     useRef<OfficeExtension.EventHandlerResult<Excel.SelectionChangedEventArgs>>();
   useEffect(() => {
@@ -49,7 +51,7 @@ const useInitializeSidePanel = (
     initializeSidePanelActiveSelectionChangedListener();
 
     return clearSidePanelActiveSelectionChangedListener();
-  }, [setActiveSheetIndex, updateActiveCellAddress, isAnyPopupOrSettingsDisplayed])
+  }, [setActiveSheetIndex, updateActiveCellAddress, isAnyPopupOrSettingsDisplayed]);
 };
 
 export default useInitializeSidePanel;

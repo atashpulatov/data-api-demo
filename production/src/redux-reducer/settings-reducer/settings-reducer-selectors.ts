@@ -49,6 +49,16 @@ const selectMergeCrosstabColumns = createSelector(
   settingsState => settingsState.mergeCrosstabColumns
 );
 
+const selectPivotTableAddAttributesToColumns = createSelector(
+  [getSettingsState],
+  settingsState => settingsState.pivotTableAddAttributesToColumns
+);
+
+const selectPivotTableAddMetricsToValues = createSelector(
+  [getSettingsState],
+  settingsState => settingsState.pivotTableAddMetricsToValues
+);
+
 export const settingsReducerSelectors = {
   selectSidePanelObjectInfoSettings,
   selectSidePanelMainSwitchValue,
@@ -59,4 +69,6 @@ export const settingsReducerSelectors = {
   selectPageByDisplaySetting,
   selectImportAttributesAsText,
   selectMergeCrosstabColumns,
+  selectPivotTableAddAttributesToColumns,
+  selectPivotTableAddMetricsToValues,
 };

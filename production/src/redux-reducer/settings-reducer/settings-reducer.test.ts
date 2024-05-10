@@ -20,6 +20,8 @@ describe('settingsReducer', () => {
     importType: ObjectImportType.TABLE,
     objectAndWorksheetNamingSetting: ObjectAndWorksheetNamingOption.REPORT_NAME,
     pageByDisplaySetting: PageByDisplayOption.SELECT_PAGES,
+    pivotTableAddAttributesToColumns: false,
+    pivotTableAddMetricsToValues: false,
   };
 
   it('should return correct initial state', () => {
