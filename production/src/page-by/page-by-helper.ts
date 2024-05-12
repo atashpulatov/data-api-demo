@@ -35,6 +35,11 @@ class PageByHelper {
   ): { sourceObject: ObjectData; pageBySiblings: ObjectData[] } => {
     const sourceObject =
       officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
+
+    if (!sourceObject?.pageByData) {
+      return;
+    }
+
     const { objects } = reduxStore.getState().objectReducer;
 
     const pageByObjects = objects.filter(
