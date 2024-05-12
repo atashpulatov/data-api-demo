@@ -4,6 +4,7 @@ import { authenticationHelper } from '../authentication/authentication-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { pageByHelper } from '../page-by/page-by-helper';
 
+import { PageByDisplayType } from '../page-by/page-by-types';
 import {
   OperationData,
   OperationState,
@@ -289,6 +290,12 @@ class ErrorService {
     const object = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(
       operationData?.objectWorkingId
     );
+
+    // Objects imported as default page should be treated like regular objects
+    // and Page-by error handling should not apply to them
+    if (object?.pageByData?.pageByDisplayType === PageByDisplayType.DEFAULT_PAGE) {
+      return;
+    }
 
     switch (operationData?.operationType) {
       case OperationTypes.REFRESH_OPERATION:
