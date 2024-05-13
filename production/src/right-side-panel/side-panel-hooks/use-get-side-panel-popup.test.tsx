@@ -141,7 +141,7 @@ describe('useGetSidePanelPopup', () => {
     // @ts-expect-error
     const store = createStore(rootReducer, initialState);
 
-    const setRangeTakenPopupMock = jest
+    const setPageByRefreshFailedPopupMock = jest
       .spyOn(sidePanelNotificationHelper, 'setPageByDuplicateFailedPopup')
       .mockImplementation(() => {});
 
@@ -167,7 +167,7 @@ describe('useGetSidePanelPopup', () => {
     );
 
     // Then
-    expect(setRangeTakenPopupMock).toHaveBeenCalled();
+    expect(setPageByRefreshFailedPopupMock).toHaveBeenCalled();
   });
 
   it('should call setPageByImportFailedPopup when conditions are met', () => {

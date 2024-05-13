@@ -57,7 +57,6 @@ describe('SidePanelService', () => {
 
   it('should call setSidePanelPopup when setPageByDuplicateFailedPopup is triggered', () => {
     // given
-    /* const objectWorkingId = 1; */
     const selectedObjects = [
       { objectWorkingId: 1 },
       { objectWorkingId: 2 },

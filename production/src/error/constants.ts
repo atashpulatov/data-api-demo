@@ -146,7 +146,7 @@ export const errorCodes = {
   ERR009: 'ERR009',
 };
 
-export const getIsPageByBrokenAttributeError = (error: any): boolean => {
+export const getIsPageByAttributeNumberChangedError = (error: any): boolean => {
   const errorString = error?.response?.body?.message;
 
   const pageByAttributeChangedErrorPattern =

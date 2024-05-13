@@ -21,7 +21,7 @@ import {
   errorMessageFactory,
   ErrorMessages,
   ErrorType,
-  getIsPageByBrokenAttributeError,
+  getIsPageByAttributeNumberChangedError,
   httpStatusToErrorType,
   IncomingErrorStrings,
   stringMessageToErrorType,
@@ -313,12 +313,12 @@ class ErrorService {
 
     switch (operationData?.operationType) {
       case OperationTypes.REFRESH_OPERATION:
-        if (getIsPageByBrokenAttributeError(error)) {
+        if (getIsPageByAttributeNumberChangedError(error)) {
           return ErrorType.PAGE_BY_REFRESH_ERR;
         }
         break;
       case OperationTypes.DUPLICATE_OPERATION:
-        if (getIsPageByBrokenAttributeError(error)) {
+        if (getIsPageByAttributeNumberChangedError(error)) {
           return ErrorType.PAGE_BY_DUPLICATE_ERR;
         }
         break;
