@@ -288,5 +288,7 @@
    "Data": "資料",
    "Data with formatting": "具有格式設定的資料",
    "Visualization": "視覺效果",
-   "Pivot Table": "資料表"
+   "Pivot Table": "資料表",
+   "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "若已啟用屬性將自動新增至資料透視表的「欄位」區段。",
+   "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "若已啟用計量會自動新增至資料透視表的「數值」區段。"
 }

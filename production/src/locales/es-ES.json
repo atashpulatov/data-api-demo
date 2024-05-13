@@ -288,5 +288,7 @@
    "Data": "Datos",
    "Data with formatting": "Datos con formato",
    "Visualization": "Visualización",
-   "Pivot Table": "Tabla dinámica"
+   "Pivot Table": "Tabla dinámica",
+   "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "Si se habilita, los atributos se agregarán automáticamente a la sección \"Columna\" de la tabla dinámica.",
+   "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "Si se habilita, las métricas se agregarán automáticamente a la sección \"Valores\" de la tabla dinámica."
 }

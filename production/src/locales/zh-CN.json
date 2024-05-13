@@ -288,5 +288,7 @@
    "Data": "数据",
    "Data with formatting": "带格式的数据",
    "Visualization": "可视化效果",
-   "Pivot Table": "数据透视表"
+   "Pivot Table": "数据透视表",
+   "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "启用后实体将自动添加到数据透视表的\"列\"部分。",
+   "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "启用后度量将自动添加到数据透视表的\"值\"部分。"
 }

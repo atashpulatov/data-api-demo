@@ -288,5 +288,7 @@
    "Data": "データ",
    "Data with formatting": "書式設定済みのデータ",
    "Visualization": "ビジュアリゼーション",
-   "Pivot Table": "ピボット テーブル"
+   "Pivot Table": "ピボット テーブル",
+   "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "有効な場合、アトリビュートは自動的にピボット テーブルの 'Column' セクションに追加されます。",
+   "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "有効にされている場合、メトリックは自動的にピボット テーブルの [値] セクションに追加されます。"
 }

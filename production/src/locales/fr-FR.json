@@ -288,5 +288,7 @@
    "Data": "Données",
    "Data with formatting": "Données avec formatage",
    "Visualization": "Visualisation",
-   "Pivot Table": "Tableau croisé dynamique"
+   "Pivot Table": "Tableau croisé dynamique",
+   "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "Si l'option est activée, des attributs seront automatiquement ajoutés à la section « Colonne » du tableau croisé dynamique.",
+   "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "Si l'option est activée, les mesures seront automatiquement ajoutées à la section « Valeurs » du tableau croisé dynamique."
 }

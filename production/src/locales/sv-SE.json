@@ -288,5 +288,7 @@
    "Data": "Data",
    "Data with formatting": "Data med formatering",
    "Visualization": "Visualisering",
-   "Pivot Table": "Pivottabell"
+   "Pivot Table": "Pivottabell",
+   "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "Om detta aktiveras kommer attribut automatiskt att läggas till i avsnittet ”Kolumn” i pivottabellen.",
+   "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "Om detta aktiveras läggs mätvärden till automatiskt till i avsnittet ”Värden” i pivottabellen."
 }

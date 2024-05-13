@@ -288,5 +288,7 @@
    "Data": "데이터",
    "Data with formatting": "형식이 있는 데이터",
    "Visualization": "시각화",
-   "Pivot Table": "피벗 테이블"
+   "Pivot Table": "피벗 테이블",
+   "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "활성화되면 애트리뷰트가 피보 테이블의 '열' 섹션에 자동으로 추가됩니다.",
+   "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "활성화되면 메트릭이 피보 테이블의 '값' 섹션에 자동으로 추가됩니다."
 }

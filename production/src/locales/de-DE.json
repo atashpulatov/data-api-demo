@@ -288,5 +288,7 @@
    "Data": "Daten",
    "Data with formatting": "Daten mit Formatierung",
    "Visualization": "Visualisierung",
-   "Pivot Table": "Pivot-Tabelle"
+   "Pivot Table": "Pivot-Tabelle",
+   "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "Wenn aktiviert, werden Attribute automatisch zum Abschnitt „Spalte“ der Pivot-Tabelle hinzugefügt.",
+   "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "Bei aktivierter Option werden Metriken automatisch zum Abschnitt „Werte“ der Pivot-Tabelle hinzugefügt."
 }

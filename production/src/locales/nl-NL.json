@@ -288,5 +288,7 @@
    "Data": "Gegevens",
    "Data with formatting": "Gegevens met opmaak",
    "Visualization": "Visualisatie",
-   "Pivot Table": "Draaitabel"
+   "Pivot Table": "Draaitabel",
+   "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "Als deze optie is ingeschakeld, worden attributen automatisch toegevoegd aan het gedeelte Kolom van de draaitabel.",
+   "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "Als deze optie is ingeschakeld, worden metrieken automatisch toegevoegd aan het gedeelte Waarden van de draaitabel."
 }
