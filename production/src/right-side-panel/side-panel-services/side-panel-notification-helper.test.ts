@@ -55,6 +55,28 @@ describe('SidePanelService', () => {
     expect(setSidePanelPopup).toBeCalledTimes(1);
   });
 
+  it('should call setSidePanelPopup when setPageByDuplicateFailedPopup is triggered', () => {
+    // given
+    /* const objectWorkingId = 1; */
+    const selectedObjects = [
+      { objectWorkingId: 1 },
+      { objectWorkingId: 2 },
+    ] as unknown as ObjectData[];
+    const setSidePanelPopup = jest.fn();
+    const callback = jest.fn();
+
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+
+    // when
+    sidePanelNotificationHelper.setPageByDuplicateFailedPopup({
+      selectedObjects,
+      setSidePanelPopup,
+      callback,
+    });
+    // then
+    expect(setSidePanelPopup).toHaveBeenCalledTimes(1);
+  });
+
   it('setPageByImportFailedPopup should set up range taken popup', () => {
     // given
     const objectWorkingId = 1;

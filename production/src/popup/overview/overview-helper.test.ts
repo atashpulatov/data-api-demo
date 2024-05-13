@@ -1,4 +1,5 @@
 import { GlobalNotificationTypes, ObjectNotificationTypes } from '@mstr/connector-components';
+import { LoadedObject } from '@mstr/connector-components/lib/loaded-objects/object-tile/object-tile-types';
 
 import { notificationService } from '../../notification/notification-service';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
@@ -155,6 +156,23 @@ describe('overview-helper', () => {
     });
   });
 
+  it('should send handlePageByDuplicateFailedClose request to side panel', () => {
+    // Given
+    const objectWorkingId = objectWorkingIds[0];
+    const officeMessageParentMock = jest
+      .spyOn(popupHelper, 'officeMessageParent')
+      .mockImplementation();
+
+    // When
+    overviewHelper.handlePageByDuplicateFailedClose(objectWorkingId);
+
+    // Then
+    expect(officeMessageParentMock).toHaveBeenCalledWith({
+      command: OverviewActionCommands.PAGE_BY_DUPLICATE_FAILED_CLOSE,
+      objectWorkingId,
+    });
+  });
+
   it('should send handlePageByRefreshFailedEdit request to side panel', () => {
     // Given
     const objectWorkingId = objectWorkingIds[0];
@@ -197,6 +215,22 @@ describe('overview-helper', () => {
     // when
     overviewHelper.setPageByRefreshFailedPopup({
       objectWorkingIds: [objectWorkingId],
+      setDialogPopup,
+    });
+    // then
+    expect(setDialogPopup).toBeCalledTimes(1);
+  });
+
+  it('should call setDialogPopup when setPageByDuplicateFailedPopup is triggered', () => {
+    // given
+    const objectWorkingId = 1;
+    const setDialogPopup = jest.fn();
+    const selectedObjects = [{ objectWorkingId: 1 }] as unknown as LoadedObject[];
+
+    // when
+    overviewHelper.setPageByDuplicateFailedPopup({
+      objectWorkingIds: [objectWorkingId],
+      selectedObjects,
       setDialogPopup,
     });
     // then

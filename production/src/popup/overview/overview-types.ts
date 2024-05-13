@@ -1,4 +1,5 @@
 import { PageByRefreshFailedOptions, PopupTypes } from '@mstr/connector-components';
+import { LoadedObject } from '@mstr/connector-components/lib/loaded-objects/object-tile/object-tile-types';
 
 export interface DuplicatePopup {
   type: PopupTypes;
@@ -20,12 +21,23 @@ export interface PageByRefreshFailedPopup {
   onClose: () => void;
 }
 
+export interface PageByDuplicateFailedPopup {
+  type: PopupTypes;
+  selectedObjects: LoadedObject[];
+  onOk: (refreshFailedOptions?: PageByRefreshFailedOptions) => void;
+}
+
 export interface DialogPopup {
   objectWorkingIds: number[];
   setDialogPopup: (
-    dialogPopup: DuplicatePopup | RangeTakenPopup | PageByRefreshFailedPopup
+    dialogPopup:
+      | DuplicatePopup
+      | RangeTakenPopup
+      | PageByRefreshFailedPopup
+      | PageByDuplicateFailedPopup
   ) => void;
   activeCellAddress?: string;
+  selectedObjects?: LoadedObject[];
   onDuplicate?: (
     objectWorkingIds: number[],
     insertNewWorksheet: boolean,

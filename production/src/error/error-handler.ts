@@ -21,7 +21,7 @@ import {
   errorMessageFactory,
   ErrorMessages,
   ErrorType,
-  getIsPageByRefreshError,
+  getIsPageByBrokenAttributeError,
   httpStatusToErrorType,
   IncomingErrorStrings,
   stringMessageToErrorType,
@@ -120,6 +120,8 @@ class ErrorService {
       officeReducerHelper.displayPopup(popupData);
     } else if (errorType === ErrorType.PAGE_BY_REFRESH_ERR) {
       this.handlePageByRefreshError(objectWorkingId, errorMessage, details, callback);
+    } else if (errorType === ErrorType.PAGE_BY_DUPLICATE_ERR) {
+      this.handlePageByDuplicateError(objectWorkingId, callback);
     } else if (errorType === ErrorType.PAGE_BY_IMPORT_ERR) {
       this.handlePageByImportError(objectWorkingId, errorMessage, callback);
     } else {
@@ -199,6 +201,25 @@ class ErrorService {
     const popupData = {
       type: PopupTypes.FAILED_TO_IMPORT,
       errorDetails: errorMessage,
+      objectWorkingId,
+      callback,
+    };
+
+    this.clearOperationsForPageBySiblings(objectWorkingId);
+
+    officeReducerHelper.displayPopup(popupData);
+  };
+
+  /**
+   * Handles page by duplicate error
+   * @param objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param callback Function to be called after click on warning notification
+   */
+  handlePageByDuplicateError = (objectWorkingId: number, callback: () => Promise<void>): void => {
+    const { sourceObject } = pageByHelper.getAllPageByObjects(objectWorkingId);
+    const popupData = {
+      type: PopupTypes.FAILED_TO_DUPLICATE,
+      selectedObjects: [sourceObject],
       objectWorkingId,
       callback,
     };
@@ -292,8 +313,13 @@ class ErrorService {
 
     switch (operationData?.operationType) {
       case OperationTypes.REFRESH_OPERATION:
-        if (getIsPageByRefreshError(error)) {
+        if (getIsPageByBrokenAttributeError(error)) {
           return ErrorType.PAGE_BY_REFRESH_ERR;
+        }
+        break;
+      case OperationTypes.DUPLICATE_OPERATION:
+        if (getIsPageByBrokenAttributeError(error)) {
+          return ErrorType.PAGE_BY_DUPLICATE_ERR;
         }
         break;
       case OperationTypes.IMPORT_OPERATION:

@@ -17,7 +17,11 @@ describe('ErrorService', () => {
     jest.clearAllMocks();
   });
 
-  it('should handle page-by refresh error', async () => {
+  it.each`
+    operationType                         | expectedErrorType
+    ${OperationTypes.REFRESH_OPERATION}   | ${ErrorType.PAGE_BY_REFRESH_ERR}
+    ${OperationTypes.DUPLICATE_OPERATION} | ${ErrorType.PAGE_BY_DUPLICATE_ERR}
+  `('should handle page by operation error', async ({ operationType, expectedErrorType }) => {
     // given
     const objectWorkingId = 123;
     const error = {
@@ -29,14 +33,14 @@ describe('ErrorService', () => {
       },
     };
     const callback = jest.fn();
-    const operationData = { operationType: OperationTypes.REFRESH_OPERATION } as OperationData;
+    const operationData = { operationType } as OperationData;
 
     errorService.getErrorDetails = jest.fn().mockReturnValue('error details');
     errorService.reduxStore = {
       getState: jest.fn().mockReturnValue({
         popupStateReducer: { isDataOverviewOpen: true },
         officeReducer: { isDialogOpen: false },
-        operationReducer: { operations: [{ operationType: OperationTypes.REFRESH_OPERATION }] },
+        operationReducer: { operations: [{ operationType }] },
       }),
       dispatch: jest.fn(),
     };
@@ -52,7 +56,7 @@ describe('ErrorService', () => {
     await errorService.handleObjectBasedError(objectWorkingId, error, callback, operationData);
 
     // then
-    expect(errorType).toEqual('pageByRefresh');
+    expect(errorType).toEqual(expectedErrorType);
     expect(errorService.getErrorDetails).toHaveBeenCalled();
     expect(pageByHelper.getAllPageByObjects).toHaveBeenCalled();
   });

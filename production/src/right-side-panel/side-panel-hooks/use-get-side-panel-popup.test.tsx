@@ -68,7 +68,7 @@ describe('useGetSidePanelPopup', () => {
 
   it('should call setPageByRefreshFailedPopup  when conditions are met', () => {
     // Given
-    const sidePanelPopupMock = { type: PopupTypes.RANGE_TAKEN };
+    const sidePanelPopupMock = { type: PopupTypes.FAILED_TO_REFRESH_PAGES };
     const setSidePanelPopupMock = jest.fn();
 
     const initialState = {
@@ -90,7 +90,59 @@ describe('useGetSidePanelPopup', () => {
     const store = createStore(rootReducer, initialState);
 
     const setRangeTakenPopupMock = jest
-      .spyOn(sidePanelNotificationHelper, 'setRangeTakenPopup')
+      .spyOn(sidePanelNotificationHelper, 'setPageByRefreshFailedPopup')
+      .mockImplementation(() => {});
+
+    const objectData = {
+      mstrObjectType: {
+        name: 'visualization',
+      },
+    };
+    jest
+      .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId')
+      .mockReturnValue(objectData as any);
+
+    // When
+    renderHook(
+      () =>
+        useGetSidePanelPopup({
+          sidePanelPopup: sidePanelPopupMock,
+          setSidePanelPopup: setSidePanelPopupMock,
+        }),
+      {
+        wrapper: ({ children }) => <Provider store={store}>{children}</Provider>,
+      }
+    );
+
+    // Then
+    expect(setRangeTakenPopupMock).toHaveBeenCalled();
+  });
+
+  it('should call setPageByDuplicateFailedPopup  when conditions are met', () => {
+    // Given
+    const sidePanelPopupMock = { type: PopupTypes.FAILED_TO_DUPLICATE };
+    const setSidePanelPopupMock = jest.fn();
+
+    const initialState = {
+      officeReducer: {
+        popupData: { type: PopupTypes.FAILED_TO_DUPLICATE },
+        selectedObjects: [] as unknown as ObjectData[],
+        isSecured: false,
+        isClearDataFailed: false,
+      },
+      popupStateReducer: {
+        isDataOverviewOpen: false,
+      },
+      repromptsQueueReducer: {
+        repromptsQueue: [] as any,
+      },
+    };
+
+    // @ts-expect-error
+    const store = createStore(rootReducer, initialState);
+
+    const setRangeTakenPopupMock = jest
+      .spyOn(sidePanelNotificationHelper, 'setPageByDuplicateFailedPopup')
       .mockImplementation(() => {});
 
     const objectData = {
