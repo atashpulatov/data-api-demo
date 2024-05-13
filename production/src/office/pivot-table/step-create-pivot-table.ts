@@ -1,4 +1,5 @@
 import { officeApiWorksheetHelper } from '../api/office-api-worksheet-helper';
+import { pivotTableHelper } from './pivot-table-helper';
 
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
@@ -26,7 +27,12 @@ class StepCreatePivotTable {
     console.group('Creating pivot table');
 
     try {
-      const { excelContext, officeTable, objectWorkingId } = operationData;
+      const {
+        excelContext,
+        officeTable,
+        objectWorkingId,
+        instanceDefinition: { mstrTable },
+      } = operationData;
       const { name: objectName } = objectData;
 
       const worksheet = await officeApiWorksheetHelper.createNewWorksheet({
@@ -39,6 +45,8 @@ class StepCreatePivotTable {
       // Imitate Excel behaviour when creating pivot table manually on new sheet - generate table from A3
       const pivotTableStartCell = worksheet.getRange('A3');
       const pivotTable = worksheet.pivotTables.add(objectName, officeTable, pivotTableStartCell);
+
+      await pivotTableHelper.populatePivotTable(pivotTable, mstrTable, excelContext);
 
       const {
         name,

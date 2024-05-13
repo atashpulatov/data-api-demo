@@ -79,7 +79,7 @@ class PivotTableSettingsHelper {
         settings: [
           {
             key: PivotTableOption.ADD_ATTRIBUTES_TO_COLUMNS,
-            label: i18n.t('Add attributes to columns'),
+            label: i18n.t('Attributes'),
             value: pivotTableAddAttributesToColumnsValue,
             description: i18n.t(
               'If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.'
@@ -94,7 +94,7 @@ class PivotTableSettingsHelper {
         settings: [
           {
             key: PivotTableOption.ADD_METRICS_TO_VALUES,
-            label: i18n.t('Add metrics to values'),
+            label: i18n.t('Metrics'),
             value: pivotTableAddMetricsToValuesValue,
             description: i18n.t(
               'If enabled, attributes will be automatically added to the ‘Values’ section of the pivot table.'

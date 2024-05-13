@@ -578,19 +578,6 @@ class OfficeApiHelper {
 
     return shape;
   }
-
-  async getPivotTable(
-    excelContext: Excel.RequestContext,
-    pivotTableId: string
-  ): Promise<Excel.PivotTable> {
-    const pivotTableOrNullObject =
-      excelContext.workbook.pivotTables.getItemOrNullObject(pivotTableId);
-
-    pivotTableOrNullObject.load('isNullObject');
-    await excelContext.sync();
-
-    return pivotTableOrNullObject;
-  }
 }
 
 export const officeApiHelper = new OfficeApiHelper();

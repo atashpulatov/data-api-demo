@@ -1,4 +1,4 @@
-import { officeApiHelper } from '../api/office-api-helper';
+import { pivotTableHelper } from './pivot-table-helper';
 
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
@@ -24,13 +24,17 @@ class StepRefreshPivotTable {
 
     try {
       const { pivotTableId, objectWorkingId } = objectData;
-      const { excelContext } = operationData;
+      const {
+        excelContext,
+        instanceDefinition: { mstrTable },
+      } = operationData;
 
-      const pivotTable = await officeApiHelper.getPivotTable(excelContext, pivotTableId);
+      const pivotTable = await pivotTableHelper.getPivotTable(excelContext, pivotTableId);
 
       if (!pivotTable.isNullObject) {
         pivotTable.refresh();
         await excelContext.sync();
+        await pivotTableHelper.populatePivotTable(pivotTable, mstrTable, excelContext);
       }
 
       operationStepDispatcher.completeRefreshPivotTable(objectWorkingId);

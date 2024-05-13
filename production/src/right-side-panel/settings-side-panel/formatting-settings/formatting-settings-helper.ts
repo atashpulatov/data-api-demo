@@ -132,7 +132,7 @@ class FormattingSettingsHelper {
             options: [
               { key: ObjectImportType.TABLE, value: i18n.t('Data') },
               { key: ObjectImportType.FORMATTED_TABLE, value: i18n.t('Data with formatting') },
-              { key: ObjectImportType.IMAGE, value: i18n.t('Visualisation') },
+              { key: ObjectImportType.IMAGE, value: i18n.t('Visualization') },
               { key: ObjectImportType.PIVOT_TABLE, value: i18n.t('Pivot Table') },
             ],
             value: defaultImportType,
