@@ -31,6 +31,7 @@ export enum OverviewActionCommands {
   RANGE_TAKEN_OK = 'overview-range-taken-ok',
   RANGE_TAKEN_CLOSE = 'overview-range-taken-close',
   PAGE_BY_REFRESH_FAILED_CLOSE = 'overview-page-by-refresh-failed-close',
+  PAGE_BY_DUPLICATE_FAILED_CLOSE = 'overview-page-by-duplicate-failed-close',
   PAGE_BY_REFRESH_FAILED_EDIT = 'overview-page-by-refresh-failed-edit',
   PAGE_BY_REFRESH_FAILED_REMOVE = 'overview-page-by-refresh-failed-remove',
   RENAME = 'overview-rename',
@@ -196,6 +197,18 @@ class OverviewHelper {
   };
 
   /**
+   * Sends message with handlePageByDuplicateFailedClose command to the Side Panel
+   *
+   * @param objectWorkingId Unique Id of the object allowing to reference specific object
+   */
+  handlePageByDuplicateFailedClose = (objectWorkingId: number): void => {
+    popupHelper.officeMessageParent({
+      command: OverviewActionCommands.PAGE_BY_DUPLICATE_FAILED_CLOSE,
+      objectWorkingId,
+    });
+  };
+
+  /**
    * Sends message with pageByRefreshFailedEdit command to the Side Panel
    *
    * @param objectWorkingId Unique Id of the object allowing to reference specific object
@@ -327,6 +340,7 @@ class OverviewHelper {
         officeReducerHelper.clearPopupData();
         break;
       case OverviewActionCommands.PAGE_BY_REFRESH_FAILED_CLOSE:
+      case OverviewActionCommands.PAGE_BY_DUPLICATE_FAILED_CLOSE:
         sidePanelNotificationHelper.clearPopupDataAndRunCallback(callback);
         break;
       case OverviewActionCommands.PAGE_BY_REFRESH_FAILED_EDIT:
@@ -394,10 +408,6 @@ class OverviewHelper {
         isPrompted = object.isPrompted;
       }
 
-      const page = pageByData?.elements
-        ?.map((element: any) => `${element.name}: ${element.value}`)
-        .join(', ');
-
       return {
         objectWorkingId,
         mstrObjectType,
@@ -418,7 +428,7 @@ class OverviewHelper {
         importedBy: details?.importedBy,
         isPrompted,
         ...(pageByData && {
-          page,
+          pageByData,
           pageByLinkId: pageByData?.pageByLinkId,
           sourceName: definition?.sourceName,
         }),
@@ -516,6 +526,30 @@ class OverviewHelper {
       type: PopupTypes.FAILED_TO_REFRESH_PAGES_OVERVIEW,
       onOk: (refreshFailedOptions: PageByRefreshFailedOptions): void => onOk(refreshFailedOptions),
       onClose: onCancel,
+    });
+  }
+
+  /**
+   * Sets page by duplicate error popup for Overview dialog
+   *
+   * @param objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param setDialogPopup Function used as a callback for seting Overview dialog popup
+   * @param selectedObjects Objects that are failed to duplicate
+   */
+  setPageByDuplicateFailedPopup({
+    objectWorkingIds,
+    setDialogPopup,
+    selectedObjects,
+  }: DialogPopup): void {
+    const onOk = (): void => {
+      this.handlePageByDuplicateFailedClose(objectWorkingIds[0]);
+      officeReducerHelper.clearPopupData();
+    };
+
+    setDialogPopup({
+      type: PopupTypes.FAILED_TO_DUPLICATE,
+      selectedObjects,
+      onOk,
     });
   }
 

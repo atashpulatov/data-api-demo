@@ -15,6 +15,8 @@ export type SettingsState = {
   importType: ObjectImportType;
   objectAndWorksheetNamingSetting: ObjectAndWorksheetNamingOption;
   pageByDisplaySetting: PageByDisplayOption;
+  pivotTableAddAttributesToColumns: boolean;
+  pivotTableAddMetricsToValues: boolean;
 };
 
 export enum SettingsActionTypes {
@@ -29,6 +31,8 @@ export enum SettingsActionTypes {
   SET_OBJECT_AND_WORKSHEET_NAMING_SETTING = 'SET_OBJECT_AND_WORKSHEET_NAMING_SETTING',
   SET_PAGE_BY_DISPLAY_SETTING = 'SET_PAGE_BY_DISPLAY_SETTING',
   SET_DEFAULT_IMPORT_TYPE = 'SET_DEFAULT_IMPORT_TYPE',
+  SET_PIVOT_TABLE_ADD_ATTRIBUTES_TO_COLUMNS = 'SET_PIVOT_TABLE_ADD_ATTRIBUTES_TO_COLUMNS',
+  SET_PIVOT_TABLE_ADD_METRICS_TO_VALUES = 'SET_PIVOT_TABLE_ADD_METRICS_TO_VALUES',
 }
 
 export interface ToggleMergeCrosstabColumnsFlagAction extends Action {
@@ -86,6 +90,16 @@ export interface SetDefaultImportTypeAction extends Action {
   defaultImportType: ObjectImportType;
 }
 
+export interface SetPivotTableAddAttributesToColumnsAction extends Action {
+  type: SettingsActionTypes.SET_PIVOT_TABLE_ADD_ATTRIBUTES_TO_COLUMNS;
+  payload: boolean;
+}
+
+export interface SetPivotTableAddMetricsToValuesAction extends Action {
+  type: SettingsActionTypes.SET_PIVOT_TABLE_ADD_METRICS_TO_VALUES;
+  payload: boolean;
+}
+
 export type SettingsActions =
   | ToggleMergeCrosstabColumnsFlagAction
   | ToggleImportAttributesAsTextFlagAction
@@ -97,7 +111,9 @@ export type SettingsActions =
   | ToggleMainWorksheetObjectInfoSettingAction
   | SetWorksheetNamingSettingAction
   | SetPageByDisplaySettingAction
-  | SetDefaultImportTypeAction;
+  | SetDefaultImportTypeAction
+  | SetPivotTableAddAttributesToColumnsAction
+  | SetPivotTableAddMetricsToValuesAction;
 
 export type ObjectInfoSetting = {
   key: string;

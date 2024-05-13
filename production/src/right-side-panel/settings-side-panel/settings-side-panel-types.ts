@@ -17,6 +17,11 @@ export enum ImportFormattingOption {
   DEFAULT_IMPORT_TYPE = 'defaultImportType',
 }
 
+export enum PivotTableOption {
+  ADD_ATTRIBUTES_TO_COLUMNS = 'addAttributesToColumns',
+  ADD_METRICS_TO_VALUES = 'addMetricsToValues',
+}
+
 export enum UserPreferenceKey {
   EXCEL_REUSE_PROMPT_ANSWERS = 'excelReusePromptAnswers',
   EXCEL_OBJECT_INFO_SIDE_PANEL_PREFERENCES = 'excelObjectInfoSidePanelPreferences',
@@ -26,6 +31,8 @@ export enum UserPreferenceKey {
   EXCEL_IMPORT_MERGE_CROSSTAB_COLUMNS = 'excelImportMergeCrosstabColumns',
   EXCEL_IMPORT_ATTRIBUTES_AS_TEXT = 'excelImportAttributesAsText',
   EXCEL_DEFAULT_IMPORT_TYPE = 'excelDefaultImportFormat',
+  EXCEL_PIVOT_TABLE_ADD_ATTRIBUTES_TO_COLUMNS = 'excelPivotTableAddAttributesToColumns',
+  EXCEL_PIVOT_TABLE_ADD_METRICS_TO_VALUES = 'excelPivotTableAddMetricsToValues',
 }
 
 export const EXCEL_IMPORT_ATTRIBUTES_AS_TEXT = 'excelImportAttributesAsText';

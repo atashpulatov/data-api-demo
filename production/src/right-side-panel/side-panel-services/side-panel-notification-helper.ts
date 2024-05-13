@@ -266,6 +266,34 @@ class SidePanelNotificationHelper {
   };
 
   /**
+   * Creates pageby duplicate failed popup.
+   *
+   * @param data  Data required to create and update pageby duplicate failed popup.
+   * @param data.setSidePanelPopup Callback to save popup in state of RightSidePanel.
+   * @param data.selectedObjects  List of objects to be displayed in the popup.
+   * @param data.callback  Callback function for failed operation
+   */
+  setPageByDuplicateFailedPopup = ({
+    setSidePanelPopup,
+    selectedObjects,
+    callback,
+  }: {
+    setSidePanelPopup: Function;
+    selectedObjects: ObjectData[];
+    callback: () => Promise<void>;
+  }): void => {
+    const onOk = async (): Promise<void> => {
+      this.clearPopupDataAndRunCallback(callback);
+    };
+
+    setSidePanelPopup({
+      type: PopupTypes.FAILED_TO_DUPLICATE,
+      selectedObjects,
+      onOk,
+    });
+  };
+
+  /**
    * Clears the rendered popup data and runs the provided callback.
    *
    * @param callback Callback to run after clearing the popup data.

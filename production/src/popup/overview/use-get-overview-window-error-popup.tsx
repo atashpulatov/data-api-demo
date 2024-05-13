@@ -4,13 +4,22 @@ import { PopupTypes } from '@mstr/connector-components';
 
 import overviewHelper from './overview-helper';
 
-import { DuplicatePopup, PageByRefreshFailedPopup, RangeTakenPopup } from './overview-types';
+import {
+  DuplicatePopup,
+  PageByDuplicateFailedPopup,
+  PageByRefreshFailedPopup,
+  RangeTakenPopup,
+} from './overview-types';
 
 import { officeSelectors } from '../../redux-reducer/office-reducer/office-reducer-selectors';
 
 interface UseGetOverviewWindowErrorPopupProps {
   setDialogPopup: (
-    dialogPopup: DuplicatePopup | RangeTakenPopup | PageByRefreshFailedPopup
+    dialogPopup:
+      | DuplicatePopup
+      | RangeTakenPopup
+      | PageByRefreshFailedPopup
+      | PageByDuplicateFailedPopup
   ) => void;
 }
 
@@ -21,7 +30,7 @@ const useGetOverviewWindowErrorPopup = ({
 
   useEffect(() => {
     if (popupData) {
-      const { type, objectWorkingId } = popupData;
+      const { type, objectWorkingId, selectedObjects } = popupData;
       switch (type) {
         case PopupTypes.RANGE_TAKEN:
           overviewHelper.setRangeTakenPopup({
@@ -32,6 +41,13 @@ const useGetOverviewWindowErrorPopup = ({
         case PopupTypes.FAILED_TO_REFRESH_PAGES:
           overviewHelper.setPageByRefreshFailedPopup({
             objectWorkingIds: [objectWorkingId],
+            setDialogPopup,
+          });
+          break;
+        case PopupTypes.FAILED_TO_DUPLICATE:
+          overviewHelper.setPageByDuplicateFailedPopup({
+            objectWorkingIds: [objectWorkingId],
+            selectedObjects,
             setDialogPopup,
           });
           break;

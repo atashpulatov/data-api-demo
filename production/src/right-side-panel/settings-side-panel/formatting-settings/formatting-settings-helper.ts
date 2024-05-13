@@ -1,6 +1,7 @@
 import { SettingPanelSection, SettingsSection } from '@mstr/connector-components';
 
 import { userRestService } from '../../../home/user-rest-service';
+import { getBooleanUserPreference } from '../settings-side-panel-helper';
 
 import { reduxStore } from '../../../store';
 
@@ -13,27 +14,17 @@ import { ObjectImportType } from '../../../mstr-object/constants';
 
 class FormattingSettingsHelper {
   /**
-   * Gets the initial value of boolean setting preference. Assumes the received from the server value is "0" or "1" or "true" or "false".
-   * @param preferenceKey name of the preference
-   * @returns A Promise that resolves with the boolean value of the preference.
-   */
-  async getBooleanUserPreference(preferenceKey: UserPreferenceKey): Promise<boolean> {
-    const { value } = await userRestService.getUserPreference(preferenceKey);
-    return !Number.isNaN(+value) ? !!parseInt(value, 10) : JSON.parse(value);
-  }
-
-  /**
    * Initializes the import formatting section
    * Retrieves the user preference for the importing as a text and merge crosstab columns from the userRestService,
    * updates the redux store with the retrieved value.
    */
   @initializationErrorDecorator.initializationWrapper
   async initImportFormattingSettings(): Promise<void> {
-    const importAttributesAsText = await this.getBooleanUserPreference(
+    const importAttributesAsText = await getBooleanUserPreference(
       UserPreferenceKey.EXCEL_IMPORT_ATTRIBUTES_AS_TEXT
     );
 
-    const mergeCrosstabColumns = await this.getBooleanUserPreference(
+    const mergeCrosstabColumns = await getBooleanUserPreference(
       UserPreferenceKey.EXCEL_IMPORT_MERGE_CROSSTAB_COLUMNS
     );
 

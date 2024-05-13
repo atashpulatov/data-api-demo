@@ -56,8 +56,8 @@ describe('useGetOverviewWindowErrorPopup', () => {
     // @ts-expect-error
     const store = createStore(rootReducer, initialState);
 
-    const setRangeTakenPopupMock = jest
-      .spyOn(overviewHelper, 'setRangeTakenPopup')
+    const setPageByRefreshFailedPopupMock = jest
+      .spyOn(overviewHelper, 'setPageByRefreshFailedPopup')
       .mockImplementation(() => {});
 
     // When
@@ -72,6 +72,38 @@ describe('useGetOverviewWindowErrorPopup', () => {
     );
 
     // Then
-    expect(setRangeTakenPopupMock).toHaveBeenCalled();
+    expect(setPageByRefreshFailedPopupMock).toHaveBeenCalled();
+  });
+
+  it('should call setPageByDuplicateFailedPopup  when conditions are met', () => {
+    // Given
+    const setSidePanelPopupMock = jest.fn();
+
+    const initialState = {
+      officeReducer: {
+        popupData: { type: PopupTypes.FAILED_TO_DUPLICATE },
+      },
+    };
+
+    // @ts-expect-error
+    const store = createStore(rootReducer, initialState);
+
+    const setPageByDuplicateFailedPopupMock = jest
+      .spyOn(overviewHelper, 'setPageByDuplicateFailedPopup')
+      .mockImplementation(() => {});
+
+    // When
+    renderHook(
+      () =>
+        useGetOverviewWindowErrorPopup({
+          setDialogPopup: setSidePanelPopupMock,
+        }),
+      {
+        wrapper: ({ children }) => <Provider store={store}>{children}</Provider>,
+      }
+    );
+
+    // Then
+    expect(setPageByDuplicateFailedPopupMock).toHaveBeenCalled();
   });
 });

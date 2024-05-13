@@ -9,6 +9,8 @@ import {
   ObjectInfoSetting,
   SetDefaultImportTypeAction,
   SetPageByDisplaySettingAction,
+  SetPivotTableAddAttributesToColumnsAction,
+  SetPivotTableAddMetricsToValuesAction,
   SettingsActionTypes,
   SetWorksheetNamingSettingAction,
   ToggleImportAttributesAsTextFlagAction,
@@ -96,6 +98,20 @@ const setDefaultImportType = (importType: ObjectImportType): SetDefaultImportTyp
   defaultImportType: importType,
 });
 
+const setPivotTableAddAttributesToColumns = (
+  payload: boolean
+): SetPivotTableAddAttributesToColumnsAction => ({
+  type: SettingsActionTypes.SET_PIVOT_TABLE_ADD_ATTRIBUTES_TO_COLUMNS,
+  payload,
+});
+
+const setPivotTableAddMetricsToValues = (
+  payload: boolean
+): SetPivotTableAddMetricsToValuesAction => ({
+  type: SettingsActionTypes.SET_PIVOT_TABLE_ADD_METRICS_TO_VALUES,
+  payload,
+});
+
 export const settingsActions = {
   toggleImportAttributesAsTextFlag,
   toggleMergeCrosstabColumnsFlag,
@@ -108,4 +124,6 @@ export const settingsActions = {
   setWorksheetNamingSetting,
   setPageByDisplaySetting,
   setDefaultImportType,
+  setPivotTableAddAttributesToColumns,
+  setPivotTableAddMetricsToValues,
 };
