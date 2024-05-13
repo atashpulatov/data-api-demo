@@ -2,6 +2,8 @@ import { reduxStore } from '../../store';
 
 import { MstrTable } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 
+import stepApplyFormatting from '../format/step-apply-formatting';
+
 class PivotTableHelper {
   async getPivotTable(
     excelContext: Excel.RequestContext,
@@ -18,7 +20,7 @@ class PivotTableHelper {
 
   async addAttributesToColumns(
     pivotTable: Excel.PivotTable,
-    mstrTable: MstrTable,
+    attributesInfo: any,
     excelContext: Excel.RequestContext
   ): Promise<void> {
     pivotTable.load('rowHierarchies/items/id');
@@ -26,7 +28,7 @@ class PivotTableHelper {
 
     const attributesIds = new Set(pivotTable.rowHierarchies.items.map(({ id }) => id));
 
-    for (const name of mstrTable.attributesNames.rowsAttributes) {
+    for (const name of attributesInfo) {
       if (!attributesIds.has(name)) {
         pivotTable.rowHierarchies.add(pivotTable.hierarchies.getItem(name));
       }
@@ -35,7 +37,7 @@ class PivotTableHelper {
 
   async addMetricsToValues(
     pivotTable: Excel.PivotTable,
-    mstrTable: MstrTable,
+    metricsInfo: any,
     excelContext: Excel.RequestContext
   ): Promise<void> {
     pivotTable.load('dataHierarchies/items/field/id');
@@ -43,9 +45,10 @@ class PivotTableHelper {
 
     const metricsIds = new Set(pivotTable.dataHierarchies.items.map(({ field }) => field.id));
 
-    for (const { name } of mstrTable.metrics) {
-      if (!metricsIds.has(name)) {
-        pivotTable.dataHierarchies.add(pivotTable.hierarchies.getItem(name));
+    for (const metric of metricsInfo) {
+      if (!metricsIds.has(metric.name)) {
+        const item = pivotTable.dataHierarchies.add(pivotTable.hierarchies.getItem(metric.name));
+        item.numberFormat = stepApplyFormatting.getFormat(metric) as any;
       }
     }
   }
@@ -59,11 +62,19 @@ class PivotTableHelper {
       reduxStore.getState().settingsReducer;
 
     if (pivotTableAddAttributesToColumns) {
-      await this.addAttributesToColumns(pivotTable, mstrTable, excelContext);
+      await this.addAttributesToColumns(
+        pivotTable,
+        mstrTable.attributesNames.rowsAttributes,
+        excelContext
+      );
     }
 
     if (pivotTableAddMetricsToValues) {
-      await this.addMetricsToValues(pivotTable, mstrTable, excelContext);
+      await this.addMetricsToValues(
+        pivotTable,
+        mstrTable.columnInformation.filter(({ isAttribute }) => !isAttribute),
+        excelContext
+      );
     }
   }
 }
