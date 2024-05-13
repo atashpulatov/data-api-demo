@@ -1,4 +1,5 @@
 import { officeApiHelper } from '../api/office-api-helper';
+import { pivotTableHelper } from './pivot-table-helper';
 
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
@@ -27,7 +28,7 @@ class StepRemovePivotTable {
       const { pivotTableId } = objectData;
       const excelContext = await officeApiHelper.getExcelContext();
 
-      const pivotTable = await officeApiHelper.getPivotTable(excelContext, pivotTableId);
+      const pivotTable = await pivotTableHelper.getPivotTable(excelContext, pivotTableId);
 
       if (!pivotTable.isNullObject) {
         pivotTable.delete();

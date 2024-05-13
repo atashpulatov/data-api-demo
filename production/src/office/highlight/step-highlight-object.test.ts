@@ -1,4 +1,5 @@
 import { officeApiHelper } from '../api/office-api-helper';
+import { pivotTableHelper } from '../pivot-table/pivot-table-helper';
 import { officeShapeApiHelper } from '../shapes/office-shape-api-helper';
 
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
@@ -63,7 +64,7 @@ describe('StepHighlightObject', () => {
       objectWorkingId: 42,
     } as ObjectData;
 
-    jest.spyOn(officeApiHelper, 'getPivotTable').mockResolvedValue({
+    jest.spyOn(pivotTableHelper, 'getPivotTable').mockResolvedValue({
       isNullObject: false,
       worksheet: { activate },
     } as any);
