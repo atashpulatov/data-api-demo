@@ -27,7 +27,7 @@ import {
   clearRepromptTask,
   executeNextRepromptTask,
 } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
-import { DisplayAttrFormNames } from '../mstr-object/constants';
+import { DisplayAttrFormNames, ObjectImportType } from '../mstr-object/constants';
 
 const URL = `${window.location.href}`;
 
@@ -485,7 +485,7 @@ class PopupController {
    * @param objectData Contains information about the MSTR object
    */
   handleImport = async (objectData: ObjectData): Promise<void> => {
-    const { mstrObjectType, pageByConfigurations } = objectData;
+    const { mstrObjectType, pageByConfigurations, importType } = objectData;
 
     let preparedInstanceDefinition;
 
@@ -495,7 +495,7 @@ class PopupController {
 
     const { pageBy } = preparedInstanceDefinition?.definition.grid ?? {};
 
-    if (!pageBy?.length) {
+    if (!pageBy?.length || importType === ObjectImportType.PIVOT_TABLE) {
       return this.reduxStore.dispatch(
         importRequested({ ...objectData }, preparedInstanceDefinition)
       );
