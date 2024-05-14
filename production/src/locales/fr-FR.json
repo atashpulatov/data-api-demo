@@ -282,5 +282,14 @@
    "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "Si l'option est activée, les valeurs d'attributs seront importées sous forme de texte, en conservant la mise en forme de MicroStrategy. Cela peut avoir un impact sur les formules Excel.",
    "Merge columns": "Fusionner les colonnes",
    "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Si l'option est activée, les en-têtes de colonne adjacents avec des valeurs identiques seront fusionnés. S'applique uniquement aux rapports entre les onglets.",
-   "Paged-By": "Par page"
+   "Paged-By": "Par page",
+   "Default import format:": "Format d'importation par défaut :",
+   "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.": "Les objets qui ne peuvent pas être importés dans le format sélectionné seront importés en tant que données. Vous pouvez modifier le format pendant l'importation.",
+   "Data": "Données",
+   "Data with formatting": "Données avec formatage",
+   "Visualization": "Visualisation",
+   "Pivot Table": "Tableau croisé dynamique",
+   "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "Si l'option est activée, des attributs seront automatiquement ajoutés à la section « Colonne » du tableau croisé dynamique.",
+   "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "Si l'option est activée, les mesures seront automatiquement ajoutées à la section « Valeurs » du tableau croisé dynamique.",
+   "The memory limit has been reached. You cannot import any more objects.": "La limite de mémoire a été atteinte. Vous ne pouvez plus importer d'objets."
 }

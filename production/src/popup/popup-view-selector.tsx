@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { PageBy } from '@mstr/connector-components';
 
 import { handleExecuteNextRepromptTask } from '../helpers/prompts-handling-helper';
+import { pageByHelper } from '../page-by/page-by-helper';
 import { ObtainInstanceHelper } from './obtain-instance-helper';
 import { popupHelper } from './popup-helper';
 import { popupViewSelectorHelper } from './popup-view-selector-helper';
@@ -88,6 +89,18 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
 
   const popupType = popupViewSelectorHelper.setPopupType(props, popupTypeProps);
 
+  const getPageByConfiguration = useCallback(
+    () =>
+      pageByHelper.getPageByConfigurations(
+        editedObject?.objectWorkingId,
+        pageByHelper.parseValidPageByElements(
+          pageByResponse?.pageBy,
+          pageByResponse?.validPageByElements
+        )
+      ),
+    [editedObject?.objectWorkingId, pageByResponse?.pageBy, pageByResponse?.validPageByElements]
+  );
+
   useEffect(() => {
     // @ts-expect-error
     dispatch(popupStateActions.setDialogType(popupType));
@@ -128,6 +141,7 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
             requestPageByModalClose();
           }}
           onCancel={handlePageByModalClose}
+          pageByConfiguration={getPageByConfiguration()}
         />
       )}
       {renderProperComponent(popupType)}

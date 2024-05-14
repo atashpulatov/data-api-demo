@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { ObjectWindowTitle, PageByConfiguration } from '@mstr/connector-components';
 import { Spinner } from '@mstr/rc';
 
@@ -24,6 +24,7 @@ import {
 } from '../redux-reducer/popup-reducer/popup-reducer-types';
 import { RepromptsQueueState } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer-types';
 import { SessionState } from '../redux-reducer/session-reducer/session-reducer-types';
+import { PageByDisplayOption } from '../right-side-panel/settings-side-panel/settings-side-panel-types';
 
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import i18n from '../i18n';
@@ -32,6 +33,7 @@ import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
+import { settingsReducerSelectors } from '../redux-reducer/settings-reducer/settings-reducer-selectors';
 import { PromptsContainer } from './prompts-container';
 import { ErrorMessages } from '../error/constants';
 
@@ -86,6 +88,8 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
   const newPromptsAnswers = useRef([]);
   const [isPromptLoading, setIsPromptLoading] = useState(true);
   const [embeddedDocument, setEmbeddedDocument] = useState(null);
+
+  const pageByDisplaySetting = useSelector(settingsReducerSelectors.selectPageByDisplaySetting);
 
   const [t] = useTranslation('common', { i18n });
 
@@ -193,6 +197,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
       isPrompted: !!newPromptsAnswers.current.length,
       subtotalsInfo: editedObject.subtotalsInfo,
       displayAttrFormNames: editedObject.displayAttrFormNames,
+      pageByData: editedObject.pageByData,
       pageByConfigurations,
     });
 
@@ -212,7 +217,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
         return;
       }
 
-      if (editedObject.pageByData) {
+      if (editedObject.pageByData && pageByDisplaySetting === PageByDisplayOption.SELECT_PAGES) {
         popupViewSelectorHelper.handleRequestPageByModalOpen({
           ...props,
           objectId: chosenObjectIdLocal,

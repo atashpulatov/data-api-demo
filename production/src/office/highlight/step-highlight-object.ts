@@ -1,4 +1,5 @@
 import { officeApiHelper } from '../api/office-api-helper';
+import { pivotTableHelper } from '../pivot-table/pivot-table-helper';
 import { officeShapeApiHelper } from '../shapes/office-shape-api-helper';
 
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
@@ -33,7 +34,7 @@ class StepHighlightObject {
         let worksheet;
 
         if (importType === ObjectImportType.PIVOT_TABLE) {
-          const pivotTable = await officeApiHelper.getPivotTable(excelContext, pivotTableId);
+          const pivotTable = await pivotTableHelper.getPivotTable(excelContext, pivotTableId);
 
           // Omit the highlight operation, if the pivot table was removed manually from the worksheet.
           if (pivotTable.isNullObject) {

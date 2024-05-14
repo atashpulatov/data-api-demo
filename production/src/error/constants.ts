@@ -29,6 +29,7 @@ export enum ErrorType {
   EXCEEDS_EXCEL_API_LIMITS = 'exceedExcelApiLimit',
   PAGE_BY_REFRESH_ERR = 'pageByRefresh',
   PAGE_BY_IMPORT_ERR = 'pageByImport',
+  PAGE_BY_DUPLICATE_ERR = 'pageByDuplicate',
 }
 
 export enum IncomingErrorStrings {
@@ -145,7 +146,7 @@ export const errorCodes = {
   ERR009: 'ERR009',
 };
 
-export const getIsPageByRefreshError = (error: any): boolean => {
+export const getIsPageByAttributeNumberChangedError = (error: any): boolean => {
   const errorString = error?.response?.body?.message;
 
   const pageByAttributeChangedErrorPattern =

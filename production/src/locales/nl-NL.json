@@ -282,5 +282,14 @@
    "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "Als deze optie is ingeschakeld, worden attribuutwaarden geïmporteerd als tekst met behoud van de opmaak van MicroStrategy. Dit kan invloed hebben op Excel-formules.",
    "Merge columns": "Kolommen samenvoegen",
    "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Als deze optie is ingeschakeld, worden aangrenzende kolomkoppen met identieke waarden samengevoegd. Alleen van toepassing op kruistabelrapporten.",
-   "Paged-By": "Op pagina"
+   "Paged-By": "Op pagina",
+   "Default import format:": "Standaard importindeling:",
+   "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.": "Objecten die niet geïmporteerd kunnen worden in de geselecteerde indeling, worden geïmporteerd als gegevens. U kunt de indeling tijdens het importeren wijzigen.",
+   "Data": "Gegevens",
+   "Data with formatting": "Gegevens met opmaak",
+   "Visualization": "Visualisatie",
+   "Pivot Table": "Draaitabel",
+   "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "Als deze optie is ingeschakeld, worden attributen automatisch toegevoegd aan het gedeelte Kolom van de draaitabel.",
+   "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "Als deze optie is ingeschakeld, worden metrieken automatisch toegevoegd aan het gedeelte Waarden van de draaitabel.",
+   "The memory limit has been reached. You cannot import any more objects.": "De geheugenlimiet is bereikt. U kunt geen objecten meer importeren."
 }

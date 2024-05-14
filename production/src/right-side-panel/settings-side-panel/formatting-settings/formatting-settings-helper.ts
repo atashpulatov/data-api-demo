@@ -1,6 +1,7 @@
 import { SettingPanelSection, SettingsSection } from '@mstr/connector-components';
 
 import { userRestService } from '../../../home/user-rest-service';
+import { getBooleanUserPreference } from '../settings-side-panel-helper';
 
 import { reduxStore } from '../../../store';
 
@@ -9,18 +10,9 @@ import { ImportFormattingOption, UserPreferenceKey } from '../settings-side-pane
 import i18n from '../../../i18n';
 import { settingsActions } from '../../../redux-reducer/settings-reducer/settings-actions';
 import initializationErrorDecorator from '../initialization-error-decorator';
+import { ObjectImportType } from '../../../mstr-object/constants';
 
 class FormattingSettingsHelper {
-  /**
-   * Gets the initial value of boolean setting preference. Assumes the received from the server value is "0" or "1" or "true" or "false".
-   * @param preferenceKey name of the preference
-   * @returns A Promise that resolves with the boolean value of the preference.
-   */
-  async getBooleanUserPreference(preferenceKey: UserPreferenceKey): Promise<boolean> {
-    const { value } = await userRestService.getUserPreference(preferenceKey);
-    return !Number.isNaN(+value) ? !!parseInt(value, 10) : JSON.parse(value);
-  }
-
   /**
    * Initializes the import formatting section
    * Retrieves the user preference for the importing as a text and merge crosstab columns from the userRestService,
@@ -28,12 +20,16 @@ class FormattingSettingsHelper {
    */
   @initializationErrorDecorator.initializationWrapper
   async initImportFormattingSettings(): Promise<void> {
-    const importAttributesAsText = await this.getBooleanUserPreference(
+    const importAttributesAsText = await getBooleanUserPreference(
       UserPreferenceKey.EXCEL_IMPORT_ATTRIBUTES_AS_TEXT
     );
 
-    const mergeCrosstabColumns = await this.getBooleanUserPreference(
+    const mergeCrosstabColumns = await getBooleanUserPreference(
       UserPreferenceKey.EXCEL_IMPORT_MERGE_CROSSTAB_COLUMNS
+    );
+
+    const { value: defaultImportType } = await userRestService.getUserPreference(
+      UserPreferenceKey.EXCEL_DEFAULT_IMPORT_TYPE
     );
 
     reduxStore.dispatch(
@@ -43,6 +39,8 @@ class FormattingSettingsHelper {
     reduxStore.dispatch(
       settingsActions.toggleMergeCrosstabColumnsFlag(mergeCrosstabColumns) as any
     );
+
+    reduxStore.dispatch(settingsActions.setDefaultImportType(defaultImportType) as any);
   }
 
   /**
@@ -96,6 +94,15 @@ class FormattingSettingsHelper {
   };
 
   /**
+   * Handles the default import format change
+   * @param format - The new default format.
+   */
+  handleDefaultImportTypeChange = async (format: ObjectImportType): Promise<void> => {
+    await userRestService.setUserPreference(UserPreferenceKey.EXCEL_DEFAULT_IMPORT_TYPE, format);
+    reduxStore.dispatch(settingsActions.setDefaultImportType(format));
+  };
+
+  /**
    * Returns the settings section for the import formatting settings.
    * @param importAttributesAsTextValue - The value of the importAttributesAsText setting.
    * @param mergeCrosstabColumnsValue - The value of the mergeCrosstabColumns setting.
@@ -104,12 +111,34 @@ class FormattingSettingsHelper {
 
   getImportFormattingSection = (
     importAttributesAsTextValue: boolean,
-    mergeCrosstabColumnsValue: boolean
+    mergeCrosstabColumnsValue: boolean,
+    defaultImportType: ObjectImportType
   ): SettingsSection => ({
     key: 'import-settings',
     label: i18n.t('Import'),
     initialExpand: false,
     settingsGroups: [
+      {
+        key: 'default-import-type',
+        type: SettingPanelSection.SELECT,
+        onChange: this.handleDefaultImportTypeChange,
+        settings: [
+          {
+            key: ImportFormattingOption.DEFAULT_IMPORT_TYPE,
+            label: i18n.t('Default import format:'),
+            description: i18n.t(
+              'Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.'
+            ),
+            options: [
+              { key: ObjectImportType.TABLE, value: i18n.t('Data') },
+              { key: ObjectImportType.FORMATTED_TABLE, value: i18n.t('Data with formatting') },
+              { key: ObjectImportType.IMAGE, value: i18n.t('Visualization') },
+              { key: ObjectImportType.PIVOT_TABLE, value: i18n.t('Pivot Table') },
+            ],
+            value: defaultImportType,
+          },
+        ],
+      },
       {
         key: 'import-formatting',
         type: SettingPanelSection.SWITCH,

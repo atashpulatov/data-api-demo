@@ -1,4 +1,5 @@
 import { userRestService } from '../../../home/user-rest-service';
+import * as sidePanelHelper from '../settings-side-panel-helper';
 import { formattingSettingsHelper } from './formatting-settings-helper';
 
 import { reduxStore } from '../../../store';
@@ -6,6 +7,7 @@ import { reduxStore } from '../../../store';
 import { UserPreferenceKey } from '../settings-side-panel-types';
 
 import { settingsActions } from '../../../redux-reducer/settings-reducer/settings-actions';
+import { ObjectImportType } from '../../../mstr-object/constants';
 
 describe('FormattingSettingsHelper', () => {
   beforeEach(() => {
@@ -27,7 +29,7 @@ describe('FormattingSettingsHelper', () => {
         .mockResolvedValue({ value: userPreferenceResponse });
 
       // When
-      const result = await formattingSettingsHelper.getBooleanUserPreference(
+      const result = await sidePanelHelper.getBooleanUserPreference(
         UserPreferenceKey.EXCEL_IMPORT_ATTRIBUTES_AS_TEXT
       );
 
@@ -38,27 +40,37 @@ describe('FormattingSettingsHelper', () => {
 
   it('initImportFormattingSettings should dispatch correct actions and get correct preferences', async () => {
     // Given
-    jest.spyOn(formattingSettingsHelper, 'getBooleanUserPreference').mockResolvedValue(true);
+    jest.spyOn(sidePanelHelper, 'getBooleanUserPreference').mockResolvedValue(true);
+    jest
+      .spyOn(userRestService, 'getUserPreference')
+      .mockResolvedValue({ value: ObjectImportType.TABLE });
     const dispatchSpy = jest.spyOn(reduxStore, 'dispatch');
 
     // When
     await formattingSettingsHelper.initImportFormattingSettings();
 
     // Then
-    expect(formattingSettingsHelper.getBooleanUserPreference).toHaveBeenCalledTimes(2);
-    expect(formattingSettingsHelper.getBooleanUserPreference).toHaveBeenCalledWith(
+    expect(sidePanelHelper.getBooleanUserPreference).toHaveBeenCalledTimes(2);
+    expect(sidePanelHelper.getBooleanUserPreference).toHaveBeenCalledWith(
       UserPreferenceKey.EXCEL_IMPORT_ATTRIBUTES_AS_TEXT
     );
-    expect(formattingSettingsHelper.getBooleanUserPreference).toHaveBeenCalledWith(
+    expect(sidePanelHelper.getBooleanUserPreference).toHaveBeenCalledWith(
       UserPreferenceKey.EXCEL_IMPORT_MERGE_CROSSTAB_COLUMNS
     );
+    expect(userRestService.getUserPreference).toHaveBeenCalledTimes(1);
+    expect(userRestService.getUserPreference).toHaveBeenCalledWith(
+      UserPreferenceKey.EXCEL_DEFAULT_IMPORT_TYPE
+    );
 
-    expect(dispatchSpy).toHaveBeenCalledTimes(2);
+    expect(dispatchSpy).toHaveBeenCalledTimes(3);
     expect(dispatchSpy).toHaveBeenCalledWith(
       settingsActions.toggleImportAttributesAsTextFlag(true) as any
     );
     expect(dispatchSpy).toHaveBeenCalledWith(
       settingsActions.toggleMergeCrosstabColumnsFlag(true) as any
+    );
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      settingsActions.setDefaultImportType(ObjectImportType.TABLE) as any
     );
   });
 

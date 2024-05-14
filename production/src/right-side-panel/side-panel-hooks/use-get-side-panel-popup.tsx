@@ -62,6 +62,12 @@ export const useGetSidePanelPopup = ({
             setSidePanelPopup,
           });
           break;
+        case PopupTypes.FAILED_TO_DUPLICATE:
+          sidePanelNotificationHelper.setPageByDuplicateFailedPopup({
+            ...popupData,
+            setSidePanelPopup,
+          });
+          break;
         default:
           break;
       }
@@ -79,7 +85,8 @@ export const useGetSidePanelPopup = ({
     } else if (
       sidePanelPopup?.type === PopupTypes.RANGE_TAKEN ||
       sidePanelPopup?.type === PopupTypes.FAILED_TO_REFRESH_PAGES ||
-      sidePanelPopup?.type === PopupTypes.FAILED_TO_IMPORT
+      sidePanelPopup?.type === PopupTypes.FAILED_TO_IMPORT ||
+      sidePanelPopup?.type === PopupTypes.FAILED_TO_DUPLICATE
     ) {
       setSidePanelPopup(null);
     }

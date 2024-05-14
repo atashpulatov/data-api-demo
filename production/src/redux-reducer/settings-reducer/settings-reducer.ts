@@ -6,7 +6,10 @@ import {
 import {
   LoadSidePanelObjectInfoSettingAction,
   LoadWorksheetObjectInfoSettingAction,
+  SetDefaultImportTypeAction,
   SetPageByDisplaySettingAction,
+  SetPivotTableAddAttributesToColumnsAction,
+  SetPivotTableAddMetricsToValuesAction,
   SettingsActions,
   SettingsActionTypes,
   SettingsState,
@@ -33,6 +36,8 @@ const initialState: SettingsState = {
   importType: ObjectImportType.TABLE,
   objectAndWorksheetNamingSetting: ObjectAndWorksheetNamingOption.REPORT_NAME,
   pageByDisplaySetting: PageByDisplayOption.SELECT_PAGES,
+  pivotTableAddAttributesToColumns: false,
+  pivotTableAddMetricsToValues: false,
 };
 
 // eslint-disable-next-line default-param-last
@@ -58,6 +63,12 @@ export const settingsReducer = (state = initialState, action: SettingsActions): 
       return setWorksheetNamingSetting(state, action);
     case SettingsActionTypes.SET_PAGE_BY_DISPLAY_SETTING:
       return setPageByDisplaySetting(state, action);
+    case SettingsActionTypes.SET_DEFAULT_IMPORT_TYPE:
+      return setDefaultImportType(state, action);
+    case SettingsActionTypes.SET_PIVOT_TABLE_ADD_ATTRIBUTES_TO_COLUMNS:
+      return setPivotTableAddAttributesToColumns(state, action);
+    case SettingsActionTypes.SET_PIVOT_TABLE_ADD_METRICS_TO_VALUES:
+      return setPivotTableAddMetricsToValues(state, action);
     default:
       return state;
   }
@@ -169,4 +180,25 @@ function setPageByDisplaySetting(
   action: SetPageByDisplaySettingAction
 ): SettingsState {
   return { ...state, pageByDisplaySetting: action.pageByDisplaySetting };
+}
+
+function setDefaultImportType(
+  state: SettingsState,
+  action: SetDefaultImportTypeAction
+): SettingsState {
+  return { ...state, importType: action.defaultImportType };
+}
+
+function setPivotTableAddAttributesToColumns(
+  state: SettingsState,
+  action: SetPivotTableAddAttributesToColumnsAction
+): SettingsState {
+  return { ...state, pivotTableAddAttributesToColumns: action.payload };
+}
+
+function setPivotTableAddMetricsToValues(
+  state: SettingsState,
+  action: SetPivotTableAddMetricsToValuesAction
+): SettingsState {
+  return { ...state, pivotTableAddMetricsToValues: action.payload };
 }

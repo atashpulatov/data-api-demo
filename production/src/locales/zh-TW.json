@@ -282,5 +282,14 @@
    "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "若啟用屬性值將會匯入為文字並維持 MicroStrategy 中的格式。這可能會影響 Excel 公式。",
    "Merge columns": "合併欄",
    "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "若已啟用具有相同值的相鄰欄標頭將會合併。僅適用於交叉表報告。",
-   "Paged-By": "逐頁分組"
+   "Paged-By": "逐頁分組",
+   "Default import format:": "預設匯入格式:",
+   "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.": "無法以選取格式匯入的物件將會匯入為資料。您可以在匯入期間變更格式。",
+   "Data": "資料",
+   "Data with formatting": "具有格式設定的資料",
+   "Visualization": "視覺效果",
+   "Pivot Table": "資料表",
+   "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "若已啟用屬性將自動新增至資料透視表的「欄位」區段。",
+   "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "若已啟用計量會自動新增至資料透視表的「數值」區段。",
+   "The memory limit has been reached. You cannot import any more objects.": "已達到記憶體上限。您無法彙入更多物件。"
 }

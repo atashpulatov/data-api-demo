@@ -51,10 +51,10 @@ class StepRemoveObjectDetails {
           );
 
         // get starting header cell of the table
-        const rowCellPosition = isCrosstab ? -validRowsX - 1 : 0;
-        const columnCellPosition = isCrosstab ? -validColumnsY + 1 : 0;
+        const rowCellPosition = isCrosstab ? -validRowsX : 0;
+        const columnCellPosition = isCrosstab ? -validColumnsY : 0;
 
-        const headerCell = officeTable.getRange().getCell(rowCellPosition, columnCellPosition);
+        const headerCell = officeTable.getRange().getCell(columnCellPosition, rowCellPosition);
         excelContext.trackedObjects.add(headerCell);
 
         headerCell.load('address');
@@ -64,8 +64,7 @@ class StepRemoveObjectDetails {
 
         // delete the object details only if the table is not moved
         if (currentCell === startCell) {
-          headerCell.getRowsAbove(objectDetailsSize).clear('Contents');
-          headerCell.getRowsAbove(objectDetailsSize).clear('Formats');
+          headerCell.getRowsAbove(objectDetailsSize).clear();
         }
 
         await excelContext.sync();

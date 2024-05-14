@@ -14,6 +14,12 @@ export enum PageByDisplayOption {
 export enum ImportFormattingOption {
   IMPORT_ATTRIBUTES_AS_TEXT = 'importAttributesAsText',
   MERGE_CROSSTAB_COLUMNS = 'mergeCrosstabColumns',
+  DEFAULT_IMPORT_TYPE = 'defaultImportType',
+}
+
+export enum PivotTableOption {
+  ADD_ATTRIBUTES_TO_COLUMNS = 'addAttributesToColumns',
+  ADD_METRICS_TO_VALUES = 'addMetricsToValues',
 }
 
 export enum UserPreferenceKey {
@@ -24,6 +30,9 @@ export enum UserPreferenceKey {
   EXCEL_PAGE_BY_AND_WORKSHEET_NAMING = 'excelPageByObjectAndWorksheetNaming',
   EXCEL_IMPORT_MERGE_CROSSTAB_COLUMNS = 'excelImportMergeCrosstabColumns',
   EXCEL_IMPORT_ATTRIBUTES_AS_TEXT = 'excelImportAttributesAsText',
+  EXCEL_DEFAULT_IMPORT_TYPE = 'excelDefaultImportFormat',
+  EXCEL_PIVOT_TABLE_ADD_ATTRIBUTES_TO_COLUMNS = 'excelPivotTableAddAttributesToColumns',
+  EXCEL_PIVOT_TABLE_ADD_METRICS_TO_VALUES = 'excelPivotTableAddMetricsToValues',
 }
 
 export const EXCEL_IMPORT_ATTRIBUTES_AS_TEXT = 'excelImportAttributesAsText';

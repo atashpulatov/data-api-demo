@@ -1,5 +1,6 @@
 import { PageByConfiguration } from '@mstr/connector-components';
 
+import { isArrayInNestedArrays } from '../helpers/array-helpers';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 
@@ -34,6 +35,11 @@ class PageByHelper {
   ): { sourceObject: ObjectData; pageBySiblings: ObjectData[] } => {
     const sourceObject =
       officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
+
+    if (!sourceObject?.pageByData) {
+      return;
+    }
+
     const { objects } = reduxStore.getState().objectReducer;
 
     const pageByObjects = objects.filter(
@@ -91,11 +97,13 @@ class PageByHelper {
       const pageByDataElement: PageByDataElement[] = combination.map((value, index) => {
         const { name: pageByItemName, elements } = pageBy[index];
         const { name: elementName, id, formValues } = elements[value];
+        const formattedFormValues =
+          formValues?.length > 1 ? `(${formValues?.join(', ')})` : formValues?.[0];
         return {
           name: pageByItemName,
-          value: formValues?.[0] ?? elementName ?? '',
+          value: formattedFormValues ?? elementName ?? '',
           valueId: id,
-        }
+        };
       });
 
       validPageByData.push(pageByDataElement);
@@ -194,13 +202,25 @@ class PageByHelper {
   };
 
   /**
+   * Retrieves and formats page-by elements.
+   *
+   * @param pageByData Contains information about page-by elements.
+   * @returns A formatted string containing the page-by elements.
+   */
+  getPageByElements(pageByData: PageByData): string {
+    return pageByData.elements
+      ?.map(element => (element.value.includes(',') ? `(${element.value})` : element.value))
+      .join(', ');
+  }
+
+  /**
    * Generates a worksheet name based on naming conventions and pageBy value
    * @param objectName Name of the object added to the new worksheet
    * @param pageByData Contains information about page-by elements
    * @return Generated worksheet name.
    */
   prepareNameBasedOnPageBySettings(objectName: string, pageByData: PageByData): string {
-    const pageByElement = pageByData.elements.map(element => element.value).join(', ');
+    const pageByElement = this.getPageByElements(pageByData);
     const { settingsReducer } = reduxStore.getState();
     const currentNamingSetting = settingsReducer.objectAndWorksheetNamingSetting;
 
@@ -237,6 +257,40 @@ class PageByHelper {
     pageByConfigurations.map(combination =>
       combination.map(({ name, value, id }) => ({ name, value, valueId: id }))
     );
+
+  /**
+   * Create page by configurations
+   *
+   * @param objectWorkingId Unique identifier of the object
+   * @param validPageByCombination containts valid Page-by combinations of Report's Page-by attributes
+   * @returns An array of arrays containing Page By configurations
+   */
+  getPageByConfigurations(
+    objectWorkingId: number,
+    validPageByCombination: PageByDataElement[][]
+  ): PageByConfiguration[][] {
+    if (!objectWorkingId) {
+      return [];
+    }
+
+    const { pageBySiblings, sourceObject } = this.getAllPageByObjects(objectWorkingId);
+    const allPageByObjects = [sourceObject, ...pageBySiblings];
+    const pageByConfiguration = [];
+
+    for (const pageByObject of allPageByObjects) {
+      if (!isArrayInNestedArrays(validPageByCombination, pageByObject.pageByData.elements)) {
+        return [];
+      }
+      const pageByElements = pageByObject?.pageByData?.elements.map(({ name, value, valueId }) => ({
+        name,
+        value,
+        id: valueId,
+      }));
+      pageByElements && pageByConfiguration.push(pageByElements);
+    }
+
+    return pageByConfiguration;
+  }
 }
 
 export const pageByHelper = new PageByHelper();

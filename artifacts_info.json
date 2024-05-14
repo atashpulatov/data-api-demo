@@ -11,6 +11,36 @@
   },
   "dependencies": {
   },
+  "outputs": {
+    "office.zip": {
+      "storage_type": "NEXUS",
+      "storage_info": {
+        "repository": "releases",
+        "group_id": "com.microstrategy.#{branch}",
+        "artifact_id": "office",
+        "extension": "zip",
+        "has_pom": "false",
+        "upload_commit_hash": "true",
+        "upload_commit_hash_to_manifest_repo": "true"
+      },
+      "label": "ci",
+      "source_path": "production/build/office-#{Common::Version.application_version}.zip"
+    },
+    "office-loader.zip": {
+      "storage_type": "NEXUS",
+      "storage_info": {
+        "repository": "releases",
+        "group_id": "com.microstrategy.#{branch}",
+        "artifact_id": "office-loader",
+        "extension": "zip",
+        "has_pom": "false",
+        "upload_commit_hash": "true",
+        "upload_commit_hash_to_manifest_repo": "true"
+      },
+      "label": "ci",
+      "source_path": "office-loader/build/office-loader-#{Common::Version.application_version}.zip"
+    }
+  },
   "infra": {
     "cookbooks": {
       "nodejs": "18.20.2",

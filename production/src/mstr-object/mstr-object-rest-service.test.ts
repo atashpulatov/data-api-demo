@@ -6,7 +6,9 @@ import { reduxStore } from '../store';
 jest.mock('superagent');
 
 const dossierId = '9051CF184B420CBBEC81739AC70209B4';
+const reportId = '74512F184B420CBBEC81739AC70200H6';
 const dossierInstanceId = '29002278268140DB84A3F8630F03B497';
+const reportInstanceId = '37202278268140DB84A3F8630F03B042';
 const projectId = 'B7CA92F04B9FAE8D941C3E9B7E0CD754';
 const visualizationKey = 'W56';
 
@@ -90,6 +92,28 @@ describe('MstrObjectRestService', () => {
           dossierId,
           dossierInstanceId,
           visualizationKey,
+          projectId
+        }
+      );
+      expect(excelWorkbook).toBeDefined();
+    });
+  });
+
+  describe('exportReportToExcel', () => {
+    it('should export report to excel', async () => {
+      global.fetch = jest.fn((): any =>
+        Promise.resolve({ body: new ArrayBuffer(100), status: 200, statusText: 'OK' })
+      );
+      mstrObjectRestService.reduxStore.getState = jest.fn().mockImplementation(() => ({
+        sessionReducer: {
+          envUrl: 'envUrl',
+          authToken: 'sg8lqk4gndagkv5uvcpq2k46i0',
+        },
+      }));
+      const excelWorkbook = await mstrObjectRestService.exportReportToExcel(
+        {
+          reportId,
+          reportInstanceId,
           projectId
         }
       );

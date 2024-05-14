@@ -65,10 +65,7 @@ export const AttributeSelectorWindowNotConnected: React.FC<
 
     const { pageBy } = instance.definition?.grid || {};
 
-    const selectedPageByDisplaySetting =
-      editedObject?.pageByData?.pageByDisplayType || pageByDisplaySetting;
-
-    if (pageBy?.length && selectedPageByDisplaySetting === PageByDisplayOption.SELECT_PAGES) {
+    if (pageBy?.length && pageByDisplaySetting === PageByDisplayOption.SELECT_PAGES) {
       await popupViewSelectorHelper.handleRequestPageByModalOpen({
         objectId,
         projectId,
@@ -99,7 +96,14 @@ export const AttributeSelectorWindowNotConnected: React.FC<
     chosenObjectName: string,
     filterDetails: any
   ): void => {
-    const { chosenObject, editedObject, importSubtotal, displayAttrFormNames, objectName } = props;
+    const {
+      chosenObject,
+      editedObject,
+      importSubtotal,
+      displayAttrFormNames,
+      objectName,
+      importType,
+    } = props;
     chosenObjectName = chosenObjectName || objectName;
 
     const subtotalsInfo = {
@@ -123,6 +127,7 @@ export const AttributeSelectorWindowNotConnected: React.FC<
       chosenObjectName,
       instanceId: chosenObject.preparedInstanceId,
       promptsAnswers: chosenObject.promptsAnswers,
+      importType,
       isPrompted: !!chosenObject.promptsAnswers,
       subtotalsInfo,
       displayAttrFormNames: displayAttrFormNamesSet,
@@ -181,6 +186,7 @@ export const AttributeSelectorWindowNotConnected: React.FC<
 const mapStateToProps = (state: RootState): any => {
   const { importSubtotal, displayAttrFormNames, ...chosenObject } = state.navigationTree;
   const { editedObject } = state.popupReducer;
+  const { importType } = state.popupStateReducer;
 
   let editedObjectName;
 
@@ -197,6 +203,7 @@ const mapStateToProps = (state: RootState): any => {
     importSubtotal,
     displayAttrFormNames,
     editedObject: state.popupReducer.editedObject,
+    importType,
   };
 };
 
