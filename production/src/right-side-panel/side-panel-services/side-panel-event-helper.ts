@@ -86,7 +86,6 @@ class SidePanelEventHelper {
     const { workbook: { worksheets } = {} } = excelContext;
 
     if (isAdvancedWorksheetTrackingSupported) {
-      // advanced event listeners supported
       // assign object tracking event listeners for worksheet name change, move, add, and delete
       this.setObjectTrackingOnNameChangedWorksheetEvent(worksheets);
       this.setObjectTrackingOnMovedWorksheetEvent(worksheets, excelContext);
@@ -96,46 +95,8 @@ class SidePanelEventHelper {
       await excelContext.sync();
     } else {
       // only basic event listener supported
-      Office.context.document.addHandlerAsync?.(
-        Office.EventType.DocumentSelectionChanged,
-        async (selectionChangedResult: Office.DocumentSelectionChangedEventArgs) => {
-          // validate correct event type
-          if (selectionChangedResult.type === Office.EventType.DocumentSelectionChanged) {
-            const objects = officeReducerHelper.getObjectsListFromObjectReducer();
-            const updatedObjects: ObjectData[] = [];
-
-            worksheets.load('items');
-            await excelContext.sync();
-
-            for (let i = 0; i < worksheets.items.length; i++) {
-              const worksheet = worksheets.items[i];
-
-              worksheet.load(['id', 'name']);
-              await excelContext.sync();
-
-              // update worksheet index fields for affected objects
-              objects.forEach(object => {
-                // if object's worksheet index/name outdated, update them
-                if (
-                  object?.worksheet?.id === worksheet?.id &&
-                  (object?.worksheet?.index !== i || object?.worksheet?.name !== worksheet.name)
-                ) {
-                  updatedObjects.push({
-                    ...object,
-                    worksheet: { ...object.worksheet, index: i, name: worksheet.name },
-                    groupData: { ...object.groupData, key: i, title: worksheet.name },
-                  });
-                }
-              });
-            }
-
-            if (updatedObjects.length > 0) {
-              reduxStore.dispatch(updateObjects(updatedObjects));
-              officeStoreObject.saveObjectsInExcelStore();
-            }
-          }
-        }
-      );
+      // assign object tracking event listener for document selection change
+      this.setObjectTrackingDocumentSelectionChangedEvent(worksheets, excelContext);
     }
   }
 
@@ -348,6 +309,60 @@ class SidePanelEventHelper {
         }
       }
     });
+  }
+
+  /**
+   * Assigns callback used to track object locations, for document selection change event.
+   * The event is triggered when the user makes a selection in the document, whether by click or arrow key.
+   * This event listener exists in all ExcelApi versions (1.1+), thus is compatible with any Excel version.
+   *
+   * @param worksheets Excel worksheet collection
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   */
+  setObjectTrackingDocumentSelectionChangedEvent(
+    worksheets: Excel.WorksheetCollection,
+    excelContext: Excel.RequestContext
+  ): void {
+    Office.context.document.addHandlerAsync?.(
+      Office.EventType.DocumentSelectionChanged,
+      async (selectionChangedResult: Office.DocumentSelectionChangedEventArgs) => {
+        // validate correct event type
+        if (selectionChangedResult.type === Office.EventType.DocumentSelectionChanged) {
+          const objects = officeReducerHelper.getObjectsListFromObjectReducer();
+          const updatedObjects: ObjectData[] = [];
+
+          worksheets.load('items');
+          await excelContext.sync();
+
+          for (let i = 0; i < worksheets.items.length; i++) {
+            const worksheet = worksheets.items[i];
+
+            worksheet.load(['id', 'name']);
+            await excelContext.sync();
+
+            // update worksheet index fields for affected objects
+            objects.forEach(object => {
+              // if object's worksheet index/name outdated, update them
+              if (
+                object?.worksheet?.id === worksheet?.id &&
+                (object?.worksheet?.index !== i || object?.worksheet?.name !== worksheet.name)
+              ) {
+                updatedObjects.push({
+                  ...object,
+                  worksheet: { ...object.worksheet, index: i, name: worksheet.name },
+                  groupData: { ...object.groupData, key: i, title: worksheet.name },
+                });
+              }
+            });
+          }
+
+          if (updatedObjects.length > 0) {
+            reduxStore.dispatch(updateObjects(updatedObjects));
+            officeStoreObject.saveObjectsInExcelStore();
+          }
+        }
+      }
+    );
   }
 }
 
