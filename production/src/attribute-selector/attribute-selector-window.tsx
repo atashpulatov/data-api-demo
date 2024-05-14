@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
-import { connect, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
+import { pageByHelper } from '../page-by/page-by-helper';
 import { popupHelper } from '../popup/popup-helper';
 import { popupViewSelectorHelper } from '../popup/popup-view-selector-helper';
 
 import { RootState } from '../store';
 
-import { PageByDisplayOption } from '../right-side-panel/settings-side-panel/settings-side-panel-types';
 import { AttributeSelectorWindowNotConnectedProps } from './attribute-selector-types';
 
 import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
-import { settingsReducerSelectors } from '../redux-reducer/settings-reducer/settings-reducer-selectors';
 import { AttributeSelector } from './attribute-selector';
 import { selectorProperties } from './selector-properties';
 import { DisplayAttrFormNames } from '../mstr-object/constants';
@@ -30,13 +29,12 @@ export const AttributeSelectorWindowNotConnected: React.FC<
   const [attributesSelected, setAttributesSelected] = useState(false);
   const [selectedPageByConfigurations, setSelectedPageByConfigurations] = useState([]);
 
-  const pageByDisplaySetting = useSelector(settingsReducerSelectors.selectPageByDisplaySetting);
-
   const handleOk = async (): Promise<void> => {
     const {
       chosenObject,
       editedObject,
       displayAttrFormNames: chosenDisplayAttrFormNames,
+      importType,
       requestPageByModalOpen,
     } = props;
 
@@ -65,7 +63,9 @@ export const AttributeSelectorWindowNotConnected: React.FC<
 
     const { pageBy } = instance.definition?.grid || {};
 
-    if (pageBy?.length && pageByDisplaySetting === PageByDisplayOption.SELECT_PAGES) {
+    const shouldOpenPageByModal = pageByHelper.getShouldOpenPageByModal(pageBy, importType);
+
+    if (shouldOpenPageByModal) {
       await popupViewSelectorHelper.handleRequestPageByModalOpen({
         objectId,
         projectId,
