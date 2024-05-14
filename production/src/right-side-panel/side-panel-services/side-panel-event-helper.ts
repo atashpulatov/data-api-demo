@@ -209,11 +209,46 @@ class SidePanelEventHelper {
       });
 
       await excelContext.sync();
-    }
+    } else {
+      // only basic event listener supported
+      Office.context.document.addHandlerAsync(
+        Office.EventType.DocumentSelectionChanged,
+        async (selectionChangedResult: Office.DocumentSelectionChangedEventArgs) => {
+          // validate correct event type
+          if (selectionChangedResult.type === Office.EventType.DocumentSelectionChanged) {
+            const objects = officeReducerHelper.getObjectsListFromObjectReducer();
+            const updatedObjects: ObjectData[] = [];
 
-    if (officeContext.isSetSupported(1.7)) {
-      // basic event listeners supported
-      // TODO: add lower API support event listeners
+            worksheets.load('items');
+            await excelContext.sync();
+
+            for (let i = 0; i < worksheets.items.length; i++) {
+              const worksheet = worksheets.items[i];
+
+              worksheet.load(['id', 'name']);
+              await excelContext.sync();
+
+              // update worksheet index fields for affected objects
+              objects.forEach(object => {
+                // if object's worksheet index/name outdated, update them
+                if (
+                  object?.worksheet?.id === worksheet?.id &&
+                  (object?.worksheet?.index !== i || object?.worksheet?.name !== worksheet.name)
+                ) {
+                  updatedObjects.push({
+                    ...object,
+                    worksheet: { ...object.worksheet, index: i, name: worksheet.name },
+                    groupData: { ...object.groupData, key: i, title: worksheet.name },
+                  });
+                }
+              });
+            }
+
+            reduxStore.dispatch(updateObjects(updatedObjects));
+            officeStoreObject.saveObjectsInExcelStore();
+          }
+        }
+      );
     }
   }
 
