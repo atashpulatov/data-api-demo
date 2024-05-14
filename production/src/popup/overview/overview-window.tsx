@@ -107,7 +107,7 @@ export const OverviewWindow: React.FC = () => {
         onGoTo={overviewHelper.sendGoToWorksheetRequest}
         shouldDisableActions={shouldDisableActions}
         globalNotifications={notificationsToDisplay}
-        prefilteredObjectName={prefilteredObjectName}
+        prefilteredSourceObjectName={prefilteredObjectName}
       />
       <Button className='overview-close-button' onClick={handleCloseDialog}>
         {t('Close')}
