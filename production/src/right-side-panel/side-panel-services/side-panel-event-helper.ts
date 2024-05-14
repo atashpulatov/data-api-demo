@@ -77,7 +77,7 @@ class SidePanelEventHelper {
 
   /**
    * Initializes listeners for tracking object worksheet changes (e.g. adding, removing, renaming, etc.).
-   * The listeners that are applied vary based on API support, with improved support available in ExcelAPI versions 1.17+.
+   * The listeners applied vary based on API support, with improved support available in ExcelAPI versions 1.17+.
    */
   @initializationErrorDecorator.initializationWrapper
   async initObjectWorksheetTrackingListeners(): Promise<void> {
@@ -92,6 +92,7 @@ class SidePanelEventHelper {
       this.setObjectTrackingOnMovedWorksheetEvent(worksheets, excelContext);
       this.setObjectTrackingOnAddedWorksheetEvent(worksheets, excelContext);
       this.setObjectTrackingOnDeletedWorksheetEvent(worksheets, excelContext);
+      // sync context after adding event listeners, helper functions don't sync individually to avoid multiple syncs
       await excelContext.sync();
     } else {
       // only basic event listener supported
