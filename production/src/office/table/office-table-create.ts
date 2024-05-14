@@ -1,4 +1,7 @@
-import { insertAndFormatObjectDetails } from '../../mstr-object/object-info-helper';
+import {
+  getObjectDetailsRange,
+  insertAndFormatObjectDetails,
+} from '../../mstr-object/object-info-helper';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 import { officeApiWorksheetHelper } from '../api/office-api-worksheet-helper';
@@ -91,12 +94,16 @@ class OfficeTableCreate {
     );
 
     if (objectDetailsSize > 0) {
-      await insertAndFormatObjectDetails({
-        objectDetailsSize,
-        startCell,
-        objectData,
+      const objectDetailsRange = await getObjectDetailsRange({
         worksheet,
+        objectDetailsStartCell: startCell,
+        objectDetailsSize,
+      });
+
+      await insertAndFormatObjectDetails({
+        objectData,
         excelContext,
+        objectDetailsRange,
       });
 
       startCell = officeApiHelper.offsetCellBy(startCell, objectDetailsSize, 0);
