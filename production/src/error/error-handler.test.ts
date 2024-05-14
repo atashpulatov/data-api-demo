@@ -181,10 +181,11 @@ describe('ErrorService', () => {
   });
 
   it.each`
-    operationType                          | objectFromObjectReducer | expectedErrorType
-    ${OperationTypes.IMPORT_OPERATION}     | ${{}}                   | ${undefined}
-    ${OperationTypes.CLEAR_DATA_OPERATION} | ${{ pageByData: {} }}   | ${undefined}
-    ${OperationTypes.IMPORT_OPERATION}     | ${{ pageByData: {} }}   | ${ErrorType.PAGE_BY_IMPORT_ERR}
+    operationType                          | objectFromObjectReducer                                                  | expectedErrorType
+    ${OperationTypes.IMPORT_OPERATION}     | ${{}}                                                                    | ${undefined}
+    ${OperationTypes.CLEAR_DATA_OPERATION} | ${{ pageByData: { pageByDisplayType: PageByDisplayType.ALL_PAGES } }}    | ${undefined}
+    ${OperationTypes.IMPORT_OPERATION}     | ${{ pageByData: { pageByDisplayType: PageByDisplayType.SELECT_PAGES } }} | ${ErrorType.PAGE_BY_IMPORT_ERR}
+    ${OperationTypes.IMPORT_OPERATION}     | ${{ pageByData: { pageByDisplayType: PageByDisplayType.DEFAULT_PAGE } }} | ${undefined}
   `(
     'getPageByError should work properly',
     ({ operationType, objectFromObjectReducer, expectedErrorType }) => {

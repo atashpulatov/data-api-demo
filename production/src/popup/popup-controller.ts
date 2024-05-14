@@ -395,14 +395,22 @@ class PopupController {
    * @param reportParams Contains information about the currently selected object
    */
   onCommandUpdate = async (response: DialogResponse, reportParams: ReportParams): Promise<void> => {
-    const { pageByData } = response;
+    const { objectWorkingId, pageByData, pageByConfigurations } = response;
+    const { pageByDisplaySetting } = this.reduxStore.getState().settingsReducer;
+    const { pageBySiblings } = pageByHelper.getAllPageByObjects(objectWorkingId) || {};
 
-    if (
-      !reportParams ||
-      response.pageByConfigurations?.length ||
-      (pageByData && pageByData.pageByDisplayType !== PageByDisplayType.DEFAULT_PAGE)
-    ) {
-      // TODO: Add error handling for re-importing Page-by on Edit
+    const isPageUpdateNeeded =
+      pageByData &&
+      (pageByData.pageByDisplayType !== PageByDisplayType.DEFAULT_PAGE ||
+        pageByDisplaySetting !== PageByDisplayOption.DEFAULT_PAGE);
+
+    const shouldRemovePages = isPageUpdateNeeded || pageBySiblings?.length;
+
+    if (shouldRemovePages) {
+      pageByHelper.handleRemovingMultiplePages(objectWorkingId);
+    }
+
+    if (!reportParams || shouldRemovePages || pageByConfigurations?.length) {
       return this.handleUpdateCommand(response);
     }
 
@@ -477,7 +485,7 @@ class PopupController {
    * @param objectData Contains information about the MSTR object
    */
   handleImport = async (objectData: ObjectData): Promise<void> => {
-    const { mstrObjectType, pageByData, pageByConfigurations } = objectData;
+    const { mstrObjectType, pageByConfigurations } = objectData;
 
     let preparedInstanceDefinition;
 
@@ -498,8 +506,6 @@ class PopupController {
     const { settingsReducer } = this.reduxStore.getState();
     const { pageByDisplaySetting } = settingsReducer;
 
-    const selectedPageByDisplayType = pageByData?.pageByDisplayType || pageByDisplaySetting;
-
     const parsedPageByConfigurations =
       pageByConfigurations && pageByHelper.parseSelectedPageByConfigurations(pageByConfigurations);
 
@@ -508,13 +514,13 @@ class PopupController {
       preparedInstanceDefinition
     );
 
-    switch (selectedPageByDisplayType) {
+    switch (pageByDisplaySetting) {
       case PageByDisplayOption.DEFAULT_PAGE:
         return this.handleDefaultPageImport(
           pageByLinkId,
           objectData,
           preparedInstanceDefinition,
-          selectedPageByDisplayType
+          pageByDisplaySetting
         );
       case PageByDisplayOption.ALL_PAGES:
         return this.handleMultiplePagesImport(
@@ -522,7 +528,7 @@ class PopupController {
           validPageByData,
           objectData,
           preparedInstanceDefinition,
-          selectedPageByDisplayType
+          pageByDisplaySetting
         );
       case PageByDisplayOption.SELECT_PAGES:
         return this.handleMultiplePagesImport(
@@ -530,7 +536,7 @@ class PopupController {
           parsedPageByConfigurations,
           objectData,
           preparedInstanceDefinition,
-          selectedPageByDisplayType
+          pageByDisplaySetting
         );
       default:
         break;
@@ -578,12 +584,6 @@ class PopupController {
     preparedInstanceDefinition: InstanceDefinition,
     pageByDisplayType: PageByDisplayType
   ): void => {
-    const { objectWorkingId } = objectData;
-
-    if (objectWorkingId) {
-      pageByHelper.handleRemovingMultiplePages(objectWorkingId);
-    }
-
     pageByCombinations.forEach((validCombination, pageByIndex) => {
       const pageByData = {
         pageByLinkId,
@@ -607,10 +607,10 @@ class PopupController {
 
   loadPending =
     (wrapped: any) =>
-      async (...args: any) => {
-        this.runPopup(DialogType.loadingPage, 30, 40);
-        return wrapped(...args);
-      };
+    async (...args: any) => {
+      this.runPopup(DialogType.loadingPage, 30, 40);
+      return wrapped(...args);
+    };
 
   closeDialog = (dialog: Office.Dialog): void => {
     try {

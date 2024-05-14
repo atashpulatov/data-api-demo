@@ -65,10 +65,7 @@ export const AttributeSelectorWindowNotConnected: React.FC<
 
     const { pageBy } = instance.definition?.grid || {};
 
-    const selectedPageByDisplaySetting =
-      editedObject?.pageByData?.pageByDisplayType || pageByDisplaySetting;
-
-    if (pageBy?.length && selectedPageByDisplaySetting === PageByDisplayOption.SELECT_PAGES) {
+    if (pageBy?.length && pageByDisplaySetting === PageByDisplayOption.SELECT_PAGES) {
       await popupViewSelectorHelper.handleRequestPageByModalOpen({
         objectId,
         projectId,
