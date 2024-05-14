@@ -83,14 +83,12 @@ class SidePanelEventHelper {
   async initObjectWorksheetTrackingListeners(): Promise<void> {
     const { isAdvancedWorksheetTrackingSupported } = reduxStore.getState().officeReducer;
     const excelContext = await officeApiHelper.getExcelContext();
-    const {
-      workbook: { worksheets },
-    } = excelContext;
+    const { workbook: { worksheets } = {} } = excelContext;
 
-    if (isAdvancedWorksheetTrackingSupported) {
+    if (worksheets && isAdvancedWorksheetTrackingSupported) {
       // advanced event listeners supported
       // worksheet rename listener
-      worksheets.onNameChanged.add(async eventParams => {
+      worksheets.onNameChanged?.add(async eventParams => {
         // validate correct event type
         if (eventParams?.type === Excel.EventType.worksheetNameChanged) {
           const objects = officeReducerHelper.getObjectsListFromObjectReducer();
@@ -112,7 +110,7 @@ class SidePanelEventHelper {
         }
       });
       // worksheet moved listener
-      worksheets.onMoved.add(async eventParams => {
+      worksheets.onMoved?.add(async eventParams => {
         // validate correct event type
         if (eventParams?.type === Excel.EventType.worksheetMoved) {
           const { positionBefore, positionAfter } = eventParams;
@@ -147,7 +145,7 @@ class SidePanelEventHelper {
         }
       });
       // worksheet added listener
-      worksheets.onAdded.add(async eventParams => {
+      worksheets.onAdded?.add(async eventParams => {
         // validate correct event type
         if (eventParams?.type === Excel.EventType.worksheetAdded) {
           const newWorksheet = worksheets.getItemOrNullObject(eventParams.worksheetId);
@@ -175,7 +173,7 @@ class SidePanelEventHelper {
         }
       });
       // worksheet deleted listener
-      worksheets.onDeleted.add(async eventParams => {
+      worksheets.onDeleted?.add(async eventParams => {
         // validate correct event type
         if (eventParams?.type === Excel.EventType.worksheetDeleted) {
           const objects = officeReducerHelper.getObjectsListFromObjectReducer();
@@ -211,7 +209,7 @@ class SidePanelEventHelper {
       await excelContext.sync();
     } else {
       // only basic event listener supported
-      Office.context.document.addHandlerAsync(
+      Office.context.document.addHandlerAsync?.(
         Office.EventType.DocumentSelectionChanged,
         async (selectionChangedResult: Office.DocumentSelectionChangedEventArgs) => {
           // validate correct event type
