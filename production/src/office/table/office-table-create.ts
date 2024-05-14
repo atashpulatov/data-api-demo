@@ -93,19 +93,8 @@ class OfficeTableCreate {
       objectData.mstrObjectType
     );
 
+    const objectDetailsStartCell = startCell;
     if (objectDetailsSize > 0) {
-      const objectDetailsRange = await getObjectDetailsRange({
-        worksheet,
-        objectDetailsStartCell: startCell,
-        objectDetailsSize,
-      });
-
-      await insertAndFormatObjectDetails({
-        objectData,
-        excelContext,
-        objectDetailsRange,
-      });
-
       startCell = officeApiHelper.offsetCellBy(startCell, objectDetailsSize, 0);
     }
 
@@ -135,6 +124,19 @@ class OfficeTableCreate {
       instanceDefinition,
       isRepeatStep
     );
+
+    if (objectDetailsSize > 0) {
+      const objectDetailsRange = await getObjectDetailsRange({
+        worksheet,
+        objectDetailsStartCell,
+        objectDetailsSize,
+      });
+      await insertAndFormatObjectDetails({
+        objectData,
+        excelContext,
+        objectDetailsRange,
+      });
+    }
 
     range.numberFormat = '' as unknown as any[][];
 
