@@ -1,4 +1,5 @@
 import { authenticationHelper } from '../authentication/authentication-helper';
+import { officeApiHelper } from '../office/api/office-api-helper';
 import { mstrObjectRestService } from './mstr-object-rest-service';
 import { FiltersText } from './object-filter-helper-types';
 
@@ -109,4 +110,147 @@ export const calculateOffsetForObjectInfoSettings = (
   }
 
   return offset;
+};
+
+// TEMPORARY DOCS - SOME OF THE PARAMETERS CAN BE CALCULATED IN THE FUNCTION
+/**
+ * Retrieves the table status based on various conditions.
+ * @param {boolean} tableMoved - Indicates whether the table has been moved.
+ * @param {boolean} tableChanged - Indicates whether the table has been changed. (for example, the table columns have been deleted)
+ * @param {boolean} objectDetailsSizeChanged - Indicates whether the object details size has changed.
+ * @param {number} previousObjectDetailsSize - The previous object details size.
+ * @param {number} newObjectDetailsSize - The new object details size.
+ * @param {string} startCell - The start cell of the table.
+ * @param {string} tableOuterCell - The outer cell of the table.
+ * @returns {object} - An object containing the table status.
+ * @property {string} value - Temporarily used during the development
+ * @property {string} operation - The operation to be performed.
+ * @property {string} [startCell] - The start cell of the table.
+ * @property {string} [objectDetailsStartCell] - The start cell of the object details.
+ */
+export const getTableStatus = ({
+  tableMoved,
+  tableChanged,
+  previousObjectDetailsSize,
+  newObjectDetailsSize,
+  tableOuterCell,
+}: {
+  tableMoved: boolean;
+  tableChanged: boolean;
+  previousObjectDetailsSize: number;
+  newObjectDetailsSize: number;
+  startCell: string;
+  tableOuterCell: string;
+}): {
+  // temporary value used during development
+  value: string;
+  operation: 'createNewTable' | 'updateExistingTable';
+  startCell?: string;
+  objectDetailsStartCell?: string;
+} => {
+  const objectDetailsSizeChanged = previousObjectDetailsSize !== newObjectDetailsSize;
+  if (!tableChanged) {
+    console.log('table not changed');
+    if (tableMoved && objectDetailsSizeChanged) {
+      const newObjectDetailsStartCell = officeApiHelper.offsetCellBy(
+        tableOuterCell,
+        -newObjectDetailsSize,
+        0
+      );
+      return {
+        value: '11',
+        operation: 'updateExistingTable',
+        objectDetailsStartCell: newObjectDetailsStartCell,
+      };
+    }
+    if (tableMoved && !objectDetailsSizeChanged) {
+      const newObjectDetailsStartCell = officeApiHelper.offsetCellBy(
+        tableOuterCell,
+        -newObjectDetailsSize, // === previousObjectDetailsSize
+        0
+      );
+      return {
+        value: '10',
+        operation: 'updateExistingTable',
+        objectDetailsStartCell: newObjectDetailsStartCell,
+      };
+    }
+    if (!tableMoved && !objectDetailsSizeChanged) {
+      const objectDetailsStartCell = officeApiHelper.offsetCellBy(
+        tableOuterCell,
+        -newObjectDetailsSize, // === previousObjectDetailsSize
+        0
+      );
+      return {
+        value: '00',
+        operation: 'updateExistingTable',
+        objectDetailsStartCell,
+      };
+    }
+    if (!tableMoved && objectDetailsSizeChanged) {
+      const previousObjectDetailsStartCell = officeApiHelper.offsetCellBy(
+        tableOuterCell,
+        -previousObjectDetailsSize,
+        0
+      );
+      return {
+        value: '01',
+        operation: 'createNewTable',
+        startCell: previousObjectDetailsStartCell,
+      };
+    }
+  }
+  if (tableChanged) {
+    console.log('table  changed');
+    if (tableMoved && objectDetailsSizeChanged) {
+      const newObjectDetailsStartCell = officeApiHelper.offsetCellBy(
+        tableOuterCell,
+        -newObjectDetailsSize,
+        0
+      );
+      return {
+        operation: 'createNewTable',
+        value: '11',
+        startCell: newObjectDetailsStartCell,
+      };
+    }
+    if (tableMoved && !objectDetailsSizeChanged) {
+      const previousObjectDetailsStartCell = officeApiHelper.offsetCellBy(
+        tableOuterCell,
+        -previousObjectDetailsSize, // === newObjectDetailsSize
+        0
+      );
+      return {
+        operation: 'createNewTable',
+        value: '10',
+        startCell: previousObjectDetailsStartCell,
+      };
+    }
+    if (!tableMoved && objectDetailsSizeChanged) {
+      const previousObjectDetailsStartCell = officeApiHelper.offsetCellBy(
+        tableOuterCell,
+        -previousObjectDetailsSize,
+        0
+      );
+      return {
+        value: '01',
+        operation: 'createNewTable',
+        startCell: previousObjectDetailsStartCell,
+      };
+    }
+    if (!tableMoved && !objectDetailsSizeChanged) {
+      const objectDetailsStartCell = officeApiHelper.offsetCellBy(
+        tableOuterCell,
+        -newObjectDetailsSize, // === previousObjectDetailsSize
+        0
+      );
+      return {
+        value: '00',
+        operation: 'createNewTable',
+        startCell: objectDetailsStartCell,
+      };
+    }
+  }
+
+  throw new Error('Invalid table status');
 };
