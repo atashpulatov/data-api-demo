@@ -399,12 +399,12 @@ class PopupController {
     const { pageByDisplaySetting } = this.reduxStore.getState().settingsReducer;
     const { pageBySiblings } = pageByHelper.getAllPageByObjects(objectWorkingId) || {};
 
-    const isPageUpdateNeeded =
+    const shouldUpdateDefaultPage =
       pageByData &&
       (pageByData.pageByDisplayType !== PageByDisplayType.DEFAULT_PAGE ||
         pageByDisplaySetting !== PageByDisplayOption.DEFAULT_PAGE);
 
-    const shouldRemovePages = isPageUpdateNeeded || pageBySiblings?.length;
+    const shouldRemovePages = shouldUpdateDefaultPage || pageBySiblings?.length;
 
     if (shouldRemovePages) {
       pageByHelper.handleRemovingMultiplePages(objectWorkingId);
