@@ -87,7 +87,7 @@ function updateObjects(
 ): ObjectState {
   const newObjects = [...state.objects];
 
-  updatedObjectsProps.forEach(
+  updatedObjectsProps?.forEach?.(
     updatedObjectProps =>
       updatedObjectProps &&
       replaceSingleObject(newObjects, updatedObjectProps.objectWorkingId, updatedObjectProps)
