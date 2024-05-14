@@ -34,13 +34,14 @@ export const AttributeSelectorWindowNotConnected: React.FC<
       chosenObject,
       editedObject,
       displayAttrFormNames: chosenDisplayAttrFormNames,
-      importType,
+      importType: chosenImportType,
       requestPageByModalOpen,
     } = props;
 
     const objectId = editedObject?.objectId || chosenObject.chosenObjectId;
     const projectId = editedObject?.projectId || chosenObject.chosenProjectId;
     const instanceId = editedObject?.instanceId;
+    const importType = editedObject?.importType || chosenImportType;
     const displayAttrFormNames = (editedObject?.displayAttrFormNames ||
       chosenDisplayAttrFormNames) as DisplayAttrFormNames;
 
