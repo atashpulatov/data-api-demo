@@ -78,6 +78,13 @@ class PopupStateActions {
       importType,
     });
   };
+
+  setPrefilteredObjectName = (objectName: string) => (dispatch: Dispatch<any>) => {
+    dispatch({
+      type: PopupStateActionTypes.SET_PREFILTERED_OBJECT_NAME,
+      objectName,
+    });
+  };
 }
 
 export const popupStateActions = new PopupStateActions();

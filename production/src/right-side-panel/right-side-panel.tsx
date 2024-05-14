@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { connect, useSelector } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { OfficeApplicationType, SidePanel } from '@mstr/connector-components';
 
 import { useGetFilteredObjectListForSidePanelDetails } from '../redux-reducer/settings-reducer/settings-hooks';
@@ -19,11 +19,13 @@ import { ObjectData } from '../types/object-types';
 
 import { Confirmation } from '../home/confirmation';
 import { SettingsMenu } from '../home/settings-menu';
+import { popupController } from '../popup/popup-controller';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { notificationReducerSelectors } from '../redux-reducer/notification-reducer/notification-reducer-selectors';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { officeSelectors } from '../redux-reducer/office-reducer/office-reducer-selectors';
 import { selectOperations } from '../redux-reducer/operation-reducer/operation-reducer-selectors';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { repromptsQueueSelector } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer-selector';
 import SettingsSidePanel from './settings-side-panel/settings-side-panel';
 
@@ -49,6 +51,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   const [sidePanelPopup, setSidePanelPopup] = useState(null);
   const [loadedObjectsWrapped, setLoadedObjectsWrapped] = useState(loadedObjects);
   const [activeSheetIndex, setActiveSheetIndex] = useState(-1);
+  const dispatch = useDispatch();
 
   const operations = useSelector(selectOperations);
   const globalNotification = useSelector(notificationReducerSelectors.selectGlobalNotification);
@@ -58,10 +61,19 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   const popupData = useSelector(officeSelectors.selectPopupData);
 
   // represents whether any popup (notifications, Office dialog, sidepanel popup) or settings are visible
-  const isAnyPopupOrSettingsDisplayed = sidePanelPopup || globalNotification?.type || isDialogOpen
-    || popupData || isSettings || settingsPanelLoaded;
+  const isAnyPopupOrSettingsDisplayed =
+    sidePanelPopup ||
+    globalNotification?.type ||
+    isDialogOpen ||
+    popupData ||
+    isSettings ||
+    settingsPanelLoaded;
 
-  useInitializeSidePanel(updateActiveCellAddress, setActiveSheetIndex, isAnyPopupOrSettingsDisplayed);
+  useInitializeSidePanel(
+    updateActiveCellAddress,
+    setActiveSheetIndex,
+    isAnyPopupOrSettingsDisplayed
+  );
   useDialogPanelCommunication();
   useGetSidePanelPopup({ setSidePanelPopup, sidePanelPopup });
 
@@ -77,6 +89,12 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
       )
     );
   }, [loadedObjects, notifications, operations]);
+
+  const showOverviewModal = (objectName: string): void => {
+    popupController.runImportedDataOverviewPopup();
+    dispatch(popupStateActions.setPrefilteredObjectName(objectName) as any);
+    dispatch(popupStateActions.setIsDataOverviewOpen(true) as any);
+  };
 
   return (
     <>
@@ -113,6 +131,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
           onDeleteAllPagesClick={pageByLinkId =>
             sidePanelService.deleteAllPages(pageByLinkId, setSidePanelPopup, loadedObjects)
           }
+          onShowInOverviewClick={showOverviewModal}
           isPopupRendered={isDialogOpen}
           applicationType={OfficeApplicationType.EXCEL}
         />

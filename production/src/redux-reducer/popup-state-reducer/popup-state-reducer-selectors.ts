@@ -30,10 +30,16 @@ const selectIsPromptDialog = createSelector(
     popupState.dialogType === DialogType.multipleRepromptTransitionPage
 );
 
+const selectPrefilteredObjectName = createSelector(
+  [getPopupState],
+  (popupState: PopupStateState) => popupState.prefilteredObjectName
+);
+
 export const popupStateSelectors = {
   selectPopupType,
   selectIsDataOverviewOpen,
   selectImportType,
   selectIsPromptDialog,
   selectDialogType,
+  selectPrefilteredObjectName,
 };

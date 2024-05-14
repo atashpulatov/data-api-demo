@@ -20,6 +20,7 @@ import { OperationTypes } from '../../operation/operation-type-names';
 import { notificationReducerSelectors } from '../../redux-reducer/notification-reducer/notification-reducer-selectors';
 import { selectObjects } from '../../redux-reducer/object-reducer/object-reducer-selectors';
 import { officeSelectors } from '../../redux-reducer/office-reducer/office-reducer-selectors';
+import { popupStateSelectors } from '../../redux-reducer/popup-state-reducer/popup-state-reducer-selectors';
 
 import './overview-window.scss';
 
@@ -28,7 +29,7 @@ export const OverviewWindow: React.FC = () => {
   const objects = useSelector(selectObjects);
   const globalNotification = useSelector(notificationReducerSelectors.selectGlobalNotification);
   const notifications = useSelector(notificationReducerSelectors.selectNotifications);
-
+  const prefilteredObjectName = useSelector(popupStateSelectors.selectPrefilteredObjectName);
   useStateSyncOnDialogMessage();
 
   const [t] = useTranslation('common', { i18n });
@@ -106,6 +107,7 @@ export const OverviewWindow: React.FC = () => {
         onGoTo={overviewHelper.sendGoToWorksheetRequest}
         shouldDisableActions={shouldDisableActions}
         globalNotifications={notificationsToDisplay}
+        prefilteredObjectName={prefilteredObjectName}
       />
       <Button className='overview-close-button' onClick={handleCloseDialog}>
         {t('Close')}
