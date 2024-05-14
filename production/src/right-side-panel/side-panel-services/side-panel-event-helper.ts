@@ -105,8 +105,10 @@ class SidePanelEventHelper {
             }
           });
 
-          reduxStore.dispatch(updateObjects(updatedObjects));
-          officeStoreObject.saveObjectsInExcelStore();
+          if (updatedObjects.length > 0) {
+            reduxStore.dispatch(updateObjects(updatedObjects));
+            officeStoreObject.saveObjectsInExcelStore();
+          }
         }
       });
       // worksheet moved listener
@@ -140,8 +142,10 @@ class SidePanelEventHelper {
             });
           }
 
-          reduxStore.dispatch(updateObjects(updatedObjects));
-          officeStoreObject.saveObjectsInExcelStore();
+          if (updatedObjects.length > 0) {
+            reduxStore.dispatch(updateObjects(updatedObjects));
+            officeStoreObject.saveObjectsInExcelStore();
+          }
         }
       });
       // worksheet added listener
@@ -167,8 +171,10 @@ class SidePanelEventHelper {
               }
             });
 
-            reduxStore.dispatch(updateObjects(updatedObjects));
-            officeStoreObject.saveObjectsInExcelStore();
+            if (updatedObjects.length > 0) {
+              reduxStore.dispatch(updateObjects(updatedObjects));
+              officeStoreObject.saveObjectsInExcelStore();
+            }
           }
         }
       });
@@ -201,8 +207,10 @@ class SidePanelEventHelper {
             });
           }
 
-          reduxStore.dispatch(updateObjects(updatedObjects));
-          officeStoreObject.saveObjectsInExcelStore();
+          if (updatedObjects.length > 0) {
+            reduxStore.dispatch(updateObjects(updatedObjects));
+            officeStoreObject.saveObjectsInExcelStore();
+          }
         }
       });
 
@@ -242,8 +250,10 @@ class SidePanelEventHelper {
               });
             }
 
-            reduxStore.dispatch(updateObjects(updatedObjects));
-            officeStoreObject.saveObjectsInExcelStore();
+            if (updatedObjects.length > 0) {
+              reduxStore.dispatch(updateObjects(updatedObjects));
+              officeStoreObject.saveObjectsInExcelStore();
+            }
           }
         }
       );
