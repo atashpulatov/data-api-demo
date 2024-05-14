@@ -7,7 +7,10 @@ import officeReducerHelper from '../office/store/office-reducer-helper';
 import { reduxStore } from '../store';
 
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
-import { ObjectAndWorksheetNamingOption } from '../right-side-panel/settings-side-panel/settings-side-panel-types';
+import {
+  ObjectAndWorksheetNamingOption,
+  PageByDisplayOption,
+} from '../right-side-panel/settings-side-panel/settings-side-panel-types';
 import { ObjectData } from '../types/object-types';
 import {
   PageBy,
@@ -22,6 +25,7 @@ import {
   refreshRequested,
   removeRequested,
 } from '../redux-reducer/operation-reducer/operation-actions';
+import { ObjectImportType } from '../mstr-object/constants';
 
 class PageByHelper {
   /**
@@ -290,6 +294,23 @@ class PageByHelper {
     }
 
     return pageByConfiguration;
+  }
+
+  /**
+   * Method checking if the conditions for opening the Page-by modal are met
+   *
+   * @param pageBy contains Page-by elements of a Report
+   * @param importType type of the import selected by the user
+   * @returns Flag indicating whether the Page-by modal should be opened
+   */
+  getShouldOpenPageByModal(pageBy: PageBy[], importType: ObjectImportType): boolean {
+    const { pageByDisplaySetting } = reduxStore.getState().settingsReducer;
+
+    return (
+      pageBy?.length &&
+      pageByDisplaySetting === PageByDisplayOption.SELECT_PAGES &&
+      importType !== ObjectImportType.PIVOT_TABLE
+    );
   }
 }
 
