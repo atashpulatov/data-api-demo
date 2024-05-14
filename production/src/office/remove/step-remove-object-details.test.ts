@@ -102,7 +102,7 @@ describe('StepRemoveObjectDetails', () => {
 
     expect(officeApiCrosstabHelper.getCrosstabHeadersSafely).toHaveBeenCalledTimes(1);
 
-    expect(clearMock).toHaveBeenCalledTimes(2);
+    expect(clearMock).toHaveBeenCalledTimes(1);
 
     expect(operationStepDispatcher.completeRemoveObjectDetails).toHaveBeenCalledTimes(1);
     expect(operationStepDispatcher.completeRemoveObjectDetails).toHaveBeenCalledWith(2137);
