@@ -290,5 +290,6 @@
    "Visualization": "시각화",
    "Pivot Table": "피벗 테이블",
    "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "활성화되면 애트리뷰트가 피보 테이블의 '열' 섹션에 자동으로 추가됩니다.",
-   "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "활성화되면 메트릭이 피보 테이블의 '값' 섹션에 자동으로 추가됩니다."
+   "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "활성화되면 메트릭이 피보 테이블의 '값' 섹션에 자동으로 추가됩니다.",
+   "The memory limit has been reached. You cannot import any more objects.": "메모리 제한에 도달했습니다. 더 이상 개체를 가져올 수 없습니다."
 }

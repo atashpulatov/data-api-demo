@@ -290,5 +290,6 @@
    "Visualization": "Visualisation",
    "Pivot Table": "Tableau croisé dynamique",
    "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "Si l'option est activée, des attributs seront automatiquement ajoutés à la section « Colonne » du tableau croisé dynamique.",
-   "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "Si l'option est activée, les mesures seront automatiquement ajoutées à la section « Valeurs » du tableau croisé dynamique."
+   "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "Si l'option est activée, les mesures seront automatiquement ajoutées à la section « Valeurs » du tableau croisé dynamique.",
+   "The memory limit has been reached. You cannot import any more objects.": "La limite de mémoire a été atteinte. Vous ne pouvez plus importer d'objets."
 }
