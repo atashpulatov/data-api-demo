@@ -138,6 +138,12 @@ export const getTableOperationAndStartCell = ({
   operation: 'createNewTable' | 'updateExistingTable';
   startCell: string;
 } => {
+  const [column, row] = tableStartCell.split(/(\d+)/);
+
+  // if there is no place left for the object details above the table, the object details start from the first cell of the selected column.
+  if (parseInt(row, 10) < newObjectDetailsSize) {
+    return { startCell: `${column}1`, operation: 'createNewTable' };
+  }
   const objectDetailsSizeChanged = previousObjectDetailsSize !== newObjectDetailsSize;
 
   let startCell: string;
@@ -150,18 +156,10 @@ export const getTableOperationAndStartCell = ({
 
   // If the table changed (for example one of the columns are deleted), or the object details size changed when the table was not moved, a new table has to be created.
   // When the table is not moved but the object details size changed, the reference point is taken as the start cell of the object details, and the placement of the new table is made accordingly.
-  let operation: 'createNewTable' | 'updateExistingTable' =
+  const operation: 'createNewTable' | 'updateExistingTable' =
     tableChanged || (!tableMoved && objectDetailsSizeChanged)
       ? 'createNewTable'
       : 'updateExistingTable';
-
-  const [column, row] = startCell.split(/(\d+)/);
-
-  // if there is no place left for the object details above the table, the object details start from the first cell of the selected column.
-  if (parseInt(row, 10) < newObjectDetailsSize) {
-    startCell = `${column}1`;
-    operation = 'createNewTable';
-  }
 
   return {
     operation,
