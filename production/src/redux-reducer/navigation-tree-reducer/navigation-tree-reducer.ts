@@ -23,7 +23,7 @@ export const initialState: NavigationTreeState = {
   mstrObjectType: null,
   chosenChapterKey: null,
   chosenVisualizationKey: null,
-  choseVisualizationTypeGrid: false,
+  isChosenVisOfGridType: true,
   dossierOpenRequested: false,
   isEdit: false,
   chosenLibraryDossier: null,
@@ -257,6 +257,6 @@ const setPopupType = (state: NavigationTreeState, popupType: DialogType): Naviga
 
 const updateVisualizationTypeGrid = (state: NavigationTreeState, isVizGrid: boolean): NavigationTreeState => {
   const newState = { ...state };
-  newState.choseVisualizationTypeGrid = isVizGrid;
+  newState.isChosenVisOfGridType = isVizGrid;
   return newState;
 };

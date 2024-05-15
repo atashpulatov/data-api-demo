@@ -40,7 +40,7 @@ export interface NavigationTreeState {
   mstrObjectType: MstrObjectTypes | null;
   chosenChapterKey: string | null;
   chosenVisualizationKey: string | null;
-  choseVisualizationTypeGrid: boolean;
+  isChosenVisOfGridType: boolean;
   dossierOpenRequested: boolean;
   isEdit: boolean;
   chosenLibraryDossier: any | null; // Replace 'any' with the appropriate type
