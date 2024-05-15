@@ -98,7 +98,6 @@ class StepGetOfficeTableEditRefresh {
         tableChanged,
         previousObjectDetailsSize: objectData.objectDetailsSize,
         newObjectDetailsSize,
-        startCell,
         tableStartCell: currentTableStartCell,
       });
 
@@ -134,18 +133,19 @@ class StepGetOfficeTableEditRefresh {
           objectData
         );
 
-        // insert object details
-        const objectDetailsRange = await getObjectDetailsRange({
-          worksheet: officeTable.worksheet,
-          objectDetailsStartCell: tableStatus.objectDetailsStartCell,
-          objectDetailsSize: newObjectDetailsSize,
-        });
+        if (newObjectDetailsSize > 0) {
+          const objectDetailsRange = await getObjectDetailsRange({
+            worksheet: officeTable.worksheet,
+            objectDetailsStartCell: tableStatus.startCell,
+            objectDetailsSize: newObjectDetailsSize,
+          });
 
-        await insertAndFormatObjectDetails({
-          objectData,
-          excelContext,
-          objectDetailsRange,
-        });
+          await insertAndFormatObjectDetails({
+            objectData,
+            excelContext,
+            objectDetailsRange,
+          });
+        }
       }
 
       const updatedOperation = {

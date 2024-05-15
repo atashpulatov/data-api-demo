@@ -112,23 +112,6 @@ export const calculateOffsetForObjectInfoSettings = (
   return offset;
 };
 
-// TODO: refactor function. Each step is written explicitly for debugging purposes.
-/**
- * Retrieves the table status based on the provided parameters.
- *
- * @param {Object} options - The options object.
- * @param {boolean} options.tableMoved - Indicates whether the table has been moved.
- * @param {boolean} options.tableChanged - Indicates whether the table has been changed.
- * @param {number} options.previousObjectDetailsSize - The previous size of the object details.
- * @param {number} options.newObjectDetailsSize - The new size of the object details.
- * @param {string} options.startCell - The start cell of the table.
- * @param {string} options.tableStartCell - The start cell of the table.
- * @returns {Object} - The table status. Includes the following properties:
- *   - operation: A string indicating the operation to be performed on the table. Can be either 'createNewTable' or 'updateExistingTable'.
- *   - startCell: The start cell of the table (optional).
- *   - objectDetailsStartCell: The start cell of the object details (optional).
- * @throws {Error} - If the table status is invalid.
- */
 export const getTableOperationAndStartCell = ({
   tableMoved,
   tableChanged,
@@ -140,119 +123,30 @@ export const getTableOperationAndStartCell = ({
   tableChanged: boolean;
   previousObjectDetailsSize: number;
   newObjectDetailsSize: number;
-  startCell: string;
   tableStartCell: string;
 }): {
-  // temporary value used during development for debugging purposes
-  // TODO: remove the value property after refresh is completely implemented
-  value: string;
   operation: 'createNewTable' | 'updateExistingTable';
-  startCell?: string;
-  objectDetailsStartCell?: string;
+  startCell: string;
 } => {
   const objectDetailsSizeChanged = previousObjectDetailsSize !== newObjectDetailsSize;
-  if (!tableChanged) {
-    console.log('table not changed');
-    if (tableMoved && objectDetailsSizeChanged) {
-      const newObjectDetailsStartCell = officeApiHelper.offsetCellBy(
-        tableStartCell,
-        -newObjectDetailsSize,
-        0
-      );
-      return {
-        value: '11',
-        operation: 'updateExistingTable',
-        objectDetailsStartCell: newObjectDetailsStartCell,
-      };
-    }
-    if (tableMoved && !objectDetailsSizeChanged) {
-      const newObjectDetailsStartCell = officeApiHelper.offsetCellBy(
-        tableStartCell,
-        -newObjectDetailsSize, // === previousObjectDetailsSize
-        0
-      );
-      return {
-        value: '10',
-        operation: 'updateExistingTable',
-        objectDetailsStartCell: newObjectDetailsStartCell,
-      };
-    }
-    if (!tableMoved && !objectDetailsSizeChanged) {
-      const objectDetailsStartCell = officeApiHelper.offsetCellBy(
-        tableStartCell,
-        -newObjectDetailsSize, // === previousObjectDetailsSize
-        0
-      );
-      return {
-        value: '00',
-        operation: 'updateExistingTable',
-        objectDetailsStartCell,
-      };
-    }
-    if (!tableMoved && objectDetailsSizeChanged) {
-      const previousObjectDetailsStartCell = officeApiHelper.offsetCellBy(
-        tableStartCell,
-        -previousObjectDetailsSize,
-        0
-      );
-      return {
-        value: '01',
-        operation: 'createNewTable',
-        startCell: previousObjectDetailsStartCell,
-      };
-    }
-  }
-  if (tableChanged) {
-    console.log('table  changed');
-    if (tableMoved && objectDetailsSizeChanged) {
-      const newObjectDetailsStartCell = officeApiHelper.offsetCellBy(
-        tableStartCell,
-        -newObjectDetailsSize,
-        0
-      );
-      return {
-        operation: 'createNewTable',
-        value: '11',
-        startCell: newObjectDetailsStartCell,
-      };
-    }
-    if (tableMoved && !objectDetailsSizeChanged) {
-      const previousObjectDetailsStartCell = officeApiHelper.offsetCellBy(
-        tableStartCell,
-        -previousObjectDetailsSize, // === newObjectDetailsSize
-        0
-      );
-      return {
-        operation: 'createNewTable',
-        value: '10',
-        startCell: previousObjectDetailsStartCell,
-      };
-    }
-    if (!tableMoved && objectDetailsSizeChanged) {
-      const previousObjectDetailsStartCell = officeApiHelper.offsetCellBy(
-        tableStartCell,
-        -previousObjectDetailsSize,
-        0
-      );
-      return {
-        value: '01',
-        operation: 'createNewTable',
-        startCell: previousObjectDetailsStartCell,
-      };
-    }
-    if (!tableMoved && !objectDetailsSizeChanged) {
-      const objectDetailsStartCell = officeApiHelper.offsetCellBy(
-        tableStartCell,
-        -newObjectDetailsSize, // === previousObjectDetailsSize
-        0
-      );
-      return {
-        value: '00',
-        operation: 'createNewTable',
-        startCell: objectDetailsStartCell,
-      };
-    }
+
+  let startCell: string;
+
+  if (!tableMoved && objectDetailsSizeChanged) {
+    startCell = officeApiHelper.offsetCellBy(tableStartCell, -previousObjectDetailsSize, 0);
+  } else {
+    startCell = officeApiHelper.offsetCellBy(tableStartCell, -newObjectDetailsSize, 0);
   }
 
-  throw new Error('Invalid table status');
+  // If the table changed (for example one of the columns are deleted), or the object details size changed when the table was not moved, a new table has to be created.
+  // When the table is not moved but the object details size changed, the reference point is taken as the start cell of the object details, and the placement of the new table is made accordingly.
+  const operation =
+    tableChanged || (!tableMoved && objectDetailsSizeChanged)
+      ? 'createNewTable'
+      : 'updateExistingTable';
+
+  return {
+    operation,
+    startCell,
+  };
 };
