@@ -9,6 +9,7 @@ import { MstrObjectTypes } from './mstr-object-types';
 import {
   calculateOffsetForObjectInfoSettings,
   getObjectPrompts,
+  getTableOperationAndStartCell,
   populateDefinition,
   populateDetails,
 } from './get-object-details-methods';
@@ -351,5 +352,83 @@ describe('Get Object Details Methods', () => {
       // then
       expect(offset).toEqual(expectedOffset);
     });
+  });
+});
+
+describe('getTableOperationAndStartCell', () => {
+  it('tableChanged: false, tableMoved:false, objectDetailsSizeChanged: true', () => {
+    // given
+    const options = {
+      tableMoved: false,
+      tableChanged: false,
+      previousObjectDetailsSize: 5,
+      newObjectDetailsSize: 7,
+      tableStartCell: 'A10',
+    };
+    const expected = {
+      operation: 'createNewTable',
+      startCell: 'A5',
+    };
+    // when
+    const result = getTableOperationAndStartCell(options);
+    // then
+    expect(result).toEqual(expected);
+  });
+
+  it('tableChanged: false, tableMoved:true, objectDetailsSizeChanged: false', () => {
+    // given
+    const options = {
+      tableMoved: true,
+      tableChanged: false,
+      previousObjectDetailsSize: 5,
+      newObjectDetailsSize: 5,
+      tableStartCell: 'A1',
+    };
+    const expected = {
+      operation: 'createNewTable',
+      startCell: 'A1',
+    };
+    // when
+    const result = getTableOperationAndStartCell(options);
+    // then
+    expect(result).toEqual(expected);
+  });
+
+  it('tableChanged: false, tableMoved:true, objectDetailsSizeChanged: true', () => {
+    // given
+    const options = {
+      tableMoved: true,
+      tableChanged: false,
+      previousObjectDetailsSize: 5,
+      newObjectDetailsSize: 7,
+      tableStartCell: 'A10',
+    };
+    const expected = {
+      operation: 'updateExistingTable',
+      startCell: 'A3',
+    };
+    // when
+    const result = getTableOperationAndStartCell(options);
+    // then
+    expect(result).toEqual(expected);
+  });
+
+  it('tableChanged: true, tableMoved:false, objectDetailsSizeChanged: true', () => {
+    // given
+    const options = {
+      tableMoved: false,
+      tableChanged: true,
+      previousObjectDetailsSize: 5,
+      newObjectDetailsSize: 7,
+      tableStartCell: 'A10',
+    };
+    const expected = {
+      operation: 'createNewTable',
+      startCell: 'A5',
+    };
+    // when
+    const result = getTableOperationAndStartCell(options);
+    // then
+    expect(result).toEqual(expected);
   });
 });
