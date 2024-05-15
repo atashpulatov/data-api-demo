@@ -112,6 +112,16 @@ export const calculateOffsetForObjectInfoSettings = (
   return offset;
 };
 
+/**
+ * Determines the table operation and start cell based on the provided parameters.
+ * @param options - The options object.
+ * @param options.tableMoved - Indicates whether the table was moved.
+ * @param options.tableChanged - Indicates whether the table was changed.
+ * @param options.previousObjectDetailsSize - The previous size of the object details.
+ * @param options.newObjectDetailsSize - The new size of the object details.
+ * @param options.tableStartCell - The start cell of the table.
+ * @returns - An object containing the operation and start cell.
+ */
 export const getTableOperationAndStartCell = ({
   tableMoved,
   tableChanged,
@@ -140,10 +150,18 @@ export const getTableOperationAndStartCell = ({
 
   // If the table changed (for example one of the columns are deleted), or the object details size changed when the table was not moved, a new table has to be created.
   // When the table is not moved but the object details size changed, the reference point is taken as the start cell of the object details, and the placement of the new table is made accordingly.
-  const operation =
+  let operation: 'createNewTable' | 'updateExistingTable' =
     tableChanged || (!tableMoved && objectDetailsSizeChanged)
       ? 'createNewTable'
       : 'updateExistingTable';
+
+  const [column, row] = startCell.split(/(\d+)/);
+
+  // if there is no place left for the object details above the table, the object details start from the first cell of the selected column.
+  if (parseInt(row, 10) < newObjectDetailsSize) {
+    startCell = `${column}1`;
+    operation = 'createNewTable';
+  }
 
   return {
     operation,
