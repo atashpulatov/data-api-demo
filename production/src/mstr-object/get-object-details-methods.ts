@@ -112,37 +112,39 @@ export const calculateOffsetForObjectInfoSettings = (
   return offset;
 };
 
-// TEMPORARY DOCS - SOME OF THE PARAMETERS CAN BE CALCULATED IN THE FUNCTION
+// TODO: refactor function. Each step is written explicitly for debugging purposes.
 /**
- * Retrieves the table status based on various conditions.
- * @param {boolean} tableMoved - Indicates whether the table has been moved.
- * @param {boolean} tableChanged - Indicates whether the table has been changed. (for example, the table columns have been deleted)
- * @param {boolean} objectDetailsSizeChanged - Indicates whether the object details size has changed.
- * @param {number} previousObjectDetailsSize - The previous object details size.
- * @param {number} newObjectDetailsSize - The new object details size.
- * @param {string} startCell - The start cell of the table.
- * @param {string} tableOuterCell - The outer cell of the table.
- * @returns {object} - An object containing the table status.
- * @property {string} value - Temporarily used during the development
- * @property {string} operation - The operation to be performed.
- * @property {string} [startCell] - The start cell of the table.
- * @property {string} [objectDetailsStartCell] - The start cell of the object details.
+ * Retrieves the table status based on the provided parameters.
+ *
+ * @param {Object} options - The options object.
+ * @param {boolean} options.tableMoved - Indicates whether the table has been moved.
+ * @param {boolean} options.tableChanged - Indicates whether the table has been changed.
+ * @param {number} options.previousObjectDetailsSize - The previous size of the object details.
+ * @param {number} options.newObjectDetailsSize - The new size of the object details.
+ * @param {string} options.startCell - The start cell of the table.
+ * @param {string} options.tableStartCell - The start cell of the table.
+ * @returns {Object} - The table status. Includes the following properties:
+ *   - operation: A string indicating the operation to be performed on the table. Can be either 'createNewTable' or 'updateExistingTable'.
+ *   - startCell: The start cell of the table (optional).
+ *   - objectDetailsStartCell: The start cell of the object details (optional).
+ * @throws {Error} - If the table status is invalid.
  */
-export const getTableStatus = ({
+export const getTableOperationAndStartCell = ({
   tableMoved,
   tableChanged,
   previousObjectDetailsSize,
   newObjectDetailsSize,
-  tableOuterCell,
+  tableStartCell,
 }: {
   tableMoved: boolean;
   tableChanged: boolean;
   previousObjectDetailsSize: number;
   newObjectDetailsSize: number;
   startCell: string;
-  tableOuterCell: string;
+  tableStartCell: string;
 }): {
-  // temporary value used during development
+  // temporary value used during development for debugging purposes
+  // TODO: remove the value property after refresh is completely implemented
   value: string;
   operation: 'createNewTable' | 'updateExistingTable';
   startCell?: string;
@@ -153,7 +155,7 @@ export const getTableStatus = ({
     console.log('table not changed');
     if (tableMoved && objectDetailsSizeChanged) {
       const newObjectDetailsStartCell = officeApiHelper.offsetCellBy(
-        tableOuterCell,
+        tableStartCell,
         -newObjectDetailsSize,
         0
       );
@@ -165,7 +167,7 @@ export const getTableStatus = ({
     }
     if (tableMoved && !objectDetailsSizeChanged) {
       const newObjectDetailsStartCell = officeApiHelper.offsetCellBy(
-        tableOuterCell,
+        tableStartCell,
         -newObjectDetailsSize, // === previousObjectDetailsSize
         0
       );
@@ -177,7 +179,7 @@ export const getTableStatus = ({
     }
     if (!tableMoved && !objectDetailsSizeChanged) {
       const objectDetailsStartCell = officeApiHelper.offsetCellBy(
-        tableOuterCell,
+        tableStartCell,
         -newObjectDetailsSize, // === previousObjectDetailsSize
         0
       );
@@ -189,7 +191,7 @@ export const getTableStatus = ({
     }
     if (!tableMoved && objectDetailsSizeChanged) {
       const previousObjectDetailsStartCell = officeApiHelper.offsetCellBy(
-        tableOuterCell,
+        tableStartCell,
         -previousObjectDetailsSize,
         0
       );
@@ -204,7 +206,7 @@ export const getTableStatus = ({
     console.log('table  changed');
     if (tableMoved && objectDetailsSizeChanged) {
       const newObjectDetailsStartCell = officeApiHelper.offsetCellBy(
-        tableOuterCell,
+        tableStartCell,
         -newObjectDetailsSize,
         0
       );
@@ -216,7 +218,7 @@ export const getTableStatus = ({
     }
     if (tableMoved && !objectDetailsSizeChanged) {
       const previousObjectDetailsStartCell = officeApiHelper.offsetCellBy(
-        tableOuterCell,
+        tableStartCell,
         -previousObjectDetailsSize, // === newObjectDetailsSize
         0
       );
@@ -228,7 +230,7 @@ export const getTableStatus = ({
     }
     if (!tableMoved && objectDetailsSizeChanged) {
       const previousObjectDetailsStartCell = officeApiHelper.offsetCellBy(
-        tableOuterCell,
+        tableStartCell,
         -previousObjectDetailsSize,
         0
       );
@@ -240,7 +242,7 @@ export const getTableStatus = ({
     }
     if (!tableMoved && !objectDetailsSizeChanged) {
       const objectDetailsStartCell = officeApiHelper.offsetCellBy(
-        tableOuterCell,
+        tableStartCell,
         -newObjectDetailsSize, // === previousObjectDetailsSize
         0
       );

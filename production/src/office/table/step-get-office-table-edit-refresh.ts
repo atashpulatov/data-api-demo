@@ -11,7 +11,7 @@ import { ObjectData } from '../../types/object-types';
 
 import {
   calculateOffsetForObjectInfoSettings,
-  getTableStatus,
+  getTableOperationAndStartCell,
 } from '../../mstr-object/get-object-details-methods';
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
@@ -86,22 +86,23 @@ class StepGetOfficeTableEditRefresh {
         mstrObjectType
       );
 
-      const currentTableOuterStartCell = officeTableRefresh.getCrosstabStartCell(
-        startCell,
+      // wheter the table has cross tab headers or not, this value stores the start cell of the headers (outer header if cross tab)
+      const currentTableStartCell = officeTableRefresh.getCrosstabStartCell(
+        startCell, // if the table has crosstab headers, this is the start cell of the inner headers.
         instanceDefinition,
         tableChanged
       );
-      const tableMoved = objectData.startCell !== currentTableOuterStartCell;
-      const res = getTableStatus({
+      const tableMoved = objectData.startCell !== currentTableStartCell;
+      const tableStatus = getTableOperationAndStartCell({
         tableMoved,
         tableChanged,
         previousObjectDetailsSize: objectData.objectDetailsSize,
         newObjectDetailsSize,
         startCell,
-        tableOuterCell: currentTableOuterStartCell,
+        tableStartCell: currentTableStartCell,
       });
 
-      tableChanged = res.operation === 'createNewTable';
+      tableChanged = tableStatus.operation === 'createNewTable';
 
       if (tableChanged) {
         console.warn('Instance definition changed, creating new table');
@@ -109,7 +110,7 @@ class StepGetOfficeTableEditRefresh {
         ({ officeTable, bindId, startCell } = await officeTableCreate.createOfficeTable({
           instanceDefinition,
           excelContext,
-          startCell: res.startCell,
+          startCell: tableStatus.startCell,
           tableName,
           prevOfficeTable,
           tableChanged,
@@ -136,7 +137,7 @@ class StepGetOfficeTableEditRefresh {
         // insert object details
         const objectDetailsRange = await getObjectDetailsRange({
           worksheet: officeTable.worksheet,
-          objectDetailsStartCell: res.objectDetailsStartCell,
+          objectDetailsStartCell: tableStatus.objectDetailsStartCell,
           objectDetailsSize: newObjectDetailsSize,
         });
 
