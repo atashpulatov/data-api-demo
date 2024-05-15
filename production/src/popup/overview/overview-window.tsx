@@ -29,7 +29,9 @@ export const OverviewWindow: React.FC = () => {
   const objects = useSelector(selectObjects);
   const globalNotification = useSelector(notificationReducerSelectors.selectGlobalNotification);
   const notifications = useSelector(notificationReducerSelectors.selectNotifications);
-  const prefilteredObjectName = useSelector(popupStateSelectors.selectPrefilteredObjectName);
+  const prefilteredSourceObjectName = useSelector(
+    popupStateSelectors.selectPrefilteredSourceObjectName
+  );
   useStateSyncOnDialogMessage();
 
   const [t] = useTranslation('common', { i18n });
@@ -107,7 +109,7 @@ export const OverviewWindow: React.FC = () => {
         onGoTo={overviewHelper.sendGoToWorksheetRequest}
         shouldDisableActions={shouldDisableActions}
         globalNotifications={notificationsToDisplay}
-        prefilteredSourceObjectName={prefilteredObjectName}
+        prefilteredSourceObjectName={prefilteredSourceObjectName}
       />
       <Button className='overview-close-button' onClick={handleCloseDialog}>
         {t('Close')}

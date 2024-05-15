@@ -79,10 +79,10 @@ class PopupStateActions {
     });
   };
 
-  setPrefilteredObjectName = (objectName: string) => (dispatch: Dispatch<any>) => {
+  setPrefilteredSourceObjectName = (sourceObjectName: string) => (dispatch: Dispatch<any>) => {
     dispatch({
-      type: PopupStateActionTypes.SET_PREFILTERED_OBJECT_NAME,
-      objectName,
+      type: PopupStateActionTypes.SET_PREFILTERED_SOURCE_OBJECT_NAME,
+      sourceObjectName,
     });
   };
 }

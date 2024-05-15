@@ -92,7 +92,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
 
   const showOverviewModal = (objectName: string): void => {
     popupController.runImportedDataOverviewPopup();
-    dispatch(popupStateActions.setPrefilteredObjectName(objectName) as any);
+    dispatch(popupStateActions.setPrefilteredSourceObjectName(objectName) as any);
     dispatch(popupStateActions.setIsDataOverviewOpen(true) as any);
   };
 
