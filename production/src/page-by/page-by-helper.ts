@@ -97,8 +97,7 @@ class PageByHelper {
       const pageByDataElement: PageByDataElement[] = combination.map((value, index) => {
         const { name: pageByItemName, elements } = pageBy[index];
         const { name: elementName, id, formValues } = elements[value];
-        const formattedFormValues =
-          formValues?.length > 1 ? formValues?.join(', ') : formValues?.[0];
+        const formattedFormValues = formValues?.join(', ');
         return {
           name: pageByItemName,
           value: formattedFormValues ?? elementName ?? '',

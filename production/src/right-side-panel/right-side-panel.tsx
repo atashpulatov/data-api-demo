@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { OfficeApplicationType, SidePanel } from '@mstr/connector-components';
 
 import { useGetFilteredObjectListForSidePanelDetails } from '../redux-reducer/settings-reducer/settings-hooks';
@@ -38,6 +38,8 @@ interface RightSidePanelProps {
   settingsPanelLoaded?: boolean;
   toggleIsSettingsFlag?: (flag?: boolean) => void;
   updateActiveCellAddress?: (cellAddress?: string) => void;
+  setPrefilteredSourceObjectName?: (objectName: string) => void;
+  setIsDataOverviewOpen?: (isDataOverviewOpen: boolean) => void;
 }
 
 export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
@@ -47,11 +49,12 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   settingsPanelLoaded,
   toggleIsSettingsFlag,
   updateActiveCellAddress,
+  setPrefilteredSourceObjectName,
+  setIsDataOverviewOpen,
 }) => {
   const [sidePanelPopup, setSidePanelPopup] = useState(null);
   const [loadedObjectsWrapped, setLoadedObjectsWrapped] = useState(loadedObjects);
   const [activeSheetIndex, setActiveSheetIndex] = useState(-1);
-  const dispatch = useDispatch();
 
   const operations = useSelector(selectOperations);
   const globalNotification = useSelector(notificationReducerSelectors.selectGlobalNotification);
@@ -92,8 +95,8 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
 
   const showOverviewModal = (objectName: string): void => {
     popupController.runImportedDataOverviewPopup();
-    dispatch(popupStateActions.setPrefilteredSourceObjectName(objectName) as any);
-    dispatch(popupStateActions.setIsDataOverviewOpen(true) as any);
+    setPrefilteredSourceObjectName(objectName);
+    setIsDataOverviewOpen(true);
   };
 
   return (
@@ -157,6 +160,8 @@ const mapDispatchToProps = {
   cancelCurrentImportRequest: navigationTreeActions.cancelImportRequest,
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
   updateActiveCellAddress: officeActions.updateActiveCellAddress,
+  setPrefilteredSourceObjectName: popupStateActions.setPrefilteredSourceObjectName,
+  setIsDataOverviewOpen: popupStateActions.setIsDataOverviewOpen,
 };
 
 export const RightSidePanel = connect(
