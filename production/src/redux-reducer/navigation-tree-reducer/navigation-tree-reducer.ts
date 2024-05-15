@@ -23,6 +23,7 @@ export const initialState: NavigationTreeState = {
   mstrObjectType: null,
   chosenChapterKey: null,
   chosenVisualizationKey: null,
+  choseVisualizationTypeGrid: false,
   dossierOpenRequested: false,
   isEdit: false,
   chosenLibraryDossier: null,
@@ -81,6 +82,9 @@ export const navigationTree = (
 
     case NavigationTreeActionTypes.SET_POPUP_TYPE:
       return setPopupType(state, action.popupType);
+
+    case NavigationTreeActionTypes.UPDATE_VISUALIZATION_TYPE_GRID:
+      return updateVisualizationTypeGrid(state, action.isVizGrid);
 
     default:
       return state;
@@ -248,5 +252,11 @@ const updateSelectedMenu = (state: NavigationTreeState, data: any): NavigationTr
 const setPopupType = (state: NavigationTreeState, popupType: DialogType): NavigationTreeState => {
   const newState = { ...state };
   newState.isPreparedDataRequested = !!popupType && popupType === DialogType.dataPreparation;
+  return newState;
+};
+
+const updateVisualizationTypeGrid = (state: NavigationTreeState, isVizGrid: boolean): NavigationTreeState => {
+  const newState = { ...state };
+  newState.choseVisualizationTypeGrid = isVizGrid;
   return newState;
 };

@@ -21,6 +21,7 @@ const useGetImportOptions = (): ImportButtonOptionsType[] => {
   const isShapeAPISupported = useSelector(officeSelectors.selectIsShapeAPISupported);
   const isInsertWorksheetAPISupported = useSelector(officeSelectors.selectIsInsertWorksheetAPISupported);
   const selectedMstrObjectType = useSelector(navigationTreeSelectors.selectMstrObjectType);
+  const choseVisualizationTypeGrid = useSelector(navigationTreeSelectors.selectChoseVisualizationTypeGrid);
   const isEdit = useSelector(navigationTreeSelectors.selectIsEdit);
   const editedObject = useSelector(popupSelectors.selectEditedObject);
 
@@ -34,7 +35,7 @@ const useGetImportOptions = (): ImportButtonOptionsType[] => {
   options.push(optionsDictionary[ObjectImportType.TABLE]);
 
   if (isInsertWorksheetAPISupported) {
-    options.push(optionsDictionary[ObjectImportType.FORMATTED_TABLE]);
+    options.push({ disabled: !choseVisualizationTypeGrid, ...optionsDictionary[ObjectImportType.FORMATTED_TABLE] });
   }
 
   if (isShapeAPISupported && selectedMstrObjectType === mstrObjectType.mstrObjectType.dossier) {

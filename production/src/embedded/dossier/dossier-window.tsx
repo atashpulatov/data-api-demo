@@ -23,6 +23,7 @@ import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
+import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { EmbeddedDossier } from './embedded-dossier';
 import { errorCodes } from '../../error/constants';
 import { ObjectImportType } from '../../mstr-object/constants';
@@ -36,6 +37,7 @@ interface DossierWindowProps {
   isShapeAPISupported: boolean;
   handleBack: () => void;
   setImportType: (importType: ObjectImportType) => void;
+  updateVisualizationTypeGrid: (isVizGrid: boolean) => void;
   editedObject: EditedObject;
   isReprompt: boolean;
   importType: ObjectImportType;
@@ -63,6 +65,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
     chosenObjectName = DEFAULT_PROJECT_NAME,
     handleBack,
     setImportType,
+    updateVisualizationTypeGrid,
     editedObject = {} as EditedObject,
     chosenObjectId = 'default id',
     chosenProjectId = 'default id',
@@ -136,6 +139,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
         chapterKey: chosenVizchapterKey,
         visualizationKey: chosenVizKey,
         vizDimensions: chosenVizDimensions,
+        isVizGrid: chosenVizIsGrid,
         promptsAnswers: chosenVizPromptAnswers,
         instanceId: chosenVizInstanceId,
       } = dossierData;
@@ -146,6 +150,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
           visualizationKey: chosenVizKey,
           vizDimensions: chosenVizDimensions,
         });
+        updateVisualizationTypeGrid(chosenVizIsGrid);
         setPromptsAnswers(chosenVizPromptAnswers);
         instanceId.current = chosenVizInstanceId;
 
@@ -423,6 +428,7 @@ function mapStateToProps(state: RootState): any {
 const mapActionsToProps = {
   handleBack: popupStateActions.onPopupBack,
   setImportType: popupStateActions.setImportType,
+  updateVisualizationTypeGrid: navigationTreeActions.updateVisualizationTypeGrid,
 };
 
 export const DossierWindow = connect(mapStateToProps, mapActionsToProps)(DossierWindowNotConnected);

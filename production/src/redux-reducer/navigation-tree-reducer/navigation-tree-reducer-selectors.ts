@@ -51,6 +51,11 @@ const selectImportPageByConfigurations = createSelector(
   navigationTree => navigationTree.importPageByConfigurations
 );
 
+const selectChoseVisualizationTypeGrid = createSelector(
+  [getNavigationTreeState],
+  navigationTree => navigationTree.choseVisualizationTypeGrid
+);
+
 export const navigationTreeSelectors = {
   selectMstrObjectType,
   selectIsObjectSelected,
@@ -61,4 +66,5 @@ export const navigationTreeSelectors = {
   selectChosenObjectName,
   selectIsPageByModalOpenRequested,
   selectImportPageByConfigurations,
+  selectChoseVisualizationTypeGrid
 };
