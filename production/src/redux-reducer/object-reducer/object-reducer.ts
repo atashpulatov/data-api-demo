@@ -69,8 +69,7 @@ function editRequested(state: ObjectState, payload: EditRequestedPayload): Objec
 function updateObject(state: ObjectState, updatedObjectProps: Partial<ObjectData>): ObjectState {
   const newObjects = [...state.objects];
 
-  updatedObjectProps &&
-    replaceSingleObject(newObjects, updatedObjectProps.objectWorkingId, updatedObjectProps);
+  replaceSingleObject(newObjects, updatedObjectProps.objectWorkingId, updatedObjectProps);
 
   return { objects: newObjects };
 }
