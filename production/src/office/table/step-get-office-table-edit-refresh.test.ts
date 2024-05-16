@@ -3,13 +3,14 @@ import getOfficeTableHelper from './get-office-table-helper';
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
 
-import * as getObjectDetailsMethods from '../../mstr-object/get-object-details-methods'
+import * as getObjectDetailsMethods from '../../mstr-object/get-object-details-methods';
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import officeTableCreate from './office-table-create';
 import officeTableRefresh from './office-table-refresh';
 import officeTableUpdate from './office-table-update';
 import stepGetOfficeTableEditRefresh from './step-get-office-table-edit-refresh';
+import { TableOperation } from '../../error/constants';
 
 describe('StepGetOfficeTableEditRefresh', () => {
   const mockFn = jest.fn();
@@ -70,7 +71,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
       previousTableDimensions: 'previousTableDimensionsTest',
       visualizationInfo: 'visualizationInfoTest',
       objectWorkingId: 'objectWorkingIdTest',
-      mstrObjectType: { name: 'report' }
+      mstrObjectType: { name: 'report' },
     } as unknown as ObjectData;
 
     const operationData = {
@@ -96,9 +97,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
       startCell: 'A10',
     }));
 
-    jest
-      .spyOn(officeTableRefresh, 'getCrosstabStartCell')
-      .mockImplementation(() => 'A10');
+    jest.spyOn(officeTableRefresh, 'getCrosstabStartCell').mockImplementation(() => 'A10');
 
     jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
 
@@ -107,7 +106,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
     jest.spyOn(operationStepDispatcher, 'completeGetOfficeTableEditRefresh').mockImplementation();
 
     jest.spyOn(getObjectDetailsMethods, 'getTableOperationAndStartCell').mockImplementation(() => ({
-      operation: 'createNewTable',
+      operation: TableOperation.CREATE_NEW_TABLE,
       startCell: 'A10',
     }));
 
@@ -177,7 +176,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
         tableName: 'tableNameTest',
         previousTableDimensions: 'previousTableDimensionsTest',
         objectWorkingId: 'objectWorkingIdTest',
-        mstrObjectType: { name: 'report' }
+        mstrObjectType: { name: 'report' },
       } as unknown as ObjectData;
 
       const operationData = {
@@ -206,9 +205,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
         .spyOn(officeTableUpdate, 'updateOfficeTable')
         .mockImplementation(() => mockedOfficeTable as any);
 
-      jest
-        .spyOn(officeTableRefresh, 'getCrosstabStartCell')
-        .mockImplementation(() => 'A10');
+      jest.spyOn(officeTableRefresh, 'getCrosstabStartCell').mockImplementation(() => 'A10');
 
       jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
 
