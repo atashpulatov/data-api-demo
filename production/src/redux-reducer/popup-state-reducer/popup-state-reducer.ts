@@ -60,6 +60,12 @@ export const popupStateReducer = (
         importType: action.importType,
       };
     }
+    case PopupStateActionTypes.SET_PREFILTERED_SOURCE_OBJECT_NAME: {
+      return {
+        ...state,
+        prefilteredSourceObjectName: action.sourceObjectName,
+      };
+    }
 
     default:
       return state;

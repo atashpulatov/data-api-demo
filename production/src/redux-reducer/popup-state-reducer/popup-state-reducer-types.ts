@@ -11,6 +11,7 @@ export interface PopupStateState {
   isReprompt?: boolean;
   isPrompted?: boolean | any;
   importType?: ObjectImportType;
+  prefilteredSourceObjectName?: string;
 }
 
 export enum PopupStateActionTypes {
@@ -23,6 +24,7 @@ export enum PopupStateActionTypes {
   SET_IS_DATA_OVERVIEW_OPEN = 'POPUP_STATE_SET_IS_DATA_OVERVIEW_OPEN',
   SET_FILTERED_PAGE_BY_LINK_ID = 'SET_FILTERED_PAGE_BY_LINK_ID',
   SET_IMPORT_TYPE = 'POPUP_STATE_SET_IMPORT_TYPE',
+  SET_PREFILTERED_SOURCE_OBJECT_NAME = 'SET_PREFILTERED_SOURCE_OBJECT_NAME',
 }
 
 export enum DialogType {
@@ -84,6 +86,11 @@ interface SetImportTypeAction extends Action {
   importType: ObjectImportType;
 }
 
+interface SetPrefilteredSourceObjectNameAction extends Action {
+  type: PopupStateActionTypes.SET_PREFILTERED_SOURCE_OBJECT_NAME;
+  sourceObjectName: string;
+}
+
 export type PopupStateActions =
   | SetPopupTypeAction
   | SetDialogTypeAction
@@ -93,4 +100,5 @@ export type PopupStateActions =
   | ClearPopupStateAction
   | SetIsDataOverviewOpenAction
   | SetFilteredPageByLinkIdAction
-  | SetImportTypeAction;
+  | SetImportTypeAction
+  | SetPrefilteredSourceObjectNameAction;

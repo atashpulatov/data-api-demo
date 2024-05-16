@@ -64,6 +64,7 @@ export interface EditedObjectProps {
   selectedFilters: Record<string, number[] | string[]>;
   selectedAttrForms: string[];
   pageByData: PageByData;
+  importType: ObjectImportType;
 }
 
 export interface ChosenObjectType {

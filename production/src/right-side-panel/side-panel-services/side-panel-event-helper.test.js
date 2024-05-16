@@ -4,6 +4,8 @@ import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { sidePanelEventHelper } from './side-panel-event-helper';
 import { sidePanelService } from './side-panel-service';
 
+import { reduxStore } from '../../store';
+
 describe('SidePanelService', () => {
   afterEach(() => {
     jest.restoreAllMocks();
@@ -158,4 +160,138 @@ describe('SidePanelService', () => {
       expect(mockedAddEvent).toBeCalledTimes(eventAddedTimes);
     }
   );
+
+  it('should call advanced event listener helpers in initObjectWorksheetTrackingListeners when isAdvancedWorksheetTrackingSupported true', async () => {
+    // given
+    const mockSync = jest.fn();
+    const mockedExcelContext = {
+      sync: mockSync,
+      workbook: {
+        worksheets: {}
+      },
+    };
+
+    const mockedGetState = jest.spyOn(reduxStore, 'getState').mockReturnValue({
+      officeReducer: { isAdvancedWorksheetTrackingSupported: true },
+    });
+    const mockedGetExcelContext = jest
+      .spyOn(officeApiHelper, 'getExcelContext')
+      .mockReturnValue(mockedExcelContext);
+    const mockedOnNameChangedHelper = jest.spyOn(sidePanelEventHelper, 'setObjectTrackingOnNameChangedWorksheetEvent').mockImplementation();
+    const mockedOnMovedHelper = jest.spyOn(sidePanelEventHelper, 'setObjectTrackingOnMovedWorksheetEvent').mockImplementation();
+    const mockedOnAddedHelper = jest.spyOn(sidePanelEventHelper, 'setObjectTrackingOnAddedWorksheetEvent').mockImplementation();
+    const mockedOnDeletedHelper = jest.spyOn(sidePanelEventHelper, 'setObjectTrackingOnDeletedWorksheetEvent').mockImplementation();
+
+
+    // when
+    await sidePanelEventHelper.initObjectWorksheetTrackingListeners();
+
+    // then
+    expect(mockedGetState).toHaveBeenCalledTimes(1)
+    expect(mockedGetExcelContext).toHaveBeenCalledTimes(1);
+    expect(mockedOnNameChangedHelper).toHaveBeenCalledTimes(1);
+    expect(mockedOnMovedHelper).toHaveBeenCalledTimes(1);
+    expect(mockedOnAddedHelper).toHaveBeenCalledTimes(1);
+    expect(mockedOnDeletedHelper).toHaveBeenCalledTimes(1);
+    expect(mockSync).toHaveBeenCalledTimes(1);
+  });
+
+  it('should call basic event listener helper in initObjectWorksheetTrackingListeners when isAdvancedWorksheetTrackingSupported false', async () => {
+    // given
+    const mockedExcelContext = {
+      workbook: {
+        worksheets: {}
+      },
+    };
+
+    const mockedGetState = jest.spyOn(reduxStore, 'getState').mockReturnValue({
+      officeReducer: { isAdvancedWorksheetTrackingSupported: false },
+    });
+    const mockedGetExcelContext = jest
+      .spyOn(officeApiHelper, 'getExcelContext')
+      .mockReturnValue(mockedExcelContext);
+    const mockedDocumentSelectionChangedHelper = jest.spyOn(sidePanelEventHelper, 'setObjectTrackingDocumentSelectionChangedEvent').mockImplementation();
+
+    // when
+    await sidePanelEventHelper.initObjectWorksheetTrackingListeners();
+
+    // then
+    expect(mockedGetState).toHaveBeenCalledTimes(1)
+    expect(mockedGetExcelContext).toHaveBeenCalledTimes(1);
+    expect(mockedDocumentSelectionChangedHelper).toHaveBeenCalledTimes(1);
+  });
+
+  it('should properly set event listener in setObjectTrackingOnNameChangedWorksheetEvent', () => {
+    // given
+    const mockAddEvent = jest.fn();
+    const mockedWorksheets = { onNameChanged: { add: mockAddEvent } };
+
+    // when
+    sidePanelEventHelper.setObjectTrackingOnNameChangedWorksheetEvent(mockedWorksheets);
+
+    // then
+    expect(mockAddEvent).toHaveBeenCalledTimes(1);
+  });
+
+  it('should properly set event listener in setObjectTrackingOnMovedWorksheetEvent', () => {
+    // given
+    const mockAddEvent = jest.fn();
+    const mockedWorksheets = { onMoved: { add: mockAddEvent } };
+    const mockedExcelContext = {};
+
+    // when
+    sidePanelEventHelper.setObjectTrackingOnMovedWorksheetEvent(mockedWorksheets, mockedExcelContext);
+
+    // then
+    expect(mockAddEvent).toHaveBeenCalledTimes(1);
+  });
+
+  it('should properly set event listener in setObjectTrackingOnAddedWorksheetEvent', () => {
+    // given
+    const mockAddEvent = jest.fn();
+    const mockedWorksheets = { onAdded: { add: mockAddEvent } };
+    const mockedExcelContext = {};
+
+    // when
+    sidePanelEventHelper.setObjectTrackingOnAddedWorksheetEvent(mockedWorksheets, mockedExcelContext);
+
+    // then
+    expect(mockAddEvent).toHaveBeenCalledTimes(1);
+  });
+
+  it('should properly set event listener in setObjectTrackingOnDeletedWorksheetEvent', () => {
+    // given
+    const mockAddEvent = jest.fn();
+    const mockedWorksheets = { onDeleted: { add: mockAddEvent } };
+    const mockedExcelContext = {};
+
+    // when
+    sidePanelEventHelper.setObjectTrackingOnDeletedWorksheetEvent(mockedWorksheets, mockedExcelContext);
+
+    // then
+    expect(mockAddEvent).toHaveBeenCalledTimes(1);
+  });
+
+  it('should properly set event listener in setObjectTrackingDocumentSelectionChangedEvent', () => {
+    // given
+    const mockedAddHandlerAsync = jest.fn();
+    global.Office = {
+      context: {
+        document: {
+          addHandlerAsync: mockedAddHandlerAsync,
+        }
+      },
+      EventType: {
+        DocumentSelectionChanged: 'DocumentSelectionChanged',
+      },
+    };
+    const mockedWorksheets = {};
+    const mockedExcelContext = {};
+
+    // when
+    sidePanelEventHelper.setObjectTrackingDocumentSelectionChangedEvent(mockedWorksheets, mockedExcelContext);
+
+    // then
+    expect(mockedAddHandlerAsync).toHaveBeenCalledTimes(1);
+  });
 });
