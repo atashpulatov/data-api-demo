@@ -310,14 +310,14 @@ describe('Get Object Details Methods', () => {
 
       const objectInfoSettings = [
         { key: 'name', toggleChecked: true },
-        { key: 'filter', toggleChecked: true },
+        { key: 'filters', toggleChecked: true },
         { key: 'property1', toggleChecked: true },
         { key: 'property2', toggleChecked: false },
       ] as ObjectInfoSetting[];
       const expectedOffset = 14;
 
       // when
-      const offset = calculateOffsetForObjectInfoSettings(objectInfoSettings, objectType);
+      const offset = calculateOffsetForObjectInfoSettings(objectInfoSettings, objectType, false);
 
       // then
       expect(offset).toEqual(expectedOffset);
@@ -334,7 +334,7 @@ describe('Get Object Details Methods', () => {
       const expectedOffset = 0;
 
       // when
-      const offset = calculateOffsetForObjectInfoSettings(objectInfoSettings, objectType);
+      const offset = calculateOffsetForObjectInfoSettings(objectInfoSettings, objectType, false);
 
       // then
       expect(offset).toEqual(expectedOffset);
@@ -348,7 +348,7 @@ describe('Get Object Details Methods', () => {
       const expectedOffset = 0;
 
       // when
-      const offset = calculateOffsetForObjectInfoSettings(objectInfoSettings, objectType);
+      const offset = calculateOffsetForObjectInfoSettings(objectInfoSettings, objectType, false);
 
       // then
       expect(offset).toEqual(expectedOffset);

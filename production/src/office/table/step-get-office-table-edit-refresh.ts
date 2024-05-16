@@ -84,7 +84,8 @@ class StepGetOfficeTableEditRefresh {
       const { worksheetObjectInfoSettings } = reduxStore.getState().settingsReducer;
       const newObjectDetailsSize = calculateOffsetForObjectInfoSettings(
         worksheetObjectInfoSettings,
-        mstrObjectType
+        mstrObjectType,
+        pageByData?.elements?.length > 0
       );
 
       // whether the table has cross tab headers or not, this value stores the start cell of the headers (outer header if cross tab)
@@ -121,11 +122,7 @@ class StepGetOfficeTableEditRefresh {
           objectData,
         }));
       } else {
-        shouldFormat =
-          (objectEditedData &&
-            objectEditedData.visualizationInfo &&
-            objectEditedData.visualizationInfo.nameAndFormatShouldUpdate) ||
-          false;
+        shouldFormat = objectEditedData?.visualizationInfo?.nameAndFormatShouldUpdate || false;
 
         officeTable = await officeTableUpdate.updateOfficeTable(
           instanceDefinition,
@@ -152,7 +149,7 @@ class StepGetOfficeTableEditRefresh {
       const updatedOperation = {
         objectWorkingId,
         officeTable,
-        shouldFormat,
+        shouldFormat: newObjectDetailsSize === 0 ? shouldFormat : false,
         tableChanged,
         instanceDefinition,
         startCell,

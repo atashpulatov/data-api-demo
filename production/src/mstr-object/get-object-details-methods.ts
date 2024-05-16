@@ -82,7 +82,8 @@ export const populateDetails = (
  */
 export const calculateOffsetForObjectInfoSettings = (
   objectInfoSettings: ObjectInfoSetting[],
-  objectType: MstrObjectTypes
+  objectType: MstrObjectTypes,
+  hasPageBy: boolean
 ): number => {
   const isReport = objectType.name === mstrObjectEnum.mstrObjectType.report.name;
 
@@ -98,10 +99,11 @@ export const calculateOffsetForObjectInfoSettings = (
           offset += offsetForName;
           break;
         case 'filter':
+        case 'filters':
           offset += isReport ? offsetForReportFilters : defaultOffset;
           break;
         case 'pageBy':
-          offset += isReport ? defaultOffset : 0;
+          offset += isReport && hasPageBy ? defaultOffset : 0;
           break;
         default:
           offset += defaultOffset;
