@@ -21,9 +21,9 @@ import { selectorProperties } from '../../attribute-selector/selector-properties
 import i18n from '../../i18n';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
+import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
-import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { EmbeddedDossier } from './embedded-dossier';
 import { errorCodes } from '../../error/constants';
 import { ObjectImportType } from '../../mstr-object/constants';
@@ -76,7 +76,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
   } = props;
 
   const { isEdit, importType: editedObjectImportType } = editedObject;
-  const { chapterKey, visualizationKey, vizDimensions } = lastSelectedViz;
+  const { chapterKey, visualizationKey, vizDimensions, isVizGrid } = lastSelectedViz;
   const [dialogPopup, setDialogPopup] = React.useState(null);
 
   if (editedObjectImportType && importType !== editedObjectImportType) {
@@ -94,6 +94,8 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
   const isSelected = !!(chapterKey && visualizationKey);
   const isSupported = !!(isSelected && vizData && vizData.isSupported);
   const isChecking = !!(isSelected && (!vizData || (vizData && vizData.isSupported === undefined)));
+  const isFormattedImportVizOfNonGridType =
+    importType === ObjectImportType.FORMATTED_TABLE && !isVizGrid;
 
   const handleCancel = (): void => {
     const { commandCancel } = selectorProperties;
@@ -149,6 +151,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
           chapterKey: chosenVizchapterKey,
           visualizationKey: chosenVizKey,
           vizDimensions: chosenVizDimensions,
+          isVizGrid: chosenVizIsGrid,
         });
         updateVisualizationTypeGrid(chosenVizIsGrid);
         setPromptsAnswers(chosenVizPromptAnswers);
@@ -199,7 +202,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
         }
       }
     },
-    [chosenObjectId, chosenProjectId, vizualizationsData]
+    [chosenObjectId, chosenProjectId, vizualizationsData, updateVisualizationTypeGrid]
   );
 
   const handleOk = useCallback(() => {
@@ -363,6 +366,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
             handleBack={!isEdit && handleBack}
             hideSecondary
             disableActiveActions={!isSelected}
+            disablePrimaryOnFormattedDataImport={isFormattedImportVizOfNonGridType}
             isPublished={!(isSelected && !isSupported && !isChecking)}
             disableSecondary={isSelected && !isSupported && !isChecking}
             checkingSelection={isChecking}

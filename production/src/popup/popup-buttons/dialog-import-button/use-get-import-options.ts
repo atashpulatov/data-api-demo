@@ -34,7 +34,11 @@ const useGetImportOptions = (): ImportButtonOptionsType[] => {
 
   options.push(optionsDictionary[ObjectImportType.TABLE]);
 
-  if (isInsertWorksheetAPISupported) {
+  // Display 'Import Formatted Data' button only for reports and dossiers
+  if (isInsertWorksheetAPISupported
+    && (selectedMstrObjectType === mstrObjectType.mstrObjectType.dossier
+      || selectedMstrObjectType === mstrObjectType.mstrObjectType.report)
+  ) {
     options.push({ disabled: !isChosenVisOfGridType, ...optionsDictionary[ObjectImportType.FORMATTED_TABLE] });
   }
 

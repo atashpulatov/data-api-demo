@@ -8,6 +8,7 @@ import useGetImportOptions from './use-get-import-options';
 import useGetImportType from './use-get-import-type';
 
 import { popupStateActions } from '../../../redux-reducer/popup-state-reducer/popup-state-actions';
+import { ErrorMessages } from '../../../error/constants';
 import { ObjectImportType } from '../../../mstr-object/constants';
 
 interface ImportButtonProps {
@@ -25,10 +26,21 @@ export const ImportButton: React.FC<ImportButtonProps> = ({
   const dispatch = useDispatch();
 
   const isDisabled = !!disableReason;
-  
+
   const options = useGetImportOptions();
-  const importType = useGetImportType(options); 
-  const { shouldDisplayOptions, importButtonProps } = useGetImportButtonProps(importType, options, isDisabled);
+  const importType = useGetImportType(options);
+
+  const isNonGridVizNotSupported = disableReason === ErrorMessages.NON_GRID_VIZ_NOT_SUPPORTED;
+
+  // Enable users to select valid(supported) import options(types), even if the current selected
+  // import type is not supported. Indicates whether we should disable the options button
+  const isOptionsBtnDisabled = isNonGridVizNotSupported ? false : isDisabled;
+
+  const { shouldDisplayOptions, importButtonProps } = useGetImportButtonProps(
+    importType,
+    options,
+    isOptionsBtnDisabled
+  );
 
   const handleOptionChange = (type: ObjectImportType): void => {
     dispatch(popupStateActions.setImportType(type) as any);
@@ -44,7 +56,7 @@ export const ImportButton: React.FC<ImportButtonProps> = ({
           onOptionChange={handleOptionChange}
           variant={isPrimaryBtn ? 'primary' : 'secondary'}
           disabledActionButton={isDisabled}
-          disabledDropdownButton={isDisabled}
+          disabledDropdownButton={isOptionsBtnDisabled}
         >
           {t(importButtonProps.actionType)}
         </ButtonWithOptions>

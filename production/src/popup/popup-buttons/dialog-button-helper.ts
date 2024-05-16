@@ -6,6 +6,7 @@ class DialogButtonHelper {
   getDisableReasonImport(
     isPublished: boolean,
     disableActiveActions: boolean,
+    disablePrimaryOnFormattedDataImport?: boolean,
     disableSecondary?: boolean,
     checkingSelection?: boolean
   ): ErrorMessages {
@@ -20,6 +21,10 @@ class DialogButtonHelper {
     }
     if (checkingSelection !== undefined && checkingSelection) {
       return ErrorMessages.CHECKING_SELECTION;
+    }
+    // Disable 'Import Formatted Data' button on non-grid visualization selection
+    if (disablePrimaryOnFormattedDataImport) {
+      return ErrorMessages.NON_GRID_VIZ_NOT_SUPPORTED;
     }
   }
 
@@ -48,6 +53,8 @@ class DialogButtonHelper {
     let id = ImportButtonIds.IMPORT;
     let actionType = ImportActionTypes.IMPORT;
 
+    console.log('HHHHHHHHH - importType', importType)
+
     if (importType === ObjectImportType.TABLE) {
       id = ImportButtonIds.IMPORT_DATA;
       actionType = ImportActionTypes.IMPORT_DATA;
@@ -57,7 +64,7 @@ class DialogButtonHelper {
       id = ImportButtonIds.IMPORT_PIVOT_TABLE;
       actionType = ImportActionTypes.IMPORT_PIVOT_TABLE;
     }
-      
+
     if (importType === ObjectImportType.FORMATTED_TABLE) {
       id = ImportButtonIds.IMPORT_DATA_WITH_FORMATTING;
       actionType = ImportActionTypes.IMPORT_DATA_WITH_FORMATTING;
