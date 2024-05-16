@@ -40,6 +40,11 @@ class StepGetObjectDetails {
     console.time('Total');
 
     try {
+      const value = Math.random();
+      console.log('🚀 ~ MstrObjectRestService ~ value:', value);
+      if (value > 0.5) {
+        throw new Error('Error');
+      }
       const { objectWorkingId, objectId, projectId, mstrObjectType, pageByData } = objectData;
 
       const {
