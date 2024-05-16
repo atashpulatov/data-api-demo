@@ -105,9 +105,8 @@ class PivotTableHelper {
       worksheet.delete();
       await excelContext.sync();
 
-      const officeContext = await officeApiHelper.getOfficeContext();
-
       if (pivotTableId) {
+        const officeContext = await officeApiHelper.getOfficeContext();
         officeContext.document.bindings.releaseByIdAsync(pivotTableId);
       }
     }
