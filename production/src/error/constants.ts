@@ -244,3 +244,8 @@ export const errorMessageFactory = withDefaultValue(
 export const globalNotificationWarningAndErrorStrings = Object.values(
   GlobalNotificationTypes || {}
 );
+
+export enum TableOperation {
+  CREATE_NEW_TABLE = 'createNewTable',
+  UPDATE_EXISTING_TABLE = 'updateExistingTable',
+}
