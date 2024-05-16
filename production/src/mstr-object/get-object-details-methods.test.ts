@@ -9,9 +9,11 @@ import { MstrObjectTypes } from './mstr-object-types';
 import {
   calculateOffsetForObjectInfoSettings,
   getObjectPrompts,
+  getTableOperationAndStartCell,
   populateDefinition,
   populateDetails,
 } from './get-object-details-methods';
+import { TableOperation } from '../error/constants';
 
 describe('Get Object Details Methods', () => {
   describe('getObjectPrompts', () => {
@@ -352,4 +354,47 @@ describe('Get Object Details Methods', () => {
       expect(offset).toEqual(expectedOffset);
     });
   });
+});
+
+describe('getTableOperationAndStartCell', () => {
+  it.each`
+    tableChanged | tableMoved | previousObjectDetailsSize | newObjectDetailsSize | expectedStartCell | expectedOperation
+    ${false}     | ${false}   | ${5}                      | ${5}                 | ${'A5'}           | ${TableOperation.UPDATE_EXISTING_TABLE}
+    ${false}     | ${false}   | ${5}                      | ${7}                 | ${'A5'}           | ${TableOperation.CREATE_NEW_TABLE}
+    ${false}     | ${true}    | ${5}                      | ${5}                 | ${'A5'}           | ${TableOperation.UPDATE_EXISTING_TABLE}
+    ${false}     | ${true}    | ${5}                      | ${7}                 | ${'A3'}           | ${TableOperation.UPDATE_EXISTING_TABLE}
+    ${true}      | ${false}   | ${5}                      | ${5}                 | ${'A5'}           | ${TableOperation.CREATE_NEW_TABLE}
+    ${true}      | ${false}   | ${5}                      | ${7}                 | ${'A5'}           | ${TableOperation.CREATE_NEW_TABLE}
+    ${true}      | ${true}    | ${5}                      | ${5}                 | ${'A5'}           | ${TableOperation.CREATE_NEW_TABLE}
+    ${true}      | ${true}    | ${5}                      | ${7}                 | ${'A3'}           | ${TableOperation.CREATE_NEW_TABLE}
+  `(
+    'should handle page by operation error',
+    async ({
+      tableChanged,
+      tableMoved,
+      previousObjectDetailsSize,
+      newObjectDetailsSize,
+      expectedOperation,
+      expectedStartCell,
+    }) => {
+      // given
+      const options = {
+        tableMoved,
+        tableChanged,
+        previousObjectDetailsSize,
+        newObjectDetailsSize,
+        tableStartCell: 'A10',
+      };
+      const expected = {
+        operation: expectedOperation,
+        startCell: expectedStartCell,
+      };
+
+      // when
+      const result = getTableOperationAndStartCell(options);
+
+      // then
+      expect(result).toEqual(expected);
+    }
+  );
 });
