@@ -66,7 +66,7 @@ class OperationErrorHandler {
     const { officeTable, excelContext } = operationData;
 
     if (importType === ObjectImportType.PIVOT_TABLE) {
-      await this.handlePivotTableImportError(objectData, operationData);
+      await this.handlePivotTableImportError(operationData);
     } else if (officeTable) {
       await officeApiCrosstabHelper.clearCrosstabRange(
         officeTable,
@@ -96,11 +96,9 @@ class OperationErrorHandler {
   /**
    * Function handling errors that occurred during Import and Duplicate operation of Pivot Table.
    * It aims to remove the source worksheet and pivot table from Excel.
+   *  @param operationData Contains information about current operation
    */
-  handlePivotTableImportError = async (
-    objectData: ObjectData,
-    operationData: OperationData
-  ): Promise<void> => {
+  handlePivotTableImportError = async (operationData: OperationData): Promise<void> => {
     const { excelContext, objectWorkingId, officeTable } = operationData;
     const { worksheet } = officeTable;
 
