@@ -29,7 +29,7 @@ export interface DialogResponse {
   displayAttrFormNames?: DisplayAttrFormNames;
   projectId?: string;
   body?: Body;
-  instanceId?: number;
+  instanceId?: string;
   subtotalsInfo?: SubtotalsInfo;
   error?: any;
   filterDetails?: FilterDetails[];
