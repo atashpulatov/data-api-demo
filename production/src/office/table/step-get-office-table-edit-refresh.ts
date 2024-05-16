@@ -18,6 +18,7 @@ import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import officeTableCreate from './office-table-create';
 import officeTableRefresh from './office-table-refresh';
 import officeTableUpdate from './office-table-update';
+import { TableOperation } from '../../error/constants';
 import { ObjectImportType } from '../../mstr-object/constants';
 
 class StepGetOfficeTableEditRefresh {
@@ -101,7 +102,7 @@ class StepGetOfficeTableEditRefresh {
         tableStartCell: currentTableStartCell,
       });
 
-      tableChanged = tableStatus.operation === 'createNewTable';
+      tableChanged = tableStatus.operation === TableOperation.CREATE_NEW_TABLE;
 
       if (tableChanged) {
         console.warn('Instance definition changed, creating new table');

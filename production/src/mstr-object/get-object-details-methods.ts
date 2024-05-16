@@ -9,6 +9,7 @@ import { ObjectData, ObjectDetails, Owner } from '../types/object-types';
 import { MstrObjectTypes } from './mstr-object-types';
 
 import mstrObjectEnum from './mstr-object-type-enum';
+import { TableOperation } from '../error/constants';
 
 const promptAnswerFunctionsMap = {
   OBJECTS: (prompt: any) => prompt.answers.map((answer: any) => answer.name),
@@ -135,14 +136,14 @@ export const getTableOperationAndStartCell = ({
   newObjectDetailsSize: number;
   tableStartCell: string;
 }): {
-  operation: 'createNewTable' | 'updateExistingTable';
+  operation: TableOperation;
   startCell: string;
 } => {
   const [column, row] = tableStartCell.split(/(\d+)/);
 
   // if there is no place left for the object details above the table, the object details start from the first cell of the selected column.
   if (parseInt(row, 10) < newObjectDetailsSize) {
-    return { startCell: `${column}1`, operation: 'createNewTable' };
+    return { startCell: `${column}1`, operation: TableOperation.CREATE_NEW_TABLE };
   }
   const objectDetailsSizeChanged = previousObjectDetailsSize !== newObjectDetailsSize;
 
@@ -156,10 +157,10 @@ export const getTableOperationAndStartCell = ({
 
   // If the table changed (for example one of the columns are deleted), or the object details size changed when the table was not moved, a new table has to be created.
   // When the table is not moved but the object details size changed, the reference point is taken as the start cell of the object details, and the placement of the new table is made accordingly.
-  const operation: 'createNewTable' | 'updateExistingTable' =
+  const operation =
     tableChanged || (!tableMoved && objectDetailsSizeChanged)
-      ? 'createNewTable'
-      : 'updateExistingTable';
+      ? TableOperation.CREATE_NEW_TABLE
+      : TableOperation.UPDATE_EXISTING_TABLE;
 
   return {
     operation,
