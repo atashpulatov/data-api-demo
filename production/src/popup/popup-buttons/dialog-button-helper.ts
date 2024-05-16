@@ -22,7 +22,7 @@ class DialogButtonHelper {
     if (checkingSelection !== undefined && checkingSelection) {
       return ErrorMessages.CHECKING_SELECTION;
     }
-    // Disable 'Import Formatted Data' button on non-grid visualization selection
+    // Disable 'Import Formatted Data' button on non-grid visualization selected
     if (disablePrimaryOnFormattedDataImport) {
       return ErrorMessages.NON_GRID_VIZ_NOT_SUPPORTED;
     }
@@ -52,8 +52,6 @@ class DialogButtonHelper {
   ): { id: string; actionType: string } {
     let id = ImportButtonIds.IMPORT;
     let actionType = ImportActionTypes.IMPORT;
-
-    console.log('HHHHHHHHH - importType', importType)
 
     if (importType === ObjectImportType.TABLE) {
       id = ImportButtonIds.IMPORT_DATA;

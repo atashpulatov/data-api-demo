@@ -94,7 +94,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
   const isSelected = !!(chapterKey && visualizationKey);
   const isSupported = !!(isSelected && vizData && vizData.isSupported);
   const isChecking = !!(isSelected && (!vizData || (vizData && vizData.isSupported === undefined)));
-  const isFormattedImportVizOfNonGridType =
+  const isVizOfNonGridTypeOnFormattedDataImport =
     importType === ObjectImportType.FORMATTED_TABLE && !isVizGrid;
 
   const handleCancel = (): void => {
@@ -366,7 +366,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
             handleBack={!isEdit && handleBack}
             hideSecondary
             disableActiveActions={!isSelected}
-            disablePrimaryOnFormattedDataImport={isFormattedImportVizOfNonGridType}
+            disablePrimaryOnFormattedDataImport={isVizOfNonGridTypeOnFormattedDataImport}
             isPublished={!(isSelected && !isSupported && !isChecking)}
             disableSecondary={isSelected && !isSupported && !isChecking}
             checkingSelection={isChecking}
