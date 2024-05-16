@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
-import { PageBy, PageByConfiguration } from '@mstr/connector-components';
+import { PageBy } from '@mstr/connector-components';
 
 import { handleExecuteNextRepromptTask } from '../helpers/prompts-handling-helper';
 import { pageByHelper } from '../page-by/page-by-helper';
@@ -103,16 +103,12 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
 
   const getDefaultPageByConfiguration = useCallback(
     () =>
-      pageByHelper
-        .getDefaultPageByElement(pageByResponse?.pageBy, pageByResponse?.validPageByElements)
-        .map(
-          ({ name, value, valueId }) =>
-            ({
-              name,
-              value,
-              id: valueId,
-            }) as PageByConfiguration
-        ),
+      pageByHelper.parsePageByDataElements(
+        pageByHelper.getDefaultPageByElement(
+          pageByResponse?.pageBy,
+          pageByResponse?.validPageByElements
+        )
+      ),
     [pageByResponse?.pageBy, pageByResponse?.validPageByElements]
   );
 
