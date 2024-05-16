@@ -87,7 +87,7 @@ class StepGetOfficeTableEditRefresh {
         mstrObjectType
       );
 
-      // wheter the table has cross tab headers or not, this value stores the start cell of the headers (outer header if cross tab)
+      // whether the table has cross tab headers or not, this value stores the start cell of the headers (outer header if cross tab)
       const currentTableStartCell = officeTableRefresh.getCrosstabStartCell(
         startCell, // if the table has crosstab headers, this is the start cell of the inner headers.
         instanceDefinition,
