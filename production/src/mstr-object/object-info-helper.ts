@@ -181,30 +181,6 @@ export const insertAndFormatObjectDetails = async ({
 };
 
 /**
- * Returns the start cell for the object details based on the provided table outer start cell and object details size.
- *
- * @param params - The parameters for calculating the start cell.
- * @param params.tableOuterStartCell - The start cell of the table outer.
- * @param params.objectDetailsSize - The size of the object details.
- * @returns The start cell for the object details.
- */
-export const getObjectDetailsStartCell = ({
-  tableOuterStartCell,
-  objectDetailsSize,
-}: {
-  tableOuterStartCell: string;
-  objectDetailsSize: number;
-}): string => {
-  const objectDetailsStartCell = officeApiHelper.offsetCellBy(
-    tableOuterStartCell,
-    -objectDetailsSize,
-    0
-  );
-
-  return objectDetailsStartCell;
-};
-
-/**
  * Retrieves the range of object details in the specified worksheet.
  *
  * @param params - The parameters for retrieving the object details range.
