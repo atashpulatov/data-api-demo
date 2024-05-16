@@ -13,6 +13,7 @@ import {
   populateDefinition,
   populateDetails,
 } from './get-object-details-methods';
+import { TableOperation } from '../error/constants';
 
 describe('Get Object Details Methods', () => {
   describe('getObjectPrompts', () => {
@@ -356,171 +357,44 @@ describe('Get Object Details Methods', () => {
 });
 
 describe('getTableOperationAndStartCell', () => {
-  it('tableChanged: false, tableMoved:false, objectDetailsSizeChanged: false', () => {
-    // given
-    const options = {
-      tableMoved: false,
-      tableChanged: false,
-      previousObjectDetailsSize: 5,
-      newObjectDetailsSize: 5,
-      tableStartCell: 'A10',
-    };
-    const expected = {
-      operation: 'updateExistingTable',
-      startCell: 'A5',
-    };
+  it.each`
+    tableChanged | tableMoved | previousObjectDetailsSize | newObjectDetailsSize | expectedStartCell | expectedOperation
+    ${false}     | ${false}   | ${5}                      | ${5}                 | ${'A5'}           | ${TableOperation.UPDATE_EXISTING_TABLE}
+    ${false}     | ${false}   | ${5}                      | ${7}                 | ${'A5'}           | ${TableOperation.CREATE_NEW_TABLE}
+    ${false}     | ${true}    | ${5}                      | ${5}                 | ${'A5'}           | ${TableOperation.UPDATE_EXISTING_TABLE}
+    ${false}     | ${true}    | ${5}                      | ${7}                 | ${'A3'}           | ${TableOperation.UPDATE_EXISTING_TABLE}
+    ${true}      | ${false}   | ${5}                      | ${5}                 | ${'A5'}           | ${TableOperation.CREATE_NEW_TABLE}
+    ${true}      | ${false}   | ${5}                      | ${7}                 | ${'A5'}           | ${TableOperation.CREATE_NEW_TABLE}
+    ${true}      | ${true}    | ${5}                      | ${5}                 | ${'A5'}           | ${TableOperation.CREATE_NEW_TABLE}
+    ${true}      | ${true}    | ${5}                      | ${7}                 | ${'A3'}           | ${TableOperation.CREATE_NEW_TABLE}
+  `(
+    'should handle page by operation error',
+    async ({
+      tableChanged,
+      tableMoved,
+      previousObjectDetailsSize,
+      newObjectDetailsSize,
+      expectedOperation,
+      expectedStartCell,
+    }) => {
+      // given
+      const options = {
+        tableMoved,
+        tableChanged,
+        previousObjectDetailsSize,
+        newObjectDetailsSize,
+        tableStartCell: 'A10',
+      };
+      const expected = {
+        operation: expectedOperation,
+        startCell: expectedStartCell,
+      };
 
-    // when
-    const result = getTableOperationAndStartCell(options);
+      // when
+      const result = getTableOperationAndStartCell(options);
 
-    // then
-    expect(result).toEqual(expected);
-  });
-
-  it('tableChanged: false, tableMoved:false, objectDetailsSizeChanged: true', () => {
-    // given
-    const options = {
-      tableMoved: false,
-      tableChanged: false,
-      previousObjectDetailsSize: 5,
-      newObjectDetailsSize: 7,
-      tableStartCell: 'A10',
-    };
-    const expected = {
-      operation: 'createNewTable',
-      startCell: 'A5',
-    };
-
-    // when
-    const result = getTableOperationAndStartCell(options);
-
-    // then
-    expect(result).toEqual(expected);
-  });
-
-  it('tableChanged: false, tableMoved:true, objectDetailsSizeChanged: false', () => {
-    // given
-    const options = {
-      tableMoved: true,
-      tableChanged: false,
-      previousObjectDetailsSize: 5,
-      newObjectDetailsSize: 5,
-      tableStartCell: 'A1',
-    };
-    const expected = {
-      operation: 'createNewTable',
-      startCell: 'A1',
-    };
-
-    // when
-    const result = getTableOperationAndStartCell(options);
-
-    // then
-    expect(result).toEqual(expected);
-  });
-
-  it('tableChanged: false, tableMoved:true, objectDetailsSizeChanged: true', () => {
-    // given
-    const options = {
-      tableMoved: true,
-      tableChanged: false,
-      previousObjectDetailsSize: 5,
-      newObjectDetailsSize: 7,
-      tableStartCell: 'A10',
-    };
-    const expected = {
-      operation: 'updateExistingTable',
-      startCell: 'A3',
-    };
-
-    // when
-    const result = getTableOperationAndStartCell(options);
-
-    // then
-    expect(result).toEqual(expected);
-  });
-
-  it('tableChanged: true, tableMoved:false, objectDetailsSizeChanged: false', () => {
-    // given
-    const options = {
-      tableMoved: false,
-      tableChanged: true,
-      previousObjectDetailsSize: 5,
-      newObjectDetailsSize: 5,
-      tableStartCell: 'A10',
-    };
-    const expected = {
-      operation: 'createNewTable',
-      startCell: 'A5',
-    };
-
-    // when
-    const result = getTableOperationAndStartCell(options);
-
-    // then
-    expect(result).toEqual(expected);
-  });
-
-  it('tableChanged: true, tableMoved:false, objectDetailsSizeChanged: true', () => {
-    // given
-    const options = {
-      tableMoved: false,
-      tableChanged: true,
-      previousObjectDetailsSize: 5,
-      newObjectDetailsSize: 7,
-      tableStartCell: 'A10',
-    };
-    const expected = {
-      operation: 'createNewTable',
-      startCell: 'A5',
-    };
-
-    // when
-    const result = getTableOperationAndStartCell(options);
-
-    // then
-    expect(result).toEqual(expected);
-  });
-
-  it('tableChanged: true, tableMoved:true, objectDetailsSizeChanged: false', () => {
-    // given
-    const options = {
-      tableMoved: true,
-      tableChanged: true,
-      previousObjectDetailsSize: 5,
-      newObjectDetailsSize: 5,
-      tableStartCell: 'A10',
-    };
-    const expected = {
-      operation: 'createNewTable',
-      startCell: 'A5',
-    };
-
-    // when
-    const result = getTableOperationAndStartCell(options);
-
-    // then
-    expect(result).toEqual(expected);
-  });
-
-  it('tableChanged: true, tableMoved:true, objectDetailsSizeChanged: true', () => {
-    // given
-    const options = {
-      tableMoved: true,
-      tableChanged: true,
-      previousObjectDetailsSize: 5,
-      newObjectDetailsSize: 7,
-      tableStartCell: 'A10',
-    };
-    const expected = {
-      operation: 'createNewTable',
-      startCell: 'A3',
-    };
-
-    // when
-    const result = getTableOperationAndStartCell(options);
-
-    // then
-    expect(result).toEqual(expected);
-  });
+      // then
+      expect(result).toEqual(expected);
+    }
+  );
 });
