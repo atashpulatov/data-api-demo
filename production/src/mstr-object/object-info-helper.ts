@@ -146,12 +146,10 @@ export const getObjectDetailsForWorksheet = (
 
 /**
  * Inserts and formats object details in the worksheet.
- *
- * @param objectDetailsSize - The number of rows needed for the object details.
- * @param startCell - The starting cell for inserting the object details.
- * @param objectData - The object data.
- * @param worksheet - The Excel worksheet.
- * @param excelContext - The Excel request context.
+ * @param params
+ * @param params.objectData - The object data.
+ * @param params.excelContext - The Excel request context.
+ * @param params.objectDetailsRange - The range where the object details will be inserted.
  * @returns A promise that resolves when the object details are inserted and formatted.
  */
 export const insertAndFormatObjectDetails = async ({
@@ -179,11 +177,17 @@ export const insertAndFormatObjectDetails = async ({
         objectDetailsRange.getCell(row, 0).format.font.bold = true;
       }
     }
-  } else {
-    console.log('objectDetailsRange is null');
   }
 };
 
+/**
+ * Returns the start cell for the object details based on the provided table outer start cell and object details size.
+ *
+ * @param params - The parameters for calculating the start cell.
+ * @param params.tableOuterStartCell - The start cell of the table outer.
+ * @param params.objectDetailsSize - The size of the object details.
+ * @returns The start cell for the object details.
+ */
 export const getObjectDetailsStartCell = ({
   tableOuterStartCell,
   objectDetailsSize,
@@ -200,6 +204,15 @@ export const getObjectDetailsStartCell = ({
   return objectDetailsStartCell;
 };
 
+/**
+ * Retrieves the range of object details in the specified worksheet.
+ *
+ * @param params - The parameters for retrieving the object details range.
+ * @param params.worksheet - The worksheet to retrieve the range from.
+ * @param params.objectDetailsStartCell - The starting cell of the object details range.
+ * @param params.objectDetailsSize - The size of the object details range.
+ * @returns A promise returns the range of object details.
+ */
 export const getObjectDetailsRange = async ({
   worksheet,
   objectDetailsStartCell,
