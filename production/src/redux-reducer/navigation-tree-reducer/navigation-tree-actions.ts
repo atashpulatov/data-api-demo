@@ -74,9 +74,9 @@ function updateSelectedMenu(data: any) {
     dispatch({ type: NavigationTreeActionTypes.UPDATE_SELECTED_MENU, data });
 }
 
-function updateVisualizationTypeGrid(isVizGrid: any) {
+function updateIsChosenVizOfGridType(isVizGrid: any) {
   return (dispatch: Dispatch<any>) =>
-    dispatch({ type: NavigationTreeActionTypes.UPDATE_VISUALIZATION_TYPE_GRID, isVizGrid });
+    dispatch({ type: NavigationTreeActionTypes.UPDATE_IS_CHOSEN_VIZ_OF_GRID_TYPE, isVizGrid });
 }
 
 export const navigationTreeActions = {
@@ -94,5 +94,5 @@ export const navigationTreeActions = {
   updateDisplayAttrFormOnImport,
   setPromptObjects,
   updateSelectedMenu,
-  updateVisualizationTypeGrid
+  updateIsChosenVizOfGridType
 };

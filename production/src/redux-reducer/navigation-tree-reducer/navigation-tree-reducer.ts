@@ -83,8 +83,8 @@ export const navigationTree = (
     case NavigationTreeActionTypes.SET_POPUP_TYPE:
       return setPopupType(state, action.popupType);
 
-    case NavigationTreeActionTypes.UPDATE_VISUALIZATION_TYPE_GRID:
-      return updateVisualizationTypeGrid(state, action.isVizGrid);
+    case NavigationTreeActionTypes.UPDATE_IS_CHOSEN_VIZ_OF_GRID_TYPE:
+      return updateIsChosenVizOfGridType(state, action.isVizGrid);
 
     default:
       return state;
@@ -255,7 +255,7 @@ const setPopupType = (state: NavigationTreeState, popupType: DialogType): Naviga
   return newState;
 };
 
-const updateVisualizationTypeGrid = (state: NavigationTreeState, isVizGrid: boolean): NavigationTreeState => {
+const updateIsChosenVizOfGridType = (state: NavigationTreeState, isVizGrid: boolean): NavigationTreeState => {
   const newState = { ...state };
   newState.isChosenVisOfGridType = isVizGrid;
   return newState;

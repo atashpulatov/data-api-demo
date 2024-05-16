@@ -37,7 +37,7 @@ interface DossierWindowProps {
   isShapeAPISupported: boolean;
   handleBack: () => void;
   setImportType: (importType: ObjectImportType) => void;
-  updateVisualizationTypeGrid: (isVizGrid: boolean) => void;
+  updateIsChosenVizOfGridType: (isVizGrid: boolean) => void;
   editedObject: EditedObject;
   isReprompt: boolean;
   importType: ObjectImportType;
@@ -65,7 +65,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
     chosenObjectName = DEFAULT_PROJECT_NAME,
     handleBack,
     setImportType,
-    updateVisualizationTypeGrid,
+    updateIsChosenVizOfGridType,
     editedObject = {} as EditedObject,
     chosenObjectId = 'default id',
     chosenProjectId = 'default id',
@@ -153,7 +153,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
           vizDimensions: chosenVizDimensions,
           isVizGrid: chosenVizIsGrid,
         });
-        updateVisualizationTypeGrid(chosenVizIsGrid);
+        updateIsChosenVizOfGridType(chosenVizIsGrid);
         setPromptsAnswers(chosenVizPromptAnswers);
         instanceId.current = chosenVizInstanceId;
 
@@ -202,7 +202,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
         }
       }
     },
-    [chosenObjectId, chosenProjectId, vizualizationsData, updateVisualizationTypeGrid]
+    [chosenObjectId, chosenProjectId, vizualizationsData, updateIsChosenVizOfGridType]
   );
 
   const handleOk = useCallback(() => {
@@ -432,7 +432,7 @@ function mapStateToProps(state: RootState): any {
 const mapActionsToProps = {
   handleBack: popupStateActions.onPopupBack,
   setImportType: popupStateActions.setImportType,
-  updateVisualizationTypeGrid: navigationTreeActions.updateVisualizationTypeGrid,
+  updateIsChosenVizOfGridType: navigationTreeActions.updateIsChosenVizOfGridType,
 };
 
 export const DossierWindow = connect(mapStateToProps, mapActionsToProps)(DossierWindowNotConnected);
