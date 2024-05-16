@@ -2,14 +2,12 @@ import { PageByConfiguration } from '@mstr/connector-components';
 
 import { ObjectExecutionStatus } from '../helpers/prompts-handling-helper';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
+import { pageByHelper } from '../page-by/page-by-helper';
 import { popupHelper } from './popup-helper';
-
-import { reduxStore } from '../store';
 
 import { RequestPageByModalOpenData } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer-types';
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
-import { PageByDisplayOption } from '../right-side-panel/settings-side-panel/settings-side-panel-types';
 
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
@@ -128,7 +126,8 @@ class PopupViewSelectorHelper {
   }
 
   async obtainInstanceWithPromptsAnswers(props: any): Promise<InstanceDefinition> {
-    const { editedObject, chosenProjectId, chosenObjectId, requestPageByModalOpen } = props;
+    const { editedObject, chosenProjectId, chosenObjectId, requestPageByModalOpen, importType } =
+      props;
     const projectId =
       chosenProjectId || editedObject.chosenProjectId || (editedObject.projectId as string);
     const objectId = chosenObjectId || (editedObject.chosenObjectId as string);
@@ -176,10 +175,11 @@ class PopupViewSelectorHelper {
     props.preparePromptedReport(instanceDefinition.instanceId, preparedReport);
 
     const { pageBy } = instanceDefinition.definition?.grid || {};
-    const { pageByDisplaySetting } = reduxStore.getState().settingsReducer;
 
     if (props.popupType === DialogType.libraryWindow) {
-      if (pageBy?.length && pageByDisplaySetting === PageByDisplayOption.SELECT_PAGES) {
+      const shouldOpenPageByModal = pageByHelper.getShouldOpenPageByModal(pageBy, importType);
+
+      if (shouldOpenPageByModal) {
         await this.handleRequestPageByModalOpen({
           objectId,
           projectId,

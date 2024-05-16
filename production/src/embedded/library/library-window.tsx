@@ -1,17 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { ObjectWindowTitle } from '@mstr/connector-components';
 import { Spinner } from '@mstr/rc';
 
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
+import { pageByHelper } from '../../page-by/page-by-helper';
 import { popupHelper } from '../../popup/popup-helper';
 import { popupViewSelectorHelper } from '../../popup/popup-view-selector-helper';
 import { EXTEND_SESSION, sessionHelper } from '../../storage/session-helper';
 
-import { PageByDisplayOption } from '../../right-side-panel/settings-side-panel/settings-side-panel-types';
 import { ItemType, LibraryWindowProps } from './library-window-types';
 
 import { selectorProperties } from '../../attribute-selector/selector-properties';
@@ -20,7 +20,6 @@ import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
-import { settingsReducerSelectors } from '../../redux-reducer/settings-reducer/settings-reducer-selectors';
 import { EmbeddedLibrary } from './embedded-library';
 import { DisplayAttrFormNames, ObjectImportType } from '../../mstr-object/constants';
 
@@ -40,8 +39,6 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
   const [isPublished, setIsPublished] = useState(true);
   const [t] = useTranslation('common', { i18n });
 
-  const pageByDisplaySetting = useSelector(settingsReducerSelectors.selectPageByDisplaySetting);
-
   const {
     chosenObjectId,
     chosenProjectId,
@@ -52,6 +49,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
     handlePrepare,
     setObjectData,
     mstrObjectType,
+    importType,
     requestPageByModalOpen,
   } = props;
 
@@ -143,7 +141,9 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
 
         const { pageBy } = instance.definition?.grid || {};
 
-        if (pageBy?.length && pageByDisplaySetting === PageByDisplayOption.SELECT_PAGES) {
+        const shouldOpenPageByModal = pageByHelper.getShouldOpenPageByModal(pageBy, importType);
+
+        if (shouldOpenPageByModal) {
           await popupViewSelectorHelper.handleRequestPageByModalOpen({
             objectId: chosenObjectId,
             projectId: chosenProjectId,

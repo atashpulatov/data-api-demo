@@ -30,7 +30,7 @@ function mapStateToProps(state: any): any {
     popupReducer: { editedObject },
     sessionReducer: { attrFormPrivilege },
     officeReducer,
-    popupStateReducer: { popupType },
+    popupStateReducer: { popupType, importType },
   } = state;
   const { promptsAnswers } = navigationTree;
   const { supportForms } = officeReducer;
@@ -43,6 +43,7 @@ function mapStateToProps(state: any): any {
       ...popupHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege),
     },
     popupType,
+    importType
   };
 }
 
