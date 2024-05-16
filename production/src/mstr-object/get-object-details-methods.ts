@@ -141,8 +141,8 @@ export const getTableOperationAndStartCell = ({
 } => {
   const [column, row] = tableStartCell.split(/(\d+)/);
 
-  // if there is no place left for the object details above the table, the object details start from the first cell of the selected column.
-  if (parseInt(row, 10) < newObjectDetailsSize) {
+  // when the table moved, if there is no place left for the object details above the table, the object details start from the first cell of the selected column.
+  if (parseInt(row, 10) < newObjectDetailsSize && tableMoved) {
     return { startCell: `${column}1`, operation: TableOperation.CREATE_NEW_TABLE };
   }
   const objectDetailsSizeChanged = previousObjectDetailsSize !== newObjectDetailsSize;
