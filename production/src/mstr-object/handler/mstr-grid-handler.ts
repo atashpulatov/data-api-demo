@@ -13,13 +13,15 @@ import jsonHandler from './mstr-normalized-json-handler';
 class GridHandler {
   createTable(response: any): MstrTable {
     const { grid } = response.definition;
-    const isPageByInMetricsAxis = grid.metricsPosition?.axis === 'pageBy';
     // Crosstabular is a Crosstab report with metrics in Rows and nothing in columns, so we display it as tabular
     const isCrosstabular =
-      grid.metricsPosition &&
-      (grid.metricsPosition.axis === 'rows' || isPageByInMetricsAxis) &&
-      grid.columns.length === 0;
-    const columnInformation = this.getColumnInformation(response, isCrosstabular);
+      grid.metricsPosition && grid.metricsPosition.axis === 'rows' && grid.columns.length === 0;
+    const isPageByInMetricsAxis = grid.metricsPosition?.axis === 'pageBy';
+    const columnInformation = this.getColumnInformation(
+      response,
+      isCrosstabular,
+      isPageByInMetricsAxis
+    );
     const isCrosstab = !isCrosstabular && this.isCrosstab(response);
     const { attributes, metrics } = mstrAttributeMetricHelper.extractAttributesMetrics(grid);
     return {
@@ -172,17 +174,9 @@ class GridHandler {
       );
     }
 
-    let headers;
-
-    if (isPageByInMetricsAxis || !isCrosstabular) {
-      headers = { columns: [[...attributeTitles[0], ...metricHeaders[0]]] };
-    } else {
-      headers = {
-        columns: [[...attributeTitles[0], ...metricHeaders[0], "' "]],
-      };
-    }
-
-    return headers;
+    return isCrosstabular
+      ? { columns: [[...attributeTitles[0], ...metricHeaders[0], "' "]] }
+      : { columns: [[...attributeTitles[0], ...metricHeaders[0]]] };
   }
 
   /**
@@ -235,9 +229,14 @@ class GridHandler {
    *
    * @param response
    * @param isCrosstabular Crosstabular is a Crosstab report with metrics in Rows and nothing in columns
+   * @param isPageByInMetricsAxis Specify if metricsPosition axis is pageBy
    * @return
    */
-  getColumnInformation = (response: any, isCrosstabular: boolean): any[] => {
+  getColumnInformation = (
+    response: any,
+    isCrosstabular: boolean,
+    isPageByInMetricsAxis: boolean
+  ): any[] => {
     const { attrforms } = response;
     const supportForms = attrforms ? attrforms.supportForms : false;
     let columns;
@@ -260,7 +259,7 @@ class GridHandler {
 
     if (!attributeColumns.length) {
       columns = parsedMetricColumns;
-    } else if (isCrosstabular) {
+    } else if (isCrosstabular || isPageByInMetricsAxis) {
       columns = [...attributeColumns[attributeColumns.length - 1], ...parsedMetricColumns, []];
     } else {
       columns = [...attributeColumns[attributeColumns.length - 1], ...parsedMetricColumns];
