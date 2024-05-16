@@ -1,7 +1,7 @@
 import { PageByPaging } from '../page-by/page-by-types';
 import { VisualizationTypes } from './mstr-object-types';
 
-export type Axis = 'rows' | 'columns';
+export type Axis = 'rows' | 'columns' | 'pageBy';
 
 export type ValueMatrix = 'raw' | 'formatted' | 'extras';
 
