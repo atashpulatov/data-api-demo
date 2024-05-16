@@ -137,15 +137,30 @@ class PageByHelper {
       items: [currentPageBy],
     };
 
-    const elements = this.parseValidPageByElements(pageBy, validPageByElements);
+    const defaultElement = this.getDefaultPageByElement(pageBy, validPageByElements);
 
     const pageByData = {
       pageByLinkId,
       pageByDisplayType,
-      elements: elements[0],
+      elements: defaultElement,
     };
 
     return pageByData;
+  };
+
+  /**
+   * Retrieves the default Page-by element from the provided Page-by data and valid Page-by combinations.
+   *
+   * @param pageByData Contains information about Page-by data of given object
+   * @param validPageByElements containts valid Page-by combinations of Report's Page-by attributes
+   * @returns
+   */
+  getDefaultPageByElement = (
+    pageBy: PageBy[],
+    validPageByElements: ValidPageByElements
+  ): PageByDataElement[] => {
+    const elements = this.parseValidPageByElements(pageBy, validPageByElements);
+    return elements[0];
   };
 
   /**
