@@ -356,6 +356,27 @@ describe('Get Object Details Methods', () => {
 });
 
 describe('getTableOperationAndStartCell', () => {
+  it('tableChanged: false, tableMoved:false, objectDetailsSizeChanged: false', () => {
+    // given
+    const options = {
+      tableMoved: false,
+      tableChanged: false,
+      previousObjectDetailsSize: 5,
+      newObjectDetailsSize: 5,
+      tableStartCell: 'A10',
+    };
+    const expected = {
+      operation: 'updateExistingTable',
+      startCell: 'A5',
+    };
+
+    // when
+    const result = getTableOperationAndStartCell(options);
+
+    // then
+    expect(result).toEqual(expected);
+  });
+
   it('tableChanged: false, tableMoved:false, objectDetailsSizeChanged: true', () => {
     // given
     const options = {
@@ -369,8 +390,10 @@ describe('getTableOperationAndStartCell', () => {
       operation: 'createNewTable',
       startCell: 'A5',
     };
+
     // when
     const result = getTableOperationAndStartCell(options);
+
     // then
     expect(result).toEqual(expected);
   });
@@ -388,8 +411,10 @@ describe('getTableOperationAndStartCell', () => {
       operation: 'createNewTable',
       startCell: 'A1',
     };
+
     // when
     const result = getTableOperationAndStartCell(options);
+
     // then
     expect(result).toEqual(expected);
   });
@@ -407,8 +432,31 @@ describe('getTableOperationAndStartCell', () => {
       operation: 'updateExistingTable',
       startCell: 'A3',
     };
+
     // when
     const result = getTableOperationAndStartCell(options);
+
+    // then
+    expect(result).toEqual(expected);
+  });
+
+  it('tableChanged: true, tableMoved:false, objectDetailsSizeChanged: false', () => {
+    // given
+    const options = {
+      tableMoved: false,
+      tableChanged: true,
+      previousObjectDetailsSize: 5,
+      newObjectDetailsSize: 5,
+      tableStartCell: 'A10',
+    };
+    const expected = {
+      operation: 'createNewTable',
+      startCell: 'A5',
+    };
+
+    // when
+    const result = getTableOperationAndStartCell(options);
+
     // then
     expect(result).toEqual(expected);
   });
@@ -426,8 +474,52 @@ describe('getTableOperationAndStartCell', () => {
       operation: 'createNewTable',
       startCell: 'A5',
     };
+
     // when
     const result = getTableOperationAndStartCell(options);
+
+    // then
+    expect(result).toEqual(expected);
+  });
+
+  it('tableChanged: true, tableMoved:true, objectDetailsSizeChanged: false', () => {
+    // given
+    const options = {
+      tableMoved: true,
+      tableChanged: true,
+      previousObjectDetailsSize: 5,
+      newObjectDetailsSize: 5,
+      tableStartCell: 'A10',
+    };
+    const expected = {
+      operation: 'createNewTable',
+      startCell: 'A5',
+    };
+
+    // when
+    const result = getTableOperationAndStartCell(options);
+
+    // then
+    expect(result).toEqual(expected);
+  });
+
+  it('tableChanged: true, tableMoved:true, objectDetailsSizeChanged: true', () => {
+    // given
+    const options = {
+      tableMoved: true,
+      tableChanged: true,
+      previousObjectDetailsSize: 5,
+      newObjectDetailsSize: 7,
+      tableStartCell: 'A10',
+    };
+    const expected = {
+      operation: 'createNewTable',
+      startCell: 'A3',
+    };
+
+    // when
+    const result = getTableOperationAndStartCell(options);
+
     // then
     expect(result).toEqual(expected);
   });
