@@ -153,7 +153,7 @@ class PageByHelper {
    *
    * @param pageByData Contains information about Page-by data of given object
    * @param validPageByElements containts valid Page-by combinations of Report's Page-by attributes
-   * @returns
+   * @returns default Page-by configuration
    */
   getDefaultPageByElement = (
     pageBy: PageBy[],

@@ -101,7 +101,7 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
     [editedObject?.objectWorkingId, pageByResponse?.pageBy, pageByResponse?.validPageByElements]
   );
 
-  const getDefaultElement = useCallback(
+  const getDefaultPageByConfiguration = useCallback(
     () =>
       pageByHelper
         .getDefaultPageByElement(pageByResponse?.pageBy, pageByResponse?.validPageByElements)
@@ -157,7 +157,7 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
           }}
           onCancel={handlePageByModalClose}
           pageByConfiguration={getPageByConfiguration()}
-          defaultPageByConfigurations={[getDefaultElement()]}
+          defaultPageByConfigurations={[getDefaultPageByConfiguration()]}
         />
       )}
       {renderProperComponent(popupType)}
