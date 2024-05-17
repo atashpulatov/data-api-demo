@@ -3,7 +3,7 @@ import { ObjectImportType } from '../../../mstr-object/constants';
 export enum ImportActionTypes {
   IMPORT = 'Import',
   IMPORT_DATA = 'Import Data',
-  IMPORT_DATA_WITH_FORMATTING = 'Import Data With Formatting',
+  IMPORT_FORMATTED_DATA = 'Import Formatted Data',
   IMPORT_PIVOT_TABLE = 'Import Pivot Table',
   IMPORT_IMAGE = 'Import Visualization',
   APPLY = 'Apply',
@@ -12,7 +12,7 @@ export enum ImportActionTypes {
 export enum ImportButtonIds {
   IMPORT = 'import',
   IMPORT_DATA = 'import-data',
-  IMPORT_DATA_WITH_FORMATTING = 'import-data-with-formatting',
+  IMPORT_FORMATTED_DATA = 'import-formatted-data',
   IMPORT_PIVOT_TABLE = 'import-pivot-table',
   IMPORT_IMAGE = 'import-image',
   RUN = 'run',
@@ -24,7 +24,7 @@ export const optionsDictionary = {
     key: ObjectImportType.TABLE,
   },
   [ObjectImportType.FORMATTED_TABLE]: {
-    value: 'Import as Data with formatting',
+    value: 'Import Formatted Data',
     key: ObjectImportType.FORMATTED_TABLE,
   },
   [ObjectImportType.IMAGE]: {
