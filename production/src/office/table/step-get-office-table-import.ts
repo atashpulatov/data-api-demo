@@ -44,7 +44,7 @@ class StepGetOfficeTableImport {
       const updatedOperation = {
         objectWorkingId,
         officeTable,
-        shouldFormat: true,
+        shouldFormat: objectDetailsSize === 0,
         tableChanged: false,
         instanceDefinition,
         startCell,

@@ -20,6 +20,8 @@ describe('getObjectDetailsForWorksheet', () => {
           reportLimitsText: 'Test report limits',
         },
         importedBy: 'Jane Smith',
+        modifiedDate: '2024-01-01',
+        createdDate: '2024-01-01',
       },
       objectId: '123456789',
       pageByData: {
@@ -60,6 +62,12 @@ describe('getObjectDetailsForWorksheet', () => {
       ['Imported By'],
       ['Jane Smith'],
       [''],
+      ['Date Modified'],
+      ['1/1/2024 12:00 AM'],
+      [''],
+      ['Date Created'],
+      ['1/1/2024 12:00 AM'],
+      [''],
       ['ID'],
       ['123456789'],
       [''],
@@ -68,7 +76,7 @@ describe('getObjectDetailsForWorksheet', () => {
       [''],
     ];
 
-    const expectedIndexesToFormat = [0, 2, 5, 8, 11, 14, 17, 20, 23];
+    const expectedIndexesToFormat = [0, 2, 5, 8, 11, 14, 17, 20, 23, 26, 29];
 
     // when
     const { objectDetailValues, indexesToFormat } = getObjectDetailsForWorksheet(object);

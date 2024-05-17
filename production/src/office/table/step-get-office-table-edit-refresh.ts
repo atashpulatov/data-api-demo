@@ -1,13 +1,24 @@
+import {
+  getObjectDetailsRange,
+  insertAndFormatObjectDetails,
+} from '../../mstr-object/object-info-helper';
 import getOfficeTableHelper from './get-office-table-helper';
+
+import { reduxStore } from '../../store';
 
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
 
+import {
+  calculateOffsetForObjectInfoSettings,
+  getTableOperationAndStartCell,
+} from '../../mstr-object/get-object-details-methods';
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import officeTableCreate from './office-table-create';
 import officeTableRefresh from './office-table-refresh';
 import officeTableUpdate from './office-table-update';
+import { TableOperation } from '../../error/constants';
 import { ObjectImportType } from '../../mstr-object/constants';
 
 class StepGetOfficeTableEditRefresh {
@@ -36,8 +47,14 @@ class StepGetOfficeTableEditRefresh {
   ): Promise<void> {
     try {
       console.time('Create or get table - edit or refresh');
-      const { tableName, previousTableDimensions, objectWorkingId, pageByData, importType } =
-        objectData;
+      const {
+        tableName,
+        previousTableDimensions,
+        objectWorkingId,
+        pageByData,
+        importType,
+        mstrObjectType,
+      } = objectData;
       const { excelContext, instanceDefinition, oldBindId, objectEditedData, insertNewWorksheet } =
         operationData;
       let { tableChanged, startCell } = operationData;
@@ -64,13 +81,37 @@ class StepGetOfficeTableEditRefresh {
         ));
       }
 
+      const { worksheetObjectInfoSettings } = reduxStore.getState().settingsReducer;
+      const newObjectDetailsSize = calculateOffsetForObjectInfoSettings(
+        worksheetObjectInfoSettings,
+        mstrObjectType,
+        pageByData?.elements?.length > 0
+      );
+
+      // whether the table has cross tab headers or not, this value stores the start cell of the headers (outer header if cross tab)
+      const currentTableStartCell = officeTableRefresh.getCrosstabStartCell(
+        startCell, // if the table has crosstab headers, this is the start cell of the inner headers.
+        instanceDefinition,
+        tableChanged
+      );
+      const tableMoved = objectData.startCell !== currentTableStartCell;
+      const tableStatus = getTableOperationAndStartCell({
+        tableMoved,
+        tableChanged,
+        previousObjectDetailsSize: objectData.objectDetailsSize,
+        newObjectDetailsSize,
+        tableStartCell: currentTableStartCell,
+      });
+
+      tableChanged = tableStatus.operation === TableOperation.CREATE_NEW_TABLE;
+
       if (tableChanged) {
         console.warn('Instance definition changed, creating new table');
 
         ({ officeTable, bindId, startCell } = await officeTableCreate.createOfficeTable({
           instanceDefinition,
           excelContext,
-          startCell,
+          startCell: tableStatus.startCell,
           tableName,
           prevOfficeTable,
           tableChanged,
@@ -81,11 +122,7 @@ class StepGetOfficeTableEditRefresh {
           objectData,
         }));
       } else {
-        shouldFormat =
-          (objectEditedData &&
-            objectEditedData.visualizationInfo &&
-            objectEditedData.visualizationInfo.nameAndFormatShouldUpdate) ||
-          false;
+        shouldFormat = objectEditedData?.visualizationInfo?.nameAndFormatShouldUpdate || false;
 
         officeTable = await officeTableUpdate.updateOfficeTable(
           instanceDefinition,
@@ -93,23 +130,38 @@ class StepGetOfficeTableEditRefresh {
           prevOfficeTable,
           objectData
         );
+
+        if (newObjectDetailsSize > 0) {
+          const objectDetailsRange = await getObjectDetailsRange({
+            worksheet: officeTable.worksheet,
+            objectDetailsStartCell: tableStatus.startCell,
+            objectDetailsSize: newObjectDetailsSize,
+          });
+
+          await insertAndFormatObjectDetails({
+            objectData,
+            excelContext,
+            objectDetailsRange,
+          });
+        }
       }
 
       const updatedOperation = {
         objectWorkingId,
         officeTable,
-        shouldFormat,
+        shouldFormat: newObjectDetailsSize === 0 ? shouldFormat : false,
         tableChanged,
         instanceDefinition,
         startCell,
         isTotalsRowVisible: prevOfficeTable.showTotals,
       };
 
-      startCell = officeTableRefresh.getCrosstabStartCell(
-        startCell,
-        instanceDefinition,
-        tableChanged
-      );
+      if (!tableChanged)
+        startCell = officeTableRefresh.getCrosstabStartCell(
+          startCell,
+          instanceDefinition,
+          tableChanged
+        );
 
       officeTable.worksheet.load(['id', 'name', 'position']);
       await excelContext.sync();
@@ -127,6 +179,7 @@ class StepGetOfficeTableEditRefresh {
           ...updatedObject,
           worksheet: { id, name, index: position },
           groupData: { key: position, title: name },
+          objectDetailsSize: newObjectDetailsSize,
         };
       }
 

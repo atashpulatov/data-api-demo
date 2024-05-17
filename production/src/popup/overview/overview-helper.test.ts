@@ -156,6 +156,22 @@ describe('overview-helper', () => {
     });
   });
 
+  it('should send handlePageByImportFailedClose request to side panel', () => {
+    // Given
+    const objectWorkingId = objectWorkingIds[0];
+    const officeMessageParentMock = jest
+      .spyOn(popupHelper, 'officeMessageParent')
+      .mockImplementation();
+
+    // When
+    overviewHelper.handlePageByImportFailedClose(objectWorkingId);
+
+    // Then
+    expect(officeMessageParentMock).toHaveBeenCalledWith({
+      command: OverviewActionCommands.PAGE_BY_IMPORT_FAILED_CLOSE,
+      objectWorkingId,
+    });
+  });
   it('should send handlePageByDuplicateFailedClose request to side panel', () => {
     // Given
     const objectWorkingId = objectWorkingIds[0];
@@ -221,6 +237,21 @@ describe('overview-helper', () => {
     expect(setDialogPopup).toBeCalledTimes(1);
   });
 
+  it('should call setDialogPopup when setPageByImportFailedPopup is triggered', () => {
+    // given
+    const objectWorkingId = 1;
+    const setDialogPopup = jest.fn();
+    const errorDetails = 'errorDetails';
+
+    // when
+    overviewHelper.setPageByImportFailedPopup({
+      objectWorkingIds: [objectWorkingId],
+      errorDetails,
+      setDialogPopup,
+    });
+    // then
+    expect(setDialogPopup).toBeCalledTimes(1);
+  });
   it('should call setDialogPopup when setPageByDuplicateFailedPopup is triggered', () => {
     // given
     const objectWorkingId = 1;

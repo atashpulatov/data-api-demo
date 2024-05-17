@@ -33,6 +33,8 @@ export const getObjectDetailsForWorksheet = (
 
   let formatIndex = 0;
 
+  // TODO: Duplicated cases 'filter', 'dateModified', 'dateCreated' can be deleted later.
+  // For now they are kept for backward compatibility.
   enabledWorksheetDetailsSettings.forEach(setting => {
     switch (setting.key) {
       case 'name':
@@ -51,6 +53,7 @@ export const getObjectDetailsForWorksheet = (
         formatIndex += 3;
         break;
       case 'filter':
+      case 'filters':
         if (isReport) {
           const mergedViewFilters =
             object.details?.filters.metricLimitsText === '-'
@@ -91,6 +94,7 @@ export const getObjectDetailsForWorksheet = (
         formatIndex += 3;
         break;
       case 'dateModified':
+      case 'modifiedDate':
         objectDetailValues.push(
           [setting.item],
           [
@@ -106,6 +110,7 @@ export const getObjectDetailsForWorksheet = (
         formatIndex += 3;
         break;
       case 'dateCreated':
+      case 'createdDate':
         objectDetailValues.push(
           [setting.item],
           [
@@ -131,9 +136,11 @@ export const getObjectDetailsForWorksheet = (
             object?.pageByData?.elements?.length &&
             pageByHelper.getPageByElements(object.pageByData);
 
-          objectDetailValues.push([i18n.t('Paged-By')], [pageByData || '-'], ['']);
-          indexesToFormat.push(formatIndex);
-          formatIndex += 3;
+          if (pageByData) {
+            objectDetailValues.push([i18n.t('Paged-By')], [pageByData], ['']);
+            indexesToFormat.push(formatIndex);
+            formatIndex += 3;
+          }
         }
         break;
       default:
@@ -146,46 +153,67 @@ export const getObjectDetailsForWorksheet = (
 
 /**
  * Inserts and formats object details in the worksheet.
- *
- * @param objectDetailsSize - The number of rows needed for the object details.
- * @param startCell - The starting cell for inserting the object details.
- * @param objectData - The object data.
- * @param worksheet - The Excel worksheet.
- * @param excelContext - The Excel request context.
+ * @param params
+ * @param params.objectData - The object data.
+ * @param params.excelContext - The Excel request context.
+ * @param params.objectDetailsRange - The range where the object details will be inserted.
  * @returns A promise that resolves when the object details are inserted and formatted.
  */
 export const insertAndFormatObjectDetails = async ({
-  objectDetailsSize,
-  startCell,
   objectData,
-  worksheet,
   excelContext,
+  objectDetailsRange,
 }: {
-  objectDetailsSize: number;
-  startCell: string;
   objectData: ObjectData;
-  worksheet: Excel.Worksheet;
   excelContext: Excel.RequestContext;
+  objectDetailsRange: Excel.Range;
 }): Promise<void> => {
-  if (objectDetailsSize > 0) {
-    const lastCellOfDetails = officeApiHelper.offsetCellBy(startCell, objectDetailsSize - 1, 0);
-    const tableDetailsAddress = `${startCell}:${lastCellOfDetails}`;
-    const tableDetailsRange = worksheet.getRange(tableDetailsAddress);
-
+  if (objectDetailsRange) {
     const { objectDetailValues, indexesToFormat } = getObjectDetailsForWorksheet(objectData);
-    tableDetailsRange.numberFormat = [['@']];
-    tableDetailsRange.values = objectDetailValues;
+    excelContext.trackedObjects.add(objectDetailsRange);
+    objectDetailsRange.clear();
+    objectDetailsRange.numberFormat = [['@']];
+    objectDetailsRange.values = objectDetailValues;
 
-    const dataRange = tableDetailsRange.load(['rowCount']);
-    excelContext.trackedObjects.add(dataRange);
+    objectDetailsRange.load(['rowCount']);
+
     await excelContext.sync();
 
-    for (let row = 0; row < dataRange.rowCount; row++) {
+    for (let row = 0; row < objectDetailsRange.rowCount; row++) {
       if (indexesToFormat.includes(row)) {
-        dataRange.getCell(row, 0).format.font.bold = true;
+        objectDetailsRange.getCell(row, 0).format.font.bold = true;
       }
     }
-
-    await excelContext.sync();
   }
+};
+
+/**
+ * Retrieves the range of object details in the specified worksheet.
+ *
+ * @param params - The parameters for retrieving the object details range.
+ * @param params.worksheet - The worksheet to retrieve the range from.
+ * @param params.objectDetailsStartCell - The starting cell of the object details range.
+ * @param params.objectDetailsSize - The size of the object details range.
+ * @returns A promise returns the range of object details.
+ */
+export const getObjectDetailsRange = async ({
+  worksheet,
+  objectDetailsStartCell,
+  objectDetailsSize,
+}: {
+  worksheet: Excel.Worksheet;
+  objectDetailsStartCell: string;
+  objectDetailsSize: number;
+}): Promise<Excel.Range> => {
+  const objectDetailsEndCell = officeApiHelper.offsetCellBy(
+    objectDetailsStartCell,
+    objectDetailsSize - 1,
+    0
+  );
+
+  const objectDetailsRange = worksheet.getRange(
+    `${objectDetailsStartCell}:${objectDetailsEndCell}`
+  );
+
+  return objectDetailsRange;
 };

@@ -1,4 +1,7 @@
-import { insertAndFormatObjectDetails } from '../../mstr-object/object-info-helper';
+import {
+  getObjectDetailsRange,
+  insertAndFormatObjectDetails,
+} from '../../mstr-object/object-info-helper';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 import { officeApiWorksheetHelper } from '../api/office-api-worksheet-helper';
@@ -66,12 +69,12 @@ class OfficeTableCreate {
       mstrTable: { isCrosstab, crosstabHeaderDimensions, name },
     } = instanceDefinition;
 
-    const { importType } = objectData;
+    const { importType, mstrObjectType } = objectData;
 
     const newOfficeTableName = getOfficeTableHelper.createTableName(mstrTable, tableName);
     const worksheet = await officeApiWorksheetHelper.getWorksheet(
       excelContext,
-      objectData.importType,
+      importType,
       name,
       pageByData,
       prevOfficeTable,
@@ -87,18 +90,12 @@ class OfficeTableCreate {
 
     const objectDetailsSize = calculateOffsetForObjectInfoSettings(
       worksheetObjectInfoSettings,
-      objectData.mstrObjectType
+      mstrObjectType,
+      pageByData?.elements?.length > 0
     );
 
+    const objectDetailsStartCell = startCell;
     if (objectDetailsSize > 0) {
-      await insertAndFormatObjectDetails({
-        objectDetailsSize,
-        startCell,
-        objectData,
-        worksheet,
-        excelContext,
-      });
-
       startCell = officeApiHelper.offsetCellBy(startCell, objectDetailsSize, 0);
     }
 
@@ -128,6 +125,19 @@ class OfficeTableCreate {
       instanceDefinition,
       isRepeatStep
     );
+
+    if (objectDetailsSize > 0) {
+      const objectDetailsRange = await getObjectDetailsRange({
+        worksheet,
+        objectDetailsStartCell,
+        objectDetailsSize,
+      });
+      await insertAndFormatObjectDetails({
+        objectData,
+        excelContext,
+        objectDetailsRange,
+      });
+    }
 
     range.numberFormat = '' as unknown as any[][];
 

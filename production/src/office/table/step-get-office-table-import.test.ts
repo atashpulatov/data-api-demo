@@ -55,6 +55,7 @@ describe('StepGetOfficeTableImport', () => {
       tableName: 'newOfficeTableNameTest',
       worksheet: 'worksheetTest',
       startCell: 'startCellTest',
+      objectDetailsSize: 0,
       groupData: { key: 'key', title: 'name' },
     }));
 
@@ -88,6 +89,7 @@ describe('StepGetOfficeTableImport', () => {
 
     expect(operationStepDispatcher.updateObject).toBeCalledTimes(1);
     expect(operationStepDispatcher.updateObject).toBeCalledWith({
+      objectDetailsSize: 0,
       objectWorkingId: 'objectWorkingIdTest',
       tableName: 'newOfficeTableNameTest',
       bindId: 'bindIdTest',
