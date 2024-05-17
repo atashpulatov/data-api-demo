@@ -47,4 +47,5 @@ export interface ReportParams {
   mstrObjectType?: typeof mstrObjectType;
   duplicateMode?: any;
   object?: any;
+  pageByData?: PageByData;
 }

@@ -103,7 +103,15 @@ export const AttributeSelectorWindowNotConnected: React.FC<
         },
       });
     } else {
-      popupHelper.officeMessageParent(message);
+      let pageByData;
+
+      if (pageBy.length) {
+        pageByData = editedObject?.pageByData || {};
+      } else {
+        pageByData = undefined;
+      }
+
+      popupHelper.officeMessageParent({ ...message, pageByData });
     }
   };
 
@@ -152,7 +160,6 @@ export const AttributeSelectorWindowNotConnected: React.FC<
       subtotalsInfo,
       displayAttrFormNames: displayAttrFormNamesSet,
       filterDetails,
-      pageByData: editedObject?.pageByData,
     };
     handleImport(message);
   };

@@ -36,12 +36,12 @@ class PageByHelper {
    */
   getAllPageByObjects = (
     objectWorkingId: number
-  ): { sourceObject: ObjectData; pageBySiblings: ObjectData[] } => {
+  ): { sourceObject: ObjectData; pageBySiblings?: ObjectData[] } => {
     const sourceObject =
       officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
 
     if (!sourceObject?.pageByData) {
-      return;
+      return { sourceObject };
     }
 
     const { objects } = reduxStore.getState().objectReducer;
@@ -196,7 +196,7 @@ class PageByHelper {
    */
   // TODO: combine with handleRefreshingMultiplePages
   handleRemovingMultiplePages = (objectWorkingId: number): void => {
-    const { pageBySiblings, sourceObject } = this.getAllPageByObjects(objectWorkingId);
+    const { pageBySiblings = [], sourceObject } = this.getAllPageByObjects(objectWorkingId) ?? {};
     pageBySiblings.push(sourceObject);
 
     pageBySiblings.forEach((pageByObject: ObjectData) => {
@@ -276,12 +276,15 @@ class PageByHelper {
       return [];
     }
 
-    const { pageBySiblings, sourceObject } = this.getAllPageByObjects(objectWorkingId);
+    const { pageBySiblings = [], sourceObject } = this.getAllPageByObjects(objectWorkingId) ?? {};
     const allPageByObjects = [sourceObject, ...pageBySiblings];
     const pageByConfiguration = [];
 
     for (const pageByObject of allPageByObjects) {
-      if (!isArrayInNestedArrays(validPageByCombination, pageByObject.pageByData.elements)) {
+      if (
+        !pageByObject.pageByData ||
+        !isArrayInNestedArrays(validPageByCombination, pageByObject.pageByData?.elements)
+      ) {
         return [];
       }
       const pageByElements = pageByObject?.pageByData?.elements.map(({ name, value, valueId }) => ({
