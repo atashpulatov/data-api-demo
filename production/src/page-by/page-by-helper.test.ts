@@ -261,11 +261,11 @@ describe('Page-by helper', () => {
     pageBy                       | pageByDisplaySetting                | importType                          | expectedResult
     ${[]}                        | ${PageByDisplayOption.SELECT_PAGES} | ${ObjectImportType.TABLE}           | ${0}
     ${pageByDataResponse.pageBy} | ${PageByDisplayOption.DEFAULT_PAGE} | ${ObjectImportType.IMAGE}           | ${false}
-    ${pageByDataResponse.pageBy} | ${PageByDisplayOption.ALL_PAGES}    | ${ObjectImportType.FORMATTED_TABLE} | ${false}
+    ${pageByDataResponse.pageBy} | ${PageByDisplayOption.ALL_PAGES}    | ${ObjectImportType.FORMATTED_DATA} | ${false}
     ${pageByDataResponse.pageBy} | ${PageByDisplayOption.SELECT_PAGES} | ${ObjectImportType.PIVOT_TABLE}     | ${false}
     ${pageByDataResponse.pageBy} | ${PageByDisplayOption.SELECT_PAGES} | ${ObjectImportType.TABLE}           | ${true}
     ${pageByDataResponse.pageBy} | ${PageByDisplayOption.SELECT_PAGES} | ${ObjectImportType.IMAGE}           | ${true}
-    ${pageByDataResponse.pageBy} | ${PageByDisplayOption.SELECT_PAGES} | ${ObjectImportType.FORMATTED_TABLE} | ${true}
+    ${pageByDataResponse.pageBy} | ${PageByDisplayOption.SELECT_PAGES} | ${ObjectImportType.FORMATTED_DATA} | ${true}
   `(
     'should return $expectedResult when pageBy is $pageBy, pageByDisplaySetting is $pageByDisplaySetting, and importType is $importType',
     ({ pageBy, pageByDisplaySetting, importType, expectedResult }) => {

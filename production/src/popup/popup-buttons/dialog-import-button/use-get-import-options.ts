@@ -34,7 +34,7 @@ const useGetImportOptions = (): ImportButtonOptionsType[] => {
   options.push(optionsDictionary[ObjectImportType.TABLE]);
 
   if (isInsertWorksheetAPISupported) {
-    options.push(optionsDictionary[ObjectImportType.FORMATTED_TABLE]);
+    options.push(optionsDictionary[ObjectImportType.FORMATTED_DATA]);
   }
 
   if (isShapeAPISupported && selectedMstrObjectType === mstrObjectType.mstrObjectType.dossier) {

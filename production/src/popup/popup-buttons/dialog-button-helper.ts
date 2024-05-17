@@ -58,7 +58,7 @@ class DialogButtonHelper {
       actionType = ImportActionTypes.IMPORT_PIVOT_TABLE;
     }
 
-    if (importType === ObjectImportType.FORMATTED_TABLE) {
+    if (importType === ObjectImportType.FORMATTED_DATA) {
       id = ImportButtonIds.IMPORT_FORMATTED_DATA;
       actionType = ImportActionTypes.IMPORT_FORMATTED_DATA;
     }

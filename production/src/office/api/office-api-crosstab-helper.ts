@@ -227,7 +227,7 @@ class OfficeApiCrosstabHelper {
     const headerRange = startingCell.getResizedRange(columns.length - 1, columns[0].length - 1);
     this.insertHeadersValues(headerRange, columns, 'columns');
 
-    if (objectData.importType !== ObjectImportType.FORMATTED_TABLE) {
+    if (objectData.importType !== ObjectImportType.FORMATTED_DATA) {
       const { mergeCrosstabColumns } = objectData.objectSettings;
 
       if (mergeCrosstabColumns) {

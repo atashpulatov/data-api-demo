@@ -23,9 +23,9 @@ export const optionsDictionary = {
     value: 'Import Data',
     key: ObjectImportType.TABLE,
   },
-  [ObjectImportType.FORMATTED_TABLE]: {
+  [ObjectImportType.FORMATTED_DATA]: {
     value: 'Import Formatted Data',
-    key: ObjectImportType.FORMATTED_TABLE,
+    key: ObjectImportType.FORMATTED_DATA,
   },
   [ObjectImportType.IMAGE]: {
     value: 'Import Visualization',

@@ -5,21 +5,21 @@ export const TITLE_EXCLUDED_DEFAULT_CELL_POSITION = 'A3';
 export enum ObjectImportType {
   TABLE = 'table',
   PIVOT_TABLE = 'pivot-table',
-  FORMATTED_TABLE = 'formatted-table',
+  FORMATTED_DATA = 'formatted-data',
   IMAGE = 'image',
 }
 
 export const objectTableImportType = new Set([
   ObjectImportType.TABLE,
   ObjectImportType.PIVOT_TABLE,
-  ObjectImportType.FORMATTED_TABLE
+  ObjectImportType.FORMATTED_DATA
 ]);
 
 // Excludable object import types based on corresponding excel api support
 export const excludableObjectImportTypes = [
   ObjectImportType.IMAGE,
   ObjectImportType.PIVOT_TABLE,
-  ObjectImportType.FORMATTED_TABLE
+  ObjectImportType.FORMATTED_DATA
 ]
 
 export enum ImportOperationStepDict {

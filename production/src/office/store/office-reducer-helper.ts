@@ -118,7 +118,7 @@ class OfficeReducerHelper {
     switch (objectImportType) {
       case ObjectImportType.IMAGE:
         return isShapeAPISupported;
-      case ObjectImportType.FORMATTED_TABLE:
+      case ObjectImportType.FORMATTED_DATA:
         return isInsertWorksheetAPISupported;
       case ObjectImportType.PIVOT_TABLE:
         return isPivotTableSupported;

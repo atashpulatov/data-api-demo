@@ -142,14 +142,14 @@ describe('OfficeStoreObject', () => {
 
   it('mergeStoreObjectsToRedux should work as expected', async () => {
     // given
-    const objectsInOfficeStore = [{ objectWorkingId: 12345673, importType: ObjectImportType.FORMATTED_TABLE }];
+    const objectsInOfficeStore = [{ objectWorkingId: 12345673, importType: ObjectImportType.FORMATTED_DATA }];
     const objectInRedux: any = [{ objectWorkingId: 62345674, importType: ObjectImportType.TABLE }];
 
     jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
     jest.spyOn(settingsMock, 'get').mockReturnValue(objectsInOfficeStore);
 
     // when
-    const objects = officeStoreObject.mergeStoreObjectsToRedux(objectInRedux, ObjectImportType.FORMATTED_TABLE);
+    const objects = officeStoreObject.mergeStoreObjectsToRedux(objectInRedux, ObjectImportType.FORMATTED_DATA);
 
     // then
     expect(officeStoreHelper.getOfficeSettings).toHaveBeenCalled();
