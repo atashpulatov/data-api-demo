@@ -14,11 +14,16 @@ const useGetImportType = (options: ImportButtonOptionsType[]): ObjectImportType 
   const isEdit = useSelector(navigationTreeSelectors.selectIsEdit);
   const dispatch = useDispatch();
 
+  if (!options.length) {
+    return undefined;
+  }
+
   const isDefaultImportTypeSupportedByObject = options.some(({ key }) => key === defaultImportType);
-  const importType = !options.length
-    ? undefined
-    : selectedImportType ||
-      (isDefaultImportTypeSupportedByObject ? defaultImportType : ObjectImportType.TABLE);
+  const fallbackImportType = isDefaultImportTypeSupportedByObject
+    ? defaultImportType
+    : ObjectImportType.TABLE;
+
+  const importType = selectedImportType || fallbackImportType;
 
   if (!selectedImportType && isEdit) {
     dispatch(popupStateActions.setImportType(importType) as any);
