@@ -25,4 +25,12 @@ jest.mock('@mstr/connector-components', () => {
 
 global.ResizeObserver = require('resize-observer-polyfill');
 
+global.Excel = {
+  SheetVisibility: {
+    visible: 'visible',
+    hidden: 'hidden',
+    veryHidden: 'veryHidden',
+  },
+};
+
 diContainer.initializeAll();
