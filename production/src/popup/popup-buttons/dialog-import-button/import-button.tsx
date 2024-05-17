@@ -25,10 +25,15 @@ export const ImportButton: React.FC<ImportButtonProps> = ({
   const dispatch = useDispatch();
 
   const isDisabled = !!disableReason;
-  
-  const options = useGetImportOptions();
-  const importType = useGetImportType(options); 
-  const { shouldDisplayOptions, importButtonProps } = useGetImportButtonProps(importType, options, isDisabled);
+
+  const supportedOptions = useGetImportOptions();
+  const options = isDisabled ? [] : supportedOptions;
+  const importType = useGetImportType(options);
+  const { shouldDisplayOptions, importButtonProps } = useGetImportButtonProps(
+    importType,
+    options,
+    isDisabled
+  );
 
   const handleOptionChange = (type: ObjectImportType): void => {
     dispatch(popupStateActions.setImportType(type) as any);

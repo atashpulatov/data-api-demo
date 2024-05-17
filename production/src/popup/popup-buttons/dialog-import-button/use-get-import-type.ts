@@ -11,15 +11,16 @@ import { ObjectImportType } from '../../../mstr-object/constants';
 const useGetImportType = (options: ImportButtonOptionsType[]): ObjectImportType => {
   const defaultImportType = useSelector(settingsReducerSelectors.selectImportType);
   const selectedImportType = useSelector(popupStateSelectors.selectImportType);
-  const isObjectSelected = useSelector(navigationTreeSelectors.selectIsObjectSelected);
+  const isEdit = useSelector(navigationTreeSelectors.selectIsEdit);
   const dispatch = useDispatch();
 
   const isDefaultImportTypeSupportedByObject = options.some(({ key }) => key === defaultImportType);
-  const importType =
-    selectedImportType ||
-    (isDefaultImportTypeSupportedByObject ? defaultImportType : ObjectImportType.TABLE);
+  const importType = !options.length
+    ? undefined
+    : selectedImportType ||
+      (isDefaultImportTypeSupportedByObject ? defaultImportType : ObjectImportType.TABLE);
 
-  if (!selectedImportType && !isObjectSelected) {
+  if (!selectedImportType && isEdit) {
     dispatch(popupStateActions.setImportType(importType) as any);
   }
 
