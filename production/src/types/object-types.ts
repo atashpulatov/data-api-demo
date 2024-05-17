@@ -136,7 +136,7 @@ export interface ObjectData {
   objectType?: MstrObjectTypes;
   objectId: string;
   projectId: string;
-  dossierData: DossierData;
+  dossierData?: DossierData;
   displayAttrFormNames?: DisplayAttrFormNames;
   refreshDate?: number;
   manipulationsXML?: ManipulationsXML;
