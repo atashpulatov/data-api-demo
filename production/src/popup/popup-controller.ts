@@ -404,7 +404,8 @@ class PopupController {
       (pageByData.pageByDisplayType !== PageByDisplayType.DEFAULT_PAGE ||
         pageByDisplaySetting !== PageByDisplayOption.DEFAULT_PAGE);
 
-    const isPageByConversion = pageByConfigurations || (!pageByData && reportParams?.pageByData);
+    const isPageByConversion =
+      (pageByConfigurations && reportParams) || (!pageByData && reportParams?.pageByData);
 
     const shouldRemovePages =
       shouldUpdateDefaultPage || isPageByConversion || pageBySiblings?.length;

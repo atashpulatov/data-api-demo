@@ -103,7 +103,14 @@ export const AttributeSelectorWindowNotConnected: React.FC<
         },
       });
     } else {
-      const pageByData = pageBy.length ? editedObject?.pageByData : undefined;
+      let pageByData;
+
+      if (pageBy.length) {
+        pageByData = editedObject?.pageByData || {};
+      } else {
+        pageByData = undefined;
+      }
+
       popupHelper.officeMessageParent({ ...message, pageByData });
     }
   };
