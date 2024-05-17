@@ -6,6 +6,7 @@ class DialogButtonHelper {
   getDisableReasonImport(
     isPublished: boolean,
     disableActiveActions: boolean,
+    disablePrimaryOnFormattedDataImport?: boolean,
     disableSecondary?: boolean,
     checkingSelection?: boolean
   ): ErrorMessages {
@@ -20,6 +21,10 @@ class DialogButtonHelper {
     }
     if (checkingSelection !== undefined && checkingSelection) {
       return ErrorMessages.CHECKING_SELECTION;
+    }
+    // Disable 'Import Formatted Data' button on non-grid visualization selected
+    if (disablePrimaryOnFormattedDataImport) {
+      return ErrorMessages.NON_GRID_VIZ_NOT_SUPPORTED;
     }
   }
 

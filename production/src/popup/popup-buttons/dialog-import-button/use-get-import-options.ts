@@ -21,6 +21,7 @@ const useGetImportOptions = (): ImportButtonOptionsType[] => {
   const isShapeAPISupported = useSelector(officeSelectors.selectIsShapeAPISupported);
   const isInsertWorksheetAPISupported = useSelector(officeSelectors.selectIsInsertWorksheetAPISupported);
   const selectedMstrObjectType = useSelector(navigationTreeSelectors.selectMstrObjectType);
+  const isChosenVisOfGridType = useSelector(navigationTreeSelectors.selectIsChosenVisOfGridType);
   const isEdit = useSelector(navigationTreeSelectors.selectIsEdit);
   const editedObject = useSelector(popupSelectors.selectEditedObject);
 
@@ -33,8 +34,12 @@ const useGetImportOptions = (): ImportButtonOptionsType[] => {
 
   options.push(optionsDictionary[ObjectImportType.TABLE]);
 
-  if (isInsertWorksheetAPISupported) {
-    options.push(optionsDictionary[ObjectImportType.FORMATTED_DATA]);
+  // Display 'Import Formatted Data' button only for reports and dossiers
+  if (isInsertWorksheetAPISupported
+    && (selectedMstrObjectType === mstrObjectType.mstrObjectType.dossier
+      || selectedMstrObjectType === mstrObjectType.mstrObjectType.report)
+  ) {
+    options.push({ disabled: !isChosenVisOfGridType, ...optionsDictionary[ObjectImportType.FORMATTED_DATA] });
   }
 
   if (isShapeAPISupported && selectedMstrObjectType === mstrObjectType.mstrObjectType.dossier) {
