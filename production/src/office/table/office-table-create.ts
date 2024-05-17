@@ -69,12 +69,12 @@ class OfficeTableCreate {
       mstrTable: { isCrosstab, crosstabHeaderDimensions, name },
     } = instanceDefinition;
 
-    const { importType } = objectData;
+    const { importType, mstrObjectType } = objectData;
 
     const newOfficeTableName = getOfficeTableHelper.createTableName(mstrTable, tableName);
     const worksheet = await officeApiWorksheetHelper.getWorksheet(
       excelContext,
-      objectData.importType,
+      importType,
       name,
       pageByData,
       prevOfficeTable,
@@ -90,7 +90,8 @@ class OfficeTableCreate {
 
     const objectDetailsSize = calculateOffsetForObjectInfoSettings(
       worksheetObjectInfoSettings,
-      objectData.mstrObjectType
+      mstrObjectType,
+      pageByData?.elements?.length > 0
     );
 
     const objectDetailsStartCell = startCell;

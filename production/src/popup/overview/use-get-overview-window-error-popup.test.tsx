@@ -106,4 +106,35 @@ describe('useGetOverviewWindowErrorPopup', () => {
     // Then
     expect(setPageByDuplicateFailedPopupMock).toHaveBeenCalled();
   });
+  it('should call setPageByImportFailedPopup  when conditions are met', () => {
+    // Given
+    const setSidePanelPopupMock = jest.fn();
+
+    const initialState = {
+      officeReducer: {
+        popupData: { type: PopupTypes.FAILED_TO_IMPORT },
+      },
+    };
+
+    // @ts-expect-error
+    const store = createStore(rootReducer, initialState);
+
+    const setPageByDuplicateFailedPopupMock = jest
+      .spyOn(overviewHelper, 'setPageByImportFailedPopup')
+      .mockImplementation(() => {});
+
+    // When
+    renderHook(
+      () =>
+        useGetOverviewWindowErrorPopup({
+          setDialogPopup: setSidePanelPopupMock,
+        }),
+      {
+        wrapper: ({ children }) => <Provider store={store}>{children}</Provider>,
+      }
+    );
+
+    // Then
+    expect(setPageByDuplicateFailedPopupMock).toHaveBeenCalled();
+  });
 });

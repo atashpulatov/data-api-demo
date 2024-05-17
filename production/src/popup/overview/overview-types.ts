@@ -27,6 +27,12 @@ export interface PageByDuplicateFailedPopup {
   onOk: (refreshFailedOptions?: PageByRefreshFailedOptions) => void;
 }
 
+export interface PageByImportFailedPopup {
+  type: PopupTypes;
+  errorDetails: string;
+  onOk: (refreshFailedOptions?: PageByRefreshFailedOptions) => void;
+}
+
 export interface DialogPopup {
   objectWorkingIds: number[];
   setDialogPopup: (
@@ -35,6 +41,7 @@ export interface DialogPopup {
       | RangeTakenPopup
       | PageByRefreshFailedPopup
       | PageByDuplicateFailedPopup
+      | PageByImportFailedPopup
   ) => void;
   activeCellAddress?: string;
   selectedObjects?: LoadedObject[];

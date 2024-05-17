@@ -33,6 +33,8 @@ export const getObjectDetailsForWorksheet = (
 
   let formatIndex = 0;
 
+  // TODO: Duplicated cases 'filter', 'dateModified', 'dateCreated' can be deleted later.
+  // For now they are kept for backward compatibility.
   enabledWorksheetDetailsSettings.forEach(setting => {
     switch (setting.key) {
       case 'name':
@@ -51,6 +53,7 @@ export const getObjectDetailsForWorksheet = (
         formatIndex += 3;
         break;
       case 'filter':
+      case 'filters':
         if (isReport) {
           const mergedViewFilters =
             object.details?.filters.metricLimitsText === '-'
@@ -91,6 +94,7 @@ export const getObjectDetailsForWorksheet = (
         formatIndex += 3;
         break;
       case 'dateModified':
+      case 'modifiedDate':
         objectDetailValues.push(
           [setting.item],
           [
@@ -106,6 +110,7 @@ export const getObjectDetailsForWorksheet = (
         formatIndex += 3;
         break;
       case 'dateCreated':
+      case 'createdDate':
         objectDetailValues.push(
           [setting.item],
           [
@@ -131,9 +136,11 @@ export const getObjectDetailsForWorksheet = (
             object?.pageByData?.elements?.length &&
             pageByHelper.getPageByElements(object.pageByData);
 
-          objectDetailValues.push([i18n.t('Paged-By')], [pageByData || '-'], ['']);
-          indexesToFormat.push(formatIndex);
-          formatIndex += 3;
+          if (pageByData) {
+            objectDetailValues.push([i18n.t('Paged-By')], [pageByData], ['']);
+            indexesToFormat.push(formatIndex);
+            formatIndex += 3;
+          }
         }
         break;
       default:
