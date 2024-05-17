@@ -24,6 +24,7 @@ export enum NavigationTreeActionTypes {
   SET_PROMPT_OBJECTS = 'SET_PROMPT_OBJECTS',
   UPDATE_SELECTED_MENU = 'UPDATE_SELECTED_MENU',
   SET_POPUP_TYPE = 'SET_POPUP_TYPE',
+  UPDATE_IS_CHOSEN_VIZ_OF_GRID_TYPE = 'UPDATE_IS_CHOSEN_VIZ_OF_GRID_TYPE'
 }
 
 export interface NavigationTreeState {
@@ -39,6 +40,7 @@ export interface NavigationTreeState {
   mstrObjectType: MstrObjectTypes | null;
   chosenChapterKey: string | null;
   chosenVisualizationKey: string | null;
+  isChosenVisOfGridType: boolean;
   dossierOpenRequested: boolean;
   isEdit: boolean;
   chosenLibraryDossier: any | null; // Replace 'any' with the appropriate type
@@ -129,6 +131,11 @@ interface SetPopupTypeAction extends Action {
   popupType: DialogType;
 }
 
+interface UpdateIsChosenVizOfGridTypeAction extends Action {
+  type: NavigationTreeActionTypes.UPDATE_IS_CHOSEN_VIZ_OF_GRID_TYPE;
+  isVizGrid: boolean;
+}
+
 export type NavigationTreeActions =
   | SelectObjectAction
   | SetPromptObjectsAction
@@ -144,4 +151,5 @@ export type NavigationTreeActions =
   | SwitchImportSubtotalsOnImportAction
   | UpdateDisplayAttrFormOnImportAction
   | UpdateSelectedMenuAction
-  | SetPopupTypeAction;
+  | SetPopupTypeAction
+  | UpdateIsChosenVizOfGridTypeAction;
