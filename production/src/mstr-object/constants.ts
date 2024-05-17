@@ -9,6 +9,13 @@ export enum ObjectImportType {
   IMAGE = 'image',
 }
 
+export const objectImportTypeDictionary = {
+  [ObjectImportType.TABLE]: 'table',
+  [ObjectImportType.PIVOT_TABLE]: 'pivot table',
+  [ObjectImportType.FORMATTED_DATA]: 'formatted data',
+  [ObjectImportType.IMAGE]: 'image'
+}
+
 export const objectTableImportType = new Set([
   ObjectImportType.TABLE,
   ObjectImportType.PIVOT_TABLE,

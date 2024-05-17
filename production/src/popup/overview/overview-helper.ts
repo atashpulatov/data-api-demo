@@ -20,6 +20,8 @@ import {
   NotificationButtonsProps,
   OverviewGlobalNotificationButtons,
 } from './overview-global-notification-buttons';
+import { objectImportTypeDictionary } from '../../mstr-object/constants';
+import { ObjectData } from '../../types/object-types';
 
 export enum OverviewActionCommands {
   IMPORT = 'overview-import',
@@ -395,7 +397,7 @@ class OverviewHelper {
    * @returns Transformed objects
    */
   // TODO add types once redux state is typed
-  transformExcelObjects(objects: any[], notifications: any[]): any[] {
+  transformExcelObjects(objects: ObjectData[], notifications: any[]): any[] {
     return objects.map(object => {
       const {
         objectWorkingId,
@@ -433,7 +435,7 @@ class OverviewHelper {
         cell: startCell,
         rows: details?.excelTableSize?.rows,
         columns: details?.excelTableSize?.columns,
-        objectType: importType,
+        objectType: objectImportTypeDictionary[importType],
         lastUpdated: refreshDate,
         status: {
           type: objectNotification?.type,
@@ -645,13 +647,13 @@ class OverviewHelper {
     } as NotificationButtonsProps;
     const modifiedGlobalNotification = isGlobalWarning
       ? [
-          {
-            ...globalNotification,
-            children: OverviewGlobalNotificationButtons({
-              ...globalNotificationButtons,
-            }),
-          },
-        ]
+        {
+          ...globalNotification,
+          children: OverviewGlobalNotificationButtons({
+            ...globalNotificationButtons,
+          }),
+        },
+      ]
       : null;
 
     return modifiedGlobalNotification || modifiedWarnings;
