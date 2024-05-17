@@ -180,11 +180,13 @@ class OfficeApiWorksheetHelper {
     await excelContext.sync();
     const sheetsNames = sheets.items.map(item => item.name);
 
-    let newSheetName = objectName?.replace(/[:?*\\/\][]/g, '_');
+    let newSheetName = objectName;
 
     if (pageByData) {
       newSheetName = pageByHelper.prepareNameBasedOnPageBySettings(newSheetName, pageByData);
     }
+
+    newSheetName = newSheetName?.replace(/[:?*\\/\][]/g, '_');
 
     // if objectName only contains whitespaces replace it with _
     if (!newSheetName?.replace(/\s/g, '').length) {
