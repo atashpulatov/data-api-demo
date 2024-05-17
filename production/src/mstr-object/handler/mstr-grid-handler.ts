@@ -115,7 +115,7 @@ class GridHandler {
     const { attrforms, definition } = response;
     const { grid } = definition;
     const supportForms = attrforms ? attrforms.supportForms : false;
-    const onElement = (array: any[]) => (element: any) => {
+    const onElement = (array?: any[]) => (element: any) => {
       if (array) {
         array.push(element.subtotalAddress);
       }
@@ -151,7 +151,6 @@ class GridHandler {
       response.definition,
       'rows',
       response.data.headers,
-      // @ts-expect-error
       onElement(),
       supportForms
     );
@@ -168,7 +167,6 @@ class GridHandler {
         response.definition,
         'columns',
         response.data.headers,
-        // @ts-expect-error
         onElement(),
         supportForms
       );
