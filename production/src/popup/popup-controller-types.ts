@@ -20,7 +20,7 @@ export interface DialogResponse {
   chosenProject?: string;
   chosenObjectSubtype?: string;
   chosenSubtype?: number;
-  dossierData?: DossierData;
+  dossierData: DossierData;
   importType?: ObjectImportType;
   isPrompted?: boolean;
   promptsAnswers?: any;
