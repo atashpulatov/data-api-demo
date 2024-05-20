@@ -34,6 +34,7 @@ interface DossierWindowProps {
   chosenObjectId: string;
   chosenObjectName: string;
   chosenProjectId: string;
+  isChosenVisOfGridType: boolean;
   isShapeAPISupported: boolean;
   handleBack: () => void;
   setImportType: (importType: ObjectImportType) => void;
@@ -69,6 +70,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
     editedObject = {} as EditedObject,
     chosenObjectId = 'default id',
     chosenProjectId = 'default id',
+    isChosenVisOfGridType,
     isReprompt = false,
     importType,
     repromptsQueue = { total: 0, index: 0 },
@@ -76,7 +78,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
   } = props;
 
   const { isEdit, importType: editedObjectImportType } = editedObject;
-  const { chapterKey, visualizationKey, vizDimensions, isVizGrid } = lastSelectedViz;
+  const { chapterKey, visualizationKey, vizDimensions } = lastSelectedViz;
   const [dialogPopup, setDialogPopup] = React.useState(null);
 
   if (editedObjectImportType && importType !== editedObjectImportType) {
@@ -95,7 +97,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
   const isSupported = !!(isSelected && vizData && vizData.isSupported);
   const isChecking = !!(isSelected && (!vizData || (vizData && vizData.isSupported === undefined)));
   const isVizOfNonGridTypeOnFormattedDataImport =
-    importType === ObjectImportType.FORMATTED_TABLE && !isVizGrid;
+    importType === ObjectImportType.FORMATTED_TABLE && !isChosenVisOfGridType;
 
   const handleCancel = (): void => {
     const { commandCancel } = selectorProperties;
@@ -151,9 +153,12 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
           chapterKey: chosenVizchapterKey,
           visualizationKey: chosenVizKey,
           vizDimensions: chosenVizDimensions,
-          isVizGrid: chosenVizIsGrid,
         });
-        updateIsChosenVizOfGridType(chosenVizIsGrid);
+
+        if (chosenVizIsGrid !== undefined && chosenVizIsGrid !== null) {
+          updateIsChosenVizOfGridType(chosenVizIsGrid);
+        }
+
         setPromptsAnswers(chosenVizPromptAnswers);
         instanceId.current = chosenVizInstanceId;
 
@@ -397,6 +402,7 @@ function mapStateToProps(state: RootState): any {
     chosenObjectName,
     chosenObjectId,
     chosenProjectId,
+    isChosenVisOfGridType,
     promptsAnswers,
     promptObjects,
     importRequested,
@@ -417,6 +423,7 @@ function mapStateToProps(state: RootState): any {
     chosenObjectName: editedObject ? editedObjectParse.dossierName : chosenObjectName,
     chosenObjectId: editedObject ? editedObjectParse.chosenObjectId : chosenObjectId,
     chosenProjectId: editedObject ? editedObjectParse.projectId : chosenProjectId,
+    isChosenVisOfGridType: isChosenVisOfGridType,
     editedObject: editedObjectParse,
     previousPromptsAnswers: answers,
     promptObjects,
