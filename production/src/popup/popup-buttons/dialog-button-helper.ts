@@ -64,8 +64,8 @@ class DialogButtonHelper {
     }
 
     if (importType === ObjectImportType.FORMATTED_TABLE) {
-      id = ImportButtonIds.IMPORT_DATA_WITH_FORMATTING;
-      actionType = ImportActionTypes.IMPORT_DATA_WITH_FORMATTING;
+      id = ImportButtonIds.IMPORT_FORMATTED_DATA;
+      actionType = ImportActionTypes.IMPORT_FORMATTED_DATA;
     }
 
     if (importType === ObjectImportType.IMAGE) {
