@@ -7,10 +7,7 @@ import officeReducerHelper from '../office/store/office-reducer-helper';
 import { reduxStore } from '../store';
 
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
-import {
-  ObjectAndWorksheetNamingOption,
-  PageByDisplayOption,
-} from '../right-side-panel/settings-side-panel/settings-side-panel-types';
+import { ObjectAndWorksheetNamingOption } from '../right-side-panel/settings-side-panel/settings-side-panel-types';
 import { ObjectData } from '../types/object-types';
 import {
   PageBy,
@@ -335,7 +332,7 @@ class PageByHelper {
 
     return (
       pageBy?.length &&
-      pageByDisplaySetting === PageByDisplayOption.SELECT_PAGES &&
+      pageByDisplaySetting === PageByDisplayType.SELECT_PAGES &&
       importType !== ObjectImportType.PIVOT_TABLE
     );
   }

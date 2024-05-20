@@ -5,12 +5,6 @@ export enum ObjectAndWorksheetNamingOption {
   PAGE_NAME_AND_REPORT_NAME = 'pageNameAndReportName',
 }
 
-export enum PageByDisplayOption {
-  DEFAULT_PAGE = 'defaultPage',
-  ALL_PAGES = 'allPages',
-  SELECT_PAGES = 'selectPages',
-}
-
 export enum ImportFormattingOption {
   IMPORT_ATTRIBUTES_AS_TEXT = 'importAttributesAsText',
   MERGE_CROSSTAB_COLUMNS = 'mergeCrosstabColumns',
