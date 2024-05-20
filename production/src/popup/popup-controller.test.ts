@@ -672,7 +672,7 @@ describe('PopupController', () => {
     ${undefined}                      | ${PageByDisplayType.DEFAULT_PAGE} | ${undefined}         | ${[]}                             | ${{ something: 'test' }}              | ${true}  | ${false}
   `(
     'onCommandUpdate should trigger proper function when called with $pageByDisplayType and $pageByDisplaySetting',
-    ({
+    async ({
       pageByDisplayType,
       pageByDisplaySetting,
       pageByConfigurations,
@@ -710,7 +710,7 @@ describe('PopupController', () => {
       } as DialogResponse;
 
       // when
-      popupController.onCommandUpdate(response, reportParams);
+      await popupController.onCommandUpdate(response, reportParams);
 
       // then
       if (shouldCallReduxStore) {

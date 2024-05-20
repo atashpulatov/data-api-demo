@@ -89,7 +89,7 @@ export const AttributeSelectorWindowNotConnected: React.FC<
     }
 
     const { pageBy } = instance.definition?.grid || {};
-    const isPageBy = pageBy?.length;
+    const isPageBy = !!pageBy?.length;
 
     const shouldOpenPageByModal = pageByHelper.getShouldOpenPageByModal(pageBy, importType);
 
