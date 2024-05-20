@@ -423,7 +423,7 @@ function mapStateToProps(state: RootState): any {
     chosenObjectName: editedObject ? editedObjectParse.dossierName : chosenObjectName,
     chosenObjectId: editedObject ? editedObjectParse.chosenObjectId : chosenObjectId,
     chosenProjectId: editedObject ? editedObjectParse.projectId : chosenProjectId,
-    isChosenVisOfGridType: isChosenVisOfGridType,
+    isChosenVisOfGridType,
     editedObject: editedObjectParse,
     previousPromptsAnswers: answers,
     promptObjects,
