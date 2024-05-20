@@ -27,7 +27,8 @@ export const ImportButton: React.FC<ImportButtonProps> = ({
 
   const isDisabled = !!disableReason;
 
-  const options = useGetImportOptions();
+  const supportedOptions = useGetImportOptions();
+  const options = isDisabled ? [] : supportedOptions;
   const importType = useGetImportType(options);
 
   const isNonGridVizNotSupported = disableReason === ErrorMessages.NON_GRID_VIZ_NOT_SUPPORTED;

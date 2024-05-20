@@ -41,6 +41,7 @@ interface DossierWindowProps {
   editedObject: EditedObject;
   isReprompt: boolean;
   importType: ObjectImportType;
+  defaultImportType: ObjectImportType;
   repromptsQueue: RepromptsQueueState;
   popupData: { objectWorkingId: number };
 }
@@ -71,6 +72,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
     chosenProjectId = 'default id',
     isReprompt = false,
     importType,
+    defaultImportType,
     repromptsQueue = { total: 0, index: 0 },
     popupData,
   } = props;
@@ -164,6 +166,8 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
         ) {
           let isVizSupported = true;
 
+          setImportType(defaultImportType);
+
           const checkIfVizDataCanBeImported = async (): Promise<any> => {
             // @ts-expect-error
             await mstrObjectRestService.fetchVisualizationDefinition({
@@ -202,7 +206,14 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
         }
       }
     },
-    [chosenObjectId, chosenProjectId, vizualizationsData, updateIsChosenVizOfGridType]
+    [
+      chosenObjectId,
+      chosenProjectId,
+      vizualizationsData,
+      defaultImportType,
+      setImportType,
+      updateIsChosenVizOfGridType,
+    ]
   );
 
   const handleOk = useCallback(() => {
@@ -391,6 +402,7 @@ function mapStateToProps(state: RootState): any {
     officeReducer,
     answersReducer,
     popupStateReducer,
+    settingsReducer,
     repromptsQueueReducer,
   } = state;
   const {
@@ -403,6 +415,7 @@ function mapStateToProps(state: RootState): any {
   } = navigationTree;
   const { editedObject } = popupReducer;
   const { isReprompt, importType } = popupStateReducer;
+  const { importType: defaultImportType } = settingsReducer;
   const { supportForms, isShapeAPISupported, popupData } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
   const { answers } = answersReducer;
@@ -424,6 +437,7 @@ function mapStateToProps(state: RootState): any {
     isShapeAPISupported,
     isReprompt,
     importType,
+    defaultImportType,
     repromptsQueue: { ...repromptsQueueReducer },
     popupData,
   };
