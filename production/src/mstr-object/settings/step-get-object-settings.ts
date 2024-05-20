@@ -37,12 +37,12 @@ class StepGetObjectSettings {
         case OperationTypes.REFRESH_OPERATION:
         case OperationTypes.DUPLICATE_OPERATION:
           updatedObjectSettings.mergeCrosstabColumns =
-            objectSettings.mergeCrosstabColumns !== undefined
+            objectSettings?.mergeCrosstabColumns !== undefined
               ? objectSettings.mergeCrosstabColumns
               : mergeCrosstabColumnsUserSetting;
 
           updatedObjectSettings.importAttributesAsText =
-            objectSettings.importAttributesAsText !== undefined
+            objectSettings?.importAttributesAsText !== undefined
               ? objectSettings.importAttributesAsText
               : importAttributesAsTextUserSetting;
 
