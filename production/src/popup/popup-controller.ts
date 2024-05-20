@@ -9,7 +9,6 @@ import { OverviewActionCommands } from './overview/overview-helper';
 import { PageByDataElement, PageByDisplayType } from '../page-by/page-by-types';
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
-import { PageByDisplayOption } from '../right-side-panel/settings-side-panel/settings-side-panel-types';
 import { ObjectData } from '../types/object-types';
 import { DialogResponse, ReportParams } from './popup-controller-types';
 
@@ -402,7 +401,7 @@ class PopupController {
     const shouldUpdateDefaultPage =
       pageByData &&
       (pageByData.pageByDisplayType !== PageByDisplayType.DEFAULT_PAGE ||
-        pageByDisplaySetting !== PageByDisplayOption.DEFAULT_PAGE);
+        pageByDisplaySetting !== PageByDisplayType.DEFAULT_PAGE);
 
     const isPageByConversion =
       (pageByConfigurations && reportParams) || (!pageByData && reportParams?.pageByData);
@@ -519,14 +518,14 @@ class PopupController {
     );
 
     switch (pageByDisplaySetting) {
-      case PageByDisplayOption.DEFAULT_PAGE:
+      case PageByDisplayType.DEFAULT_PAGE:
         return this.handleDefaultPageImport(
           pageByLinkId,
           objectData,
           preparedInstanceDefinition,
           pageByDisplaySetting
         );
-      case PageByDisplayOption.ALL_PAGES:
+      case PageByDisplayType.ALL_PAGES:
         return this.handleMultiplePagesImport(
           pageByLinkId,
           validPageByData,
@@ -534,7 +533,7 @@ class PopupController {
           preparedInstanceDefinition,
           pageByDisplaySetting
         );
-      case PageByDisplayOption.SELECT_PAGES:
+      case PageByDisplayType.SELECT_PAGES:
         return this.handleMultiplePagesImport(
           pageByLinkId,
           parsedPageByConfigurations,

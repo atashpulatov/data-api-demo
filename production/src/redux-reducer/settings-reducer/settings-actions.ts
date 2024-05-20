@@ -1,7 +1,5 @@
-import {
-  ObjectAndWorksheetNamingOption,
-  PageByDisplayOption,
-} from '../../right-side-panel/settings-side-panel/settings-side-panel-types';
+import { PageByDisplayType } from '../../page-by/page-by-types';
+import { ObjectAndWorksheetNamingOption } from '../../right-side-panel/settings-side-panel/settings-side-panel-types';
 import {
   KeyValue,
   LoadSidePanelObjectInfoSettingAction,
@@ -87,7 +85,7 @@ const setWorksheetNamingSetting = (
 });
 
 const setPageByDisplaySetting = (
-  pageByDisplaySetting: PageByDisplayOption
+  pageByDisplaySetting: PageByDisplayType
 ): SetPageByDisplaySettingAction => ({
   type: SettingsActionTypes.SET_PAGE_BY_DISPLAY_SETTING,
   pageByDisplaySetting,
