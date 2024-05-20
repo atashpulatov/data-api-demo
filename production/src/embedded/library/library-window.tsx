@@ -4,6 +4,9 @@ import { connect, useDispatch } from 'react-redux';
 import { ObjectWindowTitle } from '@mstr/connector-components';
 import { Spinner } from '@mstr/rc';
 
+import useGetImportOptions from '../../popup/popup-buttons/dialog-import-button/use-get-import-options';
+import useGetImportType from '../../popup/popup-buttons/dialog-import-button/use-get-import-type';
+
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
@@ -21,7 +24,7 @@ import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
 import { EmbeddedLibrary } from './embedded-library';
-import { DisplayAttrFormNames, ObjectImportType } from '../../mstr-object/constants';
+import { DisplayAttrFormNames } from '../../mstr-object/constants';
 
 import './library.css';
 
@@ -49,11 +52,13 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
     handlePrepare,
     setObjectData,
     mstrObjectType,
-    importType,
     requestPageByModalOpen,
   } = props;
 
   const disableActiveActions = !isPublished;
+
+  const options = useGetImportOptions();
+  const importType = useGetImportType(options);
 
   /**
    * Selects an object from embedded library and saves its info in the redux store.
@@ -70,7 +75,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
       }
 
       // Reset import type to default on object selection
-      dispatch(popupStateActions.setImportType(undefined) as any);
+      dispatch(popupStateActions.setImportType(importType) as any);
 
       const { projectId, type, name, docId } = itemsInfo[0];
 
@@ -115,7 +120,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
         mstrObjectType: chosenMstrObjectType,
       });
     },
-    [dispatch, selectObject]
+    [dispatch, selectObject, importType]
   );
 
   /**
@@ -285,14 +290,10 @@ function mapStateToProps(state: {
     chosenSubtype: number;
     mstrObjectType: object;
   };
-  popupStateReducer: {
-    importType: ObjectImportType;
-  };
 }): any {
   const { navigationTree } = state;
   const { chosenObjectName, chosenObjectId, chosenProjectId, chosenSubtype, mstrObjectType } =
     navigationTree;
-  const { importType } = state.popupStateReducer;
 
   return {
     chosenObjectName,
@@ -300,7 +301,6 @@ function mapStateToProps(state: {
     chosenProjectId,
     chosenSubtype,
     mstrObjectType,
-    importType,
     ...navigationTreeActions,
   };
 }
