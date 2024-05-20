@@ -353,7 +353,7 @@ class PageByHelper {
     const shouldUpdateDefaultPage =
       isPageBy &&
       (pageByData?.pageByDisplayType !== PageByDisplayType.DEFAULT_PAGE ||
-        pageByDisplaySetting !== PageByDisplayOption.DEFAULT_PAGE);
+        pageByDisplaySetting !== PageByDisplayType.DEFAULT_PAGE);
 
     const isPageByConversion = !pageByData && reportParams?.pageByData;
 
