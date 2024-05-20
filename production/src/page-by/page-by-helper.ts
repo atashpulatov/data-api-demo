@@ -6,6 +6,7 @@ import officeReducerHelper from '../office/store/office-reducer-helper';
 
 import { reduxStore } from '../store';
 
+import { DialogResponse, ReportParams } from '../popup/popup-controller-types';
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectAndWorksheetNamingOption } from '../right-side-panel/settings-side-panel/settings-side-panel-types';
 import { ObjectData } from '../types/object-types';
@@ -335,6 +336,34 @@ class PageByHelper {
       pageByDisplaySetting === PageByDisplayType.SELECT_PAGES &&
       importType !== ObjectImportType.PIVOT_TABLE
     );
+  }
+
+  /**
+   * Method checking if there is a need for removing and re-importing Page-by objects
+   *
+   * @param response Message received from the dialog
+   * @param reportParams Contains information about the currently selected object
+   * @returns Flag indicating whether the Page-by objects should be removed
+   */
+  getShouldRemovePages(response: DialogResponse, reportParams: ReportParams): boolean {
+    const { objectWorkingId, pageByData, pageByConfigurations, isPageBy } = response;
+    const { pageByDisplaySetting } = reduxStore.getState().settingsReducer;
+    const { pageBySiblings } = this.getAllPageByObjects(objectWorkingId) || {};
+
+    const shouldUpdateDefaultPage =
+      isPageBy &&
+      (pageByData?.pageByDisplayType !== PageByDisplayType.DEFAULT_PAGE ||
+        pageByDisplaySetting !== PageByDisplayType.DEFAULT_PAGE);
+
+    const isPageByConversion = !pageByData && reportParams?.pageByData;
+
+    const shouldRemovePages =
+      shouldUpdateDefaultPage ||
+      isPageByConversion ||
+      pageByConfigurations ||
+      pageBySiblings?.length;
+
+    return !!shouldRemovePages;
   }
 }
 

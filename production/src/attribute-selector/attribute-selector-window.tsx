@@ -89,6 +89,7 @@ export const AttributeSelectorWindowNotConnected: React.FC<
     }
 
     const { pageBy } = instance.definition?.grid || {};
+    const isPageBy = !!pageBy?.length;
 
     const shouldOpenPageByModal = pageByHelper.getShouldOpenPageByModal(pageBy, importType);
 
@@ -99,12 +100,12 @@ export const AttributeSelectorWindowNotConnected: React.FC<
         instanceId: instance.instanceId,
         requestPageByModalOpen,
         importCallback: pageByConfigurations => {
-          popupHelper.officeMessageParent({ ...message, pageByConfigurations });
+          popupHelper.officeMessageParent({ ...message, isPageBy, pageByConfigurations });
         },
       });
     } else {
-      const pageByData = pageBy.length ? editedObject?.pageByData : undefined;
-      popupHelper.officeMessageParent({ ...message, pageByData });
+      const pageByData = isPageBy ? editedObject?.pageByData : undefined;
+      popupHelper.officeMessageParent({ ...message, isPageBy, pageByData });
     }
   };
 

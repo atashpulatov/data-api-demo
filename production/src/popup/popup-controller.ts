@@ -394,26 +394,15 @@ class PopupController {
    * @param reportParams Contains information about the currently selected object
    */
   onCommandUpdate = async (response: DialogResponse, reportParams: ReportParams): Promise<void> => {
-    const { objectWorkingId, pageByData, pageByConfigurations } = response;
-    const { pageByDisplaySetting } = this.reduxStore.getState().settingsReducer;
-    const { pageBySiblings } = pageByHelper.getAllPageByObjects(objectWorkingId) || {};
+    const { objectWorkingId } = response;
 
-    const shouldUpdateDefaultPage =
-      pageByData &&
-      (pageByData.pageByDisplayType !== PageByDisplayType.DEFAULT_PAGE ||
-        pageByDisplaySetting !== PageByDisplayType.DEFAULT_PAGE);
+    const shouldRemovePages = pageByHelper.getShouldRemovePages(response, reportParams);
 
-    const isPageByConversion =
-      (pageByConfigurations && reportParams) || (!pageByData && reportParams?.pageByData);
-
-    const shouldRemovePages =
-      shouldUpdateDefaultPage || isPageByConversion || pageBySiblings?.length;
-
-    if (shouldRemovePages) {
+    if (shouldRemovePages && objectWorkingId) {
       pageByHelper.handleRemovingMultiplePages(objectWorkingId);
     }
 
-    if (!reportParams || shouldRemovePages || pageByConfigurations?.length) {
+    if (!reportParams || shouldRemovePages) {
       return this.handleUpdateCommand(response);
     }
 

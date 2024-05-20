@@ -35,6 +35,7 @@ export interface DialogResponse {
   filterDetails?: FilterDetails[];
   pageByData?: PageByData;
   pageByConfigurations?: PageByConfiguration[][];
+  isPageBy?: boolean;
 }
 
 export interface FilterDetails {
