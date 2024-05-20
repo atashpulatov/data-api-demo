@@ -155,7 +155,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
           vizDimensions: chosenVizDimensions,
         });
 
-        if (chosenVizIsGrid !== undefined && chosenVizIsGrid !== null) {
+        if (chosenVizIsGrid != null) {
           updateIsChosenVizOfGridType(chosenVizIsGrid);
         }
 
