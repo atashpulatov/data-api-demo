@@ -5,13 +5,15 @@ import { objectTypes } from '@mstr/mstr-react-library';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
+import { pageByHelper } from '../page-by/page-by-helper';
 import overviewHelper, { OverviewActionCommands } from './overview/overview-helper';
 
 import { reduxStore, RootState } from '../store';
 
+import { PageByDisplayType } from '../page-by/page-by-types';
 import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 import { ObjectData } from '../types/object-types';
-import { ReportParams } from './popup-controller-types';
+import { DialogResponse, ReportParams } from './popup-controller-types';
 
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { errorService } from '../error/error-handler';
@@ -21,6 +23,7 @@ import { popupController } from './popup-controller';
 import { ObjectImportType } from '../mstr-object/constants';
 
 import { Office } from '../../__mocks__/mockOffice';
+import { pageByDataResponse } from '../../__mocks__/page-by-data-response';
 
 describe('PopupController', () => {
   const dialog = {} as unknown as Office.Dialog;
@@ -649,4 +652,77 @@ describe('PopupController', () => {
 
     expect(result).toBe(false);
   });
+
+  it.each`
+    pageByDisplayType                 | pageByDisplaySetting              | pageByConfigurations | pageBySiblings                    | reportParams                          | isPageBy | shouldCallReduxStore | shouldCallRemoveAndUpdate
+    ${PageByDisplayType.DEFAULT_PAGE} | ${PageByDisplayType.DEFAULT_PAGE} | ${undefined}         | ${[]}                             | ${{ pageByData: pageByDataResponse }} | ${true}  | ${true}              | ${false}
+    ${PageByDisplayType.DEFAULT_PAGE} | ${PageByDisplayType.DEFAULT_PAGE} | ${undefined}         | ${{ pageBySiblings: ['1', '2'] }} | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}             | ${true}
+    ${PageByDisplayType.DEFAULT_PAGE} | ${PageByDisplayType.ALL_PAGES}    | ${undefined}         | ${[]}                             | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}             | ${true}
+    ${PageByDisplayType.DEFAULT_PAGE} | ${PageByDisplayType.SELECT_PAGES} | ${['1', '2']}        | ${{ pageBySiblings: ['1', '2'] }} | ${{ pageByData: undefined }}          | ${true}  | ${false}             | ${true}
+    ${PageByDisplayType.ALL_PAGES}    | ${PageByDisplayType.ALL_PAGES}    | ${undefined}         | ${{ pageBySiblings: ['1', '2'] }} | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}             | ${true}
+    ${PageByDisplayType.ALL_PAGES}    | ${PageByDisplayType.ALL_PAGES}    | ${undefined}         | ${[]}                             | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}             | ${true}
+    ${PageByDisplayType.ALL_PAGES}    | ${PageByDisplayType.DEFAULT_PAGE} | ${undefined}         | ${{ pageBySiblings: ['1', '2'] }} | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}             | ${true}
+    ${PageByDisplayType.ALL_PAGES}    | ${PageByDisplayType.DEFAULT_PAGE} | ${undefined}         | ${[]}                             | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}             | ${true}
+    ${PageByDisplayType.SELECT_PAGES} | ${PageByDisplayType.SELECT_PAGES} | ${['1', '2']}        | ${{ pageBySiblings: ['1', '2'] }} | ${{ pageByData: undefined }}          | ${true}  | ${false}             | ${true}
+    ${PageByDisplayType.SELECT_PAGES} | ${PageByDisplayType.SELECT_PAGES} | ${['1', '2']}        | ${[]}                             | ${{ pageByData: undefined }}          | ${true}  | ${false}             | ${true}
+    ${PageByDisplayType.SELECT_PAGES} | ${PageByDisplayType.DEFAULT_PAGE} | ${undefined}         | ${{ pageBySiblings: ['1', '2'] }} | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}             | ${true}
+    ${PageByDisplayType.SELECT_PAGES} | ${PageByDisplayType.ALL_PAGES}    | ${undefined}         | ${{ pageBySiblings: ['1', '2'] }} | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}             | ${true}
+    ${undefined}                      | ${PageByDisplayType.DEFAULT_PAGE} | ${undefined}         | ${undefined}                      | ${{ something: 'test' }}              | ${false} | ${true}              | ${false}
+    ${undefined}                      | ${PageByDisplayType.DEFAULT_PAGE} | ${undefined}         | ${[]}                             | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}             | ${true}
+    ${undefined}                      | ${PageByDisplayType.DEFAULT_PAGE} | ${undefined}         | ${[]}                             | ${{ something: 'test' }}              | ${true}  | ${false}             | ${true}
+  `(
+    'onCommandUpdate should trigger proper function when called with $pageByDisplayType and $pageByDisplaySetting',
+    ({
+      pageByDisplayType,
+      pageByDisplaySetting,
+      pageByConfigurations,
+      pageBySiblings,
+      reportParams,
+      isPageBy,
+      shouldCallReduxStore,
+      shouldCallRemoveAndUpdate,
+    }) => {
+      // given
+      jest.spyOn(reduxStore, 'getState').mockImplementation(
+        () =>
+          ({
+            settingsReducer: { pageByDisplaySetting },
+          }) as RootState
+      );
+
+      jest.spyOn(pageByHelper, 'getAllPageByObjects').mockReturnValue(pageBySiblings);
+
+      const getObjectPreviousStateSpy = jest
+        .spyOn(popupController, 'getObjectPreviousState')
+        .mockReturnValue(reportParams);
+      const reduxStoreSpy = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+      const handleRemovingMultiplePagesSpy = jest
+        .spyOn(pageByHelper, 'handleRemovingMultiplePages')
+        .mockImplementation();
+      const handleUpdateCommandSpy = jest
+        .spyOn(popupController, 'handleUpdateCommand')
+        .mockImplementation();
+
+      const response = {
+        objectWorkingId: 1,
+        pageByData: pageByDisplayType && { pageByDisplayType },
+        pageByConfigurations,
+        isPageBy,
+      } as DialogResponse;
+
+      // when
+      popupController.onCommandUpdate(response, reportParams);
+
+      // then
+      if (shouldCallReduxStore) {
+        expect(getObjectPreviousStateSpy).toHaveBeenCalled();
+        expect(reduxStoreSpy).toHaveBeenCalled();
+      }
+
+      if (shouldCallRemoveAndUpdate) {
+        expect(handleRemovingMultiplePagesSpy).toHaveBeenCalled();
+        expect(handleUpdateCommandSpy).toHaveBeenCalled();
+      }
+    }
+  );
 });
