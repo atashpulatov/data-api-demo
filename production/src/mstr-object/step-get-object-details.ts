@@ -65,6 +65,7 @@ class StepGetObjectDetails {
             );
             return generateReportFilterTexts(reportDefinition);
           }
+          case 'visualization':
           case 'dossier': {
             const dossierDefinition = await mstrObjectRestService.getDossierDefinition(
               objectId,
