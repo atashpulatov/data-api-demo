@@ -654,22 +654,22 @@ describe('PopupController', () => {
   });
 
   it.each`
-    pageByDisplayType                 | pageByDisplaySetting              | pageByConfigurations | pageBySiblings                    | reportParams                          | isPageBy | shouldCallReduxStore | shouldCallRemoveAndUpdate
-    ${PageByDisplayType.DEFAULT_PAGE} | ${PageByDisplayType.DEFAULT_PAGE} | ${undefined}         | ${[]}                             | ${{ pageByData: pageByDataResponse }} | ${true}  | ${true}              | ${false}
-    ${PageByDisplayType.DEFAULT_PAGE} | ${PageByDisplayType.DEFAULT_PAGE} | ${undefined}         | ${{ pageBySiblings: ['1', '2'] }} | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}             | ${true}
-    ${PageByDisplayType.DEFAULT_PAGE} | ${PageByDisplayType.ALL_PAGES}    | ${undefined}         | ${[]}                             | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}             | ${true}
-    ${PageByDisplayType.DEFAULT_PAGE} | ${PageByDisplayType.SELECT_PAGES} | ${['1', '2']}        | ${{ pageBySiblings: ['1', '2'] }} | ${{ pageByData: undefined }}          | ${true}  | ${false}             | ${true}
-    ${PageByDisplayType.ALL_PAGES}    | ${PageByDisplayType.ALL_PAGES}    | ${undefined}         | ${{ pageBySiblings: ['1', '2'] }} | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}             | ${true}
-    ${PageByDisplayType.ALL_PAGES}    | ${PageByDisplayType.ALL_PAGES}    | ${undefined}         | ${[]}                             | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}             | ${true}
-    ${PageByDisplayType.ALL_PAGES}    | ${PageByDisplayType.DEFAULT_PAGE} | ${undefined}         | ${{ pageBySiblings: ['1', '2'] }} | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}             | ${true}
-    ${PageByDisplayType.ALL_PAGES}    | ${PageByDisplayType.DEFAULT_PAGE} | ${undefined}         | ${[]}                             | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}             | ${true}
-    ${PageByDisplayType.SELECT_PAGES} | ${PageByDisplayType.SELECT_PAGES} | ${['1', '2']}        | ${{ pageBySiblings: ['1', '2'] }} | ${{ pageByData: undefined }}          | ${true}  | ${false}             | ${true}
-    ${PageByDisplayType.SELECT_PAGES} | ${PageByDisplayType.SELECT_PAGES} | ${['1', '2']}        | ${[]}                             | ${{ pageByData: undefined }}          | ${true}  | ${false}             | ${true}
-    ${PageByDisplayType.SELECT_PAGES} | ${PageByDisplayType.DEFAULT_PAGE} | ${undefined}         | ${{ pageBySiblings: ['1', '2'] }} | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}             | ${true}
-    ${PageByDisplayType.SELECT_PAGES} | ${PageByDisplayType.ALL_PAGES}    | ${undefined}         | ${{ pageBySiblings: ['1', '2'] }} | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}             | ${true}
-    ${undefined}                      | ${PageByDisplayType.DEFAULT_PAGE} | ${undefined}         | ${undefined}                      | ${{ something: 'test' }}              | ${false} | ${true}              | ${false}
-    ${undefined}                      | ${PageByDisplayType.DEFAULT_PAGE} | ${undefined}         | ${[]}                             | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}             | ${true}
-    ${undefined}                      | ${PageByDisplayType.DEFAULT_PAGE} | ${undefined}         | ${[]}                             | ${{ something: 'test' }}              | ${true}  | ${false}             | ${true}
+    pageByDisplayType                 | pageByDisplaySetting              | pageByConfigurations | pageBySiblings                    | reportParams                          | isPageBy | shouldCallReduxStore
+    ${PageByDisplayType.DEFAULT_PAGE} | ${PageByDisplayType.DEFAULT_PAGE} | ${undefined}         | ${[]}                             | ${{ pageByData: pageByDataResponse }} | ${true}  | ${true}
+    ${PageByDisplayType.DEFAULT_PAGE} | ${PageByDisplayType.DEFAULT_PAGE} | ${undefined}         | ${{ pageBySiblings: ['1', '2'] }} | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}
+    ${PageByDisplayType.DEFAULT_PAGE} | ${PageByDisplayType.ALL_PAGES}    | ${undefined}         | ${[]}                             | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}
+    ${PageByDisplayType.DEFAULT_PAGE} | ${PageByDisplayType.SELECT_PAGES} | ${['1', '2']}        | ${{ pageBySiblings: ['1', '2'] }} | ${{ pageByData: undefined }}          | ${true}  | ${false}
+    ${PageByDisplayType.ALL_PAGES}    | ${PageByDisplayType.ALL_PAGES}    | ${undefined}         | ${{ pageBySiblings: ['1', '2'] }} | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}
+    ${PageByDisplayType.ALL_PAGES}    | ${PageByDisplayType.ALL_PAGES}    | ${undefined}         | ${[]}                             | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}
+    ${PageByDisplayType.ALL_PAGES}    | ${PageByDisplayType.DEFAULT_PAGE} | ${undefined}         | ${{ pageBySiblings: ['1', '2'] }} | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}
+    ${PageByDisplayType.ALL_PAGES}    | ${PageByDisplayType.DEFAULT_PAGE} | ${undefined}         | ${[]}                             | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}
+    ${PageByDisplayType.SELECT_PAGES} | ${PageByDisplayType.SELECT_PAGES} | ${['1', '2']}        | ${{ pageBySiblings: ['1', '2'] }} | ${{ pageByData: undefined }}          | ${true}  | ${false}
+    ${PageByDisplayType.SELECT_PAGES} | ${PageByDisplayType.SELECT_PAGES} | ${['1', '2']}        | ${[]}                             | ${{ pageByData: undefined }}          | ${true}  | ${false}
+    ${PageByDisplayType.SELECT_PAGES} | ${PageByDisplayType.DEFAULT_PAGE} | ${undefined}         | ${{ pageBySiblings: ['1', '2'] }} | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}
+    ${PageByDisplayType.SELECT_PAGES} | ${PageByDisplayType.ALL_PAGES}    | ${undefined}         | ${{ pageBySiblings: ['1', '2'] }} | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}
+    ${undefined}                      | ${PageByDisplayType.DEFAULT_PAGE} | ${undefined}         | ${undefined}                      | ${{ something: 'test' }}              | ${false} | ${true}
+    ${undefined}                      | ${PageByDisplayType.DEFAULT_PAGE} | ${undefined}         | ${[]}                             | ${{ pageByData: pageByDataResponse }} | ${true}  | ${false}
+    ${undefined}                      | ${PageByDisplayType.DEFAULT_PAGE} | ${undefined}         | ${[]}                             | ${{ something: 'test' }}              | ${true}  | ${false}
   `(
     'onCommandUpdate should trigger proper function when called with $pageByDisplayType and $pageByDisplaySetting',
     ({
@@ -680,7 +680,6 @@ describe('PopupController', () => {
       reportParams,
       isPageBy,
       shouldCallReduxStore,
-      shouldCallRemoveAndUpdate,
     }) => {
       // given
       jest.spyOn(reduxStore, 'getState').mockImplementation(
@@ -717,9 +716,7 @@ describe('PopupController', () => {
       if (shouldCallReduxStore) {
         expect(getObjectPreviousStateSpy).toHaveBeenCalled();
         expect(reduxStoreSpy).toHaveBeenCalled();
-      }
-
-      if (shouldCallRemoveAndUpdate) {
+      } else {
         expect(handleRemovingMultiplePagesSpy).toHaveBeenCalled();
         expect(handleUpdateCommandSpy).toHaveBeenCalled();
       }
