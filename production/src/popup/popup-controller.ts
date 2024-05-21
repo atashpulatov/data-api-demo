@@ -1,3 +1,4 @@
+import { PageByConfiguration } from '@mstr/connector-components';
 import { v4 as uuidv4 } from 'uuid';
 
 import { authenticationHelper } from '../authentication/authentication-helper';
@@ -375,7 +376,7 @@ class PopupController {
    * @param reportParams Contains information about the currently selected object
    */
   onCommandOk = async (response: DialogResponse, reportParams: ReportParams): Promise<void> => {
-    if (!reportParams || response.pageByConfigurations?.length) {
+    if (!reportParams) {
       return this.handleOkCommand(response);
     }
 
@@ -437,10 +438,9 @@ class PopupController {
       displayAttrFormNames: response.displayAttrFormNames,
       definition: { filters: response.filterDetails },
       pageByData: response.pageByData,
-      pageByConfigurations: response.pageByConfigurations,
     };
 
-    await this.handleImport(objectData);
+    await this.handleImport(objectData, response.pageByConfigurations);
   };
 
   /**
@@ -463,10 +463,9 @@ class PopupController {
         preparedInstanceId: response.preparedInstanceId,
         definition: { filters: response.filterDetails },
         displayAttrFormNames: response.displayAttrFormNames,
-        pageByConfigurations: response.pageByConfigurations,
       };
 
-      await this.handleImport(objectData);
+      await this.handleImport(objectData, response.pageByConfigurations);
     }
   };
 
@@ -475,9 +474,13 @@ class PopupController {
    * For Page-by Reports, it will loop through all valid combinations of Page-by elements, creating new import request for each.
    *
    * @param objectData Contains information about the MSTR object
+   * @param pageByConfigurations Contains information about Page-by configurations selected in the Page-by modal
    */
-  handleImport = async (objectData: ObjectData): Promise<void> => {
-    const { mstrObjectType, pageByConfigurations, importType } = objectData;
+  handleImport = async (
+    objectData: ObjectData,
+    pageByConfigurations: PageByConfiguration[][]
+  ): Promise<void> => {
+    const { mstrObjectType, importType } = objectData;
 
     let preparedInstanceDefinition;
 
