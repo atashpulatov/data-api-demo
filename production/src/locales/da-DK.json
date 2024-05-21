@@ -286,7 +286,7 @@
    "Default import format:": "Standard importformat:",
    "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.": "Objekter, der ikke kan importeres i det valgte format, importeres som data. Du kan ændre formatet under importen.",
    "Data": "Data",
-   "Data with formatting": "Data med formatering",
+   "Formatted Data": "Formaterede data",
    "Visualization": "Visualisering",
    "Pivot Table": "Pivottabel",
    "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "Hvis det er aktiveret, tilføjes attributterne automatisk til sektionen 'Kolonne' i pivottabellen.",

@@ -286,7 +286,7 @@
    "Default import format:": "デフォルトのインポート形式:",
    "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.": "選択した形式でインポートできないオブジェクトは、データとしてインポートされます。インポート中に書式を変更できます。",
    "Data": "データ",
-   "Data with formatting": "書式設定済みのデータ",
+   "Formatted Data": "書式設定されたデータ",
    "Visualization": "ビジュアリゼーション",
    "Pivot Table": "ピボット テーブル",
    "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "有効な場合、アトリビュートは自動的にピボット テーブルの 'Column' セクションに追加されます。",

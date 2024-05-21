@@ -286,7 +286,7 @@
    "Default import format:": "Format d'importation par défaut :",
    "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.": "Les objets qui ne peuvent pas être importés dans le format sélectionné seront importés en tant que données. Vous pouvez modifier le format lors de l'importation.",
    "Data": "Données",
-   "Data with formatting": "Données avec formatage",
+   "Formatted Data": "Données mises en forme",
    "Visualization": "Visualisation",
    "Pivot Table": "Tableau croisé dynamique",
    "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "Si l'option est activée, des attributs seront automatiquement ajoutés à la section « Colonne » du tableau croisé dynamique.",

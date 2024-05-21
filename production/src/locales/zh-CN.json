@@ -286,7 +286,7 @@
    "Default import format:": "默认导入格式:",
    "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.": "无法以所选格式导入的对象将作为数据导入。您可以在导入期间更改格式。",
    "Data": "数据",
-   "Data with formatting": "带格式的数据",
+   "Formatted Data": "格式化数据",
    "Visualization": "可视化效果",
    "Pivot Table": "数据透视表",
    "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "启用后实体将自动添加到数据透视表的\"列\"部分。",
