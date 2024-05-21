@@ -106,10 +106,10 @@ class OfficeTableCreate {
       tableChanged
     );
 
-    // Add extra rows to crosstab table to be able to track users manipulations, otherwise formatted table range
+    // Add extra rows to crosstab table to be able to track users manipulations, otherwise formatted data(table) range
     // will entirely overlap and ultmately remove the underneath crosstab table
     let tableRows: number = rows;
-    if (importType === ObjectImportType.FORMATTED_TABLE && isCrosstab) {
+    if (importType === ObjectImportType.FORMATTED_DATA && isCrosstab) {
       tableRows += FORMATTED_TABLE_CROSSTAB_EXTRA_ROWS;
     }
 

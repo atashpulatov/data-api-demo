@@ -56,10 +56,10 @@ class OfficeTableUpdate {
       await excelContext.sync();
 
 
-      // Add extra rows to crosstab table to be able to track users manipulations, otherwise formatted table range 
+      // Add extra rows to crosstab table to be able to track users manipulations, otherwise formatted data(table) range 
       // will entirely overlap and ultmately remove the underneath crosstab table
       let rowsToPreserveCount: number = rows;
-      if (objectData.importType === ObjectImportType.FORMATTED_TABLE && isCrosstab) {
+      if (objectData.importType === ObjectImportType.FORMATTED_DATA && isCrosstab) {
         rowsToPreserveCount += FORMATTED_TABLE_CROSSTAB_EXTRA_ROWS;
       }
 

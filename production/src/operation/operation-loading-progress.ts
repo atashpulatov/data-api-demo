@@ -66,7 +66,7 @@ const loadingStateEnumWeights = {
       DISPLAY_NOTIFICATION_COMPLETED: 40,
     },
   },
-  [ObjectImportType.FORMATTED_TABLE]: {
+  [ObjectImportType.FORMATTED_DATA]: {
     [OperationTypes.IMPORT_OPERATION]: {
       GET_INSTANCE_DEFINITION: 0,
       GET_OBJECT_DETAILS: 10,

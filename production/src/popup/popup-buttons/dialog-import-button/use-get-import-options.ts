@@ -39,7 +39,7 @@ const useGetImportOptions = (): ImportButtonOptionsType[] => {
     && (selectedMstrObjectType === mstrObjectType.mstrObjectType.dossier
       || selectedMstrObjectType === mstrObjectType.mstrObjectType.report)
   ) {
-    options.push({ disabled: !isChosenVisOfGridType, ...optionsDictionary[ObjectImportType.FORMATTED_TABLE] });
+    options.push({ disabled: !isChosenVisOfGridType, ...optionsDictionary[ObjectImportType.FORMATTED_DATA] });
   }
 
   if (isShapeAPISupported && selectedMstrObjectType === mstrObjectType.mstrObjectType.dossier) {

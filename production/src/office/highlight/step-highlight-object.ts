@@ -25,7 +25,7 @@ class StepHighlightObject {
 
       if (
         importType === ObjectImportType.TABLE ||
-        importType === ObjectImportType.FORMATTED_TABLE
+        importType === ObjectImportType.FORMATTED_DATA
       ) {
         await officeApiHelper.onBindingObjectClick(objectData);
       } else {

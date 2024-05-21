@@ -602,10 +602,10 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
   });
 
   describe('OfficeStoreRestoreObject excludeObjects()', () => {
-    it('excludeObjects works as expected and filters out formatted_table object', () => {
+    it('excludeObjects works as expected and filters out formatted_data object', () => {
       // given
       const objects: any = [
-        { objectWorkingId: 12345673, importType: ObjectImportType.FORMATTED_TABLE },
+        { objectWorkingId: 12345673, importType: ObjectImportType.FORMATTED_DATA },
       ];
 
       jest.spyOn(officeReducerHelper, 'checkExcelApiSupport').mockReturnValue(false);
@@ -613,7 +613,7 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
       // when
       const result = officeStoreRestoreObject.excludeObjects(
         objects,
-        ObjectImportType.FORMATTED_TABLE
+        ObjectImportType.FORMATTED_DATA
       );
 
       // then
@@ -622,10 +622,10 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
       expect(result).toHaveLength(0);
     });
 
-    it('excludeObjects works as expected and does not filter out formatted_table object', () => {
+    it('excludeObjects works as expected and does not filter out formatted_data object', () => {
       // given
       const objects: any = [
-        { objectWorkingId: 12345673, importType: ObjectImportType.FORMATTED_TABLE },
+        { objectWorkingId: 12345673, importType: ObjectImportType.FORMATTED_DATA },
       ];
 
       jest.spyOn(officeReducerHelper, 'checkExcelApiSupport').mockReturnValue(true);
@@ -633,7 +633,7 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
       // when
       const result = officeStoreRestoreObject.excludeObjects(
         objects,
-        ObjectImportType.FORMATTED_TABLE
+        ObjectImportType.FORMATTED_DATA
       );
 
       // then
