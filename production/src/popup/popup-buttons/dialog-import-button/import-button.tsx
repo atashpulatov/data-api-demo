@@ -25,13 +25,13 @@ export const ImportButton: React.FC<ImportButtonProps> = ({
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
+  const isNonGridVizNotSupported = disableReason === ErrorMessages.NON_GRID_VIZ_NOT_SUPPORTED;
+
   const isDisabled = !!disableReason;
 
   const supportedOptions = useGetImportOptions();
-  const options = isDisabled ? [] : supportedOptions;
+  const options = isDisabled && !isNonGridVizNotSupported ? [] : supportedOptions;
   const importType = useGetImportType(options);
-
-  const isNonGridVizNotSupported = disableReason === ErrorMessages.NON_GRID_VIZ_NOT_SUPPORTED;
 
   // Enable users to select valid(supported) import options(types), even if the current selected
   // import type is not supported. Indicates whether we should disable the options button
