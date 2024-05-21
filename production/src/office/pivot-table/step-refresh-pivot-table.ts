@@ -23,18 +23,17 @@ class StepRefreshPivotTable {
     console.group('Refreshing pivot table');
 
     try {
-      const { pivotTableId, objectWorkingId } = objectData;
-      const {
-        excelContext,
-        instanceDefinition: { mstrTable } = {},
-      } = operationData;
+      const { pivotTableId, objectWorkingId, isCrosstab } = objectData;
+      const { excelContext, instanceDefinition: { mstrTable } = {} } = operationData;
 
       const pivotTable = await pivotTableHelper.getPivotTable(excelContext, pivotTableId);
 
       if (!pivotTable.isNullObject) {
         pivotTable.refresh();
         await excelContext.sync();
-        await pivotTableHelper.populatePivotTable(pivotTable, mstrTable, excelContext);
+        if (!isCrosstab) {
+          await pivotTableHelper.populatePivotTable(pivotTable, mstrTable, excelContext);
+        }
       }
 
       operationStepDispatcher.completeRefreshPivotTable(objectWorkingId);
