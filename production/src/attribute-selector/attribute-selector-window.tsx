@@ -64,8 +64,7 @@ export const AttributeSelectorWindowNotConnected: React.FC<
     const projectId = editedObject?.projectId || chosenObject.chosenProjectId;
     const instanceId = editedObject?.instanceId;
     const importType = editedObject?.importType || chosenImportType;
-    const displayAttrFormNames = (editedObject?.displayAttrFormNames ||
-      chosenDisplayAttrFormNames) as DisplayAttrFormNames;
+    const displayAttrFormNames = editedObject?.displayAttrFormNames || chosenDisplayAttrFormNames;
 
     let instance;
 
