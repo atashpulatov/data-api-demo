@@ -98,7 +98,7 @@ class StepGetOfficeTableEditRefresh {
       const tableStatus = getTableOperationAndStartCell({
         tableMoved,
         tableChanged,
-        previousObjectDetailsSize: objectData.objectDetailsSize,
+        previousObjectDetailsSize: objectData.objectDetailsSize ?? 0,
         newObjectDetailsSize,
         tableStartCell: currentTableStartCell,
       });

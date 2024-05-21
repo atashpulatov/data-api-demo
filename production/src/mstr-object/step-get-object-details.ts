@@ -65,6 +65,7 @@ class StepGetObjectDetails {
             );
             return generateReportFilterTexts(reportDefinition);
           }
+          case 'visualization':
           case 'dossier': {
             const dossierDefinition = await mstrObjectRestService.getDossierDefinition(
               objectId,
@@ -77,8 +78,7 @@ class StepGetObjectDetails {
             break;
           }
           default:
-            // TODO: transform to string, cause it returns {operands: any[], operator: string}
-            filtersText = { viewFilter: objectData.body?.viewFilter } as FiltersText;
+            filtersText = { viewFilterText: '-' };
         }
         return filtersText;
       };

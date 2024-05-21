@@ -91,6 +91,7 @@ export const generateDossierFilterText = (
   const selectedChapter = dossierDefinition.chapters.find(chapter => chapter.key === chapterKey);
   const joinDelimiter = ` ) ${t('and').toUpperCase()} ( `;
   const dossierFilterSummary = `( ${selectedChapter.filters
+    .filter(filter => filter.summary)
     .map(filter => filter.summary)
     .join(joinDelimiter)} )`;
 
