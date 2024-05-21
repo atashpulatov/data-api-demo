@@ -291,5 +291,8 @@
    "Pivot Table": "資料表",
    "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "若已啟用屬性將自動新增至資料透視表的「欄位」區段。",
    "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "若已啟用計量會自動新增至資料透視表的「數值」區段。",
-   "The memory limit has been reached. You cannot import any more objects.": "已達到記憶體上限。您無法彙入更多物件。"
+   "The memory limit has been reached. You cannot import any more objects.": "已達到記憶體上限。您無法彙入更多物件。",
+   "Import Pivot Table": "匯入資料資料表",
+   "Import Visualization": "匯入視覺效果",
+   "Import Formatted Data": "匯入格式化資料"
 }
