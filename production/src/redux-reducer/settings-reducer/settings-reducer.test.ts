@@ -1,7 +1,5 @@
-import {
-  ObjectAndWorksheetNamingOption,
-  PageByDisplayOption,
-} from '../../right-side-panel/settings-side-panel/settings-side-panel-types';
+import { PageByDisplayType } from '../../page-by/page-by-types';
+import { ObjectAndWorksheetNamingOption } from '../../right-side-panel/settings-side-panel/settings-side-panel-types';
 
 import { settingsActions } from './settings-actions';
 import { settingsReducer } from './settings-reducer';
@@ -19,7 +17,7 @@ describe('settingsReducer', () => {
     worksheetObjectInfoSettings: initialWorksheetObjectInfoSettings,
     importType: ObjectImportType.TABLE,
     objectAndWorksheetNamingSetting: ObjectAndWorksheetNamingOption.REPORT_NAME,
-    pageByDisplaySetting: PageByDisplayOption.SELECT_PAGES,
+    pageByDisplaySetting: PageByDisplayType.SELECT_PAGES,
     pivotTableAddAttributesToColumns: false,
     pivotTableAddMetricsToValues: false,
   };
@@ -103,10 +101,10 @@ describe('settingsReducer', () => {
 
   it('should return proper state in case of SET_PAGE_BY_DISPLAY_SETTING action', () => {
     // given
-    const action = settingsActions.setPageByDisplaySetting(PageByDisplayOption.ALL_PAGES);
+    const action = settingsActions.setPageByDisplaySetting(PageByDisplayType.ALL_PAGES);
     // when
     const newState = settingsReducer(initialState, action);
     // then
-    expect(newState.pageByDisplaySetting).toBe(PageByDisplayOption.ALL_PAGES);
+    expect(newState.pageByDisplaySetting).toBe(PageByDisplayType.ALL_PAGES);
   });
 });

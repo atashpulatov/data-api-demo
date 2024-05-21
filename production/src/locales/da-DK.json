@@ -291,5 +291,8 @@
    "Pivot Table": "Pivottabel",
    "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "Hvis det er aktiveret, tilføjes attributterne automatisk til sektionen 'Kolonne' i pivottabellen.",
    "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "Hvis det er aktiveret, tilføjes metrics automatisk i sektionen 'Værdier' i pivottabellen.",
-   "The memory limit has been reached. You cannot import any more objects.": "Hukommelsesgrænsen er nået. Du kan ikke importere flere objekter."
+   "The memory limit has been reached. You cannot import any more objects.": "Hukommelsesgrænsen er nået. Du kan ikke importere flere objekter.",
+   "Import Pivot Table": "Importer pivottabel",
+   "Import Visualization": "Importer visualisering",
+   "Import Formatted Data": "Importer formaterede data"
 }

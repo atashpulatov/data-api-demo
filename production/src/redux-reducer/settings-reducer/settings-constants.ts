@@ -2,7 +2,6 @@ import i18n from '../../i18n';
 
 const { t } = i18n;
 
-// TODO Add translations
 export const initialSidePanelObjectInfoSettings = [
   { key: 'importedBy', item: t('Imported By'), showToggle: true, toggleChecked: true },
   { key: 'owner', item: t('Owner'), showToggle: true, toggleChecked: true },

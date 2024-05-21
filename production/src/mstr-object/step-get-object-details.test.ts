@@ -24,7 +24,7 @@ describe('StepGetObjectDetails', () => {
     dateModified: 'some date modified',
     description: 'some description',
     owner: 'some owner',
-    objectFilters: { viewFilter: undefined as any },
+    objectFilters: { viewFilterText: '-' },
     version: '1.0',
     name: 'testName',
   };

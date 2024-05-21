@@ -34,6 +34,7 @@ interface DossierWindowProps {
   chosenObjectId: string;
   chosenObjectName: string;
   chosenProjectId: string;
+  isChosenVisOfGridType: boolean;
   isShapeAPISupported: boolean;
   handleBack: () => void;
   setImportType: (importType: ObjectImportType) => void;
@@ -41,6 +42,7 @@ interface DossierWindowProps {
   editedObject: EditedObject;
   isReprompt: boolean;
   importType: ObjectImportType;
+  defaultImportType: ObjectImportType;
   repromptsQueue: RepromptsQueueState;
   popupData: { objectWorkingId: number };
 }
@@ -69,14 +71,16 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
     editedObject = {} as EditedObject,
     chosenObjectId = 'default id',
     chosenProjectId = 'default id',
+    isChosenVisOfGridType,
     isReprompt = false,
     importType,
+    defaultImportType,
     repromptsQueue = { total: 0, index: 0 },
     popupData,
   } = props;
 
   const { isEdit, importType: editedObjectImportType } = editedObject;
-  const { chapterKey, visualizationKey, vizDimensions, isVizGrid } = lastSelectedViz;
+  const { chapterKey, visualizationKey, vizDimensions } = lastSelectedViz;
   const [dialogPopup, setDialogPopup] = React.useState(null);
 
   if (editedObjectImportType && importType !== editedObjectImportType) {
@@ -95,7 +99,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
   const isSupported = !!(isSelected && vizData && vizData.isSupported);
   const isChecking = !!(isSelected && (!vizData || (vizData && vizData.isSupported === undefined)));
   const isVizOfNonGridTypeOnFormattedDataImport =
-    importType === ObjectImportType.FORMATTED_DATA && !isVizGrid;
+    importType === ObjectImportType.FORMATTED_DATA && !isChosenVisOfGridType;
 
   const handleCancel = (): void => {
     const { commandCancel } = selectorProperties;
@@ -151,9 +155,12 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
           chapterKey: chosenVizchapterKey,
           visualizationKey: chosenVizKey,
           vizDimensions: chosenVizDimensions,
-          isVizGrid: chosenVizIsGrid,
         });
-        updateIsChosenVizOfGridType(chosenVizIsGrid);
+
+        if (chosenVizIsGrid !== undefined && chosenVizIsGrid !== null) {
+          updateIsChosenVizOfGridType(chosenVizIsGrid);
+        }
+
         setPromptsAnswers(chosenVizPromptAnswers);
         instanceId.current = chosenVizInstanceId;
 
@@ -163,6 +170,8 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
           )
         ) {
           let isVizSupported = true;
+
+          setImportType(defaultImportType);
 
           const checkIfVizDataCanBeImported = async (): Promise<any> => {
             // @ts-expect-error
@@ -202,7 +211,14 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
         }
       }
     },
-    [chosenObjectId, chosenProjectId, vizualizationsData, updateIsChosenVizOfGridType]
+    [
+      chosenObjectId,
+      chosenProjectId,
+      vizualizationsData,
+      defaultImportType,
+      setImportType,
+      updateIsChosenVizOfGridType,
+    ]
   );
 
   const handleOk = useCallback(() => {
@@ -391,18 +407,21 @@ function mapStateToProps(state: RootState): any {
     officeReducer,
     answersReducer,
     popupStateReducer,
+    settingsReducer,
     repromptsQueueReducer,
   } = state;
   const {
     chosenObjectName,
     chosenObjectId,
     chosenProjectId,
+    isChosenVisOfGridType,
     promptsAnswers,
     promptObjects,
     importRequested,
   } = navigationTree;
   const { editedObject } = popupReducer;
   const { isReprompt, importType } = popupStateReducer;
+  const { importType: defaultImportType } = settingsReducer;
   const { supportForms, isShapeAPISupported, popupData } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
   const { answers } = answersReducer;
@@ -417,6 +436,7 @@ function mapStateToProps(state: RootState): any {
     chosenObjectName: editedObject ? editedObjectParse.dossierName : chosenObjectName,
     chosenObjectId: editedObject ? editedObjectParse.chosenObjectId : chosenObjectId,
     chosenProjectId: editedObject ? editedObjectParse.projectId : chosenProjectId,
+    isChosenVisOfGridType,
     editedObject: editedObjectParse,
     previousPromptsAnswers: answers,
     promptObjects,
@@ -424,6 +444,7 @@ function mapStateToProps(state: RootState): any {
     isShapeAPISupported,
     isReprompt,
     importType,
+    defaultImportType,
     repromptsQueue: { ...repromptsQueueReducer },
     popupData,
   };

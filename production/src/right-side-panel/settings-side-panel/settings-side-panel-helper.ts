@@ -4,17 +4,14 @@ import { userRestService } from '../../home/user-rest-service';
 
 import { reduxStore } from '../../store';
 
+import { PageByDisplayType } from '../../page-by/page-by-types';
 import {
   KeyValue,
   LoadSidePanelObjectInfoSettingAction,
   LoadWorksheetObjectInfoSettingAction,
   ObjectInfoSetting,
 } from '../../redux-reducer/settings-reducer/settings-reducer-types';
-import {
-  ObjectAndWorksheetNamingOption,
-  PageByDisplayOption,
-  UserPreferenceKey,
-} from './settings-side-panel-types';
+import { ObjectAndWorksheetNamingOption, UserPreferenceKey } from './settings-side-panel-types';
 
 import i18n from '../../i18n';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
@@ -270,13 +267,13 @@ class SettingsSidePanelHelper {
 
   /**
    * Updates the page-by display settings value
-   * @param pageByDisplayOption - page-by display value.
+   * @param pageByDisplayType - page-by display value.
    */
-  async handlePageByDisplayChange(pageByDisplayOption: PageByDisplayOption): Promise<void> {
-    reduxStore.dispatch(settingsActions.setPageByDisplaySetting(pageByDisplayOption));
+  async handlePageByDisplayChange(pageByDisplayType: PageByDisplayType): Promise<void> {
+    reduxStore.dispatch(settingsActions.setPageByDisplaySetting(pageByDisplayType));
     await userRestService.setUserPreference(
       UserPreferenceKey.EXCEL_PAGE_BY_SELECTION,
-      pageByDisplayOption
+      pageByDisplayType
     );
   }
 
@@ -389,7 +386,7 @@ class SettingsSidePanelHelper {
    */
   getPageBySection = (
     objectAndWorksheetNamingSetting: ObjectAndWorksheetNamingOption,
-    pageByDisplayOption: PageByDisplayOption
+    pageByDisplayType: PageByDisplayType
   ): SettingsSection => ({
     key: 'page-by-section',
     label: i18n.t('Page-By'),
@@ -428,19 +425,19 @@ class SettingsSidePanelHelper {
         key: 'page-by-display-section',
         label: i18n.t('Page-by display'),
         type: SettingPanelSection.RADIO,
-        selectedOption: pageByDisplayOption,
+        selectedOption: pageByDisplayType,
         onChange: this.handlePageByDisplayChange,
         settings: [
           {
-            key: PageByDisplayOption.SELECT_PAGES,
+            key: PageByDisplayType.SELECT_PAGES,
             label: i18n.t('Prompt to select pages'),
           },
           {
-            key: PageByDisplayOption.DEFAULT_PAGE,
+            key: PageByDisplayType.DEFAULT_PAGE,
             label: i18n.t('Import default page'),
           },
           {
-            key: PageByDisplayOption.ALL_PAGES,
+            key: PageByDisplayType.ALL_PAGES,
             label: i18n.t('Import all pages'),
           },
         ],

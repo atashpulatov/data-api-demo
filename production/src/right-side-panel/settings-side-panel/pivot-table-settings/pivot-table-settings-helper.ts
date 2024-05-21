@@ -1,4 +1,4 @@
-import { i18n, SettingPanelSection, SettingsSection } from '@mstr/connector-components';
+import { SettingPanelSection, SettingsSection } from '@mstr/connector-components';
 
 import { userRestService } from '../../../home/user-rest-service';
 import { getBooleanUserPreference } from '../settings-side-panel-helper';
@@ -7,6 +7,7 @@ import { reduxStore } from '../../../store';
 
 import { PivotTableOption, UserPreferenceKey } from '../settings-side-panel-types';
 
+import i18n from '../../../i18n';
 import { settingsActions } from '../../../redux-reducer/settings-reducer/settings-actions';
 import initializationErrorDecorator from '../initialization-error-decorator';
 
@@ -82,7 +83,7 @@ class PivotTableSettingsHelper {
             label: i18n.t('Attributes'),
             value: pivotTableAddAttributesToColumnsValue,
             description: i18n.t(
-              'If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.'
+              'If enabled, attributes will be automatically added to the ‘Rows’ section of the pivot table.'
             ),
           },
         ],
@@ -97,7 +98,7 @@ class PivotTableSettingsHelper {
             label: i18n.t('Metrics'),
             value: pivotTableAddMetricsToValuesValue,
             description: i18n.t(
-              'If enabled, attributes will be automatically added to the ‘Values’ section of the pivot table.'
+              'If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.'
             ),
           },
         ],

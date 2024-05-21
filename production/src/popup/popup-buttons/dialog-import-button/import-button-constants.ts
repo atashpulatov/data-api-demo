@@ -1,3 +1,4 @@
+import i18n from '../../../i18n';
 import { ObjectImportType } from '../../../mstr-object/constants';
 
 export enum ImportActionTypes {
@@ -20,19 +21,19 @@ export enum ImportButtonIds {
 
 export const optionsDictionary = {
   [ObjectImportType.TABLE]: {
-    value: 'Import Data',
+    value: i18n.t(ImportActionTypes.IMPORT_DATA),
     key: ObjectImportType.TABLE,
   },
   [ObjectImportType.FORMATTED_DATA]: {
-    value: 'Import Formatted Data',
+    value: i18n.t(ImportActionTypes.IMPORT_FORMATTED_DATA),
     key: ObjectImportType.FORMATTED_DATA,
   },
   [ObjectImportType.IMAGE]: {
-    value: 'Import Visualization',
+    value: i18n.t(ImportActionTypes.IMPORT_IMAGE),
     key: ObjectImportType.IMAGE,
   },
   [ObjectImportType.PIVOT_TABLE]: {
-    value: 'Import Pivot Table',
+    value: i18n.t(ImportActionTypes.IMPORT_PIVOT_TABLE),
     key: ObjectImportType.PIVOT_TABLE,
   },
 };

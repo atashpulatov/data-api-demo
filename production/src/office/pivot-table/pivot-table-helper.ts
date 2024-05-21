@@ -85,6 +85,10 @@ class PivotTableHelper {
     mstrTable: MstrTable,
     excelContext: Excel.RequestContext
   ): Promise<void> {
+    if (!mstrTable) {
+      return;
+    }
+    
     const { pivotTableAddAttributesToColumns, pivotTableAddMetricsToValues } =
       reduxStore.getState().settingsReducer;
 
