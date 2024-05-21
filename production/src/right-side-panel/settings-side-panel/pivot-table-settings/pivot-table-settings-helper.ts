@@ -83,7 +83,7 @@ class PivotTableSettingsHelper {
             label: i18n.t('Attributes'),
             value: pivotTableAddAttributesToColumnsValue,
             description: i18n.t(
-              'If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.'
+              'If enabled, attributes will be automatically added to the ‘Rows’ section of the pivot table.'
             ),
           },
         ],
