@@ -496,12 +496,12 @@ class OfficeApiHelper {
     excelContext: Excel.RequestContext,
     setActiveCellAddress: Function,
     setActiveSheetIndex: Dispatch<SetStateAction<number>>,
-    isAnyPopupOrSettingsDisplayed: boolean
-  ): Promise<OfficeExtension.EventHandlerResult<Excel.SelectionChangedEventArgs>> {
-    const eventResult = excelContext.workbook.onSelectionChanged.add(async () => {
+    isAnyPopupOrSettingsDisplayedRef: React.MutableRefObject<boolean>
+  ): Promise<void> {
+    excelContext.workbook.onSelectionChanged.add(async () => {
       try {
         // only read + update active sheet index if no popup (notifications, Office dialog, etc.) or settings visible
-        if (!isAnyPopupOrSettingsDisplayed) {
+        if (!isAnyPopupOrSettingsDisplayedRef.current) {
           const activeWorksheet = this.getCurrentExcelSheet(excelContext);
 
           activeWorksheet.load('position');
@@ -517,8 +517,6 @@ class OfficeApiHelper {
       }
     });
     await excelContext.sync();
-
-    return eventResult;
   }
 
   /**
