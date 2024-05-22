@@ -244,56 +244,56 @@ class SidePanelEventHelper {
   ): void {
     worksheets?.onAdded?.add?.(async eventParams => {
       try {
-        // validate correct event type
-        if (eventParams?.type === Excel.EventType.worksheetAdded) {
-          const newWorksheet = worksheets.getItemOrNullObject(eventParams.worksheetId);
-          const objects = officeReducerHelper.getObjectsListFromObjectReducer();
-          const updatedObjects: ObjectData[] = [];
+        // immediately return if not correct event type
+        if (eventParams?.type !== Excel.EventType.worksheetAdded) return;
 
-          newWorksheet.load(['id', 'position', 'isNullObject']);
-          await excelContext.sync();
+        const newWorksheet = worksheets.getItemOrNullObject(eventParams.worksheetId);
+        const objects = officeReducerHelper.getObjectsListFromObjectReducer();
+        const updatedObjects: ObjectData[] = [];
 
-          // immediately return if new worksheet object is not found
-          if (newWorksheet.isNullObject) return;
+        newWorksheet.load(['id', 'position', 'isNullObject']);
+        await excelContext.sync();
 
-          // update worksheet index fields for affected objects
-          for (const object of objects) {
-            const objectNotification = officeReducerHelper.getNotificationFromNotificationReducer(
-              object?.objectWorkingId
-            );
+        // immediately return if new worksheet object is not found
+        if (newWorksheet.isNullObject) return;
 
-            if (objectNotification?.type === ObjectNotificationTypes.PROGRESS) {
-              // ignore objects with progress notifications, they will be set properly when finished processing
-            } else if (
-              object?.worksheet?.id &&
-              object.worksheet.id !== newWorksheet.id &&
-              object.worksheet.index >= newWorksheet.position
+        // update worksheet index fields for affected objects
+        for (const object of objects) {
+          const objectNotification = officeReducerHelper.getNotificationFromNotificationReducer(
+            object?.objectWorkingId
+          );
+
+          if (objectNotification?.type === ObjectNotificationTypes.PROGRESS) {
+            // ignore objects with progress notifications, they will be set properly when finished processing
+          } else if (
+            object?.worksheet?.id &&
+            object.worksheet.id !== newWorksheet.id &&
+            object.worksheet.index >= newWorksheet.position
+          ) {
+            // if object's worksheet index is >= the added one, update its index
+            const objectWorksheet = worksheets.getItemOrNullObject(object.worksheet.id);
+
+            // read latest affected object's worksheet position if valid
+            objectWorksheet.load(['position', 'isNullObject']);
+            await excelContext.sync();
+
+            if (
+              !objectWorksheet.isNullObject &&
+              object.worksheet.index !== objectWorksheet.position
             ) {
-              // if object's worksheet index is >= the added one, update its index
-              const objectWorksheet = worksheets.getItemOrNullObject(object.worksheet.id);
-
-              // read latest affected object's worksheet position if valid
-              objectWorksheet.load(['position', 'isNullObject']);
-              await excelContext.sync();
-
-              if (
-                !objectWorksheet.isNullObject &&
-                object.worksheet.index !== objectWorksheet.position
-              ) {
-                // update object's worksheet index and groupData key if changed
-                updatedObjects.push({
-                  ...object,
-                  worksheet: { ...object.worksheet, index: objectWorksheet.position },
-                  groupData: { ...object.groupData, key: objectWorksheet.position },
-                });
-              }
+              // update object's worksheet index and groupData key if changed
+              updatedObjects.push({
+                ...object,
+                worksheet: { ...object.worksheet, index: objectWorksheet.position },
+                groupData: { ...object.groupData, key: objectWorksheet.position },
+              });
             }
           }
+        }
 
-          if (updatedObjects.length > 0) {
-            reduxStore.dispatch(updateObjects(updatedObjects));
-            officeStoreObject.saveObjectsInExcelStore();
-          }
+        if (updatedObjects.length > 0) {
+          reduxStore.dispatch(updateObjects(updatedObjects));
+          officeStoreObject.saveObjectsInExcelStore();
         }
       } catch (e) {
         console.warn('Error in onAdded event listener');
