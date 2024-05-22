@@ -17,6 +17,7 @@ describe('OfficeApiWorksheetHelper', () => {
     ${'some random name'}                         | ${'some random name'}
     ${'some name'}                                | ${'some name (4)'}
     ${'*test?'}                                   | ${'_test_'}
+    ${"test's"}                                   | ${"test's"}
     ${"'test / test'"}                            | ${'_test _ test_'}
     ${'History'}                                  | ${'History_'}
     ${''}                                         | ${'_'}
