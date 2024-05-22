@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import { ObjectNotificationTypes } from '@mstr/connector-components';
 
 import { notificationService } from '../../notification/notification-service';
 import { officeApiHelper } from '../../office/api/office-api-helper';
@@ -243,28 +244,38 @@ class SidePanelEventHelper {
         const objects = officeReducerHelper.getObjectsListFromObjectReducer();
         const updatedObjects: ObjectData[] = [];
 
-        newWorksheet.load(['position', 'isNullObject']);
+        newWorksheet.load(['id', 'position', 'isNullObject']);
         await excelContext.sync();
 
         if (!newWorksheet.isNullObject) {
           // update worksheet index fields for affected objects
-          objects.forEach(object => {
-            if (object?.worksheet?.id === newWorksheet.id) {
-              // if object's worksheet is same as the added one, update its index to the new worksheet position
-              updatedObjects.push({
-                ...object,
-                worksheet: { ...object.worksheet, index: newWorksheet.position },
-                groupData: { ...object.groupData, key: newWorksheet.position },
-              });
-            } else if (object?.worksheet?.index >= newWorksheet.position) {
-              // if object's worksheet index is >= the added one, update its index by adding 1 (since 1 worksheet was added before it)
-              updatedObjects.push({
-                ...object,
-                worksheet: { ...object.worksheet, index: object.worksheet.index + 1 },
-                groupData: { ...object.groupData, key: object.groupData.key + 1 },
-              });
+          for (const object of objects) {
+            const objectNotification = officeReducerHelper.getNotificationFromNotificationReducer(
+              object?.objectWorkingId
+            );
+
+            if (objectNotification.type === ObjectNotificationTypes.PROGRESS) {
+              // ignore objects with progress notifications, they will be set properly when finished processing
+            } else if (
+              object?.worksheet?.id &&
+              object.worksheet.id !== newWorksheet.id &&
+              object.worksheet.index >= newWorksheet.position
+            ) {
+              // if object's worksheet index is >= the added one, update its index after reading latest position
+              const objectWorksheet = worksheets.getItemOrNullObject(object.worksheet.id);
+
+              objectWorksheet.load('position');
+              await excelContext.sync();
+
+              if (object.worksheet.index !== objectWorksheet.position) {
+                updatedObjects.push({
+                  ...object,
+                  worksheet: { ...object.worksheet, index: objectWorksheet.position },
+                  groupData: { ...object.groupData, key: objectWorksheet.position },
+                });
+              }
             }
-          });
+          }
 
           if (updatedObjects.length > 0) {
             reduxStore.dispatch(updateObjects(updatedObjects));

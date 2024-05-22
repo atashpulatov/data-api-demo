@@ -1,3 +1,4 @@
+import { Notification } from '../../redux-reducer/notification-reducer/notification-reducer-types';
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
 
@@ -76,7 +77,7 @@ class OfficeReducerHelper {
    * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
    * @return {Object}
    */
-  getNotificationFromNotificationReducer = (objectWorkingId: number): any => {
+  getNotificationFromNotificationReducer = (objectWorkingId: number): Notification => {
     const { notifications } = this.reduxStore.getState().notificationReducer;
     return notifications.find(
       (notification: any) => notification.objectWorkingId === objectWorkingId
@@ -101,19 +102,16 @@ class OfficeReducerHelper {
   };
 
   /**
-   * Performs excel api version check and identifies the excel api support 
+   * Performs excel api version check and identifies the excel api support
    * in current version based on import type.
-   * 
+   *
    * @param importType Type of the import that is being made
-   * 
+   *
    * @return Flag indicating whether correspoding excel api to import type is supported
    */
   checkExcelApiSupport = (objectImportType: ObjectImportType): boolean => {
-    const {
-      isShapeAPISupported,
-      isInsertWorksheetAPISupported,
-      isPivotTableSupported
-    } = this.reduxStore.getState().officeReducer;
+    const { isShapeAPISupported, isInsertWorksheetAPISupported, isPivotTableSupported } =
+      this.reduxStore.getState().officeReducer;
 
     switch (objectImportType) {
       case ObjectImportType.IMAGE:
@@ -126,7 +124,7 @@ class OfficeReducerHelper {
       default:
         return true;
     }
-  }
+  };
 }
 
 const officeReducerHelper = new OfficeReducerHelper();
