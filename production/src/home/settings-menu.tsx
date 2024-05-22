@@ -193,7 +193,7 @@ export const SettingsMenuNotConnected: React.FC<SettingsMenuProps> = ({
       <li className='privacy-policy'>
         <a
           tabIndex={0}
-          href='https://www.microstrategy.com/legal-folder/privacy-policy'
+          href='https://www.microstrategy.com/legal/privacy-policy'
           target='_blank'
           rel='noopener noreferrer'
         >
@@ -203,7 +203,7 @@ export const SettingsMenuNotConnected: React.FC<SettingsMenuProps> = ({
       <li>
         <a
           tabIndex={0}
-          href='https://www.microstrategy.com/legal-folder/legal-policies/terms-of-use'
+          href='https://www.microstrategy.com/legal/terms-of-use'
           target='_blank'
           rel='noopener noreferrer'
         >
