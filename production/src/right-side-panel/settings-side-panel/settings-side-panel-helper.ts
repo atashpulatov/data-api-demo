@@ -423,7 +423,7 @@ class SettingsSidePanelHelper {
       },
       {
         key: 'page-by-display-section',
-        label: i18n.t('Page-by display'),
+        label: i18n.t('Page-by Display'),
         type: SettingPanelSection.RADIO,
         selectedOption: pageByDisplayType,
         onChange: this.handlePageByDisplayChange,
