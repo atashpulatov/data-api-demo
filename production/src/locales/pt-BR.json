@@ -289,10 +289,11 @@
    "Formatted Data": "Dados formatados",
    "Visualization": "Visualização",
    "Pivot Table": "Tabela dinâmica",
-   "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "Caso habilitado, os atributos serão adicionados automaticamente à seção \"Coluna\" da tabela dinâmica.",
+   "If enabled, attributes will be automatically added to the ‘Rows’ section of the pivot table.": "Caso habilitado, os atributos serão adicionados automaticamente à seção \"Linhas\" da tabela dinâmica.",
    "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "Caso habilitadas, as métricas serão adicionadas automaticamente à seção \"Valores\" da tabela dinâmica.",
    "The memory limit has been reached. You cannot import any more objects.": "O limite de memória foi atingido. Não é possível importar mais objetos.",
    "Import Pivot Table": "Importar tabela dinâmica",
    "Import Visualization": "Importar visualização",
-   "Import Formatted Data": "Importar dados formatados"
+   "Import Formatted Data": "Importar dados formatados",
+   "Page-By": "Seleção de dados que cabem na página"
 }

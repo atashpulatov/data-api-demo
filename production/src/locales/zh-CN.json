@@ -289,10 +289,11 @@
    "Formatted Data": "格式化数据",
    "Visualization": "可视化效果",
    "Pivot Table": "数据透视表",
-   "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "启用后实体将自动添加到数据透视表的\"列\"部分。",
+   "If enabled, attributes will be automatically added to the ‘Rows’ section of the pivot table.": "启用后实体将自动添加到数据透视表的\"行\"部分。",
    "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "启用后度量将自动添加到数据透视表的\"值\"部分。",
    "The memory limit has been reached. You cannot import any more objects.": "已达到内存上限。您无法导入更多对象。",
    "Import Pivot Table": "导入数据透视表",
    "Import Visualization": "导入可视化效果",
-   "Import Formatted Data": "导入格式化数据"
+   "Import Formatted Data": "导入格式化数据",
+   "Page-By": "分页依据"
 }

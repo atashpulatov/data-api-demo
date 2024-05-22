@@ -289,10 +289,11 @@
    "Formatted Data": "Données mises en forme",
    "Visualization": "Visualisation",
    "Pivot Table": "Tableau croisé dynamique",
-   "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "Si l'option est activée, des attributs seront automatiquement ajoutés à la section « Colonne » du tableau croisé dynamique.",
+   "If enabled, attributes will be automatically added to the ‘Rows’ section of the pivot table.": "Si l'option est activée, des attributs seront automatiquement ajoutés à la section « Lignes » du tableau croisé dynamique.",
    "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "Si l'option est activée, les mesures seront automatiquement ajoutées à la section « Valeurs » du tableau croisé dynamique.",
    "The memory limit has been reached. You cannot import any more objects.": "La limite de mémoire a été atteinte. Vous ne pouvez plus importer d'objets.",
    "Import Pivot Table": "Importer un tableau croisé dynamique",
    "Import Visualization": "Importer une visualisation",
-   "Import Formatted Data": "Importer les données mises en forme"
+   "Import Formatted Data": "Importer les données mises en forme",
+   "Page-By": "Saut de page"
 }
