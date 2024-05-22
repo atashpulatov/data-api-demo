@@ -82,6 +82,8 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
     TOOLTIP_CSS = '.__react_component_tooltip'
 
+    PIVOT_TABLE_HEADER = '#FieldListTaskPaneTaskPaneTitle'
+
     def wait_for_import_to_finish_successfully(self, timeout=Const.LONG_TIMEOUT):
         self._wait_for_operation_with_status(MessageConst.IMPORT_SUCCESSFUL_TEXT, timeout)
 
@@ -480,3 +482,17 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
             if item.get_attribute('aria-label') == item_name:
                 return True
         return False
+    
+    def get_pivot_table_menu(self):
+
+        pivot_table_header = self.get_element_by_css(RightPanelTileBrowserPage.PIVOT_TABLE_HEADER)
+        
+        if pivot_table_header:
+            return pivot_table_header.is_displayed()
+        else:
+            return False
+        
+    # def open_settings_menu():
+    #     self.focus_on_add_in_frame()
+
+    #     self.get_element_by_css(RightPanelTileBrowserPage.SETTINGS_BUTTON).click()

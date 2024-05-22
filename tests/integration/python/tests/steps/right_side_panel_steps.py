@@ -89,6 +89,14 @@ def step_impl(context, overlay_message):
 def step_impl(context):
     context.pages.right_panel_page().open_setting()
 
+@step('I clicked "{menu_option}" section on Settings menu')
+def step_impl(context, menu_option):
+    context.pages.right_panel_page().open_setting_menu_option(menu_option)
+
+@step('I changed default import type to "{import_format}"')
+def step_impl(context, import_format):
+    context.pages.right_panel_page().select_default_import_format(import_format)
+
 @step('I toggle the Reuse Prompt Answers setting')
 def step_impl(context):
     context.pages.right_panel_page().toggle_reuse_prompt_answer()
@@ -111,3 +119,12 @@ def step_impl(context):
 @step('I clicked Overview settings menu option')
 def step_impl(context):
     context.pages.right_panel_page().click_imported_data_overview_settings_menu()
+
+@step('I toggle the "{option}" setting in Pivot section')
+def step_impl(context, option):
+    context.pages.right_panel_page().toggle_pivot_table_option(option)
+
+@step('I checked the "{option}" setting in Pivot section is ON')
+def step_impl(context, option):
+    is_option_enabled = context.pages.right_panel_page().is_toggle_pivot_table_option_enabled(option)
+    AssertUtil.assert_simple(is_option_enabled, True)

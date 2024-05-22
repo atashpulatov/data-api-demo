@@ -11,6 +11,7 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     DOTS_MENU_BOX = '.settings-list'
     DOTS_MENU_ITEM_LOG_OUT_ID = 'logOut'
     DOTS_MENU_SETTING = '.settings.not-linked-list'
+    MENUT_SETTING_OPTION = '//button[normalize-space(.)="%s"]'
 
     SELECT_ALL_TILES = 'div.object-tile-container-header > span > span > '
     SELECT_ALL_TILES_CHECKBOX = '.object-tile-container-header .checkbox-cell'
@@ -33,6 +34,10 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     REUSE_PROMPT_ANSWER_BACK = '.settings-icon span'
 
     IMPORTED_DATA_OVERVIEW = '.imported-data-overview'
+    DEFAULT_IMPORT_FORMAT = "//li[@class='select-section__setting']//button"
+    IMPORT_FORMAT_OPTION = "//li[@aria-label='%s']"
+
+    PIVOT_TABLE_TOGGLES = "(//button[contains(@class, 'mstr-rc-3-switch--regular') and @type='button' and @role='switch' and ancestor::*[contains(text(), '%s')]][@aria-checked='true' or @aria-checked='false'])[1]"
 
     def click_import_data_button_element(self):
         self.focus_on_add_in_frame()
@@ -148,6 +153,11 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
         self._open_dots_menu()
         self.get_element_by_css(RightPanelMainBrowserPage.DOTS_MENU_SETTING).click()
 
+    def open_setting_menu_option(self, settings_option):
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_xpath(RightPanelMainBrowserPage.MENUT_SETTING_OPTION % settings_option).click()
+
     def toggle_reuse_prompt_answer(self):
         self.focus_on_add_in_frame()
 
@@ -173,3 +183,27 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
 
         self.get_element_by_css(RightPanelMainBrowserPage.IMPORTED_DATA_OVERVIEW).click()
 
+
+    def select_default_import_format(self, import_format):
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_xpath(RightPanelMainBrowserPage.DEFAULT_IMPORT_FORMAT).click()
+        self.get_element_by_xpath(RightPanelMainBrowserPage.IMPORT_FORMAT_OPTION % import_format).click()
+
+    def toggle_pivot_table_option(self, pivot_option):
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_xpath(RightPanelMainBrowserPage.PIVOT_TABLE_TOGGLES % pivot_option).click()
+
+    def is_toggle_pivot_table_option_enabled(self, pivot_option):
+        self.focus_on_add_in_frame()
+
+        element = self.get_element_by_xpath(RightPanelMainBrowserPage.PIVOT_TABLE_TOGGLES % pivot_option)
+        aria_checked_value = element.get_attribute("aria-checked")
+        return aria_checked_value == "true"
+
+    def assert_toggle_pivot_table_option_enabled(self, pivot_option):
+        assert self.is_toggle_pivot_table_option_enabled(pivot_option), "Toggle option is not enabled"
+
+    def assert_toggle_pivot_table_option_disabled(self, pivot_option):
+        assert not self.is_toggle_pivot_table_option_enabled(pivot_option), "Toggle option is enabled"
