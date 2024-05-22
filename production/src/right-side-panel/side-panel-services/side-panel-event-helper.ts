@@ -270,11 +270,15 @@ class SidePanelEventHelper {
                 // if object's worksheet index is >= the added one, update its index
                 const objectWorksheet = worksheets.getItemOrNullObject(object.worksheet.id);
 
-                // read latest affected object's worksheet position
-                objectWorksheet.load('position');
+                // read latest affected object's worksheet position if valid
+                objectWorksheet.load(['position', 'isNullObject']);
                 await excelContext.sync();
 
-                if (object.worksheet.index !== objectWorksheet.position) {
+                if (
+                  !objectWorksheet.isNullObject &&
+                  object.worksheet.index !== objectWorksheet.position
+                ) {
+                  // update object's worksheet index and groupData key if changed
                   updatedObjects.push({
                     ...object,
                     worksheet: { ...object.worksheet, index: objectWorksheet.position },
