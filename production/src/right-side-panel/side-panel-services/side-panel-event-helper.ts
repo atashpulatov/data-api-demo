@@ -150,7 +150,6 @@ class SidePanelEventHelper {
     worksheets?.onNameChanged?.add(async eventParams => {
       // validate correct event type
       if (eventParams?.type === Excel.EventType.worksheetNameChanged) {
-        console.log('Worksheet name changed event:', eventParams);
         const objects = officeReducerHelper.getObjectsListFromObjectReducer();
         const updatedObjects: ObjectData[] = [];
 
@@ -188,7 +187,6 @@ class SidePanelEventHelper {
     worksheets?.onMoved?.add(async eventParams => {
       // validate correct event type
       if (eventParams?.type === Excel.EventType.worksheetMoved) {
-        console.log('Worksheet moved event:', eventParams);
         const { positionBefore, positionAfter } = eventParams;
         const startIdx = Math.min(positionBefore, positionAfter);
         const endIdx = Math.max(positionBefore, positionAfter);
@@ -239,7 +237,6 @@ class SidePanelEventHelper {
     worksheets?.onAdded?.add(async eventParams => {
       // validate correct event type
       if (eventParams?.type === Excel.EventType.worksheetAdded) {
-        console.log('Worksheet added event:', eventParams);
         const newWorksheet = worksheets.getItemOrNullObject(eventParams.worksheetId);
         const objects = officeReducerHelper.getObjectsListFromObjectReducer();
         const updatedObjects: ObjectData[] = [];
@@ -301,7 +298,6 @@ class SidePanelEventHelper {
     worksheets?.onDeleted?.add(async eventParams => {
       // validate correct event type
       if (eventParams?.type === Excel.EventType.worksheetDeleted) {
-        console.log('Worksheet deleted event:', eventParams);
         const objects = officeReducerHelper.getObjectsListFromObjectReducer();
         const updatedObjects: ObjectData[] = [];
 
