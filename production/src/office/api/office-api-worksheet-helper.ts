@@ -186,11 +186,22 @@ class OfficeApiWorksheetHelper {
       newSheetName = pageByHelper.prepareNameBasedOnPageBySettings(newSheetName, pageByData);
     }
 
-    newSheetName = newSheetName?.replace(/[:?*\\/\][]/g, '_');
+    // Worksheet names cannot:
+    // Be blank
+    // Contain more than 31 characters
+    // Contain any of the following characters: / \ ? * : [ ]
+    // Begin or end with an apostrophe ('), but they can be used in between text or numbers in a name
+    // Be named "History". This is a reserved word Excel uses internally
+
+    newSheetName = newSheetName?.replace(/[:?*\\/\][]|^'|'$/g, '_');
 
     // if objectName only contains whitespaces replace it with _
     if (!newSheetName?.replace(/\s/g, '').length) {
       newSheetName = '_';
+    }
+
+    if (newSheetName?.toLowerCase() === 'history') {
+      newSheetName += '_';
     }
 
     if (newSheetName.length > EXCEL_WORKSHEET_CHAR_LIMIT) {
