@@ -251,7 +251,7 @@ class SidePanelEventHelper {
               object?.objectWorkingId
             );
 
-            if (objectNotification.type === ObjectNotificationTypes.PROGRESS) {
+            if (objectNotification?.type === ObjectNotificationTypes.PROGRESS) {
               // ignore objects with progress notifications, they will be set properly when finished processing
             } else if (
               object?.worksheet?.id &&
