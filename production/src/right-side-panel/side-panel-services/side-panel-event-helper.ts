@@ -246,7 +246,15 @@ class SidePanelEventHelper {
         if (!newWorksheet.isNullObject) {
           // update worksheet index fields for affected objects
           objects.forEach(object => {
-            if (object?.worksheet?.index >= newWorksheet.position) {
+            if (object?.worksheet?.id === newWorksheet.id) {
+              // if object's worksheet is same as the added one, update its index to the new worksheet position
+              updatedObjects.push({
+                ...object,
+                worksheet: { ...object.worksheet, index: newWorksheet.position },
+                groupData: { ...object.groupData, key: newWorksheet.position },
+              });
+            } else if (object?.worksheet?.index >= newWorksheet.position) {
+              // if object's worksheet index is >= the added one, update its index by adding 1 (since 1 worksheet was added before it)
               updatedObjects.push({
                 ...object,
                 worksheet: { ...object.worksheet, index: object.worksheet.index + 1 },
