@@ -195,7 +195,7 @@ class OfficeApiWorksheetHelper {
 
     newSheetName = newSheetName
       ?.replace(/[:?*\\/\][]|^'|'$/g, '_')
-      .replace(/^History$/i, 'History_');
+      ?.replace(/^History$/i, 'History_');
 
     // if objectName only contains whitespaces replace it with _
     if (!newSheetName?.replace(/\s/g, '').length) {
