@@ -495,19 +495,19 @@ class OfficeApiHelper {
   async addOnSelectionChangedListener(
     excelContext: Excel.RequestContext,
     setActiveCellAddress: Function,
-    setActiveSheetIndex: Dispatch<SetStateAction<number>>,
-    isAnyPopupOrSettingsDisplayed: boolean
-  ): Promise<OfficeExtension.EventHandlerResult<Excel.SelectionChangedEventArgs>> {
-    const eventResult = excelContext.workbook.onSelectionChanged.add(async () => {
+    setActiveSheetId: Dispatch<SetStateAction<string>>,
+    isAnyPopupOrSettingsDisplayedRef: React.MutableRefObject<boolean>
+  ): Promise<void> {
+    excelContext.workbook.onSelectionChanged.add(async () => {
       try {
-        // only read + update active sheet index if no popup (notifications, Office dialog, etc.) or settings visible
-        if (!isAnyPopupOrSettingsDisplayed) {
+        // only read + update active sheet id if no popup (notifications, Office dialog, etc.) or settings visible
+        if (!isAnyPopupOrSettingsDisplayedRef.current) {
           const activeWorksheet = this.getCurrentExcelSheet(excelContext);
 
-          activeWorksheet.load('position');
+          activeWorksheet.load('id');
           await excelContext.sync();
 
-          setActiveSheetIndex(activeWorksheet.position);
+          setActiveSheetId(activeWorksheet.id);
         }
         // active cell address will always be updated
         const activeCellAddress = await this.getSelectedCell(excelContext);
@@ -517,8 +517,6 @@ class OfficeApiHelper {
       }
     });
     await excelContext.sync();
-
-    return eventResult;
   }
 
   /**

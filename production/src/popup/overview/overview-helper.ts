@@ -20,6 +20,7 @@ import {
   NotificationButtonsProps,
   OverviewGlobalNotificationButtons,
 } from './overview-global-notification-buttons';
+import { ObjectImportType, objectImportTypeDictionary } from '../../mstr-object/constants';
 
 export enum OverviewActionCommands {
   IMPORT = 'overview-import',
@@ -32,6 +33,7 @@ export enum OverviewActionCommands {
   RANGE_TAKEN_CLOSE = 'overview-range-taken-close',
   PAGE_BY_REFRESH_FAILED_CLOSE = 'overview-page-by-refresh-failed-close',
   PAGE_BY_DUPLICATE_FAILED_CLOSE = 'overview-page-by-duplicate-failed-close',
+  PAGE_BY_IMPORT_FAILED_CLOSE = 'overview-page-by-import-failed-close',
   PAGE_BY_REFRESH_FAILED_EDIT = 'overview-page-by-refresh-failed-edit',
   PAGE_BY_REFRESH_FAILED_REMOVE = 'overview-page-by-refresh-failed-remove',
   RENAME = 'overview-rename',
@@ -209,6 +211,18 @@ class OverviewHelper {
   };
 
   /**
+   * Sends message with handlePageByImportFailedClose command to the Side Panel
+   *
+   * @param objectWorkingId Unique Id of the object allowing to reference specific object
+   */
+  handlePageByImportFailedClose = (objectWorkingId: number): void => {
+    popupHelper.officeMessageParent({
+      command: OverviewActionCommands.PAGE_BY_IMPORT_FAILED_CLOSE,
+      objectWorkingId,
+    });
+  };
+
+  /**
    * Sends message with pageByRefreshFailedEdit command to the Side Panel
    *
    * @param objectWorkingId Unique Id of the object allowing to reference specific object
@@ -343,6 +357,10 @@ class OverviewHelper {
       case OverviewActionCommands.PAGE_BY_DUPLICATE_FAILED_CLOSE:
         sidePanelNotificationHelper.clearPopupDataAndRunCallback(callback);
         break;
+      case OverviewActionCommands.PAGE_BY_IMPORT_FAILED_CLOSE:
+        await this.sidePanelHelper.revertPageByImportForSiblings(response.objectWorkingId);
+        sidePanelNotificationHelper.clearPopupDataAndRunCallback(callback);
+        break;
       case OverviewActionCommands.PAGE_BY_REFRESH_FAILED_EDIT:
         sidePanelNotificationHelper.clearPopupDataAndRunCallback(callback);
         await this.sidePanelService.edit(response.objectWorkingId);
@@ -416,7 +434,7 @@ class OverviewHelper {
         cell: startCell,
         rows: details?.excelTableSize?.rows,
         columns: details?.excelTableSize?.columns,
-        objectType: importType,
+        objectType: objectImportTypeDictionary[importType as ObjectImportType],
         lastUpdated: refreshDate,
         status: {
           type: objectNotification?.type,
@@ -554,6 +572,34 @@ class OverviewHelper {
   }
 
   /**
+   * Creates pageby import failed popup.
+   *
+   * @param data  Data required to create and update pageby refresh failed popup.
+   * @param data.objectWorkingId  Uniqe id of source object for duplication.
+   * @param data.setDialogPopup Callback to save popup in state of RightSidePanel.
+   * @param data.errorDetails  Details of the error that occurred during import.
+   */
+  setPageByImportFailedPopup = ({
+    objectWorkingIds,
+    setDialogPopup,
+    errorDetails,
+  }: {
+    objectWorkingIds: number[];
+    setDialogPopup: Function;
+    errorDetails: string;
+  }): void => {
+    const onOk = async (): Promise<void> => {
+      this.handlePageByImportFailedClose(objectWorkingIds[0]);
+    };
+
+    setDialogPopup({
+      type: PopupTypes.FAILED_TO_IMPORT,
+      errorDetails,
+      onOk,
+    });
+  };
+
+  /**
    * Gets warning notification to display as global warnings in the Overview dialog
    * @param notifications Array of notifications
    * @param globalNotification Global notification object
@@ -600,13 +646,13 @@ class OverviewHelper {
     } as NotificationButtonsProps;
     const modifiedGlobalNotification = isGlobalWarning
       ? [
-          {
-            ...globalNotification,
-            children: OverviewGlobalNotificationButtons({
-              ...globalNotificationButtons,
-            }),
-          },
-        ]
+        {
+          ...globalNotification,
+          children: OverviewGlobalNotificationButtons({
+            ...globalNotificationButtons,
+          }),
+        },
+      ]
       : null;
 
     return modifiedGlobalNotification || modifiedWarnings;

@@ -1,11 +1,15 @@
 import { officeApiCrosstabHelper } from '../office/api/office-api-crosstab-helper';
+import { pivotTableHelper } from '../office/pivot-table/pivot-table-helper';
 import { officeRemoveHelper } from '../office/remove/office-remove-helper';
 import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 
 import officeStoreObject from '../office/store/office-store-object';
 
-import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import {
+  MstrTable,
+  OperationData,
+} from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../types/object-types';
 
 import { errorService } from '../error/error-handler';
@@ -64,14 +68,16 @@ class OperationErrorHandler {
       objectData;
     const { officeTable, excelContext } = operationData;
 
-    if (officeTable) {
+    if (importType === ObjectImportType.PIVOT_TABLE) {
+      await this.handlePivotTableImportError(operationData);
+    } else if (officeTable) {
       await officeApiCrosstabHelper.clearCrosstabRange(
         officeTable,
         {
           crosstabHeaderDimensions: {},
           isCrosstab,
           prevCrosstabDimensions: crosstabHeaderDimensions,
-        },
+        } as MstrTable,
         excelContext,
         false
       );
@@ -89,6 +95,34 @@ class OperationErrorHandler {
     officeStoreObject.removeObjectInExcelStore(objectWorkingId);
     this.clearFailedObjectFromRedux(objectWorkingId);
   }
+
+  /**
+   * Function handling errors that occurred during Import and Duplicate operation of Pivot Table.
+   * It aims to remove the source worksheet and pivot table from Excel.
+   *  @param operationData Contains information about current operation
+   */
+  handlePivotTableImportError = async (operationData: OperationData): Promise<void> => {
+    const { excelContext, objectWorkingId, officeTable } = operationData;
+    const { worksheet } = officeTable;
+
+    const objectDataReducer = this.reduxStore.getState().objectReducer.objects as ObjectData[];
+
+    const objectDataIndex = objectDataReducer.findIndex(
+      (object: ObjectData) => object.objectWorkingId === objectWorkingId
+    );
+    const { pivotTableId } = objectDataReducer[objectDataIndex];
+
+    const pivotTable = await pivotTableHelper.getPivotTable(excelContext, pivotTableId);
+
+    await pivotTableHelper.removePivotTable(pivotTable, excelContext);
+
+    await pivotTableHelper.removePivotSourceWorksheet(
+      worksheet,
+      excelContext,
+      officeTable,
+      pivotTableId
+    );
+  };
 
   /**
    * Function removing object, operation and notification.

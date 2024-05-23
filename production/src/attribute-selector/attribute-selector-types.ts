@@ -1,7 +1,7 @@
 import { PageByData } from '../page-by/page-by-types';
 import { RequestPageByModalOpenData } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer-types';
 
-import { ObjectImportType } from '../mstr-object/constants';
+import { DisplayAttrFormNames, ObjectImportType } from '../mstr-object/constants';
 
 export interface AttributeSelectorNotConnectedProps {
   title: string;
@@ -48,7 +48,7 @@ export interface EditedObjectProps {
   objectWorkingId: number;
   chosenObjectId: string;
   chosenObjectName: string;
-  displayAttrFormNames: string;
+  displayAttrFormNames: DisplayAttrFormNames;
   subtotalsInfo: SubtotalsInfoProps;
   objectId: string;
   projectId: string;
@@ -98,7 +98,7 @@ export interface AttributeSelectorWindowNotConnectedProps {
   mstrData: MstrDataProps;
   handleBack: NonNullable<boolean | ((...args: any[]) => any)>;
   importSubtotal: boolean;
-  displayAttrFormNames: string;
+  displayAttrFormNames: DisplayAttrFormNames;
   editedObject: EditedObjectProps;
   requestPageByModalOpen: (data: RequestPageByModalOpenData) => void;
 }

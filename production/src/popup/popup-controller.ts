@@ -1,3 +1,4 @@
+import { PageByConfiguration } from '@mstr/connector-components';
 import { v4 as uuidv4 } from 'uuid';
 
 import { authenticationHelper } from '../authentication/authentication-helper';
@@ -9,7 +10,6 @@ import { OverviewActionCommands } from './overview/overview-helper';
 import { PageByDataElement, PageByDisplayType } from '../page-by/page-by-types';
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
-import { PageByDisplayOption } from '../right-side-panel/settings-side-panel/settings-side-panel-types';
 import { ObjectData } from '../types/object-types';
 import { DialogResponse, ReportParams } from './popup-controller-types';
 
@@ -376,7 +376,7 @@ class PopupController {
    * @param reportParams Contains information about the currently selected object
    */
   onCommandOk = async (response: DialogResponse, reportParams: ReportParams): Promise<void> => {
-    if (!reportParams || response.pageByConfigurations?.length) {
+    if (!reportParams) {
       return this.handleOkCommand(response);
     }
 
@@ -395,22 +395,15 @@ class PopupController {
    * @param reportParams Contains information about the currently selected object
    */
   onCommandUpdate = async (response: DialogResponse, reportParams: ReportParams): Promise<void> => {
-    const { objectWorkingId, pageByData, pageByConfigurations } = response;
-    const { pageByDisplaySetting } = this.reduxStore.getState().settingsReducer;
-    const { pageBySiblings } = pageByHelper.getAllPageByObjects(objectWorkingId) || {};
+    const { objectWorkingId } = response;
 
-    const shouldUpdateDefaultPage =
-      pageByData &&
-      (pageByData.pageByDisplayType !== PageByDisplayType.DEFAULT_PAGE ||
-        pageByDisplaySetting !== PageByDisplayOption.DEFAULT_PAGE);
+    const shouldRemovePages = pageByHelper.getShouldRemovePages(response, reportParams);
 
-    const shouldRemovePages = shouldUpdateDefaultPage || pageBySiblings?.length;
-
-    if (shouldRemovePages) {
+    if (shouldRemovePages && objectWorkingId) {
       pageByHelper.handleRemovingMultiplePages(objectWorkingId);
     }
 
-    if (!reportParams || shouldRemovePages || pageByConfigurations?.length) {
+    if (!reportParams || shouldRemovePages) {
       return this.handleUpdateCommand(response);
     }
 
@@ -445,10 +438,9 @@ class PopupController {
       displayAttrFormNames: response.displayAttrFormNames,
       definition: { filters: response.filterDetails },
       pageByData: response.pageByData,
-      pageByConfigurations: response.pageByConfigurations,
     };
 
-    await this.handleImport(objectData);
+    await this.handleImport(objectData, response.pageByConfigurations);
   };
 
   /**
@@ -471,10 +463,9 @@ class PopupController {
         preparedInstanceId: response.preparedInstanceId,
         definition: { filters: response.filterDetails },
         displayAttrFormNames: response.displayAttrFormNames,
-        pageByConfigurations: response.pageByConfigurations,
       };
 
-      await this.handleImport(objectData);
+      await this.handleImport(objectData, response.pageByConfigurations);
     }
   };
 
@@ -483,9 +474,13 @@ class PopupController {
    * For Page-by Reports, it will loop through all valid combinations of Page-by elements, creating new import request for each.
    *
    * @param objectData Contains information about the MSTR object
+   * @param pageByConfigurations Contains information about Page-by configurations selected in the Page-by modal
    */
-  handleImport = async (objectData: ObjectData): Promise<void> => {
-    const { mstrObjectType, pageByConfigurations, importType } = objectData;
+  handleImport = async (
+    objectData: ObjectData,
+    pageByConfigurations: PageByConfiguration[][]
+  ): Promise<void> => {
+    const { mstrObjectType, importType } = objectData;
 
     let preparedInstanceDefinition;
 
@@ -515,14 +510,14 @@ class PopupController {
     );
 
     switch (pageByDisplaySetting) {
-      case PageByDisplayOption.DEFAULT_PAGE:
+      case PageByDisplayType.DEFAULT_PAGE:
         return this.handleDefaultPageImport(
           pageByLinkId,
           objectData,
           preparedInstanceDefinition,
           pageByDisplaySetting
         );
-      case PageByDisplayOption.ALL_PAGES:
+      case PageByDisplayType.ALL_PAGES:
         return this.handleMultiplePagesImport(
           pageByLinkId,
           validPageByData,
@@ -530,7 +525,7 @@ class PopupController {
           preparedInstanceDefinition,
           pageByDisplaySetting
         );
-      case PageByDisplayOption.SELECT_PAGES:
+      case PageByDisplayType.SELECT_PAGES:
         return this.handleMultiplePagesImport(
           pageByLinkId,
           parsedPageByConfigurations,

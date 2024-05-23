@@ -31,15 +31,11 @@ class StepApplyFormatting {
     const { columnInformation, isCrosstab, metricsInRows } = instanceDefinition.mstrTable;
 
     try {
-      const filteredColumnInformation = formattingHelper.filterColumnInformation(columnInformation);
-      const offset = formattingHelper.calculateMetricColumnOffset(
-        filteredColumnInformation,
-        isCrosstab
-      );
+      const offset = objectData?.crosstabHeaderDimensions?.rowsX || 0;
 
       await excelContext.sync();
       await this.setupFormatting(
-        filteredColumnInformation,
+        columnInformation,
         isCrosstab,
         offset,
         officeTable,
@@ -84,23 +80,25 @@ class StepApplyFormatting {
   ): Promise<void> {
     for (let index = 0; index < filteredColumnInformation.length; index++) {
       const object = filteredColumnInformation[index];
-      const { importAttributesAsText } = objectData.objectSettings || {};
-      const columnRange = formattingHelper.getColumnRangeForFormatting(
-        index,
-        isCrosstab,
-        offset,
-        officeTable,
-        columns,
-        metricsInRows
-      );
-      if (object.isAttribute) {
-        columnRange.numberFormat = (importAttributesAsText ? '@' : '') as any;
-      } else {
-        columnRange.numberFormat = this.getFormat(object) as any;
-      }
+      if (object) {
+        const { importAttributesAsText } = objectData.objectSettings || {};
+        const columnRange = formattingHelper.getColumnRangeForFormatting(
+          index,
+          isCrosstab,
+          offset,
+          officeTable,
+          columns,
+          metricsInRows
+        );
+        if (object.isAttribute) {
+          columnRange.numberFormat = (importAttributesAsText ? '@' : '') as any;
+        } else {
+          columnRange.numberFormat = this.getFormat(object) as any;
+        }
 
-      if (index % 5000 === 0) {
-        await excelContext.sync();
+        if (index % 5000 === 0) {
+          await excelContext.sync();
+        }
       }
     }
   }

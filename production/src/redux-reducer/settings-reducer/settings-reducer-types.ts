@@ -1,9 +1,7 @@
 import { Action } from 'redux';
 
-import {
-  ObjectAndWorksheetNamingOption,
-  PageByDisplayOption,
-} from '../../right-side-panel/settings-side-panel/settings-side-panel-types';
+import { PageByDisplayType } from '../../page-by/page-by-types';
+import { ObjectAndWorksheetNamingOption } from '../../right-side-panel/settings-side-panel/settings-side-panel-types';
 
 import { ObjectImportType } from '../../mstr-object/constants';
 
@@ -14,7 +12,7 @@ export type SettingsState = {
   worksheetObjectInfoSettings: ObjectInfoSetting[];
   importType: ObjectImportType;
   objectAndWorksheetNamingSetting: ObjectAndWorksheetNamingOption;
-  pageByDisplaySetting: PageByDisplayOption;
+  pageByDisplaySetting: PageByDisplayType;
   pivotTableAddAttributesToColumns: boolean;
   pivotTableAddMetricsToValues: boolean;
 };
@@ -82,7 +80,7 @@ export interface SetWorksheetNamingSettingAction extends Action {
 
 export interface SetPageByDisplaySettingAction extends Action {
   type: SettingsActionTypes.SET_PAGE_BY_DISPLAY_SETTING;
-  pageByDisplaySetting: PageByDisplayOption;
+  pageByDisplaySetting: PageByDisplayType;
 }
 
 export interface SetDefaultImportTypeAction extends Action {

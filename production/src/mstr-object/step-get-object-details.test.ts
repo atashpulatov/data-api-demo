@@ -24,7 +24,7 @@ describe('StepGetObjectDetails', () => {
     dateModified: 'some date modified',
     description: 'some description',
     owner: 'some owner',
-    objectFilters: { viewFilter: undefined as any },
+    objectFilters: { viewFilterText: '-' },
     version: '1.0',
     name: 'testName',
   };
@@ -94,7 +94,8 @@ describe('StepGetObjectDetails', () => {
 
   it('should call populateDefinition', async () => {
     // given
-    const mockedPromptsAnswer = ['some prompts'];
+    const mockedPromptsAnswer = [{ answers: 'some prompts', id: '1', name: 'promptName' }];
+    const promptStrings = mockedPromptsAnswer.map(prompt => prompt.answers);
     jest.spyOn(objectDetailsMethods, 'getObjectPrompts').mockResolvedValue(mockedPromptsAnswer);
     jest
       .spyOn(objectDetailsMethods, 'populateDetails')
@@ -109,7 +110,7 @@ describe('StepGetObjectDetails', () => {
     expect(objectDetailsMethods.populateDefinition).toBeCalled();
     expect(objectDetailsMethods.populateDefinition).toBeCalledWith(
       objectDataMock,
-      mockedPromptsAnswer,
+      promptStrings,
       'testName'
     );
   });

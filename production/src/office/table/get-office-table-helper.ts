@@ -1,3 +1,5 @@
+import { MstrTable } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+
 class GetOfficeTableHelper {
   /**
    * Checks if the report changes to or from crosstab.
@@ -5,8 +7,9 @@ class GetOfficeTableHelper {
    * @param mstrTable contains information about mstr object
    *
    */
-  checkReportTypeChange(mstrTable: any): void {
+  checkReportTypeChange(mstrTable: MstrTable): void {
     const { prevCrosstabDimensions, isCrosstab } = mstrTable;
+
     mstrTable.toCrosstabChange = !prevCrosstabDimensions && isCrosstab;
     mstrTable.fromCrosstabChange = prevCrosstabDimensions && !isCrosstab;
   }

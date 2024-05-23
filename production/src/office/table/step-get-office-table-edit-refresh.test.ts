@@ -51,13 +51,13 @@ describe('StepGetOfficeTableEditRefresh', () => {
     );
 
     // then
-    expect(getOfficeTableHelper.checkReportTypeChange).toBeCalledTimes(1);
-    expect(getOfficeTableHelper.checkReportTypeChange).toThrowError(Error);
-    expect(console.error).toBeCalledTimes(1);
-    expect(console.error).toBeCalledWith(new Error('errorTest'));
+    expect(getOfficeTableHelper.checkReportTypeChange).toHaveBeenCalledTimes(1);
+    expect(getOfficeTableHelper.checkReportTypeChange).toThrow(Error);
+    expect(console.error).toHaveBeenCalledTimes(1);
+    expect(console.error).toHaveBeenCalledWith(new Error('errorTest'));
 
-    expect(operationErrorHandler.handleOperationError).toBeCalledTimes(1);
-    expect(operationErrorHandler.handleOperationError).toBeCalledWith(
+    expect(operationErrorHandler.handleOperationError).toHaveBeenCalledTimes(1);
+    expect(operationErrorHandler.handleOperationError).toHaveBeenCalledWith(
       {},
       { instanceDefinition: {} },
       new Error('errorTest')
@@ -123,7 +123,8 @@ describe('StepGetOfficeTableEditRefresh', () => {
       // 'oldBindIdTest',
       { mstrTable: 'mstrTableTest' },
       'prevOfficeTableTest',
-      'previousTableDimensionsTest'
+      'previousTableDimensionsTest',
+      false
     );
 
     expect(officeTableCreate.createOfficeTable).toBeCalledTimes(1);
@@ -155,7 +156,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
       startCell: 'A10',
       objectDetailsSize: 0,
       worksheet: { id: 1, name: 'worksheetTest', index: 0 },
-      groupData: { key: 0, title: 'worksheetTest' },
+      groupData: { key: 1, title: 'worksheetTest', index: 0 },
     });
 
     expect(operationStepDispatcher.completeGetOfficeTableEditRefresh).toBeCalledTimes(1);
@@ -225,7 +226,8 @@ describe('StepGetOfficeTableEditRefresh', () => {
         excelContextMock,
         { mstrTable: 'mstrTableTest' },
         mockedOfficeTable,
-        'previousTableDimensionsTest'
+        'previousTableDimensionsTest',
+        false
       );
 
       expect(officeTableUpdate.updateOfficeTable).toBeCalledTimes(1);
@@ -253,7 +255,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
         startCell: 'A10',
         objectDetailsSize: 0,
         worksheet: { id: 1, name: 'worksheetTest', index: 0 },
-        groupData: { key: 0, title: 'worksheetTest' },
+        groupData: { key: 1, title: 'worksheetTest', index: 0 },
       });
 
       expect(operationStepDispatcher.completeGetOfficeTableEditRefresh).toBeCalledTimes(1);

@@ -6,11 +6,9 @@ import officeReducerHelper from '../office/store/office-reducer-helper';
 
 import { reduxStore } from '../store';
 
+import { DialogResponse, ReportParams } from '../popup/popup-controller-types';
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
-import {
-  ObjectAndWorksheetNamingOption,
-  PageByDisplayOption,
-} from '../right-side-panel/settings-side-panel/settings-side-panel-types';
+import { ObjectAndWorksheetNamingOption } from '../right-side-panel/settings-side-panel/settings-side-panel-types';
 import { ObjectData } from '../types/object-types';
 import {
   PageBy,
@@ -36,12 +34,12 @@ class PageByHelper {
    */
   getAllPageByObjects = (
     objectWorkingId: number
-  ): { sourceObject: ObjectData; pageBySiblings: ObjectData[] } => {
+  ): { sourceObject: ObjectData; pageBySiblings?: ObjectData[] } => {
     const sourceObject =
       officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
 
     if (!sourceObject?.pageByData) {
-      return;
+      return { sourceObject };
     }
 
     const { objects } = reduxStore.getState().objectReducer;
@@ -137,15 +135,30 @@ class PageByHelper {
       items: [currentPageBy],
     };
 
-    const elements = this.parseValidPageByElements(pageBy, validPageByElements);
+    const defaultElement = this.getDefaultPageByElement(pageBy, validPageByElements);
 
     const pageByData = {
       pageByLinkId,
       pageByDisplayType,
-      elements: elements[0],
+      elements: defaultElement,
     };
 
     return pageByData;
+  };
+
+  /**
+   * Retrieves the default Page-by element from the provided Page-by data and valid Page-by combinations.
+   *
+   * @param pageByData Contains information about Page-by data of given object
+   * @param validPageByElements containts valid Page-by combinations of Report's Page-by attributes
+   * @returns default Page-by configuration
+   */
+  getDefaultPageByElement = (
+    pageBy: PageBy[],
+    validPageByElements: ValidPageByElements
+  ): PageByDataElement[] => {
+    const elements = this.parseValidPageByElements(pageBy, validPageByElements);
+    return elements[0];
   };
 
   /**
@@ -196,7 +209,7 @@ class PageByHelper {
    */
   // TODO: combine with handleRefreshingMultiplePages
   handleRemovingMultiplePages = (objectWorkingId: number): void => {
-    const { pageBySiblings, sourceObject } = this.getAllPageByObjects(objectWorkingId);
+    const { pageBySiblings = [], sourceObject } = this.getAllPageByObjects(objectWorkingId) ?? {};
     pageBySiblings.push(sourceObject);
 
     pageBySiblings.forEach((pageByObject: ObjectData) => {
@@ -262,6 +275,20 @@ class PageByHelper {
     );
 
   /**
+   * Parses an array of Page-by data elements into an array of Page-by configurations.
+   *
+   * @param elements An array of PageByDataElement objects to be parsed.
+   * @returns An array of PageByConfiguration objects derived from the input elements.
+   */
+  parsePageByDataElements(elements: PageByDataElement[]): PageByConfiguration[] {
+    return elements.map(({ name, value, valueId }) => ({
+      name,
+      value,
+      id: valueId,
+    }));
+  }
+
+  /**
    * Create page by configurations
    *
    * @param objectWorkingId Unique identifier of the object
@@ -276,19 +303,18 @@ class PageByHelper {
       return [];
     }
 
-    const { pageBySiblings, sourceObject } = this.getAllPageByObjects(objectWorkingId);
+    const { pageBySiblings = [], sourceObject } = this.getAllPageByObjects(objectWorkingId) ?? {};
     const allPageByObjects = [sourceObject, ...pageBySiblings];
     const pageByConfiguration = [];
 
     for (const pageByObject of allPageByObjects) {
-      if (!isArrayInNestedArrays(validPageByCombination, pageByObject.pageByData.elements)) {
+      if (
+        !pageByObject.pageByData ||
+        !isArrayInNestedArrays(validPageByCombination, pageByObject.pageByData?.elements)
+      ) {
         return [];
       }
-      const pageByElements = pageByObject?.pageByData?.elements.map(({ name, value, valueId }) => ({
-        name,
-        value,
-        id: valueId,
-      }));
+      const pageByElements = this.parsePageByDataElements(pageByObject?.pageByData.elements);
       pageByElements && pageByConfiguration.push(pageByElements);
     }
 
@@ -307,9 +333,37 @@ class PageByHelper {
 
     return (
       pageBy?.length &&
-      pageByDisplaySetting === PageByDisplayOption.SELECT_PAGES &&
+      pageByDisplaySetting === PageByDisplayType.SELECT_PAGES &&
       importType !== ObjectImportType.PIVOT_TABLE
     );
+  }
+
+  /**
+   * Method checking if there is a need for removing and re-importing Page-by objects
+   *
+   * @param response Message received from the dialog
+   * @param reportParams Contains information about the currently selected object
+   * @returns Flag indicating whether the Page-by objects should be removed
+   */
+  getShouldRemovePages(response: DialogResponse, reportParams: ReportParams): boolean {
+    const { objectWorkingId, pageByData, pageByConfigurations, isPageBy } = response;
+    const { pageByDisplaySetting } = reduxStore.getState().settingsReducer;
+    const { pageBySiblings } = this.getAllPageByObjects(objectWorkingId) || {};
+
+    const shouldUpdateDefaultPage =
+      isPageBy &&
+      (pageByData?.pageByDisplayType !== PageByDisplayType.DEFAULT_PAGE ||
+        pageByDisplaySetting !== PageByDisplayType.DEFAULT_PAGE);
+
+    const isPageByConversion = !pageByData && reportParams?.pageByData;
+
+    const shouldRemovePages =
+      shouldUpdateDefaultPage ||
+      isPageByConversion ||
+      pageByConfigurations ||
+      pageBySiblings?.length;
+
+    return !!shouldRemovePages;
   }
 }
 

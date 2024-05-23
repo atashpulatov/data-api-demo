@@ -21,6 +21,7 @@ import { selectorProperties } from '../../attribute-selector/selector-properties
 import i18n from '../../i18n';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
+import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
 import { EmbeddedDossier } from './embedded-dossier';
@@ -33,12 +34,15 @@ interface DossierWindowProps {
   chosenObjectId: string;
   chosenObjectName: string;
   chosenProjectId: string;
+  isChosenVisOfGridType: boolean;
   isShapeAPISupported: boolean;
   handleBack: () => void;
   setImportType: (importType: ObjectImportType) => void;
+  updateIsChosenVizOfGridType: (isVizGrid: boolean) => void;
   editedObject: EditedObject;
   isReprompt: boolean;
   importType: ObjectImportType;
+  defaultImportType: ObjectImportType;
   repromptsQueue: RepromptsQueueState;
   popupData: { objectWorkingId: number };
 }
@@ -63,11 +67,14 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
     chosenObjectName = DEFAULT_PROJECT_NAME,
     handleBack,
     setImportType,
+    updateIsChosenVizOfGridType,
     editedObject = {} as EditedObject,
     chosenObjectId = 'default id',
     chosenProjectId = 'default id',
+    isChosenVisOfGridType,
     isReprompt = false,
     importType,
+    defaultImportType,
     repromptsQueue = { total: 0, index: 0 },
     popupData,
   } = props;
@@ -91,6 +98,8 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
   const isSelected = !!(chapterKey && visualizationKey);
   const isSupported = !!(isSelected && vizData && vizData.isSupported);
   const isChecking = !!(isSelected && (!vizData || (vizData && vizData.isSupported === undefined)));
+  const isVizOfNonGridTypeOnFormattedDataImport =
+    importType === ObjectImportType.FORMATTED_DATA && !isChosenVisOfGridType;
 
   const handleCancel = (): void => {
     const { commandCancel } = selectorProperties;
@@ -136,6 +145,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
         chapterKey: chosenVizchapterKey,
         visualizationKey: chosenVizKey,
         vizDimensions: chosenVizDimensions,
+        isVizGrid: chosenVizIsGrid,
         promptsAnswers: chosenVizPromptAnswers,
         instanceId: chosenVizInstanceId,
       } = dossierData;
@@ -146,6 +156,11 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
           visualizationKey: chosenVizKey,
           vizDimensions: chosenVizDimensions,
         });
+
+        if (chosenVizIsGrid !== undefined && chosenVizIsGrid !== null) {
+          updateIsChosenVizOfGridType(chosenVizIsGrid);
+        }
+
         setPromptsAnswers(chosenVizPromptAnswers);
         instanceId.current = chosenVizInstanceId;
 
@@ -155,6 +170,8 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
           )
         ) {
           let isVizSupported = true;
+
+          setImportType(defaultImportType);
 
           const checkIfVizDataCanBeImported = async (): Promise<any> => {
             // @ts-expect-error
@@ -194,7 +211,14 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
         }
       }
     },
-    [chosenObjectId, chosenProjectId, vizualizationsData]
+    [
+      chosenObjectId,
+      chosenProjectId,
+      vizualizationsData,
+      defaultImportType,
+      setImportType,
+      updateIsChosenVizOfGridType,
+    ]
   );
 
   const handleOk = useCallback(() => {
@@ -358,6 +382,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
             handleBack={!isEdit && handleBack}
             hideSecondary
             disableActiveActions={!isSelected}
+            disablePrimaryOnFormattedDataImport={isVizOfNonGridTypeOnFormattedDataImport}
             isPublished={!(isSelected && !isSupported && !isChecking)}
             disableSecondary={isSelected && !isSupported && !isChecking}
             checkingSelection={isChecking}
@@ -382,18 +407,21 @@ function mapStateToProps(state: RootState): any {
     officeReducer,
     answersReducer,
     popupStateReducer,
+    settingsReducer,
     repromptsQueueReducer,
   } = state;
   const {
     chosenObjectName,
     chosenObjectId,
     chosenProjectId,
+    isChosenVisOfGridType,
     promptsAnswers,
     promptObjects,
     importRequested,
   } = navigationTree;
   const { editedObject } = popupReducer;
   const { isReprompt, importType } = popupStateReducer;
+  const { importType: defaultImportType } = settingsReducer;
   const { supportForms, isShapeAPISupported, popupData } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
   const { answers } = answersReducer;
@@ -408,6 +436,7 @@ function mapStateToProps(state: RootState): any {
     chosenObjectName: editedObject ? editedObjectParse.dossierName : chosenObjectName,
     chosenObjectId: editedObject ? editedObjectParse.chosenObjectId : chosenObjectId,
     chosenProjectId: editedObject ? editedObjectParse.projectId : chosenProjectId,
+    isChosenVisOfGridType,
     editedObject: editedObjectParse,
     previousPromptsAnswers: answers,
     promptObjects,
@@ -415,6 +444,7 @@ function mapStateToProps(state: RootState): any {
     isShapeAPISupported,
     isReprompt,
     importType,
+    defaultImportType,
     repromptsQueue: { ...repromptsQueueReducer },
     popupData,
   };
@@ -423,6 +453,7 @@ function mapStateToProps(state: RootState): any {
 const mapActionsToProps = {
   handleBack: popupStateActions.onPopupBack,
   setImportType: popupStateActions.setImportType,
+  updateIsChosenVizOfGridType: navigationTreeActions.updateIsChosenVizOfGridType,
 };
 
 export const DossierWindow = connect(mapStateToProps, mapActionsToProps)(DossierWindowNotConnected);

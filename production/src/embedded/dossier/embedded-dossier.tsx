@@ -161,7 +161,14 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     const [payloadChapterKey] = Object.keys(payload);
     const chapterData = payload[payloadChapterKey];
     const [payloadVisKey] = Object.keys(chapterData);
-    const vizDimensions = chapterData[payloadVisKey];
+    const vizInfo = chapterData[payloadVisKey];
+
+    let isGrid;
+    let vizDimensions;
+
+    if (vizInfo) {
+      ({ isGrid, ...vizDimensions } = vizInfo);
+    }
 
     if (vizDimensions) {
       // Currently scrollWidth is applied only to grid images
@@ -182,6 +189,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       chapterKey: payloadChapterKey,
       visualizationKey: payloadVisKey,
       vizDimensions,
+      isVizGrid: isGrid,
     };
 
     handleSelection(this.dossierData);

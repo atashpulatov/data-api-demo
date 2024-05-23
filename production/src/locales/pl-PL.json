@@ -286,10 +286,14 @@
    "Default import format:": "Domyślny format importu:",
    "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.": "Obiekty, których nie można zaimportować w wybranym formacie, zostaną zaimportowane jako dane. Format można zmienić podczas importu.",
    "Data": "Dane",
-   "Data with formatting": "Dane z formatowaniem",
+   "Formatted Data": "Sformatowane dane",
    "Visualization": "Wizualizacja",
    "Pivot Table": "Tabela przestawna",
-   "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "Jeśli jest włączona, atrybuty będą automatycznie dodawane do sekcji „Kolumna” w tabeli przestawnej.",
-   "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "Jeśli jest włączona, metryki będą automatycznie dodawane do sekcji „Wartości” w tabeli przestawnej.",
-   "The memory limit has been reached. You cannot import any more objects.": "Osiągnięto limit pamięci. Nie można zaimportować większej liczby obiektów."
+   "If enabled, attributes will be automatically added to the ‘Rows’ section of the pivot table.": "Jeśli jest włączona, atrybuty będą automatycznie dodawane do sekcji „Wiersze” tabeli przestawnej.",
+   "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "Jeśli ta opcja jest włączona, metryki będą automatycznie dodawane do sekcji „Wartości” w tabeli przestawnej.",
+   "The memory limit has been reached. You cannot import any more objects.": "Osiągnięto limit pamięci. Nie można zaimportować większej liczby obiektów.",
+   "Import Pivot Table": "Importuj tabelę przestawną",
+   "Import Visualization": "Importuj wizualizację",
+   "Import Formatted Data": "Importuj sformatowane dane",
+   "Page-By": "Stronicowanie"
 }

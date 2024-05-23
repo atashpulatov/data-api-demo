@@ -156,6 +156,22 @@ describe('overview-helper', () => {
     });
   });
 
+  it('should send handlePageByImportFailedClose request to side panel', () => {
+    // Given
+    const objectWorkingId = objectWorkingIds[0];
+    const officeMessageParentMock = jest
+      .spyOn(popupHelper, 'officeMessageParent')
+      .mockImplementation();
+
+    // When
+    overviewHelper.handlePageByImportFailedClose(objectWorkingId);
+
+    // Then
+    expect(officeMessageParentMock).toHaveBeenCalledWith({
+      command: OverviewActionCommands.PAGE_BY_IMPORT_FAILED_CLOSE,
+      objectWorkingId,
+    });
+  });
   it('should send handlePageByDuplicateFailedClose request to side panel', () => {
     // Given
     const objectWorkingId = objectWorkingIds[0];
@@ -221,6 +237,21 @@ describe('overview-helper', () => {
     expect(setDialogPopup).toBeCalledTimes(1);
   });
 
+  it('should call setDialogPopup when setPageByImportFailedPopup is triggered', () => {
+    // given
+    const objectWorkingId = 1;
+    const setDialogPopup = jest.fn();
+    const errorDetails = 'errorDetails';
+
+    // when
+    overviewHelper.setPageByImportFailedPopup({
+      objectWorkingIds: [objectWorkingId],
+      errorDetails,
+      setDialogPopup,
+    });
+    // then
+    expect(setDialogPopup).toBeCalledTimes(1);
+  });
   it('should call setDialogPopup when setPageByDuplicateFailedPopup is triggered', () => {
     // given
     const objectWorkingId = 1;
@@ -587,7 +618,7 @@ describe('overview-helper', () => {
           owner: { name: 'Owner 1' },
           importedBy: 'User 1',
         },
-        importType: 'Type 1',
+        importType: 'formatted-data',
         startCell: 'A1',
         worksheet: { name: 'Sheet 1' },
         manipulationsXML: { promptAnswers: 'Answer 1' },
@@ -618,7 +649,7 @@ describe('overview-helper', () => {
           owner: { name: 'Owner 2' },
           importedBy: 'User 2',
         },
-        importType: 'Type 2',
+        importType: 'table',
         startCell: 'B2',
         worksheet: { name: 'Sheet 2' },
         isPrompted: true,
@@ -653,7 +684,7 @@ describe('overview-helper', () => {
         cell: 'A1',
         rows: 10,
         columns: 5,
-        objectType: 'Type 1',
+        objectType: 'formatted data',
         lastUpdated: '2022-01-01',
         status: {
           type: 'notificationType',
@@ -688,7 +719,7 @@ describe('overview-helper', () => {
         cell: 'B2',
         rows: 20,
         columns: 10,
-        objectType: 'Type 2',
+        objectType: 'table',
         lastUpdated: '2022-01-02',
         status: {
           type: 'notificationType',

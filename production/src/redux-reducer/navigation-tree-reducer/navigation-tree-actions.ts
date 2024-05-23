@@ -74,6 +74,11 @@ function updateSelectedMenu(data: any) {
     dispatch({ type: NavigationTreeActionTypes.UPDATE_SELECTED_MENU, data });
 }
 
+function updateIsChosenVizOfGridType(isVizGrid: any) {
+  return (dispatch: Dispatch<any>) =>
+    dispatch({ type: NavigationTreeActionTypes.UPDATE_IS_CHOSEN_VIZ_OF_GRID_TYPE, isVizGrid });
+}
+
 export const navigationTreeActions = {
   selectObject,
   requestImport,
@@ -89,4 +94,5 @@ export const navigationTreeActions = {
   updateDisplayAttrFormOnImport,
   setPromptObjects,
   updateSelectedMenu,
+  updateIsChosenVizOfGridType
 };

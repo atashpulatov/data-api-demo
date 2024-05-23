@@ -33,6 +33,8 @@ export interface MstrTable {
   crosstabHeaderDimensions?: CrosstabHeaderDimensions;
   metricsInRows?: boolean;
   subtotalsInfo?: SubtotalsInfo;
+  toCrosstabChange?: boolean;
+  fromCrosstabChange?: boolean;
 }
 
 export interface InstanceDefinition {

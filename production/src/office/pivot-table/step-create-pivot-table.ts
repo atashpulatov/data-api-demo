@@ -33,7 +33,7 @@ class StepCreatePivotTable {
         objectWorkingId,
         instanceDefinition: { mstrTable },
       } = operationData;
-      const { name: objectName } = objectData;
+      const { name: objectName, isCrosstab } = objectData;
 
       const worksheet = await officeApiWorksheetHelper.createNewWorksheet({
         excelContext,
@@ -46,7 +46,9 @@ class StepCreatePivotTable {
       const pivotTableStartCell = worksheet.getRange('A3');
       const pivotTable = worksheet.pivotTables.add(objectName, officeTable, pivotTableStartCell);
 
-      await pivotTableHelper.populatePivotTable(pivotTable, mstrTable, excelContext);
+      if (!isCrosstab) {
+        await pivotTableHelper.populatePivotTable(pivotTable, mstrTable, excelContext);
+      }
 
       const {
         name,
@@ -62,7 +64,7 @@ class StepCreatePivotTable {
         ...objectData,
         pivotTableId: pivotTable.id,
         worksheet: { id, name, index },
-        groupData: { key: index, title: name },
+        groupData: { key: id, title: name, index },
       });
 
       operationStepDispatcher.completeCreatePivotTable(objectWorkingId);

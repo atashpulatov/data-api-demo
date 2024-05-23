@@ -73,13 +73,17 @@ describe('Get Object Details Methods', () => {
         const mockedPromptAnswers = [
           {
             type: 'OBJECTS',
+            id: '1',
+            name: 'promptName',
             answers: [{ name: 'some name1' }, { name: 'some name2', otherProp: 'some other prop' }],
           },
         ];
         jest
           .spyOn(mstrObjectRestService, 'getObjectPrompts')
           .mockResolvedValue(mockedPromptAnswers);
-        const expectedResult = [['some name1', 'some name2']];
+        const expectedResult = [
+          { answers: ['some name1', 'some name2'], id: '1', name: 'promptName' },
+        ];
         // when
         const result = await getObjectPrompts(mockedObjectData, '', '', {
           instanceDefinition: { instanceId: 2 },
@@ -93,15 +97,20 @@ describe('Get Object Details Methods', () => {
         const mockedPromptAnswers = [
           {
             type: 'LEVEL',
+            id: '1',
+            name: 'promptName',
             answers: {
               units: [{ name: 'some name1' }, { name: 'some name2', otherProp: 'some other prop' }],
             },
           },
         ];
+
         jest
           .spyOn(mstrObjectRestService, 'getObjectPrompts')
           .mockResolvedValue(mockedPromptAnswers);
-        const expectedResult = [['some name1', 'some name2']];
+        const expectedResult = [
+          { answers: ['some name1', 'some name2'], id: '1', name: 'promptName' },
+        ];
         // when
         const result = await getObjectPrompts(mockedObjectData, '', '', {
           instanceDefinition: { instanceId: 2 },
@@ -115,6 +124,8 @@ describe('Get Object Details Methods', () => {
         const mockedPromptAnswers = [
           {
             type: 'EXPRESSION',
+            id: '1',
+            name: 'promptName',
             answers: {
               content: 'some content',
             },
@@ -123,7 +134,7 @@ describe('Get Object Details Methods', () => {
         jest
           .spyOn(mstrObjectRestService, 'getObjectPrompts')
           .mockResolvedValue(mockedPromptAnswers);
-        const expectedResult = ['some content'];
+        const expectedResult = [{ answers: 'some content', id: '1', name: 'promptName' }];
         // when
         const result = await getObjectPrompts(mockedObjectData, '', '', {
           instanceDefinition: { instanceId: 2 },
@@ -137,13 +148,17 @@ describe('Get Object Details Methods', () => {
         const mockedPromptAnswers = [
           {
             type: 'ELEMENTS',
+            id: '1',
+            name: 'promptName',
             answers: [{ name: 'some name1' }, { name: 'some name2', otherProp: 'some other prop' }],
           },
         ];
         jest
           .spyOn(mstrObjectRestService, 'getObjectPrompts')
           .mockResolvedValue(mockedPromptAnswers);
-        const expectedResult = [['some name1', 'some name2']];
+        const expectedResult = [
+          { answers: ['some name1', 'some name2'], id: '1', name: 'promptName' },
+        ];
         // when
         const result = await getObjectPrompts(mockedObjectData, '', '', {
           instanceDefinition: { instanceId: 2 },
@@ -157,13 +172,21 @@ describe('Get Object Details Methods', () => {
         const mockedPromptAnswers = [
           {
             type: 'VALUE',
+            id: '1',
+            name: 'promptName',
             answers: 'some answer',
           },
         ];
         jest
           .spyOn(mstrObjectRestService, 'getObjectPrompts')
           .mockResolvedValue(mockedPromptAnswers);
-        const expectedResult = ['some answer'];
+        const expectedResult = [
+          {
+            answers: 'some answer',
+            id: '1',
+            name: 'promptName',
+          },
+        ];
         // when
         const result = await getObjectPrompts(mockedObjectData, '', '', {
           instanceDefinition: { instanceId: 2 },
@@ -176,26 +199,36 @@ describe('Get Object Details Methods', () => {
         // given
         const mockedPromptAnswers = [
           {
+            id: '1',
+            name: 'promptName1',
             type: 'OBJECTS',
             answers: [{ name: 'some name1' }, { name: 'some name2', otherProp: 'some other prop' }],
           },
           {
+            id: '2',
+            name: 'promptName2',
             type: 'LEVEL',
             answers: {
               units: [{ name: 'some name1' }, { name: 'some name2', otherProp: 'some other prop' }],
             },
           },
           {
+            id: '3',
+            name: 'promptName3',
             type: 'ELEMENTS',
             answers: [{ name: 'some name1' }, { name: 'some name2', otherProp: 'some other prop' }],
           },
           {
+            id: '4',
+            name: 'promptName4',
             type: 'EXPRESSION',
             answers: {
               content: 'some content',
             },
           },
           {
+            id: '5',
+            name: 'promptName5',
             type: 'VALUE',
             answers: 'some answer',
           },
@@ -204,11 +237,31 @@ describe('Get Object Details Methods', () => {
           .spyOn(mstrObjectRestService, 'getObjectPrompts')
           .mockResolvedValue(mockedPromptAnswers);
         const expectedResult = [
-          ['some name1', 'some name2'],
-          ['some name1', 'some name2'],
-          ['some name1', 'some name2'],
-          'some content',
-          'some answer',
+          {
+            id: '1',
+            name: 'promptName1',
+            answers: ['some name1', 'some name2'],
+          },
+          {
+            id: '2',
+            name: 'promptName2',
+            answers: ['some name1', 'some name2'],
+          },
+          {
+            id: '3',
+            name: 'promptName3',
+            answers: ['some name1', 'some name2'],
+          },
+          {
+            id: '4',
+            name: 'promptName4',
+            answers: 'some content',
+          },
+          {
+            id: '5',
+            name: 'promptName5',
+            answers: 'some answer',
+          },
         ];
         // when
         const result = await getObjectPrompts(mockedObjectData, '', '', {
@@ -310,14 +363,14 @@ describe('Get Object Details Methods', () => {
 
       const objectInfoSettings = [
         { key: 'name', toggleChecked: true },
-        { key: 'filter', toggleChecked: true },
+        { key: 'filters', toggleChecked: true },
         { key: 'property1', toggleChecked: true },
         { key: 'property2', toggleChecked: false },
       ] as ObjectInfoSetting[];
       const expectedOffset = 14;
 
       // when
-      const offset = calculateOffsetForObjectInfoSettings(objectInfoSettings, objectType);
+      const offset = calculateOffsetForObjectInfoSettings(objectInfoSettings, objectType, false);
 
       // then
       expect(offset).toEqual(expectedOffset);
@@ -334,7 +387,7 @@ describe('Get Object Details Methods', () => {
       const expectedOffset = 0;
 
       // when
-      const offset = calculateOffsetForObjectInfoSettings(objectInfoSettings, objectType);
+      const offset = calculateOffsetForObjectInfoSettings(objectInfoSettings, objectType, false);
 
       // then
       expect(offset).toEqual(expectedOffset);
@@ -348,7 +401,7 @@ describe('Get Object Details Methods', () => {
       const expectedOffset = 0;
 
       // when
-      const offset = calculateOffsetForObjectInfoSettings(objectInfoSettings, objectType);
+      const offset = calculateOffsetForObjectInfoSettings(objectInfoSettings, objectType, false);
 
       // then
       expect(offset).toEqual(expectedOffset);

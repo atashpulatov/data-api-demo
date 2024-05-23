@@ -1,4 +1,5 @@
 import { MetricsPosition } from '../../mstr-object/mstr-object-response-types';
+import { MstrTable } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { CrosstabHeaderDimensions, ObjectData } from '../../types/object-types';
 
 import mstrNormalizedJsonHandler from '../../mstr-object/handler/mstr-normalized-json-handler';
@@ -88,12 +89,14 @@ class OfficeApiCrosstabHelper {
    * @param mstrTable Contains information about mstr object
    * @param excelContext Reference to Excel Context used by Excel API functions
    * @param isClear Flag indicating clear data operation
+   * @param objectDetailsSizeChanged Flag indicating if object details size has changed
    */
   async clearCrosstabRange(
     officeTable: Excel.Table,
-    mstrTable: any,
+    mstrTable: MstrTable,
     excelContext: Excel.RequestContext,
-    isClear = false
+    isClear = false,
+    objectDetailsSizeChanged = false
   ): Promise<void> {
     try {
       const { prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab } = mstrTable;
@@ -101,8 +104,18 @@ class OfficeApiCrosstabHelper {
       let topRange;
       let titlesRange;
 
-      const { rowsX, columnsY } = prevCrosstabDimensions;
+      const isSameCrosstabDimensions =
+        isCrosstab && // TODO Check if isCrosstab is needed
+        JSON.stringify(crosstabHeaderDimensions) === JSON.stringify(prevCrosstabDimensions);
+      const { rowsX, columnsY } = prevCrosstabDimensions as CrosstabHeaderDimensions;
+      const clearType =
+        !objectDetailsSizeChanged && (isClear || isSameCrosstabDimensions) ? 'Contents' : undefined;
 
+      // Column headers
+      if (columnsY) {
+        topRange = officeTable.getDataBodyRange().getRowsAbove(columnsY);
+        excelContext.trackedObjects.add(topRange);
+      }
       if (rowsX) {
         // Row headers
         leftRange = officeTable.getDataBodyRange().getColumnsBefore(rowsX);
@@ -113,40 +126,16 @@ class OfficeApiCrosstabHelper {
         excelContext.trackedObjects.add(titlesRange);
       }
 
-      // Column headers
-      if (columnsY) {
-        topRange = officeTable.getDataBodyRange().getRowsAbove(columnsY);
-        excelContext.trackedObjects.add(topRange);
-      }
       // Check if ranges are valid before clearing
       await excelContext.sync();
 
-      if (
-        isClear ||
-        (isCrosstab &&
-          JSON.stringify(crosstabHeaderDimensions) === JSON.stringify(prevCrosstabDimensions))
-      ) {
-        if (columnsY) {
-          topRange.clear('Contents');
-        }
-        if (rowsX) {
-          leftRange.clear('Contents');
-          titlesRange.clear('Contents');
-        }
-      } else {
-        if (columnsY) {
-          topRange.clear();
-        }
-        if (rowsX) {
-          leftRange.clear();
-          titlesRange.clear();
-        }
-      }
-
       if (columnsY) {
+        topRange.clear(clearType);
         excelContext.trackedObjects.remove([topRange]);
       }
       if (rowsX) {
+        leftRange.clear(clearType);
+        titlesRange.clear(clearType);
         excelContext.trackedObjects.remove([leftRange, titlesRange]);
       }
     } catch (error) {
@@ -227,7 +216,7 @@ class OfficeApiCrosstabHelper {
     const headerRange = startingCell.getResizedRange(columns.length - 1, columns[0].length - 1);
     this.insertHeadersValues(headerRange, columns, 'columns');
 
-    if (objectData.importType !== ObjectImportType.FORMATTED_TABLE) {
+    if (objectData.importType !== ObjectImportType.FORMATTED_DATA) {
       const { mergeCrosstabColumns } = objectData.objectSettings;
 
       if (mergeCrosstabColumns) {

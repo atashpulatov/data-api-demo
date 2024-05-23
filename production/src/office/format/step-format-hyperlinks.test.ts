@@ -37,14 +37,6 @@ describe('StepFormatHyperlinks', () => {
       },
     } as unknown as OperationData;
 
-    const filterColumnInformationSpy = jest
-      .spyOn(formattingHelper, 'filterColumnInformation')
-      .mockReturnValue('filteredColumnInformationTest' as unknown as any[]);
-
-    const calculateMetricColumnOffsetSpy = jest
-      .spyOn(formattingHelper, 'calculateMetricColumnOffset')
-      .mockImplementation(() => 'calculateOffsetTest' as unknown as number);
-
     const completeFormatDataSpy = jest
       .spyOn(operationStepDispatcher, 'completeFormatHyperlinks')
       .mockImplementation(() => {});
@@ -56,15 +48,6 @@ describe('StepFormatHyperlinks', () => {
     );
 
     // Then
-    expect(filterColumnInformationSpy).toHaveBeenCalledTimes(1);
-    expect(filterColumnInformationSpy).toHaveBeenCalledWith('columnInformationTest');
-
-    expect(calculateMetricColumnOffsetSpy).toHaveBeenCalledTimes(1);
-    expect(calculateMetricColumnOffsetSpy).toHaveBeenCalledWith(
-      'filteredColumnInformationTest',
-      'isCrosstabTest'
-    );
-
     expect(excelContextSyncMock).toHaveBeenCalledTimes(1);
 
     expect(completeFormatDataSpy).toHaveBeenCalledTimes(1);
@@ -73,7 +56,7 @@ describe('StepFormatHyperlinks', () => {
 
   it('formatHyperlinks should handle error', async () => {
     // Given
-    jest.spyOn(formattingHelper, 'filterColumnInformation').mockImplementation(() => {
+    jest.spyOn(formattingHelper, 'getColumnRangeForFormatting').mockImplementation(() => {
       throw new Error('errorTest');
     });
 
@@ -83,15 +66,13 @@ describe('StepFormatHyperlinks', () => {
 
     const operationData = {
       objectWorkingId: 2137,
-      instanceDefinition: { mstrTable: {} },
+      instanceDefinition: { mstrTable: { columnInformation: [{}] } },
     } as unknown as OperationData;
 
     // when
     await stepFormatHyperlinks.formatHyperlinks({} as ObjectData, operationData);
 
     // then
-    expect(formattingHelper.filterColumnInformation).toHaveBeenCalledTimes(1);
-    expect(formattingHelper.filterColumnInformation).toThrow(Error);
 
     expect(handleOperationErrorSpy).toHaveBeenCalledTimes(1);
     expect(handleOperationErrorSpy).toHaveBeenCalledWith({}, operationData, new Error('errorTest'));

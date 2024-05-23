@@ -29,12 +29,13 @@ export interface DialogResponse {
   displayAttrFormNames?: DisplayAttrFormNames;
   projectId?: string;
   body?: Body;
-  instanceId?: number;
+  instanceId?: string;
   subtotalsInfo?: SubtotalsInfo;
   error?: any;
   filterDetails?: FilterDetails[];
   pageByData?: PageByData;
   pageByConfigurations?: PageByConfiguration[][];
+  isPageBy?: boolean;
 }
 
 export interface FilterDetails {
@@ -47,4 +48,5 @@ export interface ReportParams {
   mstrObjectType?: typeof mstrObjectType;
   duplicateMode?: any;
   object?: any;
+  pageByData?: PageByData;
 }

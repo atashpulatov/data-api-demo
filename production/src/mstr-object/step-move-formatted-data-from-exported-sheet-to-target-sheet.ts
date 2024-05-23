@@ -9,7 +9,7 @@ import { TITLE_EXCLUDED_DEFAULT_CELL_POSITION } from './constants';
 
 class StepMoveFormattedDataFromExportedSheetToTargetSheet {
   /**
-   * Moves formatted table from export engine worksheet to current active worksheet.
+   * Moves formatted data(table) from export engine worksheet to current active worksheet.
    * Ultimately deletes the source worksheet(export engine worksheet) after copying 
    * the table range from source worksheet to target. 
    *

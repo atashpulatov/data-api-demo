@@ -1,7 +1,7 @@
 import { PageByPaging } from '../page-by/page-by-types';
 import { VisualizationTypes } from './mstr-object-types';
 
-export type Axis = 'rows' | 'columns';
+export type Axis = 'rows' | 'columns' | 'pageBy';
 
 export type ValueMatrix = 'raw' | 'formatted' | 'extras';
 
@@ -155,3 +155,14 @@ export interface MstrCompoundGridResponse {
   data: CompoundGridData;
   attrforms?: any; // TODO: check if correct
 }
+
+export type PromptResponse = {
+  id: string;
+  key: string;
+  name: string;
+  title: string;
+  closed: boolean;
+  answers: any;
+  defaulstAnswers: any;
+  type: 'OBJECTS' | 'LEVEL' | 'EXPRESSION' | 'ELEMENTS' | 'VALUE';
+};

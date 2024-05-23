@@ -16,13 +16,18 @@ class GridHandler {
     // Crosstabular is a Crosstab report with metrics in Rows and nothing in columns, so we display it as tabular
     const isCrosstabular =
       grid.metricsPosition && grid.metricsPosition.axis === 'rows' && grid.columns.length === 0;
-    const columnInformation = this.getColumnInformation(response, isCrosstabular);
+    const isPageByInMetricsAxis = grid.metricsPosition?.axis === 'pageBy';
+    const columnInformation = this.getColumnInformation(
+      response,
+      isCrosstabular,
+      isPageByInMetricsAxis
+    );
     const isCrosstab = !isCrosstabular && this.isCrosstab(response);
     const { attributes, metrics } = mstrAttributeMetricHelper.extractAttributesMetrics(grid);
     return {
       tableSize: this.getTableSize(response, columnInformation, isCrosstab),
       columnInformation,
-      headers: this.getHeaders(response, isCrosstab, isCrosstabular),
+      headers: this.getHeaders(response, isCrosstab, isCrosstabular, isPageByInMetricsAxis),
       id: response.k || response.id,
       isCrosstab,
       isCrosstabular,
@@ -92,12 +97,14 @@ class GridHandler {
    * @param response
    * @param isCrosstab Specify if object is a crosstab
    * @param isCrosstabular Crosstabular is a Crosstab report with metrics in Rows and nothing in columns
+   * @param isPageByInMetricsAxis Specify if metricsPosition axis is pageBy
    * @return
    */
   getHeaders(
     response: any,
     isCrosstab: boolean,
-    isCrosstabular?: boolean
+    isCrosstabular?: boolean,
+    isPageByInMetricsAxis?: boolean
   ): {
     rows?: any[];
     columns?: any[];
@@ -105,9 +112,10 @@ class GridHandler {
   } {
     const rowTotals: any[] = [];
     const columnTotals: any[] = [];
-    const { attrforms } = response;
+    const { attrforms, definition } = response;
+    const { grid } = definition;
     const supportForms = attrforms ? attrforms.supportForms : false;
-    const onElement = (array: any[]) => (element: any) => {
+    const onElement = (array?: any[]) => (element: any) => {
       if (array) {
         array.push(element.subtotalAddress);
       }
@@ -143,18 +151,27 @@ class GridHandler {
       response.definition,
       'rows',
       response.data.headers,
-      // @ts-expect-error
       onElement(),
       supportForms
     );
-    const metricHeaders = jsonHandler.renderHeaders(
-      response.definition,
-      'columns',
-      response.data.headers,
-      // @ts-expect-error
-      onElement(),
-      supportForms
-    );
+
+    let metricHeaders;
+
+    if (isPageByInMetricsAxis) {
+      const { pageBy } = grid;
+      const { index } = grid.metricsPosition;
+
+      metricHeaders = [[pageBy[index].name]];
+    } else {
+      metricHeaders = jsonHandler.renderHeaders(
+        response.definition,
+        'columns',
+        response.data.headers,
+        onElement(),
+        supportForms
+      );
+    }
+
     return isCrosstabular
       ? { columns: [[...attributeTitles[0], ...metricHeaders[0], "' "]] }
       : { columns: [[...attributeTitles[0], ...metricHeaders[0]]] };
@@ -210,9 +227,14 @@ class GridHandler {
    *
    * @param response
    * @param isCrosstabular Crosstabular is a Crosstab report with metrics in Rows and nothing in columns
+   * @param isPageByInMetricsAxis Specify if metricsPosition axis is pageBy
    * @return
    */
-  getColumnInformation = (response: any, isCrosstabular: boolean): any[] => {
+  getColumnInformation = (
+    response: any,
+    isCrosstabular: boolean,
+    isPageByInMetricsAxis: boolean
+  ): any[] => {
     const { attrforms } = response;
     const supportForms = attrforms ? attrforms.supportForms : false;
     let columns;
@@ -235,7 +257,7 @@ class GridHandler {
 
     if (!attributeColumns.length) {
       columns = parsedMetricColumns;
-    } else if (isCrosstabular) {
+    } else if (isCrosstabular || isPageByInMetricsAxis) {
       columns = [...attributeColumns[attributeColumns.length - 1], ...parsedMetricColumns, []];
     } else {
       columns = [...attributeColumns[attributeColumns.length - 1], ...parsedMetricColumns];

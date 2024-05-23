@@ -286,10 +286,14 @@
    "Default import format:": "預設匯入格式:",
    "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.": "無法以選取格式匯入的物件將會匯入為資料。您可以在匯入期間變更格式。",
    "Data": "資料",
-   "Data with formatting": "具有格式設定的資料",
+   "Formatted Data": "格式化資料",
    "Visualization": "視覺效果",
    "Pivot Table": "資料表",
-   "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "若已啟用屬性將自動新增至資料透視表的「欄位」區段。",
+   "If enabled, attributes will be automatically added to the ‘Rows’ section of the pivot table.": "若啟用屬性會自動新增至資料透視表的「列」區段。",
    "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "若已啟用計量會自動新增至資料透視表的「數值」區段。",
-   "The memory limit has been reached. You cannot import any more objects.": "已達到記憶體上限。您無法彙入更多物件。"
+   "The memory limit has been reached. You cannot import any more objects.": "已達到記憶體上限。您無法彙入更多物件。",
+   "Import Pivot Table": "匯入資料資料表",
+   "Import Visualization": "匯入視覺效果",
+   "Import Formatted Data": "匯入格式化資料",
+   "Page-By": "逐頁分組"
 }

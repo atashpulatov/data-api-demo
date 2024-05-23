@@ -47,6 +47,7 @@ class StepGetOfficeTableEditRefresh {
   ): Promise<void> {
     try {
       console.time('Create or get table - edit or refresh');
+      const { worksheetObjectInfoSettings } = reduxStore.getState().settingsReducer;
       const {
         tableName,
         previousTableDimensions,
@@ -67,25 +68,30 @@ class StepGetOfficeTableEditRefresh {
       let officeTable;
 
       getOfficeTableHelper.checkReportTypeChange(mstrTable);
+
+      const previousObjectDetailsSize = objectData.objectDetailsSize ?? 0;
+      const newObjectDetailsSize = calculateOffsetForObjectInfoSettings(
+        worksheetObjectInfoSettings,
+        mstrObjectType,
+        pageByData?.elements?.length > 0
+      );
+
       const prevOfficeTable = await officeTableRefresh.getPreviousOfficeTable(
         excelContext,
         oldBindId
       );
 
       if (!isRepeatStep) {
+        const objectDetailsSizeChanged = previousObjectDetailsSize !== newObjectDetailsSize;
+
         ({ tableChanged, startCell } = await officeTableRefresh.getExistingOfficeTableData(
           excelContext,
           instanceDefinition,
           prevOfficeTable,
-          previousTableDimensions
+          previousTableDimensions,
+          objectDetailsSizeChanged
         ));
       }
-
-      const { worksheetObjectInfoSettings } = reduxStore.getState().settingsReducer;
-      const newObjectDetailsSize = calculateOffsetForObjectInfoSettings(
-        worksheetObjectInfoSettings,
-        mstrObjectType
-      );
 
       // whether the table has cross tab headers or not, this value stores the start cell of the headers (outer header if cross tab)
       const currentTableStartCell = officeTableRefresh.getCrosstabStartCell(
@@ -97,7 +103,7 @@ class StepGetOfficeTableEditRefresh {
       const tableStatus = getTableOperationAndStartCell({
         tableMoved,
         tableChanged,
-        previousObjectDetailsSize: objectData.objectDetailsSize,
+        previousObjectDetailsSize,
         newObjectDetailsSize,
         tableStartCell: currentTableStartCell,
       });
@@ -121,11 +127,7 @@ class StepGetOfficeTableEditRefresh {
           objectData,
         }));
       } else {
-        shouldFormat =
-          (objectEditedData &&
-            objectEditedData.visualizationInfo &&
-            objectEditedData.visualizationInfo.nameAndFormatShouldUpdate) ||
-          false;
+        shouldFormat = objectEditedData?.visualizationInfo?.nameAndFormatShouldUpdate || false;
 
         officeTable = await officeTableUpdate.updateOfficeTable(
           instanceDefinition,
@@ -152,7 +154,7 @@ class StepGetOfficeTableEditRefresh {
       const updatedOperation = {
         objectWorkingId,
         officeTable,
-        shouldFormat,
+        shouldFormat: newObjectDetailsSize === 0 ? shouldFormat : false,
         tableChanged,
         instanceDefinition,
         startCell,
@@ -181,7 +183,7 @@ class StepGetOfficeTableEditRefresh {
         updatedObject = {
           ...updatedObject,
           worksheet: { id, name, index: position },
-          groupData: { key: position, title: name },
+          groupData: { key: id, title: name, index: position },
           objectDetailsSize: newObjectDetailsSize,
         };
       }

@@ -8,6 +8,7 @@ import { ObjectData, VisualizationInfo } from '../types/object-types';
 
 import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
+import { OperationTypes } from '../operation/operation-type-names';
 import {
   getObjectPrompts,
   populateDefinition,
@@ -40,7 +41,14 @@ class StepGetObjectDetails {
     console.time('Total');
 
     try {
-      const { objectWorkingId, objectId, projectId, mstrObjectType, pageByData } = objectData;
+      const {
+        objectWorkingId,
+        objectId,
+        projectId,
+        mstrObjectType,
+        pageByData,
+        name: objectDataName, // DE294385: this is the name persisted in redux store; it might have been changed by user with renaming action.
+      } = objectData;
 
       const {
         ancestors,
@@ -53,6 +61,10 @@ class StepGetObjectDetails {
         version,
       } = await mstrObjectRestService.getObjectInfo(objectId, projectId, mstrObjectType);
 
+      // DE294385: Need to compare against name from redux store, as it might have been changed by user
+      // and we need to keep the name consistent with the one in the store not from the REST API call.
+      let newObjectName = objectDataName || name;
+
       const prompts = await getObjectPrompts(objectData, objectId, projectId, operationData);
 
       const getFilterInformation = async (): Promise<FiltersText> => {
@@ -63,8 +75,9 @@ class StepGetObjectDetails {
               objectId,
               projectId
             );
-            return generateReportFilterTexts(reportDefinition);
+            return generateReportFilterTexts(reportDefinition, prompts);
           }
+          case 'visualization':
           case 'dossier': {
             const dossierDefinition = await mstrObjectRestService.getDossierDefinition(
               objectId,
@@ -77,8 +90,7 @@ class StepGetObjectDetails {
             break;
           }
           default:
-            // TODO: transform to string, cause it returns {operands: any[], operator: string}
-            filtersText = { viewFilter: objectData.body?.viewFilter } as FiltersText;
+            filtersText = { viewFilterText: '-' };
         }
         return filtersText;
       };
@@ -95,16 +107,19 @@ class StepGetObjectDetails {
         owner,
         version
       );
-      const definition = populateDefinition(objectData, prompts, name);
+      const definition = populateDefinition(
+        objectData,
+        prompts.map(prompt => prompt.answers),
+        newObjectName // DE294385: use the name from the store if it was changed by user
+      );
 
-      let newObjectName = name;
-      if (pageByData) {
+      if (pageByData && operationData.operationType !== OperationTypes.REFRESH_OPERATION) {
         newObjectName = pageByHelper.prepareNameBasedOnPageBySettings(
           definition.sourceName,
           pageByData
         );
       } else if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-        newObjectName = objectData.name;
+        newObjectName = objectDataName; // DE294385: use the name from the store if it was changed by user.
       }
 
       const updatedObject = {

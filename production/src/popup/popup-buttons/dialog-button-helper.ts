@@ -6,6 +6,7 @@ class DialogButtonHelper {
   getDisableReasonImport(
     isPublished: boolean,
     disableActiveActions: boolean,
+    disablePrimaryOnFormattedDataImport?: boolean,
     disableSecondary?: boolean,
     checkingSelection?: boolean
   ): ErrorMessages {
@@ -20,6 +21,10 @@ class DialogButtonHelper {
     }
     if (checkingSelection !== undefined && checkingSelection) {
       return ErrorMessages.CHECKING_SELECTION;
+    }
+    // Disable 'Import Formatted Data' button on non-grid visualization selected
+    if (disablePrimaryOnFormattedDataImport) {
+      return ErrorMessages.NON_GRID_VIZ_NOT_SUPPORTED;
     }
   }
 
@@ -57,10 +62,10 @@ class DialogButtonHelper {
       id = ImportButtonIds.IMPORT_PIVOT_TABLE;
       actionType = ImportActionTypes.IMPORT_PIVOT_TABLE;
     }
-      
-    if (importType === ObjectImportType.FORMATTED_TABLE) {
-      id = ImportButtonIds.IMPORT_DATA_WITH_FORMATTING;
-      actionType = ImportActionTypes.IMPORT_DATA_WITH_FORMATTING;
+
+    if (importType === ObjectImportType.FORMATTED_DATA) {
+      id = ImportButtonIds.IMPORT_FORMATTED_DATA;
+      actionType = ImportActionTypes.IMPORT_FORMATTED_DATA;
     }
 
     if (importType === ObjectImportType.IMAGE) {

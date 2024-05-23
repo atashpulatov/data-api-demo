@@ -286,10 +286,14 @@
    "Default import format:": "Standaard importindeling:",
    "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.": "Objecten die niet geïmporteerd kunnen worden in de geselecteerde indeling, worden geïmporteerd als gegevens. U kunt de indeling tijdens het importeren wijzigen.",
    "Data": "Gegevens",
-   "Data with formatting": "Gegevens met opmaak",
+   "Formatted Data": "Opgemaakte gegevens",
    "Visualization": "Visualisatie",
    "Pivot Table": "Draaitabel",
-   "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "Als deze optie is ingeschakeld, worden attributen automatisch toegevoegd aan het gedeelte Kolom van de draaitabel.",
+   "If enabled, attributes will be automatically added to the ‘Rows’ section of the pivot table.": "Als deze optie is ingeschakeld, worden attributen automatisch toegevoegd aan het gedeelte ‘Rijen’ van de draaitabel.",
    "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "Als deze optie is ingeschakeld, worden metrieken automatisch toegevoegd aan het gedeelte Waarden van de draaitabel.",
-   "The memory limit has been reached. You cannot import any more objects.": "De geheugenlimiet is bereikt. U kunt geen objecten meer importeren."
+   "The memory limit has been reached. You cannot import any more objects.": "De geheugenlimiet is bereikt. U kunt geen objecten meer importeren.",
+   "Import Pivot Table": "Draaitabel importeren",
+   "Import Visualization": "Visualisatie importeren",
+   "Import Formatted Data": "Opgemaakte gegevens importeren",
+   "Page-By": "Op pagina"
 }

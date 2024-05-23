@@ -1,5 +1,3 @@
-import { PageByConfiguration } from '@mstr/connector-components';
-
 import { FiltersText } from '../mstr-object/object-filter-helper-types';
 
 import { Attribute, MetricElement } from '../mstr-object/mstr-object-response-types';
@@ -121,8 +119,9 @@ export interface Worksheet {
 }
 
 export interface GroupData {
-  key: number;
+  key: string;
   title: string;
+  index: number;
 }
 
 export interface ObjectData {
@@ -136,7 +135,7 @@ export interface ObjectData {
   objectType?: MstrObjectTypes;
   objectId: string;
   projectId: string;
-  dossierData: DossierData;
+  dossierData?: DossierData;
   displayAttrFormNames?: DisplayAttrFormNames;
   refreshDate?: number;
   manipulationsXML?: ManipulationsXML;
@@ -163,7 +162,6 @@ export interface ObjectData {
   // TODO fix type
   visualizationInfo?: false | VisualizationInfo;
   objectSettings?: ObjectSettings;
-  pageByConfigurations?: PageByConfiguration[][];
   sourceName?: string;
 }
 

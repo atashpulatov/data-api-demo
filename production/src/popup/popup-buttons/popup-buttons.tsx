@@ -17,6 +17,7 @@ interface PopupButtonsProps {
   handleCancel?: () => void;
   handleBack?: () => void;
   disableActiveActions?: boolean;
+  disablePrimaryOnFormattedDataImport?: boolean;
   onPreviewClick?: () => void;
   hideSecondary?: boolean;
   disableSecondary?: boolean;
@@ -33,6 +34,7 @@ export const PopupButtons: React.FC<PopupButtonsProps> = ({
   handleBack,
   shouldShowImportAsVisualization,
   disableActiveActions,
+  disablePrimaryOnFormattedDataImport,
   onPreviewClick,
   hideSecondary,
   disableSecondary,
@@ -46,9 +48,11 @@ export const PopupButtons: React.FC<PopupButtonsProps> = ({
     disableSecondary,
     disableActiveActions
   );
+
   const disableReasonForImport = dialogButtonHelper.getDisableReasonImport(
     isPublished,
     disableActiveActions,
+    disablePrimaryOnFormattedDataImport,
     disableSecondary,
     checkingSelection
   );

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { connect, useSelector } from 'react-redux';
 
+import instanceDefinitionHelper from '../mstr-object/instance/instance-definition-helper';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { pageByHelper } from '../page-by/page-by-helper';
 import { popupHelper } from '../popup/popup-helper';
@@ -8,10 +9,12 @@ import { popupViewSelectorHelper } from '../popup/popup-view-selector-helper';
 
 import { RootState } from '../store';
 
+import { DialogResponse } from '../popup/popup-controller-types';
 import { AttributeSelectorWindowNotConnectedProps } from './attribute-selector-types';
 
 import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { navigationTreeSelectors } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer-selectors';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { AttributeSelector } from './attribute-selector';
 import { selectorProperties } from './selector-properties';
@@ -27,9 +30,28 @@ export const AttributeSelectorWindowNotConnected: React.FC<
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [attributesSelected, setAttributesSelected] = useState(false);
-  const [selectedPageByConfigurations, setSelectedPageByConfigurations] = useState([]);
+
+  const isPageByModalOpenRequested = useSelector(
+    navigationTreeSelectors.selectIsPageByModalOpenRequested
+  );
+
+  useEffect(() => {
+    if (!isPageByModalOpenRequested) {
+      setTriggerUpdate(false);
+    }
+  }, [isPageByModalOpenRequested]);
 
   const handleOk = async (): Promise<void> => {
+    setTriggerUpdate(true);
+  };
+
+  const handleCancel = (): void => {
+    const { commandCancel } = selectorProperties;
+    const message = { command: commandCancel };
+    popupHelper.officeMessageParent(message);
+  };
+
+  const handleImport = async (message: DialogResponse): Promise<void> => {
     const {
       chosenObject,
       editedObject,
@@ -42,27 +64,31 @@ export const AttributeSelectorWindowNotConnected: React.FC<
     const projectId = editedObject?.projectId || chosenObject.chosenProjectId;
     const instanceId = editedObject?.instanceId;
     const importType = editedObject?.importType || chosenImportType;
-    const displayAttrFormNames = (editedObject?.displayAttrFormNames ||
-      chosenDisplayAttrFormNames) as DisplayAttrFormNames;
+    const displayAttrFormNames = editedObject?.displayAttrFormNames || chosenDisplayAttrFormNames;
 
     let instance;
+
+    const body = instanceDefinitionHelper.setupBodyTemplate(message.body);
 
     if (!editedObject?.instanceId) {
       instance = await mstrObjectRestService.createInstance({
         objectId,
         projectId,
         displayAttrFormNames,
+        body,
       });
     } else {
-      instance = await mstrObjectRestService.getInstance({
+      instance = await mstrObjectRestService.modifyInstance({
         objectId,
         projectId,
         instanceId,
         displayAttrFormNames,
+        body,
       });
     }
 
     const { pageBy } = instance.definition?.grid || {};
+    const isPageBy = !!pageBy?.length;
 
     const shouldOpenPageByModal = pageByHelper.getShouldOpenPageByModal(pageBy, importType);
 
@@ -73,19 +99,13 @@ export const AttributeSelectorWindowNotConnected: React.FC<
         instanceId: instance.instanceId,
         requestPageByModalOpen,
         importCallback: pageByConfigurations => {
-          setTriggerUpdate(true);
-          setSelectedPageByConfigurations(pageByConfigurations);
+          popupHelper.officeMessageParent({ ...message, isPageBy, pageByConfigurations });
         },
       });
     } else {
-      setTriggerUpdate(true);
+      const pageByData = isPageBy ? editedObject?.pageByData : undefined;
+      popupHelper.officeMessageParent({ ...message, isPageBy, pageByData });
     }
-  };
-
-  const handleCancel = (): void => {
-    const { commandCancel } = selectorProperties;
-    const message = { command: commandCancel };
-    popupHelper.officeMessageParent(message);
   };
 
   // TODO: fix any types
@@ -133,10 +153,8 @@ export const AttributeSelectorWindowNotConnected: React.FC<
       subtotalsInfo,
       displayAttrFormNames: displayAttrFormNamesSet,
       filterDetails,
-      pageByData: editedObject?.pageByData,
-      pageByConfigurations: selectedPageByConfigurations,
     };
-    popupHelper.officeMessageParent(message);
+    handleImport(message);
   };
 
   /**

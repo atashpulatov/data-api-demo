@@ -3,6 +3,7 @@ import { t } from 'i18next';
 import {
   DossierDefinition,
   FiltersText,
+  PromptObject,
   ReportDefinition,
   Token,
 } from './object-filter-helper-types';
@@ -31,27 +32,42 @@ const getTokenString = (token: Token): string => {
 };
 
 /**
- * Converts an array of filter tokens to a string representation of the filter.
+ * Converts an array of filter tokens into a string representation of the filter.
  *
  * @param tokens - The array of tokens to convert.
+ * @param prompts - Optional array of prompt objects.
  * @returns The string representation of the tokens.
  */
-const convertTokensToString = (tokens: Token[]): string =>
-  tokens?.length
-    ? // slice(1) to remove the first token which is the root token, "%"
-    tokens
-      .slice(1)
-      .map(token => getTokenString(token))
-      .join(' ')
-      .trim()
-    : '-';
+const convertTokensToString = (tokens: Token[], prompts?: PromptObject[]): string => {
+  if (!tokens?.length) {
+    return '-';
+  }
+
+  let filterText = '';
+  for (const token of tokens) {
+    if (token.value === '?' || token.value === '%') {
+      filterText += '';
+    } else if (prompts && token?.target?.subType === 'prompt_expression') {
+      const { answers, name } = prompts.find(prompt => prompt.id === token?.target?.objectId);
+      const promptText = answers ? ` ( ${answers} )` : ` ? ( ${name} )`;
+
+      filterText += promptText;
+    } else filterText += ` ${getTokenString(token)}`;
+  }
+
+  return filterText.trim();
+};
 
 /**
  * Generates the report filter text, report limits text, view filter text, and metric limits text based on the provided filter data.
  * @param reportDefinition - The filter data object which is the response from the API call to get the report filter data.
+ * @param prompts - The array of prompt objects.
  * @returns An object containing the generated report filter text, report limits text, view filter text, and metric limits text.
  */
-export const generateReportFilterTexts = (reportDefinition: ReportDefinition): FiltersText => {
+export const generateReportFilterTexts = (
+  reportDefinition: ReportDefinition,
+  prompts: PromptObject[]
+): FiltersText => {
   const reportFilter = reportDefinition?.dataSource?.filter;
   const reportLimits = reportDefinition?.dataSource?.dataTemplate?.units?.find(
     unit => unit.type === 'metrics'
@@ -61,7 +77,7 @@ export const generateReportFilterTexts = (reportDefinition: ReportDefinition): F
     unit => unit.type === 'metrics'
   )?.elements;
 
-  const reportFilterText = convertTokensToString(reportFilter?.tokens);
+  const reportFilterText = convertTokensToString(reportFilter?.tokens, prompts);
   const reportLimitsText = convertTokensToString(reportLimits?.tokens);
   const viewFilterText = convertTokensToString(viewFilter?.tokens);
 
@@ -91,6 +107,7 @@ export const generateDossierFilterText = (
   const selectedChapter = dossierDefinition.chapters.find(chapter => chapter.key === chapterKey);
   const joinDelimiter = ` ) ${t('and').toUpperCase()} ( `;
   const dossierFilterSummary = `( ${selectedChapter.filters
+    .filter(filter => filter.summary)
     .map(filter => filter.summary)
     .join(joinDelimiter)} )`;
 

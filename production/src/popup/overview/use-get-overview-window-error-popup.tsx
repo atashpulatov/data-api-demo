@@ -30,7 +30,7 @@ const useGetOverviewWindowErrorPopup = ({
 
   useEffect(() => {
     if (popupData) {
-      const { type, objectWorkingId, selectedObjects } = popupData;
+      const { type, objectWorkingId, selectedObjects, errorDetails } = popupData;
       switch (type) {
         case PopupTypes.RANGE_TAKEN:
           overviewHelper.setRangeTakenPopup({
@@ -49,6 +49,13 @@ const useGetOverviewWindowErrorPopup = ({
             objectWorkingIds: [objectWorkingId],
             selectedObjects,
             setDialogPopup,
+          });
+          break;
+        case PopupTypes.FAILED_TO_IMPORT:
+          overviewHelper.setPageByImportFailedPopup({
+            objectWorkingIds: [objectWorkingId],
+            setDialogPopup,
+            errorDetails,
           });
           break;
 

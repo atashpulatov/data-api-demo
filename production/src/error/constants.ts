@@ -77,6 +77,7 @@ export enum ErrorMessages {
   SHEET_HIDDEN = 'To view the data, please unhide the worksheet.',
   PROTECTED_SHEET = 'The table you are trying to manipulate is in a protected sheet. To make a change, unprotect the sheet. You might be requested to enter a password.',
   NOT_SUPPORTED_VIZ = 'Selected visualization cannot be imported in current version of the Add-in',
+  NON_GRID_VIZ_NOT_SUPPORTED = 'Selected non-grid visualization cannot be imported as formatted data',
   INVALID_VIZ_KEY_MESSAGE = 'You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.',
   SESSION_EXTENSION_FAILURE_MESSAGE = "The user's session has expired, please reauthenticate",
   DOSSIER_HAS_CHANGED = 'The object cannot be refreshed because the dossier has changed. You can edit the object or remove it.',

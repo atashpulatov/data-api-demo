@@ -101,6 +101,17 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
     [editedObject?.objectWorkingId, pageByResponse?.pageBy, pageByResponse?.validPageByElements]
   );
 
+  const getDefaultPageByConfiguration = useCallback(
+    () =>
+      pageByHelper.parsePageByDataElements(
+        pageByHelper.getDefaultPageByElement(
+          pageByResponse?.pageBy,
+          pageByResponse?.validPageByElements
+        )
+      ),
+    [pageByResponse?.pageBy, pageByResponse?.validPageByElements]
+  );
+
   useEffect(() => {
     // @ts-expect-error
     dispatch(popupStateActions.setDialogType(popupType));
@@ -142,6 +153,7 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
           }}
           onCancel={handlePageByModalClose}
           pageByConfiguration={getPageByConfiguration()}
+          defaultPageByConfigurations={[getDefaultPageByConfiguration()]}
         />
       )}
       {renderProperComponent(popupType)}
