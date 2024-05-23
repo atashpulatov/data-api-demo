@@ -58,6 +58,8 @@ export const ImportButton: React.FC<ImportButtonProps> = ({
           variant={isPrimaryBtn ? 'primary' : 'secondary'}
           disabledActionButton={isDisabled}
           disabledDropdownButton={isOptionsBtnDisabled}
+          className='import-button'
+          popoverPlacement='bottom-end'
         >
           {t(importButtonProps.actionType)}
         </ButtonWithOptions>
