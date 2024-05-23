@@ -24,7 +24,7 @@ import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
 import { EmbeddedLibrary } from './embedded-library';
-import { DisplayAttrFormNames } from '../../mstr-object/constants';
+import { DisplayAttrFormNames, ObjectImportType } from '../../mstr-object/constants';
 
 import './library.css';
 
@@ -290,10 +290,15 @@ function mapStateToProps(state: {
     chosenSubtype: number;
     mstrObjectType: object;
   };
+  popupStateReducer: {
+    importType: ObjectImportType;
+  };
 }): any {
-  const { navigationTree } = state;
+  const { navigationTree, popupStateReducer } = state;
   const { chosenObjectName, chosenObjectId, chosenProjectId, chosenSubtype, mstrObjectType } =
     navigationTree;
+
+  const { importType } = popupStateReducer;
 
   return {
     chosenObjectName,
@@ -301,6 +306,7 @@ function mapStateToProps(state: {
     chosenProjectId,
     chosenSubtype,
     mstrObjectType,
+    importType,
     ...navigationTreeActions,
   };
 }
