@@ -16,7 +16,7 @@ describe('SidePanelService', () => {
     const mockSync = jest.fn();
     const mockContext = { sync: mockSync };
     const mockActiveCell = 'Sheet123!ABC123';
-    const mockActiveWorksheetPosition = 0;
+    const mockActiveWorksheetId = '123';
 
     const spyGetExcelContext = jest
       .spyOn(officeApiHelper, 'getExcelContext')
@@ -30,11 +30,11 @@ describe('SidePanelService', () => {
       .spyOn(officeApiHelper, 'getCurrentExcelSheet')
       .mockImplementationOnce(() => ({
         load: jest.fn(),
-        position: mockActiveWorksheetPosition,
+        id: mockActiveWorksheetId,
       }));
 
     const mockSetActiveCellAddress = jest.fn();
-    const mockSetActiveSheetIndex = jest.fn();
+    const mockSetActiveSheetId = jest.fn();
     const mockIsAnyPopupOrSettingsDisplayed = false;
 
     const spyAddOnSelectionChangedListener = jest
@@ -42,14 +42,14 @@ describe('SidePanelService', () => {
       .mockImplementationOnce(() => {});
 
     // when
-    await sidePanelEventHelper.initActiveSelectionChangedListener(mockSetActiveCellAddress, mockSetActiveSheetIndex, mockIsAnyPopupOrSettingsDisplayed);
+    await sidePanelEventHelper.initActiveSelectionChangedListener(mockSetActiveCellAddress, mockSetActiveSheetId, mockIsAnyPopupOrSettingsDisplayed);
     // then
     expect(spyGetExcelContext).toBeCalled();
     expect(spyGetSelectedCell).toBeCalledWith(mockContext);
     expect(spyGetCurrentExcelSheet).toBeCalledWith(mockContext);
     expect(mockSetActiveCellAddress).toBeCalledWith(mockActiveCell);
-    expect(mockSetActiveSheetIndex).toBeCalledWith(mockActiveWorksheetPosition);
-    expect(spyAddOnSelectionChangedListener).toBeCalledWith(mockContext, mockSetActiveCellAddress, mockSetActiveSheetIndex, mockIsAnyPopupOrSettingsDisplayed);
+    expect(mockSetActiveSheetId).toBeCalledWith(mockActiveWorksheetId);
+    expect(spyAddOnSelectionChangedListener).toBeCalledWith(mockContext, mockSetActiveCellAddress, mockSetActiveSheetId, mockIsAnyPopupOrSettingsDisplayed);
   });
 
   it('should remove objects in setOnDeletedTablesEvent', async () => {

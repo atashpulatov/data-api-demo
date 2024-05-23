@@ -57,12 +57,10 @@ class SidePanelEventHelper {
     if (!isAnyPopupOrSettingsDisplayedRef.current) {
       const activeWorksheet = officeApiHelper.getCurrentExcelSheet(excelContext);
 
-      activeWorksheet.load(['id', 'position']);
+      activeWorksheet.load(['id']);
       await excelContext.sync();
 
-      activeWorksheet.position !== undefined &&
-        activeWorksheet.position !== null &&
-        setActiveSheetId(activeWorksheet.id);
+      activeWorksheet.id && setActiveSheetId(activeWorksheet.id);
     }
     // initiatilize active cell address
     const initialCellAddress = await officeApiHelper.getSelectedCell(excelContext);
