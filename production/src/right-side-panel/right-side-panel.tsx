@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { OfficeApplicationType, SidePanel } from '@mstr/connector-components';
 
@@ -63,7 +63,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   const isDialogOpen = useSelector(officeSelectors.selectIsDialogOpen);
   const popupData = useSelector(officeSelectors.selectPopupData);
 
-  // represents whether any popup (notifications, Office dialog, sidepanel popup) or settings are visible
+  // Represents whether any popup (notifications, Office dialog, sidepanel popup) or settings are visible
   const isAnyPopupOrSettingsDisplayed =
     sidePanelPopup ||
     globalNotification?.type ||
@@ -71,17 +71,24 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
     popupData ||
     isSettings ||
     settingsPanelLoaded;
+  // Use ref so this value can be used in event listener callback
+  const isAnyPopupOrSettingsDisplayedRef = useRef(isAnyPopupOrSettingsDisplayed);
 
   useInitializeSidePanel(
     updateActiveCellAddress,
     setActiveSheetIndex,
-    isAnyPopupOrSettingsDisplayed
+    isAnyPopupOrSettingsDisplayedRef
   );
   useDialogPanelCommunication();
   useGetSidePanelPopup({ setSidePanelPopup, sidePanelPopup });
 
   const duplicatePopupParams = useGetUpdatedDuplicatePopup({ sidePanelPopup, setSidePanelPopup });
   const filteredObjects = useGetFilteredObjectListForSidePanelDetails(loadedObjectsWrapped);
+
+  // Update ref when value changes
+  useEffect(() => {
+    isAnyPopupOrSettingsDisplayedRef.current = isAnyPopupOrSettingsDisplayed;
+  }, [isAnyPopupOrSettingsDisplayed]);
 
   useEffect(() => {
     setLoadedObjectsWrapped(
@@ -98,7 +105,6 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
     setPrefilteredSourceObjectName(objectName);
     setIsDataOverviewOpen(true);
   };
-
   return (
     <>
       {isSidePanelBlocked && <div className='block-side-panel-ui' />}
