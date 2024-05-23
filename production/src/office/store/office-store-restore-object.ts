@@ -84,7 +84,7 @@ class OfficeStoreRestoreObject {
    * @param isExcelApiSupported Indicated whether given excel api is supported
    * @param objects Objects stored in office settings
    * @param importType Type of the import that is being made
-   * 
+   *
    * @returns Contains the objects object definitions from excel document
    */
   excludeObjects = (objects: ObjectData[], objectImportType: ObjectImportType): ObjectData[] => {
@@ -164,10 +164,11 @@ class OfficeStoreRestoreObject {
     }
     // Restore groupData related props
     if (!object.groupData) {
-      const { worksheet: { index = -1, name = '' } = {} } = object;
+      const { worksheet: { id = '', name = '', index = -1 } = {} } = object;
       object.groupData = {
-        key: index,
+        key: id,
         title: name,
+        index,
       };
     }
   };

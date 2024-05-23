@@ -119,8 +119,9 @@ export interface Worksheet {
 }
 
 export interface GroupData {
-  key: number;
+  key: string;
   title: string;
+  index: number;
 }
 
 export interface ObjectData {

@@ -120,7 +120,7 @@ class StepManipulateVisualizationImage {
         objectWorkingId,
         bindId: imageShapeId,
         worksheet: { id, name, index: position },
-        groupData: { key: position, title: name },
+        groupData: { key: id, title: name, index: position },
         shapeProps: undefined as any, // reset the shape props after adding image
         bindIdToBeDuplicated: undefined as string, // reset the bindIdToBeDuplicated after adding image
         instanceId: undefined as string, // reset the instanceId after adding image
