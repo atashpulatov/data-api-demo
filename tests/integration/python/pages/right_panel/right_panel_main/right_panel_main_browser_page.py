@@ -38,6 +38,10 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     IMPORT_FORMAT_OPTION = "//li[@aria-label='%s']"
 
     PIVOT_TABLE_TOGGLES = "(//button[contains(@class, 'mstr-rc-3-switch--regular') and @type='button' and @role='switch' and ancestor::*[contains(text(), '%s')]][@aria-checked='true' or @aria-checked='false'])[1]"
+    PARENT_TOGGLES = "//button[contains(@class, 'mstr-rc-3-switch--regular') and ancestor::label/div/span[contains(text(), '%s')]]"
+    CHILD_TOGGLES = "//button[contains(@class, 'mstr-rc-3-switch--small') and ancestor::label/div[contains(text(), '%s')]]"
+    DRAGGABLE_CHILD_NODES = "//button[contains(@class, 'mstr-rc-3-switch--small') and ancestor::label/div[contains(text(), '%s')] and ancestor::li/button[contains(@class, 'mstr-rc-3-draggable-list__item-drag-handle')]]"
+ 
 
     def click_import_data_button_element(self):
         self.focus_on_add_in_frame()
@@ -207,3 +211,24 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
 
     def assert_toggle_pivot_table_option_disabled(self, pivot_option):
         assert not self.is_toggle_pivot_table_option_enabled(pivot_option), "Toggle option is enabled"
+    
+    def toggle_parent_setting(self, option):
+        self.get_element_by_xpath(RightPanelMainBrowserPage.PARENT_TOGGLES % option).click()
+    
+    def is_parent_toggle_option_enabled(self, option):
+        element = self.get_element_by_xpath(RightPanelMainBrowserPage.PARENT_TOGGLES % option)
+        aria_checked_value = element.get_attribute("aria-checked")
+        return aria_checked_value == "true"
+    
+    def toggle_child_setting(self, option):
+        self.get_element_by_xpath(RightPanelMainBrowserPage.CHILD_TOGGLES % option).click()
+    
+    def is_child_toggle_option_enabled(self, option):
+        element = self.get_element_by_xpath(RightPanelMainBrowserPage.CHILD_TOGGLES % option)
+        aria_checked_value = element.get_attribute("aria-checked")
+        return aria_checked_value == "true"
+    
+    def is_draggable_child_toggle_option_enabled(self, option):
+        element = self.get_element_by_xpath(RightPanelMainBrowserPage.DRAGGABLE_CHILD_NODES % option)
+        aria_checked_value = element.get_attribute("aria-checked")
+        return aria_checked_value == "true"

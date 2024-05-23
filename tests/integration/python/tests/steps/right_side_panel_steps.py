@@ -128,3 +128,42 @@ def step_impl(context, option):
 def step_impl(context, option):
     is_option_enabled = context.pages.right_panel_page().is_toggle_pivot_table_option_enabled(option)
     AssertUtil.assert_simple(is_option_enabled, True)
+
+@step('I toggle the "{option}" parent setting')
+def step_impl(context, option):
+    context.pages.right_panel_page().toggle_parent_setting(option)
+
+@step('I verified "{option}" parent setting is OFF')
+def step_impl(context, option):
+    is_option_enabled = context.pages.right_panel_page().is_parent_toggle_option_enabled(option)
+    AssertUtil.assert_simple(is_option_enabled, False)
+ 
+@step('I verified "{option}" parent setting is ON')
+def step_impl(context, option):
+    is_option_enabled = context.pages.right_panel_page().is_parent_toggle_option_enabled(option)
+    AssertUtil.assert_simple(is_option_enabled, True)
+ 
+@step('I toggle the "{option}" child setting')
+def step_impl(context, option):
+    context.pages.right_panel_page().toggle_child_setting(option)
+ 
+@step('I verified "{option}" child setting is OFF')
+def step_impl(context, option):
+    is_option_enabled = context.pages.right_panel_page().is_child_toggle_option_enabled(option)
+    AssertUtil.assert_simple(is_option_enabled, False)
+ 
+@step('I verified "{option}" child setting is ON')
+def step_impl(context, option):
+    is_option_enabled = context.pages.right_panel_page().is_child_toggle_option_enabled(option)
+    AssertUtil.assert_simple(is_option_enabled, True)
+ 
+@step('I verified draggable "{option}" child setting is OFF')
+def step_impl(context, option):
+    is_option_enabled = context.pages.right_panel_page().is_draggable_child_toggle_option_enabled(option)
+    AssertUtil.assert_simple(is_option_enabled, False)
+ 
+@step('I verified draggable "{option}" child setting is ON')
+def step_impl(context, option):
+    is_option_enabled = context.pages.right_panel_page().is_draggable_child_toggle_option_enabled(option)
+    AssertUtil.assert_simple(is_option_enabled, True)
+    
