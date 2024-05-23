@@ -267,7 +267,8 @@ class SidePanelEventHelper {
             // ignore objects with progress notifications, they will be set properly when finished processing
           } else if (
             object?.worksheet?.id &&
-            (object.worksheet.index !== undefined || object.worksheet.index !== null) &&
+            object.worksheet.index !== undefined &&
+            object.worksheet.index !== null &&
             object.worksheet.id !== newWorksheet.id &&
             object.worksheet.index >= newWorksheet.position
           ) {
