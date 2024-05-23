@@ -267,6 +267,7 @@ class SidePanelEventHelper {
             // ignore objects with progress notifications, they will be set properly when finished processing
           } else if (
             object?.worksheet?.id &&
+            (object.worksheet.index !== undefined || object.worksheet.index !== null) &&
             object.worksheet.id !== newWorksheet.id &&
             object.worksheet.index >= newWorksheet.position
           ) {
@@ -376,6 +377,9 @@ class SidePanelEventHelper {
 
             worksheets.load('items');
             await excelContext.sync();
+
+            // immediately return if no worksheets found
+            if (!worksheets.items || worksheets.items.length === 0) return;
 
             for (let i = 0; i < worksheets.items.length; i++) {
               const worksheet = worksheets.items[i];
