@@ -3,12 +3,9 @@ import { settingsSidePanelHelper } from './settings-side-panel-helper';
 
 import { reduxStore } from '../../store';
 
+import { PageByDisplayType } from '../../page-by/page-by-types';
 import { SettingsActionTypes } from '../../redux-reducer/settings-reducer/settings-reducer-types';
-import {
-  ObjectAndWorksheetNamingOption,
-  PageByDisplayOption,
-  UserPreferenceKey,
-} from './settings-side-panel-types';
+import { ObjectAndWorksheetNamingOption, UserPreferenceKey } from './settings-side-panel-types';
 
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 import { settingsActions } from '../../redux-reducer/settings-reducer/settings-actions';
@@ -166,14 +163,14 @@ describe('SettingsSidePanelHelper', () => {
     jest.resetAllMocks();
     const getUserPreferenceMock = jest
       .spyOn(userRestService, 'getUserPreference')
-      .mockResolvedValue({ value: PageByDisplayOption.ALL_PAGES });
+      .mockResolvedValue({ value: PageByDisplayType.ALL_PAGES });
 
     await settingsSidePanelHelper.initPageByDisplayAnswers();
 
     // then
     expect(getUserPreferenceMock).toHaveBeenCalledWith(UserPreferenceKey.EXCEL_PAGE_BY_SELECTION);
     expect(reduxStore.dispatch).toHaveBeenCalledWith({
-      pageByDisplaySetting: PageByDisplayOption.ALL_PAGES,
+      pageByDisplaySetting: PageByDisplayType.ALL_PAGES,
       type: SettingsActionTypes.SET_PAGE_BY_DISPLAY_SETTING,
     });
   });

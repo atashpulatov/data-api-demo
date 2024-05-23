@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import {
-  ObjectAndWorksheetNamingOption,
-  PageByDisplayOption,
-} from '../../right-side-panel/settings-side-panel/settings-side-panel-types';
+import { PageByDisplayType } from '../../page-by/page-by-types';
+import { ObjectAndWorksheetNamingOption } from '../../right-side-panel/settings-side-panel/settings-side-panel-types';
 import {
   LoadSidePanelObjectInfoSettingAction,
   LoadWorksheetObjectInfoSettingAction,
@@ -35,7 +33,7 @@ const initialState: SettingsState = {
   worksheetObjectInfoSettings: initialWorksheetObjectInfoSettings,
   importType: ObjectImportType.TABLE,
   objectAndWorksheetNamingSetting: ObjectAndWorksheetNamingOption.REPORT_NAME,
-  pageByDisplaySetting: PageByDisplayOption.SELECT_PAGES,
+  pageByDisplaySetting: PageByDisplayType.SELECT_PAGES,
   pivotTableAddAttributesToColumns: false,
   pivotTableAddMetricsToValues: false,
 };

@@ -17,6 +17,7 @@ import { EXTEND_SESSION, sessionHelper } from '../storage/session-helper';
 
 import { RootState } from '../store';
 
+import { PageByDisplayType } from '../page-by/page-by-types';
 import {
   EditedObject,
   MstrData,
@@ -24,7 +25,6 @@ import {
 } from '../redux-reducer/popup-reducer/popup-reducer-types';
 import { RepromptsQueueState } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer-types';
 import { SessionState } from '../redux-reducer/session-reducer/session-reducer-types';
-import { PageByDisplayOption } from '../right-side-panel/settings-side-panel/settings-side-panel-types';
 
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import i18n from '../i18n';
@@ -217,7 +217,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
         return;
       }
 
-      if (editedObject.pageByData && pageByDisplaySetting === PageByDisplayOption.SELECT_PAGES) {
+      if (editedObject.pageByData && pageByDisplaySetting === PageByDisplayType.SELECT_PAGES) {
         popupViewSelectorHelper.handleRequestPageByModalOpen({
           ...props,
           objectId: chosenObjectIdLocal,

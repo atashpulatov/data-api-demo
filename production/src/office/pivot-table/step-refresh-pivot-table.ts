@@ -26,7 +26,7 @@ class StepRefreshPivotTable {
       const { pivotTableId, objectWorkingId } = objectData;
       const {
         excelContext,
-        instanceDefinition: { mstrTable },
+        instanceDefinition: { mstrTable } = {},
       } = operationData;
 
       const pivotTable = await pivotTableHelper.getPivotTable(excelContext, pivotTableId);

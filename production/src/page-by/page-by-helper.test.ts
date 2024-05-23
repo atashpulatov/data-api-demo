@@ -5,10 +5,7 @@ import { pageByHelper } from './page-by-helper';
 import { reduxStore, RootState } from '../store';
 
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
-import {
-  ObjectAndWorksheetNamingOption,
-  PageByDisplayOption,
-} from '../right-side-panel/settings-side-panel/settings-side-panel-types';
+import { ObjectAndWorksheetNamingOption } from '../right-side-panel/settings-side-panel/settings-side-panel-types';
 import { ObjectData } from '../types/object-types';
 import { PageByData, PageByDisplayType } from './page-by-types';
 
@@ -258,14 +255,14 @@ describe('Page-by helper', () => {
   });
 
   it.each`
-    pageBy                       | pageByDisplaySetting                | importType                          | expectedResult
-    ${[]}                        | ${PageByDisplayOption.SELECT_PAGES} | ${ObjectImportType.TABLE}           | ${0}
-    ${pageByDataResponse.pageBy} | ${PageByDisplayOption.DEFAULT_PAGE} | ${ObjectImportType.IMAGE}           | ${false}
-    ${pageByDataResponse.pageBy} | ${PageByDisplayOption.ALL_PAGES}    | ${ObjectImportType.FORMATTED_TABLE} | ${false}
-    ${pageByDataResponse.pageBy} | ${PageByDisplayOption.SELECT_PAGES} | ${ObjectImportType.PIVOT_TABLE}     | ${false}
-    ${pageByDataResponse.pageBy} | ${PageByDisplayOption.SELECT_PAGES} | ${ObjectImportType.TABLE}           | ${true}
-    ${pageByDataResponse.pageBy} | ${PageByDisplayOption.SELECT_PAGES} | ${ObjectImportType.IMAGE}           | ${true}
-    ${pageByDataResponse.pageBy} | ${PageByDisplayOption.SELECT_PAGES} | ${ObjectImportType.FORMATTED_TABLE} | ${true}
+    pageBy                       | pageByDisplaySetting              | importType                          | expectedResult
+    ${[]}                        | ${PageByDisplayType.SELECT_PAGES} | ${ObjectImportType.TABLE}           | ${0}
+    ${pageByDataResponse.pageBy} | ${PageByDisplayType.DEFAULT_PAGE} | ${ObjectImportType.IMAGE}           | ${false}
+    ${pageByDataResponse.pageBy} | ${PageByDisplayType.ALL_PAGES}    | ${ObjectImportType.FORMATTED_TABLE} | ${false}
+    ${pageByDataResponse.pageBy} | ${PageByDisplayType.SELECT_PAGES} | ${ObjectImportType.PIVOT_TABLE}     | ${false}
+    ${pageByDataResponse.pageBy} | ${PageByDisplayType.SELECT_PAGES} | ${ObjectImportType.TABLE}           | ${true}
+    ${pageByDataResponse.pageBy} | ${PageByDisplayType.SELECT_PAGES} | ${ObjectImportType.IMAGE}           | ${true}
+    ${pageByDataResponse.pageBy} | ${PageByDisplayType.SELECT_PAGES} | ${ObjectImportType.FORMATTED_TABLE} | ${true}
   `(
     'should return $expectedResult when pageBy is $pageBy, pageByDisplaySetting is $pageByDisplaySetting, and importType is $importType',
     ({ pageBy, pageByDisplaySetting, importType, expectedResult }) => {
