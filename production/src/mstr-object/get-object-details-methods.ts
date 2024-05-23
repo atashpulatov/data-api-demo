@@ -1,22 +1,43 @@
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { mstrObjectRestService } from './mstr-object-rest-service';
-import { FiltersText } from './object-filter-helper-types';
+import { FiltersText, PromptObject } from './object-filter-helper-types';
 
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectInfoSetting } from '../redux-reducer/settings-reducer/settings-reducer-types';
 import { ObjectData, ObjectDetails, Owner } from '../types/object-types';
+import { PromptResponse } from './mstr-object-response-types';
 import { MstrObjectTypes } from './mstr-object-types';
 
 import mstrObjectEnum from './mstr-object-type-enum';
 import { TableOperation } from '../error/constants';
 
 const promptAnswerFunctionsMap = {
-  OBJECTS: (prompt: any) => prompt.answers.map((answer: any) => answer.name),
-  LEVEL: (prompt: any) => prompt.answers.units.map((unit: any) => unit.name),
-  EXPRESSION: (prompt: any) => prompt.answers.content,
-  ELEMENTS: (prompt: any) => prompt.answers.map((answer: any) => answer.name),
-  VALUE: (prompt: any) => prompt.answers,
+  OBJECTS: (prompt: PromptResponse): PromptObject => ({
+    id: prompt.id,
+    name: prompt.name,
+    answers: prompt.answers.map((answer: any) => answer.name),
+  }),
+  LEVEL: (prompt: PromptResponse): PromptObject => ({
+    id: prompt.id,
+    name: prompt.name,
+    answers: prompt.answers.units.map((unit: any) => unit.name),
+  }),
+  EXPRESSION: (prompt: PromptResponse): PromptObject => ({
+    id: prompt.id,
+    name: prompt.name,
+    answers: prompt.answers.content,
+  }),
+  ELEMENTS: (prompt: PromptResponse): PromptObject => ({
+    id: prompt.id,
+    name: prompt.name,
+    answers: prompt.answers.map((answer: { name: string }) => answer.name),
+  }),
+  VALUE: (prompt: PromptResponse): PromptObject => ({
+    id: prompt.id,
+    name: prompt.name,
+    answers: prompt.answers,
+  }),
 };
 
 export const getObjectPrompts = async (
@@ -24,7 +45,7 @@ export const getObjectPrompts = async (
   objectId: string,
   projectId: string,
   operationData: OperationData
-): Promise<any[]> => {
+): Promise<PromptObject[]> => {
   const { mstrObjectType, manipulationsXML, promptsAnswers } = objectData;
   if (
     mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name
@@ -33,13 +54,13 @@ export const getObjectPrompts = async (
   ) {
     return [];
   }
-  const unfilteredPrompts = await mstrObjectRestService.getObjectPrompts(
+  const unfilteredPrompts: PromptResponse[] = await mstrObjectRestService.getObjectPrompts(
     objectId,
     projectId,
     operationData.instanceDefinition.instanceId
   );
-  // @ts-expect-error
-  return unfilteredPrompts.map((prompt: any) => promptAnswerFunctionsMap[prompt.type](prompt));
+
+  return unfilteredPrompts.map(prompt => promptAnswerFunctionsMap[prompt.type](prompt));
 };
 
 export const populateDefinition = (

@@ -75,7 +75,7 @@ class StepGetObjectDetails {
               objectId,
               projectId
             );
-            return generateReportFilterTexts(reportDefinition);
+            return generateReportFilterTexts(reportDefinition, prompts);
           }
           case 'visualization':
           case 'dossier': {
@@ -107,7 +107,11 @@ class StepGetObjectDetails {
         owner,
         version
       );
-      const definition = populateDefinition(objectData, prompts, newObjectName); // DE294385: use the name from the store if it was changed by user
+      const definition = populateDefinition(
+        objectData,
+        prompts.map(prompt => prompt.answers),
+        newObjectName // DE294385: use the name from the store if it was changed by user
+      );
 
       if (pageByData && operationData.operationType !== OperationTypes.REFRESH_OPERATION) {
         newObjectName = pageByHelper.prepareNameBasedOnPageBySettings(

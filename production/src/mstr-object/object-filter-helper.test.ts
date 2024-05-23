@@ -117,7 +117,7 @@ describe('generateReportFilterTexts', () => {
     } as ReportDefinition;
 
     // when
-    const result = generateReportFilterTexts(filterData);
+    const result = generateReportFilterTexts(filterData, undefined);
 
     // then
     expect(result.reportFilterText).toBe('NOT ( filter1 AND filter2 )');
@@ -132,7 +132,7 @@ describe('generateReportFilterTexts', () => {
       const filterData = {} as ReportDefinition;
 
       // when
-      const result = generateReportFilterTexts(filterData);
+      const result = generateReportFilterTexts(filterData, undefined);
 
       // then
       expect(result.reportFilterText).toBe('-');
@@ -146,7 +146,7 @@ describe('generateReportFilterTexts', () => {
       const reportDefinition: ReportDefinition = undefined;
 
       // when
-      const result = generateReportFilterTexts(reportDefinition);
+      const result = generateReportFilterTexts(reportDefinition, undefined);
 
       // then
       expect(result.reportFilterText).toBe('-');
@@ -162,7 +162,7 @@ describe('generateReportFilterTexts', () => {
       } as ReportDefinition;
 
       // when
-      const result = generateReportFilterTexts(reportDefinition);
+      const result = generateReportFilterTexts(reportDefinition, undefined);
 
       // then
       expect(result.reportFilterText).toBe('-');
@@ -179,7 +179,7 @@ describe('generateReportFilterTexts', () => {
       } as ReportDefinition;
 
       // when
-      const result = generateReportFilterTexts(reportDefinition);
+      const result = generateReportFilterTexts(reportDefinition, undefined);
 
       // then
       expect(result.reportFilterText).toBe('-');
@@ -198,7 +198,7 @@ describe('generateReportFilterTexts', () => {
       } as ReportDefinition;
 
       // when
-      const result = generateReportFilterTexts(reportDefinition);
+      const result = generateReportFilterTexts(reportDefinition, undefined);
 
       // then
       expect(result.reportFilterText).toBe('-');
@@ -219,7 +219,7 @@ describe('generateReportFilterTexts', () => {
       } as ReportDefinition;
 
       // when
-      const result = generateReportFilterTexts(reportDefinition);
+      const result = generateReportFilterTexts(reportDefinition, undefined);
 
       // then
       expect(result.reportFilterText).toBe('-');
@@ -241,7 +241,7 @@ describe('generateReportFilterTexts', () => {
       } as ReportDefinition;
 
       // when
-      const result = generateReportFilterTexts(reportDefinition);
+      const result = generateReportFilterTexts(reportDefinition, undefined);
 
       // then
       expect(result.reportFilterText).toBe('-');
@@ -265,7 +265,7 @@ describe('generateReportFilterTexts', () => {
       } as ReportDefinition;
 
       // when
-      const result = generateReportFilterTexts(reportDefinition);
+      const result = generateReportFilterTexts(reportDefinition, undefined);
 
       // then
       expect(result.reportFilterText).toBe('-');
@@ -293,7 +293,7 @@ describe('generateReportFilterTexts', () => {
       } as ReportDefinition;
 
       // when
-      const result = generateReportFilterTexts(reportDefinition);
+      const result = generateReportFilterTexts(reportDefinition, undefined);
 
       // then
       expect(result.reportFilterText).toBe('-');
