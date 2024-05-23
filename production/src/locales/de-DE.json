@@ -282,7 +282,7 @@
    "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "Bei aktivierter Option werden die Attributwerte als Text unter Beibehaltung der Formatierung von MicroStrategy importiert. Dies kann sich auf Excel-Formeln auswirken.",
    "Merge columns": "Spalten zusammenführen",
    "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Bei aktivierter Option werden benachbarte Spaltenköpfe mit identischen Werten zusammengeführt. Gilt nur für Kreuztabellenberichte.",
-   "Paged-By": "Paged-By",
+   "Paged-By": "Page-By",
    "Default import format:": "Standardimportformat:",
    "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.": "Objekte, die im ausgewählten Format nicht importiert werden können, werden als Daten importiert. Sie können das Format während des Imports ändern.",
    "Data": "Daten",

@@ -290,7 +290,7 @@
    "Visualization": "Wizualizacja",
    "Pivot Table": "Tabela przestawna",
    "If enabled, attributes will be automatically added to the ‘Rows’ section of the pivot table.": "Jeśli jest włączona, atrybuty będą automatycznie dodawane do sekcji „Wiersze” tabeli przestawnej.",
-   "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "Jeśli jest włączona, metryki będą automatycznie dodawane do sekcji „Wartości” w tabeli przestawnej.",
+   "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "Jeśli ta opcja jest włączona, metryki będą automatycznie dodawane do sekcji „Wartości” w tabeli przestawnej.",
    "The memory limit has been reached. You cannot import any more objects.": "Osiągnięto limit pamięci. Nie można zaimportować większej liczby obiektów.",
    "Import Pivot Table": "Importuj tabelę przestawną",
    "Import Visualization": "Importuj wizualizację",

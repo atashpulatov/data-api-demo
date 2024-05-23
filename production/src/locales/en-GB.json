@@ -287,7 +287,7 @@
    "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.": "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.",
    "Data": "Data",
    "Formatted Data": "Formatted Data",
-   "Visualization": "Visualisation",
+   "Visualization": "Visualization",
    "Pivot Table": "Pivot Table",
    "If enabled, attributes will be automatically added to the ‘Rows’ section of the pivot table.": "If enabled, attributes will be automatically added to the ‘Rows’ section of the pivot table.",
    "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.",
