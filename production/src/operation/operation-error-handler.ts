@@ -6,7 +6,10 @@ import officeReducerHelper from '../office/store/office-reducer-helper';
 
 import officeStoreObject from '../office/store/office-store-object';
 
-import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import {
+  MstrTable,
+  OperationData,
+} from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../types/object-types';
 
 import { errorService } from '../error/error-handler';
@@ -74,7 +77,7 @@ class OperationErrorHandler {
           crosstabHeaderDimensions: {},
           isCrosstab,
           prevCrosstabDimensions: crosstabHeaderDimensions,
-        },
+        } as MstrTable,
         excelContext,
         false
       );

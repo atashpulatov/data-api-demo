@@ -47,6 +47,7 @@ class StepGetOfficeTableEditRefresh {
   ): Promise<void> {
     try {
       console.time('Create or get table - edit or refresh');
+      const { worksheetObjectInfoSettings } = reduxStore.getState().settingsReducer;
       const {
         tableName,
         previousTableDimensions,
@@ -67,26 +68,30 @@ class StepGetOfficeTableEditRefresh {
       let officeTable;
 
       getOfficeTableHelper.checkReportTypeChange(mstrTable);
+
+      const previousObjectDetailsSize = objectData.objectDetailsSize ?? 0;
+      const newObjectDetailsSize = calculateOffsetForObjectInfoSettings(
+        worksheetObjectInfoSettings,
+        mstrObjectType,
+        pageByData?.elements?.length > 0
+      );
+
       const prevOfficeTable = await officeTableRefresh.getPreviousOfficeTable(
         excelContext,
         oldBindId
       );
 
       if (!isRepeatStep) {
+        const objectDetailsSizeChanged = previousObjectDetailsSize !== newObjectDetailsSize;
+
         ({ tableChanged, startCell } = await officeTableRefresh.getExistingOfficeTableData(
           excelContext,
           instanceDefinition,
           prevOfficeTable,
-          previousTableDimensions
+          previousTableDimensions,
+          objectDetailsSizeChanged
         ));
       }
-
-      const { worksheetObjectInfoSettings } = reduxStore.getState().settingsReducer;
-      const newObjectDetailsSize = calculateOffsetForObjectInfoSettings(
-        worksheetObjectInfoSettings,
-        mstrObjectType,
-        pageByData?.elements?.length > 0
-      );
 
       // whether the table has cross tab headers or not, this value stores the start cell of the headers (outer header if cross tab)
       const currentTableStartCell = officeTableRefresh.getCrosstabStartCell(
@@ -98,7 +103,7 @@ class StepGetOfficeTableEditRefresh {
       const tableStatus = getTableOperationAndStartCell({
         tableMoved,
         tableChanged,
-        previousObjectDetailsSize: objectData.objectDetailsSize ?? 0,
+        previousObjectDetailsSize,
         newObjectDetailsSize,
         tableStartCell: currentTableStartCell,
       });
