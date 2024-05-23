@@ -36,6 +36,7 @@ import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-st
 import { settingsReducerSelectors } from '../redux-reducer/settings-reducer/settings-reducer-selectors';
 import { PromptsContainer } from './prompts-container';
 import { ErrorMessages } from '../error/constants';
+import { ObjectImportType } from '../mstr-object/constants';
 
 import '../home/home.css';
 import '../index.css';
@@ -56,6 +57,8 @@ interface PromptsWindowProps {
   promptObjects?: any[]; // Replace 'any' with the appropriate type
   repromptsQueue?: RepromptsQueueState;
   isMultipleRepromptWithReuse?: boolean;
+  setImportType?: (importType: ObjectImportType) => void;
+  importType?: ObjectImportType;
 }
 
 const { microstrategy } = window;
@@ -77,11 +80,19 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
     isPreparedDataRequested,
     isMultipleRepromptWithReuse,
     repromptsQueue,
+    setImportType,
+    importType,
   } = props;
   const { chosenObjectId, chosenObjectName } = mstrData;
   // isReprompt will be true for both Edit AND Reprompt workflows
   // isEdit will only be true for the Edit workflow
   const { isReprompt, isEdit } = popupState;
+
+  const { importType: editedObjectImportType } = editedObject;
+
+  if (editedObjectImportType && importType !== editedObjectImportType) {
+    setImportType(editedObjectImportType);
+  }
 
   const { installSessionProlongingHandler } = sessionHelper;
 
@@ -558,6 +569,7 @@ const mapDispatchToProps = {
   preparePromptedReport: popupActions.preparePromptedReport,
   requestPageByModalOpen: navigationTreeActions.requestPageByModalOpen,
   startImport: navigationTreeActions.startImport,
+  setImportType: popupStateActions.setImportType,
 };
 
 export const PromptsWindow = connect(

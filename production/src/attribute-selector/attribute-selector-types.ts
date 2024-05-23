@@ -101,6 +101,7 @@ export interface AttributeSelectorWindowNotConnectedProps {
   displayAttrFormNames: DisplayAttrFormNames;
   editedObject: EditedObjectProps;
   requestPageByModalOpen: (data: RequestPageByModalOpenData) => void;
+  setImportType: (importType: ObjectImportType) => void;
 }
 
 export interface ObjectTypeProps {
