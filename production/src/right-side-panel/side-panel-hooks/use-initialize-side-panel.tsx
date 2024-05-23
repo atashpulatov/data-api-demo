@@ -8,7 +8,7 @@ import { sidePanelHelper } from '../side-panel-services/side-panel-helper';
 
 const useInitializeSidePanel = (
   updateActiveCellAddress: (cellAddress: string) => void,
-  setActiveSheetIndex: Dispatch<SetStateAction<number>>,
+  setActiveSheetId: Dispatch<SetStateAction<string>>,
   isAnyPopupOrSettingsDisplayedRef: React.MutableRefObject<boolean>
 ): void => {
   // Assign most event listeners and initialize settings
@@ -34,7 +34,7 @@ const useInitializeSidePanel = (
     async function initializeSidePanelActiveSelectionChangedListener(): Promise<void> {
       await sidePanelEventHelper.initActiveSelectionChangedListener(
         updateActiveCellAddress,
-        setActiveSheetIndex,
+        setActiveSheetId,
         isAnyPopupOrSettingsDisplayedRef
       );
     }

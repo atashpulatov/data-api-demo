@@ -183,7 +183,7 @@ class StepGetOfficeTableEditRefresh {
         updatedObject = {
           ...updatedObject,
           worksheet: { id, name, index: position },
-          groupData: { key: position, title: name },
+          groupData: { key: id, title: name, index: position },
           objectDetailsSize: newObjectDetailsSize,
         };
       }

@@ -156,7 +156,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
       startCell: 'A10',
       objectDetailsSize: 0,
       worksheet: { id: 1, name: 'worksheetTest', index: 0 },
-      groupData: { key: 0, title: 'worksheetTest' },
+      groupData: { key: 1, title: 'worksheetTest', index: 0 },
     });
 
     expect(operationStepDispatcher.completeGetOfficeTableEditRefresh).toBeCalledTimes(1);
@@ -255,7 +255,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
         startCell: 'A10',
         objectDetailsSize: 0,
         worksheet: { id: 1, name: 'worksheetTest', index: 0 },
-        groupData: { key: 0, title: 'worksheetTest' },
+        groupData: { key: 1, title: 'worksheetTest', index: 0 },
       });
 
       expect(operationStepDispatcher.completeGetOfficeTableEditRefresh).toBeCalledTimes(1);

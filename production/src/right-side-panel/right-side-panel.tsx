@@ -54,7 +54,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
 }) => {
   const [sidePanelPopup, setSidePanelPopup] = useState(null);
   const [loadedObjectsWrapped, setLoadedObjectsWrapped] = useState(loadedObjects);
-  const [activeSheetIndex, setActiveSheetIndex] = useState(-1);
+  const [activeSheetId, setActiveSheetId] = useState('');
 
   const operations = useSelector(selectOperations);
   const globalNotification = useSelector(notificationReducerSelectors.selectGlobalNotification);
@@ -76,7 +76,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
 
   useInitializeSidePanel(
     updateActiveCellAddress,
-    setActiveSheetIndex,
+    setActiveSheetId,
     isAnyPopupOrSettingsDisplayedRef
   );
   useDialogPanelCommunication();
@@ -112,7 +112,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
         <SettingsSidePanel />
       ) : (
         <SidePanel
-          activeGroupKey={activeSheetIndex}
+          activeGroupKey={activeSheetId}
           loadedObjects={filteredObjects as any}
           onAddData={sidePanelService.addData}
           onTileClick={sidePanelService.highlightObject}

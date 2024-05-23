@@ -305,7 +305,7 @@ class OfficeTableCreate {
         tableName: newOfficeTableName,
         worksheet: { id, name, index },
         startCell,
-        groupData: { key: index, title: name },
+        groupData: { key: id, title: name, index },
         objectDetailsSize,
       };
     } catch (error) {

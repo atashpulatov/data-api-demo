@@ -64,7 +64,7 @@ class StepCreatePivotTable {
         ...objectData,
         pivotTableId: pivotTable.id,
         worksheet: { id, name, index },
-        groupData: { key: index, title: name },
+        groupData: { key: id, title: name, index },
       });
 
       operationStepDispatcher.completeCreatePivotTable(objectWorkingId);

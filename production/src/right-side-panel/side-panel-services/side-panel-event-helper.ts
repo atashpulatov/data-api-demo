@@ -49,20 +49,20 @@ class SidePanelEventHelper {
   @initializationErrorDecorator.initializationWrapper
   async initActiveSelectionChangedListener(
     setActiveCellAddress: (cellAddress: string) => void,
-    setActiveSheetIndex: Dispatch<SetStateAction<number>>,
+    setActiveSheetId: Dispatch<SetStateAction<string>>,
     isAnyPopupOrSettingsDisplayedRef: React.MutableRefObject<boolean>
   ): Promise<void> {
     const excelContext = await officeApiHelper.getExcelContext();
-    // only read + init active sheet index when no popup (notifications, Office dialog, etc.) or settings visible
+    // only read + init active sheet id when no popup (notifications, Office dialog, etc.) or settings visible
     if (!isAnyPopupOrSettingsDisplayedRef.current) {
       const activeWorksheet = officeApiHelper.getCurrentExcelSheet(excelContext);
 
-      activeWorksheet.load('position');
+      activeWorksheet.load(['id', 'position']);
       await excelContext.sync();
 
       activeWorksheet.position !== undefined &&
         activeWorksheet.position !== null &&
-        setActiveSheetIndex(activeWorksheet.position);
+        setActiveSheetId(activeWorksheet.id);
     }
     // initiatilize active cell address
     const initialCellAddress = await officeApiHelper.getSelectedCell(excelContext);
@@ -72,7 +72,7 @@ class SidePanelEventHelper {
     await officeApiHelper.addOnSelectionChangedListener(
       excelContext,
       setActiveCellAddress,
-      setActiveSheetIndex,
+      setActiveSheetId,
       isAnyPopupOrSettingsDisplayedRef
     );
   }
@@ -213,7 +213,7 @@ class SidePanelEventHelper {
                 updatedObjects.push({
                   ...object,
                   worksheet: { ...object.worksheet, index: i },
-                  groupData: { ...object.groupData, key: i },
+                  groupData: { ...object.groupData, index: i },
                 });
               }
             });
@@ -287,7 +287,7 @@ class SidePanelEventHelper {
               updatedObjects.push({
                 ...object,
                 worksheet: { ...object.worksheet, index: objectWorksheet.position },
-                groupData: { ...object.groupData, key: objectWorksheet.position },
+                groupData: { ...object.groupData, index: objectWorksheet.position },
               });
             }
           }
@@ -338,7 +338,7 @@ class SidePanelEventHelper {
                 updatedObjects.push({
                   ...object,
                   worksheet: { ...object.worksheet, index: object.worksheet.index - 1 },
-                  groupData: { ...object.groupData, key: object.groupData.key - 1 },
+                  groupData: { ...object.groupData, index: object.groupData.index - 1 },
                 });
               }
             });
@@ -398,7 +398,7 @@ class SidePanelEventHelper {
                   updatedObjects.push({
                     ...object,
                     worksheet: { ...object.worksheet, index: i, name: worksheet.name },
-                    groupData: { ...object.groupData, key: i, title: worksheet.name },
+                    groupData: { ...object.groupData, index: i, title: worksheet.name },
                   });
                 }
               });
