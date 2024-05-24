@@ -49,4 +49,5 @@ export interface ReportParams {
   duplicateMode?: any;
   object?: any;
   pageByData?: PageByData;
+  importType?: ObjectImportType;
 }

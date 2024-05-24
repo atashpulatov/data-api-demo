@@ -404,6 +404,9 @@ class PopupController {
     }
 
     if (!reportParams || shouldRemovePages) {
+      if (!response?.importType) {
+        response.importType = reportParams.importType;
+      }
       return this.handleUpdateCommand(response);
     }
 
@@ -602,10 +605,10 @@ class PopupController {
 
   loadPending =
     (wrapped: any) =>
-    async (...args: any) => {
-      this.runPopup(DialogType.loadingPage, 30, 40);
-      return wrapped(...args);
-    };
+      async (...args: any) => {
+        this.runPopup(DialogType.loadingPage, 30, 40);
+        return wrapped(...args);
+      };
 
   closeDialog = (dialog: Office.Dialog): void => {
     try {
