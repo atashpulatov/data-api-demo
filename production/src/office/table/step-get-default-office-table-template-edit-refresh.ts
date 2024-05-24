@@ -1,0 +1,101 @@
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../../types/object-types';
+
+import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import officeTableCreate from './office-table-create';
+import officeTableRefresh from './office-table-refresh';
+import { ObjectImportType } from '../../mstr-object/constants';
+
+class StepGetDefaultOfficeTableTemplateEditRefresh {
+    /**
+     * Creates an office table and removes the previous existing office table on every refresh or edit.
+     *
+     * This function is subscribed as one of the operation steps with the key GET_DEFAULT_OFFICE_TABLE_TEMPLATE_EDIT_REFRESH,
+     * therefore should be called only via operation bus.
+     *
+     * @param objectData.tableName Name of Excel table created on import
+     * @param objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+     * @param operationData.excelContext Reference to Excel Context used by Excel API functions
+     * @param operationData.instanceDefinition Object containing information about MSTR object
+     * @param operationData.oldBindId Id of the Office table created on import
+     * @param operationData.insertNewWorksheet Specify if new worksheet has to be created
+     */
+    async getDefaultOfficeTableTemplateEditRefresh(
+        objectData: ObjectData,
+        operationData: OperationData
+    ): Promise<void> {
+        try {
+            console.time('Create default table template - edit or refresh');
+            const {
+                tableName,
+                objectWorkingId,
+                pageByData,
+                importType,
+            } = objectData;
+            const { excelContext, instanceDefinition, oldBindId, insertNewWorksheet } =
+                operationData;
+
+            const prevOfficeTable = await officeTableRefresh.getPreviousOfficeTable(
+                excelContext,
+                oldBindId
+            );
+
+            const { officeTable, bindId, startCell } = await officeTableCreate.createDefaultOfficeTable({
+                instanceDefinition,
+                excelContext,
+                startCell: objectData.startCell,
+                tableName,
+                prevOfficeTable,
+                insertNewWorksheet,
+                pageByData,
+                objectData,
+            });
+
+            const updatedOperation = {
+                objectWorkingId,
+                officeTable,
+                shouldFormat: true,
+                tableChanged: true,
+                instanceDefinition,
+                startCell,
+                isTotalsRowVisible: prevOfficeTable.showTotals,
+            };
+
+            officeTable.worksheet.load(['id', 'name', 'position']);
+            await excelContext.sync();
+
+            const { id, name, position } = officeTable.worksheet;
+
+            let updatedObject: Partial<ObjectData> = {
+                objectWorkingId,
+                bindId,
+                startCell,
+                importType
+            };
+
+            if (importType !== ObjectImportType.PIVOT_TABLE) {
+                updatedObject = {
+                    ...updatedObject,
+                    worksheet: { id, name, index: position },
+                    groupData: {
+                        key: position, title: name,
+                        index: 0
+                    },
+                };
+            }
+
+            operationStepDispatcher.updateOperation(updatedOperation);
+            operationStepDispatcher.updateObject(updatedObject);
+            operationStepDispatcher.completeGetDefaultOfficeTableTemplateEditRefresh(objectWorkingId);
+        } catch (error) {
+            console.error(error);
+            operationErrorHandler.handleOperationError(objectData, operationData, error);
+        } finally {
+            console.timeEnd('Create default table template - edit or refresh');
+        }
+    }
+}
+
+const stepGetDefaultOfficeTableTemplateEditRefresh = new StepGetDefaultOfficeTableTemplateEditRefresh();
+export default stepGetDefaultOfficeTableTemplateEditRefresh;

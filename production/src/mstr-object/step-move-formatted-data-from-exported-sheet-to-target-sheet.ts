@@ -7,6 +7,8 @@ import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 import { TITLE_EXCLUDED_DEFAULT_CELL_POSITION } from './constants';
 
+export const FORMATTED_TABLE_SINGLE_ROW = 1;
+
 class StepMoveFormattedDataFromExportedSheetToTargetSheet {
   /**
    * Moves formatted data(table) from export engine worksheet to current active worksheet.
@@ -38,6 +40,7 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
         rows = columnsY + rowsY;
         columns = columnsX + rowsX;
       }
+      rows -= FORMATTED_TABLE_SINGLE_ROW;
 
       // Get range starting from 'A3', to exclude the visualization title 
       const sourceTableRange = officeApiHelper.getRange(columns, TITLE_EXCLUDED_DEFAULT_CELL_POSITION, rows);

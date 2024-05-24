@@ -10,18 +10,19 @@ import officeTableHelperRange from './office-table-helper-range';
 
 import { reduxStore } from '../../store';
 
+import { VisualizationTypes } from '../../mstr-object/mstr-object-types';
 import { PageByData } from '../../page-by/page-by-types';
 import { InstanceDefinition } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
 
 import { calculateOffsetForObjectInfoSettings } from '../../mstr-object/get-object-details-methods';
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import officeApiDataLoader from '../api/office-api-data-loader';
-import { ObjectImportType } from '../../mstr-object/constants';
 
 const DEFAULT_TABLE_STYLE = 'TableStyleLight11';
 
 // Pair of extra rows required to be appended to formatted crosstab table, in order to track the imported range
-export const FORMATTED_TABLE_CROSSTAB_EXTRA_ROWS = 2;
+export const FORMATTED_TABLE_SINGLE_GRID_LINE = 1;
 
 class OfficeTableCreate {
   /**
@@ -106,14 +107,7 @@ class OfficeTableCreate {
       tableChanged
     );
 
-    // Add extra rows to crosstab table to be able to track users manipulations, otherwise formatted data(table) range
-    // will entirely overlap and ultmately remove the underneath crosstab table
-    let tableRows: number = rows;
-    if (importType === ObjectImportType.FORMATTED_DATA && isCrosstab) {
-      tableRows += FORMATTED_TABLE_CROSSTAB_EXTRA_ROWS;
-    }
-
-    const tableRange = officeApiHelper.getRange(columns, tableStartCell, tableRows);
+    const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
     const range = this.getObjectRange(tableStartCell, worksheet, tableRange, mstrTable);
 
     excelContext.trackedObjects.add(range);
@@ -161,6 +155,98 @@ class OfficeTableCreate {
       startCell,
       excelContext,
       objectDetailsSize,
+    });
+  }
+
+
+  async createDefaultOfficeTable({
+    instanceDefinition,
+    excelContext,
+    startCell,
+    tableName,
+    prevOfficeTable,
+    isRepeatStep,
+    insertNewWorksheet,
+    pageByData,
+    objectData,
+  }: {
+    instanceDefinition: InstanceDefinition;
+    excelContext: Excel.RequestContext;
+    startCell: string;
+    tableName?: string;
+    prevOfficeTable?: Excel.Table;
+    tableChanged?: boolean;
+    isRepeatStep?: boolean;
+    insertNewWorksheet: boolean;
+    pageByData?: PageByData;
+    objectData: ObjectData;
+  }): Promise<any> {
+    const {
+      mstrTable,
+      mstrTable: { isCrosstab, name, visualizationType },
+    } = instanceDefinition;
+    const { importType, crosstabHeaderDimensions, mstrObjectType } = objectData;
+
+    const newOfficeTableName = getOfficeTableHelper.createTableName(mstrTable, tableName);
+    const worksheet = await officeApiWorksheetHelper.getWorksheet(
+      excelContext,
+      importType,
+      name,
+      pageByData,
+      prevOfficeTable,
+      insertNewWorksheet
+    );
+
+    if (insertNewWorksheet) {
+      startCell = 'A1';
+    } else if (!startCell) {
+      startCell = await officeApiHelper.getSelectedCell(excelContext);
+    }
+
+    let { rows, columns } = instanceDefinition;
+    if (isCrosstab) {
+      const { rowsX, rowsY, columnsX, columnsY } = crosstabHeaderDimensions;
+      rows = columnsY + rowsY;
+      columns = columnsX + rowsX;
+
+      if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name
+        && visualizationType !== VisualizationTypes.GRID) {
+        columns -= FORMATTED_TABLE_SINGLE_GRID_LINE;
+      }
+    } else {
+      rows -= FORMATTED_TABLE_SINGLE_GRID_LINE;
+    }
+
+    const tableRange = officeApiHelper.getRange(columns, startCell, rows);
+    const range = worksheet.getRange(tableRange)
+
+    excelContext.trackedObjects.add(range);
+
+    await officeTableHelperRange.checkObjectRangeValidity(
+      prevOfficeTable,
+      excelContext,
+      range,
+      instanceDefinition,
+      isRepeatStep
+    );
+
+    range.numberFormat = '' as unknown as any[][];
+
+    const officeTable = worksheet.tables.add(tableRange, true); // create office table based on the range
+
+    if (isCrosstab) {
+      officeTable.showHeaders = false;
+    }
+
+    this.styleHeaders(officeTable);
+
+    return this.setOfficeTableProperties({
+      officeTable,
+      newOfficeTableName,
+      mstrTable,
+      worksheet,
+      startCell,
+      excelContext,
     });
   }
 
@@ -274,7 +360,7 @@ class OfficeTableCreate {
     worksheet: Excel.Worksheet;
     startCell: string;
     excelContext: Excel.RequestContext;
-    objectDetailsSize: number;
+    objectDetailsSize?: number;
   }): Promise<any> {
     const { isCrosstab } = mstrTable;
     try {

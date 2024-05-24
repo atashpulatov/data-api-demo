@@ -7,7 +7,7 @@ import { IncorrectInputTypeError } from '../../error/incorrect-input-type';
 import { OutsideOfRangeError } from '../../error/outside-of-range-error';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 import { OfficeSettingsEnum } from '../../constants/office-constants';
-import { DEFAULT_CELL_POSITION, DEFAULT_RANGE_POSITION } from '../../mstr-object/constants';
+import { DEFAULT_CELL_POSITION, DEFAULT_RANGE_POSITION, ObjectImportType } from '../../mstr-object/constants';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -388,13 +388,40 @@ class OfficeApiHelper {
    * @param ObjectData.crosstabHeaderDimensions Contains information about crosstab headers dimensions
    */
   async onBindingObjectClick(ObjectData: any): Promise<void> {
-    let crosstabRange;
-    const { bindId, isCrosstab, crosstabHeaderDimensions } = ObjectData;
+    const { bindId, isCrosstab, crosstabHeaderDimensions, importType } = ObjectData;
 
     const excelContext = await this.getExcelContext();
     const officeTable = excelContext.workbook.tables.getItem(bindId);
 
     if (isCrosstab) {
+      const crosstabRange = await this.getCrosstabRange(
+        {
+          excelContext,
+          importType,
+          crosstabHeaderDimensions,
+          officeTable,
+          bindId
+        });
+      crosstabRange.select();
+    } else {
+      const tableRange = this.getBindingRange(excelContext, bindId);
+      tableRange.select();
+    }
+    await excelContext.sync();
+  }
+
+  private async getCrosstabRange({
+    excelContext,
+    importType,
+    crosstabHeaderDimensions,
+    officeTable,
+    bindId
+  }: any): Promise<Excel.Range> {
+    let crosstabRange: Excel.Range;
+    if (importType === ObjectImportType.FORMATTED_DATA) {
+      const tableRange = this.getBindingRange(excelContext, bindId);
+      crosstabRange = tableRange.getOffsetRange(-1, 0).getResizedRange(1, 0);
+    } else {
       const tmpXtabDimensions = {
         ...crosstabHeaderDimensions,
         columnsY: crosstabHeaderDimensions.columnsY,
@@ -404,12 +431,10 @@ class OfficeApiHelper {
         tmpXtabDimensions,
         excelContext
       );
-      crosstabRange.select();
-    } else {
-      const tableRange = this.getBindingRange(excelContext, bindId);
-      tableRange.select();
     }
-    await excelContext.sync();
+
+    return crosstabRange;
+
   }
 
   /**

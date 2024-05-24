@@ -68,6 +68,18 @@ class OperationStepDispatcher {
     );
   }
 
+  completeGetDefaultOfficeTableTemplateImport(objectWorkingId: number): void {
+    this.reduxStore.dispatch(
+      markStepCompleted(objectWorkingId, OperationSteps.GET_DEFAULT_OFFICE_TABLE_TEMPLATE_IMPORT)
+    );
+  }
+
+  completeGetDefaultOfficeTableTemplateEditRefresh(objectWorkingId: number): void {
+    this.reduxStore.dispatch(
+      markStepCompleted(objectWorkingId, OperationSteps.GET_DEFAULT_OFFICE_TABLE_TEMPLATE_EDIT_REFRESH)
+    );
+  }
+
   completeFormatSubtotals(objectWorkingId: number): void {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.FORMAT_SUBTOTALS));
   }
