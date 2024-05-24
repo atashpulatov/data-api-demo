@@ -5,9 +5,9 @@ import { ObjectData } from '../types/object-types';
 
 import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
+import { OFFICE_TABLE_EXTA_GRID_LINE } from '../office/constants';
 import { TITLE_EXCLUDED_DEFAULT_CELL_POSITION } from './constants';
 
-export const FORMATTED_TABLE_SINGLE_ROW = 1;
 
 class StepMoveFormattedDataFromExportedSheetToTargetSheet {
   /**
@@ -41,7 +41,9 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
         rows = columnsY + rowsY;
         columns = columnsX + rowsX;
 
-        sourceTableRows = rows - FORMATTED_TABLE_SINGLE_ROW;
+        // Remove the redundant row for source table range, as we hide the headers 
+        // of the underneath office table template for crosstab
+        sourceTableRows = rows - OFFICE_TABLE_EXTA_GRID_LINE;
       }
 
       // Get range starting from 'A3', to exclude the visualization title 

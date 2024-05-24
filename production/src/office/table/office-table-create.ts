@@ -18,11 +18,9 @@ import { ObjectData } from '../../types/object-types';
 import { calculateOffsetForObjectInfoSettings } from '../../mstr-object/get-object-details-methods';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import officeApiDataLoader from '../api/office-api-data-loader';
+import { OFFICE_TABLE_EXTA_GRID_LINE } from '../constants';
 
 const DEFAULT_TABLE_STYLE = 'TableStyleLight11';
-
-// Pair of extra rows required to be appended to formatted crosstab table, in order to track the imported range
-export const FORMATTED_TABLE_SINGLE_GRID_LINE = 1;
 
 class OfficeTableCreate {
   /**
@@ -226,7 +224,9 @@ class OfficeTableCreate {
 
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name
         && visualizationType !== VisualizationTypes.GRID) {
-        columns -= FORMATTED_TABLE_SINGLE_GRID_LINE;
+        // Remove the redundant column from non-grid visualization, due to the reason that
+        // the export engine does not export the first row of attributes for crosstab microcharts/custom grids
+        columns -= OFFICE_TABLE_EXTA_GRID_LINE;
       }
     }
     const tableRange = officeApiHelper.getRange(columns, startCell, rows);
@@ -241,15 +241,6 @@ class OfficeTableCreate {
       instanceDefinition,
       isRepeatStep
     );
-
-    const a = range.getOffsetRange(-1, 0).getResizedRange(1, 0);
-    a.load('address');
-
-    a.clear();
-    await excelContext.sync();
-
-    console.log('aaaaa', a);
-
 
     const officeTable = worksheet.tables.add(tableRange, true); // create office table based on the range
 
