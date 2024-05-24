@@ -289,7 +289,7 @@
    "Formatted Data": "Dati formattati",
    "Visualization": "Visualizzazione",
    "Pivot Table": "Tabella pivot",
-   "If enabled, attributes will be automatically added to the ‘Rows’ section of the pivot table.": "Se abilitati, gli attributi saranno aggiunti automaticamente alla sezione \"Righe\" della tabella pivot.",
+   "If enabled, attributes will be automatically added to the ‘Rows’ section of the pivot table.": "Se questa opzione è abilitata, gli attributi saranno aggiunti automaticamente alla sezione “Righe” della tabella pivot.",
    "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "Se questa opzione è abilitata, le metriche saranno aggiunte automaticamente alla sezione “Valori” della tabella pivot.",
    "The memory limit has been reached. You cannot import any more objects.": "Limite di memoria raggiunto. Impossibile importare altri oggetti.",
    "Import Pivot Table": "Importa tabella pivot",
