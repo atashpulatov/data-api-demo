@@ -5,7 +5,6 @@ import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import officeTableCreate from './office-table-create';
 import officeTableRefresh from './office-table-refresh';
-import { ObjectImportType } from '../../mstr-object/constants';
 
 class StepGetDefaultOfficeTableTemplateEditRefresh {
     /**
@@ -67,23 +66,17 @@ class StepGetDefaultOfficeTableTemplateEditRefresh {
 
             const { id, name, position } = officeTable.worksheet;
 
-            let updatedObject: Partial<ObjectData> = {
+            const updatedObject: Partial<ObjectData> = {
                 objectWorkingId,
                 bindId,
                 startCell,
-                importType
+                importType,
+                worksheet: { id, name, index: position },
+                groupData: {
+                    key: position, title: name,
+                    index: 0
+                },
             };
-
-            if (importType !== ObjectImportType.PIVOT_TABLE) {
-                updatedObject = {
-                    ...updatedObject,
-                    worksheet: { id, name, index: position },
-                    groupData: {
-                        key: position, title: name,
-                        index: 0
-                    },
-                };
-            }
 
             operationStepDispatcher.updateOperation(updatedOperation);
             operationStepDispatcher.updateObject(updatedObject);
