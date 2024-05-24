@@ -230,8 +230,6 @@ class OfficeTableCreate {
       isRepeatStep
     );
 
-    range.numberFormat = '' as unknown as any[][];
-
     const officeTable = worksheet.tables.add(tableRange, true); // create office table based on the range
 
     if (isCrosstab) {
