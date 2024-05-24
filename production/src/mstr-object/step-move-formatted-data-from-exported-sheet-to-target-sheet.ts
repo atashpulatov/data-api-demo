@@ -34,16 +34,18 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
       const { isCrosstab, crosstabHeaderDimensions, objectWorkingId } = objectData;
 
       let { rows, columns } = instanceDefinition;
+      let sourceTableRows = rows;
 
       if (isCrosstab) {
         const { rowsX, rowsY, columnsX, columnsY } = crosstabHeaderDimensions;
         rows = columnsY + rowsY;
         columns = columnsX + rowsX;
+
+        sourceTableRows = rows - FORMATTED_TABLE_SINGLE_ROW;
       }
-      rows -= FORMATTED_TABLE_SINGLE_ROW;
 
       // Get range starting from 'A3', to exclude the visualization title 
-      const sourceTableRange = officeApiHelper.getRange(columns, TITLE_EXCLUDED_DEFAULT_CELL_POSITION, rows);
+      const sourceTableRange = officeApiHelper.getRange(columns, TITLE_EXCLUDED_DEFAULT_CELL_POSITION, sourceTableRows);
       const targetTableRange = officeApiHelper.getRange(columns, startCell, rows);
 
       const targetWorksheet = officeApiHelper.getExcelSheetById(

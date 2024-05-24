@@ -213,10 +213,7 @@ class OfficeTableCreate {
         && visualizationType !== VisualizationTypes.GRID) {
         columns -= FORMATTED_TABLE_SINGLE_GRID_LINE;
       }
-    } else {
-      rows -= FORMATTED_TABLE_SINGLE_GRID_LINE;
     }
-
     const tableRange = officeApiHelper.getRange(columns, startCell, rows);
     const range = worksheet.getRange(tableRange)
 
