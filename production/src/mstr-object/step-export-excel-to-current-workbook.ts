@@ -57,7 +57,7 @@ class StepExportExcelToCurrentWorkbook {
 
       const excelBlob = await response.blob();
 
-      // DE294780: temporarily pause event handling to prevent onAdd event from being triggered
+      // DE294780: temporarily pause event handling to prevent onAdded event from being triggered
       excelContext.runtime.enableEvents = false;
       await excelContext.sync();
 
