@@ -281,7 +281,7 @@
    "Import data as text": "Importar datos como texto",
    "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "Si se activa, los valores de atributo se importarán como texto y se mantendrá el formato de MicroStrategy. Esto puede afectar a las fórmulas de Excel.",
    "Merge columns": "Combinar columnas",
-   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Si se habilita, se combinarán los encabezados de columnas adyacentes con valores idénticos. Se aplica solo a informes con referencias cruzadas.",
+   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Si se habilita, se combinarán los encabezados de columnas adyacentes con valores idénticos. Se aplica solo a cuadrículas de referencias cruzadas.",
    "Paged-By": "Paginación por",
    "Default import format:": "Formato de importación por defecto:",
    "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.": "Los objetos que no puedan importarse en el formato seleccionado se importarán como datos. Puede cambiar el formato durante la importación.",

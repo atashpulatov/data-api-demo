@@ -281,7 +281,7 @@
    "Import data as text": "Import data as text",
    "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.",
    "Merge columns": "Merge columns",
-   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.",
+   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab grids.",
    "Paged-By": "Paged-By",
    "Default import format:": "Default import format:",
    "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.": "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.",
