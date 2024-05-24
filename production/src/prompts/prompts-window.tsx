@@ -81,12 +81,11 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
     isMultipleRepromptWithReuse,
     repromptsQueue,
     setImportType,
-    importType,
   } = props;
   const { chosenObjectId, chosenObjectName } = mstrData;
   // isReprompt will be true for both Edit AND Reprompt workflows
   // isEdit will only be true for the Edit workflow
-  const { isReprompt, isEdit } = popupState;
+  const { isReprompt, isEdit, importType } = popupState;
 
   const { importType: editedObjectImportType } = editedObject;
 
@@ -201,6 +200,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
         // @ts-expect-error
         editedObject.instanceId
       ),
+      importType: editedObject.importType,
       chosenObjectName: editedObject.chosenObjectName,
       objectWorkingId: editedObject.objectWorkingId,
       instanceId: editedObject.instanceId,

@@ -404,9 +404,6 @@ class PopupController {
     }
 
     if (!reportParams || shouldRemovePages) {
-      if (!response?.importType) {
-        response.importType = reportParams.importType;
-      }
       return this.handleUpdateCommand(response);
     }
 
