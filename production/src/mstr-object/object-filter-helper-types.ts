@@ -110,5 +110,5 @@ export type DossierDefinition = {
 export type PromptObject = {
   id: string;
   name: string;
-  answers?: string;
+  answers?: string | string[];
 };

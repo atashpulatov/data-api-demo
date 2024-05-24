@@ -47,9 +47,12 @@ const convertTokensToString = (tokens: Token[], prompts?: PromptObject[]): strin
   for (const token of tokens) {
     if (token.value === '?' || token.value === '%') {
       filterText += '';
-    } else if (prompts && token?.target?.subType === 'prompt_expression') {
+    } else if (prompts && token?.target?.subType.startsWith('prompt')) {
       const { answers, name } = prompts.find(prompt => prompt.id === token?.target?.objectId);
-      const promptText = answers ? ` ( ${answers} )` : ` ? ( ${name} )`;
+
+      const answersText = Array.isArray(answers) ? answers.join(', ') : answers;
+
+      const promptText = answersText ? ` ( ${answersText} )` : ` ? ( ${name} )`;
 
       filterText += promptText;
     } else filterText += ` ${getTokenString(token)}`;
