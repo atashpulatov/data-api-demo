@@ -159,6 +159,21 @@ class OfficeTableCreate {
   }
 
 
+  /**
+   * Creates an office table if it's a new import or if the number of columns of an existing table changes.
+   * If we are refreshing a table and the new definiton range is not empty we keep the original table.
+   *
+   * @param instanceDefinition
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param startCell  Top left corner cell
+   * @param tableName Name of the Excel Table
+   * @param prevOfficeTable Previous office table to refresh
+   * @param isRepeatStep Specify if repeat creating of the table
+   * @param insertNewWorksheet Specify if new worksheet has to be created before creating the table
+   * @param pageByData Contains information about page-by elements
+   * @param objectData Contains information about the MSTR object
+   *
+   */
   async createDefaultOfficeTable({
     instanceDefinition,
     excelContext,
@@ -226,6 +241,15 @@ class OfficeTableCreate {
       instanceDefinition,
       isRepeatStep
     );
+
+    const a = range.getOffsetRange(-1, 0).getResizedRange(1, 0);
+    a.load('address');
+
+    a.clear();
+    await excelContext.sync();
+
+    console.log('aaaaa', a);
+
 
     const officeTable = worksheet.tables.add(tableRange, true); // create office table based on the range
 
