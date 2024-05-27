@@ -191,4 +191,3 @@ class OverviewDialogBrowserPage(BaseBrowserPage):
     def get_number_of_objects_in_grid(self):
         number_of_grid_rows = len(self.get_elements_by_xpath(OverviewDialogBrowserPage.GRID_ROW))
         return number_of_grid_rows
-    

@@ -163,4 +163,3 @@ def step_impl(context, expected_number_of_object_tiles):
 @step('I clicked "{context_menu_option}" using context menu in object {object_number}')
 def step_impl(context, context_menu_option, object_number):
     context.pages.right_panel_page().click_context_menu_item(context_menu_option, int(object_number))
-    

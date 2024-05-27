@@ -41,11 +41,6 @@ def step_impl(context):
 @step('I clicked Import button in Columns and Filters Selection to duplicate object')
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().click_import_button_to_duplicate()
-    
-@step('I clicked Import button in Columns and Filters Selection without waiting')
-def step_impl(context):
-    context.pages.columns_and_filters_selection_page().click_import_button_without_waiting()
-
 
 @step('I clicked Back button')
 def step_impl(context):
