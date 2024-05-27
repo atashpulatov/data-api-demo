@@ -105,8 +105,9 @@ describe('stepManipulateVisualizationImage', () => {
       index: 0,
     },
     groupData: {
-      key: 0,
+      key: 'mockedSheetId',
       title: 'mockedSheetName',
+      index: 0,
     },
   } as unknown as ObjectData;
 

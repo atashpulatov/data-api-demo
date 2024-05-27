@@ -281,18 +281,19 @@
    "Import data as text": "Import data as text",
    "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.",
    "Merge columns": "Merge columns",
-   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.",
+   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab grids.",
    "Paged-By": "Paged-By",
    "Default import format:": "Default import format:",
    "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.": "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.",
    "Data": "Data",
-   "Data with formatting": "Data with formatting",
+   "Formatted Data": "Formatted Data",
    "Visualization": "Visualization",
    "Pivot Table": "Pivot Table",
-   "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.",
+   "If enabled, attributes will be automatically added to the ‘Rows’ section of the pivot table.": "If enabled, attributes will be automatically added to the ‘Rows’ section of the pivot table.",
    "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.",
    "The memory limit has been reached. You cannot import any more objects.": "The memory limit has been reached. You cannot import any more objects.",
    "Import Pivot Table": "Import Pivot Table",
    "Import Visualization": "Import Visualization",
-   "Import Formatted Data": "Import Formatted Data"
+   "Import Formatted Data": "Import Formatted Data",
+   "Page-By": "Page-By"
 }

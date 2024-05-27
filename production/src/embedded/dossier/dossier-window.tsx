@@ -99,7 +99,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
   const isSupported = !!(isSelected && vizData && vizData.isSupported);
   const isChecking = !!(isSelected && (!vizData || (vizData && vizData.isSupported === undefined)));
   const isVizOfNonGridTypeOnFormattedDataImport =
-    importType === ObjectImportType.FORMATTED_TABLE && !isChosenVisOfGridType;
+    importType === ObjectImportType.FORMATTED_DATA && !isChosenVisOfGridType;
 
   const handleCancel = (): void => {
     const { commandCancel } = selectorProperties;

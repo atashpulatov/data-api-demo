@@ -13,7 +13,7 @@ export enum ImportActionTypes {
 export enum ImportButtonIds {
   IMPORT = 'import',
   IMPORT_DATA = 'import-data',
-  IMPORT_FORMATTED_DATA = 'import-data-with-formatting',
+  IMPORT_FORMATTED_DATA = 'import-formatted-data',
   IMPORT_PIVOT_TABLE = 'import-pivot-table',
   IMPORT_IMAGE = 'import-image',
   RUN = 'run',
@@ -24,9 +24,9 @@ export const optionsDictionary = {
     value: i18n.t(ImportActionTypes.IMPORT_DATA),
     key: ObjectImportType.TABLE,
   },
-  [ObjectImportType.FORMATTED_TABLE]: {
+  [ObjectImportType.FORMATTED_DATA]: {
     value: i18n.t(ImportActionTypes.IMPORT_FORMATTED_DATA),
-    key: ObjectImportType.FORMATTED_TABLE,
+    key: ObjectImportType.FORMATTED_DATA,
   },
   [ObjectImportType.IMAGE]: {
     value: i18n.t(ImportActionTypes.IMPORT_IMAGE),

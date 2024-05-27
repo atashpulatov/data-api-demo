@@ -20,6 +20,7 @@ import {
   NotificationButtonsProps,
   OverviewGlobalNotificationButtons,
 } from './overview-global-notification-buttons';
+import { ObjectImportType, objectImportTypeDictionary } from '../../mstr-object/constants';
 
 export enum OverviewActionCommands {
   IMPORT = 'overview-import',
@@ -433,7 +434,7 @@ class OverviewHelper {
         cell: startCell,
         rows: details?.excelTableSize?.rows,
         columns: details?.excelTableSize?.columns,
-        objectType: importType,
+        objectType: objectImportTypeDictionary[importType as ObjectImportType],
         lastUpdated: refreshDate,
         status: {
           type: objectNotification?.type,
@@ -645,13 +646,13 @@ class OverviewHelper {
     } as NotificationButtonsProps;
     const modifiedGlobalNotification = isGlobalWarning
       ? [
-          {
-            ...globalNotification,
-            children: OverviewGlobalNotificationButtons({
-              ...globalNotificationButtons,
-            }),
-          },
-        ]
+        {
+          ...globalNotification,
+          children: OverviewGlobalNotificationButtons({
+            ...globalNotificationButtons,
+          }),
+        },
+      ]
       : null;
 
     return modifiedGlobalNotification || modifiedWarnings;

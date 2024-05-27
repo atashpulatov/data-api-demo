@@ -56,7 +56,7 @@ describe('StepGetOfficeTableImport', () => {
       worksheet: 'worksheetTest',
       startCell: 'startCellTest',
       objectDetailsSize: 0,
-      groupData: { key: 'key', title: 'name' },
+      groupData: { key: 'key', title: 'name', index: 0 },
     }));
 
     jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
@@ -95,7 +95,7 @@ describe('StepGetOfficeTableImport', () => {
       bindId: 'bindIdTest',
       startCell: 'startCellTest',
       worksheet: 'worksheetTest',
-      groupData: { key: 'key', title: 'name' },
+      groupData: { key: 'key', title: 'name', index: 0 },
     });
 
     expect(operationStepDispatcher.completeGetOfficeTableImport).toBeCalledTimes(1);

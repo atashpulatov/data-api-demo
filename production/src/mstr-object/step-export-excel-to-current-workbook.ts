@@ -24,38 +24,50 @@ class StepExportExcelToCurrentWorkbook {
    * @param objectData.projectId Id of the MSTR project from which we fetch data
    * @param operationData.instanceDefinition Object containing information about MSTR object
    */
-  exportExcelToCurrentWorkBook = async (objectData: ObjectData, operationData: OperationData): Promise<void> => {
+  exportExcelToCurrentWorkBook = async (
+    objectData: ObjectData,
+    operationData: OperationData
+  ): Promise<void> => {
     console.group('Importing export engine workbook');
     console.time('Total');
 
     try {
       const { instanceDefinition } = operationData;
-      const { objectWorkingId, objectId, visualizationInfo, projectId, mstrObjectType } = objectData;
+      const { objectWorkingId, objectId, visualizationInfo, projectId, mstrObjectType } =
+        objectData;
       const excelContext = await officeApiHelper.getExcelContext();
 
       let response: Response;
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
         const { visualizationKey } = visualizationInfo as VisualizationInfo;
-        response = await mstrObjectRestService.exportDossierToExcel(
-          {
-            dossierId: objectId,
-            dossierInstanceId: instanceDefinition.instanceId,
-            visualizationKey,
-            projectId
-          }
-        );
-      } else { // mstrObjectType is a report type
+        response = await mstrObjectRestService.exportDossierToExcel({
+          dossierId: objectId,
+          dossierInstanceId: instanceDefinition.instanceId,
+          visualizationKey,
+          projectId,
+        });
+      } else {
+        // mstrObjectType is a report type
         response = await mstrObjectRestService.exportReportToExcel({
           reportId: objectId,
           reportInstanceId: instanceDefinition.instanceId,
-          projectId
+          projectId,
         });
       }
 
       const excelBlob = await response.blob();
 
+      // DE294780: temporarily pause event handling to prevent onAdded event from being triggered
+      // and causing unintentional side effects (updating objects to the wrong sheet, etc.)
+      excelContext.runtime.enableEvents = false;
+      await excelContext.sync();
+
       const exportEngineWorksheet = await this.insertExcelWorksheet(excelBlob, excelContext);
       operationData.sourceWorksheetId = exportEngineWorksheet.id;
+
+      // DE294780: re-enable event handling immediately after new sheet added
+      excelContext.runtime.enableEvents = true;
+      await excelContext.sync();
 
       operationStepDispatcher.updateOperation(operationData);
       operationStepDispatcher.completeExportToCurrentWorkbook(objectWorkingId);
@@ -85,13 +97,21 @@ class StepExportExcelToCurrentWorkbook {
           const activeWorksheet = officeApiHelper.getCurrentExcelSheet(excelContext);
 
           // slice the actual worbook encoded in base 64 from file data starting the last index of 'base64,' substring indicator
-          const externalWorkbookBase64 = fileData.substring(fileData.indexOf(base64BlobFileDataSubstring) + base64BlobFileDataSubstring.length);
-          const insertedWorksheets = officeApiHelper.insertExcelWorksheets(externalWorkbookBase64, excelContext);
+          const externalWorkbookBase64 = fileData.substring(
+            fileData.indexOf(base64BlobFileDataSubstring) + base64BlobFileDataSubstring.length
+          );
+          const insertedWorksheets = officeApiHelper.insertExcelWorksheets(
+            externalWorkbookBase64,
+            excelContext
+          );
 
           activeWorksheet.activate();
           await excelContext.sync();
 
-          const exportEngineWorksheet = officeApiHelper.hideExcelWorksheet(insertedWorksheets.value[0], excelContext);
+          const exportEngineWorksheet = officeApiHelper.hideExcelWorksheet(
+            insertedWorksheets.value[0],
+            excelContext
+          );
 
           resolve(exportEngineWorksheet);
         } catch (err) {
@@ -102,7 +122,6 @@ class StepExportExcelToCurrentWorkbook {
       reader.readAsDataURL(blob);
     });
   }
-
 }
 
 const stepExportExcelToCurrentWorkbook = new StepExportExcelToCurrentWorkbook();

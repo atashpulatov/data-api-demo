@@ -22,6 +22,7 @@ const loadingStateEnumWeights = {
       GET_INSTANCE_DEFINITION: 5,
       GET_OBJECT_DETAILS: 10,
       GET_OBJECT_SETTINGS: 10,
+      REMOVE_OBJECT_DETAILS: 10,
       GET_OFFICE_TABLE_EDIT_REFRESH: 15,
       FORMAT_DATA: 20,
       FETCH_INSERT_DATA: 20,
@@ -37,6 +38,7 @@ const loadingStateEnumWeights = {
       GET_INSTANCE_DEFINITION: 5,
       GET_OBJECT_DETAILS: 10,
       GET_OBJECT_SETTINGS: 10,
+      REMOVE_OBJECT_DETAILS: 10,
       GET_OFFICE_TABLE_EDIT_REFRESH: 15,
       FORMAT_DATA: 20,
       FETCH_INSERT_DATA: 20,
@@ -64,7 +66,7 @@ const loadingStateEnumWeights = {
       DISPLAY_NOTIFICATION_COMPLETED: 40,
     },
   },
-  [ObjectImportType.FORMATTED_TABLE]: {
+  [ObjectImportType.FORMATTED_DATA]: {
     [OperationTypes.IMPORT_OPERATION]: {
       GET_INSTANCE_DEFINITION: 0,
       GET_OBJECT_DETAILS: 10,

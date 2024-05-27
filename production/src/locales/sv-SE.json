@@ -281,18 +281,19 @@
    "Import data as text": "Importera data som text",
    "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "Om detta aktiveras kommer attributvärden att importeras som text, med bibehållen formatering från MicroStrategy. Detta kan påverka Excel-formler.",
    "Merge columns": "Slå samman kolumner",
-   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Om detta aktiveras kommer intilliggande kolumnrubriker med identiska värden att slås samman. Gäller endast korsfliksrapporter.",
+   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Om detta aktiveras kommer intilliggande kolumnrubriker med identiska värden att slås samman. Gäller endast för rutnät med korsflikar.",
    "Paged-By": "Siddöpt av",
    "Default import format:": "Standardimportformat:",
    "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.": "Objekt som inte kan importeras i valt format kommer att importeras som data. Du kan ändra format vid import.",
    "Data": "Data",
-   "Data with formatting": "Data med formatering",
+   "Formatted Data": "Formaterade data",
    "Visualization": "Visualisering",
    "Pivot Table": "Pivottabell",
-   "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "Om detta aktiveras kommer attribut automatiskt att läggas till i avsnittet ”Kolumn” i pivottabellen.",
+   "If enabled, attributes will be automatically added to the ‘Rows’ section of the pivot table.": "Om detta aktiveras kommer attribut automatiskt att läggas till i avsnittet ”Rader” i pivottabellen.",
    "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "Om detta aktiveras läggs mätvärden till automatiskt till i avsnittet ”Värden” i pivottabellen.",
    "The memory limit has been reached. You cannot import any more objects.": "Minnesgränsen har uppnåtts. Du kan inte importera fler objekt.",
    "Import Pivot Table": "Importera pivottabell",
    "Import Visualization": "Importera visualisering",
-   "Import Formatted Data": "Importera formaterad data"
+   "Import Formatted Data": "Importera formaterad data",
+   "Page-By": "Per sida"
 }

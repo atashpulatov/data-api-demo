@@ -155,3 +155,14 @@ export interface MstrCompoundGridResponse {
   data: CompoundGridData;
   attrforms?: any; // TODO: check if correct
 }
+
+export type PromptResponse = {
+  id: string;
+  key: string;
+  name: string;
+  title: string;
+  closed: boolean;
+  answers: any;
+  defaulstAnswers: any;
+  type: 'OBJECTS' | 'LEVEL' | 'EXPRESSION' | 'ELEMENTS' | 'VALUE';
+};

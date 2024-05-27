@@ -7,6 +7,7 @@ import { popupHelper } from '../popup/popup-helper';
 import { reduxStore } from '../store';
 
 import { AttributeSelectorWindowNotConnected } from './attribute-selector-window';
+import { ObjectImportType } from '../mstr-object/constants';
 
 jest.mock('../office/office-context');
 jest.mock('../popup/popup-helper');
@@ -16,13 +17,19 @@ describe('AttributeSelectorWindow', () => {
     // given
     const mstrData = { chosenObjectType: 'report' };
     const chosenObject = { objectType: { name: 'dossier' } };
-    // when
+    const editedObject = { editedObjectImportType: ObjectImportType.TABLE };
+
     // when
     const { getByText } = render(
       <Provider store={reduxStore}>
-        <AttributeSelectorWindowNotConnected mstrData={mstrData} chosenObject={chosenObject} />
+        <AttributeSelectorWindowNotConnected
+          mstrData={mstrData}
+          chosenObject={chosenObject}
+          editedObject={editedObject}
+        />
       </Provider>
     );
+
     // then
     getByText('Data Preview');
     getByText('Import');
@@ -39,6 +46,7 @@ describe('AttributeSelectorWindow', () => {
       projectId: 'proId',
     };
     const chosenObject = { chosenObjectName: '55' };
+    const editedObject = { editedObjectImportType: ObjectImportType.TABLE };
 
     // when
     const { getByText } = render(
@@ -47,6 +55,7 @@ describe('AttributeSelectorWindow', () => {
           mstrData={mstrData}
           chosenObject={chosenObject}
           handleBack={handleBack}
+          editedObject={editedObject}
         />
       </Provider>
     );
@@ -66,11 +75,16 @@ describe('AttributeSelectorWindow', () => {
       projectId: 'proId',
     };
     const chosenObject = { chosenObjectName: '55' };
+    const editedObject = { editedObjectImportType: ObjectImportType.TABLE };
 
     // when
     const { getByText } = render(
       <Provider store={reduxStore}>
-        <AttributeSelectorWindowNotConnected mstrData={mstrData} chosenObject={chosenObject} />
+        <AttributeSelectorWindowNotConnected
+          mstrData={mstrData}
+          chosenObject={chosenObject}
+          editedObject={editedObject}
+        />
       </Provider>
     );
 

@@ -795,7 +795,7 @@ export const mockedObjectsFromStore = [
     },
     startCell: 'A1',
     worksheet: { id: 1, name: 'Sheet 1', index: 0 },
-    groupData: { key: 0, title: 'Sheet 1' },
+    groupData: { key: 1, title: 'Sheet 1', index: 0 },
     refreshDate: 1707383921342,
     manipulationsXML: { promptAnswers: 'promptAnswer' },
   },

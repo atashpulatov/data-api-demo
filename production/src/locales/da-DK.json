@@ -281,18 +281,19 @@
    "Import data as text": "Importer data som tekst",
    "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "Hvis det er aktiveret, importeres attributværdierne som tekst med bevarelse af formateringen fra MicroStrategy. Dette kan påvirke Excel-formler.",
    "Merge columns": "Flet kolonner",
-   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Hvis det er aktiveret, flettes tilstødende kolonneoverskrifter med identiske værdier. Gælder kun for krydstabelrapporter.",
+   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Hvis det er aktiveret, flettes tilstødende kolonneoverskrifter med identiske værdier. Gælder kun for krydstabelgitter.",
    "Paged-By": "Paged-By",
    "Default import format:": "Standard importformat:",
    "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.": "Objekter, der ikke kan importeres i det valgte format, importeres som data. Du kan ændre formatet under importen.",
    "Data": "Data",
-   "Data with formatting": "Data med formatering",
+   "Formatted Data": "Formaterede data",
    "Visualization": "Visualisering",
    "Pivot Table": "Pivottabel",
-   "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "Hvis det er aktiveret, tilføjes attributterne automatisk til sektionen 'Kolonne' i pivottabellen.",
+   "If enabled, attributes will be automatically added to the ‘Rows’ section of the pivot table.": "Hvis det er aktiveret, tilføjes attributterne automatisk til sektionen 'Rækker' i pivottabellen.",
    "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "Hvis det er aktiveret, tilføjes metrics automatisk i sektionen 'Værdier' i pivottabellen.",
    "The memory limit has been reached. You cannot import any more objects.": "Hukommelsesgrænsen er nået. Du kan ikke importere flere objekter.",
    "Import Pivot Table": "Importer pivottabel",
    "Import Visualization": "Importer visualisering",
-   "Import Formatted Data": "Importer formaterede data"
+   "Import Formatted Data": "Importer formaterede data",
+   "Page-By": "Side efter"
 }

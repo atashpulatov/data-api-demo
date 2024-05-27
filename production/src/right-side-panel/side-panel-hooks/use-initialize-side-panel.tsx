@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 
 import { formattingSettingsHelper } from '../settings-side-panel/formatting-settings/formatting-settings-helper';
 import { pivotTableSettingsHelper } from '../settings-side-panel/pivot-table-settings/pivot-table-settings-helper';
@@ -8,9 +8,10 @@ import { sidePanelHelper } from '../side-panel-services/side-panel-helper';
 
 const useInitializeSidePanel = (
   updateActiveCellAddress: (cellAddress: string) => void,
-  setActiveSheetIndex: Dispatch<SetStateAction<number>>,
-  isAnyPopupOrSettingsDisplayed: boolean
+  setActiveSheetId: Dispatch<SetStateAction<string>>,
+  isAnyPopupOrSettingsDisplayedRef: React.MutableRefObject<boolean>
 ): void => {
+  // Assign most event listeners and initialize settings
   useEffect(() => {
     async function initializeSidePanel(): Promise<void> {
       await sidePanelEventHelper.addRemoveObjectListener();
@@ -28,30 +29,20 @@ const useInitializeSidePanel = (
     initializeSidePanel();
   }, []);
 
-  const activeSelectionChangedListenerEventResult =
-    useRef<OfficeExtension.EventHandlerResult<Excel.SelectionChangedEventArgs>>();
+  // Separately assign active selection changed event listener due to dependency differences
   useEffect(() => {
     async function initializeSidePanelActiveSelectionChangedListener(): Promise<void> {
-      activeSelectionChangedListenerEventResult.current =
-        await sidePanelEventHelper.initActiveSelectionChangedListener(
-          updateActiveCellAddress,
-          setActiveSheetIndex,
-          isAnyPopupOrSettingsDisplayed
-        );
-    }
-    // Clear the event listener and sync context whenever dependencies change, prior to running next initialization
-    function clearSidePanelActiveSelectionChangedListener(): void {
-      // Extract the current value of the event result ref
-      const { current: eventResultCurrent } = activeSelectionChangedListenerEventResult;
-      // Remove the event listener and sync the context
-      eventResultCurrent?.remove?.();
-      eventResultCurrent?.context?.sync?.();
+      await sidePanelEventHelper.initActiveSelectionChangedListener(
+        updateActiveCellAddress,
+        setActiveSheetId,
+        isAnyPopupOrSettingsDisplayedRef
+      );
     }
 
     initializeSidePanelActiveSelectionChangedListener();
-
-    return clearSidePanelActiveSelectionChangedListener();
-  }, [setActiveSheetIndex, updateActiveCellAddress, isAnyPopupOrSettingsDisplayed]);
+  // disable exhaustive-deps rule because this effect should only run once
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 };
 
 export default useInitializeSidePanel;

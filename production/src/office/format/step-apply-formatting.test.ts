@@ -20,29 +20,32 @@ describe('StepApplyFormatting', () => {
     jest.spyOn(console, 'log');
     jest.spyOn(console, 'error');
 
-    jest.spyOn(formattingHelper, 'filterColumnInformation').mockImplementation(() => {
-      throw new Error('errorTest');
-    });
+    const getColumnRangeForFormattingMock = jest
+      .spyOn(formattingHelper, 'getColumnRangeForFormatting')
+      .mockImplementation(() => {
+        throw new Error('errorTest');
+      });
 
     jest.spyOn(operationStepDispatcher, 'completeFormatData').mockImplementation();
 
     const operationData = {
       objectWorkingId: 2137,
-      instanceDefinition: { mstrTable: {} },
+      instanceDefinition: { mstrTable: { columnInformation: [{}] } },
+      excelContext,
     } as unknown as OperationData;
 
     // when
     await stepApplyFormatting.applyFormatting({} as ObjectData, operationData);
 
     // then
-    expect(formattingHelper.filterColumnInformation).toBeCalledTimes(1);
-    expect(formattingHelper.filterColumnInformation).toThrowError(Error);
+    expect(getColumnRangeForFormattingMock).toHaveBeenCalledTimes(1);
+    expect(getColumnRangeForFormattingMock).toThrow(Error);
 
-    expect(console.error).toBeCalledTimes(1);
-    expect(console.error).toBeCalledWith(new Error('errorTest'));
+    expect(console.error).toHaveBeenCalledTimes(1);
+    expect(console.error).toHaveBeenCalledWith(new Error('errorTest'));
 
-    expect(operationStepDispatcher.completeFormatData).toBeCalledTimes(1);
-    expect(operationStepDispatcher.completeFormatData).toBeCalledWith(2137);
+    expect(operationStepDispatcher.completeFormatData).toHaveBeenCalledTimes(1);
+    expect(operationStepDispatcher.completeFormatData).toHaveBeenCalledWith(2137);
   });
 
   it('applyFormatting should work as expected', async () => {
@@ -61,14 +64,6 @@ describe('StepApplyFormatting', () => {
       officeTable: { columns: 'columnsTest' },
     } as unknown as OperationData;
 
-    jest
-      .spyOn(formattingHelper, 'filterColumnInformation')
-      .mockReturnValue('filteredColumnInformationTest' as unknown as any[]);
-
-    jest
-      .spyOn(formattingHelper, 'calculateMetricColumnOffset')
-      .mockReturnValue('calculateOffsetTest' as unknown as number);
-
     jest.spyOn(stepApplyFormatting, 'setupFormatting').mockImplementation();
 
     jest.spyOn(operationStepDispatcher, 'completeFormatData').mockImplementation();
@@ -77,20 +72,11 @@ describe('StepApplyFormatting', () => {
     await stepApplyFormatting.applyFormatting({} as ObjectData, operationData);
 
     // then
-    expect(formattingHelper.filterColumnInformation).toBeCalledTimes(1);
-    expect(formattingHelper.filterColumnInformation).toBeCalledWith('columnInformationTest');
-
-    expect(formattingHelper.calculateMetricColumnOffset).toBeCalledTimes(1);
-    expect(formattingHelper.calculateMetricColumnOffset).toBeCalledWith(
-      'filteredColumnInformationTest',
-      'isCrosstabTest'
-    );
-
-    expect(stepApplyFormatting.setupFormatting).toBeCalledTimes(1);
-    expect(stepApplyFormatting.setupFormatting).toBeCalledWith(
-      'filteredColumnInformationTest',
+    expect(stepApplyFormatting.setupFormatting).toHaveBeenCalledTimes(1);
+    expect(stepApplyFormatting.setupFormatting).toHaveBeenCalledWith(
+      'columnInformationTest',
       'isCrosstabTest',
-      'calculateOffsetTest',
+      0,
       { columns: 'columnsTest' },
       { sync: excelContextSyncMock },
       {} as ObjectData,
@@ -98,57 +84,11 @@ describe('StepApplyFormatting', () => {
       'metricsInRowsTest'
     );
 
-    expect(excelContextSyncMock).toBeCalledTimes(2);
+    expect(excelContextSyncMock).toHaveBeenCalledTimes(3);
 
-    expect(operationStepDispatcher.completeFormatData).toBeCalledTimes(1);
-    expect(operationStepDispatcher.completeFormatData).toBeCalledWith(2137);
+    expect(operationStepDispatcher.completeFormatData).toHaveBeenCalledTimes(1);
+    expect(operationStepDispatcher.completeFormatData).toHaveBeenCalledWith(2137);
   });
-
-  it.each`
-    expectedMetricColumnOffset | columnInformation                                                                                                                                            | isCrosstab
-    ${0}                       | ${[]}                                                                                                                                                        | ${false}
-    ${0}                       | ${[{}]}                                                                                                                                                      | ${false}
-    ${0}                       | ${[{}, {}]}                                                                                                                                                  | ${false}
-    ${0}                       | ${[]}                                                                                                                                                        | ${true}
-    ${0}                       | ${[{}]}                                                                                                                                                      | ${true}
-    ${0}                       | ${[{}, {}]}                                                                                                                                                  | ${true}
-    ${0}                       | ${[{ isAttribute: false }]}                                                                                                                                  | ${true}
-    ${0}                       | ${[{ isAttribute: false }, {}]}                                                                                                                              | ${true}
-    ${0}                       | ${[{}, { isAttribute: false }]}                                                                                                                              | ${true}
-    ${0}                       | ${[{ isAttribute: false }, { isAttribute: false }]}                                                                                                          | ${true}
-    ${0}                       | ${[{ isAttribute: true }]}                                                                                                                                   | ${true}
-    ${0}                       | ${[{}, { isAttribute: true }]}                                                                                                                               | ${true}
-    ${1}                       | ${[{ isAttribute: true }, {}]}                                                                                                                               | ${true}
-    ${1}                       | ${[{ isAttribute: true }, { isAttribute: false }]}                                                                                                           | ${true}
-    ${1}                       | ${[{ isAttribute: true, forms: [1] }, { isAttribute: false, forms: [1, 2] }]}                                                                                | ${true}
-    ${1}                       | ${[{ isAttribute: true, forms: [1, 2] }, { isAttribute: false, forms: [1] }]}                                                                                | ${true}
-    ${0}                       | ${[{ isAttribute: false, forms: [] }, { isAttribute: false, forms: [] }]}                                                                                    | ${true}
-    ${1}                       | ${[{ isAttribute: true, forms: [] }, { isAttribute: false, forms: [] }]}                                                                                     | ${true}
-    ${0}                       | ${[{ isAttribute: false, forms: [] }, { isAttribute: true, forms: [] }]}                                                                                     | ${true}
-    ${0}                       | ${[{ isAttribute: true, forms: [] }, { isAttribute: true, forms: [] }]}                                                                                      | ${true}
-    ${0}                       | ${[{ isAttribute: false, forms: [1] }, { isAttribute: false, forms: [1] }]}                                                                                  | ${true}
-    ${1}                       | ${[{ isAttribute: true, forms: [1] }, { isAttribute: false, forms: [1] }]}                                                                                   | ${true}
-    ${2}                       | ${[{ isAttribute: true, forms: [1] }, { isAttribute: true, forms: [1] }, { isAttribute: false, forms: [1] }]}                                                | ${true}
-    ${3}                       | ${[{ isAttribute: true, forms: [1] }, { isAttribute: true, forms: [1] }, { isAttribute: true, forms: [1] }, { isAttribute: false, forms: [1] }]}             | ${true}
-    ${0}                       | ${[{ isAttribute: true, forms: [1] }, { isAttribute: true, forms: [1] }, { isAttribute: true, forms: [1] }, { isAttribute: false, forms: [1] }]}             | ${false}
-    ${0}                       | ${[{ isAttribute: false, forms: [1, 2] }, { isAttribute: false, forms: [1, 2] }, { isAttribute: false, forms: [1, 2] }]}                                     | ${true}
-    ${1}                       | ${[{ isAttribute: true, forms: [1, 2] }, { isAttribute: false, forms: [1, 2] }, { isAttribute: false, forms: [1, 2] }]}                                      | ${true}
-    ${2}                       | ${[{ isAttribute: true, forms: [1, 2] }, { isAttribute: true, forms: [1, 2] }, { isAttribute: false, forms: [1, 2] }]}                                       | ${true}
-    ${3}                       | ${[{ isAttribute: true, forms: [1, 2] }, { isAttribute: true, forms: [1, 2] }, { isAttribute: true, forms: [1, 2] }, { isAttribute: false, forms: [1, 2] }]} | ${true}
-    ${0}                       | ${[{ isAttribute: true, forms: [1, 2] }, { isAttribute: true, forms: [1, 2] }, { isAttribute: true, forms: [1, 2] }, { isAttribute: false, forms: [1, 2] }]} | ${false}
-  `(
-    'calculateMetricColumnOffset should work as expected',
-    ({ expectedMetricColumnOffset, columnInformation, isCrosstab }) => {
-      // when
-      const attributeColumnNumber = formattingHelper.calculateMetricColumnOffset(
-        columnInformation,
-        isCrosstab
-      );
-
-      // then
-      expect(attributeColumnNumber).toEqual(expectedMetricColumnOffset);
-    }
-  );
 
   it('setupFormatting should do nothing when filteredColumnInformation is empty', () => {
     // given
@@ -191,8 +131,8 @@ describe('StepApplyFormatting', () => {
     );
 
     // then
-    expect(formattingHelper.getColumnRangeForFormatting).toBeCalledTimes(1);
-    expect(formattingHelper.getColumnRangeForFormatting).toBeCalledWith(
+    expect(formattingHelper.getColumnRangeForFormatting).toHaveBeenCalledTimes(1);
+    expect(formattingHelper.getColumnRangeForFormatting).toHaveBeenCalledWith(
       0,
       true,
       1,
@@ -230,10 +170,17 @@ describe('StepApplyFormatting', () => {
     );
 
     // then
-    expect(formattingHelper.getColumnRangeForFormatting).toBeCalledTimes(1);
-    expect(formattingHelper.getColumnRangeForFormatting).toBeCalledWith(0, true, 1, {}, 2, true);
+    expect(formattingHelper.getColumnRangeForFormatting).toHaveBeenCalledTimes(1);
+    expect(formattingHelper.getColumnRangeForFormatting).toHaveBeenCalledWith(
+      0,
+      true,
+      1,
+      {},
+      2,
+      true
+    );
 
-    expect(stepApplyFormatting.getFormat).toBeCalledTimes(1);
+    expect(stepApplyFormatting.getFormat).toHaveBeenCalledTimes(1);
 
     expect(columnRangeMock.numberFormat).toEqual('getFormatTest');
   });
@@ -276,7 +223,7 @@ describe('StepApplyFormatting', () => {
       );
 
       // then
-      expect(formattingHelper.getColumnRangeForFormatting).toBeCalledTimes(2);
+      expect(formattingHelper.getColumnRangeForFormatting).toHaveBeenCalledTimes(2);
       expect(formattingHelper.getColumnRangeForFormatting).toHaveBeenNthCalledWith(
         1,
         0,
@@ -296,7 +243,7 @@ describe('StepApplyFormatting', () => {
         true
       );
 
-      expect(stepApplyFormatting.getFormat).toBeCalledTimes(getFormatCallNo);
+      expect(stepApplyFormatting.getFormat).toHaveBeenCalledTimes(getFormatCallNo);
 
       expect(columnRangeMock[0].numberFormat).toEqual(expectedNumberFormat[0]);
       expect(columnRangeMock[1].numberFormat).toEqual(expectedNumberFormat[1]);
@@ -323,98 +270,69 @@ describe('StepApplyFormatting', () => {
       formattingHelper.getColumnRangeForFormatting(index, isCrosstab, offset, officeTableMock);
 
       // then
-      expect(getItemAtMock).toBeCalledTimes(1);
-      expect(getItemAtMock).toBeCalledWith(expectedObjectIndex);
+      expect(getItemAtMock).toHaveBeenCalledTimes(1);
+      expect(getItemAtMock).toHaveBeenCalledWith(expectedObjectIndex);
     }
   );
 
   it.each`
-    expectedFilteredColumnInformation                                           | columnInformation
-    ${[]}                                                                       | ${[]}
-    ${[]}                                                                       | ${[{}]}
-    ${[{ sth: 'sth' }]}                                                         | ${[{ sth: 'sth' }]}
-    ${[{ sth: 'sth' }, { sth: 'sth' }]}                                         | ${[{ sth: 'sth' }, { sth: 'sth' }]}
-    ${[{ isAttribute: false }]}                                                 | ${[{ isAttribute: false }]}
-    ${[{ isAttribute: true }]}                                                  | ${[{ isAttribute: true }]}
-    ${[{ isAttribute: false, sth: 'sth' }]}                                     | ${[{ isAttribute: false, sth: 'sth' }]}
-    ${[{ isAttribute: true, sth: 'sth' }]}                                      | ${[{ isAttribute: true, sth: 'sth' }]}
-    ${[{ isAttribute: false }, { isAttribute: false }]}                         | ${[{ isAttribute: false }, { isAttribute: false }]}
-    ${[{ isAttribute: true }, { isAttribute: true }]}                           | ${[{ isAttribute: true }, { isAttribute: true }]}
-    ${[{ isAttribute: false, sth: 'sth' }, { isAttribute: false, sth: 'sth' }]} | ${[{ isAttribute: false, sth: 'sth' }, { isAttribute: false, sth: 'sth' }]}
-    ${[{ isAttribute: true, sth: 'sth' }, { isAttribute: true, sth: 'sth' }]}   | ${[{ isAttribute: true, sth: 'sth' }, { isAttribute: true, sth: 'sth' }]}
-    ${[{ isAttribute: true }, { isAttribute: false }]}                          | ${[{ isAttribute: true }, { isAttribute: false }]}
-    ${[{ isAttribute: false }, { isAttribute: true }]}                          | ${[{ isAttribute: false }, { isAttribute: true }]}
-    ${[{ isAttribute: true, sth: 'sth' }, { isAttribute: false, sth: 'sth' }]}  | ${[{ isAttribute: true, sth: 'sth' }, { isAttribute: false, sth: 'sth' }]}
-    ${[{ isAttribute: false, sth: 'sth' }, { isAttribute: true, sth: 'sth' }]}  | ${[{ isAttribute: false, sth: 'sth' }, { isAttribute: true, sth: 'sth' }]}
-  `(
-    'filterColumnInformation should work as expected for non crosstab',
-    ({ expectedFilteredColumnInformation, columnInformation }) => {
-      // when
-      const result = formattingHelper.filterColumnInformation(columnInformation);
+    expectedParsedFormat   | category     | formatString
+    ${'General'}           | ${9}         | ${undefined}
+    ${'General'}           | ${9}         | ${''}
+    ${'General'}           | ${9}         | ${'formatString'}
+    ${'General'}           | ${undefined} | ${''}
+    ${'General'}           | ${undefined} | ${'# ?/?'}
+    ${'General'}           | ${undefined} | ${'# ??/?'}
+    ${'General'}           | ${undefined} | ${'# ???/?'}
+    ${'General'}           | ${undefined} | ${'# ?/?a'}
+    ${'General'}           | ${undefined} | ${'# ??/?a'}
+    ${'General'}           | ${undefined} | ${'# ???/?a'}
+    ${'[-'}                | ${undefined} | ${'[-'}
+    ${'[$-'}               | ${undefined} | ${'[$-'}
+    ${'[$-'}               | ${undefined} | ${'[$$-'}
+    ${'[$\\$-'}            | ${undefined} | ${'[$$$-'}
+    ${'[$$-'}              | ${undefined} | ${'[$$$$-'}
+    ${'[$$\\$-'}           | ${undefined} | ${'[$$$$$-'}
+    ${'[$$$-'}             | ${undefined} | ${'[$$$$$$-'}
+    ${'a[$-'}              | ${undefined} | ${'a[$-'}
+    ${'a[$-'}              | ${undefined} | ${'a[$$-'}
+    ${'a[$\\$-'}           | ${undefined} | ${'a[$$$-'}
+    ${'a[$$-'}             | ${undefined} | ${'a[$$$$-'}
+    ${'a[$$\\$-'}          | ${undefined} | ${'a[$$$$$-'}
+    ${'a[$$$-'}            | ${undefined} | ${'a[$$$$$$-'}
+    ${'a[$-b'}             | ${undefined} | ${'a[$-b'}
+    ${'a[$-b'}             | ${undefined} | ${'a[$$-b'}
+    ${'a[$\\$-b'}          | ${undefined} | ${'a[$$$-b'}
+    ${'a[$$-b'}            | ${undefined} | ${'a[$$$$-b'}
+    ${'a[$$\\$-b'}         | ${undefined} | ${'a[$$$$$-b'}
+    ${'a[$$$-b'}           | ${undefined} | ${'a[$$$$$$-b'}
+    ${'a[$-[$-b'}          | ${undefined} | ${'a[$-[$-b'}
+    ${'a[$-[$-b'}          | ${undefined} | ${'a[$$-[$$-b'}
+    ${'a[$\\$-[$\\$-b'}    | ${undefined} | ${'a[$$$-[$$$-b'}
+    ${'a[$$-[$$-b'}        | ${undefined} | ${'a[$$$$-[$$$$-b'}
+    ${'a[$$\\$-[$$\\$-b'}  | ${undefined} | ${'a[$$$$$-[$$$$$-b'}
+    ${'a[$$$-[$$$-b'}      | ${undefined} | ${'a[$$$$$$-[$$$$$$-b'}
+    ${'a[$-c[$-b'}         | ${undefined} | ${'a[$-c[$-b'}
+    ${'a[$-c[$-b'}         | ${undefined} | ${'a[$$-c[$$-b'}
+    ${'a[$\\$-c[$\\$-b'}   | ${undefined} | ${'a[$$$-c[$$$-b'}
+    ${'a[$$-c[$$-b'}       | ${undefined} | ${'a[$$$$-c[$$$$-b'}
+    ${'a[$$\\$-c[$$\\$-b'} | ${undefined} | ${'a[$$$$$-c[$$$$$-b'}
+    ${'a[$$$-c[$$$-b'}     | ${undefined} | ${'a[$$$$$$-c[$$$$$$-b'}
+    ${'\\$'}               | ${undefined} | ${'$'}
+    ${'\\$'}               | ${undefined} | ${'$"'}
+    ${'\\$'}               | ${undefined} | ${'$""'}
+    ${'\\$'}               | ${undefined} | ${'"$'}
+    ${'\\$'}               | ${undefined} | ${'"$"'}
+    ${'\\$'}               | ${undefined} | ${'"$""'}
+    ${'\\$'}               | ${undefined} | ${'""$'}
+    ${'\\$'}               | ${undefined} | ${'""$"'}
+    ${'"'}                 | ${undefined} | ${'"'}
+    ${'a'}                 | ${undefined} | ${'a'}
+  `('getFormat should work as expected', ({ expectedParsedFormat, category, formatString }) => {
+    // when
+    const result = stepApplyFormatting.getFormat({ formatString, category });
 
-      // then
-      expect(result).toEqual(expectedFilteredColumnInformation);
-    }
-  );
-});
-
-it.each`
-  expectedParsedFormat   | category     | formatString
-  ${'General'}           | ${9}         | ${undefined}
-  ${'General'}           | ${9}         | ${''}
-  ${'General'}           | ${9}         | ${'formatString'}
-  ${'General'}           | ${undefined} | ${''}
-  ${'General'}           | ${undefined} | ${'# ?/?'}
-  ${'General'}           | ${undefined} | ${'# ??/?'}
-  ${'General'}           | ${undefined} | ${'# ???/?'}
-  ${'General'}           | ${undefined} | ${'# ?/?a'}
-  ${'General'}           | ${undefined} | ${'# ??/?a'}
-  ${'General'}           | ${undefined} | ${'# ???/?a'}
-  ${'[-'}                | ${undefined} | ${'[-'}
-  ${'[$-'}               | ${undefined} | ${'[$-'}
-  ${'[$-'}               | ${undefined} | ${'[$$-'}
-  ${'[$\\$-'}            | ${undefined} | ${'[$$$-'}
-  ${'[$$-'}              | ${undefined} | ${'[$$$$-'}
-  ${'[$$\\$-'}           | ${undefined} | ${'[$$$$$-'}
-  ${'[$$$-'}             | ${undefined} | ${'[$$$$$$-'}
-  ${'a[$-'}              | ${undefined} | ${'a[$-'}
-  ${'a[$-'}              | ${undefined} | ${'a[$$-'}
-  ${'a[$\\$-'}           | ${undefined} | ${'a[$$$-'}
-  ${'a[$$-'}             | ${undefined} | ${'a[$$$$-'}
-  ${'a[$$\\$-'}          | ${undefined} | ${'a[$$$$$-'}
-  ${'a[$$$-'}            | ${undefined} | ${'a[$$$$$$-'}
-  ${'a[$-b'}             | ${undefined} | ${'a[$-b'}
-  ${'a[$-b'}             | ${undefined} | ${'a[$$-b'}
-  ${'a[$\\$-b'}          | ${undefined} | ${'a[$$$-b'}
-  ${'a[$$-b'}            | ${undefined} | ${'a[$$$$-b'}
-  ${'a[$$\\$-b'}         | ${undefined} | ${'a[$$$$$-b'}
-  ${'a[$$$-b'}           | ${undefined} | ${'a[$$$$$$-b'}
-  ${'a[$-[$-b'}          | ${undefined} | ${'a[$-[$-b'}
-  ${'a[$-[$-b'}          | ${undefined} | ${'a[$$-[$$-b'}
-  ${'a[$\\$-[$\\$-b'}    | ${undefined} | ${'a[$$$-[$$$-b'}
-  ${'a[$$-[$$-b'}        | ${undefined} | ${'a[$$$$-[$$$$-b'}
-  ${'a[$$\\$-[$$\\$-b'}  | ${undefined} | ${'a[$$$$$-[$$$$$-b'}
-  ${'a[$$$-[$$$-b'}      | ${undefined} | ${'a[$$$$$$-[$$$$$$-b'}
-  ${'a[$-c[$-b'}         | ${undefined} | ${'a[$-c[$-b'}
-  ${'a[$-c[$-b'}         | ${undefined} | ${'a[$$-c[$$-b'}
-  ${'a[$\\$-c[$\\$-b'}   | ${undefined} | ${'a[$$$-c[$$$-b'}
-  ${'a[$$-c[$$-b'}       | ${undefined} | ${'a[$$$$-c[$$$$-b'}
-  ${'a[$$\\$-c[$$\\$-b'} | ${undefined} | ${'a[$$$$$-c[$$$$$-b'}
-  ${'a[$$$-c[$$$-b'}     | ${undefined} | ${'a[$$$$$$-c[$$$$$$-b'}
-  ${'\\$'}               | ${undefined} | ${'$'}
-  ${'\\$'}               | ${undefined} | ${'$"'}
-  ${'\\$'}               | ${undefined} | ${'$""'}
-  ${'\\$'}               | ${undefined} | ${'"$'}
-  ${'\\$'}               | ${undefined} | ${'"$"'}
-  ${'\\$'}               | ${undefined} | ${'"$""'}
-  ${'\\$'}               | ${undefined} | ${'""$'}
-  ${'\\$'}               | ${undefined} | ${'""$"'}
-  ${'"'}                 | ${undefined} | ${'"'}
-  ${'a'}                 | ${undefined} | ${'a'}
-`('getFormat should work as expected', ({ expectedParsedFormat, category, formatString }) => {
-  // when
-  const result = stepApplyFormatting.getFormat({ formatString, category });
-
-  // then
-  expect(result).toEqual(expectedParsedFormat);
+    // then
+    expect(result).toEqual(expectedParsedFormat);
+  });
 });

@@ -64,7 +64,7 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
       And I selected import type "Import Data" and clicked import
       And I clicked OK button in Range Taken popup in Overview window
       And I found object "no_such_object" in Overview window
-      And I verified that object "Subtotals" is NOT visible
+      And I verified that object "no_such_object" is NOT visible
       And I cleared search box in Overview window
       And I found object "Subtotals" in Overview window
       And I verified that object "Subtotals" is visible

@@ -113,3 +113,8 @@
     max-height: calc(100vh - 160px);
   }
 }
+
+// Allow dropdown options to extend the width of the container beyond max-width of 200px
+.import-button__dropdown {
+  max-width: initial;
+}

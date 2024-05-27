@@ -1,5 +1,5 @@
 import { generateDossierFilterText, generateReportFilterTexts } from './object-filter-helper';
-import { DossierDefinition, ReportDefinition } from './object-filter-helper-types';
+import { DossierDefinition, PromptObject, ReportDefinition } from './object-filter-helper-types';
 
 describe('generateReportFilterTexts', () => {
   it('should generate the correct text for report filters', () => {
@@ -61,20 +61,20 @@ describe('generateReportFilterTexts', () => {
                       tokens: [
                         [
                           {
-                            'value': '%',
-                            'type': 'character',
+                            value: '%',
+                            type: 'character',
                           },
                           {
-                            'value': 'Reference1',
-                            'type': 'object_reference',
+                            value: 'Reference1',
+                            type: 'object_reference',
                           },
                           {
-                            'value': '>',
-                            'type': 'character',
+                            value: '>',
+                            type: 'character',
                           },
                           {
-                            'value': '10',
-                            'type': 'integer',
+                            value: '10',
+                            type: 'integer',
                           },
                         ],
                       ],
@@ -86,20 +86,20 @@ describe('generateReportFilterTexts', () => {
                       tokens: [
                         [
                           {
-                            'value': '%',
-                            'type': 'character',
+                            value: '%',
+                            type: 'character',
                           },
                           {
-                            'value': 'Reference2',
-                            'type': 'object_reference',
+                            value: 'Reference2',
+                            type: 'object_reference',
                           },
                           {
-                            'value': '>',
-                            'type': 'character',
+                            value: '>',
+                            type: 'character',
                           },
                           {
-                            'value': '10',
-                            'type': 'integer',
+                            value: '10',
+                            type: 'integer',
                           },
                         ],
                       ],
@@ -117,7 +117,7 @@ describe('generateReportFilterTexts', () => {
     } as ReportDefinition;
 
     // when
-    const result = generateReportFilterTexts(filterData);
+    const result = generateReportFilterTexts(filterData, undefined);
 
     // then
     expect(result.reportFilterText).toBe('NOT ( filter1 AND filter2 )');
@@ -126,13 +126,66 @@ describe('generateReportFilterTexts', () => {
     expect(result.metricLimitsText).toBe('( reference1 > 10 ) AND ( reference2 > 10 )');
   });
 
+  it.each`
+    answers                   | expectedText
+    ${['answer1', 'answer2']} | ${'( answer1, answer2 )'}
+    ${[]}                     | ${'? ( promptName )'}
+    ${'answer'}               | ${'( answer )'}
+    ${undefined}              | ${'? ( promptName )'}
+    ${''}                     | ${'? ( promptName )'}
+  `(
+    'should generate the correct text for report filters when prompts given',
+    ({ answers, expectedText }) => {
+      // given
+      const reportDefinition = {
+        dataSource: {
+          filter: {
+            tokens: [
+              {
+                value: '%',
+              },
+              {
+                value: '?',
+              },
+              {
+                type: 'object_reference',
+                target: {
+                  objectId: 'objectId',
+                  subType: 'prompt',
+                  name: 'promptName',
+                },
+              },
+              {
+                value: '',
+                type: 'end_of_text',
+              },
+            ],
+          },
+        },
+      } as ReportDefinition;
+      const prompts = [
+        {
+          id: 'objectId',
+          answers,
+          name: 'promptName',
+        },
+      ] as PromptObject[];
+
+      // when
+      const { reportFilterText } = generateReportFilterTexts(reportDefinition, prompts);
+
+      // then
+      expect(reportFilterText).toBe(expectedText);
+    }
+  );
+
   describe('error handling', () => {
     it('should return "-" when reportDefinition is an empty object', () => {
       // given
       const filterData = {} as ReportDefinition;
 
       // when
-      const result = generateReportFilterTexts(filterData);
+      const result = generateReportFilterTexts(filterData, undefined);
 
       // then
       expect(result.reportFilterText).toBe('-');
@@ -146,7 +199,7 @@ describe('generateReportFilterTexts', () => {
       const reportDefinition: ReportDefinition = undefined;
 
       // when
-      const result = generateReportFilterTexts(reportDefinition);
+      const result = generateReportFilterTexts(reportDefinition, undefined);
 
       // then
       expect(result.reportFilterText).toBe('-');
@@ -162,7 +215,7 @@ describe('generateReportFilterTexts', () => {
       } as ReportDefinition;
 
       // when
-      const result = generateReportFilterTexts(reportDefinition);
+      const result = generateReportFilterTexts(reportDefinition, undefined);
 
       // then
       expect(result.reportFilterText).toBe('-');
@@ -179,7 +232,7 @@ describe('generateReportFilterTexts', () => {
       } as ReportDefinition;
 
       // when
-      const result = generateReportFilterTexts(reportDefinition);
+      const result = generateReportFilterTexts(reportDefinition, undefined);
 
       // then
       expect(result.reportFilterText).toBe('-');
@@ -198,7 +251,7 @@ describe('generateReportFilterTexts', () => {
       } as ReportDefinition;
 
       // when
-      const result = generateReportFilterTexts(reportDefinition);
+      const result = generateReportFilterTexts(reportDefinition, undefined);
 
       // then
       expect(result.reportFilterText).toBe('-');
@@ -219,7 +272,7 @@ describe('generateReportFilterTexts', () => {
       } as ReportDefinition;
 
       // when
-      const result = generateReportFilterTexts(reportDefinition);
+      const result = generateReportFilterTexts(reportDefinition, undefined);
 
       // then
       expect(result.reportFilterText).toBe('-');
@@ -241,7 +294,7 @@ describe('generateReportFilterTexts', () => {
       } as ReportDefinition;
 
       // when
-      const result = generateReportFilterTexts(reportDefinition);
+      const result = generateReportFilterTexts(reportDefinition, undefined);
 
       // then
       expect(result.reportFilterText).toBe('-');
@@ -265,7 +318,7 @@ describe('generateReportFilterTexts', () => {
       } as ReportDefinition;
 
       // when
-      const result = generateReportFilterTexts(reportDefinition);
+      const result = generateReportFilterTexts(reportDefinition, undefined);
 
       // then
       expect(result.reportFilterText).toBe('-');
@@ -293,7 +346,7 @@ describe('generateReportFilterTexts', () => {
       } as ReportDefinition;
 
       // when
-      const result = generateReportFilterTexts(reportDefinition);
+      const result = generateReportFilterTexts(reportDefinition, undefined);
 
       // then
       expect(result.reportFilterText).toBe('-');

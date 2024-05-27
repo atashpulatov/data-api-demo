@@ -39,7 +39,7 @@ export enum OperationSteps {
   CREATE_PIVOT_TABLE = 'CREATE_PIVOT_TABLE',
   REMOVE_PIVOT_TABLE = 'REMOVE_PIVOT_TABLE',
   REFRESH_PIVOT_TABLE = 'REFRESH_PIVOT_TABLE',
-  // formatted-table steps
+  // formatted data(table) steps
   EXPORT_EXCEL_TO_CURRENT_WORKBOOK = 'EXPORT_EXCEL_TO_CURRENT_WORKBOOK',
   MOVE_FORMATTED_DATA_FROM_EXPORTED_SHEET_TO_TARGET_SHEET = 'MOVE_FORMATTED_DATA_FROM_EXPORTED_SHEET_TO_TARGET_SHEET',
 }
@@ -354,6 +354,6 @@ const operationStepsMapPivotTable = {
 export const operationsMap = {
   [ObjectImportType.TABLE]: operationStepsMapTable,
   [ObjectImportType.PIVOT_TABLE]: operationStepsMapPivotTable,
-  [ObjectImportType.FORMATTED_TABLE]: operationStepsMapFormattedTable,
+  [ObjectImportType.FORMATTED_DATA]: operationStepsMapFormattedTable,
   [ObjectImportType.IMAGE]: operationStepsMapImage,
 };

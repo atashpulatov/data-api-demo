@@ -1,6 +1,12 @@
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 
+import {
+  InstanceDefinition,
+  MstrTable,
+} from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { TableDimensions } from '../../types/object-types';
+
 const ROWS_NUMBER_CHANGE_LIMIT = 10000;
 const CELLS_NUMBER_CHANGE_LIMIT = 100000;
 
@@ -12,6 +18,7 @@ class OfficeTableRefresh {
    * @param instanceDefinition
    * @param prevOfficeTable Reference to previous Excel table
    * @param previousTableDimensions Dimensions of the previously created table
+   * @param objectDetailsSizeChanged Flag indicating if object details size has changed
    *
    * @returns object containing:
    *
@@ -20,9 +27,10 @@ class OfficeTableRefresh {
    */
   async getExistingOfficeTableData(
     excelContext: Excel.RequestContext,
-    instanceDefinition: any,
+    instanceDefinition: InstanceDefinition,
     prevOfficeTable: Excel.Table,
-    previousTableDimensions: any
+    previousTableDimensions: TableDimensions,
+    objectDetailsSizeChanged: boolean
   ): Promise<{ tableChanged: boolean; startCell: string }> {
     let startCell = await this.getStartCellOnRefresh(prevOfficeTable, excelContext);
 
@@ -32,7 +40,8 @@ class OfficeTableRefresh {
       excelContext,
       instanceDefinition,
       previousTableDimensions,
-      startCell
+      startCell,
+      objectDetailsSizeChanged
     ));
 
     // TODO rename startCell to startCellAddress in whole repo for celladress with string type
@@ -47,6 +56,7 @@ class OfficeTableRefresh {
    * @param instanceDefinition
    * @param previousTableDimensions Dimensions of the previously created table
    * @param startCellAddress Address of starting cell of Table
+   * @param objectDetailsSizeChanged Flag indicating if object details size has changed
    *
    * @returns object containing:
    *
@@ -57,8 +67,9 @@ class OfficeTableRefresh {
     prevOfficeTable: Excel.Table,
     excelContext: Excel.RequestContext,
     instanceDefinition: any,
-    previousTableDimensions: any,
-    startCellAddress: string
+    previousTableDimensions: TableDimensions,
+    startCellAddress: string,
+    objectDetailsSizeChanged: boolean
   ): Promise<{ tableChanged: boolean; startCell: string }> {
     const { mstrTable } = instanceDefinition;
 
@@ -69,12 +80,14 @@ class OfficeTableRefresh {
       previousTableDimensions
     );
 
+    // TODO Clearing crosstab shoudl separate from checking if crosstab headers changed
     ({ tableChanged, startCell: startCellAddress } = await this.clearIfCrosstabHeadersChanged(
       prevOfficeTable,
       excelContext,
       tableChanged,
       startCellAddress,
-      mstrTable
+      mstrTable,
+      objectDetailsSizeChanged
     ));
 
     return { tableChanged, startCell: startCellAddress };
@@ -227,6 +240,7 @@ class OfficeTableRefresh {
    * @param tableChanged Specify if table columns has been changed.
    * @param startCellAddress Address of starting cell of Table
    * @param mstrTable Contains information about mstr object
+   * @param objectDetailsSizeChanged Flag indicating if object details size has changed
    *
    */
   async clearIfCrosstabHeadersChanged(
@@ -234,7 +248,8 @@ class OfficeTableRefresh {
     excelContext: Excel.RequestContext,
     tableChanged: boolean,
     startCellAddress: string,
-    mstrTable: any
+    mstrTable: MstrTable,
+    objectDetailsSizeChanged: boolean
   ): Promise<{ tableChanged: boolean; startCell: string }> {
     const { prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab } = mstrTable;
     const { validColumnsY, validRowsX } = await officeApiCrosstabHelper.getCrosstabHeadersSafely(
@@ -262,7 +277,13 @@ class OfficeTableRefresh {
     }
 
     if (prevCrosstabDimensions) {
-      officeApiCrosstabHelper.clearCrosstabRange(prevOfficeTable, mstrTable, excelContext);
+      officeApiCrosstabHelper.clearCrosstabRange(
+        prevOfficeTable,
+        mstrTable,
+        excelContext,
+        false,
+        objectDetailsSizeChanged
+      );
     }
 
     await excelContext.sync();

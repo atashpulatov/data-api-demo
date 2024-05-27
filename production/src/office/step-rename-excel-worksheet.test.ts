@@ -45,7 +45,7 @@ describe('StepRenameExcelWorksheet', () => {
       objectWorkingId: 'objectWorkingIdTest',
       name: 'test',
       worksheet: { id: '1', name: 'Sheet 1', index: 0 },
-      groupData: { key: 0, title: 'Sheet 1' },
+      groupData: { key: '1', title: 'Sheet 1', index: 0 },
     } as unknown as ObjectData;
     const excelContext = { sync: jest.fn() };
     const operationData = {
@@ -60,8 +60,9 @@ describe('StepRenameExcelWorksheet', () => {
         index: 0,
       },
       groupData: {
-        key: 0,
+        key: '1',
         title: 'test',
+        index: 0,
       },
     };
 

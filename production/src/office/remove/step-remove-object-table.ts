@@ -2,7 +2,10 @@ import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 import { officeRemoveHelper } from './office-remove-helper';
 
-import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import {
+  MstrTable,
+  OperationData,
+} from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
 
 import operationErrorHandler from '../../operation/operation-error-handler';
@@ -70,7 +73,7 @@ class StepRemoveObjectTable {
               crosstabHeaderDimensions: {},
               isCrosstab,
               prevCrosstabDimensions: validCrosstabHeaderDimnesions,
-            },
+            } as MstrTable,
             excelContext,
             false
           );

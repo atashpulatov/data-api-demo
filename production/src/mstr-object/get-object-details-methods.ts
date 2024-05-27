@@ -1,22 +1,43 @@
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { mstrObjectRestService } from './mstr-object-rest-service';
-import { FiltersText } from './object-filter-helper-types';
+import { FiltersText, PromptObject } from './object-filter-helper-types';
 
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectInfoSetting } from '../redux-reducer/settings-reducer/settings-reducer-types';
 import { ObjectData, ObjectDetails, Owner } from '../types/object-types';
+import { PromptResponse } from './mstr-object-response-types';
 import { MstrObjectTypes } from './mstr-object-types';
 
 import mstrObjectEnum from './mstr-object-type-enum';
 import { TableOperation } from '../error/constants';
 
 const promptAnswerFunctionsMap = {
-  OBJECTS: (prompt: any) => prompt.answers.map((answer: any) => answer.name),
-  LEVEL: (prompt: any) => prompt.answers.units.map((unit: any) => unit.name),
-  EXPRESSION: (prompt: any) => prompt.answers.content,
-  ELEMENTS: (prompt: any) => prompt.answers.map((answer: any) => answer.name),
-  VALUE: (prompt: any) => prompt.answers,
+  OBJECTS: (prompt: PromptResponse): PromptObject => ({
+    id: prompt.id,
+    name: prompt.name,
+    answers: prompt.answers.map((answer: any) => answer.name),
+  }),
+  LEVEL: (prompt: PromptResponse): PromptObject => ({
+    id: prompt.id,
+    name: prompt.name,
+    answers: prompt.answers.units.map((unit: any) => unit.name),
+  }),
+  EXPRESSION: (prompt: PromptResponse): PromptObject => ({
+    id: prompt.id,
+    name: prompt.name,
+    answers: prompt.answers.content,
+  }),
+  ELEMENTS: (prompt: PromptResponse): PromptObject => ({
+    id: prompt.id,
+    name: prompt.name,
+    answers: prompt.answers.map((answer: { name: string }) => answer.name),
+  }),
+  VALUE: (prompt: PromptResponse): PromptObject => ({
+    id: prompt.id,
+    name: prompt.name,
+    answers: prompt.answers,
+  }),
 };
 
 export const getObjectPrompts = async (
@@ -24,7 +45,7 @@ export const getObjectPrompts = async (
   objectId: string,
   projectId: string,
   operationData: OperationData
-): Promise<any[]> => {
+): Promise<PromptObject[]> => {
   const { mstrObjectType, manipulationsXML, promptsAnswers } = objectData;
   if (
     mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name
@@ -33,13 +54,13 @@ export const getObjectPrompts = async (
   ) {
     return [];
   }
-  const unfilteredPrompts = await mstrObjectRestService.getObjectPrompts(
+  const unfilteredPrompts: PromptResponse[] = await mstrObjectRestService.getObjectPrompts(
     objectId,
     projectId,
     operationData.instanceDefinition.instanceId
   );
-  // @ts-expect-error
-  return unfilteredPrompts.map((prompt: any) => promptAnswerFunctionsMap[prompt.type](prompt));
+
+  return unfilteredPrompts.map(prompt => promptAnswerFunctionsMap[prompt.type](prompt));
 };
 
 export const populateDefinition = (
@@ -123,6 +144,7 @@ export const calculateOffsetForObjectInfoSettings = (
  * @param options.previousObjectDetailsSize - The previous size of the object details.
  * @param options.newObjectDetailsSize - The new size of the object details.
  * @param options.tableStartCell - The start cell of the table.
+ * @param options.isNewStartCellSelected - Indicates whether the new cell is selected.
  * @returns - An object containing the operation and start cell.
  */
 export const getTableOperationAndStartCell = ({
@@ -131,21 +153,25 @@ export const getTableOperationAndStartCell = ({
   previousObjectDetailsSize,
   newObjectDetailsSize,
   tableStartCell,
+  isNewStartCellSelected,
 }: {
   tableMoved: boolean;
   tableChanged: boolean;
   previousObjectDetailsSize: number;
   newObjectDetailsSize: number;
   tableStartCell: string;
+  isNewStartCellSelected: boolean;
 }): {
-  operation: TableOperation;
+  tableOperation: TableOperation;
   startCell: string;
 } => {
   const [column, row] = tableStartCell.split(/(\d+)/);
 
+  const objectDetailsLastRow = parseInt(row, 10) - 1;
+
   // when the table moved, if there is no place left for the object details above the table, the object details start from the first cell of the selected column.
-  if (parseInt(row, 10) < newObjectDetailsSize && tableMoved) {
-    return { startCell: `${column}1`, operation: TableOperation.CREATE_NEW_TABLE };
+  if (objectDetailsLastRow < newObjectDetailsSize && tableMoved) {
+    return { startCell: `${column}1`, tableOperation: TableOperation.CREATE_NEW_TABLE };
   }
   const objectDetailsSizeChanged = previousObjectDetailsSize !== newObjectDetailsSize;
 
@@ -157,15 +183,17 @@ export const getTableOperationAndStartCell = ({
     startCell = officeApiHelper.offsetCellBy(tableStartCell, -newObjectDetailsSize, 0);
   }
 
+  if (isNewStartCellSelected) startCell = tableStartCell;
+
   // If the table changed (for example one of the columns are deleted), or the object details size changed when the table was not moved, a new table has to be created.
   // When the table is not moved but the object details size changed, the reference point is taken as the start cell of the object details, and the placement of the new table is made accordingly.
-  const operation =
+  const tableOperation =
     tableChanged || (!tableMoved && objectDetailsSizeChanged)
       ? TableOperation.CREATE_NEW_TABLE
       : TableOperation.UPDATE_EXISTING_TABLE;
 
   return {
-    operation,
+    tableOperation,
     startCell,
   };
 };

@@ -29,6 +29,7 @@ class StepGetOfficeTableImport {
         instanceDefinition,
         startCell: selectedCell,
         insertNewWorksheet,
+        operationType,
       } = operationData;
 
       const { officeTable, bindId, tableName, worksheet, startCell, groupData, objectDetailsSize } =
@@ -39,6 +40,7 @@ class StepGetOfficeTableImport {
           insertNewWorksheet,
           pageByData: objectData.pageByData,
           objectData,
+          operationType
         });
 
       const updatedOperation = {

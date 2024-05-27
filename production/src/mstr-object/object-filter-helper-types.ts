@@ -15,7 +15,10 @@ export type Token = {
   state: string;
   value: string | number;
   type: string;
-  target?: unknown;
+  target?: {
+    subType: string;
+    objectId: string;
+  };
   attributeForm?: unknown;
 };
 
@@ -102,4 +105,10 @@ export type DossierDefinition = {
   datasets: unknown[];
   currentChapter: string;
   chapters: DossierChapter[];
+};
+
+export type PromptObject = {
+  id: string;
+  name: string;
+  answers?: string | string[];
 };

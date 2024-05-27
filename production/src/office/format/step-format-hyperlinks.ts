@@ -29,27 +29,31 @@ class StepFormatHyperlinks {
       const { columns } = instanceDefinition;
       const { columnInformation, isCrosstab, metricsInRows } = instanceDefinition.mstrTable;
 
-      const filteredColumnInformation = formattingHelper.filterColumnInformation(columnInformation);
-      const offset = formattingHelper.calculateMetricColumnOffset(
-        filteredColumnInformation,
-        isCrosstab
-      );
-      for (let index = 0; index < filteredColumnInformation.length; index++) {
-        const object = filteredColumnInformation[index];
-        const columnRange = formattingHelper.getColumnRangeForFormatting(
-          index,
-          isCrosstab,
-          offset,
-          officeTable,
-          columns,
-          metricsInRows
-        );
-        if (object.isAttribute) {
-          await officeFormatHyperlinks.formatColumnAsHyperlinks(object, columnRange, excelContext);
-        }
+      const offset = objectData?.crosstabHeaderDimensions?.rowsX || 0;
 
-        if (index % 5000 === 0) {
-          await excelContext.sync();
+      for (let index = 0; index < columnInformation.length; index++) {
+        const object = columnInformation[index];
+
+        if (object) {
+          const columnRange = formattingHelper.getColumnRangeForFormatting(
+            index,
+            isCrosstab,
+            offset,
+            officeTable,
+            columns,
+            metricsInRows
+          );
+          if (object.isAttribute) {
+            await officeFormatHyperlinks.formatColumnAsHyperlinks(
+              object,
+              columnRange,
+              excelContext
+            );
+          }
+
+          if (index % 5000 === 0) {
+            await excelContext.sync();
+          }
         }
       }
       operationStepDispatcher.completeFormatHyperlinks(objectData.objectWorkingId);

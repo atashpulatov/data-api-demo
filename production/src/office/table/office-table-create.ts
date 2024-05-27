@@ -15,6 +15,7 @@ import { InstanceDefinition } from '../../redux-reducer/operation-reducer/operat
 import { ObjectData } from '../../types/object-types';
 
 import { calculateOffsetForObjectInfoSettings } from '../../mstr-object/get-object-details-methods';
+import { OperationTypes } from '../../operation/operation-type-names';
 import officeApiDataLoader from '../api/office-api-data-loader';
 import { ObjectImportType } from '../../mstr-object/constants';
 
@@ -61,6 +62,7 @@ class OfficeTableCreate {
     insertNewWorksheet: boolean;
     pageByData?: PageByData;
     objectData: ObjectData;
+    operationType?: OperationTypes;
   }): Promise<any> {
     const {
       rows,
@@ -70,6 +72,8 @@ class OfficeTableCreate {
     } = instanceDefinition;
 
     const { importType, mstrObjectType } = objectData;
+
+    let objectDetailsRange;
 
     const newOfficeTableName = getOfficeTableHelper.createTableName(mstrTable, tableName);
     const worksheet = await officeApiWorksheetHelper.getWorksheet(
@@ -106,10 +110,10 @@ class OfficeTableCreate {
       tableChanged
     );
 
-    // Add extra rows to crosstab table to be able to track users manipulations, otherwise formatted table range
+    // Add extra rows to crosstab table to be able to track users manipulations, otherwise formatted data(table) range
     // will entirely overlap and ultmately remove the underneath crosstab table
     let tableRows: number = rows;
-    if (importType === ObjectImportType.FORMATTED_TABLE && isCrosstab) {
+    if (importType === ObjectImportType.FORMATTED_DATA && isCrosstab) {
       tableRows += FORMATTED_TABLE_CROSSTAB_EXTRA_ROWS;
     }
 
@@ -118,26 +122,23 @@ class OfficeTableCreate {
 
     excelContext.trackedObjects.add(range);
 
-    await officeTableHelperRange.checkObjectRangeValidity(
-      prevOfficeTable,
-      excelContext,
-      range,
-      instanceDefinition,
-      isRepeatStep
-    );
-
     if (objectDetailsSize > 0) {
-      const objectDetailsRange = await getObjectDetailsRange({
+      objectDetailsRange = await getObjectDetailsRange({
         worksheet,
         objectDetailsStartCell,
         objectDetailsSize,
       });
-      await insertAndFormatObjectDetails({
-        objectData,
-        excelContext,
-        objectDetailsRange,
-      });
+      excelContext.trackedObjects.add(objectDetailsRange);
     }
+
+    await officeTableHelperRange.checkObjectRangeValidity(
+      prevOfficeTable,
+      excelContext,
+      range,
+      objectDetailsRange,
+      instanceDefinition,
+      isRepeatStep
+    );
 
     range.numberFormat = '' as unknown as any[][];
 
@@ -151,6 +152,14 @@ class OfficeTableCreate {
         crosstabHeaderDimensions,
         objectData
       );
+    }
+
+    if (objectDetailsRange) {
+      await insertAndFormatObjectDetails({
+        objectData,
+        excelContext,
+        objectDetailsRange,
+      });
     }
 
     return this.setOfficeTableProperties({
@@ -305,7 +314,7 @@ class OfficeTableCreate {
         tableName: newOfficeTableName,
         worksheet: { id, name, index },
         startCell,
-        groupData: { key: index, title: name },
+        groupData: { key: id, title: name, index },
         objectDetailsSize,
       };
     } catch (error) {

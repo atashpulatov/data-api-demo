@@ -281,18 +281,19 @@
    "Import data as text": "データをテキストとしてインポート",
    "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "有効化されている場合、MicroStrategy の書式設定を維持したまま、アトリビュート値はテキストとしてインポートされます。 Excel 式に影響する場合があります。",
    "Merge columns": "列を結合",
-   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "有効にすると、同じ値を持つ隣接する列ヘッダーが結合されます。クロス集計レポートにのみ適用されます。",
+   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "有効にすると、同じ値を持つ隣接する列ヘッダーが結合されます。クロス集計グリッドにのみ適用されます。",
    "Paged-By": "ページバイ",
    "Default import format:": "デフォルトのインポート形式:",
    "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.": "選択した形式でインポートできないオブジェクトは、データとしてインポートされます。インポート中に書式を変更できます。",
    "Data": "データ",
-   "Data with formatting": "書式設定済みのデータ",
+   "Formatted Data": "書式設定されたデータ",
    "Visualization": "ビジュアリゼーション",
    "Pivot Table": "ピボット テーブル",
-   "If enabled, attributes will be automatically added to the ‘Column’ section of the pivot table.": "有効な場合、アトリビュートは自動的にピボット テーブルの 'Column' セクションに追加されます。",
+   "If enabled, attributes will be automatically added to the ‘Rows’ section of the pivot table.": "有効な場合、アトリビュートは自動的にピボット テーブルの '行' セクションに追加されます。",
    "If enabled, metrics will be automatically added to the ‘Values’ section of the pivot table.": "有効にされている場合、メトリックは自動的にピボット テーブルの [値] セクションに追加されます。",
    "The memory limit has been reached. You cannot import any more objects.": "メモリの上限に達しました。これ以上のオブジェクトはインポートできません。",
    "Import Pivot Table": "ピボット テーブルをインポート",
    "Import Visualization": "ビジュアリゼーションをインポート",
-   "Import Formatted Data": "書式設定済みデータをインポート"
+   "Import Formatted Data": "書式設定済みデータをインポート",
+   "Page-By": "ページバイ"
 }

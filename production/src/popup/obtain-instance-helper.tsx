@@ -43,7 +43,7 @@ function mapStateToProps(state: any): any {
       ...popupHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege),
     },
     popupType,
-    importType
+    importType,
   };
 }
 
