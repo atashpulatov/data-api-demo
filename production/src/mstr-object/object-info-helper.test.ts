@@ -24,6 +24,9 @@ describe('getObjectDetailsForWorksheet', () => {
         modifiedDate: '2024-01-01',
         createdDate: '2024-01-01',
       },
+      definition: {
+        sourceName: 'Test Report Source',
+      },
       objectId: '123456789',
       pageByData: {
         elements: [{ value: 'Page 1' }, { value: 'Page 2' }],
@@ -43,7 +46,7 @@ describe('getObjectDetailsForWorksheet', () => {
     );
 
     const expectedObjectDetailValues = [
-      ['Test Report'],
+      ['Test Report Source'],
       [''],
       ['Owner'],
       ['John Doe'],

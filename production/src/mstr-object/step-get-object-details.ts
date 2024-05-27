@@ -110,7 +110,7 @@ class StepGetObjectDetails {
       const definition = populateDefinition(
         objectData,
         prompts.map(prompt => prompt.answers),
-        newObjectName // DE294385: use the name from the store if it was changed by user
+        name
       );
 
       if (pageByData && operationData.operationType !== OperationTypes.REFRESH_OPERATION) {
@@ -132,7 +132,6 @@ class StepGetObjectDetails {
       operationStepDispatcher.updateObject(updatedObject);
       operationStepDispatcher.completeGetObjectDetails(objectWorkingId);
     } catch (error) {
-      console.trace('getObjectDetails: ', error);
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
     } finally {

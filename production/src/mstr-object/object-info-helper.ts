@@ -39,7 +39,7 @@ export const getObjectDetailsForWorksheet = (
   enabledWorksheetDetailsSettings.forEach(setting => {
     switch (setting.key) {
       case 'name':
-        objectDetailValues.push([object.name], ['']);
+        objectDetailValues.push([object.definition.sourceName], ['']);
         indexesToFormat.push(formatIndex);
         formatIndex += 2;
         break;
