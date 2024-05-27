@@ -143,7 +143,7 @@ def step_impl(context, option):
     is_option_checked = context.pages.right_panel_page().is_parent_toggle_option_checked(option)
     AssertUtil.assert_simple(is_option_checked, True)
  
-@step('I toggle the "{option}" child setting to "{value}')
+@step('I toggle the "{option}" child setting to "{value}"')
 def step_impl(context, option, value):
     context.pages.right_panel_page().toggle_child_setting(option, value)
  

@@ -15,11 +15,11 @@ Feature: F38416 - Import reports with page-by as separate sheets in the Excel Ad
       And I verified that Columns & Filters Selection is visible
       And I selected all metrics
       And I selected all attributes
-      And I clicked Import button in Columns and Filters Selection
+      And I selected import type "Import Data" and clicked import
 
     # Page by configuration modal initial checks
      Then I verified that Page-by window is visible
-      And I verified that Page-by dropdown is visible
+      And I verified that "Subcategory" Page-by dropdown is visible
       And I verified that "Add" button is enabled
       And I verified that "Add All" button is enabled
       And I verified that "Remove" button is disabled

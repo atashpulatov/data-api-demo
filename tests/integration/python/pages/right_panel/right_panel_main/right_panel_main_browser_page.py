@@ -241,6 +241,11 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
         aria_checked_value = element.get_attribute("aria-checked")
         return aria_checked_value == "true"
     
+    def is_draggable_child_toggle_option_checked(self, option):
+        element = self.get_element_by_xpath(RightPanelMainBrowserPage.DRAGGABLE_CHILD_TOGGLE % option)
+        aria_checked_value = element.get_attribute("aria-checked")
+        return aria_checked_value == "true"
+    
     def get_number_of_object_tiles(self):
         self.focus_on_add_in_frame()
         number_of_object_tiles = len(self.get_elements_by_xpath(RightPanelMainBrowserPage.OBJECT_TILE))
