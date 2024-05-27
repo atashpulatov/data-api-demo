@@ -38,10 +38,13 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     IMPORT_FORMAT_OPTION = "//li[@aria-label='%s']"
 
     PIVOT_TABLE_TOGGLES = "(//button[contains(@class, 'mstr-rc-3-switch--regular') and @type='button' and @role='switch' and ancestor::*[contains(text(), '%s')]][@aria-checked='true' or @aria-checked='false'])[1]"
-    PARENT_TOGGLES = "//button[contains(@class, 'mstr-rc-3-switch--regular') and ancestor::label/div/span[contains(text(), '%s')]]"
-    CHILD_TOGGLES = "//button[contains(@class, 'mstr-rc-3-switch--small') and ancestor::label/div[contains(text(), '%s')]]"
-    DRAGGABLE_CHILD_NODES = "//button[contains(@class, 'mstr-rc-3-switch--small') and ancestor::label/div[contains(text(), '%s')] and ancestor::li/button[contains(@class, 'mstr-rc-3-draggable-list__item-drag-handle')]]"
+    PARENT_TOGGLE = "//button[contains(@class, 'mstr-rc-3-switch--regular') and ancestor::label/div/span[contains(text(), '%s')]]"
+    CHILD_TOGGLE = "//button[contains(@class, 'mstr-rc-3-switch--small') and ancestor::label/div[contains(text(), '%s')]]"
+    DRAGGABLE_CHILD_TOGGLE = "//button[contains(@class, 'mstr-rc-3-switch--small') and ancestor::label/div[contains(text(), '%s')] and ancestor::li/button[contains(@class, 'mstr-rc-3-draggable-list__item-drag-handle')]]"
  
+    OBJECT_TILE = "//article[contains(@class, 'object-tile')]"
+    OBJECT_TILE_BY_NUMBER = "(//article[contains(@class, 'object-tile')])[%d]"
+    CONTEXT_MENU = "//li[contains(@class, 'context-menu-item')]/span[text()='%s']"
 
     def click_import_data_button_element(self):
         self.focus_on_add_in_frame()
@@ -212,23 +215,38 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     def assert_toggle_pivot_table_option_disabled(self, pivot_option):
         assert not self.is_toggle_pivot_table_option_enabled(pivot_option), "Toggle option is enabled"
     
-    def toggle_parent_setting(self, option):
-        self.get_element_by_xpath(RightPanelMainBrowserPage.PARENT_TOGGLES % option).click()
+    def toggle_parent_setting(self, option, value):
+        element = self.get_element_by_xpath(RightPanelMainBrowserPage.PARENT_TOGGLE % option)
+        aria_checked_value = element.get_attribute("aria-checked")
+        if aria_checked_value == 'true' and value == 'OFF':
+            element.click()
+        if aria_checked_value == 'false' and value == 'ON':
+            element.click()
     
-    def is_parent_toggle_option_enabled(self, option):
-        element = self.get_element_by_xpath(RightPanelMainBrowserPage.PARENT_TOGGLES % option)
+    def is_parent_toggle_option_checked(self, option):
+        element = self.get_element_by_xpath(RightPanelMainBrowserPage.PARENT_TOGGLE % option)
         aria_checked_value = element.get_attribute("aria-checked")
         return aria_checked_value == "true"
     
-    def toggle_child_setting(self, option):
-        self.get_element_by_xpath(RightPanelMainBrowserPage.CHILD_TOGGLES % option).click()
+    def toggle_child_setting(self, option, value):
+        element = self.get_element_by_xpath(RightPanelMainBrowserPage.CHILD_TOGGLE % option)
+        aria_checked_value = element.get_attribute("aria-checked")
+        if aria_checked_value == 'true' and value == 'OFF':
+            element.click()
+        if aria_checked_value == 'false' and value == 'ON':
+            element.click()
     
-    def is_child_toggle_option_enabled(self, option):
-        element = self.get_element_by_xpath(RightPanelMainBrowserPage.CHILD_TOGGLES % option)
+    def is_child_toggle_option_checked(self, option):
+        element = self.get_element_by_xpath(RightPanelMainBrowserPage.CHILD_TOGGLE % option)
         aria_checked_value = element.get_attribute("aria-checked")
         return aria_checked_value == "true"
     
-    def is_draggable_child_toggle_option_enabled(self, option):
-        element = self.get_element_by_xpath(RightPanelMainBrowserPage.DRAGGABLE_CHILD_NODES % option)
-        aria_checked_value = element.get_attribute("aria-checked")
-        return aria_checked_value == "true"
+    def get_number_of_object_tiles(self):
+        self.focus_on_add_in_frame()
+        number_of_object_tiles = len(self.get_elements_by_xpath(RightPanelMainBrowserPage.OBJECT_TILE))
+        return number_of_object_tiles
+
+    def click_context_menu_item(self, context_menu_option, object_number):
+        element = self.get_element_by_xpath(RightPanelMainBrowserPage.OBJECT_TILE_BY_NUMBER % object_number)
+        element.right_click()
+        self.get_element_by_xpath(RightPanelMainBrowserPage.CONTEXT_MENU % context_menu_option).click()

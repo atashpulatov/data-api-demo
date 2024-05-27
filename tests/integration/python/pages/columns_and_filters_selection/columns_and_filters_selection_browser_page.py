@@ -12,7 +12,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
     ANT_BUTTON = '.ant-btn'
 
-    IMPORT_BUTTON_ELEM = 'import'
+    IMPORT_BUTTON_ELEM = "import"
     BACK_BUTTON_ELEM = 'back'
     CANCEL_BUTTON_ELEM = 'cancel'
 
@@ -75,11 +75,14 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_popup_frame()
 
         self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.IMPORT_BUTTON_ELEM).click()
-
+ 
     def click_import_button(self):
         self.click_import_button_without_success_check()
 
         self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully(timeout=Const.VERY_LONG_TIMEOUT)
+    
+    def click_import_button_without_waiting(self):
+        self.click_import_button_without_success_check()
 
     def click_import_button_to_duplicate(self):
         self.click_import_button_without_success_check()

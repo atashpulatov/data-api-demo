@@ -9,7 +9,7 @@ Feature: F39445 - Display object related information on the Excel sheet when imp
       And I clicked "Object Information" section on Settings menu
 
     # Toggle "Side panel details" OFF and check if all child toggles are OFF
-      And I toggle the "Side panel details" parent setting
+      And I toggle the "Side panel details" parent setting to "OFF"
      Then I verified "Side panel details" parent setting is OFF
       And I verified "Imported By" child setting is OFF
       And I verified "Owner" child setting is OFF
@@ -21,31 +21,31 @@ Feature: F39445 - Display object related information on the Excel sheet when imp
       And I verified "ID" child setting is OFF
 
     # Toggle "Imported By" ON and check if parent setting is ON
-     When I toggle the "Imported By" child setting
+     When I toggle the "Imported By" child setting to "ON"
      Then I verified "Side panel details" parent setting is ON
 
     # Toggle all "Side panel details" child settings ON
-      And I toggle the "Owner" child setting
-      And I toggle the "Date Modified" child setting
-      And I toggle the "Date Created" child setting
-      And I toggle the "Description" child setting
-      And I toggle the "Location" child setting
-      And I toggle the "Version" child setting
-      And I toggle the "ID" child setting
+      And I toggle the "Owner" child setting to "ON"
+      And I toggle the "Date Modified" child setting to "ON"
+      And I toggle the "Date Created" child setting to "ON"
+      And I toggle the "Description" child setting to "ON"
+      And I toggle the "Location" child setting to "ON"
+      And I toggle the "Version" child setting to "ON"
+      And I toggle the "ID" child setting to "ON"
 
     # Toggle all "Side panel details" child settings OFF and check if parent setting is OFF
-     When I toggle the "Imported By" child setting
-      And I toggle the "Owner" child setting
-      And I toggle the "Date Modified" child setting
-      And I toggle the "Date Created" child setting
-      And I toggle the "Description" child setting
-      And I toggle the "Location" child setting
-      And I toggle the "Version" child setting
-      And I toggle the "ID" child setting
+     When I toggle the "Imported By" child setting to "OFF"
+      And I toggle the "Owner" child setting to "OFF"
+      And I toggle the "Date Modified" child setting to "OFF"
+      And I toggle the "Date Created" child setting to "OFF"
+      And I toggle the "Description" child setting to "OFF"
+      And I toggle the "Location" child setting to "OFF"
+      And I toggle the "Version" child setting to "OFF"
+      And I toggle the "ID" child setting to "OFF"
      Then I verified "Side panel details" parent setting is OFF
 
     # Toggle "Worksheet details" ON and check if all child toggles are ON
-     When I toggle the "Worksheet details" parent setting
+     When I toggle the "Worksheet details" parent setting to "ON"
      Then I verified "Worksheet details" parent setting is ON
       And I verified draggable "Name" child setting is ON
       And I verified draggable "Owner" child setting is ON
@@ -57,4 +57,14 @@ Feature: F39445 - Display object related information on the Excel sheet when imp
       And I verified draggable "ID" child setting is ON
       And I verified draggable "Page-By Information" child setting is ON
 
+      # reset to default state
+      And I toggle the "Worksheet details" parent setting to "OFF"
+      And I toggle the "Side panel details" parent setting to "ON"
+      And I toggle the "Owner" child setting to "ON"
+      And I toggle the "Date Modified" child setting to "ON"
+      And I toggle the "Date Created" child setting to "ON"
+      And I toggle the "Description" child setting to "OFF"
+      And I toggle the "Location" child setting to "ON"
+      And I toggle the "Version" child setting to "OFF"
+      And I toggle the "ID" child setting to "OFF"
       And I logged out

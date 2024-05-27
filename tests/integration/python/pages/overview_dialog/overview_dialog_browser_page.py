@@ -38,6 +38,8 @@ class OverviewDialogBrowserPage(BaseBrowserPage):
     FILTER_DETAILS_BUTTON = '//button[text()="%s"]'
     OBJECT_ROW_NULL_STATUS = '//div[@class="ag-status-bar-left"]//div[@class="ag-status-name-value ag-status-panel ag-status-panel-total-and-filtered-row-count"]//span[text()="0"]'
     IMPORT_DUPLICATE_POPUP = '//div[@class="base-popup"]//button[text()="Import"]'
+    GRID_ROW = "//div[contains(@class, 'ag-row-level-0')]"
+    BUTTON = "//button[text()='%s']"
 
     def check_if_overview_dialog_is_opened(self):
         self.focus_on_add_in_popup_frame()
@@ -185,3 +187,8 @@ class OverviewDialogBrowserPage(BaseBrowserPage):
         element = self.get_element_by_xpath(OverviewDialogBrowserPage.OBJECT_ROW_NULL_STATUS)
 
         return element.is_displayed()
+
+    def get_number_of_objects_in_grid(self):
+        number_of_grid_rows = len(self.get_elements_by_xpath(OverviewDialogBrowserPage.GRID_ROW))
+        return number_of_grid_rows
+    
