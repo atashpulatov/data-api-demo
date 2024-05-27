@@ -8,6 +8,7 @@ class FormattingHelper {
    * @param isCrosstab Specify if object is a crosstab
    * @param offset Number of columns to be offsetted when formatting
    * @param officeTable Reference to Excel table
+   * @param rows Number of rows in the table
    * @param columns Number of columns in the table
    * @param metricsInRows Specify if metrics are present in rows
    * @returns Columns range to apply formatting to
@@ -17,14 +18,22 @@ class FormattingHelper {
     isCrosstab: boolean,
     offset: number,
     officeTable: Excel.Table,
+    rows: number,
     columns?: number,
     metricsInRows?: boolean
   ): Excel.Range {
     const objectIndex = isCrosstab ? index - offset : index + offset;
     // Crosstab
     if (isCrosstab && index < offset) {
-      // @ts-expect-error TODO - investigate why getItemAt is called without argument
-      return officeTable.columns.getItemAt().getDataBodyRange().getOffsetRange(0, objectIndex);
+      return (
+        officeTable.columns
+          // @ts-expect-error TODO - investigate why getItemAt is called without argument
+          .getItemAt()
+          .getDataBodyRange()
+          .getOffsetRange(0, objectIndex)
+          .getCell(0, 0)
+          .getResizedRange(rows - 1, 0)
+      );
     }
 
     // Metrics in rows
@@ -40,7 +49,11 @@ class FormattingHelper {
     }
 
     // Tabular
-    return officeTable.columns.getItemAt(objectIndex).getDataBodyRange();
+    return officeTable.columns
+      .getItemAt(objectIndex)
+      .getDataBodyRange()
+      .getCell(0, 0)
+      .getResizedRange(rows - 1, 0);
   }
 }
 
