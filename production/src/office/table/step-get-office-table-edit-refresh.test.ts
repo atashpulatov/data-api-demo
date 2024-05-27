@@ -106,7 +106,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
     jest.spyOn(operationStepDispatcher, 'completeGetOfficeTableEditRefresh').mockImplementation();
 
     jest.spyOn(getObjectDetailsMethods, 'getTableOperationAndStartCell').mockImplementation(() => ({
-      operation: TableOperation.CREATE_NEW_TABLE,
+      tableOperation: TableOperation.CREATE_NEW_TABLE,
       startCell: 'A10',
     }));
 

@@ -1,4 +1,5 @@
-import { getObjectDetailsForWorksheet } from './object-info-helper';
+import officeTableHelperRange from '../office/table/office-table-helper-range';
+import { checkRangeForObjectInfo, getObjectDetailsForWorksheet } from './object-info-helper';
 
 import { reduxStore } from '../store';
 
@@ -85,4 +86,54 @@ describe('getObjectDetailsForWorksheet', () => {
     expect(objectDetailValues).toEqual(expectedObjectDetailValues);
     expect(indexesToFormat).toEqual(expectedIndexesToFormat);
   });
+});
+
+describe('checkRangeForObjectInfo', () => {
+  beforeEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  it.each`
+    previousObjectDetailsSize | newObjectDetailsSize | isCrosstab | checkRangeValidityCallNo | expectedRange
+    ${2}                      | ${5}                 | ${true}    | ${1}                     | ${'A17:D19'}
+    ${2}                      | ${5}                 | ${false}   | ${1}                     | ${'A16:C18'}
+    ${5}                      | ${2}                 | ${true}    | ${1}                     | ${'A7:D9'}
+    ${5}                      | ${2}                 | ${false}   | ${1}                     | ${'A7:C9'}
+  `(
+    'should check range validity for rows=$rows, columns=$columns, previousObjectDetailsSize=$previousObjectDetailsSize, newObjectDetailsSize=$newObjectDetailsSize, isCrosstab=$isCrosstab',
+    async ({
+      previousObjectDetailsSize,
+      newObjectDetailsSize,
+      isCrosstab,
+      checkRangeValidityCallNo,
+      expectedRange,
+    }) => {
+      // given
+      const mockWorksheet = { getRange: jest.fn() };
+      const mockExcelContext = { trackedObjects: { add: jest.fn() } };
+      const mockCrosstabHeaderDimensions = { rowsX: 1, columnsY: 2 };
+
+      jest.spyOn(officeTableHelperRange, 'checkRangeValidity').mockImplementation();
+
+      // when
+      await checkRangeForObjectInfo({
+        worksheet: mockWorksheet as any,
+        excelContext: mockExcelContext as any,
+        currentTableStartCell: 'A10',
+        previousObjectDetailsSize,
+        newObjectDetailsSize,
+        isCrosstab,
+        rows: 5,
+        columns: 3,
+        isNewStartCellSelected: false,
+        crosstabHeaderDimensions: mockCrosstabHeaderDimensions,
+      });
+
+      // then
+      expect(mockWorksheet.getRange).toHaveBeenCalledWith(expectedRange);
+      expect(officeTableHelperRange.checkRangeValidity).toHaveBeenCalledTimes(
+        checkRangeValidityCallNo
+      );
+    }
+  );
 });

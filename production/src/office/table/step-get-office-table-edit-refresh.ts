@@ -1,8 +1,10 @@
 import {
+  checkRangeForObjectInfo,
   getObjectDetailsRange,
   insertAndFormatObjectDetails,
 } from '../../mstr-object/object-info-helper';
 import getOfficeTableHelper from './get-office-table-helper';
+import officeTableHelperRange from './office-table-helper-range';
 
 import { reduxStore } from '../../store';
 
@@ -55,12 +57,15 @@ class StepGetOfficeTableEditRefresh {
         pageByData,
         importType,
         mstrObjectType,
+        isCrosstab,
+        crosstabHeaderDimensions,
+        startCell: previousStartCell,
       } = objectData;
       const { excelContext, instanceDefinition, oldBindId, objectEditedData, insertNewWorksheet } =
         operationData;
       let { tableChanged, startCell } = operationData;
 
-      const { mstrTable } = instanceDefinition;
+      const { mstrTable, columns, rows } = instanceDefinition;
       const isRepeatStep = !!startCell; // If we have startCell on refresh it means that we are repeating step
 
       let shouldFormat = true;
@@ -81,9 +86,9 @@ class StepGetOfficeTableEditRefresh {
         oldBindId
       );
 
-      if (!isRepeatStep) {
-        const objectDetailsSizeChanged = previousObjectDetailsSize !== newObjectDetailsSize;
+      const objectDetailsSizeChanged = previousObjectDetailsSize !== newObjectDetailsSize;
 
+      if (!isRepeatStep) {
         ({ tableChanged, startCell } = await officeTableRefresh.getExistingOfficeTableData(
           excelContext,
           instanceDefinition,
@@ -99,19 +104,36 @@ class StepGetOfficeTableEditRefresh {
         instanceDefinition,
         tableChanged
       );
-      const tableMoved = objectData.startCell !== currentTableStartCell;
+
+      const tableMoved = previousStartCell !== currentTableStartCell;
       const tableStatus = getTableOperationAndStartCell({
         tableMoved,
         tableChanged,
         previousObjectDetailsSize,
         newObjectDetailsSize,
         tableStartCell: currentTableStartCell,
+        isNewStartCellSelected: isRepeatStep,
       });
 
-      tableChanged = tableStatus.operation === TableOperation.CREATE_NEW_TABLE;
+      tableChanged = tableStatus.tableOperation === TableOperation.CREATE_NEW_TABLE;
 
       if (tableChanged) {
         console.warn('Instance definition changed, creating new table');
+
+        if (objectDetailsSizeChanged && !insertNewWorksheet) {
+          await checkRangeForObjectInfo({
+            worksheet: prevOfficeTable.worksheet,
+            excelContext,
+            currentTableStartCell,
+            previousObjectDetailsSize,
+            newObjectDetailsSize,
+            isCrosstab,
+            rows,
+            columns,
+            crosstabHeaderDimensions,
+            isNewStartCellSelected: isRepeatStep,
+          });
+        }
 
         ({ officeTable, bindId, startCell } = await officeTableCreate.createOfficeTable({
           instanceDefinition,
@@ -142,6 +164,9 @@ class StepGetOfficeTableEditRefresh {
             objectDetailsStartCell: tableStatus.startCell,
             objectDetailsSize: newObjectDetailsSize,
           });
+
+          excelContext.trackedObjects.add(objectDetailsRange);
+          await officeTableHelperRange.checkRangeValidity(excelContext, objectDetailsRange);
 
           await insertAndFormatObjectDetails({
             objectData,

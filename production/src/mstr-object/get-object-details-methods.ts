@@ -144,6 +144,7 @@ export const calculateOffsetForObjectInfoSettings = (
  * @param options.previousObjectDetailsSize - The previous size of the object details.
  * @param options.newObjectDetailsSize - The new size of the object details.
  * @param options.tableStartCell - The start cell of the table.
+ * @param options.isNewStartCellSelected - Indicates whether the new cell is selected.
  * @returns - An object containing the operation and start cell.
  */
 export const getTableOperationAndStartCell = ({
@@ -152,21 +153,25 @@ export const getTableOperationAndStartCell = ({
   previousObjectDetailsSize,
   newObjectDetailsSize,
   tableStartCell,
+  isNewStartCellSelected,
 }: {
   tableMoved: boolean;
   tableChanged: boolean;
   previousObjectDetailsSize: number;
   newObjectDetailsSize: number;
   tableStartCell: string;
+  isNewStartCellSelected: boolean;
 }): {
-  operation: TableOperation;
+  tableOperation: TableOperation;
   startCell: string;
 } => {
   const [column, row] = tableStartCell.split(/(\d+)/);
 
+  const objectDetailsLastRow = parseInt(row, 10) - 1;
+
   // when the table moved, if there is no place left for the object details above the table, the object details start from the first cell of the selected column.
-  if (parseInt(row, 10) < newObjectDetailsSize && tableMoved) {
-    return { startCell: `${column}1`, operation: TableOperation.CREATE_NEW_TABLE };
+  if (objectDetailsLastRow < newObjectDetailsSize && tableMoved) {
+    return { startCell: `${column}1`, tableOperation: TableOperation.CREATE_NEW_TABLE };
   }
   const objectDetailsSizeChanged = previousObjectDetailsSize !== newObjectDetailsSize;
 
@@ -178,15 +183,17 @@ export const getTableOperationAndStartCell = ({
     startCell = officeApiHelper.offsetCellBy(tableStartCell, -newObjectDetailsSize, 0);
   }
 
+  if (isNewStartCellSelected) startCell = tableStartCell;
+
   // If the table changed (for example one of the columns are deleted), or the object details size changed when the table was not moved, a new table has to be created.
   // When the table is not moved but the object details size changed, the reference point is taken as the start cell of the object details, and the placement of the new table is made accordingly.
-  const operation =
+  const tableOperation =
     tableChanged || (!tableMoved && objectDetailsSizeChanged)
       ? TableOperation.CREATE_NEW_TABLE
       : TableOperation.UPDATE_EXISTING_TABLE;
 
   return {
-    operation,
+    tableOperation,
     startCell,
   };
 };

@@ -437,9 +437,10 @@ describe('getTableOperationAndStartCell', () => {
         previousObjectDetailsSize,
         newObjectDetailsSize,
         tableStartCell: 'A10',
+        isNewStartCellSelected: false,
       };
       const expected = {
-        operation: expectedOperation,
+        tableOperation: expectedOperation,
         startCell: expectedStartCell,
       };
 
