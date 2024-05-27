@@ -283,8 +283,3 @@ def step_impl(context, expected_menu_items):
 def step_impl(context, expected_menu_items):
     found = context.pages.right_panel_tile_page().get_context_menu_item_for_name(expected_menu_items)
     AssertUtil.assert_simple(found, True)
-
-@step('I verify object is imported as Pivot Table')
-def step_impl(context):
-    pivot_table = context.pages.right_panel_tile_page().get_pivot_table_menu()
-    AssertUtil.assert_simple(pivot_table, True)
