@@ -128,10 +128,10 @@ class OfficeTableCreate {
       prevOfficeTable,
       excelContext,
       range,
-      objectDetailsRange,
       instanceDefinition,
       isRepeatStep,
-      objectData
+      objectData,
+      objectDetailsRange
     );
 
     range.numberFormat = '' as unknown as any[][];

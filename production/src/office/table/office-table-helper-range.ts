@@ -25,10 +25,10 @@ class OfficeTableHelperRange {
     prevOfficeTable: Excel.Table | null,
     excelContext: Excel.RequestContext,
     range: Excel.Range,
-    objectDetailsRange?: Excel.Range,
     instanceDefinition: InstanceDefinition,
     isRepeatStep: boolean,
-    objectData: ObjectData
+    objectData: ObjectData,
+    objectDetailsRange?: Excel.Range,
   ): Promise<void> {
     if (prevOfficeTable) {
       if (isRepeatStep) {
@@ -39,7 +39,6 @@ class OfficeTableHelperRange {
           prevOfficeTable,
           excelContext,
           instanceDefinition,
-          objectData
         );
         await this.deletePrevOfficeTable(excelContext, prevOfficeTable, objectData);
       }
@@ -63,7 +62,6 @@ class OfficeTableHelperRange {
     prevOfficeTable: Excel.Table,
     excelContext: Excel.RequestContext,
     instanceDefinition: any,
-    objectData: ObjectData,
   ): Promise<void> {
     const { rows, columns, mstrTable } = instanceDefinition;
 
