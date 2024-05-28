@@ -1,6 +1,8 @@
 import { homeHelper } from '../../home/home-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 
+import { ObjectData } from '../../types/object-types';
+
 import officeApiDataLoader from '../api/office-api-data-loader';
 
 class OfficeRemoveHelper {
@@ -8,28 +10,30 @@ class OfficeRemoveHelper {
    * Get object from store based on bindId and remove it from workbook
    *
    * @param excelContext Reference to Excel Context used by Excel API functions
-   * @param object Contains information obout the object
+   * @param objectData Contains information obout the object
    * @param isClear specify if object should be cleared or deleted
    */
   async removeOfficeTableBody(
     excelContext: Excel.RequestContext,
-    object: any,
+    objectData: ObjectData,
     isClear: boolean
   ): Promise<void> {
-    const officeTable = excelContext.workbook.tables.getItem(object.bindId);
-    await this.removeExcelTable(officeTable, excelContext, isClear);
+    const officeTable = excelContext.workbook.tables.getItem(objectData.bindId);
+    await this.removeExcelTable(officeTable, excelContext, objectData, isClear);
   }
 
   /**
    * Remove Excel table object from workbook. For crosstab reports will also clear the headers
    *
    * @param officeTable Address of the first cell in report (top left)
+   * @param objectData Contains information obout the object
    * @param excelContext Reference to Excel Context used by Excel API functions
    * @param isClear Specify if object should be cleared or deleted. False by default
    */
   async removeExcelTable(
     officeTable: Excel.Table,
     excelContext: Excel.RequestContext,
+    objectData: ObjectData,
     isClear = false
   ): Promise<void> {
     const tableRange = officeTable.getDataBodyRange();
@@ -41,6 +45,10 @@ class OfficeRemoveHelper {
       if (homeHelper.isMacAndSafariBased()) {
         await this.deleteTableInChunks(excelContext, officeTable);
       } else {
+        // Delete threshold grouped shapes before deleting entire table
+        const shapeGroup = officeTable.worksheet.shapes.getItem(objectData.shapeGroupId);
+        shapeGroup.delete();
+
         officeTable.delete();
       }
 

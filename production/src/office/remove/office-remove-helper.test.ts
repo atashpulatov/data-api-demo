@@ -2,6 +2,8 @@ import { homeHelper } from '../../home/home-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 import { officeRemoveHelper } from './office-remove-helper';
 
+import { ObjectData } from '../../types/object-types';
+
 import officeApiDataLoader from '../api/office-api-data-loader';
 
 describe('OfficeRemoveHelper', () => {
@@ -12,7 +14,12 @@ describe('OfficeRemoveHelper', () => {
   it('removeOfficeTableBody should work as expected', async () => {
     // given
     const isClear = true;
-    const object = { isCrosstab: true, crosstabHeaderDimensions: {} };
+    const object = {
+      isCrosstab: true, crosstabHeaderDimensions: {}, name: 'object',
+      objectWorkingId: 1234567,
+      objectId: 'objectId',
+      projectId: 'projectId',
+    } as ObjectData;
     const officeTable = {};
     const excelContextSyncMock = jest.fn();
     const getItemMock = jest.fn().mockReturnValue(officeTable);
@@ -226,8 +233,19 @@ describe('OfficeRemoveHelper', () => {
       .spyOn(homeHelper, 'isMacAndSafariBased')
       .mockReturnValue(isSafari);
 
+    const objectData = {
+      name: 'object',
+      objectWorkingId: 1234567,
+      objectId: 'objectId',
+      projectId: 'projectId',
+      mstrObjectType: {
+        name: 'report'
+      }
+    } as ObjectData;
+
+
     // when
-    await officeRemoveHelper.removeExcelTable(officeTable, excelContextMock, isClear);
+    await officeRemoveHelper.removeExcelTable(officeTable, excelContextMock, objectData, isClear);
 
     // then
     const isnotClearCalledTimes = !isClear ? 1 : 0;
