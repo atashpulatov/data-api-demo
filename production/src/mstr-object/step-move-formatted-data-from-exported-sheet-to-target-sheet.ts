@@ -57,6 +57,9 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
         sourceWorksheetId
       );
 
+      const previousShapeCollection = await getShapCollection(targetWorksheet, excelContext);
+      const tableShapesStartIndex = previousShapeCollection.items.length;
+
       await officeApiHelper.copyRangeFromSourceWorksheet(
         {
           sourceTableRange,
@@ -68,10 +71,10 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
       sourceWorksheet.delete();
       await excelContext.sync();
 
-      const shapeCollection = await getShapCollection(targetWorksheet, excelContext);
+      const currentShapeCollection = await getShapCollection(targetWorksheet, excelContext);
 
       // Group the shape collection of imported table
-      const shapeGroup = this.groupShapeCollection(shapeCollection, targetWorksheet);
+      const shapeGroup = this.groupShapeCollection(currentShapeCollection, targetWorksheet, tableShapesStartIndex);
 
       shapeGroup.load('id');
       await excelContext.sync();
@@ -96,34 +99,16 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
    * @param shapeCollection Shape collection of imported table
    * @param worksheet Excel worksheet, where the object has been imported
    */
-  private groupShapeCollection(shapeCollection: Excel.ShapeCollection, worksheet: Excel.Worksheet) {
-    const { items } = shapeCollection;
-
-    const { workbook } = reduxStore.getState().officeReducer;
+  private groupShapeCollection(currentShapeCollection: Excel.ShapeCollection, worksheet: Excel.Worksheet, tableShapesStartIndex: number) {
+    const { items } = currentShapeCollection;
 
     const shapeCollectionCount = items.length;
 
-    let tableShapesStartIndex = 0;
-
-    if (workbook && (worksheet.id in workbook)) {
-      tableShapesStartIndex = workbook[worksheet.id];
-    }
-
     // Crop the shape collection of recently imported table
     const currentTableShapes = items.slice(tableShapesStartIndex, shapeCollectionCount);
-    const currentTableShapesCount = currentTableShapes.length;
 
     // Group the shape collection of imported table
-    const shapeGroup = shapeCollection.addGroup(currentTableShapes);
-
-    // Update the shape collection count of given worksheet, to calculate the shapes count of next imported table 
-    const updatedShapeCollectionCount = shapeCollectionCount - (currentTableShapesCount - 1);
-    reduxStore.dispatch(officeActions.setShapeCollectionCount(
-      {
-        worksheetId: worksheet.id,
-        shapeCollectionCount: updatedShapeCollectionCount
-      }
-    ));
+    const shapeGroup = currentShapeCollection.addGroup(currentTableShapes);
 
     return shapeGroup;
   }

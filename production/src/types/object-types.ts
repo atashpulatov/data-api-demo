@@ -116,7 +116,6 @@ export interface Worksheet {
   id: string;
   name: string;
   index: number;
-  shapeCollectionCount?: number;
 }
 
 export interface GroupData {

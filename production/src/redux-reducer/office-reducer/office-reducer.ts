@@ -10,7 +10,6 @@ import {
   SetIsPivotTableSupported,
   SetIsShapeAPISupportedAction,
   SetPopupDataAction,
-  SetShapeCollectionCountAction,
   ToggleIsClearDataFailedFlagAction,
   ToggleIsConfirmFlagAction,
   ToggleIsSettingsFlagAction,
@@ -36,7 +35,6 @@ const initialState: OfficeState = {
   isInsertWorksheetAPISupported: false,
   isPivotTableSupported: false,
   isAdvancedWorksheetTrackingSupported: false,
-  workbook: {}
 };
 
 // eslint-disable-next-line default-param-last
@@ -95,9 +93,6 @@ export const officeReducer = (state = initialState, action: OfficeActions): Offi
 
     case OfficeActionsTypes.SET_ADVANCED_WORKSHEET_TRACKING_SUPPORTED:
       return setIsAdvancedWorksheetTrackingSupported(state, action);
-
-    case OfficeActionsTypes.SET_SHAPE_COLLECTION_COUNT:
-      return setShapeCollectionCount(state, action);
 
     default:
       break;
@@ -254,15 +249,3 @@ function setIsAdvancedWorksheetTrackingSupported(
   };
 }
 
-function setShapeCollectionCount(
-  state: OfficeState,
-  action: SetShapeCollectionCountAction
-): OfficeState {
-  return {
-    ...state,
-    workbook: {
-      ...state.workbook,
-      [action.shapeCollectionInfo.worksheetId]: action.shapeCollectionInfo.shapeCollectionCount,
-    }
-  };
-}

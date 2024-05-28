@@ -14,9 +14,6 @@ import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { OperationTypes } from '../../operation/operation-type-names';
 import { ErrorMessages } from '../../error/constants';
-import { reduxStore } from '../../store';
-import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
-import { getShapCollection } from '../../mstr-object/formatted-data-helper';
 
 class StepManipulateVisualizationImage {
   /**
@@ -118,15 +115,6 @@ class StepManipulateVisualizationImage {
       await excelContext.sync();
 
       const { id, name, position } = sheet;
-
-      const { items } = await getShapCollection(sheet, excelContext);
-
-      reduxStore.dispatch(officeActions.setShapeCollectionCount(
-        {
-          worksheetId: id,
-          shapeCollectionCount: items.length
-        }
-      ));
 
       const updatedObject = {
         objectWorkingId,

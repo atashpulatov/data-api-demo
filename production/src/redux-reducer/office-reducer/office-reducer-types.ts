@@ -1,7 +1,6 @@
 import { Action } from 'redux';
 
 export type OfficeState = {
-  workbook: any;
   isSecured: boolean;
   shouldRenderSettings: boolean;
   isClearDataFailed: boolean;
@@ -39,7 +38,6 @@ export enum OfficeActionsTypes {
   SET_INSERT_WORKSHEET_API_SUPPORTED = 'SET_INSERT_WORKSHEET_API_SUPPORTED',
   SET_PIVOT_TABLE_SUPPORTED = 'SET_PIVOT_TABLE_SUPPORTED',
   SET_ADVANCED_WORKSHEET_TRACKING_SUPPORTED = 'SET_ADVANCED_WORKSHEET_TRACKING_SUPPORTED',
-  SET_SHAPE_COLLECTION_COUNT = 'SET_SHAPE_COLLECTION_COUNT',
 }
 
 export interface ShowDialogAction extends Action {
@@ -128,11 +126,6 @@ export interface SetIsAdvancedWorksheetTrackingSupported extends Action {
   isAdvancedWorksheetTrackingSupported: boolean;
 }
 
-export interface SetShapeCollectionCountAction extends Action {
-  type: OfficeActionsTypes.SET_SHAPE_COLLECTION_COUNT;
-  shapeCollectionInfo: any;
-}
-
 export type OfficeActions =
   | ShowDialogAction
   | HideDialogAction
@@ -151,5 +144,4 @@ export type OfficeActions =
   | SetIsShapeAPISupportedAction
   | SetIsInsertWorksheetAPISupportedAction
   | SetIsPivotTableSupported
-  | SetIsAdvancedWorksheetTrackingSupported
-  | SetShapeCollectionCountAction;
+  | SetIsAdvancedWorksheetTrackingSupported;
