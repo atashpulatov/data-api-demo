@@ -45,9 +45,11 @@ class OfficeRemoveHelper {
       if (homeHelper.isMacAndSafariBased()) {
         await this.deleteTableInChunks(excelContext, officeTable);
       } else {
-        // Delete threshold grouped shapes before deleting entire table
-        const shapeGroup = officeTable.worksheet.shapes.getItem(objectData.shapeGroupId);
-        shapeGroup.delete();
+        if (objectData?.shapeGroupId) {
+          // Delete threshold shape group before deleting the entire table
+          const shapeGroup = officeTable.worksheet.shapes.getItem(objectData.shapeGroupId);
+          shapeGroup.delete();
+        }
 
         officeTable.delete();
       }

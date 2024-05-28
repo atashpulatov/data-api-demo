@@ -73,14 +73,16 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
 
       const currentShapeCollection = await getShapCollection(targetWorksheet, excelContext);
 
-      // Group the shape collection of imported table
-      const shapeGroup = this.groupShapeCollection(currentShapeCollection, targetWorksheet, tableShapesStartIndex);
+      if (currentShapeCollection?.items?.length > 0) {
+        // Group the shape collection of imported table
+        const shapeGroup = this.groupShapeCollection(currentShapeCollection, targetWorksheet, tableShapesStartIndex);
 
-      shapeGroup.load('id');
-      await excelContext.sync();
+        shapeGroup.load('id');
+        await excelContext.sync();
 
-      // Link the shape group to imported table 
-      objectData.shapeGroupId = shapeGroup.id;
+        // Link the shape group to imported table 
+        objectData.shapeGroupId = shapeGroup.id;
+      }
 
       operationStepDispatcher.updateObject(objectData);
       operationStepDispatcher.completeMoveFormattedDataFromExportedSheetToTargetSheet(objectWorkingId);
