@@ -34,14 +34,12 @@ const useGetImportOptions = (): ImportButtonOptionsType[] => {
 
   options.push(optionsDictionary[ObjectImportType.TABLE]);
 
-  // Formatted data import type is supported by default
-  const isformattedDataSupportedByDefault = !selectedMstrObjectType;
-
   // Display 'Import Formatted Data' button only for reports and dossiers
   const { dossier, report } = mstrObjectType.mstrObjectType
   const isSelectedObjectTypeSupported = selectedMstrObjectType === dossier || selectedMstrObjectType === report;
 
-  if (isInsertWorksheetAPISupported && (isformattedDataSupportedByDefault || isSelectedObjectTypeSupported)) {
+  // Formatted data import type is supported by default
+  if (isInsertWorksheetAPISupported && (!selectedMstrObjectType || isSelectedObjectTypeSupported)) {
     options.push({ disabled: !isChosenVisOfGridType, ...optionsDictionary[ObjectImportType.FORMATTED_DATA] });
   }
 
