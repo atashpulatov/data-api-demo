@@ -1,15 +1,11 @@
 import { officeApiHelper } from '../office/api/office-api-helper';
-
-import { reduxStore } from '../store';
-
+import { getShapCollection } from './formatted-data-helper'
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../types/object-types';
 
 import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
-import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { TITLE_EXCLUDED_DEFAULT_CELL_POSITION } from './constants';
-import { getShapCollection } from './formatted-data-helper'
 
 class StepMoveFormattedDataFromExportedSheetToTargetSheet {
   /**
@@ -101,7 +97,7 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
    * @param shapeCollection Shape collection of imported table
    * @param worksheet Excel worksheet, where the object has been imported
    */
-  private groupShapeCollection(currentShapeCollection: Excel.ShapeCollection, worksheet: Excel.Worksheet, tableShapesStartIndex: number) {
+  private groupShapeCollection(currentShapeCollection: Excel.ShapeCollection, worksheet: Excel.Worksheet, tableShapesStartIndex: number): Excel.Shape {
     const { items } = currentShapeCollection;
 
     const shapeCollectionCount = items.length;
