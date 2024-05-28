@@ -302,5 +302,6 @@
    "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "永遠在側面板顯示: 物件名稱、來源名稱、類型、屬性、計量、篩選條件、資料表大小、逐頁分組資訊",
    "Report Filter": "報告篩選條件",
    "Report Limits": "報告限制",
-   "View Filter": "檢視篩選條件"
+   "View Filter": "檢視篩選條件",
+   "Selected non-grid visualization cannot be imported as formatted data": "已選取的非資料格視覺效果無法彙入為格式化資料"
 }

@@ -302,5 +302,6 @@
    "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information",
    "Report Filter": "Report Filter",
    "Report Limits": "Report Limits",
-   "View Filter": "View Filter"
+   "View Filter": "View Filter",
+   "Selected non-grid visualization cannot be imported as formatted data": "Selected non-grid visualization cannot be imported as formatted data"
 }

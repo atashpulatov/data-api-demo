@@ -302,5 +302,6 @@
    "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "常にサイド パネルに表示: オブジェクト名、ソース名、タイプ、アトリビュート、メトリック、フィルター、テーブル サイズ、ページバイ情報",
    "Report Filter": "レポート フィルター",
    "Report Limits": "レポート制限",
-   "View Filter": "ビュー フィルター"
+   "View Filter": "ビュー フィルター",
+   "Selected non-grid visualization cannot be imported as formatted data": "選択した非グリッド ビジュアリゼーションは、書式設定したデータとしてインポートできません"
 }

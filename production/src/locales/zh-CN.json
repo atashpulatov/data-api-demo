@@ -302,5 +302,6 @@
    "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "始终在侧面板上可见: 对象名称、源名称、类型、实体、度量、筛选器、表格大小、分页信息",
    "Report Filter": "报表筛选器",
    "Report Limits": "报表限制",
-   "View Filter": "视图筛选器"
+   "View Filter": "视图筛选器",
+   "Selected non-grid visualization cannot be imported as formatted data": "选定的非表格可视化效果无法导入为带格式的数据"
 }

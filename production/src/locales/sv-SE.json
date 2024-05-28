@@ -302,5 +302,6 @@
    "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "Alltid synligt på sidopanelen: objektnamn, källnamn, typ, attribut, mätvärden, filter, tabellstorlek, per sidinformation",
    "Report Filter": "Rapportfilter",
    "Report Limits": "Rapportgränser",
-   "View Filter": "Vyfilter"
+   "View Filter": "Vyfilter",
+   "Selected non-grid visualization cannot be imported as formatted data": "Vald visualisering utan rutnät kan inte importeras som formaterad data"
 }

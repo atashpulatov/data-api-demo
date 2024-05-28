@@ -302,5 +302,6 @@
    "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "Altijd zichtbaar in zijvenster: objectnaam, bronnaam, type, attributen, metrieken, filters, tabelgrootte, informatie op pagina",
    "Report Filter": "Rapportfilter",
    "Report Limits": "Rapportlimieten",
-   "View Filter": "Weergavefilter"
+   "View Filter": "Weergavefilter",
+   "Selected non-grid visualization cannot be imported as formatted data": "Geselecteerde visualisatie zonder raster kan niet geïmporteerd worden als opgemaakte gegevens"
 }

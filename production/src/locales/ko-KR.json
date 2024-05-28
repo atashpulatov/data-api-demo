@@ -302,5 +302,6 @@
    "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "측면 패널에 항상 표시: 개체 이름, 소스 이름, 유형, 애트리뷰트, 메트릭, 필터, 테이블 크기, 페이지-바이 정보",
    "Report Filter": "리포트 필터",
    "Report Limits": "리포트 제한",
-   "View Filter": "뷰 필터"
+   "View Filter": "뷰 필터",
+   "Selected non-grid visualization cannot be imported as formatted data": "선택한 비그리드 시각화를 포맷된 데이터로 가져올 수 없습니다."
 }

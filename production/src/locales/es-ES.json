@@ -302,5 +302,6 @@
    "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "Siempre visible en el panel lateral: Nombre de objeto, Nombre de origen, Tipo, Atributos, Indicadores, Filtros, Tamaño de tabla, Información de paginación",
    "Report Filter": "Filtro de informe",
    "Report Limits": "Límites del informe",
-   "View Filter": "Ver filtro"
+   "View Filter": "Ver filtro",
+   "Selected non-grid visualization cannot be imported as formatted data": "La visualización que no es de cuadrícula seleccionada no se puede importar como datos con formato"
 }

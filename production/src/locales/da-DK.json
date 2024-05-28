@@ -302,5 +302,6 @@
    "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "Altid synlig i sidepanelet: Objektnavn, Kildenavn, Type, Attributter, Metrikker, Filtre, Tabelstørrelse, Side efter-oplysninger",
    "Report Filter": "Rapportfilter",
    "Report Limits": "Rapportgrænser",
-   "View Filter": "Vis filter"
+   "View Filter": "Vis filter",
+   "Selected non-grid visualization cannot be imported as formatted data": "De valgte visualiseringer uden gitter kan ikke importeres som formaterede data"
 }
