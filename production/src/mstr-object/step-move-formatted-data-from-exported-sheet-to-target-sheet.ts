@@ -1,10 +1,13 @@
 import { officeApiHelper } from '../office/api/office-api-helper';
 
+import { reduxStore } from '../store';
+
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../types/object-types';
 
 import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { TITLE_EXCLUDED_DEFAULT_CELL_POSITION } from './constants';
 
 class StepMoveFormattedDataFromExportedSheetToTargetSheet {
@@ -29,7 +32,7 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
 
     try {
       const { startCell, instanceDefinition, sourceWorksheetId, excelContext } = operationData;
-      const { isCrosstab, crosstabHeaderDimensions, objectWorkingId } = objectData;
+      const { isCrosstab, crosstabHeaderDimensions, objectWorkingId, worksheet } = objectData;
 
       let { rows, columns } = instanceDefinition;
 
@@ -45,7 +48,7 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
 
       const targetWorksheet = officeApiHelper.getExcelSheetById(
         excelContext,
-        objectData.worksheet.id
+        worksheet.id
       );
 
       const sourceWorksheet = officeApiHelper.getExcelSheetById(
@@ -64,6 +67,43 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
       sourceWorksheet.delete();
       await excelContext.sync();
 
+      targetWorksheet.load('shapes');
+      await excelContext.sync();
+      const shapesCollection = targetWorksheet.shapes;
+
+      shapesCollection.load('items');
+      await excelContext.sync();
+      const { items } = shapesCollection;
+
+
+      const { workbook } = reduxStore.getState().officeReducer;
+
+      const shapeCollectionCount = items.length;
+
+      let tableShapesStartIndex = 0;
+
+      if (workbook && (worksheet.id in workbook)) {
+        tableShapesStartIndex = workbook[worksheet.id];
+      }
+
+      const currentTableShapes = items.slice(tableShapesStartIndex, shapeCollectionCount);
+      const currentTableShapesCount = currentTableShapes.length;
+
+      const shapeGroup = shapesCollection.addGroup(currentTableShapes);
+      shapeGroup.load('id');
+      await excelContext.sync();
+
+      const updatedShapeCollectionCount = shapeCollectionCount - (currentTableShapesCount - 1);
+      reduxStore.dispatch(officeActions.setShapeCollectionCount(
+        {
+          worksheetId: worksheet.id,
+          shapeCollectionCount: updatedShapeCollectionCount
+        }
+      ));
+
+      objectData.shapeGroupId = shapeGroup.id;
+
+      operationStepDispatcher.updateObject(objectData);
       operationStepDispatcher.completeMoveFormattedDataFromExportedSheetToTargetSheet(objectWorkingId);
     } catch (error) {
       console.error(error);

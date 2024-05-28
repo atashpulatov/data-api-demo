@@ -11,6 +11,7 @@ import {
   SetIsPivotTableSupported,
   SetIsShapeAPISupportedAction,
   SetPopupDataAction,
+  SetShapeCollectionCountAction,
   ShowDialogAction,
 } from './office-reducer-types';
 
@@ -120,6 +121,13 @@ const setIsAdvancedWorksheetTrackingSupported = (
   isAdvancedWorksheetTrackingSupported,
 });
 
+const setShapeCollectionCount = (
+  shapeCollectionInfo: any
+): SetShapeCollectionCountAction => ({
+  type: OfficeActionsTypes.SET_SHAPE_COLLECTION_COUNT,
+  shapeCollectionInfo,
+});
+
 export const officeActions = {
   showDialog,
   hideDialog,
@@ -140,4 +148,5 @@ export const officeActions = {
   setIsInsertWorksheetAPISupported,
   setIsPivotTableSupported,
   setIsAdvancedWorksheetTrackingSupported,
+  setShapeCollectionCount,
 };
