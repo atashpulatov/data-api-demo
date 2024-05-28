@@ -1,5 +1,6 @@
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { getShapCollection } from './formatted-data-helper'
+
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../types/object-types';
 
