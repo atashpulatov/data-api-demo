@@ -95,6 +95,7 @@ class OfficeTableCreate {
     const objectDetailsSize = calculateOffsetForObjectInfoSettings(
       worksheetObjectInfoSettings,
       mstrObjectType,
+      importType,
       pageByData?.elements?.length > 0
     );
 

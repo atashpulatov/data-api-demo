@@ -14,6 +14,7 @@ import {
   populateDetails,
 } from './get-object-details-methods';
 import { TableOperation } from '../error/constants';
+import { ObjectImportType } from './constants';
 
 describe('Get Object Details Methods', () => {
   describe('getObjectPrompts', () => {
@@ -370,7 +371,12 @@ describe('Get Object Details Methods', () => {
       const expectedOffset = 14;
 
       // when
-      const offset = calculateOffsetForObjectInfoSettings(objectInfoSettings, objectType, false);
+      const offset = calculateOffsetForObjectInfoSettings(
+        objectInfoSettings,
+        objectType,
+        ObjectImportType.TABLE,
+        false
+      );
 
       // then
       expect(offset).toEqual(expectedOffset);
@@ -387,7 +393,12 @@ describe('Get Object Details Methods', () => {
       const expectedOffset = 0;
 
       // when
-      const offset = calculateOffsetForObjectInfoSettings(objectInfoSettings, objectType, false);
+      const offset = calculateOffsetForObjectInfoSettings(
+        objectInfoSettings,
+        objectType,
+        ObjectImportType.TABLE,
+        false
+      );
 
       // then
       expect(offset).toEqual(expectedOffset);
@@ -401,7 +412,39 @@ describe('Get Object Details Methods', () => {
       const expectedOffset = 0;
 
       // when
-      const offset = calculateOffsetForObjectInfoSettings(objectInfoSettings, objectType, false);
+      const offset = calculateOffsetForObjectInfoSettings(
+        objectInfoSettings,
+        objectType,
+        ObjectImportType.TABLE,
+        false
+      );
+
+      // then
+      expect(offset).toEqual(expectedOffset);
+    });
+
+    it.each`
+      importType
+      ${ObjectImportType.FORMATTED_DATA}
+      ${ObjectImportType.IMAGE}
+      ${ObjectImportType.PIVOT_TABLE}
+    `('Should return 0 if importType is different than TABLE', async ({ importType }) => {
+      // given
+      const objectType = { name: 'report' } as MstrObjectTypes;
+
+      const objectInfoSettings = [
+        { key: 'property1', toggleChecked: false },
+        { key: 'property2', toggleChecked: false },
+      ] as ObjectInfoSetting[];
+      const expectedOffset = 0;
+
+      // when
+      const offset = calculateOffsetForObjectInfoSettings(
+        objectInfoSettings,
+        objectType,
+        importType,
+        false
+      );
 
       // then
       expect(offset).toEqual(expectedOffset);

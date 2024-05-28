@@ -11,6 +11,7 @@ import { MstrObjectTypes } from './mstr-object-types';
 
 import mstrObjectEnum from './mstr-object-type-enum';
 import { TableOperation } from '../error/constants';
+import { ObjectImportType } from './constants';
 
 const promptAnswerFunctionsMap = {
   OBJECTS: (prompt: PromptResponse): PromptObject => ({
@@ -104,8 +105,13 @@ export const populateDetails = (
 export const calculateOffsetForObjectInfoSettings = (
   objectInfoSettings: ObjectInfoSetting[],
   objectType: MstrObjectTypes,
+  importType: ObjectImportType,
   hasPageBy: boolean
 ): number => {
+  if (importType !== ObjectImportType.TABLE) {
+    return 0;
+  }
+
   const isReport = objectType.name === mstrObjectEnum.mstrObjectType.report.name;
 
   let offset = 0;

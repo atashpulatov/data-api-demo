@@ -78,6 +78,7 @@ class StepGetOfficeTableEditRefresh {
       const newObjectDetailsSize = calculateOffsetForObjectInfoSettings(
         worksheetObjectInfoSettings,
         mstrObjectType,
+        importType,
         pageByData?.elements?.length > 0
       );
 
