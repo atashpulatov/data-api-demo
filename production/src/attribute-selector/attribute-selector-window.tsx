@@ -33,7 +33,7 @@ export const AttributeSelectorWindowNotConnected: React.FC<
 
   const { editedObject, setImportType, importType } = props;
 
-  if (editedObject && importType !== editedObject.importType) {
+  if (editedObject?.importType && importType !== editedObject.importType) {
     setImportType(editedObject.importType);
   }
 
