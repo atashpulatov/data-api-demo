@@ -2,11 +2,10 @@ import {
   InstanceDefinition,
   MstrTable,
 } from '../../redux-reducer/operation-reducer/operation-reducer-types';
-import { CrosstabHeaderDimensions } from '../../types/object-types';
+import { CrosstabHeaderDimensions, ObjectData } from '../../types/object-types';
 
 import { OverlappingTablesError } from '../../error/overlapping-tables-error';
 import { ErrorMessages } from '../../error/constants';
-import { ObjectData } from '../../types/object-types';
 import { ObjectImportType } from '../../mstr-object/constants';
 
 class OfficeTableHelperRange {
