@@ -1,4 +1,4 @@
-export const getShapCollection = async (worksheet: Excel.Worksheet, excelContext: Excel.RequestContext): Promise<Excel.ShapeCollection> => {
+export const getShapeCollection = async (worksheet: Excel.Worksheet, excelContext: Excel.RequestContext): Promise<Excel.ShapeCollection> => {
     worksheet.load('shapes');
     await excelContext.sync();
 

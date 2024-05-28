@@ -1,5 +1,5 @@
 import { officeApiHelper } from '../office/api/office-api-helper';
-import { getShapCollection } from './formatted-data-helper'
+import { getShapeCollection } from './formatted-data-helper'
 
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../types/object-types';
@@ -54,7 +54,7 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
         sourceWorksheetId
       );
 
-      const previousShapeCollection = await getShapCollection(targetWorksheet, excelContext);
+      const previousShapeCollection = await getShapeCollection(targetWorksheet, excelContext);
       const tableShapesStartIndex = previousShapeCollection.items.length;
 
       await officeApiHelper.copyRangeFromSourceWorksheet(
@@ -68,7 +68,7 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
       sourceWorksheet.delete();
       await excelContext.sync();
 
-      const currentShapeCollection = await getShapCollection(targetWorksheet, excelContext);
+      const currentShapeCollection = await getShapeCollection(targetWorksheet, excelContext);
 
       if (currentShapeCollection?.items?.length > 0) {
         // Group the shape collection of imported table
