@@ -295,5 +295,12 @@
    "Import Pivot Table": "Importer un tableau croisé dynamique",
    "Import Visualization": "Importer une visualisation",
    "Import Formatted Data": "Importer les données mises en forme",
-   "Page-By": "Saut de page"
+   "Page-By": "Saut de page",
+   "Object Information": "Informations sur l'objet",
+   "Side panel details": "Détails du panneau latéral",
+   "Worksheet details": "Détails de la feuille de calcul",
+   "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "Toujours visible sur le panneau latéral : nom de l'objet, nom de la source, type, attributs, mesures, filtres, taille de la table, informations de saut de page",
+   "Report Filter": "Filtre de rapport",
+   "Report Limits": "Limites du rapport",
+   "View Filter": "Filtre de vue"
 }

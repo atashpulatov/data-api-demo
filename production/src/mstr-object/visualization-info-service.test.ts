@@ -1,5 +1,8 @@
 import { mstrObjectRestService } from './mstr-object-rest-service';
+import * as objectFilterHelper from './object-filter-helper';
 import { visualizationInfoService } from './visualization-info-service';
+
+import { VisualizationInfo } from '../types/object-types';
 
 describe('VisualizationInfoService', () => {
   afterEach(() => {
@@ -21,14 +24,22 @@ describe('VisualizationInfoService', () => {
   const dossierInstance = 'dossierInstanceId';
 
   const expectedVisualizationInfoWithoutPanelStacks = {
-    chapterKey,
-    pageKey,
-    visualizationKey,
-    dossierStructure: {
-      dossierName,
-      chapterName,
-      pageName,
+    vizInfo: {
+      chapterKey,
+      pageKey,
+      visualizationKey,
+      dossierStructure: {
+        dossierName,
+        chapterName,
+        pageName,
+      },
     },
+    viewFilterText: '-',
+  };
+
+  const expectedNullVisualizationInfo = {
+    vizInfo: null as VisualizationInfo,
+    viewFilterText: '-',
   };
 
   const dossierDefinitionWithoutPanelStacks = {
@@ -394,11 +405,11 @@ describe('VisualizationInfoService', () => {
   it.each`
     dossierDefinition                                                        | expectedVisualizationInfo                      | testName
     ${dossierDefinitionWithoutPanelStacks}                                   | ${expectedVisualizationInfoWithoutPanelStacks} | ${'no panel stacks'}
-    ${dossierDefinitionWithoutPanelStacksAndExpectedVisualization}           | ${null}                                        | ${'no panel stacks and no expected visualization'}
+    ${dossierDefinitionWithoutPanelStacksAndExpectedVisualization}           | ${expectedNullVisualizationInfo}               | ${'no panel stacks and no expected visualization'}
     ${dossierDefinitionWithPanelStacks}                                      | ${expectedVisualizationInfoWithoutPanelStacks} | ${'panel stack'}
-    ${dossierDefinitionWithPanelStacksAndWithoutExpectedVisualization}       | ${null}                                        | ${'panel stack and no expected visualization'}
+    ${dossierDefinitionWithPanelStacksAndWithoutExpectedVisualization}       | ${expectedNullVisualizationInfo}               | ${'panel stack and no expected visualization'}
     ${dossierDefinitionWithNestedPanelStacks}                                | ${expectedVisualizationInfoWithoutPanelStacks} | ${'nested panel stack'}
-    ${dossierDefinitionWithNestedPanelStacksAndWithoutExpectedVisualization} | ${null}                                        | ${'nested panel stack and no expected visualization'}
+    ${dossierDefinitionWithNestedPanelStacksAndWithoutExpectedVisualization} | ${expectedNullVisualizationInfo}               | ${'nested panel stack and no expected visualization'}
   `(
     'should call getVisualizationInfo and get expectedVisualizationInfo for "$testName" dossier definition',
     async ({ dossierDefinition, expectedVisualizationInfo }) => {
@@ -406,6 +417,7 @@ describe('VisualizationInfoService', () => {
       jest
         .spyOn(mstrObjectRestService, 'getDossierInstanceDefinition')
         .mockResolvedValue(dossierDefinition);
+      jest.spyOn(objectFilterHelper, 'generateDossierFilterText');
       // when
       const newVisualizationInfo = await visualizationInfoService.getVisualizationInfo(
         projectId,

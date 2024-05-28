@@ -295,5 +295,12 @@
    "Import Pivot Table": "导入数据透视表",
    "Import Visualization": "导入可视化效果",
    "Import Formatted Data": "导入格式数据",
-   "Page-By": "分页依据"
+   "Page-By": "分页依据",
+   "Object Information": "对象信息",
+   "Side panel details": "侧面板详细信息",
+   "Worksheet details": "工作表详细信息",
+   "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "始终在侧面板上可见: 对象名称、源名称、类型、实体、度量、筛选器、表格大小、分页信息",
+   "Report Filter": "报表筛选器",
+   "Report Limits": "报表限制",
+   "View Filter": "视图筛选器"
 }

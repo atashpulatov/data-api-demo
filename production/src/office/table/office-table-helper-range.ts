@@ -1,3 +1,9 @@
+import {
+  InstanceDefinition,
+  MstrTable,
+} from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { CrosstabHeaderDimensions } from '../../types/object-types';
+
 import { OverlappingTablesError } from '../../error/overlapping-tables-error';
 import { ErrorMessages } from '../../error/constants';
 
@@ -17,7 +23,8 @@ class OfficeTableHelperRange {
     prevOfficeTable: Excel.Table | null,
     excelContext: Excel.RequestContext,
     range: Excel.Range,
-    instanceDefinition: any,
+    objectDetailsRange: Excel.Range,
+    instanceDefinition: InstanceDefinition,
     isRepeatStep: boolean
   ): Promise<void> {
     if (prevOfficeTable) {
@@ -30,9 +37,13 @@ class OfficeTableHelperRange {
           excelContext,
           instanceDefinition
         );
+        await this.deletePrevOfficeTable(excelContext, prevOfficeTable);
       }
     } else {
       await this.checkRangeValidity(excelContext, range);
+      if (objectDetailsRange) {
+        await this.checkRangeValidity(excelContext, objectDetailsRange);
+      }
     }
   }
 
@@ -43,12 +54,11 @@ class OfficeTableHelperRange {
    * @param excelContext Reference to Excel Context used by Excel API functions
    * @param instanceDefinition
    *
-   * @throws {OverlappingTablesError} when range is not empty.
    */
   async checkObjectRangeValidityOnRefresh(
     prevOfficeTable: Excel.Table,
     excelContext: Excel.RequestContext,
-    instanceDefinition: any
+    instanceDefinition: InstanceDefinition
   ): Promise<void> {
     const { rows, columns, mstrTable } = instanceDefinition;
 
@@ -69,8 +79,6 @@ class OfficeTableHelperRange {
     );
 
     await this.checkExtendedRangeColumns(addedColumns, prevOfficeTable, mstrTable, excelContext);
-
-    await this.deletePrevOfficeTable(excelContext, prevOfficeTable);
   }
 
   /**
@@ -84,7 +92,7 @@ class OfficeTableHelperRange {
    */
   async calculateRowsAndColumnsSize(
     excelContext: Excel.RequestContext,
-    mstrTable: any,
+    mstrTable: MstrTable,
     prevOfficeTable: Excel.Table,
     rows: number,
     columns: number
@@ -129,14 +137,15 @@ class OfficeTableHelperRange {
    * @throws {OverlappingTablesError} when range is not empty.
    */
   checkCrosstabAddedRowsAndColumns(
-    mstrTable: any,
+    mstrTable: MstrTable,
     addedRows: number,
     addedColumns: number
   ): { addedRows: number; addedColumns: number } {
     const { isCrosstab, crosstabHeaderDimensions, prevCrosstabDimensions } = mstrTable;
 
     if (isCrosstab) {
-      const { columnsY: prevColumnsY, rowsX: prevRowsX } = prevCrosstabDimensions;
+      const { columnsY: prevColumnsY, rowsX: prevRowsX } =
+        prevCrosstabDimensions as CrosstabHeaderDimensions;
       const { columnsY: crosstabColumnsY, rowsX: crosstabRowsX } = crosstabHeaderDimensions;
 
       if (!prevCrosstabDimensions) {
@@ -167,7 +176,7 @@ class OfficeTableHelperRange {
   async checkExtendedRangeColumns(
     addedColumns: number,
     prevOfficeTable: Excel.Table,
-    mstrTable: any,
+    mstrTable: MstrTable,
     excelContext: Excel.RequestContext
   ): Promise<void> {
     const { isCrosstab, prevCrosstabDimensions } = mstrTable;
@@ -176,7 +185,7 @@ class OfficeTableHelperRange {
       const range = this.prepareRangeColumns(prevOfficeTable, addedColumns);
       const rangeCrosstab = this.prepareRangeColumnsCrosstab(
         range,
-        prevCrosstabDimensions.columnsY,
+        (prevCrosstabDimensions as CrosstabHeaderDimensions).columnsY,
         isCrosstab
       );
 
@@ -233,7 +242,7 @@ class OfficeTableHelperRange {
   async checkExtendedRangeRows(
     addedColumns: number,
     prevOfficeTable: Excel.Table,
-    mstrTable: any,
+    mstrTable: MstrTable,
     excelContext: Excel.RequestContext,
     addedRows: number
   ): Promise<void> {
@@ -243,7 +252,7 @@ class OfficeTableHelperRange {
       const range = this.prepareRangeRows(prevOfficeTable, addedColumns, addedRows);
       const rangeCrosstab = this.prepareRangeRowsCrosstab(
         range,
-        prevCrosstabDimensions.rowsX,
+        (prevCrosstabDimensions as CrosstabHeaderDimensions).rowsX,
         isCrosstab
       );
 
@@ -293,7 +302,7 @@ class OfficeTableHelperRange {
    * @param excelContext Reference to Excel Context used by Excel API functions
    * @param excelRange range in which table will be inserted
    *
-   * @throws {OverlappingTablesError} when excelRange is not empty.
+   * @throws when excelRange is not empty.
    */
   async checkRangeValidity(
     excelContext: Excel.RequestContext,

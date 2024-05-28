@@ -295,5 +295,12 @@
    "Import Pivot Table": "Importar tabela dinâmica",
    "Import Visualization": "Importar visualização",
    "Import Formatted Data": "Importar dados formatados",
-   "Page-By": "Seleção de dados que cabem na página"
+   "Page-By": "Seleção de dados que cabem na página",
+   "Object Information": "Informações do objeto",
+   "Side panel details": "Detalhes do painel lateral",
+   "Worksheet details": "Detalhes da planilha",
+   "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "Sempre visíveis no painel lateral: nome do objeto, nome da fonte, tipo, atributos, métricas, filtros, tamanho da tabela, informação de seleção de dados que cabem na página",
+   "Report Filter": "Filtro de relatório",
+   "Report Limits": "Limites do relatório",
+   "View Filter": "Filtro de exibição"
 }

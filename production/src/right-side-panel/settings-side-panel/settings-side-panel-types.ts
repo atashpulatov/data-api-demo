@@ -30,3 +30,21 @@ export enum UserPreferenceKey {
 }
 
 export const EXCEL_IMPORT_ATTRIBUTES_AS_TEXT = 'excelImportAttributesAsText';
+
+export const OBJECT_INFO_KEY_VALUE = {
+  importedBy: 'Imported By',
+  owner: 'Owner',
+  modifiedDate: 'Date Modified',
+  dateModified: 'Date Modified',
+  createdDate: 'Date Created',
+  dateCreated: 'Date Created',
+  description: 'Description',
+  ancestors: 'Location',
+  location: 'Location',
+  version: 'Version',
+  id: 'ID',
+  name: 'Name',
+  filters: 'Filter',
+  filter: 'Filter',
+  pageBy: 'Page-By Information',
+};

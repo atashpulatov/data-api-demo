@@ -55,6 +55,7 @@ describe('StepApplyFormatting', () => {
       excelContext: { sync: excelContextSyncMock },
       instanceDefinition: {
         columns: 'instanceColumnsTest',
+        rows: 33,
         mstrTable: {
           columnInformation: 'columnInformationTest',
           isCrosstab: 'isCrosstabTest',
@@ -80,6 +81,7 @@ describe('StepApplyFormatting', () => {
       { columns: 'columnsTest' },
       { sync: excelContextSyncMock },
       {} as ObjectData,
+      33,
       'instanceColumnsTest',
       'metricsInRowsTest'
     );
@@ -101,7 +103,8 @@ describe('StepApplyFormatting', () => {
       undefined,
       undefined,
       excelContext,
-      {} as ObjectData
+      {} as ObjectData,
+      1
     );
 
     // then
@@ -127,6 +130,7 @@ describe('StepApplyFormatting', () => {
       excelContext,
       {} as ObjectData,
       2,
+      3,
       true
     );
 
@@ -138,6 +142,7 @@ describe('StepApplyFormatting', () => {
       1,
       ExcelTableMock,
       2,
+      3,
       true
     );
 
@@ -166,6 +171,7 @@ describe('StepApplyFormatting', () => {
       excelContext,
       {} as ObjectData,
       2,
+      3,
       true
     );
 
@@ -177,6 +183,7 @@ describe('StepApplyFormatting', () => {
       1,
       {},
       2,
+      3,
       true
     );
 
@@ -218,6 +225,7 @@ describe('StepApplyFormatting', () => {
         ExcelTableMock,
         excelContext,
         {} as ObjectData,
+        3,
         2,
         true
       );
@@ -230,6 +238,7 @@ describe('StepApplyFormatting', () => {
         true,
         1,
         ExcelTableMock,
+        3,
         2,
         true
       );
@@ -239,6 +248,7 @@ describe('StepApplyFormatting', () => {
         true,
         1,
         ExcelTableMock,
+        3,
         2,
         true
       );
@@ -258,7 +268,13 @@ describe('StepApplyFormatting', () => {
     'getColumnRangeForFormatting should work as expected',
     ({ expectedObjectIndex, index, isCrosstab, offset }) => {
       // given
-      const getItemAtMock = jest.fn().mockReturnValue({ getDataBodyRange: jest.fn() });
+      const getItemAtMock = jest.fn().mockReturnValue({
+        getDataBodyRange: jest.fn().mockReturnValue({
+          getCell: jest.fn().mockReturnValue({
+            getResizedRange: jest.fn(),
+          }),
+        }),
+      });
 
       const officeTableMock = {
         columns: {
@@ -267,7 +283,7 @@ describe('StepApplyFormatting', () => {
       } as unknown as Excel.Table;
 
       // when
-      formattingHelper.getColumnRangeForFormatting(index, isCrosstab, offset, officeTableMock);
+      formattingHelper.getColumnRangeForFormatting(index, isCrosstab, offset, officeTableMock, 10);
 
       // then
       expect(getItemAtMock).toHaveBeenCalledTimes(1);

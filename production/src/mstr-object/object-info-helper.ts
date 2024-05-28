@@ -1,6 +1,7 @@
 import { localizeDate } from '@mstr/connector-components';
 
 import { officeApiHelper } from '../office/api/office-api-helper';
+import officeTableHelperRange from '../office/table/office-table-helper-range';
 import { pageByHelper } from '../page-by/page-by-helper';
 
 import { reduxStore } from '../store';
@@ -38,7 +39,7 @@ export const getObjectDetailsForWorksheet = (
   enabledWorksheetDetailsSettings.forEach(setting => {
     switch (setting.key) {
       case 'name':
-        objectDetailValues.push([object.name], ['']);
+        objectDetailValues.push([object.definition.sourceName], ['']);
         indexesToFormat.push(formatIndex);
         formatIndex += 2;
         break;
@@ -79,11 +80,7 @@ export const getObjectDetailsForWorksheet = (
           indexesToFormat.push(formatIndex);
           formatIndex += 3;
         } else {
-          objectDetailValues.push(
-            [setting.item],
-            [object.details?.filters.viewFilterText || '-'],
-            ['']
-          );
+          objectDetailValues.push([setting.item], [object.details?.filters?.viewFilterText], ['']);
           indexesToFormat.push(formatIndex);
           formatIndex += 3;
         }
@@ -216,4 +213,95 @@ export const getObjectDetailsRange = async ({
   );
 
   return objectDetailsRange;
+};
+
+/**
+ * Checks the range for object info and where the table will be placed after object info in the worksheet.
+ *
+ * @param params - The parameters object for checking the range for object info.
+ * @param params.worksheet The Excel worksheet to check.
+ * @param params.excelContext The Excel request context.
+ * @param params.currentTableStartCell The starting cell of the current table.
+ * @param params.previousObjectDetailsSize The size of the previous object details.
+ * @param params.newObjectDetailsSize The size of the new object details.
+ * @param params.isCrosstab Indicates if the table is a crosstab.
+ * @param params.rows The number of rows in the table.
+ * @param params.columns The number of columns in the table.
+ * @param params.isNewStartCellSelected Indicates whether the new cell is selected.
+ * @param params.crosstabHeaderDimensions The dimensions of the crosstab headers.
+ *
+ * @returns A Promise that resolves when the range check is complete.
+ */
+export const checkRangeForObjectInfo = async ({
+  worksheet,
+  excelContext,
+  currentTableStartCell,
+  previousObjectDetailsSize,
+  newObjectDetailsSize,
+  isCrosstab,
+  rows,
+  columns,
+  isNewStartCellSelected,
+  crosstabHeaderDimensions,
+}: {
+  worksheet: Excel.Worksheet;
+  excelContext: Excel.RequestContext;
+  currentTableStartCell: string;
+  previousObjectDetailsSize: number;
+  newObjectDetailsSize: number;
+  isCrosstab: boolean;
+  rows: number;
+  columns: number;
+  isNewStartCellSelected: boolean;
+  crosstabHeaderDimensions: { rowsX: number; columnsY: number };
+}): Promise<void> => {
+  const tableRows = isCrosstab ? rows : rows + 1;
+  let objectSizeDifference = newObjectDetailsSize - previousObjectDetailsSize;
+
+  const currentTableRow = currentTableStartCell.split(/(\d+)/)[1];
+
+  // When there is no place left for the object details above the table we should not check actual range.
+  // Otherwise it will go out of the worksheet. That's why we change the objectSizeDifference to rows left to the top.
+  if (objectSizeDifference < 0 && parseInt(currentTableRow, 10) < Math.abs(objectSizeDifference)) {
+    objectSizeDifference = -(parseInt(currentTableRow, 10) - 1);
+  }
+
+  // When isNewStartCellSelected is true, it will act like initial import and that's why we need to check the object details range validity again.
+  if (isNewStartCellSelected) {
+    const objectDetailsRange = await getObjectDetailsRange({
+      worksheet,
+      objectDetailsStartCell: currentTableStartCell,
+      objectDetailsSize: newObjectDetailsSize,
+    });
+
+    excelContext.trackedObjects.add(objectDetailsRange);
+    await officeTableHelperRange.checkRangeValidity(excelContext, objectDetailsRange);
+
+    // Just like initial import, we need to check the range below the table no matter settings are increased or decreased.
+    // That's why we need to change the objectSizeDifference to positive for subsequent steps.
+    objectSizeDifference = Math.abs(objectSizeDifference);
+  }
+
+  const headersToAddRow = isCrosstab ? crosstabHeaderDimensions.columnsY : 0;
+  const headersToAddColumn = isCrosstab ? crosstabHeaderDimensions.rowsX : 0;
+
+  // Top left cell of the range to check.
+  const beginCell =
+    objectSizeDifference <= 0
+      ? officeApiHelper.offsetCellBy(currentTableStartCell, objectSizeDifference, 0)
+      : officeApiHelper.offsetCellBy(currentTableStartCell, tableRows + headersToAddRow, 0);
+
+  // Bottom right cell of the range to check.
+  const endCell =
+    objectSizeDifference <= 0
+      ? officeApiHelper.offsetCellBy(currentTableStartCell, -1, columns + headersToAddColumn - 1)
+      : officeApiHelper.offsetCellBy(
+          currentTableStartCell,
+          tableRows + headersToAddRow + objectSizeDifference - 1,
+          columns + headersToAddColumn - 1
+        );
+
+  const rangeToCheck = worksheet.getRange(`${beginCell}:${endCell}`);
+
+  await officeTableHelperRange.checkRangeValidity(excelContext, rangeToCheck);
 };

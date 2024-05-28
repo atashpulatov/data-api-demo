@@ -58,6 +58,7 @@ class StepGetInstanceDefinition {
         isPrompted,
         definition,
         importType,
+        details,
       } = objectData;
       let { visualizationInfo, body, name, pageByData } = objectData;
       const { preparedInstanceDefinition } = operationData;
@@ -66,9 +67,10 @@ class StepGetInstanceDefinition {
 
       let instanceDefinition = preparedInstanceDefinition;
       let shouldRenameExcelWorksheet = false;
+      let viewFilterText = '';
 
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-        ({ body, visualizationInfo, instanceDefinition } =
+        ({ body, visualizationInfo, instanceDefinition, viewFilterText } =
           await dossierInstanceDefinition.getDossierInstanceDefinition({
             ...objectData,
             visualizationInfo,
@@ -81,7 +83,7 @@ class StepGetInstanceDefinition {
         );
       } else if (!instanceDefinition) {
         body = instanceDefinitionHelper.setupBodyTemplate(body);
-
+        viewFilterText = '-';
         instanceDefinition = await mstrObjectRestService.createInstance(objectData);
       }
 
@@ -137,6 +139,12 @@ class StepGetInstanceDefinition {
           metrics: mstrTable.metrics,
         },
         pageByData,
+        details: {
+          ...details,
+          filters: {
+            viewFilterText,
+          },
+        },
       };
 
       const updatedOperation: Partial<OperationData> = {

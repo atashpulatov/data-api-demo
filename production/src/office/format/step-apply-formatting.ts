@@ -27,7 +27,7 @@ class StepApplyFormatting {
 
     const { objectWorkingId, officeTable, instanceDefinition, excelContext } = operationData;
 
-    const { columns } = instanceDefinition;
+    const { columns, rows } = instanceDefinition;
     const { columnInformation, isCrosstab, metricsInRows } = instanceDefinition.mstrTable;
 
     try {
@@ -41,6 +41,7 @@ class StepApplyFormatting {
         officeTable,
         excelContext,
         objectData,
+        rows,
         columns,
         metricsInRows
       );
@@ -75,6 +76,7 @@ class StepApplyFormatting {
     officeTable: Excel.Table,
     excelContext: Excel.RequestContext,
     objectData: ObjectData,
+    rows: number,
     columns?: number,
     metricsInRows?: boolean
   ): Promise<void> {
@@ -87,6 +89,7 @@ class StepApplyFormatting {
           isCrosstab,
           offset,
           officeTable,
+          rows,
           columns,
           metricsInRows
         );

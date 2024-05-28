@@ -33,10 +33,8 @@ export const AttributeSelectorWindowNotConnected: React.FC<
 
   const { editedObject, setImportType, importType } = props;
 
-  const { importType: editedObjectImportType } = editedObject;
-
-  if (editedObjectImportType && importType !== editedObjectImportType) {
-    setImportType(editedObjectImportType);
+  if (editedObject?.importType && importType !== editedObject.importType) {
+    setImportType(editedObject.importType);
   }
 
   const isPageByModalOpenRequested = useSelector(

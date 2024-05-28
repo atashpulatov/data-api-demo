@@ -26,7 +26,7 @@ class StepFormatHyperlinks {
     try {
       const { officeTable, instanceDefinition, excelContext } = operationData;
 
-      const { columns } = instanceDefinition;
+      const { columns, rows } = instanceDefinition;
       const { columnInformation, isCrosstab, metricsInRows } = instanceDefinition.mstrTable;
 
       const offset = objectData?.crosstabHeaderDimensions?.rowsX || 0;
@@ -40,6 +40,7 @@ class StepFormatHyperlinks {
             isCrosstab,
             offset,
             officeTable,
+            rows,
             columns,
             metricsInRows
           );

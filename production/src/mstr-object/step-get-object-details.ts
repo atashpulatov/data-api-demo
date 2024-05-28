@@ -1,10 +1,10 @@
 import { pageByHelper } from '../page-by/page-by-helper';
 import { mstrObjectRestService } from './mstr-object-rest-service';
-import { generateDossierFilterText, generateReportFilterTexts } from './object-filter-helper';
+import { generateReportFilterTexts } from './object-filter-helper';
 import { FiltersText } from './object-filter-helper-types';
 
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
-import { ObjectData, VisualizationInfo } from '../types/object-types';
+import { ObjectData } from '../types/object-types';
 
 import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
@@ -79,15 +79,8 @@ class StepGetObjectDetails {
           }
           case 'visualization':
           case 'dossier': {
-            const dossierDefinition = await mstrObjectRestService.getDossierDefinition(
-              objectId,
-              projectId
-            );
-            const { chapterKey } = objectData.visualizationInfo as VisualizationInfo;
-            filtersText = {
-              viewFilterText: generateDossierFilterText(dossierDefinition, chapterKey),
-            };
-            break;
+            const viewFilterText = objectData.details?.filters.viewFilterText;
+            return { viewFilterText };
           }
           default:
             filtersText = { viewFilterText: '-' };
@@ -110,7 +103,7 @@ class StepGetObjectDetails {
       const definition = populateDefinition(
         objectData,
         prompts.map(prompt => prompt.answers),
-        newObjectName // DE294385: use the name from the store if it was changed by user
+        name
       );
 
       if (pageByData && operationData.operationType !== OperationTypes.REFRESH_OPERATION) {
@@ -132,7 +125,6 @@ class StepGetObjectDetails {
       operationStepDispatcher.updateObject(updatedObject);
       operationStepDispatcher.completeGetObjectDetails(objectWorkingId);
     } catch (error) {
-      console.trace('getObjectDetails: ', error);
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
     } finally {
