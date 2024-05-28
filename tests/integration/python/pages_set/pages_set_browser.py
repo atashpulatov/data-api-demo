@@ -37,6 +37,7 @@ from pages.right_panel.right_panel_tile_details.right_panel_tile_details_browser
     RightPanelTileDetailsBrowserPage
 from pages.ub_performance.import_ub_performance_browser import UbPerformancePage
 from pages_set.abstract_pages_set import AbstractPagesSet
+from pages.page_by.page_by_browser_page import PageByBrowserPage
 
 
 class PagesSetBrowser(AbstractPagesSet):
@@ -75,6 +76,7 @@ class PagesSetBrowser(AbstractPagesSet):
         self.import_dossier_show_data_browser_page = ImportDossierShowDataBrowserPage()
 
         self.import_ub_performance_browser_page = UbPerformancePage()
+        self.page_by_browser_page = PageByBrowserPage()
 
     def excel_general_page(self):
         return self.excel_general_browser_page
@@ -156,3 +158,6 @@ class PagesSetBrowser(AbstractPagesSet):
 
     def import_ub_performance_page(self):
         return self.import_ub_performance_browser_page
+    
+    def page_by_page(self):
+        return self.page_by_browser_page
