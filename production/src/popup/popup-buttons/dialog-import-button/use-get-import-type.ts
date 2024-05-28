@@ -18,13 +18,7 @@ const useGetImportType = (options: ImportButtonOptionsType[]): ObjectImportType 
     return undefined;
   }
 
-  // Despite the formatted data import type is being supported by default for report/dossiers, the supported 
-  // import options set is missing the formatted data import type, due to the object is not being selected yet.
-  const isDefaultImportTypeFormattedData = defaultImportType === ObjectImportType.FORMATTED_DATA;
-
-  const isDefaultImportTypeSupportedByObject = options.some(({ key }) => key === defaultImportType)
-    || isDefaultImportTypeFormattedData;
-
+  const isDefaultImportTypeSupportedByObject = options.some(({ key }) => key === defaultImportType);
   const fallbackImportType = isDefaultImportTypeSupportedByObject
     ? defaultImportType
     : ObjectImportType.TABLE;
