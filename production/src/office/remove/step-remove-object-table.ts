@@ -78,7 +78,7 @@ class StepRemoveObjectTable {
             false
           );
 
-          await officeRemoveHelper.removeExcelTable(officeTable, excelContext, false);
+          await officeRemoveHelper.removeExcelTable(officeTable, excelContext, objectData, false);
         }
 
         operationStepDispatcher.completeRemoveObjectTable(objectWorkingId);

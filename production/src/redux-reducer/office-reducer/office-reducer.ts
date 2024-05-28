@@ -248,3 +248,4 @@ function setIsAdvancedWorksheetTrackingSupported(
     isAdvancedWorksheetTrackingSupported: action.isAdvancedWorksheetTrackingSupported,
   };
 }
+

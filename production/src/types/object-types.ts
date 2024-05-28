@@ -126,6 +126,7 @@ export interface GroupData {
 }
 
 export interface ObjectData {
+  shapeGroupId?: string;
   body?: Body;
   objectWorkingId?: number;
   bindId?: string;

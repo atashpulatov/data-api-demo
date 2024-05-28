@@ -1,4 +1,5 @@
 import { officeApiHelper } from '../office/api/office-api-helper';
+import { getShapeCollection } from './formatted-data-helper'
 
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../types/object-types';
@@ -29,7 +30,7 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
 
     try {
       const { startCell, instanceDefinition, sourceWorksheetId, excelContext } = operationData;
-      const { isCrosstab, crosstabHeaderDimensions, objectWorkingId } = objectData;
+      const { isCrosstab, crosstabHeaderDimensions, objectWorkingId, worksheet } = objectData;
 
       let { rows, columns } = instanceDefinition;
 
@@ -45,13 +46,16 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
 
       const targetWorksheet = officeApiHelper.getExcelSheetById(
         excelContext,
-        objectData.worksheet.id
+        worksheet.id
       );
 
       const sourceWorksheet = officeApiHelper.getExcelSheetById(
         excelContext,
         sourceWorksheetId
       );
+
+      const previousShapeCollection = await getShapeCollection(targetWorksheet, excelContext);
+      const tableShapesStartIndex = previousShapeCollection?.items?.length;
 
       await officeApiHelper.copyRangeFromSourceWorksheet(
         {
@@ -64,6 +68,20 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
       sourceWorksheet.delete();
       await excelContext.sync();
 
+      const currentShapeCollection = await getShapeCollection(targetWorksheet, excelContext);
+
+      if (currentShapeCollection?.items?.length > 0) {
+        // Group the shape collection of imported table
+        const shapeGroup = this.groupShapeCollection(currentShapeCollection, targetWorksheet, tableShapesStartIndex);
+
+        shapeGroup.load('id');
+        await excelContext.sync();
+
+        // Link the shape group to imported table 
+        objectData.shapeGroupId = shapeGroup.id;
+      }
+
+      operationStepDispatcher.updateObject(objectData);
       operationStepDispatcher.completeMoveFormattedDataFromExportedSheetToTargetSheet(objectWorkingId);
     } catch (error) {
       console.error(error);
@@ -72,6 +90,26 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
       console.timeEnd('Total');
       console.groupEnd();
     }
+  }
+
+  /**
+   * Groupes the shape collection of imported table into one shape group and links it to imported table.
+   *
+   * @param shapeCollection Shape collection of imported table
+   * @param worksheet Excel worksheet, where the object has been imported
+   */
+  private groupShapeCollection(currentShapeCollection: Excel.ShapeCollection, worksheet: Excel.Worksheet, tableShapesStartIndex: number): Excel.Shape {
+    const { items } = currentShapeCollection;
+
+    const shapeCollectionCount = items.length;
+
+    // Crop the shape collection of recently imported table
+    const currentTableShapes = items.slice(tableShapesStartIndex, shapeCollectionCount);
+
+    // Group the shape collection of imported table
+    const shapeGroup = currentShapeCollection.addGroup(currentTableShapes);
+
+    return shapeGroup;
   }
 }
 

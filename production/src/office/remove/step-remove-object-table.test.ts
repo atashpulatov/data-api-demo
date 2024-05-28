@@ -102,6 +102,7 @@ describe('StepRemoveObjectTable', () => {
       expect(officeRemoveHelper.removeExcelTable).toBeCalledWith(
         { sth: 42 },
         excelContextMock,
+        objectData,
         false
       );
 

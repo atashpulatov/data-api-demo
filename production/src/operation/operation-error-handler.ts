@@ -84,7 +84,7 @@ class OperationErrorHandler {
 
       officeTable.showHeaders = true; // check if needed
 
-      await officeRemoveHelper.removeExcelTable(officeTable, excelContext, false);
+      await officeRemoveHelper.removeExcelTable(officeTable, excelContext, objectData, false);
     }
 
     // delete image if it was created
