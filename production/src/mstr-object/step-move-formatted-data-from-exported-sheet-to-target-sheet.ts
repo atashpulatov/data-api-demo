@@ -9,6 +9,7 @@ import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { TITLE_EXCLUDED_DEFAULT_CELL_POSITION } from './constants';
+import { getShapCollection } from './formatted-data-helper'
 
 class StepMoveFormattedDataFromExportedSheetToTargetSheet {
   /**
@@ -67,14 +68,8 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
       sourceWorksheet.delete();
       await excelContext.sync();
 
-      targetWorksheet.load('shapes');
-      await excelContext.sync();
-      const shapesCollection = targetWorksheet.shapes;
-
-      shapesCollection.load('items');
-      await excelContext.sync();
-      const { items } = shapesCollection;
-
+      const shapeCollection = await getShapCollection(targetWorksheet, excelContext);
+      const { items } = shapeCollection;
 
       const { workbook } = reduxStore.getState().officeReducer;
 
@@ -89,7 +84,7 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
       const currentTableShapes = items.slice(tableShapesStartIndex, shapeCollectionCount);
       const currentTableShapesCount = currentTableShapes.length;
 
-      const shapeGroup = shapesCollection.addGroup(currentTableShapes);
+      const shapeGroup = shapeCollection.addGroup(currentTableShapes);
       shapeGroup.load('id');
       await excelContext.sync();
 
