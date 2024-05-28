@@ -117,3 +117,8 @@ def step_impl(context):
 def step_impl(context):
     are_all_objects_are_removed = context.pages.overview_dialog_page().are_all_objects_are_removed()
     AssertUtil.assert_simple(are_all_objects_are_removed, True)
+
+@step('I verified that number of objects in Overview window is {expected_number_of_objects}')
+def step_impl(context, expected_number_of_objects):
+    number_of_objects = context.pages.overview_dialog_page().get_number_of_objects_in_grid()
+    AssertUtil.assert_simple(number_of_objects, int(expected_number_of_objects))

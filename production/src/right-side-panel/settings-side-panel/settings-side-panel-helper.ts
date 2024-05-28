@@ -11,7 +11,11 @@ import {
   LoadWorksheetObjectInfoSettingAction,
   ObjectInfoSetting,
 } from '../../redux-reducer/settings-reducer/settings-reducer-types';
-import { ObjectAndWorksheetNamingOption, UserPreferenceKey } from './settings-side-panel-types';
+import {
+  OBJECT_INFO_KEY_VALUE,
+  ObjectAndWorksheetNamingOption,
+  UserPreferenceKey,
+} from './settings-side-panel-types';
 
 import i18n from '../../i18n';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
@@ -83,6 +87,19 @@ class SettingsSidePanelHelper {
   };
 
   /**
+   * Translates the object info settings by replacing the keys with their corresponding translated values.
+   *
+   * @param settings - The array of object info settings to be translated.
+   * @returns The array of object info settings with translated keys.
+   */
+  translateObjectInfoByKey = (settings: ObjectInfoSetting[]): ObjectInfoSetting[] =>
+    settings.map(setting => ({
+      ...setting,
+      showToggle: true,
+      item: i18n.t(OBJECT_INFO_KEY_VALUE[setting.key as keyof typeof OBJECT_INFO_KEY_VALUE]),
+    }));
+
+  /**
    * Loads the settings from the user's preference and dispatches the corresponding action.
    * @param preferenceKey - The key of the user's preference.
    * @param defaultValue - The default value for the settings.
@@ -97,7 +114,7 @@ class SettingsSidePanelHelper {
   ): Promise<void> {
     const { value } = await userRestService.getUserPreference(preferenceKey);
     const settings = this.jsonParseWithDefault(value, defaultValue);
-    reduxStore.dispatch(action(settings));
+    reduxStore.dispatch(action(this.translateObjectInfoByKey(settings)));
   }
 
   /**
@@ -138,7 +155,7 @@ class SettingsSidePanelHelper {
     if (typeof settingValue === 'boolean') {
       return JSON.stringify(
         settings.map((setting: ObjectInfoSetting) => ({
-          ...setting,
+          key: setting.key,
           toggleChecked: settingValue,
         }))
       );
@@ -148,9 +165,12 @@ class SettingsSidePanelHelper {
     return JSON.stringify(
       settings.map((setting: ObjectInfoSetting) => {
         if (setting.key === settingValue.key) {
-          return { ...setting, toggleChecked: settingValue.value };
+          return { key: setting.key, toggleChecked: settingValue.value };
         }
-        return setting;
+        return {
+          key: setting.key,
+          toggleChecked: setting.toggleChecked,
+        };
       })
     );
   };
@@ -237,10 +257,13 @@ class SettingsSidePanelHelper {
     const orderedList = worksheetObjectInfoKeys.reduce((acc, key) => {
       const item = worksheetSettings.find(i => i.key === key);
       if (item) {
-        acc.push(item);
+        acc.push({
+          key: item.key,
+          toggleChecked: item.toggleChecked,
+        });
       }
       return acc;
-    }, [] as ObjectInfoSetting[]);
+    }, []);
 
     await userRestService.setUserPreference(
       UserPreferenceKey.EXCEL_OBJECT_INFO_WORKSHEET_PREFERENCES,

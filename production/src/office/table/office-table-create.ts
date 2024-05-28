@@ -17,6 +17,7 @@ import { ObjectData } from '../../types/object-types';
 
 import { calculateOffsetForObjectInfoSettings } from '../../mstr-object/get-object-details-methods';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
+import { OperationTypes } from '../../operation/operation-type-names';
 import officeApiDataLoader from '../api/office-api-data-loader';
 import { OFFICE_TABLE_EXTA_GRID_LINE } from '../constants';
 
@@ -60,6 +61,7 @@ class OfficeTableCreate {
     insertNewWorksheet: boolean;
     pageByData?: PageByData;
     objectData: ObjectData;
+    operationType?: OperationTypes;
   }): Promise<any> {
     const {
       rows,
@@ -69,6 +71,8 @@ class OfficeTableCreate {
     } = instanceDefinition;
 
     const { importType, mstrObjectType } = objectData;
+
+    let objectDetailsRange;
 
     const newOfficeTableName = getOfficeTableHelper.createTableName(mstrTable, tableName);
     const worksheet = await officeApiWorksheetHelper.getWorksheet(
@@ -90,6 +94,7 @@ class OfficeTableCreate {
     const objectDetailsSize = calculateOffsetForObjectInfoSettings(
       worksheetObjectInfoSettings,
       mstrObjectType,
+      importType,
       pageByData?.elements?.length > 0
     );
 
@@ -110,27 +115,24 @@ class OfficeTableCreate {
 
     excelContext.trackedObjects.add(range);
 
-    await officeTableHelperRange.checkObjectRangeValidity(
-      prevOfficeTable,
-      excelContext,
-      range,
-      instanceDefinition,
-      isRepeatStep,
-      objectData
-    );
-
     if (objectDetailsSize > 0) {
-      const objectDetailsRange = await getObjectDetailsRange({
+      objectDetailsRange = await getObjectDetailsRange({
         worksheet,
         objectDetailsStartCell,
         objectDetailsSize,
       });
-      await insertAndFormatObjectDetails({
-        objectData,
-        excelContext,
-        objectDetailsRange,
-      });
+      excelContext.trackedObjects.add(objectDetailsRange);
     }
+
+    await officeTableHelperRange.checkObjectRangeValidity(
+      prevOfficeTable,
+      excelContext,
+      range,
+      objectDetailsRange,
+      instanceDefinition,
+      isRepeatStep,
+      objectData
+    );
 
     range.numberFormat = '' as unknown as any[][];
 
@@ -144,6 +146,14 @@ class OfficeTableCreate {
         crosstabHeaderDimensions,
         objectData
       );
+    }
+
+    if (objectDetailsRange) {
+      await insertAndFormatObjectDetails({
+        objectData,
+        excelContext,
+        objectDetailsRange,
+      });
     }
 
     return this.setOfficeTableProperties({

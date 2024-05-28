@@ -26,6 +26,7 @@ class DossierInstanceDefinition {
     body: any;
     visualizationInfo: VisualizationInfo;
     instanceDefinition: InstanceDefinition;
+    viewFilterText: string;
   }> {
     if (manipulationsXML) {
       if (!body) {
@@ -52,13 +53,14 @@ class DossierInstanceDefinition {
       throw error;
     }
 
-    const updatedVisualizationInfo = await this.getUpdatedVisualizationInfo(
-      projectId,
-      objectId,
-      // @ts-expect-error
-      visualizationInfo.visualizationKey,
-      instanceId
-    );
+    const { visualizationInfo: updatedVisualizationInfo, viewFilterText } =
+      await this.getUpdatedVisualizationInfo(
+        projectId,
+        objectId,
+        // @ts-expect-error
+        visualizationInfo.visualizationKey,
+        instanceId
+      );
 
     const config = {
       projectId,
@@ -89,6 +91,7 @@ class DossierInstanceDefinition {
       body,
       visualizationInfo: updatedVisualizationInfo,
       instanceDefinition,
+      viewFilterText,
     };
   }
 
@@ -114,16 +117,20 @@ class DossierInstanceDefinition {
     objectId: string,
     visualizationKey: string,
     instanceId: string
-  ): Promise<any> => {
+  ): Promise<{
+    visualizationInfo: VisualizationInfo;
+    viewFilterText: string;
+  }> => {
     try {
-      const visualizationInfo = await visualizationInfoService.getVisualizationInfo(
-        projectId,
-        objectId,
-        visualizationKey,
-        instanceId
-      );
+      const { vizInfo: visualizationInfo, viewFilterText } =
+        await visualizationInfoService.getVisualizationInfo(
+          projectId,
+          objectId,
+          visualizationKey,
+          instanceId
+        );
       if (visualizationInfo) {
-        return visualizationInfo;
+        return { visualizationInfo, viewFilterText };
       }
       throw new Error(ErrorMessages.DOSSIER_HAS_CHANGED);
     } catch (error) {

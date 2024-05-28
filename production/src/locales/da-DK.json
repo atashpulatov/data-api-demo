@@ -281,7 +281,7 @@
    "Import data as text": "Importer data som tekst",
    "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "Hvis det er aktiveret, importeres attributværdierne som tekst med bevarelse af formateringen fra MicroStrategy. Dette kan påvirke Excel-formler.",
    "Merge columns": "Flet kolonner",
-   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Hvis det er aktiveret, flettes tilstødende kolonneoverskrifter med identiske værdier. Gælder kun for krydstabelrapporter.",
+   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Hvis det er aktiveret, flettes tilstødende kolonneoverskrifter med identiske værdier. Gælder kun for krydstabelgitter.",
    "Paged-By": "Paged-By",
    "Default import format:": "Standard importformat:",
    "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.": "Objekter, der ikke kan importeres i det valgte format, importeres som data. Du kan ændre formatet under importen.",
@@ -295,5 +295,12 @@
    "Import Pivot Table": "Importer pivottabel",
    "Import Visualization": "Importer visualisering",
    "Import Formatted Data": "Importer formaterede data",
-   "Page-By": "Side efter"
+   "Page-By": "Side efter",
+   "Object Information": "Objektoplysninger",
+   "Side panel details": "Sidepaneldetaljer",
+   "Worksheet details": "Oplysninger om regneark",
+   "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "Altid synlig i sidepanelet: Objektnavn, Kildenavn, Type, Attributter, Metrikker, Filtre, Tabelstørrelse, Side efter-oplysninger",
+   "Report Filter": "Rapportfilter",
+   "Report Limits": "Rapportgrænser",
+   "View Filter": "Vis filter"
 }

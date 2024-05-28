@@ -281,7 +281,7 @@
    "Import data as text": "データをテキストとしてインポート",
    "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "有効化されている場合、MicroStrategy の書式設定を維持したまま、アトリビュート値はテキストとしてインポートされます。 Excel 式に影響する場合があります。",
    "Merge columns": "列を結合",
-   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "有効にすると、同じ値を持つ隣接する列ヘッダーが結合されます。クロス集計レポートにのみ適用されます。",
+   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "有効にすると、同じ値を持つ隣接する列ヘッダーが結合されます。クロス集計グリッドにのみ適用されます。",
    "Paged-By": "ページバイ",
    "Default import format:": "デフォルトのインポート形式:",
    "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.": "選択した形式でインポートできないオブジェクトは、データとしてインポートされます。インポート中に書式を変更できます。",
@@ -295,5 +295,12 @@
    "Import Pivot Table": "ピボット テーブルをインポート",
    "Import Visualization": "ビジュアリゼーションをインポート",
    "Import Formatted Data": "書式設定済みデータをインポート",
-   "Page-By": "ページバイ"
+   "Page-By": "ページバイ",
+   "Object Information": "オブジェクト情報",
+   "Side panel details": "サイド パネルの詳細",
+   "Worksheet details": "ワークシートの詳細",
+   "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "常にサイド パネルに表示: オブジェクト名、ソース名、タイプ、アトリビュート、メトリック、フィルター、テーブル サイズ、ページバイ情報",
+   "Report Filter": "レポート フィルター",
+   "Report Limits": "レポート制限",
+   "View Filter": "ビュー フィルター"
 }

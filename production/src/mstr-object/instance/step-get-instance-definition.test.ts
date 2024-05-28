@@ -185,6 +185,7 @@ describe('StepGetInstanceDefinition', () => {
             name: 'mstrTableNameDossierTest',
           } as unknown as MstrTable,
         },
+        viewFilterText: '-',
       });
 
       jest
@@ -347,6 +348,11 @@ describe('StepGetInstanceDefinition', () => {
           metrics: ['some metrics'],
         },
         manipulationsXML: false,
+        details: {
+          filters: {
+            viewFilterText: '-',
+          },
+        },
       });
 
       expect(operationStepDispatcher.completeGetInstanceDefinition).toBeCalledTimes(1);
@@ -406,7 +412,19 @@ describe('StepGetInstanceDefinition', () => {
 
       jest.spyOn(instanceDefinitionHelper, 'setupBodyTemplate').mockReturnValue(objectData.body);
 
-      jest.spyOn(dossierInstanceDefinition, 'getDossierInstanceDefinition').mockImplementation();
+      jest
+        .spyOn(dossierInstanceDefinition, 'getDossierInstanceDefinition')
+        .mockImplementation()
+        .mockResolvedValue({
+          body: 'bodyDossierTest',
+          visualizationInfo: visualizationInfoParam,
+          instanceDefinition: {
+            mstrTable: {
+              name: 'mstrTableNameDossierTest',
+            } as unknown as MstrTable,
+          },
+          viewFilterText: '-',
+        });
 
       jest.spyOn(mstrObjectRestService, 'createInstance').mockResolvedValue({
         mstrTable: {
@@ -553,6 +571,11 @@ describe('StepGetInstanceDefinition', () => {
           metrics: ['some metrics'],
         },
         manipulationsXML: false,
+        details: {
+          filters: {
+            viewFilterText: '-',
+          },
+        },
       });
 
       expect(operationStepDispatcher.completeGetInstanceDefinition).toBeCalledTimes(1);

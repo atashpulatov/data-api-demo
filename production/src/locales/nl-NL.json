@@ -281,7 +281,7 @@
    "Import data as text": "Gegevens importeren als tekst",
    "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "Als deze optie is ingeschakeld, worden attribuutwaarden geïmporteerd als tekst met behoud van de opmaak van MicroStrategy. Dit kan invloed hebben op Excel-formules.",
    "Merge columns": "Kolommen samenvoegen",
-   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Als deze optie is ingeschakeld, worden aangrenzende kolomkoppen met identieke waarden samengevoegd. Alleen van toepassing op kruistabelrapporten.",
+   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "Als deze optie is ingeschakeld, worden aangrenzende kolomkoppen met identieke waarden samengevoegd. Alleen van toepassing op kruistabelrasters.",
    "Paged-By": "Op pagina",
    "Default import format:": "Standaard importindeling:",
    "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.": "Objecten die niet geïmporteerd kunnen worden in de geselecteerde indeling, worden geïmporteerd als gegevens. U kunt de indeling tijdens het importeren wijzigen.",
@@ -295,5 +295,12 @@
    "Import Pivot Table": "Draaitabel importeren",
    "Import Visualization": "Visualisatie importeren",
    "Import Formatted Data": "Opgemaakte gegevens importeren",
-   "Page-By": "Op pagina"
+   "Page-By": "Op pagina",
+   "Object Information": "Objectinformatie",
+   "Side panel details": "Details zijpaneel",
+   "Worksheet details": "Werkbladgegevens",
+   "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "Altijd zichtbaar in zijvenster: objectnaam, bronnaam, type, attributen, metrieken, filters, tabelgrootte, informatie op pagina",
+   "Report Filter": "Rapportfilter",
+   "Report Limits": "Rapportlimieten",
+   "View Filter": "Weergavefilter"
 }

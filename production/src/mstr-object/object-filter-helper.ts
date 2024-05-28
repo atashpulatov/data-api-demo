@@ -47,9 +47,12 @@ const convertTokensToString = (tokens: Token[], prompts?: PromptObject[]): strin
   for (const token of tokens) {
     if (token.value === '?' || token.value === '%') {
       filterText += '';
-    } else if (prompts && token?.target?.subType === 'prompt_expression') {
+    } else if (prompts && token?.target?.subType.startsWith('prompt')) {
       const { answers, name } = prompts.find(prompt => prompt.id === token?.target?.objectId);
-      const promptText = answers ? ` ( ${answers} )` : ` ? ( ${name} )`;
+
+      const answersText = Array.isArray(answers) ? answers.join(', ') : answers;
+
+      const promptText = answersText ? ` ( ${answersText} )` : ` ? ( ${name} )`;
 
       filterText += promptText;
     } else filterText += ` ${getTokenString(token)}`;
@@ -106,10 +109,10 @@ export const generateDossierFilterText = (
 ): string => {
   const selectedChapter = dossierDefinition.chapters.find(chapter => chapter.key === chapterKey);
   const joinDelimiter = ` ) ${t('and').toUpperCase()} ( `;
-  const dossierFilterSummary = `( ${selectedChapter.filters
-    .filter(filter => filter.summary)
-    .map(filter => filter.summary)
-    .join(joinDelimiter)} )`;
+  const dossierFilters = selectedChapter?.filters.filter(filter => filter.summary) || [];
+  const dossierFilterSummary = dossierFilters.length
+    ? `( ${dossierFilters.map(filter => filter.summary).join(joinDelimiter)} )`
+    : '-';
 
   return dossierFilterSummary;
 };

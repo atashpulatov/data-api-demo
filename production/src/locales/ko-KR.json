@@ -281,7 +281,7 @@
    "Import data as text": "데이터를 텍스트로 가져오기",
    "If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.": "활성화한 경우 애트리뷰트 값을 MicroStrategy의 형식을 유지하면서 텍스트로 가져옵니다. 이는 Excel 수식에 영향을 미칠 수 있습니다.",
    "Merge columns": "열 병합",
-   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "활성화한 경우 값이 동일한 인접한 열 헤더가 병합됩니다. 크로스탭 리포트에만 적용됩니다.",
+   "If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.": "활성화한 경우 값이 동일한 인접한 열 헤더가 병합됩니다. 크로스탭 그리드에만 적용됩니다.",
    "Paged-By": "페이지-바이",
    "Default import format:": "기본 가져오기 형식:",
    "Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.": "선택한 형식으로 가져올 수 없는 개체는 데이터로 가져옵니다. 가져오는 동안 형식을 변경할 수 있습니다.",
@@ -295,5 +295,12 @@
    "Import Pivot Table": "피벗 테이블 가져오기",
    "Import Visualization": "가져오기 시각화",
    "Import Formatted Data": "포맷된 데이터 가져오기",
-   "Page-By": "페이지-바이"
+   "Page-By": "페이지-바이",
+   "Object Information": "개체 정보",
+   "Side panel details": "측면 패널 세부 사항",
+   "Worksheet details": "워크시트 세부 사항",
+   "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "측면 패널에 항상 표시: 개체 이름, 소스 이름, 유형, 애트리뷰트, 메트릭, 필터, 테이블 크기, 페이지-바이 정보",
+   "Report Filter": "리포트 필터",
+   "Report Limits": "리포트 제한",
+   "View Filter": "뷰 필터"
 }

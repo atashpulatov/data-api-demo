@@ -31,6 +31,12 @@ export const AttributeSelectorWindowNotConnected: React.FC<
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [attributesSelected, setAttributesSelected] = useState(false);
 
+  const { editedObject, setImportType, importType } = props;
+
+  if (editedObject?.importType && importType !== editedObject.importType) {
+    setImportType(editedObject.importType);
+  }
+
   const isPageByModalOpenRequested = useSelector(
     navigationTreeSelectors.selectIsPageByModalOpenRequested
   );
@@ -54,16 +60,13 @@ export const AttributeSelectorWindowNotConnected: React.FC<
   const handleImport = async (message: DialogResponse): Promise<void> => {
     const {
       chosenObject,
-      editedObject,
       displayAttrFormNames: chosenDisplayAttrFormNames,
-      importType: chosenImportType,
       requestPageByModalOpen,
     } = props;
 
     const objectId = editedObject?.objectId || chosenObject.chosenObjectId;
     const projectId = editedObject?.projectId || chosenObject.chosenProjectId;
     const instanceId = editedObject?.instanceId;
-    const importType = editedObject?.importType || chosenImportType;
     const displayAttrFormNames = editedObject?.displayAttrFormNames || chosenDisplayAttrFormNames;
 
     let instance;
@@ -117,14 +120,7 @@ export const AttributeSelectorWindowNotConnected: React.FC<
     chosenObjectName: string,
     filterDetails: any
   ): void => {
-    const {
-      chosenObject,
-      editedObject,
-      importSubtotal,
-      displayAttrFormNames,
-      objectName,
-      importType,
-    } = props;
+    const { chosenObject, importSubtotal, displayAttrFormNames, objectName } = props;
     chosenObjectName = chosenObjectName || objectName;
 
     const subtotalsInfo = {
@@ -165,7 +161,7 @@ export const AttributeSelectorWindowNotConnected: React.FC<
     setTriggerUpdate(false);
   };
 
-  const { handleBack, chosenObject, mstrData, objectName, editedObject } = props;
+  const { handleBack, chosenObject, mstrData, objectName } = props;
   const { isPrompted } = mstrData;
   const { chosenObjectName } = chosenObject;
   const typeOfObject = editedObject || chosenObject;
@@ -229,6 +225,7 @@ const mapStateToProps = (state: RootState): any => {
 const mapDispatchToProps = {
   handleBack: popupStateActions.onPopupBack,
   handlePrepare: popupStateActions.onPrepareData,
+  setImportType: popupStateActions.setImportType,
   requestPageByModalOpen: navigationTreeActions.requestPageByModalOpen,
 };
 

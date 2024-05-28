@@ -60,9 +60,10 @@ describe('DossierInstanceDefinition', () => {
     // given
     jest.spyOn(mstrObjectRestService, 'createDossierInstance').mockImplementation();
 
-    jest
-      .spyOn(visualizationInfoService, 'getVisualizationInfo')
-      .mockResolvedValue('updatedVisualizationInfoTest' as unknown as VisualizationInfo);
+    jest.spyOn(visualizationInfoService, 'getVisualizationInfo').mockResolvedValue({
+      vizInfo: 'updatedVisualizationInfoTest' as VisualizationInfo,
+      viewFilterText: 'dossierFilterTextTest',
+    });
 
     jest.spyOn(mstrObjectRestService, 'fetchVisualizationDefinition').mockImplementation(() => {
       throw new Error('errorTest');
@@ -165,9 +166,10 @@ describe('DossierInstanceDefinition', () => {
       // Mock the createDossierInstance function to return a predefined instance
       mockCreateDossierInstance.mockResolvedValue({ mid: expectedInstanceId });
 
-      jest
-        .spyOn(visualizationInfoService, 'getVisualizationInfo')
-        .mockResolvedValue('getVisualizationInfoTest' as unknown as VisualizationInfo);
+      jest.spyOn(visualizationInfoService, 'getVisualizationInfo').mockResolvedValue({
+        vizInfo: 'getVisualizationInfoTest' as VisualizationInfo,
+        viewFilterText: 'dossierFilterTextTest',
+      });
 
       jest
         .spyOn(mstrObjectRestService, 'fetchVisualizationDefinition')

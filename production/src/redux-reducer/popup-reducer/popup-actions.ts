@@ -155,12 +155,13 @@ class PopupActions {
 
     let updatedVisualizationInfo;
     try {
-      updatedVisualizationInfo = await this.visualizationInfoService.getVisualizationInfo(
-        projectId,
-        objectId,
-        visualizationInfo.visualizationKey,
-        instance.mid
-      );
+      ({ vizInfo: updatedVisualizationInfo } =
+        await this.visualizationInfoService.getVisualizationInfo(
+          projectId,
+          objectId,
+          visualizationInfo.visualizationKey,
+          instance.mid
+        ));
     } catch (ignoreError) {
       // Ignored
     }
@@ -193,12 +194,13 @@ class PopupActions {
 
     let updatedVisualizationInfo;
     try {
-      updatedVisualizationInfo = await this.visualizationInfoService.getVisualizationInfo(
-        projectId,
-        objectId,
-        visualizationInfo.visualizationKey,
-        instance.mid
-      );
+      ({ vizInfo: updatedVisualizationInfo } =
+        await this.visualizationInfoService.getVisualizationInfo(
+          projectId,
+          objectId,
+          visualizationInfo.visualizationKey,
+          instance.mid
+        ));
     } catch (ignoreError) {
       // Ignored
     }

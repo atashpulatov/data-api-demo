@@ -66,6 +66,7 @@ export interface VisualizationInfo {
     dossierName: string;
     pageName: string;
   };
+  viewFilterText?: string;
 }
 
 export interface DossierData {

@@ -1,3 +1,5 @@
+import { generateDossierFilterText } from './object-filter-helper';
+
 import { VisualizationInfo } from '../types/object-types';
 
 class VisualizationInfoService {
@@ -25,36 +27,44 @@ class VisualizationInfoService {
    * @param objectId
    * @param visualizationKey visualization id
    * @param dossierInstance dossier instance id
-   * @returns Contains info for visualization or null if visualization key is not found
+   * @returns A promise that resolves to an object containing the visualization information (null if visualization key is not found) and view filter text.
    */
   async getVisualizationInfo(
     projectId: string,
     objectId: string,
     visualizationKey: string,
     dossierInstance: any
-  ): Promise<VisualizationInfo> {
+  ): Promise<{ vizInfo: VisualizationInfo; viewFilterText: string }> {
     const dossierDefinition = await this.mstrObjectRestService.getDossierInstanceDefinition(
       projectId,
       objectId,
       dossierInstance
     );
 
+    let vizInfo = null;
+    let currentChapter = null;
+
     for (const chapter of dossierDefinition.chapters) {
       const chapterData = { name: chapter.name, key: chapter.key };
       for (const page of chapter.pages) {
-        const vizInfo = this.parseDossierPage(
-          page,
-          visualizationKey,
-          chapterData,
-          dossierDefinition.name
-        );
-        if (vizInfo) {
-          return vizInfo;
+        if (!vizInfo) {
+          vizInfo = this.parseDossierPage(
+            page,
+            visualizationKey,
+            chapterData,
+            dossierDefinition.name
+          );
+        }
+        if (!currentChapter && chapter.key === dossierDefinition.currentChapter) {
+          currentChapter = chapter;
         }
       }
     }
 
-    return null;
+    return {
+      vizInfo,
+      viewFilterText: generateDossierFilterText(dossierDefinition, currentChapter?.key),
+    };
   }
 
   /**
