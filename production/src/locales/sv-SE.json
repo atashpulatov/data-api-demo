@@ -299,5 +299,8 @@
    "Object Information": "Objektinformation",
    "Side panel details": "Detaljer på sidopanelen",
    "Worksheet details": "Kalkylbladsdetaljer",
-   "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "Alltid synligt på sidopanelen: objektnamn, källnamn, typ, attribut, mätvärden, filter, tabellstorlek, per sidinformation"
+   "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "Alltid synligt på sidopanelen: objektnamn, källnamn, typ, attribut, mätvärden, filter, tabellstorlek, per sidinformation",
+   "Report Filter": "Rapportfilter",
+   "Report Limits": "Rapportgränser",
+   "View Filter": "Vyfilter"
 }

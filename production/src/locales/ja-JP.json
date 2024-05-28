@@ -299,5 +299,8 @@
    "Object Information": "オブジェクト情報",
    "Side panel details": "サイド パネルの詳細",
    "Worksheet details": "ワークシートの詳細",
-   "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "常にサイド パネルに表示: オブジェクト名、ソース名、タイプ、アトリビュート、メトリック、フィルター、テーブル サイズ、ページバイ情報"
+   "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "常にサイド パネルに表示: オブジェクト名、ソース名、タイプ、アトリビュート、メトリック、フィルター、テーブル サイズ、ページバイ情報",
+   "Report Filter": "レポート フィルター",
+   "Report Limits": "レポート制限",
+   "View Filter": "ビュー フィルター"
 }

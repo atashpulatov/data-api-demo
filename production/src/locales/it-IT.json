@@ -299,5 +299,8 @@
    "Object Information": "Informazioni oggetto",
    "Side panel details": "Dettagli riquadro laterale",
    "Worksheet details": "Dettagli foglio di lavoro",
-   "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "Sempre visibili sul riquadro laterale: nome oggetto, nome origine, tipo, attributi, metriche, filtri, dimensioni tabella, informazioni di raggruppamento a pagine web"
+   "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "Sempre visibili sul riquadro laterale: nome oggetto, nome origine, tipo, attributi, metriche, filtri, dimensioni tabella, informazioni di raggruppamento a pagine web",
+   "Report Filter": "Filtro report",
+   "Report Limits": "Limiti report",
+   "View Filter": "Filtro vista"
 }

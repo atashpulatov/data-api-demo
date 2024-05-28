@@ -299,5 +299,8 @@
    "Object Information": "Informations sur l'objet",
    "Side panel details": "Détails du panneau latéral",
    "Worksheet details": "Détails de la feuille de calcul",
-   "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "Toujours visible sur le panneau latéral : nom de l'objet, nom de la source, type, attributs, mesures, filtres, taille de la table, informations de saut de page"
+   "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "Toujours visible sur le panneau latéral : nom de l'objet, nom de la source, type, attributs, mesures, filtres, taille de la table, informations de saut de page",
+   "Report Filter": "Filtre de rapport",
+   "Report Limits": "Limites du rapport",
+   "View Filter": "Filtre de vue"
 }

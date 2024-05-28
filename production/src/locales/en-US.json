@@ -299,5 +299,8 @@
    "Object Information": "Object Information",
    "Side panel details": "Side panel details",
    "Worksheet details": "Worksheet details",
-   "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information"
+   "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information",
+   "Report Filter": "Report Filter",
+   "Report Limits": "Report Limits",
+   "View Filter": "View Filter"
 }

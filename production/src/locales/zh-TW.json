@@ -299,5 +299,8 @@
    "Object Information": "物件資訊",
    "Side panel details": "側面板詳細資料",
    "Worksheet details": "工作表詳細資訊",
-   "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "永遠在側面板顯示: 物件名稱、來源名稱、類型、屬性、計量、篩選條件、資料表大小、逐頁分組資訊"
+   "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "永遠在側面板顯示: 物件名稱、來源名稱、類型、屬性、計量、篩選條件、資料表大小、逐頁分組資訊",
+   "Report Filter": "報告篩選條件",
+   "Report Limits": "報告限制",
+   "View Filter": "檢視篩選條件"
 }

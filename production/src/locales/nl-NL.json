@@ -299,5 +299,8 @@
    "Object Information": "Objectinformatie",
    "Side panel details": "Details zijpaneel",
    "Worksheet details": "Werkbladgegevens",
-   "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "Altijd zichtbaar in zijvenster: objectnaam, bronnaam, type, attributen, metrieken, filters, tabelgrootte, informatie op pagina"
+   "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "Altijd zichtbaar in zijvenster: objectnaam, bronnaam, type, attributen, metrieken, filters, tabelgrootte, informatie op pagina",
+   "Report Filter": "Rapportfilter",
+   "Report Limits": "Rapportlimieten",
+   "View Filter": "Weergavefilter"
 }
