@@ -115,7 +115,8 @@ class OfficeTableCreate {
       excelContext,
       range,
       instanceDefinition,
-      isRepeatStep
+      isRepeatStep,
+      objectData
     );
 
     if (objectDetailsSize > 0) {
@@ -239,7 +240,8 @@ class OfficeTableCreate {
       excelContext,
       range,
       instanceDefinition,
-      isRepeatStep
+      isRepeatStep,
+      objectData
     );
 
     const officeTable = worksheet.tables.add(tableRange, true); // create office table based on the range
