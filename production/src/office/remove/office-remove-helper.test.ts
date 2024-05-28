@@ -37,7 +37,8 @@ describe('OfficeRemoveHelper', () => {
 
     // then
     expect(removeTableMock).toBeCalledTimes(1);
-    expect(removeTableMock).toBeCalledWith(officeTable, excelContextMock, object.isCrosstab);
+    expect(removeTableMock).toBeCalledWith(officeTable, excelContextMock, object, object.isCrosstab);
+    expect(removeTableMock).toBeCalledWith(officeTable, excelContextMock, object, object.isCrosstab);
     expect(getItemMock).toBeCalledTimes(1);
   });
 
