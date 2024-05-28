@@ -69,33 +69,14 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
       await excelContext.sync();
 
       const shapeCollection = await getShapCollection(targetWorksheet, excelContext);
-      const { items } = shapeCollection;
 
-      const { workbook } = reduxStore.getState().officeReducer;
+      // Group the shape collection of imported table
+      const shapeGroup = this.groupShapeCollection(shapeCollection, targetWorksheet);
 
-      const shapeCollectionCount = items.length;
-
-      let tableShapesStartIndex = 0;
-
-      if (workbook && (worksheet.id in workbook)) {
-        tableShapesStartIndex = workbook[worksheet.id];
-      }
-
-      const currentTableShapes = items.slice(tableShapesStartIndex, shapeCollectionCount);
-      const currentTableShapesCount = currentTableShapes.length;
-
-      const shapeGroup = shapeCollection.addGroup(currentTableShapes);
       shapeGroup.load('id');
       await excelContext.sync();
 
-      const updatedShapeCollectionCount = shapeCollectionCount - (currentTableShapesCount - 1);
-      reduxStore.dispatch(officeActions.setShapeCollectionCount(
-        {
-          worksheetId: worksheet.id,
-          shapeCollectionCount: updatedShapeCollectionCount
-        }
-      ));
-
+      // Link the shape group to imported table 
       objectData.shapeGroupId = shapeGroup.id;
 
       operationStepDispatcher.updateObject(objectData);
@@ -107,6 +88,44 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
       console.timeEnd('Total');
       console.groupEnd();
     }
+  }
+
+  /**
+   * Groupes the shape collection of imported table into one shape group and links it to imported table.
+   *
+   * @param shapeCollection Shape collection of imported table
+   * @param worksheet Excel worksheet, where the object has been imported
+   */
+  private groupShapeCollection(shapeCollection: Excel.ShapeCollection, worksheet: Excel.Worksheet) {
+    const { items } = shapeCollection;
+
+    const { workbook } = reduxStore.getState().officeReducer;
+
+    const shapeCollectionCount = items.length;
+
+    let tableShapesStartIndex = 0;
+
+    if (workbook && (worksheet.id in workbook)) {
+      tableShapesStartIndex = workbook[worksheet.id];
+    }
+
+    // Crop the shape collection of recently imported table
+    const currentTableShapes = items.slice(tableShapesStartIndex, shapeCollectionCount);
+    const currentTableShapesCount = currentTableShapes.length;
+
+    // Group the shape collection of imported table
+    const shapeGroup = shapeCollection.addGroup(currentTableShapes);
+
+    // Update the shape collection count of given worksheet, to calculate the shapes count of next imported table 
+    const updatedShapeCollectionCount = shapeCollectionCount - (currentTableShapesCount - 1);
+    reduxStore.dispatch(officeActions.setShapeCollectionCount(
+      {
+        worksheetId: worksheet.id,
+        shapeCollectionCount: updatedShapeCollectionCount
+      }
+    ));
+
+    return shapeGroup;
   }
 }
 
