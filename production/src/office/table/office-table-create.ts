@@ -10,16 +10,13 @@ import officeTableHelperRange from './office-table-helper-range';
 
 import { reduxStore } from '../../store';
 
-import { VisualizationTypes } from '../../mstr-object/mstr-object-types';
 import { PageByData } from '../../page-by/page-by-types';
 import { InstanceDefinition } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
 
 import { calculateOffsetForObjectInfoSettings } from '../../mstr-object/get-object-details-methods';
-import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { OperationTypes } from '../../operation/operation-type-names';
 import officeApiDataLoader from '../api/office-api-data-loader';
-import { OFFICE_TABLE_EXTA_GRID_LINE } from '../constants';
 
 const DEFAULT_TABLE_STYLE = 'TableStyleLight11';
 
@@ -207,9 +204,9 @@ class OfficeTableCreate {
   }): Promise<any> {
     const {
       mstrTable,
-      mstrTable: { isCrosstab, name, visualizationType },
+      mstrTable: { isCrosstab, name },
     } = instanceDefinition;
-    const { importType, crosstabHeaderDimensions, mstrObjectType } = objectData;
+    const { importType, crosstabHeaderDimensions } = objectData;
 
     const newOfficeTableName = getOfficeTableHelper.createTableName(mstrTable, tableName);
     const worksheet = await officeApiWorksheetHelper.getWorksheet(
@@ -232,13 +229,6 @@ class OfficeTableCreate {
       const { rowsX, rowsY, columnsX, columnsY } = crosstabHeaderDimensions;
       rows = columnsY + rowsY;
       columns = columnsX + rowsX;
-
-      if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name
-        && visualizationType !== VisualizationTypes.GRID) {
-        // Remove the redundant column from non-grid visualization, due to the reason that
-        // the export engine does not export the first row of attributes for crosstab microcharts/custom grids
-        columns -= OFFICE_TABLE_EXTA_GRID_LINE;
-      }
     }
     const tableRange = officeApiHelper.getRange(columns, startCell, rows);
     const range = worksheet.getRange(tableRange)
