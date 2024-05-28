@@ -295,5 +295,9 @@
    "Import Pivot Table": "匯入資料資料表",
    "Import Visualization": "匯入視覺效果",
    "Import Formatted Data": "匯入格式化資料",
-   "Page-By": "逐頁分組"
+   "Page-By": "逐頁分組",
+   "Object Information": "物件資訊",
+   "Side panel details": "側面板詳細資料",
+   "Worksheet details": "工作表詳細資訊",
+   "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "永遠在側面板顯示: 物件名稱、來源名稱、類型、屬性、計量、篩選條件、資料表大小、逐頁分組資訊"
 }

@@ -295,5 +295,9 @@
    "Import Pivot Table": "피벗 테이블 가져오기",
    "Import Visualization": "가져오기 시각화",
    "Import Formatted Data": "포맷된 데이터 가져오기",
-   "Page-By": "페이지-바이"
+   "Page-By": "페이지-바이",
+   "Object Information": "개체 정보",
+   "Side panel details": "측면 패널 세부 사항",
+   "Worksheet details": "워크시트 세부 사항",
+   "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "측면 패널에 항상 표시: 개체 이름, 소스 이름, 유형, 애트리뷰트, 메트릭, 필터, 테이블 크기, 페이지-바이 정보"
 }

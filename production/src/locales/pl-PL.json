@@ -295,5 +295,9 @@
    "Import Pivot Table": "Importuj tabelę przestawną",
    "Import Visualization": "Importuj wizualizację",
    "Import Formatted Data": "Importuj sformatowane dane",
-   "Page-By": "Stronicowanie"
+   "Page-By": "Stronicowanie",
+   "Object Information": "Informacje o obiekcie",
+   "Side panel details": "Szczegóły panelu bocznego",
+   "Worksheet details": "Szczegóły arkusza",
+   "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "Zawsze widoczne w panelu bocznym: nazwa obiektu, nazwa źródła, typ, atrybuty, metryki, filtry, rozmiar tabeli, informacje o stronicowaniu"
 }

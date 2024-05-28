@@ -295,5 +295,9 @@
    "Import Pivot Table": "ピボット テーブルをインポート",
    "Import Visualization": "ビジュアリゼーションをインポート",
    "Import Formatted Data": "書式設定済みデータをインポート",
-   "Page-By": "ページバイ"
+   "Page-By": "ページバイ",
+   "Object Information": "オブジェクト情報",
+   "Side panel details": "サイド パネルの詳細",
+   "Worksheet details": "ワークシートの詳細",
+   "Always visible on the side panel: Object Name, Source Name, Type, Attributes, Metrics, Filters, Table Size, Page-By Information": "常にサイド パネルに表示: オブジェクト名、ソース名、タイプ、アトリビュート、メトリック、フィルター、テーブル サイズ、ページバイ情報"
 }
