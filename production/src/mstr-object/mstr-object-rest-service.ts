@@ -2,7 +2,7 @@ import request from 'superagent';
 
 import mstrAttributeFormHelper from './helper/mstr-attribute-form-helper';
 import mstrAttributeMetricHelper from './helper/mstr-attribute-metric-helper';
-import { DossierDefinition, ReportDefinition } from './object-filter-helper-types';
+import { ReportDefinition } from './object-filter-helper-types';
 import officeConverterServiceV2 from './office-converter-service-v2';
 
 import { ReduxStore } from '../store';
@@ -570,25 +570,6 @@ class MstrObjectRestService {
       .then(res => parseInstanceDefinition(res, attrforms));
   };
 
-  /**
-   * Retrieves the definition of a dossier.
-   * @param dossierId - The ID of the dossier object.
-   * @param projectId - The ID of the project.
-   * @returns A Promise that resolves to the DossierDefinition object.
-   */
-  getDossierDefinition = (dossierId: string, projectId: string): Promise<DossierDefinition> => {
-    const storeState = this.reduxStore.getState();
-    const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/v2/dossiers/${dossierId}/definition`;
-
-    return request
-      .get(fullPath)
-      .set('x-mstr-authtoken', authToken)
-      .set('x-mstr-projectid', projectId)
-      .withCredentials()
-      .then(res => res.body);
-  };
-
   getObjectInfo = (
     objectId: string,
     projectId: string,
@@ -872,30 +853,29 @@ class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .withCredentials()
       .then(res => res.body);
-  }
+  };
 
   /**
    * Fetches the workbook where the specific visualization exported to excel using export engine.
-   * 
+   *
    * @param dossierId unique identifier of dossier
    * @param dossierInstanceId unique identifier of dossier instance
    * @param visualizationKey visualization key
    * @param projectId unique identifier of the mstr project
-   * 
+   *
    * @returns Readable stream(blob)
    */
-  exportDossierToExcel = async (
-    { dossierId,
-      dossierInstanceId,
-      visualizationKey,
-      projectId
-    }: {
-      dossierId: string,
-      dossierInstanceId: string,
-      visualizationKey: string,
-      projectId: string
-    }
-  ): Promise<any> => {
+  exportDossierToExcel = async ({
+    dossierId,
+    dossierInstanceId,
+    visualizationKey,
+    projectId,
+  }: {
+    dossierId: string;
+    dossierInstanceId: string;
+    visualizationKey: string;
+    projectId: string;
+  }): Promise<any> => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${dossierId}/instances/${dossierInstanceId}/excel`;
@@ -905,8 +885,8 @@ class MstrObjectRestService {
       sheet: {
         header: {
           filterDetails: false,
-        }
-      }
+        },
+      },
     };
 
     const options = {
@@ -927,23 +907,22 @@ class MstrObjectRestService {
 
   /**
    * Fetches the workbook exported to excel using export engine.
-   * 
+   *
    * @param reportId unique identifier of report
    * @param reportInstanceId unique identifier of report instance
    * @param projectId unique identifier of the mstr project
-   * 
+   *
    * @returns Readable stream(blob)
    */
-  exportReportToExcel = async (
-    { reportId,
-      reportInstanceId,
-      projectId
-    }: {
-      reportId: string,
-      reportInstanceId: string,
-      projectId: string
-    }
-  ): Promise<any> => {
+  exportReportToExcel = async ({
+    reportId,
+    reportInstanceId,
+    projectId,
+  }: {
+    reportId: string;
+    reportInstanceId: string;
+    projectId: string;
+  }): Promise<any> => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/reports/${reportId}/instances/${reportInstanceId}/excel`;
@@ -953,13 +932,13 @@ class MstrObjectRestService {
         header: {
           exportReportTitle: true,
           exportFilterDetails: false,
-          exportPageByInfo: false
-        }
+          exportPageByInfo: false,
+        },
       },
       pageBy: {
-        pageOption: "DEFAULT",
-        pagePerSheet: false
-      }
+        pageOption: 'DEFAULT',
+        pagePerSheet: false,
+      },
     };
 
     const options = {

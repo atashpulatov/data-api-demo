@@ -1,10 +1,10 @@
 import { pageByHelper } from '../page-by/page-by-helper';
 import { mstrObjectRestService } from './mstr-object-rest-service';
-import { generateDossierFilterText, generateReportFilterTexts } from './object-filter-helper';
+import { generateReportFilterTexts } from './object-filter-helper';
 import { FiltersText } from './object-filter-helper-types';
 
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
-import { ObjectData, VisualizationInfo } from '../types/object-types';
+import { ObjectData } from '../types/object-types';
 
 import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
@@ -79,15 +79,8 @@ class StepGetObjectDetails {
           }
           case 'visualization':
           case 'dossier': {
-            const dossierDefinition = await mstrObjectRestService.getDossierDefinition(
-              objectId,
-              projectId
-            );
-            const { chapterKey } = objectData.visualizationInfo as VisualizationInfo;
-            filtersText = {
-              viewFilterText: generateDossierFilterText(dossierDefinition, chapterKey),
-            };
-            break;
+            const viewFilterText = objectData.details?.filters.viewFilterText;
+            return { viewFilterText };
           }
           default:
             filtersText = { viewFilterText: '-' };

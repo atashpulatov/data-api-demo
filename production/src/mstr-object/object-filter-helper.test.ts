@@ -378,4 +378,20 @@ describe('generateDossierFilterText', () => {
       generateDossierFilterText(mockDossierDefinition, mockDossierDefinition.chapters[0].key)
     ).toBe(expectedOutput);
   });
+
+  it('should return "-" when there are no filters', () => {
+    const mockDossierDefinition = {
+      currentChapter: 'chapter1',
+      chapters: [
+        {
+          key: 'chapter1',
+          filters: [],
+        },
+      ],
+    } as DossierDefinition;
+
+    expect(
+      generateDossierFilterText(mockDossierDefinition, mockDossierDefinition.chapters[0].key)
+    ).toBe('-');
+  });
 });

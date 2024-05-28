@@ -226,8 +226,11 @@ describe('Popup actions', () => {
     };
     // @ts-expect-error
     createDossierInstance.mockReturnValueOnce(instanceId);
-    // @ts-expect-error
-    getVisualizationInfo.mockReturnValueOnce(newVizInfo);
+
+    (getVisualizationInfo as jest.Mock).mockReturnValueOnce({
+      vizInfo: newVizInfo,
+      viewFilterText: 'viewFilterText',
+    });
 
     // when
     await actions.prepareDossierForEdit(editedDossier);
@@ -273,8 +276,11 @@ describe('Popup actions', () => {
 
     // @ts-expect-error
     createDossierInstance.mockReturnValueOnce(instanceId);
-    // @ts-expect-error
-    getVisualizationInfo.mockReturnValueOnce(newVizInfo);
+
+    (getVisualizationInfo as jest.Mock).mockReturnValueOnce({
+      vizInfo: newVizInfo,
+      viewFilterText: 'viewFilterText',
+    });
 
     // when
     await actions.prepareDossierForEdit(editedDossier);
@@ -372,8 +378,11 @@ describe('Popup actions', () => {
 
     // @ts-expect-error
     createDossierInstance.mockReturnValueOnce(instanceId);
-    // @ts-expect-error
-    getVisualizationInfo.mockReturnValueOnce(newVizInfo);
+
+    (getVisualizationInfo as jest.Mock).mockReturnValueOnce({
+      vizInfo: newVizInfo,
+      viewFilterText: 'viewFilterText',
+    });
 
     // when
     await actions.prepareDossierForReprompt(promptedDossier);

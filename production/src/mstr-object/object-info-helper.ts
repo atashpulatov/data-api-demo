@@ -80,11 +80,7 @@ export const getObjectDetailsForWorksheet = (
           indexesToFormat.push(formatIndex);
           formatIndex += 3;
         } else {
-          objectDetailValues.push(
-            [setting.item],
-            [object.details?.filters.viewFilterText || '-'],
-            ['']
-          );
+          objectDetailValues.push([setting.item], [object.details?.filters?.viewFilterText], ['']);
           indexesToFormat.push(formatIndex);
           formatIndex += 3;
         }
