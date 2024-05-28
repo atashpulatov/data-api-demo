@@ -55,7 +55,7 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
       );
 
       const previousShapeCollection = await getShapeCollection(targetWorksheet, excelContext);
-      const tableShapesStartIndex = previousShapeCollection.items.length;
+      const tableShapesStartIndex = previousShapeCollection?.items?.length;
 
       await officeApiHelper.copyRangeFromSourceWorksheet(
         {

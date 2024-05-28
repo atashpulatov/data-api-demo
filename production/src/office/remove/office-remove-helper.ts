@@ -48,7 +48,7 @@ class OfficeRemoveHelper {
         if (objectData?.shapeGroupId) {
           // Delete threshold shape group before deleting the entire table
           const shapeGroup = officeTable.worksheet.shapes.getItem(objectData.shapeGroupId);
-          shapeGroup.delete();
+          shapeGroup?.delete();
         }
 
         officeTable.delete();
