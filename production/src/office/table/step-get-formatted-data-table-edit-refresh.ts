@@ -27,7 +27,7 @@ class StepGetFormattedDataTableEditRefresh {
         operationData: OperationData
     ): Promise<void> {
         try {
-            console.time('Create default table template - edit or refresh');
+            console.time('Create formatted data table - edit or refresh');
             const {
                 tableName,
                 objectWorkingId,
@@ -87,7 +87,7 @@ class StepGetFormattedDataTableEditRefresh {
             console.error(error);
             operationErrorHandler.handleOperationError(objectData, operationData, error);
         } finally {
-            console.timeEnd('Create default table template - edit or refresh');
+            console.timeEnd('Create formatted data table - edit or refresh');
         }
     }
 }

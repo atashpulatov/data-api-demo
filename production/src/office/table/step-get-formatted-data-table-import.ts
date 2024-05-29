@@ -7,7 +7,7 @@ import officeTableCreate from './office-table-create';
 
 class StepGetFormattedDataTableImport {
     /**
-     * Creates default Excel table during import workflow. Similar to StepGetOfficeTableImport.getOfficeTableImport() step
+     * Creates an office table during import workflow. Similar to StepGetOfficeTableImport.getOfficeTableImport() step
      * except that redundant operations with the relation to formatted data table were eliminated.
      *
      * Communicates with object reducer and calls officeTableCreate.createFormattedDataOfficeTable.
@@ -23,7 +23,7 @@ class StepGetFormattedDataTableImport {
      */
     async getFormattedDataTableImport(objectData: ObjectData, operationData: OperationData): Promise<void> {
         try {
-            console.time('Create default table template - import');
+            console.time('Create formatted data table - import');
             const {
                 objectWorkingId,
                 excelContext,
@@ -68,7 +68,7 @@ class StepGetFormattedDataTableImport {
             console.error(error);
             operationErrorHandler.handleOperationError(objectData, operationData, error);
         } finally {
-            console.timeEnd('Create default table template - import');
+            console.timeEnd('Create formatted data table - import');
         }
     }
 }
