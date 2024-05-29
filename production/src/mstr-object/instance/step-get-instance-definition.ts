@@ -18,7 +18,7 @@ import { OperationSteps } from '../../operation/operation-steps';
 import mstrObjectEnum from '../mstr-object-type-enum';
 import dossierInstanceDefinition from './dossier-instance-definition';
 import { ErrorMessages } from '../../error/constants';
-import { ObjectImportType, objectTableImportType } from '../constants';
+import { ImportOperationStepDict, ObjectImportType, objectTableImportType } from '../constants';
 
 class StepGetInstanceDefinition {
   /**
@@ -116,6 +116,21 @@ class StepGetInstanceDefinition {
         futureStep,
         importType
       );
+
+      // DE296533: If the object is an image, we need to create a new worksheet before the image is imported
+      if (
+        importType === ObjectImportType.IMAGE &&
+        futureStep in ImportOperationStepDict &&
+        insertNewWorksheet
+      ) {
+        const worksheet = await officeApiWorksheetHelper.createNewWorksheet({
+          excelContext,
+          worksheetName: name,
+          pageByData,
+        });
+        worksheet.activate();
+        await excelContext.sync();
+      }
 
       if (insertNewWorksheet) {
         delete objectData.insertNewWorksheet;
