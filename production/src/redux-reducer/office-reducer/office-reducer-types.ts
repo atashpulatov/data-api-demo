@@ -14,6 +14,7 @@ export type OfficeState = {
   settingsPanelLoaded: boolean;
   reusePromptAnswers: boolean;
   isShapeAPISupported: boolean;
+  isOverviewWindowAPISupported: boolean;
   isInsertWorksheetAPISupported: boolean;
   isPivotTableSupported: boolean;
   isAdvancedWorksheetTrackingSupported: boolean;
@@ -35,6 +36,7 @@ export enum OfficeActionsTypes {
   SET_POPUP_DATA = 'OFFICE_SET_POPUP_DATA',
   CLEAR_POPUP_DATA = 'OFFICE_CLEAR_POPUP_DATA',
   SET_SHAPE_API_SUPPORTED = 'OFFICE_SET_SHAPE_API_SUPPORTED',
+  SET_OVERVIEW_WINDOW_API_SUPPORTED = 'OFFICE_SET_OVERVIEW_WINDOW_API_SUPPORTED',
   SET_INSERT_WORKSHEET_API_SUPPORTED = 'SET_INSERT_WORKSHEET_API_SUPPORTED',
   SET_PIVOT_TABLE_SUPPORTED = 'SET_PIVOT_TABLE_SUPPORTED',
   SET_ADVANCED_WORKSHEET_TRACKING_SUPPORTED = 'SET_ADVANCED_WORKSHEET_TRACKING_SUPPORTED',
@@ -111,6 +113,11 @@ export interface SetIsShapeAPISupportedAction extends Action {
   isShapeAPISupported: boolean;
 }
 
+export interface SetIsOverviewWindowAPISupportedAction extends Action {
+  type: OfficeActionsTypes.SET_OVERVIEW_WINDOW_API_SUPPORTED;
+  isOverviewWindowAPISupported: boolean;
+}
+
 export interface SetIsInsertWorksheetAPISupportedAction extends Action {
   type: OfficeActionsTypes.SET_INSERT_WORKSHEET_API_SUPPORTED;
   isInsertWorksheetAPISupported: boolean;
@@ -142,6 +149,7 @@ export type OfficeActions =
   | SetPopupDataAction
   | ClearPopupDataAction
   | SetIsShapeAPISupportedAction
+  | SetIsOverviewWindowAPISupportedAction
   | SetIsInsertWorksheetAPISupportedAction
   | SetIsPivotTableSupported
   | SetIsAdvancedWorksheetTrackingSupported;

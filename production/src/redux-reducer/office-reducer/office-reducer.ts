@@ -7,6 +7,7 @@ import {
   SetIsAdvancedWorksheetTrackingSupported,
   SetIsDialogLoadedAction,
   SetIsInsertWorksheetAPISupportedAction,
+  SetIsOverviewWindowAPISupportedAction,
   SetIsPivotTableSupported,
   SetIsShapeAPISupportedAction,
   SetPopupDataAction,
@@ -32,6 +33,7 @@ const initialState: OfficeState = {
   isSecured: false,
   isClearDataFailed: false,
   isShapeAPISupported: false,
+  isOverviewWindowAPISupported: false,
   isInsertWorksheetAPISupported: false,
   isPivotTableSupported: false,
   isAdvancedWorksheetTrackingSupported: false,
@@ -84,6 +86,9 @@ export const officeReducer = (state = initialState, action: OfficeActions): Offi
 
     case OfficeActionsTypes.SET_SHAPE_API_SUPPORTED:
       return setIsShapeAPISupported(state, action);
+
+    case OfficeActionsTypes.SET_OVERVIEW_WINDOW_API_SUPPORTED:
+      return setIsOverviewWindowAPISupported(state, action);
 
     case OfficeActionsTypes.SET_INSERT_WORKSHEET_API_SUPPORTED:
       return setIsInsertWorksheetAPISupported(state, action);
@@ -216,6 +221,16 @@ function setIsShapeAPISupported(
   return {
     ...state,
     isShapeAPISupported: action.isShapeAPISupported,
+  };
+}
+
+function setIsOverviewWindowAPISupported(
+  state: OfficeState,
+  action: SetIsOverviewWindowAPISupportedAction
+): OfficeState {
+  return {
+    ...state,
+    isOverviewWindowAPISupported: action.isOverviewWindowAPISupported,
   };
 }
 

@@ -151,12 +151,16 @@ export class HomeHelper {
    */
   initSupportedFeaturesFlags(): void {
     const isShapeAPISupported = officeContext.isShapeAPISupported();
+    const isOverviewWindowAPISupported = officeContext.isOverviewWindowAPISupported();
     const isPivotTableSupported = officeContext.isPivotTableSupported();
     const isInsertWorksheetAPISupported = officeContext.isInsertWorksheetAPISupported();
     const isAdvancedWorksheetTrackingSupported =
       officeContext.isAdvancedWorksheetTrackingSupported();
 
     this.reduxStore.dispatch(officeActions.setIsShapeAPISupported(isShapeAPISupported));
+    this.reduxStore.dispatch(
+      officeActions.setIsOverviewWindowAPISupported(isOverviewWindowAPISupported)
+    );
     this.reduxStore.dispatch(officeActions.setIsPivotTableSupported(isPivotTableSupported));
     this.reduxStore.dispatch(
       officeActions.setIsInsertWorksheetAPISupported(isInsertWorksheetAPISupported)

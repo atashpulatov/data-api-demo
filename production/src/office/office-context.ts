@@ -3,6 +3,13 @@ const EXCEL_INSERT_WORKSHEET_API_VERSION = 1.13;
 const EXCEL_PIVOT_TABLE_API_VERSION = 1.8;
 const EXCEL_ADVANCED_WORKSHEET_TRACKING_API_VERSION = 1.17;
 
+const EXCEL_OVERVIEW_WINDOW_DIALOG_API_VERSION = 1.2;
+
+enum ExcelApiRequirementSetType {
+  ExcelApi = 'ExcelApi',
+  DialogApi = 'DialogApi',
+}
+
 class OfficeContext {
   getOffice(): typeof Office {
     return window.Office;
@@ -13,35 +20,68 @@ class OfficeContext {
   }
 
   /**
-   * Returns the highest requirement set supported by the current platform.
+   * Returns the highest requirement sets supported by the current platform.
    *
    * @returns Requirement set
    */
-  getRequirementSet(): string {
+  getRequirementSet(): { excelApi: string; dialogApi: string } {
+    const excelApi = this.getSupportedVersion(ExcelApiRequirementSetType.ExcelApi);
+    const dialogApi = this.getSupportedVersion(ExcelApiRequirementSetType.DialogApi);
+
+    return {
+      excelApi,
+      dialogApi,
+    };
+  }
+
+  /**
+   * Returns the highest requirement set supported by the current platform.
+   * @param Office
+   *
+   *
+   * @returns Requirement set
+   */
+  private getSupportedVersion(apiName: string): string {
     const { Office } = window;
     let isSupported = true;
-    let api = 0;
-    while (isSupported && !!Office) {
-      isSupported = Office.context.requirements.isSetSupported('ExcelAPI', `1.${api}`);
+    let apiVersion = 0;
+
+    while (isSupported && Office) {
+      isSupported = Office.context.requirements.isSetSupported(apiName, `1.${apiVersion}`);
       if (isSupported) {
-        api += 1;
+        apiVersion += 1;
       }
     }
-    return `1.${api - 1}`;
+
+    return `1.${apiVersion - 1}`;
   }
 
   /**
    * Check if requirement set is supported.
    *
-   * @param version ExcelAPI version
-   * @returns Requirement set supported
+   * @param version version of respective API type
+   * @param apiType API type
+   * @returns Whether requirement set is supported
    */
-  isSetSupported(version: number): boolean {
+  isSetSupported(version: number, apiType: string = ExcelApiRequirementSetType.ExcelApi): boolean {
     const { Office } = window;
     if (Office) {
-      return Office.context.requirements.isSetSupported('ExcelAPI', `${version}`);
+      return Office.context.requirements.isSetSupported(apiType, `${version}`);
     }
     return false;
+  }
+
+  /**
+   * Checks whether the Overview Window API is supported in the current office environment
+   * and updates the redux store with the API support status
+   *
+   * @returns true if the Excel Shape API is supported
+   */
+  isOverviewWindowAPISupported(): boolean {
+    return this.isSetSupported(
+      EXCEL_OVERVIEW_WINDOW_DIALOG_API_VERSION,
+      ExcelApiRequirementSetType.DialogApi
+    );
   }
 
   /**

@@ -8,6 +8,7 @@ import {
   SetIsAdvancedWorksheetTrackingSupported,
   SetIsDialogLoadedAction,
   SetIsInsertWorksheetAPISupportedAction,
+  SetIsOverviewWindowAPISupportedAction,
   SetIsPivotTableSupported,
   SetIsShapeAPISupportedAction,
   SetPopupDataAction,
@@ -101,6 +102,13 @@ const setIsShapeAPISupported = (isShapeAPISupported: boolean): SetIsShapeAPISupp
   isShapeAPISupported,
 });
 
+const setIsOverviewWindowAPISupported = (
+  isOverviewWindowAPISupported: boolean
+): SetIsOverviewWindowAPISupportedAction => ({
+  type: OfficeActionsTypes.SET_OVERVIEW_WINDOW_API_SUPPORTED,
+  isOverviewWindowAPISupported,
+});
+
 const setIsInsertWorksheetAPISupported = (
   isInsertWorksheetAPISupported: boolean
 ): SetIsInsertWorksheetAPISupportedAction => ({
@@ -137,6 +145,7 @@ export const officeActions = {
   setPopupData,
   clearPopupData,
   setIsShapeAPISupported,
+  setIsOverviewWindowAPISupported,
   setIsInsertWorksheetAPISupported,
   setIsPivotTableSupported,
   setIsAdvancedWorksheetTrackingSupported,

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { OverflowTooltip } from '@mstr/rc';
 
 import getDocumentationLocale from '../helpers/get-documentation-locale';
@@ -14,6 +14,7 @@ import i18n from '../i18n';
 import { officeContext } from '../office/office-context';
 import { popupController } from '../popup/popup-controller';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
+import { officeSelectors } from '../redux-reducer/office-reducer/office-reducer-selectors';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 // @ts-expect-error
@@ -24,13 +25,10 @@ import './settings-menu.scss';
 interface SettingsMenuProps {
   userFullName: string;
   userInitials: string;
-  isSecured: boolean;
-  settingsPanelLoaded: boolean;
   objects: any[];
   toggleIsSettingsFlag: (flag: boolean) => void;
   toggleIsConfirmFlag: (flag: boolean) => void;
   toggleSettingsPanelLoadedFlag: (flag: boolean) => void;
-  isSettings: boolean;
   setIsDataOverviewOpen: (flag: boolean) => void;
 }
 
@@ -53,26 +51,30 @@ const { Office } = window;
 export const SettingsMenuNotConnected: React.FC<SettingsMenuProps> = ({
   userFullName,
   userInitials,
-  isSecured,
   objects,
   toggleIsConfirmFlag,
   toggleIsSettingsFlag,
-  settingsPanelLoaded,
   toggleSettingsPanelLoadedFlag,
-  isSettings,
   setIsDataOverviewOpen,
 }) => {
   const [t] = useTranslation('common', { i18n });
 
+  const isSecured = useSelector(officeSelectors.selectIsSecured);
+  const isSettings = useSelector(officeSelectors.selectIsSettings);
+  const settingsPanelLoaded = useSelector(officeSelectors.selectIsSettingsPanelLoaded);
+  const isOverviewWindowAPISupported = useSelector(
+    officeSelectors.selectIsOverviewWindowAPISupported
+  );
+
   const userNameDisplay = userFullName || 'MicroStrategy user';
   const isSecuredActive =
     !isSecured && objects && objects.length > 0 && officeReducerHelper.noOperationInProgress();
+  const { excelApi, dialogApi } = officeContext.getRequirementSet();
   const prepareEmail = (): string => {
     if (!Office) {
       return '#';
     } // If no Office return anchor url
     const { host, platform, version } = Office.context.diagnostics;
-    const excelAPI = officeContext.getRequirementSet();
     const userAgent = encodeURIComponent(navigator.userAgent);
     const message = t('Please don’t change the text below. Type your message above this line.');
     const officeVersion = APP_VERSION || `dev`;
@@ -83,7 +85,8 @@ export const SettingsMenuNotConnected: React.FC<SettingsMenuProps> = ({
         '\r\n',
         `----- ${message} ----- `,
         `Platform: ${platform} (${host})`,
-        `Excel API: ${excelAPI}`,
+        `Excel API: ${excelApi}`,
+        `Dialog API: ${dialogApi}`,
         `Excel version: ${version}`,
         `MicroStrategy for Office version: ${officeVersion}`,
         `User agent: ${decodeURIComponent(userAgent)}`,
@@ -161,15 +164,17 @@ export const SettingsMenuNotConnected: React.FC<SettingsMenuProps> = ({
           <div className='user-name'>{userNameDisplay}</div>
         </OverflowTooltip>
       </li>
-      <li
-        className={`no-trigger-close imported-data-overview not-linked-list ${isSecured ? 'imported-data-overview-inactive' : ''}`}
-        tabIndex={0}
-        role='menuitem'
-        onClick={showImportedDataOverviewPopup}
-        onKeyUp={e => e.key === 'Enter' && showImportedDataOverviewPopup()}
-      >
-        {t('Overview')}
-      </li>
+      {isOverviewWindowAPISupported && (
+        <li
+          className={`no-trigger-close imported-data-overview not-linked-list ${isSecured ? 'imported-data-overview-inactive' : ''}`}
+          tabIndex={0}
+          role='menuitem'
+          onClick={showImportedDataOverviewPopup}
+          onKeyUp={e => e.key === 'Enter' && showImportedDataOverviewPopup()}
+        >
+          {t('Overview')}
+        </li>
+      )}
       <div className='separate-line' />
       <li
         className={`no-trigger-close clear-data not-linked-list ${!isSecuredActive ? 'clear-data-inactive' : ''}`}
@@ -237,23 +242,20 @@ export const SettingsMenuNotConnected: React.FC<SettingsMenuProps> = ({
       </li>
       <li className='settings-version no-trigger-close'>
         {t('Version {{APP_VERSION}}', { APP_VERSION })}
+        <div>{`ExcelAPI: ${excelApi} / DialogAPI: ${dialogApi}`}</div>
       </li>
     </ul>
   );
 };
 
 function mapStateToProps(state: any): any {
-  const { sessionReducer, officeReducer, objectReducer } = state;
+  const { sessionReducer, objectReducer } = state;
   const { userFullName, userInitials, userID } = sessionReducer;
-  const { isSecured, isSettings, settingsPanelLoaded } = officeReducer;
   const { objects } = objectReducer;
   return {
     userFullName,
     userInitials,
-    isSecured,
     userID,
-    isSettings,
-    settingsPanelLoaded,
     objects,
   };
 }

@@ -66,6 +66,21 @@ const selectIsAdvancedWorksheetTrackingSupported = createSelector(
   officeState => officeState.isAdvancedWorksheetTrackingSupported
 );
 
+const selectIsSettings = createSelector(
+  [getOfficeState],
+  (officeReducer: OfficeState) => officeReducer.isSettings
+);
+
+const selectSettingsPanelLoaded = createSelector(
+  [getOfficeState],
+  (officeReducer: OfficeState) => officeReducer.settingsPanelLoaded
+);
+
+const selectIsOverviewWindowAPISupported = createSelector(
+  [getOfficeState],
+  (officeReducer: OfficeState) => officeReducer.isOverviewWindowAPISupported
+);
+
 export const officeSelectors = {
   selectIsPivotTableSupported,
   selectIsShapeAPISupported,
@@ -79,4 +94,7 @@ export const officeSelectors = {
   selectIsDialogOpen,
   selectIsSettingsPanelLoaded,
   selectIsAdvancedWorksheetTrackingSupported,
+  selectIsSettings,
+  selectSettingsPanelLoaded,
+  selectIsOverviewWindowAPISupported,
 };

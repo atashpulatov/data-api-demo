@@ -1,8 +1,12 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 import { fireEvent, render } from '@testing-library/react';
+import { createStore } from 'redux';
 
 import overflowHelper from '../helpers/helpers';
 import { sessionHelper } from '../storage/session-helper';
+
+import { rootReducer } from '../store';
 
 import { errorService } from '../error/error-handler';
 import { popupController } from '../popup/popup-controller';
@@ -16,6 +20,18 @@ describe('Settings Menu', () => {
     jest.resetAllMocks();
   });
 
+  const initialState = {
+    officeReducer: {
+      isOverviewWindowAPISupported: true,
+      isSettings: true,
+      isSecured: false,
+      isSettingsPanelLoaded: false,
+    },
+  };
+
+  // @ts-expect-error
+  const store = createStore(rootReducer, initialState);
+
   it('should open Imported Data Overview popup on proper menu element click', () => {
     // given
     const runImportedDataOverviewPopupSpy = jest
@@ -25,10 +41,13 @@ describe('Settings Menu', () => {
     const setIsDataOverviewOpen = jest.fn();
 
     const { getByText } = render(
-      <SettingsMenuNotConnected
-        toggleIsSettingsFlag={toggleIsSettingsFlag}
-        setIsDataOverviewOpen={setIsDataOverviewOpen}
-      />
+      <Provider store={store}>
+        <SettingsMenuNotConnected
+          toggleIsSettingsFlag={toggleIsSettingsFlag}
+          setIsDataOverviewOpen={setIsDataOverviewOpen}
+          isOverviewWindowAPISupported
+        />
+      </Provider>
     );
     const importedDataOverviewMenuOption = getByText('Overview');
 
@@ -46,12 +65,14 @@ describe('Settings Menu', () => {
     const toggleIsSettingsFlag = jest.fn();
 
     const { getByText } = render(
-      <SettingsMenuNotConnected
-        toggleIsConfirmFlag={toggleIsConfirmFlag}
-        toggleIsSettingsFlag={toggleIsSettingsFlag}
-        isSecured={false}
-        objects={mockReports}
-      />
+      <Provider store={store}>
+        <SettingsMenuNotConnected
+          toggleIsConfirmFlag={toggleIsConfirmFlag}
+          toggleIsSettingsFlag={toggleIsSettingsFlag}
+          isSecured={false}
+          objects={mockReports}
+        />
+      </Provider>
     );
     const clearDataMenuOption = getByText('Clear Data');
 
@@ -70,10 +91,12 @@ describe('Settings Menu', () => {
     const logOutRedirectSpy = jest.spyOn(sessionHelper, 'logOutRedirect');
 
     const { getByText } = render(
-      <SettingsMenuNotConnected
-        toggleIsSettingsFlag={jest.fn()}
-        clearSavedPromptAnswers={jest.fn()}
-      />
+      <Provider store={store}>
+        <SettingsMenuNotConnected
+          toggleIsSettingsFlag={jest.fn()}
+          clearSavedPromptAnswers={jest.fn()}
+        />
+      </Provider>
     );
     // when
     fireEvent.click(getByText('Log Out'));
@@ -89,7 +112,11 @@ describe('Settings Menu', () => {
       throw new Error();
     });
     const handleErrorSpy = jest.spyOn(errorService, 'handleError').mockImplementation();
-    const { getByText } = render(<SettingsMenuNotConnected toggleIsSettingsFlag={jest.fn()} />);
+    const { getByText } = render(
+      <Provider store={store}>
+        <SettingsMenuNotConnected toggleIsSettingsFlag={jest.fn()} />
+      </Provider>
+    );
 
     // when
     fireEvent.click(getByText('Log Out'));
@@ -111,7 +138,9 @@ describe('Settings Menu', () => {
     };
     // when
     const { getByRole } = render(
-      <SettingsMenuNotConnected userFullName='userFullName' userInitials={null} userID={1} />
+      <Provider store={store}>
+        <SettingsMenuNotConnected userFullName='userFullName' userInitials={null} userID={1} />
+      </Provider>
     );
     // then
     expect(getByRole('list')).toHaveClass('settings-list');
@@ -128,7 +157,9 @@ describe('Settings Menu', () => {
     };
     // when
     const { getByRole } = render(
-      <SettingsMenuNotConnected userFullName='userFullName' userInitials={null} userID={1} />
+      <Provider store={store}>
+        <SettingsMenuNotConnected userFullName='userFullName' userInitials={null} userID={1} />
+      </Provider>
     );
     // then
     expect(getByRole('menuitem', { name: 'Settings' })).toBeInTheDocument();
@@ -149,13 +180,15 @@ describe('Settings Menu', () => {
 
     // when
     const { getByRole } = render(
-      <SettingsMenuNotConnected
-        userFullName='userFullName'
-        userInitials={null}
-        userID={1}
-        toggleSettingsPanelLoadedFlag={toggleSettingsPanelLoadedFlag}
-        toggleIsSettingsFlag={toggleIsSettingsFlag}
-      />
+      <Provider store={store}>
+        <SettingsMenuNotConnected
+          userFullName='userFullName'
+          userInitials={null}
+          userID={1}
+          toggleSettingsPanelLoadedFlag={toggleSettingsPanelLoadedFlag}
+          toggleIsSettingsFlag={toggleIsSettingsFlag}
+        />
+      </Provider>
     );
 
     // then
@@ -179,13 +212,15 @@ describe('Settings Menu', () => {
 
     // when
     const { getByRole } = render(
-      <SettingsMenuNotConnected
-        userFullName='userFullName'
-        userInitials={null}
-        userID={1}
-        toggleSettingsPanelLoadedFlag={toggleSettingsPanelLoadedFlag}
-        toggleIsSettingsFlag={toggleIsSettingsFlag}
-      />
+      <Provider store={store}>
+        <SettingsMenuNotConnected
+          userFullName='userFullName'
+          userInitials={null}
+          userID={1}
+          toggleSettingsPanelLoadedFlag={toggleSettingsPanelLoadedFlag}
+          toggleIsSettingsFlag={toggleIsSettingsFlag}
+        />
+      </Provider>
     );
 
     // then
@@ -197,7 +232,11 @@ describe('Settings Menu', () => {
     // given
     const addEventListenerSpy = jest.spyOn(document, 'addEventListener');
     // when
-    render(<SettingsMenuNotConnected isSettings />);
+    render(
+      <Provider store={store}>
+        <SettingsMenuNotConnected isSettings />
+      </Provider>
+    );
     // then
     const spyCalls = addEventListenerSpy.mock.calls;
     expect(spyCalls[spyCalls.length - 1][0]).toEqual('click');
@@ -208,9 +247,22 @@ describe('Settings Menu', () => {
   it('should remove event listeners for outside of settings menu click and esc button', () => {
     // given
     const removeEventListenerSpy = jest.spyOn(document, 'removeEventListener');
-    const { rerender } = render(<SettingsMenuNotConnected isSettings />);
+    const updatedStore = createStore(rootReducer, {
+      ...initialState,
+      officeReducer: { ...initialState.officeReducer, isSettings: false },
+    });
+
+    const { rerender } = render(
+      <Provider store={store}>
+        <SettingsMenuNotConnected />
+      </Provider>
+    );
     // when
-    rerender(<SettingsMenuNotConnected isSettings={false} />);
+    rerender(
+      <Provider store={updatedStore}>
+        <SettingsMenuNotConnected />
+      </Provider>
+    );
     // then
     const spyCalls = removeEventListenerSpy.mock.calls;
     expect(spyCalls[spyCalls.length - 1][0]).toEqual('click');
@@ -226,7 +278,9 @@ describe('Settings Menu', () => {
       map[event] = cb;
     });
     const { rerender } = render(
-      <SettingsMenuNotConnected isSettings toggleIsSettingsFlag={toggleIsSettingsFlagMock} />
+      <Provider store={store}>
+        <SettingsMenuNotConnected isSettings toggleIsSettingsFlag={toggleIsSettingsFlagMock} />
+      </Provider>
     );
     // when
     const mockEvent = {
@@ -235,7 +289,9 @@ describe('Settings Menu', () => {
     };
     map.click(mockEvent);
     rerender(
-      <SettingsMenuNotConnected isSettings toggleIsSettingsFlag={toggleIsSettingsFlagMock} />
+      <Provider store={store}>
+        <SettingsMenuNotConnected isSettings toggleIsSettingsFlag={toggleIsSettingsFlagMock} />
+      </Provider>
     );
     // then
     expect(toggleIsSettingsFlagMock).toHaveBeenCalledWith(false);
@@ -248,12 +304,16 @@ describe('Settings Menu', () => {
       map[event] = cb;
     });
     const { rerender } = render(
-      <SettingsMenuNotConnected isSettings toggleIsSettingsFlag={toggleIsSettingsFlagMock} />
+      <Provider store={store}>
+        <SettingsMenuNotConnected isSettings toggleIsSettingsFlag={toggleIsSettingsFlagMock} />
+      </Provider>
     );
     // when
     map.keyup({ key: 'Escape' });
     rerender(
-      <SettingsMenuNotConnected isSettings toggleIsSettingsFlag={toggleIsSettingsFlagMock} />
+      <Provider store={store}>
+        <SettingsMenuNotConnected isSettings toggleIsSettingsFlag={toggleIsSettingsFlagMock} />
+      </Provider>
     );
     // then
     expect(toggleIsSettingsFlagMock).toHaveBeenCalledWith(false);
@@ -266,12 +326,16 @@ describe('Settings Menu', () => {
       map[event] = cb;
     });
     const { rerender } = render(
-      <SettingsMenuNotConnected isSettings toggleIsSettingsFlag={toggleIsSettingsFlagMock} />
+      <Provider store={store}>
+        <SettingsMenuNotConnected isSettings toggleIsSettingsFlag={toggleIsSettingsFlagMock} />
+      </Provider>
     );
     // when
     map.keyup({ keyCode: 26 });
     rerender(
-      <SettingsMenuNotConnected isSettings toggleIsSettingsFlag={toggleIsSettingsFlagMock} />
+      <Provider store={store}>
+        <SettingsMenuNotConnected isSettings toggleIsSettingsFlag={toggleIsSettingsFlagMock} />
+      </Provider>
     );
     // then
     expect(toggleIsSettingsFlagMock).toHaveBeenCalledTimes(0);
