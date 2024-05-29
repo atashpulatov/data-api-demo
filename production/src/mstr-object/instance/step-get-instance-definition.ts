@@ -117,7 +117,8 @@ class StepGetInstanceDefinition {
         importType
       );
 
-      // DE296533: If the object is an image, we need to create a new worksheet before the image is imported
+      // DE296533: If the object is an image and we must import/duplicate to new sheet,
+      // we will create a new worksheet before the image is imported.
       if (
         importType === ObjectImportType.IMAGE &&
         futureStep in ImportOperationStepDict &&
