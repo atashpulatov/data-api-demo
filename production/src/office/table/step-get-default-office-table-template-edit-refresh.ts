@@ -9,6 +9,8 @@ import officeTableRefresh from './office-table-refresh';
 class StepGetDefaultOfficeTableTemplateEditRefresh {
     /**
      * Creates an office table and removes the previous existing office table on every refresh or edit.
+     * Similar to StepGetOfficeTableEditRefresh.getOfficeTableEditRefresh() step, except that redundant operations 
+     * with the relation to formatted data table were eliminated.
      *
      * This function is subscribed as one of the operation steps with the key GET_DEFAULT_OFFICE_TABLE_TEMPLATE_EDIT_REFRESH,
      * therefore should be called only via operation bus.

@@ -7,7 +7,8 @@ import officeTableCreate from './office-table-create';
 
 class StepGetFormattedDataTableImport {
     /**
-     * Creates default Excel table template during import workflow
+     * Creates default Excel table during import workflow. Similar to StepGetOfficeTableImport.getOfficeTableImport() step
+     * except that redundant operations with the relation to formatted data table were eliminated.
      *
      * Communicates with object reducer and calls officeTableCreate.createFormattedDataOfficeTable.
      *
