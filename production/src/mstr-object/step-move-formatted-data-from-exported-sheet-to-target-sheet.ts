@@ -5,7 +5,7 @@ import { ObjectData } from '../types/object-types';
 
 import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
-import { OFFICE_TABLE_EXTA_GRID_LINE } from '../office/constants';
+import { OFFICE_TABLE_EXTA_ROW } from '../office/constants';
 import { TITLE_EXCLUDED_DEFAULT_CELL_POSITION } from './constants';
 
 
@@ -43,7 +43,7 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
 
         // Remove the redundant row for source table range, as we hide the headers 
         // of the underneath office table template for crosstab
-        sourceTableRows = rows - OFFICE_TABLE_EXTA_GRID_LINE;
+        sourceTableRows = rows - OFFICE_TABLE_EXTA_ROW;
       }
 
       // Get range starting from 'A3', to exclude the visualization title 

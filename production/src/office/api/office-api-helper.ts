@@ -410,6 +410,15 @@ class OfficeApiHelper {
     await excelContext.sync();
   }
 
+  /**
+   * Determines the range of the given crosstabular table.
+   *
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param importType Type of the import that is being made
+   * @param crosstabHeaderDimensions Contains information about crosstab headers dimensions
+   * @param officeTable Reference to Table created by Excel
+   * @param bindId Id of the Office table created on import used for referencing the Excel table
+   */
   private async getCrosstabRange({
     excelContext,
     importType,
