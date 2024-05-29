@@ -441,8 +441,8 @@ class OverviewHelper {
           title: objectNotification?.title,
           details: objectNotification?.details,
         },
-        project: details?.ancestors[0].name,
-        owner: details?.owner.name,
+        project: details?.ancestors?.[0]?.name,
+        owner: details?.owner?.name,
         importedBy: details?.importedBy,
         isPrompted,
         ...(pageByData && {
@@ -646,13 +646,13 @@ class OverviewHelper {
     } as NotificationButtonsProps;
     const modifiedGlobalNotification = isGlobalWarning
       ? [
-        {
-          ...globalNotification,
-          children: OverviewGlobalNotificationButtons({
-            ...globalNotificationButtons,
-          }),
-        },
-      ]
+          {
+            ...globalNotification,
+            children: OverviewGlobalNotificationButtons({
+              ...globalNotificationButtons,
+            }),
+          },
+        ]
       : null;
 
     return modifiedGlobalNotification || modifiedWarnings;
