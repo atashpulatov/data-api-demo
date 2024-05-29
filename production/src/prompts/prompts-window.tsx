@@ -201,6 +201,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
         // @ts-expect-error
         editedObject.instanceId
       ),
+      importType: editedObject.importType,
       chosenObjectName: editedObject.chosenObjectName,
       objectWorkingId: editedObject.objectWorkingId,
       instanceId: editedObject.instanceId,
@@ -555,6 +556,7 @@ export const mapStateToProps = (state: RootState): any => {
     reusePromptAnswers,
     previousPromptsAnswers: answers,
     importRequested,
+    importType: popupStateReducer.importType,
     promptObjects: promptObjectsResolved, // Prompt objects to be used for import
     isPreparedDataRequested, // State flag indicating whether prepared data is requested for import
     repromptsQueue: { ...repromptsQueueReducer },
