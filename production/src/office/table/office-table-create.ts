@@ -180,7 +180,7 @@ class OfficeTableCreate {
    * @param objectData Contains information about the MSTR object
    *
    */
-  async createDefaultOfficeTable({
+  async createFormattedDataOfficeTable({
     instanceDefinition,
     excelContext,
     startCell,

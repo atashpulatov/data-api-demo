@@ -60,7 +60,7 @@ class OfficeTableHelperRange {
   async checkObjectRangeValidityOnRefresh(
     prevOfficeTable: Excel.Table,
     excelContext: Excel.RequestContext,
-    instanceDefinition: any,
+    instanceDefinition: InstanceDefinition,
   ): Promise<void> {
     const { rows, columns, mstrTable } = instanceDefinition;
 

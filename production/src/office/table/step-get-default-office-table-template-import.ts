@@ -5,13 +5,13 @@ import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import officeTableCreate from './office-table-create';
 
-class StepGetDefaultOfficeTableTemplateImport {
+class StepGetFormattedDataTableImport {
     /**
      * Creates default Excel table template during import workflow
      *
-     * Communicates with object reducer and calls officeTableCreate.createDefaultOfficeTable.
+     * Communicates with object reducer and calls officeTableCreate.createFormattedDataOfficeTable.
      *
-     * This function is subscribed as one of the operation steps with the key GET_DEFAULT_OFFICE_TABLE_TEMPLATE_IMPORT,
+     * This function is subscribed as one of the operation steps with the key GET_FORMATTED_DATA_TABLE_IMPORT,
      * therefore should be called only via operation bus.
      *
      * @param operationData.objectWorkingId Unique Id of the object allowing to reference specific object
@@ -20,7 +20,7 @@ class StepGetDefaultOfficeTableTemplateImport {
      * @param operationData.startCell Address of the cell in Excel spreadsheet
      * @param operationData.insertNewWorksheet Specify if new worksheet has to be created
      */
-    async getDefaultOfficeTableTemplateImport(objectData: ObjectData, operationData: OperationData): Promise<void> {
+    async getFormattedDataTableImport(objectData: ObjectData, operationData: OperationData): Promise<void> {
         try {
             console.time('Create default table template - import');
             const {
@@ -32,7 +32,7 @@ class StepGetDefaultOfficeTableTemplateImport {
             } = operationData;
 
             const { officeTable, bindId, tableName, worksheet, startCell, groupData } =
-                await officeTableCreate.createDefaultOfficeTable({
+                await officeTableCreate.createFormattedDataOfficeTable({
                     excelContext,
                     instanceDefinition,
                     startCell: selectedCell,
@@ -62,7 +62,7 @@ class StepGetDefaultOfficeTableTemplateImport {
 
             operationStepDispatcher.updateOperation(updatedOperation);
             operationStepDispatcher.updateObject(updatedObject);
-            operationStepDispatcher.completeGetDefaultOfficeTableTemplateImport(objectWorkingId);
+            operationStepDispatcher.completeGetFormattedDataTableImport(objectWorkingId);
         } catch (error) {
             console.error(error);
             operationErrorHandler.handleOperationError(objectData, operationData, error);
@@ -72,5 +72,5 @@ class StepGetDefaultOfficeTableTemplateImport {
     }
 }
 
-const stepGetDefaultOfficeTableTemplateImport = new StepGetDefaultOfficeTableTemplateImport();
-export default stepGetDefaultOfficeTableTemplateImport;
+const stepGetFormattedDataTableImport = new StepGetFormattedDataTableImport();
+export default stepGetFormattedDataTableImport;

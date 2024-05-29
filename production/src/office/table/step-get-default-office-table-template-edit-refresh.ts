@@ -40,7 +40,7 @@ class StepGetDefaultOfficeTableTemplateEditRefresh {
                 oldBindId
             );
 
-            const { officeTable, bindId, startCell } = await officeTableCreate.createDefaultOfficeTable({
+            const { officeTable, bindId, startCell } = await officeTableCreate.createFormattedDataOfficeTable({
                 instanceDefinition,
                 excelContext,
                 startCell: objectData.startCell,

@@ -68,9 +68,9 @@ class OperationStepDispatcher {
     );
   }
 
-  completeGetDefaultOfficeTableTemplateImport(objectWorkingId: number): void {
+  completeGetFormattedDataTableImport(objectWorkingId: number): void {
     this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, OperationSteps.GET_DEFAULT_OFFICE_TABLE_TEMPLATE_IMPORT)
+      markStepCompleted(objectWorkingId, OperationSteps.GET_FORMATTED_DATA_TABLE_IMPORT)
     );
   }
 

@@ -5,9 +5,9 @@ import { ObjectData } from '../types/object-types';
 
 import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
-import { OFFICE_TABLE_EXTA_ROW } from '../office/constants';
 import { TITLE_EXCLUDED_DEFAULT_CELL_POSITION } from './constants';
 
+const OFFICE_TABLE_EXTA_ROW = 1;
 
 class StepMoveFormattedDataFromExportedSheetToTargetSheet {
   /**
