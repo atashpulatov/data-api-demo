@@ -81,11 +81,12 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
     isMultipleRepromptWithReuse,
     repromptsQueue,
     setImportType,
+    importType,
   } = props;
   const { chosenObjectId, chosenObjectName } = mstrData;
   // isReprompt will be true for both Edit AND Reprompt workflows
   // isEdit will only be true for the Edit workflow
-  const { isReprompt, isEdit, importType } = popupState;
+  const { isReprompt, isEdit } = popupState;
 
   const { importType: editedObjectImportType } = editedObject;
 
@@ -555,6 +556,7 @@ export const mapStateToProps = (state: RootState): any => {
     reusePromptAnswers,
     previousPromptsAnswers: answers,
     importRequested,
+    importType: popupStateReducer.importType,
     promptObjects: promptObjectsResolved, // Prompt objects to be used for import
     isPreparedDataRequested, // State flag indicating whether prepared data is requested for import
     repromptsQueue: { ...repromptsQueueReducer },
