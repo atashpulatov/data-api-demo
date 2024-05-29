@@ -2,10 +2,11 @@ import {
   InstanceDefinition,
   MstrTable,
 } from '../../redux-reducer/operation-reducer/operation-reducer-types';
-import { CrosstabHeaderDimensions } from '../../types/object-types';
+import { CrosstabHeaderDimensions, ObjectData } from '../../types/object-types';
 
 import { OverlappingTablesError } from '../../error/overlapping-tables-error';
 import { ErrorMessages } from '../../error/constants';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 class OfficeTableHelperRange {
   /**
@@ -23,21 +24,22 @@ class OfficeTableHelperRange {
     prevOfficeTable: Excel.Table | null,
     excelContext: Excel.RequestContext,
     range: Excel.Range,
-    objectDetailsRange: Excel.Range,
     instanceDefinition: InstanceDefinition,
-    isRepeatStep: boolean
+    isRepeatStep: boolean,
+    objectData: ObjectData,
+    objectDetailsRange?: Excel.Range,
   ): Promise<void> {
     if (prevOfficeTable) {
       if (isRepeatStep) {
         await this.checkRangeValidity(excelContext, range);
-        await this.deletePrevOfficeTable(excelContext, prevOfficeTable);
+        await this.deletePrevOfficeTable(excelContext, prevOfficeTable, objectData);
       } else {
         await this.checkObjectRangeValidityOnRefresh(
           prevOfficeTable,
           excelContext,
-          instanceDefinition
+          instanceDefinition,
         );
-        await this.deletePrevOfficeTable(excelContext, prevOfficeTable);
+        await this.deletePrevOfficeTable(excelContext, prevOfficeTable, objectData);
       }
     } else {
       await this.checkRangeValidity(excelContext, range);
@@ -58,7 +60,7 @@ class OfficeTableHelperRange {
   async checkObjectRangeValidityOnRefresh(
     prevOfficeTable: Excel.Table,
     excelContext: Excel.RequestContext,
-    instanceDefinition: InstanceDefinition
+    instanceDefinition: InstanceDefinition,
   ): Promise<void> {
     const { rows, columns, mstrTable } = instanceDefinition;
 
@@ -115,12 +117,20 @@ class OfficeTableHelperRange {
    */
   async deletePrevOfficeTable(
     excelContext: Excel.RequestContext,
-    prevOfficeTable: Excel.Table
+    prevOfficeTable: Excel.Table,
+    objectData: ObjectData,
   ): Promise<void> {
     excelContext.runtime.enableEvents = false;
     await excelContext.sync();
 
-    prevOfficeTable.delete();
+    const { importType, isCrosstab } = objectData;
+
+    if (importType === ObjectImportType.FORMATTED_DATA && isCrosstab) {
+      const range = prevOfficeTable.getRange().getOffsetRange(-1, 0).getResizedRange(1, 0);
+      range.clear();
+    } else {
+      prevOfficeTable.delete();
+    }
 
     excelContext.runtime.enableEvents = true;
     await excelContext.sync();

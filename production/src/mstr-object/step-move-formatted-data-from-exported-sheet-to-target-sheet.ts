@@ -8,6 +8,8 @@ import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 import { TITLE_EXCLUDED_DEFAULT_CELL_POSITION } from './constants';
 
+const OFFICE_TABLE_EXTA_ROW = 1;
+
 class StepMoveFormattedDataFromExportedSheetToTargetSheet {
   /**
    * Moves formatted data(table) from export engine worksheet to current active worksheet.
@@ -33,15 +35,20 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
       const { isCrosstab, crosstabHeaderDimensions, objectWorkingId, worksheet } = objectData;
 
       let { rows, columns } = instanceDefinition;
+      let sourceTableRows = rows;
 
       if (isCrosstab) {
         const { rowsX, rowsY, columnsX, columnsY } = crosstabHeaderDimensions;
         rows = columnsY + rowsY;
         columns = columnsX + rowsX;
+
+        // Remove one row from source table rows, as getRange() utlimately adds an additional 
+        // row to source table range
+        sourceTableRows = rows - OFFICE_TABLE_EXTA_ROW;
       }
 
       // Get range starting from 'A3', to exclude the visualization title 
-      const sourceTableRange = officeApiHelper.getRange(columns, TITLE_EXCLUDED_DEFAULT_CELL_POSITION, rows);
+      const sourceTableRange = officeApiHelper.getRange(columns, TITLE_EXCLUDED_DEFAULT_CELL_POSITION, sourceTableRows);
       const targetTableRange = officeApiHelper.getRange(columns, startCell, rows);
 
       const targetWorksheet = officeApiHelper.getExcelSheetById(

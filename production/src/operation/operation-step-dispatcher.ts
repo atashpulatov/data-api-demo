@@ -68,6 +68,18 @@ class OperationStepDispatcher {
     );
   }
 
+  completeGetFormattedDataTableImport(objectWorkingId: number): void {
+    this.reduxStore.dispatch(
+      markStepCompleted(objectWorkingId, OperationSteps.GET_FORMATTED_DATA_TABLE_IMPORT)
+    );
+  }
+
+  completeGetDefaultOfficeTableTemplateEditRefresh(objectWorkingId: number): void {
+    this.reduxStore.dispatch(
+      markStepCompleted(objectWorkingId, OperationSteps.GET_FORMATTED_DATA_TABLE_EDIT_REFRESH)
+    );
+  }
+
   completeFormatSubtotals(objectWorkingId: number): void {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.FORMAT_SUBTOTALS));
   }

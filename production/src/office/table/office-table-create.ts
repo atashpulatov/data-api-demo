@@ -17,12 +17,8 @@ import { ObjectData } from '../../types/object-types';
 import { calculateOffsetForObjectInfoSettings } from '../../mstr-object/get-object-details-methods';
 import { OperationTypes } from '../../operation/operation-type-names';
 import officeApiDataLoader from '../api/office-api-data-loader';
-import { ObjectImportType } from '../../mstr-object/constants';
 
 const DEFAULT_TABLE_STYLE = 'TableStyleLight11';
-
-// Pair of extra rows required to be appended to formatted crosstab table, in order to track the imported range
-export const FORMATTED_TABLE_CROSSTAB_EXTRA_ROWS = 2;
 
 class OfficeTableCreate {
   /**
@@ -111,14 +107,7 @@ class OfficeTableCreate {
       tableChanged
     );
 
-    // Add extra rows to crosstab table to be able to track users manipulations, otherwise formatted data(table) range
-    // will entirely overlap and ultmately remove the underneath crosstab table
-    let tableRows: number = rows;
-    if (importType === ObjectImportType.FORMATTED_DATA && isCrosstab) {
-      tableRows += FORMATTED_TABLE_CROSSTAB_EXTRA_ROWS;
-    }
-
-    const tableRange = officeApiHelper.getRange(columns, tableStartCell, tableRows);
+    const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
     const range = this.getObjectRange(tableStartCell, worksheet, tableRange, mstrTable);
 
     excelContext.trackedObjects.add(range);
@@ -136,9 +125,10 @@ class OfficeTableCreate {
       prevOfficeTable,
       excelContext,
       range,
-      objectDetailsRange,
       instanceDefinition,
-      isRepeatStep
+      isRepeatStep,
+      objectData,
+      objectDetailsRange
     );
 
     range.numberFormat = '' as unknown as any[][];
@@ -171,6 +161,104 @@ class OfficeTableCreate {
       startCell,
       excelContext,
       objectDetailsSize,
+    });
+  }
+
+
+  /**
+   * Creates an office table if it's a new import or if the number of columns of an existing table changes.
+   * If we are refreshing a table and the new definiton range is not empty we keep the original table.
+   *
+   * @param instanceDefinition
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param startCell  Top left corner cell
+   * @param tableName Name of the Excel Table
+   * @param prevOfficeTable Previous office table to refresh
+   * @param isRepeatStep Specify if repeat creating of the table
+   * @param insertNewWorksheet Specify if new worksheet has to be created before creating the table
+   * @param pageByData Contains information about page-by elements
+   * @param objectData Contains information about the MSTR object
+   *
+   */
+  async createFormattedDataOfficeTable({
+    instanceDefinition,
+    excelContext,
+    startCell,
+    tableName,
+    prevOfficeTable,
+    isRepeatStep,
+    insertNewWorksheet,
+    pageByData,
+    objectData,
+  }: {
+    instanceDefinition: InstanceDefinition;
+    excelContext: Excel.RequestContext;
+    startCell: string;
+    tableName?: string;
+    prevOfficeTable?: Excel.Table;
+    tableChanged?: boolean;
+    isRepeatStep?: boolean;
+    insertNewWorksheet: boolean;
+    pageByData?: PageByData;
+    objectData: ObjectData;
+  }): Promise<any> {
+    const {
+      mstrTable,
+      mstrTable: { isCrosstab, name },
+    } = instanceDefinition;
+    const { importType, crosstabHeaderDimensions } = objectData;
+
+    const newOfficeTableName = getOfficeTableHelper.createTableName(mstrTable, tableName);
+    const worksheet = await officeApiWorksheetHelper.getWorksheet(
+      excelContext,
+      importType,
+      name,
+      pageByData,
+      prevOfficeTable,
+      insertNewWorksheet
+    );
+
+    if (insertNewWorksheet) {
+      startCell = 'A1';
+    } else if (!startCell) {
+      startCell = await officeApiHelper.getSelectedCell(excelContext);
+    }
+
+    let { rows, columns } = instanceDefinition;
+    if (isCrosstab) {
+      const { rowsX, rowsY, columnsX, columnsY } = crosstabHeaderDimensions;
+      rows = columnsY + rowsY;
+      columns = columnsX + rowsX;
+    }
+    const tableRange = officeApiHelper.getRange(columns, startCell, rows);
+    const range = worksheet.getRange(tableRange)
+
+    excelContext.trackedObjects.add(range);
+
+    await officeTableHelperRange.checkObjectRangeValidity(
+      prevOfficeTable,
+      excelContext,
+      range,
+      instanceDefinition,
+      isRepeatStep,
+      objectData
+    );
+
+    const officeTable = worksheet.tables.add(tableRange, true); // create office table based on the range
+
+    if (isCrosstab) {
+      officeTable.showHeaders = false;
+    }
+
+    this.styleHeaders(officeTable);
+
+    return this.setOfficeTableProperties({
+      officeTable,
+      newOfficeTableName,
+      mstrTable,
+      worksheet,
+      startCell,
+      excelContext,
     });
   }
 
@@ -284,7 +372,7 @@ class OfficeTableCreate {
     worksheet: Excel.Worksheet;
     startCell: string;
     excelContext: Excel.RequestContext;
-    objectDetailsSize: number;
+    objectDetailsSize?: number;
   }): Promise<any> {
     const { isCrosstab } = mstrTable;
     try {
