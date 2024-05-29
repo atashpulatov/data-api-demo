@@ -163,3 +163,12 @@ def step_impl(context, expected_number_of_object_tiles):
 @step('I clicked "{context_menu_option}" using context menu in object {object_number}')
 def step_impl(context, context_menu_option, object_number):
     context.pages.right_panel_page().click_context_menu_item(context_menu_option, int(object_number))
+
+@step('I selected "{display_option}" display option')
+def step_impl(context, display_option):
+    context.pages.right_panel_page().click_display_option(display_option)
+
+@step('I verified Settings is NOT visible')
+def step_impl(context):
+    result = context.pages.right_panel_page().is_settings_visible()
+    AssertUtil.assert_simple(result, False)

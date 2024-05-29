@@ -31,6 +31,10 @@ def step_impl(context, button_name):
 def step_impl(context, button_name):
     context.pages.page_by_page().click_button(button_name)
 
+@step('I clicked "{button_name}" button without checking results')
+def step_impl(context, button_name):
+    context.pages.page_by_page().click_button_without_checking(button_name)
+
 @step('I clicked Page-by "{dropdown_name}" dropdown')
 def step_impl(context, dropdown_name):
     context.pages.page_by_page().click_page_by_dropdown(dropdown_name)
@@ -43,6 +47,20 @@ def step_impl(context, option):
 def step_impl(context, dropdown_name):
     context.pages.page_by_page().close_page_by_dropdown(dropdown_name)
 
-@step('I verified that "{grid_cell_value}" page is visible in Page-by grid')
-def step_impl(context, grid_cell_value):
-    context.pages.page_by_page().is_value_in_grid_displayed(grid_cell_value)
+@step('I verified that number of pages is {expected_pages_amount} in Page-by grid')
+def step_impl(context, expected_pages_amount):
+    amount_of_pages_in_grid = context.pages.page_by_page().get_amount_of_pages_in_grid()
+    AssertUtil.assert_simple(amount_of_pages_in_grid, int(expected_pages_amount))
+
+@step('I searched for string "{search_string}" in Page-by grid')
+def step_impl(context, search_string):
+    context.pages.page_by_page().search_for_string(search_string)
+
+@step('I cleared search box in Page-by grid')
+def step_impl(context):
+    context.pages.page_by_page().clear_search_input()
+
+@step('I selected page number {page_number} from Page-by grid')
+def step_impl(context, page_number):
+    context.pages.page_by_page().select_page(int(page_number) - 1)
+

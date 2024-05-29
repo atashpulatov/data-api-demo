@@ -42,6 +42,9 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     OBJECT_TILE = "//article[contains(@class, 'object-tile')]"
     OBJECT_TILE_BY_NUMBER = "(//article[contains(@class, 'object-tile')])[%d]"
     CONTEXT_MENU = "//li[contains(@class, 'context-menu-item')]/span[text()='%s']"
+    
+    PAGE_BY_DISPLAY_OPTION = "//input[@type='radio' and ancestor::li/label[text()='%s']]"
+    SETTINGS_PANEL = 'settings-container'
 
     def click_import_data_button_element(self):
         self.focus_on_add_in_frame()
@@ -227,3 +230,14 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
         element = self.get_element_by_xpath(RightPanelMainBrowserPage.OBJECT_TILE_BY_NUMBER % object_number)
         element.right_click()
         self.get_element_by_xpath(RightPanelMainBrowserPage.CONTEXT_MENU % context_menu_option).click()
+
+    def click_display_option(self, display_option):
+        element = self.get_element_by_xpath(RightPanelMainBrowserPage.PAGE_BY_DISPLAY_OPTION % display_option)
+        element.click()
+    
+    def is_settings_visible(self):
+        try:
+            element = self.get_element_by_class_name(RightPanelMainBrowserPage.SETTINGS_PANEL)
+            return element.is_displayed()
+        except MstrException:
+            return False
