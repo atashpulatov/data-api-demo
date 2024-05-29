@@ -15,6 +15,8 @@ const DialogEntryPoint: React.FC = () => {
     // DE291188: Initialize popup type from URL to tacle Redux Re-hydration issue
     // which causes popup type's value to be out-of-sync with SidePanel's state
     // on dialog reload for imported data overview or overview's reprompt dialog type.
+    // TODO: Generally, the logic should synchronize data between both instances of Redux via Office API messages.
+    // Therefore, we will likely need to revisit this logic in the future
     if (window.location?.href?.includes('popupType')) {
       const url = new URL(window.location.href);
       const urlPopupType = url.searchParams.get('popupType');
