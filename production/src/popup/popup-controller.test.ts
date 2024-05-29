@@ -232,7 +232,6 @@ describe('PopupController', () => {
       command: selectorProperties.commandOnUpdate,
       chosenObjectId: 'chosenObjectId',
       projectId: 'projectId',
-      importType: ObjectImportType.TABLE,
       chosenObjectSubtype: objectTypes.getTypeValues('Cube').subtype,
       body: {},
       chosenObjectName: 'testName',
@@ -262,7 +261,6 @@ describe('PopupController', () => {
       command: selectorProperties.commandOnUpdate,
       chosenObjectId: 'chosenObjectId',
       projectId: 'projectId',
-      importType: ObjectImportType.TABLE,
       chosenObjectSubtype: objectTypes.getTypeValues('Report').subtype,
       body: {},
     };
@@ -290,7 +288,6 @@ describe('PopupController', () => {
       command: selectorProperties.commandOnUpdate,
       chosenObjectId: 'chosenObjectId',
       projectId: 'projectId',
-      importType: ObjectImportType.TABLE,
       dossierData: {
         instanceId: 'instanceId',
         whatever: 'whatever',
