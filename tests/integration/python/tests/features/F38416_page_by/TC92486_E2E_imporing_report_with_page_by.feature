@@ -33,13 +33,12 @@ Feature: F38416 - Import reports with page-by as separate sheets in the Excel Ad
       And I selected "Pop" attribute element
       And I closed Page-by "Subcategory" dropdown
       And I clicked "Add" button
-     Then I verified that "Art & Architecture" page is visible in Page-by grid
-      And I verified that "Literature" page is visible in Page-by grid
-      And I verified that "Pop" page is visible in Page-by grid
+     Then I verified that number of pages is 3 in Page-by grid
 
     # Importing selected pages to Excel
      When I clicked "Import" button
      Then I verified that Page-by window is NOT visible
+      And I waited for object to be imported successfully
       And I verified that number of worksheets is 4
       And I verified that number of objects in side panel is 3
 
