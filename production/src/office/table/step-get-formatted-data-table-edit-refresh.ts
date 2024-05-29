@@ -6,13 +6,13 @@ import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import officeTableCreate from './office-table-create';
 import officeTableRefresh from './office-table-refresh';
 
-class StepGetDefaultOfficeTableTemplateEditRefresh {
+class StepGetFormattedDataTableEditRefresh {
     /**
      * Creates an office table and removes the previous existing office table on every refresh or edit.
      * Similar to StepGetOfficeTableEditRefresh.getOfficeTableEditRefresh() step, except that redundant operations 
      * with the relation to formatted data table were eliminated.
      *
-     * This function is subscribed as one of the operation steps with the key GET_DEFAULT_OFFICE_TABLE_TEMPLATE_EDIT_REFRESH,
+     * This function is subscribed as one of the operation steps with the key GET_FORMATTED_DATA_TABLE_EDIT_REFRESH,
      * therefore should be called only via operation bus.
      *
      * @param objectData.tableName Name of Excel table created on import
@@ -22,7 +22,7 @@ class StepGetDefaultOfficeTableTemplateEditRefresh {
      * @param operationData.oldBindId Id of the Office table created on import
      * @param operationData.insertNewWorksheet Specify if new worksheet has to be created
      */
-    async getDefaultOfficeTableTemplateEditRefresh(
+    async getFormattedDataTableEditRefresh(
         objectData: ObjectData,
         operationData: OperationData
     ): Promise<void> {
@@ -92,5 +92,5 @@ class StepGetDefaultOfficeTableTemplateEditRefresh {
     }
 }
 
-const stepGetDefaultOfficeTableTemplateEditRefresh = new StepGetDefaultOfficeTableTemplateEditRefresh();
-export default stepGetDefaultOfficeTableTemplateEditRefresh;
+const stepGetFormattedDataTableEditRefresh = new StepGetFormattedDataTableEditRefresh();
+export default stepGetFormattedDataTableEditRefresh;

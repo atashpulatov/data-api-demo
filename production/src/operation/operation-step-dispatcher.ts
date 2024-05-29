@@ -76,7 +76,7 @@ class OperationStepDispatcher {
 
   completeGetDefaultOfficeTableTemplateEditRefresh(objectWorkingId: number): void {
     this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, OperationSteps.GET_DEFAULT_OFFICE_TABLE_TEMPLATE_EDIT_REFRESH)
+      markStepCompleted(objectWorkingId, OperationSteps.GET_FORMATTED_DATA_TABLE_EDIT_REFRESH)
     );
   }
 

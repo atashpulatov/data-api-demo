@@ -31,8 +31,8 @@ import stepSaveImageDetails from '../office/shapes/step-save-image-details';
 import stepGetDuplicateName from '../office/step-get-duplicate-name';
 import stepRenameExcelWorksheet from '../office/step-rename-excel-worksheet';
 import stepBindOfficeTable from '../office/table/step-bind-office-table';
-import stepGetDefaultOfficeTableTemplateEditRefresh from '../office/table/step-get-default-office-table-template-edit-refresh';
-import stepGetFormattedDataTableImport from '../office/table/step-get-default-office-table-template-import';
+import stepGetFormattedDataTableEditRefresh from '../office/table/step-get-formatted-data-table-edit-refresh';
+import stepGetFormattedDataTableImport from '../office/table/step-get-formatted-data-table-import';
 import stepGetOfficeTableEditRefresh from '../office/table/step-get-office-table-edit-refresh';
 import stepGetOfficeTableImport from '../office/table/step-get-office-table-import';
 import stepModifyObject from '../popup/step-modify-object';
@@ -77,8 +77,8 @@ class SubscribeSteps {
     );
 
     operationBus.subscribe(
-      OperationSteps.GET_DEFAULT_OFFICE_TABLE_TEMPLATE_EDIT_REFRESH,
-      stepGetDefaultOfficeTableTemplateEditRefresh.getDefaultOfficeTableTemplateEditRefresh
+      OperationSteps.GET_FORMATTED_DATA_TABLE_EDIT_REFRESH,
+      stepGetFormattedDataTableEditRefresh.getFormattedDataTableEditRefresh
     );
 
     operationBus.subscribe(OperationSteps.FORMAT_DATA, stepApplyFormatting.applyFormatting);
