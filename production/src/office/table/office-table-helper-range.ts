@@ -128,9 +128,9 @@ class OfficeTableHelperRange {
     if (importType === ObjectImportType.FORMATTED_DATA && isCrosstab) {
       const range = prevOfficeTable.getRange().getOffsetRange(-1, 0).getResizedRange(1, 0);
       range.clear();
-    } else {
-      prevOfficeTable.delete();
     }
+
+    prevOfficeTable.delete();
 
     excelContext.runtime.enableEvents = true;
     await excelContext.sync();
