@@ -41,8 +41,8 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
         rows = columnsY + rowsY;
         columns = columnsX + rowsX;
 
-        // Remove the redundant row for source table range, as we hide the headers 
-        // of the underneath office table template for crosstab
+        // Remove one row from source table rows, as getRange() utlimately adds an additional 
+        // row to source table range
         sourceTableRows = rows - OFFICE_TABLE_EXTA_ROW;
       }
 
