@@ -30,10 +30,7 @@ class GetOfficeTableHelper {
     if (tableName) {
       return tableName;
     }
-    const excelCompatibleTableName = mstrTable.name.replace(
-      /(\.|•|‼| |!|#|\$|%|&|'|\(|\)|\*|\+|,|-|\/|:|;|<|=|>|@|\^|`|\{|\||\}|~|¢|£|¥|¬|«|»)/g,
-      '_'
-    );
+    const excelCompatibleTableName = mstrTable.name.replace(/[^a-zA-Z0-9._]/g, '_');
     return `_${excelCompatibleTableName.slice(0, 239)}_${Date.now().toString()}`;
   }
 }
