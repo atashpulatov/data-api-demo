@@ -5,14 +5,14 @@ import { OperationData } from '../redux-reducer/operation-reducer/operation-redu
 import { ObjectData } from '../types/object-types';
 
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
-import stepImportWorksheetToCurrentWorkBook from './step-import-worksheet-to-current-workbook';
+import stepExportExcelWorkbook from './step-export-excel-workbook';
 
-describe('StepImportWorksheetToCurrentWorkBook', () => {
+describe('StepExportExcelWorkbook', () => {
     afterEach(() => {
         jest.restoreAllMocks();
     });
 
-    it('exportExcelToCurrentWorkBook should work as expected to export dossier to excel', async () => {
+    it('exportExcelWorkBook should work as expected to export dossier to excel', async () => {
         // given
         const objectData = {
             objectWorkingId: 1234567,
@@ -43,15 +43,15 @@ describe('StepImportWorksheetToCurrentWorkBook', () => {
 
         jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
 
-        jest.spyOn(operationStepDispatcher, 'completeGetOfficeTableImport').mockImplementation();
+        jest.spyOn(operationStepDispatcher, 'completeExportToCurrentWorkbook').mockImplementation();
 
         // when
-        await stepImportWorksheetToCurrentWorkBook.importWorksheetToCurrentWorkBook(objectData, operationData);
+        await stepExportExcelWorkbook.exportExcelWorkBook(objectData, operationData);
 
         expect(mstrObjectRestService.exportDossierToExcel).toHaveBeenCalled();
     });
 
-    it('exportExcelToCurrentWorkBook should work as expected to export report to excel', async () => {
+    it('exportExcelWorkBook should work as expected to export report to excel', async () => {
         // given
         const objectData = {
             objectWorkingId: 1234567,
@@ -82,10 +82,10 @@ describe('StepImportWorksheetToCurrentWorkBook', () => {
 
         jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
 
-        jest.spyOn(operationStepDispatcher, 'completeGetOfficeTableImport').mockImplementation();
+        jest.spyOn(operationStepDispatcher, 'completeExportToCurrentWorkbook').mockImplementation();
 
         // when
-        await stepImportWorksheetToCurrentWorkBook.importWorksheetToCurrentWorkBook(objectData, operationData);
+        await stepExportExcelWorkbook.exportExcelWorkBook(objectData, operationData);
 
         expect(mstrObjectRestService.exportReportToExcel).toHaveBeenCalled();
     });
