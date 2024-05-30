@@ -7,89 +7,85 @@ import officeTableCreate from './office-table-create';
 import officeTableRefresh from './office-table-refresh';
 
 class StepGetFormattedDataTableEditRefresh {
-    /**
-     * Creates an office table and removes the previous existing office table on every refresh or edit.
-     * Similar to StepGetOfficeTableEditRefresh.getOfficeTableEditRefresh() step, except that redundant operations 
-     * with the relation to formatted data table were eliminated.
-     *
-     * This function is subscribed as one of the operation steps with the key GET_FORMATTED_DATA_TABLE_EDIT_REFRESH,
-     * therefore should be called only via operation bus.
-     *
-     * @param objectData.tableName Name of Excel table created on import
-     * @param objectData.objectWorkingId Unique Id of the object allowing to reference specific object
-     * @param operationData.excelContext Reference to Excel Context used by Excel API functions
-     * @param operationData.instanceDefinition Object containing information about MSTR object
-     * @param operationData.oldBindId Id of the Office table created on import
-     * @param operationData.insertNewWorksheet Specify if new worksheet has to be created
-     */
-    async getFormattedDataTableEditRefresh(
-        objectData: ObjectData,
-        operationData: OperationData
-    ): Promise<void> {
-        try {
-            console.time('Create formatted data table - edit or refresh');
-            const {
-                tableName,
-                objectWorkingId,
-                pageByData,
-                importType,
-            } = objectData;
-            const { excelContext, instanceDefinition, oldBindId, insertNewWorksheet } =
-                operationData;
+  /**
+   * Creates an office table and removes the previous existing office table on every refresh or edit.
+   * Similar to StepGetOfficeTableEditRefresh.getOfficeTableEditRefresh() step, except that redundant operations
+   * with the relation to formatted data table were eliminated.
+   *
+   * This function is subscribed as one of the operation steps with the key GET_FORMATTED_DATA_TABLE_EDIT_REFRESH,
+   * therefore should be called only via operation bus.
+   *
+   * @param objectData.tableName Name of Excel table created on import
+   * @param objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param operationData.excelContext Reference to Excel Context used by Excel API functions
+   * @param operationData.instanceDefinition Object containing information about MSTR object
+   * @param operationData.oldBindId Id of the Office table created on import
+   * @param operationData.insertNewWorksheet Specify if new worksheet has to be created
+   */
+  async getFormattedDataTableEditRefresh(
+    objectData: ObjectData,
+    operationData: OperationData
+  ): Promise<void> {
+    try {
+      console.time('Create formatted data table - edit or refresh');
+      const { tableName, objectWorkingId, pageByData, importType } = objectData;
+      const { excelContext, instanceDefinition, oldBindId, insertNewWorksheet } = operationData;
 
-            const prevOfficeTable = await officeTableRefresh.getPreviousOfficeTable(
-                excelContext,
-                oldBindId
-            );
+      const prevOfficeTable = await officeTableRefresh.getPreviousOfficeTable(
+        excelContext,
+        oldBindId
+      );
 
-            const { officeTable, bindId, startCell } = await officeTableCreate.createFormattedDataOfficeTable({
-                instanceDefinition,
-                excelContext,
-                startCell: objectData.startCell,
-                tableName,
-                prevOfficeTable,
-                insertNewWorksheet,
-                pageByData,
-                objectData,
-            });
+      const { officeTable, bindId, startCell } =
+        await officeTableCreate.createFormattedDataOfficeTable({
+          instanceDefinition,
+          excelContext,
+          startCell: objectData.startCell,
+          tableName,
+          prevOfficeTable,
+          insertNewWorksheet,
+          pageByData,
+          objectData,
+        });
 
-            const updatedOperation = {
-                objectWorkingId,
-                officeTable,
-                shouldFormat: true,
-                tableChanged: true,
-                instanceDefinition,
-                startCell,
-                isTotalsRowVisible: prevOfficeTable.showTotals,
-            };
+      const updatedOperation = {
+        objectWorkingId,
+        officeTable,
+        shouldFormat: true,
+        tableChanged: true,
+        instanceDefinition,
+        startCell,
+        isTotalsRowVisible: prevOfficeTable.showTotals,
+      };
 
-            officeTable.worksheet.load(['id', 'name', 'position']);
-            await excelContext.sync();
+      officeTable.worksheet.load(['id', 'name', 'position']);
+      await excelContext.sync();
 
-            const { id, name, position } = officeTable.worksheet;
+      const { id, name, position } = officeTable.worksheet;
 
-            const updatedObject: Partial<ObjectData> = {
-                objectWorkingId,
-                bindId,
-                startCell,
-                importType,
-                worksheet: { id, name, index: position },
-                groupData: {
-                    key: position, title: name,
-                    index: 0
-                },
-            };
+      const updatedObject: Partial<ObjectData> = {
+        objectWorkingId,
+        bindId,
+        startCell,
+        importType,
+        worksheet: { id, name, index: position },
+        groupData: {
+          key: id,
+          title: name,
+          index: position,
+        },
+      };
 
-            operationStepDispatcher.updateOperation(updatedOperation);
-            operationStepDispatcher.updateObject(updatedObject);
-            operationStepDispatcher.completeGetDefaultOfficeTableTemplateEditRefresh(objectWorkingId);
-        } catch (error) {
-            console.error(error);
-            operationErrorHandler.handleOperationError(objectData, operationData, error);
-        } finally {
-            console.timeEnd('Create formatted data table - edit or refresh');
-        }
+      operationStepDispatcher.updateOperation(updatedOperation);
+      operationStepDispatcher.updateObject(updatedObject);
+      operationStepDispatcher.completeGetDefaultOfficeTableTemplateEditRefresh(objectWorkingId);
+    } catch (error) {
+      console.error(error);
+      operationErrorHandler.handleOperationError(objectData, operationData, error);
+    } finally {
+      console.timeEnd('Create formatted data table - edit or refresh');
     }
+  }
 }
 
 const stepGetFormattedDataTableEditRefresh = new StepGetFormattedDataTableEditRefresh();
