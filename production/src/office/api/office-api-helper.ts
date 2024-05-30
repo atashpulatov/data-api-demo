@@ -7,7 +7,11 @@ import { IncorrectInputTypeError } from '../../error/incorrect-input-type';
 import { OutsideOfRangeError } from '../../error/outside-of-range-error';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 import { OfficeSettingsEnum } from '../../constants/office-constants';
-import { DEFAULT_CELL_POSITION, DEFAULT_RANGE_POSITION, ObjectImportType } from '../../mstr-object/constants';
+import {
+  DEFAULT_CELL_POSITION,
+  DEFAULT_RANGE_POSITION,
+  ObjectImportType,
+} from '../../mstr-object/constants';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -320,7 +324,9 @@ class OfficeApiHelper {
    * @returns Reference to active Excel Worksheet
    */
   insertExcelWorksheets(externalWorkbookBase64: string, excelContext: Excel.RequestContext): any {
-    return excelContext.workbook.insertWorksheetsFromBase64(externalWorkbookBase64);
+    return excelContext.workbook.insertWorksheetsFromBase64(externalWorkbookBase64, {
+      positionType: Excel.WorksheetPositionType.end, // always insert new sheets at the end of workbook
+    });
   }
 
   /**
@@ -394,14 +400,13 @@ class OfficeApiHelper {
     const officeTable = excelContext.workbook.tables.getItem(bindId);
 
     if (isCrosstab) {
-      const crosstabRange = await this.getCrosstabRange(
-        {
-          excelContext,
-          importType,
-          crosstabHeaderDimensions,
-          officeTable,
-          bindId
-        });
+      const crosstabRange = await this.getCrosstabRange({
+        excelContext,
+        importType,
+        crosstabHeaderDimensions,
+        officeTable,
+        bindId,
+      });
       crosstabRange.select();
     } else {
       const tableRange = this.getBindingRange(excelContext, bindId);
@@ -424,7 +429,7 @@ class OfficeApiHelper {
     importType,
     crosstabHeaderDimensions,
     officeTable,
-    bindId
+    bindId,
   }: any): Promise<Excel.Range> {
     let crosstabRange: Excel.Range;
     if (importType === ObjectImportType.FORMATTED_DATA) {
@@ -443,7 +448,6 @@ class OfficeApiHelper {
     }
 
     return crosstabRange;
-
   }
 
   /**

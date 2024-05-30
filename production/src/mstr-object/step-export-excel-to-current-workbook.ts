@@ -57,17 +57,8 @@ class StepExportExcelToCurrentWorkbook {
 
       const excelBlob = await response.blob();
 
-      // DE294780: temporarily pause event handling to prevent onAdded event from being triggered
-      // and causing unintentional side effects (updating objects to the wrong sheet, etc.)
-      excelContext.runtime.enableEvents = false;
-      await excelContext.sync();
-
       const exportEngineWorksheet = await this.insertExcelWorksheet(excelBlob, excelContext);
       operationData.sourceWorksheetId = exportEngineWorksheet.id;
-
-      // DE294780: re-enable event handling immediately after new sheet added
-      excelContext.runtime.enableEvents = true;
-      await excelContext.sync();
 
       operationStepDispatcher.updateOperation(operationData);
       operationStepDispatcher.completeExportToCurrentWorkbook(objectWorkingId);
