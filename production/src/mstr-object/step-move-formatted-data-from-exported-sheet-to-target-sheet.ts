@@ -6,7 +6,7 @@ import { ObjectData } from '../types/object-types';
 
 import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
-import { TITLE_EXCLUDED_DEFAULT_START_CELL_POSITION, OFFICE_TABLE_EXTA_ROW } from './constants';
+import { OFFICE_TABLE_EXTA_ROW, TITLE_EXCLUDED_DEFAULT_START_CELL_POSITION } from './constants';
 
 class StepMoveFormattedDataFromExportedToTargetWorkSheet {
   /**
@@ -32,7 +32,7 @@ class StepMoveFormattedDataFromExportedToTargetWorkSheet {
       const { startCell, instanceDefinition, sourceWorksheetId, excelContext } = operationData;
       const { isCrosstab, objectWorkingId, worksheet } = objectData;
 
-      let { rows, columns } = instanceDefinition;
+      const { rows, columns } = instanceDefinition;
       let sourceTableRows = rows;
 
       if (isCrosstab) {

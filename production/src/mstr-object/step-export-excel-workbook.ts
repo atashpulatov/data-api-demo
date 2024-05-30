@@ -1,3 +1,5 @@
+import { read } from 'xlsx';
+
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { mstrObjectRestService } from './mstr-object-rest-service';
 
@@ -7,7 +9,6 @@ import { ObjectData, VisualizationInfo } from '../types/object-types';
 import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 import mstrObjectEnum from './mstr-object-type-enum';
-import { read } from 'xlsx';
 
 class StepExportExcelWorkBook {
     /**
@@ -59,7 +60,7 @@ class StepExportExcelWorkBook {
             const exportedWorksheetTableRange = await this.getExportedWorksheetTableRange(excelBlob, excelContext);
 
             operationData.formattedData = {
-                excelBlob: excelBlob,
+                excelBlob,
                 tableRange: exportedWorksheetTableRange
             };
 

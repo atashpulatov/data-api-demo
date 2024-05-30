@@ -17,7 +17,7 @@ import { ObjectData } from '../../types/object-types';
 import { calculateOffsetForObjectInfoSettings } from '../../mstr-object/get-object-details-methods';
 import { OperationTypes } from '../../operation/operation-type-names';
 import officeApiDataLoader from '../api/office-api-data-loader';
-import { ObjectImportType, TITLE_EXCLUDED_ROW_OFFSET, OFFICE_TABLE_EXTA_ROW } from '../../mstr-object/constants';
+import { ObjectImportType, OFFICE_TABLE_EXTA_ROW, TITLE_EXCLUDED_ROW_OFFSET } from '../../mstr-object/constants';
 
 const DEFAULT_TABLE_STYLE = 'TableStyleLight11';
 
@@ -228,7 +228,9 @@ class OfficeTableCreate {
       startCell = await officeApiHelper.getSelectedCell(excelContext);
     }
 
-    let { rows, columns } = officeApiHelper.getTableDimensions(formattedDataRange);
+    const dimensions = officeApiHelper.getTableDimensions(formattedDataRange);
+    let { rows } = dimensions;
+    const { columns } = dimensions;
 
     rows -= TITLE_EXCLUDED_ROW_OFFSET;
 

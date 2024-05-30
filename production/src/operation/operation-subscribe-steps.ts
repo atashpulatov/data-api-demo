@@ -2,9 +2,9 @@ import stepSaveObjectInExcel from '../office/store/step-save-object-in-excel';
 
 import stepGetInstanceDefinition from '../mstr-object/instance/step-get-instance-definition';
 import stepGetObjectSettings from '../mstr-object/settings/step-get-object-settings';
-import stepImportWorksheetToCurrentWorkBook from '../mstr-object/step-import-worksheet-to-current-workbook';
 import stepExportExcelWorkBook from '../mstr-object/step-export-excel-workbook'
 import stepGetObjectDetails from '../mstr-object/step-get-object-details';
+import stepImportWorksheetToCurrentWorkBook from '../mstr-object/step-import-worksheet-to-current-workbook';
 import stepMoveFormattedDataFromExportedToTargetWorkSheet from '../mstr-object/step-move-formatted-data-from-exported-sheet-to-target-sheet';
 import stepDisplayNotificationCompleted from '../notification/step-display-notification-completed';
 import stepNotificationInProgress from '../notification/step-notification-in-progress';
