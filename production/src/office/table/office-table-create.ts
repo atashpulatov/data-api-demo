@@ -17,6 +17,7 @@ import { ObjectData } from '../../types/object-types';
 import { calculateOffsetForObjectInfoSettings } from '../../mstr-object/get-object-details-methods';
 import { OperationTypes } from '../../operation/operation-type-names';
 import officeApiDataLoader from '../api/office-api-data-loader';
+import { ObjectImportType, TITLE_EXCLUDED_ROW_OFFSET, OFFICE_TABLE_EXTA_ROW } from '../../mstr-object/constants';
 
 const DEFAULT_TABLE_STYLE = 'TableStyleLight11';
 
@@ -161,6 +162,7 @@ class OfficeTableCreate {
       startCell,
       excelContext,
       objectDetailsSize,
+      importType
     });
   }
 
@@ -184,6 +186,7 @@ class OfficeTableCreate {
     instanceDefinition,
     excelContext,
     startCell,
+    tableRange: formattedDataRange,
     tableName,
     prevOfficeTable,
     isRepeatStep,
@@ -194,6 +197,7 @@ class OfficeTableCreate {
     instanceDefinition: InstanceDefinition;
     excelContext: Excel.RequestContext;
     startCell: string;
+    tableRange: string;
     tableName?: string;
     prevOfficeTable?: Excel.Table;
     tableChanged?: boolean;
@@ -206,12 +210,12 @@ class OfficeTableCreate {
       mstrTable,
       mstrTable: { isCrosstab, name },
     } = instanceDefinition;
-    const { importType, crosstabHeaderDimensions } = objectData;
+    const { importType } = objectData;
 
     const newOfficeTableName = getOfficeTableHelper.createTableName(mstrTable, tableName);
     const worksheet = await officeApiWorksheetHelper.getWorksheet(
       excelContext,
-      importType,
+      objectData.importType,
       name,
       pageByData,
       prevOfficeTable,
@@ -224,13 +228,19 @@ class OfficeTableCreate {
       startCell = await officeApiHelper.getSelectedCell(excelContext);
     }
 
-    let { rows, columns } = instanceDefinition;
+    let { rows, columns } = officeApiHelper.getTableDimensions(formattedDataRange);
+
+    rows -= TITLE_EXCLUDED_ROW_OFFSET;
+
+    // Add one row to crosstabular tables, to be able to copy formatted data range onto the imported office table
     if (isCrosstab) {
-      const { rowsX, rowsY, columnsX, columnsY } = crosstabHeaderDimensions;
-      rows = columnsY + rowsY;
-      columns = columnsX + rowsX;
+      rows += OFFICE_TABLE_EXTA_ROW;
     }
-    const tableRange = officeApiHelper.getRange(columns, startCell, rows);
+
+    // Remove one row from source table rows, as getRange() utlimately adds an additional 
+    // row to source table range
+    const tableRange = officeApiHelper.getRange(columns, startCell, rows - OFFICE_TABLE_EXTA_ROW);
+
     const range = worksheet.getRange(tableRange)
 
     excelContext.trackedObjects.add(range);
@@ -259,6 +269,8 @@ class OfficeTableCreate {
       worksheet,
       startCell,
       excelContext,
+      importType,
+      dimensions: { rows, columns }
     });
   }
 
@@ -365,6 +377,8 @@ class OfficeTableCreate {
     startCell,
     excelContext,
     objectDetailsSize,
+    importType,
+    dimensions,
   }: {
     officeTable: Excel.Table;
     newOfficeTableName: string;
@@ -373,12 +387,14 @@ class OfficeTableCreate {
     startCell: string;
     excelContext: Excel.RequestContext;
     objectDetailsSize?: number;
+    importType: ObjectImportType;
+    dimensions?: any
   }): Promise<any> {
     const { isCrosstab } = mstrTable;
     try {
       officeTable.load(['name', 'id']);
       officeTable.name = newOfficeTableName;
-      if (!isCrosstab) {
+      if (importType !== ObjectImportType.FORMATTED_DATA && !isCrosstab) {
         officeTable.getHeaderRowRange().values = [
           mstrTable.headers.columns[mstrTable.headers.columns.length - 1],
         ];
@@ -405,6 +421,7 @@ class OfficeTableCreate {
         startCell,
         groupData: { key: id, title: name, index },
         objectDetailsSize,
+        dimensions
       };
     } catch (error) {
       await excelContext.sync();

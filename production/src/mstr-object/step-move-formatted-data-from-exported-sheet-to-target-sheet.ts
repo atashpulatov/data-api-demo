@@ -6,11 +6,9 @@ import { ObjectData } from '../types/object-types';
 
 import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
-import { TITLE_EXCLUDED_DEFAULT_CELL_POSITION } from './constants';
+import { TITLE_EXCLUDED_DEFAULT_START_CELL_POSITION, OFFICE_TABLE_EXTA_ROW } from './constants';
 
-const OFFICE_TABLE_EXTA_ROW = 1;
-
-class StepMoveFormattedDataFromExportedSheetToTargetSheet {
+class StepMoveFormattedDataFromExportedToTargetWorkSheet {
   /**
    * Moves formatted data(table) from export engine worksheet to current active worksheet.
    * Ultimately deletes the source worksheet(export engine worksheet) after copying 
@@ -26,7 +24,7 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
    * @param operationData.sourceWorksheetId Source worksheet id to copy the range from
    * @param operationData.excelContext Reference to Excel Context used by Excel API functions
    */
-  moveFormattedDataFromExportedSheetToTargetSheet = async (objectData: ObjectData, operationData: OperationData): Promise<void> => {
+  moveFormattedDataFromExportedToTargetWorkSheet = async (objectData: ObjectData, operationData: OperationData): Promise<void> => {
     console.group('Moving exported formatted data to the selected worksheet');
     console.time('Total');
 
@@ -38,18 +36,12 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
       let sourceTableRows = rows;
 
       if (isCrosstab) {
-        const { rowsX, rowsY, columnsX, columnsY } = crosstabHeaderDimensions;
-        rows = columnsY + rowsY;
-        columns = columnsX + rowsX;
-
-        // Remove one row from source table rows, as getRange() utlimately adds an additional 
-        // row to source table range
         sourceTableRows = rows - OFFICE_TABLE_EXTA_ROW;
       }
 
       // Get range starting from 'A3', to exclude the visualization title 
-      const sourceTableRange = officeApiHelper.getRange(columns, TITLE_EXCLUDED_DEFAULT_CELL_POSITION, sourceTableRows);
-      const targetTableRange = officeApiHelper.getRange(columns, startCell, rows);
+      const sourceTableRange = officeApiHelper.getRange(columns, TITLE_EXCLUDED_DEFAULT_START_CELL_POSITION, sourceTableRows - OFFICE_TABLE_EXTA_ROW);
+      const targetTableRange = officeApiHelper.getRange(columns, startCell, rows - OFFICE_TABLE_EXTA_ROW);
 
       const targetWorksheet = officeApiHelper.getExcelSheetById(
         excelContext,
@@ -89,7 +81,7 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
       }
 
       operationStepDispatcher.updateObject(objectData);
-      operationStepDispatcher.completeMoveFormattedDataFromExportedSheetToTargetSheet(objectWorkingId);
+      operationStepDispatcher.completeMoveFormattedDataFromExportedToTargetWorkSheet(objectWorkingId);
     } catch (error) {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
@@ -120,5 +112,5 @@ class StepMoveFormattedDataFromExportedSheetToTargetSheet {
   }
 }
 
-const stepMoveFormattedDataFromExportedSheetToTargetSheet = new StepMoveFormattedDataFromExportedSheetToTargetSheet();
-export default stepMoveFormattedDataFromExportedSheetToTargetSheet;
+const stepMoveFormattedDataFromExportedToTargetWorkSheet = new StepMoveFormattedDataFromExportedToTargetWorkSheet();
+export default stepMoveFormattedDataFromExportedToTargetWorkSheet;

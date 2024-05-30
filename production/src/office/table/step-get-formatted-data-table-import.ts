@@ -30,17 +30,22 @@ class StepGetFormattedDataTableImport {
                 instanceDefinition,
                 startCell: selectedCell,
                 insertNewWorksheet,
+                formattedData: { tableRange }
             } = operationData;
 
-            const { officeTable, bindId, tableName, worksheet, startCell, groupData } =
+            const { officeTable, bindId, tableName, worksheet, startCell, groupData, dimensions } =
                 await officeTableCreate.createFormattedDataOfficeTable({
                     excelContext,
                     instanceDefinition,
                     startCell: selectedCell,
+                    tableRange,
                     insertNewWorksheet,
                     pageByData: objectData.pageByData,
                     objectData,
                 });
+
+            instanceDefinition.rows = dimensions.rows;
+            instanceDefinition.columns = dimensions.columns;
 
             const updatedOperation = {
                 objectWorkingId,

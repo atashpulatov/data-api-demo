@@ -1,67 +1,46 @@
 import { officeApiHelper } from '../office/api/office-api-helper';
-import { mstrObjectRestService } from './mstr-object-rest-service';
 
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
-import { ObjectData, VisualizationInfo } from '../types/object-types';
+import { ObjectData } from '../types/object-types';
 
 import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
-import mstrObjectEnum from './mstr-object-type-enum';
 
 const base64BlobFileDataSubstring = 'base64,';
 
-class StepExportExcelToCurrentWorkbook {
+class StepImportWorksheetToCurrentWorkBook {
   /**
-   * Fetches the excel workbook as blob data from export engine and inserts the extracted
-   * worksheet into current functional workbook.
+   * Imports the extracted worksheet from the excel blob workbook into current functional workbook.
    *
-   * This function is subscribed as one of the operation steps with the key IMPORT_EXPORT_ENGINE_WORKBOOK,
+   * This function is subscribed as one of the operation steps with the key IMPORT_EXPORTED_WORKSHEET_TO_CURRENT_WORKBOOK,
    * therefore should be called only via operation bus.
    *
    * @param objectData.objectWorkingId Unique Id of the object allowing to reference specific object
-   * @param objectData.objectId Id of the MSTR object being currently processed
-   * @param objectData.visualizationInfo Information about location of visualization in dossier
-   * @param objectData.projectId Id of the MSTR project from which we fetch data
-   * @param operationData.instanceDefinition Object containing information about MSTR object
+   * @param operationData.formattedData Object containing information about MSTR object
    */
-  exportExcelToCurrentWorkBook = async (
+  importWorksheetToCurrentWorkBook = async (
     objectData: ObjectData,
     operationData: OperationData
   ): Promise<void> => {
-    console.group('Importing export engine workbook');
+    console.group('Import worksheet to current workbook');
     console.time('Total');
 
     try {
-      const { instanceDefinition } = operationData;
-      const { objectWorkingId, objectId, visualizationInfo, projectId, mstrObjectType } =
-        objectData;
+      const { formattedData: { excelBlob } } = operationData;
+      const { objectWorkingId } = objectData;
+
       const excelContext = await officeApiHelper.getExcelContext();
 
-      let response: Response;
-      if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-        const { visualizationKey } = visualizationInfo as VisualizationInfo;
-        response = await mstrObjectRestService.exportDossierToExcel({
-          dossierId: objectId,
-          dossierInstanceId: instanceDefinition.instanceId,
-          visualizationKey,
-          projectId,
-        });
-      } else {
-        // mstrObjectType is a report type
-        response = await mstrObjectRestService.exportReportToExcel({
-          reportId: objectId,
-          reportInstanceId: instanceDefinition.instanceId,
-          projectId,
-        });
-      }
-
-      const excelBlob = await response.blob();
+      // DE294780: temporarily pause event handling to prevent onAdded event from being triggered
+      // and causing unintentional side effects (updating objects to the wrong sheet, etc.)
+      excelContext.runtime.enableEvents = false;
+      await excelContext.sync();
 
       const exportEngineWorksheet = await this.insertExcelWorksheet(excelBlob, excelContext);
       operationData.sourceWorksheetId = exportEngineWorksheet.id;
 
       operationStepDispatcher.updateOperation(operationData);
-      operationStepDispatcher.completeExportToCurrentWorkbook(objectWorkingId);
+      operationStepDispatcher.completeImportWorksheetToCurrentWorkBook(objectWorkingId);
     } catch (error) {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
@@ -115,5 +94,5 @@ class StepExportExcelToCurrentWorkbook {
   }
 }
 
-const stepExportExcelToCurrentWorkbook = new StepExportExcelToCurrentWorkbook();
-export default stepExportExcelToCurrentWorkbook;
+const stepImportWorksheetToCurrentWorkBook = new StepImportWorksheetToCurrentWorkBook();
+export default stepImportWorksheetToCurrentWorkBook;

@@ -234,6 +234,25 @@ class OfficeApiHelper {
   }
 
   /**
+   * Gets the Excel table dimensions based on table range.
+   *
+   * @param tableRange address of range of the table
+   * 
+   * @returns Dimensions of excel table range
+   */
+  getTableDimensions(tableRange: string): { rows: number, columns: number } {
+    const tableRangeArray = tableRange.split(':');
+
+    const startCellArray = tableRangeArray[0].split(/(\d+)/);
+    const endCellArray = tableRangeArray[1].split(/(\d+)/);
+
+    const columns = this.lettersToNumber(endCellArray[0]) - (this.lettersToNumber(startCellArray[0]) - 1);
+    const rows = Number(endCellArray[1]) - (Number(startCellArray[1]) - 1);
+
+    return { rows, columns };
+  }
+
+  /**
    * Returns excel sheet from specific table.
    *
    * @param excelContext Reference to Excel Context used by Excel API functions

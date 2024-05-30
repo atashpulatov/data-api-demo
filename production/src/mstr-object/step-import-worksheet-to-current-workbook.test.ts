@@ -5,9 +5,9 @@ import { OperationData } from '../redux-reducer/operation-reducer/operation-redu
 import { ObjectData } from '../types/object-types';
 
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
-import stepExportExcelToCurrentWorkbook from './step-export-excel-to-current-workbook';
+import stepImportWorksheetToCurrentWorkBook from './step-import-worksheet-to-current-workbook';
 
-describe('StepExportExcelToCurrentWorkbook', () => {
+describe('StepImportWorksheetToCurrentWorkBook', () => {
     afterEach(() => {
         jest.restoreAllMocks();
     });
@@ -46,7 +46,7 @@ describe('StepExportExcelToCurrentWorkbook', () => {
         jest.spyOn(operationStepDispatcher, 'completeGetOfficeTableImport').mockImplementation();
 
         // when
-        await stepExportExcelToCurrentWorkbook.exportExcelToCurrentWorkBook(objectData, operationData);
+        await stepImportWorksheetToCurrentWorkBook.importWorksheetToCurrentWorkBook(objectData, operationData);
 
         expect(mstrObjectRestService.exportDossierToExcel).toHaveBeenCalled();
     });
@@ -85,7 +85,7 @@ describe('StepExportExcelToCurrentWorkbook', () => {
         jest.spyOn(operationStepDispatcher, 'completeGetOfficeTableImport').mockImplementation();
 
         // when
-        await stepExportExcelToCurrentWorkbook.exportExcelToCurrentWorkBook(objectData, operationData);
+        await stepImportWorksheetToCurrentWorkBook.importWorksheetToCurrentWorkBook(objectData, operationData);
 
         expect(mstrObjectRestService.exportReportToExcel).toHaveBeenCalled();
     });

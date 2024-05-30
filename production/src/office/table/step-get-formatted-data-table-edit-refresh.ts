@@ -9,7 +9,7 @@ import officeTableRefresh from './office-table-refresh';
 class StepGetFormattedDataTableEditRefresh {
   /**
    * Creates an office table and removes the previous existing office table on every refresh or edit.
-   * Similar to StepGetOfficeTableEditRefresh.getOfficeTableEditRefresh() step, except that redundant operations
+   * Similar to StepGetOfficeTableEditRefresh.getOfficeTableEditRefresh() step, except that redundant operations 
    * with the relation to formatted data table were eliminated.
    *
    * This function is subscribed as one of the operation steps with the key GET_FORMATTED_DATA_TABLE_EDIT_REFRESH,
@@ -28,25 +28,34 @@ class StepGetFormattedDataTableEditRefresh {
   ): Promise<void> {
     try {
       console.time('Create formatted data table - edit or refresh');
-      const { tableName, objectWorkingId, pageByData, importType } = objectData;
-      const { excelContext, instanceDefinition, oldBindId, insertNewWorksheet } = operationData;
+      const {
+        tableName,
+        objectWorkingId,
+        pageByData,
+        importType,
+      } = objectData;
+      const { excelContext, instanceDefinition, oldBindId, insertNewWorksheet, formattedData: { tableRange } } =
+        operationData;
 
       const prevOfficeTable = await officeTableRefresh.getPreviousOfficeTable(
         excelContext,
         oldBindId
       );
 
-      const { officeTable, bindId, startCell } =
-        await officeTableCreate.createFormattedDataOfficeTable({
-          instanceDefinition,
-          excelContext,
-          startCell: objectData.startCell,
-          tableName,
-          prevOfficeTable,
-          insertNewWorksheet,
-          pageByData,
-          objectData,
-        });
+      const { officeTable, bindId, startCell, dimensions } = await officeTableCreate.createFormattedDataOfficeTable({
+        instanceDefinition,
+        excelContext,
+        startCell: objectData.startCell,
+        tableRange,
+        tableName,
+        prevOfficeTable,
+        insertNewWorksheet,
+        pageByData,
+        objectData,
+      });
+
+      instanceDefinition.rows = dimensions.rows;
+      instanceDefinition.columns = dimensions.columns;
 
       const updatedOperation = {
         objectWorkingId,

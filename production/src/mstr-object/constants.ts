@@ -1,6 +1,8 @@
 export const DEFAULT_RANGE_POSITION = { top: 0, left: 0 };
 export const DEFAULT_CELL_POSITION = 'A1';
-export const TITLE_EXCLUDED_DEFAULT_CELL_POSITION = 'A3';
+export const TITLE_EXCLUDED_DEFAULT_START_CELL_POSITION = 'A3';
+export const OFFICE_TABLE_EXTA_ROW = 1;
+export const TITLE_EXCLUDED_ROW_OFFSET = 2;
 
 export enum ObjectImportType {
   TABLE = 'table',

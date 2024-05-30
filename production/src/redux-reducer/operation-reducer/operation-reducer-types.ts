@@ -72,6 +72,10 @@ export interface OperationData {
   isTotalsRowVisible?: boolean;
   objectExist?: boolean;
   sourceWorksheetId?: string;
+  formattedData?: {
+    excelBlob: Blob,
+    tableRange: string;
+  };
 }
 
 export interface OperationState {

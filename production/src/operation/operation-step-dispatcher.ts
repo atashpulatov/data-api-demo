@@ -218,15 +218,21 @@ class OperationStepDispatcher {
 
   completeExportToCurrentWorkbook(objectWorkingId: number): void {
     this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, OperationSteps.EXPORT_EXCEL_TO_CURRENT_WORKBOOK)
+      markStepCompleted(objectWorkingId, OperationSteps.EXPORT_EXCEL_WORKBOOK)
     );
   }
 
-  completeMoveFormattedDataFromExportedSheetToTargetSheet(objectWorkingId: number): void {
+  completeImportWorksheetToCurrentWorkBook(objectWorkingId: number): void {
+    this.reduxStore.dispatch(
+      markStepCompleted(objectWorkingId, OperationSteps.IMPORT_EXPORTED_WORKSHEET_TO_CURRENT_WORKBOOK)
+    );
+  }
+
+  completeMoveFormattedDataFromExportedToTargetWorkSheet(objectWorkingId: number): void {
     this.reduxStore.dispatch(
       markStepCompleted(
         objectWorkingId,
-        OperationSteps.MOVE_FORMATTED_DATA_FROM_EXPORTED_SHEET_TO_TARGET_SHEET
+        OperationSteps.MOVE_FORMATTED_DATA_FROM_EXPORTED_TO_TARGET_WORKSHEET
       )
     );
   }

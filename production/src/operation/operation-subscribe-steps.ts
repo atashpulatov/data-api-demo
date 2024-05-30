@@ -2,9 +2,10 @@ import stepSaveObjectInExcel from '../office/store/step-save-object-in-excel';
 
 import stepGetInstanceDefinition from '../mstr-object/instance/step-get-instance-definition';
 import stepGetObjectSettings from '../mstr-object/settings/step-get-object-settings';
-import stepExportExcelToCurrentWorkBook from '../mstr-object/step-export-excel-to-current-workbook';
+import stepImportWorksheetToCurrentWorkBook from '../mstr-object/step-import-worksheet-to-current-workbook';
+import stepExportExcelWorkBook from '../mstr-object/step-export-excel-workbook'
 import stepGetObjectDetails from '../mstr-object/step-get-object-details';
-import stepMoveFormattedDataFromExportedSheetToTargetSheet from '../mstr-object/step-move-formatted-data-from-exported-sheet-to-target-sheet';
+import stepMoveFormattedDataFromExportedToTargetWorkSheet from '../mstr-object/step-move-formatted-data-from-exported-sheet-to-target-sheet';
 import stepDisplayNotificationCompleted from '../notification/step-display-notification-completed';
 import stepNotificationInProgress from '../notification/step-notification-in-progress';
 import stepBackupObjectData from '../office/backup-object-data/step-backup-object-data';
@@ -137,12 +138,16 @@ class SubscribeSteps {
       stepCompleteClearData.completeClearData
     );
     operationBus.subscribe(
-      OperationSteps.EXPORT_EXCEL_TO_CURRENT_WORKBOOK,
-      stepExportExcelToCurrentWorkBook.exportExcelToCurrentWorkBook
+      OperationSteps.EXPORT_EXCEL_WORKBOOK,
+      stepExportExcelWorkBook.exportExcelWorkBook
     );
     operationBus.subscribe(
-      OperationSteps.MOVE_FORMATTED_DATA_FROM_EXPORTED_SHEET_TO_TARGET_SHEET,
-      stepMoveFormattedDataFromExportedSheetToTargetSheet.moveFormattedDataFromExportedSheetToTargetSheet
+      OperationSteps.IMPORT_EXPORTED_WORKSHEET_TO_CURRENT_WORKBOOK,
+      stepImportWorksheetToCurrentWorkBook.importWorksheetToCurrentWorkBook
+    );
+    operationBus.subscribe(
+      OperationSteps.MOVE_FORMATTED_DATA_FROM_EXPORTED_TO_TARGET_WORKSHEET,
+      stepMoveFormattedDataFromExportedToTargetWorkSheet.moveFormattedDataFromExportedToTargetWorkSheet
     );
     operationBus.subscribe(
       OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
