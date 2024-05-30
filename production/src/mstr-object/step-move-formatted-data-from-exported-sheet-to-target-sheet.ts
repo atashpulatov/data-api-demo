@@ -30,7 +30,7 @@ class StepMoveFormattedDataFromExportedToTargetWorkSheet {
 
     try {
       const { startCell, instanceDefinition, sourceWorksheetId, excelContext } = operationData;
-      const { isCrosstab, crosstabHeaderDimensions, objectWorkingId, worksheet } = objectData;
+      const { isCrosstab, objectWorkingId, worksheet } = objectData;
 
       let { rows, columns } = instanceDefinition;
       let sourceTableRows = rows;
@@ -39,7 +39,9 @@ class StepMoveFormattedDataFromExportedToTargetWorkSheet {
         sourceTableRows = rows - OFFICE_TABLE_EXTA_ROW;
       }
 
-      // Get range starting from 'A3', to exclude the visualization title 
+      // Remove one row from source table rows, as getRange() utlimately adds an additional 
+      // row to source table range.
+      // Note: Get range starting from 'A3', to exclude the visualization title 
       const sourceTableRange = officeApiHelper.getRange(columns, TITLE_EXCLUDED_DEFAULT_START_CELL_POSITION, sourceTableRows - OFFICE_TABLE_EXTA_ROW);
       const targetTableRange = officeApiHelper.getRange(columns, startCell, rows - OFFICE_TABLE_EXTA_ROW);
 
