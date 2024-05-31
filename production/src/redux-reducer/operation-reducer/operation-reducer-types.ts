@@ -71,7 +71,10 @@ export interface OperationData {
   preparedInstanceDefinition?: any;
   isTotalsRowVisible?: boolean;
   objectExist?: boolean;
-  sourceWorksheetId?: string;
+  formattedData?: {
+    dimensions: { rows: number, columns: number };
+    sourceWorksheetId: string;
+  };
 }
 
 export interface OperationState {

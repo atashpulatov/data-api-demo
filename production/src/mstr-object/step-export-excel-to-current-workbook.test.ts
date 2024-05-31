@@ -43,10 +43,10 @@ describe('StepExportExcelToCurrentWorkbook', () => {
 
         jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
 
-        jest.spyOn(operationStepDispatcher, 'completeGetOfficeTableImport').mockImplementation();
+        jest.spyOn(operationStepDispatcher, 'completeExportExcelToCurrentWorkbook').mockImplementation();
 
         // when
-        await stepExportExcelToCurrentWorkbook.exportExcelToCurrentWorkBook(objectData, operationData);
+        await stepExportExcelToCurrentWorkbook.exportExcelToCurrentWorkbook(objectData, operationData);
 
         expect(mstrObjectRestService.exportDossierToExcel).toHaveBeenCalled();
     });
@@ -82,10 +82,10 @@ describe('StepExportExcelToCurrentWorkbook', () => {
 
         jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
 
-        jest.spyOn(operationStepDispatcher, 'completeGetOfficeTableImport').mockImplementation();
+        jest.spyOn(operationStepDispatcher, 'completeExportExcelToCurrentWorkbook').mockImplementation();
 
         // when
-        await stepExportExcelToCurrentWorkbook.exportExcelToCurrentWorkBook(objectData, operationData);
+        await stepExportExcelToCurrentWorkbook.exportExcelToCurrentWorkbook(objectData, operationData);
 
         expect(mstrObjectRestService.exportReportToExcel).toHaveBeenCalled();
     });

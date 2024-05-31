@@ -216,17 +216,17 @@ class OperationStepDispatcher {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.CREATE_PIVOT_TABLE));
   }
 
-  completeExportToCurrentWorkbook(objectWorkingId: number): void {
+  completeExportExcelToCurrentWorkbook(objectWorkingId: number): void {
     this.reduxStore.dispatch(
       markStepCompleted(objectWorkingId, OperationSteps.EXPORT_EXCEL_TO_CURRENT_WORKBOOK)
     );
   }
 
-  completeMoveFormattedDataFromExportedSheetToTargetSheet(objectWorkingId: number): void {
+  completeMoveFormattedDataFromExportedToTargetWorkSheet(objectWorkingId: number): void {
     this.reduxStore.dispatch(
       markStepCompleted(
         objectWorkingId,
-        OperationSteps.MOVE_FORMATTED_DATA_FROM_EXPORTED_SHEET_TO_TARGET_SHEET
+        OperationSteps.MOVE_FORMATTED_DATA_FROM_EXPORTED_TO_TARGET_WORKSHEET
       )
     );
   }
