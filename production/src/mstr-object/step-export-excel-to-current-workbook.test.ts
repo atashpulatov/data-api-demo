@@ -12,7 +12,7 @@ describe('StepExportExcelToCurrentWorkbook', () => {
         jest.restoreAllMocks();
     });
 
-    it('exportExcelWorkBook should work as expected to export dossier to excel', async () => {
+    it('exportExcelToCurrentWorkBook should work as expected to export dossier to excel', async () => {
         // given
         const objectData = {
             objectWorkingId: 1234567,
@@ -51,7 +51,7 @@ describe('StepExportExcelToCurrentWorkbook', () => {
         expect(mstrObjectRestService.exportDossierToExcel).toHaveBeenCalled();
     });
 
-    it('exportExcelWorkBook should work as expected to export report to excel', async () => {
+    it('exportExcelToCurrentWorkBook should work as expected to export report to excel', async () => {
         // given
         const objectData = {
             objectWorkingId: 1234567,
