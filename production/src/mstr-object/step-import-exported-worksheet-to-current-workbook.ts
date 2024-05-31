@@ -8,7 +8,7 @@ import operationStepDispatcher from '../operation/operation-step-dispatcher';
 
 const base64BlobFileDataSubstring = 'base64,';
 
-class StepImportWorksheetToCurrentWorkBook {
+class StepImportExportedWorksheetToCurrentWorkBook {
   /**
    * Imports the extracted worksheet from the excel blob workbook into current functional workbook.
    *
@@ -18,7 +18,7 @@ class StepImportWorksheetToCurrentWorkBook {
    * @param objectData.objectWorkingId Unique Id of the object allowing to reference specific object
    * @param operationData.formattedData Object containing information about MSTR object
    */
-  importWorksheetToCurrentWorkBook = async (
+  importExportedWorksheetToCurrentWorkBook = async (
     objectData: ObjectData,
     operationData: OperationData
   ): Promise<void> => {
@@ -94,5 +94,5 @@ class StepImportWorksheetToCurrentWorkBook {
   }
 }
 
-const stepImportWorksheetToCurrentWorkBook = new StepImportWorksheetToCurrentWorkBook();
-export default stepImportWorksheetToCurrentWorkBook;
+const stepImportExportedWorksheetToCurrentWorkBook = new StepImportExportedWorksheetToCurrentWorkBook();
+export default stepImportExportedWorksheetToCurrentWorkBook;

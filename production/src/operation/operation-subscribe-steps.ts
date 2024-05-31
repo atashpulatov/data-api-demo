@@ -4,8 +4,8 @@ import stepGetInstanceDefinition from '../mstr-object/instance/step-get-instance
 import stepGetObjectSettings from '../mstr-object/settings/step-get-object-settings';
 import stepExportExcelWorkBook from '../mstr-object/step-export-excel-workbook'
 import stepGetObjectDetails from '../mstr-object/step-get-object-details';
-import stepImportWorksheetToCurrentWorkBook from '../mstr-object/step-import-worksheet-to-current-workbook';
-import stepMoveFormattedDataFromExportedToTargetWorkSheet from '../mstr-object/step-move-formatted-data-from-exported-sheet-to-target-sheet';
+import stepImportExportedWorksheetToCurrentWorkBook from '../mstr-object/step-import-exported-worksheet-to-current-workbook';
+import stepMoveFormattedDataFromExportedToTargetWorkSheet from '../mstr-object/step-move-formatted-data-from-exported-to-target-worksheet';
 import stepDisplayNotificationCompleted from '../notification/step-display-notification-completed';
 import stepNotificationInProgress from '../notification/step-notification-in-progress';
 import stepBackupObjectData from '../office/backup-object-data/step-backup-object-data';
@@ -143,7 +143,7 @@ class SubscribeSteps {
     );
     operationBus.subscribe(
       OperationSteps.IMPORT_EXPORTED_WORKSHEET_TO_CURRENT_WORKBOOK,
-      stepImportWorksheetToCurrentWorkBook.importWorksheetToCurrentWorkBook
+      stepImportExportedWorksheetToCurrentWorkBook.importExportedWorksheetToCurrentWorkBook
     );
     operationBus.subscribe(
       OperationSteps.MOVE_FORMATTED_DATA_FROM_EXPORTED_TO_TARGET_WORKSHEET,
