@@ -62,15 +62,21 @@ class StepExportExcelToCurrentWorkbook {
             const excelBlob = await response.blob();
 
             const exportedWorksheetTableRange = await this.getExportedWorksheetTableRange(excelBlob, excelContext);
-            const dimensions = officeApiHelper.getTableDimensions(exportedWorksheetTableRange);
-
-            // Exclude dossier/report title from the table range of exported worksheet
-            dimensions.rows -= TITLE_EXCLUDED_ROW_OFFSET;
 
             const exportEngineWorksheet = await this.insertExcelWorksheet(excelBlob, excelContext);
 
+            const exportedTableRange = exportEngineWorksheet.getRange(exportedWorksheetTableRange);
+            exportedTableRange.load(['rowCount', 'columnCount']);
+            await excelContext.sync();
+
+            // Exclude dossier/report title from the table range of exported worksheet
+            const rows = exportedTableRange.rowCount - TITLE_EXCLUDED_ROW_OFFSET;
+
             operationData.formattedData = {
-                dimensions,
+                dimensions: {
+                    rows,
+                    columns: exportedTableRange.columnCount
+                },
                 sourceWorksheetId: exportEngineWorksheet.id,
             };
 
