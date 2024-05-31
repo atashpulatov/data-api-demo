@@ -10,6 +10,8 @@ import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 import mstrObjectEnum from './mstr-object-type-enum';
 
+const base64BlobFileDataSubstring = 'base64,';
+
 class StepExportExcelWorkBook {
     /**
      * Fetches the excel workbook as blob data from export engine.
@@ -58,10 +60,13 @@ class StepExportExcelWorkBook {
             const excelBlob = await response.blob();
 
             const exportedWorksheetTableRange = await this.getExportedWorksheetTableRange(excelBlob, excelContext);
+            const dimensions = officeApiHelper.getTableDimensions(exportedWorksheetTableRange);
+
+            const exportEngineWorksheet = await this.insertExcelWorksheet(excelBlob, excelContext);
 
             operationData.formattedData = {
-                excelBlob,
-                tableRange: exportedWorksheetTableRange
+                dimensions,
+                sourceWorksheetId: exportEngineWorksheet.id,
             };
 
             operationStepDispatcher.updateOperation(operationData);
@@ -103,6 +108,50 @@ class StepExportExcelWorkBook {
 
             };
             reader.readAsBinaryString(blob);
+        });
+    }
+
+
+    /**
+   * Inserts the blob as worksheet into current functional workbook and sets the active worksheet to the inserted worksheet.
+   *
+   * @param blob Worksheet blob exported by export engine
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   */
+    private async insertExcelWorksheet(blob: any, excelContext: Excel.RequestContext): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+
+            reader.onload = async () => {
+                const fileData = reader.result.toString();
+
+                try {
+                    const activeWorksheet = officeApiHelper.getCurrentExcelSheet(excelContext);
+
+                    // slice the actual worbook encoded in base 64 from file data starting the last index of 'base64,' substring indicator
+                    const externalWorkbookBase64 = fileData.substring(
+                        fileData.indexOf(base64BlobFileDataSubstring) + base64BlobFileDataSubstring.length
+                    );
+                    const insertedWorksheets = officeApiHelper.insertExcelWorksheets(
+                        externalWorkbookBase64,
+                        excelContext
+                    );
+
+                    activeWorksheet.activate();
+                    await excelContext.sync();
+
+                    const exportEngineWorksheet = officeApiHelper.hideExcelWorksheet(
+                        insertedWorksheets.value[0],
+                        excelContext
+                    );
+
+                    resolve(exportEngineWorksheet);
+                } catch (err) {
+                    reject(err);
+                }
+            };
+
+            reader.readAsDataURL(blob);
         });
     }
 }

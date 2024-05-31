@@ -34,7 +34,7 @@ class StepGetFormattedDataTableEditRefresh {
         pageByData,
         importType,
       } = objectData;
-      const { excelContext, instanceDefinition, oldBindId, insertNewWorksheet, formattedData: { tableRange } } =
+      const { excelContext, instanceDefinition, oldBindId, insertNewWorksheet, formattedData: { dimensions: rangeDimensions } } =
         operationData;
 
       const prevOfficeTable = await officeTableRefresh.getPreviousOfficeTable(
@@ -46,7 +46,7 @@ class StepGetFormattedDataTableEditRefresh {
         instanceDefinition,
         excelContext,
         startCell: objectData.startCell,
-        tableRange,
+        rangeDimensions,
         tableName,
         prevOfficeTable,
         insertNewWorksheet,

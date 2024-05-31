@@ -21,7 +21,7 @@ class StepMoveFormattedDataFromExportedToTargetWorkSheet {
    * @param objectData.mstrObjectType Information about MSTR object type
    * @param operationData.startCell Address of the cell in Excel spreadsheet
    * @param operationData.instanceDefinition Object containing information about MSTR object
-   * @param operationData.sourceWorksheetId Source worksheet id to copy the range from
+   * @param operationData.formattedData.sourceWorksheetId Source worksheet id to copy the range from
    * @param operationData.excelContext Reference to Excel Context used by Excel API functions
    */
   moveFormattedDataFromExportedToTargetWorkSheet = async (objectData: ObjectData, operationData: OperationData): Promise<void> => {
@@ -29,7 +29,7 @@ class StepMoveFormattedDataFromExportedToTargetWorkSheet {
     console.time('Total');
 
     try {
-      const { startCell, instanceDefinition, sourceWorksheetId, excelContext } = operationData;
+      const { startCell, instanceDefinition, formattedData: { sourceWorksheetId }, excelContext } = operationData;
       const { isCrosstab, objectWorkingId, worksheet } = objectData;
 
       const { rows, columns } = instanceDefinition;

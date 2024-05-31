@@ -30,7 +30,7 @@ class StepGetFormattedDataTableImport {
                 instanceDefinition,
                 startCell: selectedCell,
                 insertNewWorksheet,
-                formattedData: { tableRange }
+                formattedData: { dimensions: rangeDimensions },
             } = operationData;
 
             const { officeTable, bindId, tableName, worksheet, startCell, groupData, dimensions } =
@@ -38,7 +38,7 @@ class StepGetFormattedDataTableImport {
                     excelContext,
                     instanceDefinition,
                     startCell: selectedCell,
-                    tableRange,
+                    rangeDimensions,
                     insertNewWorksheet,
                     pageByData: objectData.pageByData,
                     objectData,

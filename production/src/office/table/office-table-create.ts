@@ -186,7 +186,7 @@ class OfficeTableCreate {
     instanceDefinition,
     excelContext,
     startCell,
-    tableRange: formattedDataRange,
+    rangeDimensions,
     tableName,
     prevOfficeTable,
     isRepeatStep,
@@ -197,7 +197,7 @@ class OfficeTableCreate {
     instanceDefinition: InstanceDefinition;
     excelContext: Excel.RequestContext;
     startCell: string;
-    tableRange: string;
+    rangeDimensions: { rows: number, columns: number };
     tableName?: string;
     prevOfficeTable?: Excel.Table;
     tableChanged?: boolean;
@@ -228,9 +228,8 @@ class OfficeTableCreate {
       startCell = await officeApiHelper.getSelectedCell(excelContext);
     }
 
-    const dimensions = officeApiHelper.getTableDimensions(formattedDataRange);
-    let { rows } = dimensions;
-    const { columns } = dimensions;
+    let { rows } = rangeDimensions;
+    const { columns } = rangeDimensions;
 
     rows -= TITLE_EXCLUDED_ROW_OFFSET;
 

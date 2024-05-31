@@ -71,10 +71,9 @@ export interface OperationData {
   preparedInstanceDefinition?: any;
   isTotalsRowVisible?: boolean;
   objectExist?: boolean;
-  sourceWorksheetId?: string;
   formattedData?: {
-    excelBlob: Blob,
-    tableRange: string;
+    dimensions: { rows: number, columns: number };
+    sourceWorksheetId: string;
   };
 }
 
