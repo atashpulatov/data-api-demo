@@ -216,9 +216,9 @@ class OperationStepDispatcher {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.CREATE_PIVOT_TABLE));
   }
 
-  completeExportToCurrentWorkbook(objectWorkingId: number): void {
+  completeExportExcelToCurrentWorkbook(objectWorkingId: number): void {
     this.reduxStore.dispatch(
-      markStepCompleted(objectWorkingId, OperationSteps.EXPORT_EXCEL_WORKBOOK)
+      markStepCompleted(objectWorkingId, OperationSteps.EXPORT_EXCEL_TO_CURRENT_WORKBOOK)
     );
   }
 

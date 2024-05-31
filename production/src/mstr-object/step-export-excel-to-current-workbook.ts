@@ -12,11 +12,12 @@ import mstrObjectEnum from './mstr-object-type-enum';
 
 const base64BlobFileDataSubstring = 'base64,';
 
-class StepExportExcelWorkBook {
+class StepExportExcelToCurrentWorkbook {
     /**
-     * Fetches the excel workbook as blob data from export engine.
+     * Fetches the excel workbook as blob data from export engine and inserts the extracted	
+     * worksheet into current functional workbook.
      *
-     * This function is subscribed as one of the operation steps with the key EXPORT_EXCEL_WORKBOOK,
+     * This function is subscribed as one of the operation steps with the key EXPORT_EXCEL_TO_CURRENT_WORKBOOK,
      * therefore should be called only via operation bus.
      *
      * @param objectData.objectWorkingId Unique Id of the object allowing to reference specific object
@@ -26,7 +27,7 @@ class StepExportExcelWorkBook {
      * @param objectData.mstrObjectType Information about MSTR object type
      * @param operationData.instanceDefinition Object containing information about MSTR object
      */
-    exportExcelWorkBook = async (
+    exportExcelToCurrentWorkbook = async (
         objectData: ObjectData,
         operationData: OperationData
     ): Promise<void> => {
@@ -70,7 +71,7 @@ class StepExportExcelWorkBook {
             };
 
             operationStepDispatcher.updateOperation(operationData);
-            operationStepDispatcher.completeExportToCurrentWorkbook(objectWorkingId);
+            operationStepDispatcher.completeExportExcelToCurrentWorkbook(objectWorkingId);
         } catch (error) {
             console.error(error);
             operationErrorHandler.handleOperationError(objectData, operationData, error);
@@ -156,5 +157,5 @@ class StepExportExcelWorkBook {
     }
 }
 
-const stepExportExcelWorkBook = new StepExportExcelWorkBook();
-export default stepExportExcelWorkBook;
+const stepExportExcelToCurrentWorkbook = new StepExportExcelToCurrentWorkbook();
+export default stepExportExcelToCurrentWorkbook;

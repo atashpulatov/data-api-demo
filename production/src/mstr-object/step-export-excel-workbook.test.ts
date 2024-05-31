@@ -5,9 +5,9 @@ import { OperationData } from '../redux-reducer/operation-reducer/operation-redu
 import { ObjectData } from '../types/object-types';
 
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
-import stepExportExcelWorkbook from './step-export-excel-workbook';
+import stepExportExcelToCurrentWorkbook from './step-export-excel-to-current-workbook';
 
-describe('StepExportExcelWorkbook', () => {
+describe('StepExportExcelToCurrentWorkbook', () => {
     afterEach(() => {
         jest.restoreAllMocks();
     });
@@ -43,10 +43,10 @@ describe('StepExportExcelWorkbook', () => {
 
         jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
 
-        jest.spyOn(operationStepDispatcher, 'completeExportToCurrentWorkbook').mockImplementation();
+        jest.spyOn(operationStepDispatcher, 'completeExportExcelToCurrentWorkbook').mockImplementation();
 
         // when
-        await stepExportExcelWorkbook.exportExcelWorkBook(objectData, operationData);
+        await stepExportExcelToCurrentWorkbook.exportExcelToCurrentWorkbook(objectData, operationData);
 
         expect(mstrObjectRestService.exportDossierToExcel).toHaveBeenCalled();
     });
@@ -82,10 +82,10 @@ describe('StepExportExcelWorkbook', () => {
 
         jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
 
-        jest.spyOn(operationStepDispatcher, 'completeExportToCurrentWorkbook').mockImplementation();
+        jest.spyOn(operationStepDispatcher, 'completeExportExcelToCurrentWorkbook').mockImplementation();
 
         // when
-        await stepExportExcelWorkbook.exportExcelWorkBook(objectData, operationData);
+        await stepExportExcelToCurrentWorkbook.exportExcelToCurrentWorkbook(objectData, operationData);
 
         expect(mstrObjectRestService.exportReportToExcel).toHaveBeenCalled();
     });
