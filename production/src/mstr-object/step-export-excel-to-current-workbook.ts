@@ -9,6 +9,7 @@ import { ObjectData, VisualizationInfo } from '../types/object-types';
 import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 import mstrObjectEnum from './mstr-object-type-enum';
+import { TITLE_EXCLUDED_ROW_OFFSET } from './constants';
 
 const base64BlobFileDataSubstring = 'base64,';
 
@@ -62,6 +63,9 @@ class StepExportExcelToCurrentWorkbook {
 
             const exportedWorksheetTableRange = await this.getExportedWorksheetTableRange(excelBlob, excelContext);
             const dimensions = officeApiHelper.getTableDimensions(exportedWorksheetTableRange);
+
+            // Exclude dossier/report title from the table range of exported worksheet
+            dimensions.rows -= TITLE_EXCLUDED_ROW_OFFSET;
 
             const exportEngineWorksheet = await this.insertExcelWorksheet(excelBlob, excelContext);
 

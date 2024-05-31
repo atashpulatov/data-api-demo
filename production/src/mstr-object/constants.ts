@@ -1,7 +1,11 @@
 export const DEFAULT_RANGE_POSITION = { top: 0, left: 0 };
 export const DEFAULT_CELL_POSITION = 'A1';
 export const TITLE_EXCLUDED_DEFAULT_START_CELL_POSITION = 'A3';
+
+// Extra row used to append/remove from excel table range
 export const OFFICE_TABLE_EXTA_ROW = 1;
+
+// Rows offset used to exclude dossier/report title from the table range of exported worksheet
 export const TITLE_EXCLUDED_ROW_OFFSET = 2;
 
 export enum ObjectImportType {

@@ -17,7 +17,7 @@ import { ObjectData } from '../../types/object-types';
 import { calculateOffsetForObjectInfoSettings } from '../../mstr-object/get-object-details-methods';
 import { OperationTypes } from '../../operation/operation-type-names';
 import officeApiDataLoader from '../api/office-api-data-loader';
-import { ObjectImportType, OFFICE_TABLE_EXTA_ROW, TITLE_EXCLUDED_ROW_OFFSET } from '../../mstr-object/constants';
+import { ObjectImportType, OFFICE_TABLE_EXTA_ROW } from '../../mstr-object/constants';
 
 const DEFAULT_TABLE_STYLE = 'TableStyleLight11';
 
@@ -231,9 +231,8 @@ class OfficeTableCreate {
     let { rows } = rangeDimensions;
     const { columns } = rangeDimensions;
 
-    rows -= TITLE_EXCLUDED_ROW_OFFSET;
-
-    // Add one row to crosstabular tables, to be able to copy formatted data range onto the imported office table
+    // Add single row to crosstabular tables, to be able to copy formatted data range onto the imported office table. 
+    // Otherwise the imported office table will be deleted, due to being entirely overlapped by copied formatted data.
     if (isCrosstab) {
       rows += OFFICE_TABLE_EXTA_ROW;
     }
