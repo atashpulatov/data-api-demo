@@ -42,15 +42,16 @@ class OfficeRemoveHelper {
     if (!isClear) {
       excelContext.runtime.enableEvents = false;
       await excelContext.sync();
+
+      if (objectData?.shapeGroupId) {
+        // Delete threshold shape group before deleting the entire table
+        const shapeGroup = officeTable.worksheet.shapes.getItem(objectData.shapeGroupId);
+        shapeGroup?.delete();
+      }
+
       if (homeHelper.isMacAndSafariBased()) {
         await this.deleteTableInChunks(excelContext, officeTable);
       } else {
-        if (objectData?.shapeGroupId) {
-          // Delete threshold shape group before deleting the entire table
-          const shapeGroup = officeTable.worksheet.shapes.getItem(objectData.shapeGroupId);
-          shapeGroup?.delete();
-        }
-
         officeTable.delete();
       }
 
