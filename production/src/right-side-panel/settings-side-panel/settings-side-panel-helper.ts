@@ -258,8 +258,7 @@ class SettingsSidePanelHelper {
       const item = worksheetSettings.find(i => i.key === key);
       if (item) {
         acc.push({
-          key: item.key,
-          toggleChecked: item.toggleChecked,
+          ...item
         });
       }
       return acc;
