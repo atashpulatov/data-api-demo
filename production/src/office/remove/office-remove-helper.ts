@@ -1,10 +1,10 @@
 import { homeHelper } from '../../home/home-helper';
 import { officeApiHelper } from '../api/office-api-helper';
+import { officeShapeApiHelper } from '../shapes/office-shape-api-helper';
 
 import { ObjectData } from '../../types/object-types';
 
 import officeApiDataLoader from '../api/office-api-data-loader';
-import { officeShapeApiHelper } from '../shapes/office-shape-api-helper';
 
 class OfficeRemoveHelper {
   /**

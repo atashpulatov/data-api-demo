@@ -1,3 +1,5 @@
+import { officeShapeApiHelper } from '../shapes/office-shape-api-helper';
+
 import {
   InstanceDefinition,
   MstrTable,
@@ -7,7 +9,6 @@ import { CrosstabHeaderDimensions, ObjectData } from '../../types/object-types';
 import { OverlappingTablesError } from '../../error/overlapping-tables-error';
 import { ErrorMessages } from '../../error/constants';
 import { ObjectImportType } from '../../mstr-object/constants';
-import { officeShapeApiHelper } from '../shapes/office-shape-api-helper';
 
 class OfficeTableHelperRange {
   /**
