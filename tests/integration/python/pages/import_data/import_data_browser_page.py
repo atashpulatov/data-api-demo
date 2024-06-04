@@ -37,7 +37,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
     ALL_OBJECTS_LIST = '.mstrd-SearchFilter li#searchFilterOption_all'
     FIRST_OBJECT_LIBRARY = '.mstrd-SearchResultsList li:nth-child(1)'
 
-    IMPORT_BUTTON_ELEM = 'import'
+    IMPORT_BUTTON_ELEM = '.import-button__action-button'
     IMPORT_BUTTON_DISABLED = 'disabled'
     PREPARE_BUTTON_ELEM = 'prepare'
     IMPORT_IMAGE_BUTTON_ELEM = 'import-image'
@@ -188,13 +188,13 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
     def click_import_button(self, not_used_reset_framework_method, not_used_context):
         self.focus_on_add_in_popup_frame()
-        self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
+        self.get_element_by_css(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
 
         self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully()
 
     def click_import_button_without_checking_results(self):
         self.focus_on_add_in_popup_frame()
-        self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
+        self.get_element_by_css(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
 
     def click_import_image_button_without_checking_results(self):
         self.focus_on_add_in_popup_frame()
@@ -202,18 +202,18 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
     def click_import_button_to_import_with_error(self, error_message):
         self.focus_on_add_in_popup_frame()
-        self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
+        self.get_element_by_css(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
 
         self.right_panel_tile_browser_page.wait_for_operation_error_and_accept(error_message)
 
     def click_import_button_to_import_with_global_error(self, error_message):
-        self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
+        self.get_element_by_css(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
 
         self.right_panel_tile_browser_page.wait_for_operation_global_error_and_accept(error_message)
 
     def click_import_button_to_open_import_dossier(self):
         self.focus_on_add_in_popup_frame()
-        self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
+        self.get_element_by_css(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
 
     def is_prepare_data_button_enabled(self):
         self.focus_on_add_in_popup_frame()
@@ -294,7 +294,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
     def verify_if_import_button_is_enabled(self):
         self.focus_on_add_in_popup_frame()
-        element = self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM)
+        element = self.get_element_by_css(ImportDataBrowserPage.IMPORT_BUTTON_ELEM)
         return element.get_attribute(ImportDataBrowserPage.IMPORT_BUTTON_DISABLED) is None
     
     def verify_if_import_image_button_is_enabled(self):
@@ -321,7 +321,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
     def hover_over_import_button(self):
         self.focus_on_add_in_popup_frame()
 
-        self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).move_to()
+        self.get_element_by_css(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).move_to()
 
     def hover_over_import_image_button(self):
         self.focus_on_add_in_popup_frame()

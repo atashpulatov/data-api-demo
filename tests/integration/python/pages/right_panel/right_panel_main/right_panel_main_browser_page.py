@@ -170,6 +170,14 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
 
         self.get_element_by_css(RightPanelMainBrowserPage.REUSE_PROMPT_ANSWER_TOGGLE).click()
 
+    def toggle_draggable_child_setting(self, option, value):
+        element = self.get_element_by_xpath(RightPanelMainBrowserPage.DRAGGABLE_CHILD_TOGGLE % option)
+        aria_checked_value = element.get_attribute("aria-checked")
+        if aria_checked_value == 'true' and value == 'OFF':
+            element.click()
+        if aria_checked_value == 'false' and value == 'ON':
+            element.click()
+
     def click_back_button(self):
         self.focus_on_add_in_frame()
 

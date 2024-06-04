@@ -87,6 +87,24 @@ def step_impl(context, object_number, expected_owner_name):
 
     AssertUtil.assert_simple(expected_owner_name, owner_name)
 
+@step('I verified that object {object_number} has field "{field_name}"')
+def step_impl(context, object_number, field_name):
+    field_name_exists = context.pages.right_panel_tile_details_page().field_name_exists_on_object(
+        object_number,
+        field_name
+    )
+
+    AssertUtil.assert_simple(field_name_exists, True)
+
+@step('I verified that object {object_number} doesn\'t have field "{field_name}"')
+def step_impl(context, object_number, field_name):
+    field_name_exists = context.pages.right_panel_tile_details_page().field_name_exists_on_object(
+        object_number,
+        field_name
+    )
+
+    AssertUtil.assert_simple(field_name_exists, False)
+
 
 @step('I verified that object {object_number} has details panel displayed')
 def step_impl(context, object_number):

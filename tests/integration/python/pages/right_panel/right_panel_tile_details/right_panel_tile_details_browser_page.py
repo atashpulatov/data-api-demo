@@ -14,11 +14,35 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
     ATTRIBUTES_LIST = 'div[id^="attributes-list-"]'
     METRICS_LIST = 'div[id^="metrics-list-"]'
 
+    IMPORTED_BY = 'div[id^="imported-by-"]'
+    OWNER = 'div[id^="owner-object-property-"]'
+    DATE_MODIFIED = 'div[id^="date-object-property-modified-"]'
+    DATE_CREATED = 'div[id^="date-object-property-created-"]'
+    DESCRIPTION = 'div[id^="description-object-property-"]'
+    REPORT_FILTER = 'div[id^="report-filter-object-property-"]'
+    REPORT_LIMITS = 'div[id^="report-limits-object-property-"]'
+    LOCATION = 'div[id^="location-object-property-"]'
+    VERSION = 'div[id^="version-object-property-"]'
+    ID = 'div[id^="id-object-property-"]'
+
     NAME_LISTS_TO_SELECTOR = {
         'Prompt': PROMPTS_LIST,
         'Filter': FILTERS_LIST,
         'Attribute': ATTRIBUTES_LIST,
-        'Metric': METRICS_LIST
+        'Metric': METRICS_LIST,
+    }
+
+    NAME_FEILDS_SELECTOR = {
+        'Imported by': IMPORTED_BY,
+        'Owner': OWNER,
+        'Date Modified': DATE_MODIFIED,
+        'Date Created': DATE_CREATED,
+        'Description': DESCRIPTION,
+        'Report Filter': REPORT_FILTER,
+        'Report Limits': REPORT_LIMITS,
+        'Location': LOCATION,
+        'Version': VERSION,
+        'ID': ID
     }
 
     NAME_LIST_EXPAND_BUTTON = '.name-list-expand-button'
@@ -76,6 +100,12 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
         return self._details_element_exists(
             object_number,
             RightPanelTileDetailsBrowserPage.NAME_LISTS_TO_SELECTOR[name_list_type]
+        )
+
+    def field_name_exists_on_object(self, object_number, field_name):
+        return self._details_element_exists(
+            object_number,
+            RightPanelTileDetailsBrowserPage.NAME_FEILDS_SELECTOR[field_name]
         )
 
     def collapsed_name_list_exists_on_object(self, object_number, name_list_type):

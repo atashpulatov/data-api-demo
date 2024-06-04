@@ -143,6 +143,10 @@ def step_impl(context, option):
 def step_impl(context, option):
     is_option_checked = context.pages.right_panel_page().is_child_toggle_option_checked(option)
     AssertUtil.assert_simple(is_option_checked, True)
+
+@step('I toggle the draggable "{option}" child setting to "{value}"')
+def step_impl(context, option, value):
+    context.pages.right_panel_page().toggle_draggable_child_setting(option, value)
  
 @step('I verified draggable "{option}" child setting is OFF')
 def step_impl(context, option):

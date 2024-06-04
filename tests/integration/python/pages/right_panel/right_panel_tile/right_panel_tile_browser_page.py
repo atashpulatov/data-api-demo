@@ -144,6 +144,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         for tile in tiles:
             other_container.move_to()
             tile.move_to()
+            other_container.move_to()
 
     def hover_over_import_successful_message(self):
 
