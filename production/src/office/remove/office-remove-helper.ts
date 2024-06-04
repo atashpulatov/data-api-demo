@@ -1,5 +1,6 @@
 import { homeHelper } from '../../home/home-helper';
 import { officeApiHelper } from '../api/office-api-helper';
+import { officeShapeApiHelper } from '../shapes/office-shape-api-helper';
 
 import { ObjectData } from '../../types/object-types';
 
@@ -39,15 +40,15 @@ class OfficeRemoveHelper {
     const tableRange = officeTable.getDataBodyRange();
     excelContext.trackedObjects.add(tableRange);
 
+    // Delete threshold shape group before deleting the entire table
+    if (objectData?.shapeGroupId) {
+      officeShapeApiHelper.deleteShapeGroupLinkedToOfficeTable(officeTable, objectData.shapeGroupId, excelContext);
+      delete objectData.shapeGroupId;
+    }
+
     if (!isClear) {
       excelContext.runtime.enableEvents = false;
       await excelContext.sync();
-
-      if (objectData?.shapeGroupId) {
-        // Delete threshold shape group before deleting the entire table
-        const shapeGroup = officeTable.worksheet.shapes.getItem(objectData.shapeGroupId);
-        shapeGroup?.delete();
-      }
 
       if (homeHelper.isMacAndSafariBased()) {
         await this.deleteTableInChunks(excelContext, officeTable);

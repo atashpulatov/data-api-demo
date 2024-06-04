@@ -80,6 +80,20 @@ class OfficeShapeApiHelper {
       await excelContext.sync();
     }
   };
+
+  /**
+   * Deletes the shape group linked to office table from the worksheet.
+   *
+   * @param officeTable Reference to Excel Table
+   * @param shapeGroupId Shape group Id
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   */
+  deleteShapeGroupLinkedToOfficeTable = async (officeTable: Excel.Table, shapeGroupId: string, excelContext: Excel.RequestContext): Promise<void> => {
+    const shapeGroup = officeTable.worksheet.shapes.getItem(shapeGroupId);
+    shapeGroup?.delete();
+
+    await excelContext.sync();
+  };
 }
 
 export const officeShapeApiHelper = new OfficeShapeApiHelper();

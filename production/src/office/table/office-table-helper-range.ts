@@ -1,3 +1,5 @@
+import { officeShapeApiHelper } from '../shapes/office-shape-api-helper';
+
 import {
   InstanceDefinition,
   MstrTable,
@@ -124,6 +126,11 @@ class OfficeTableHelperRange {
     await excelContext.sync();
 
     const { importType, isCrosstab } = objectData;
+
+    // Delete threshold shape group before deleting the entire table
+    if (objectData?.shapeGroupId) {
+      officeShapeApiHelper.deleteShapeGroupLinkedToOfficeTable(prevOfficeTable, objectData.shapeGroupId, excelContext);
+    }
 
     if (importType === ObjectImportType.FORMATTED_DATA && isCrosstab) {
       const range = prevOfficeTable.getRange().getOffsetRange(-1, 0).getResizedRange(1, 0);
