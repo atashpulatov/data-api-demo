@@ -5,6 +5,7 @@ import { ObjectData } from '../../types/object-types';
 
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import { ErrorMessages } from '../../error/constants';
 
 class StepRefreshPivotTable {
   /**
@@ -34,6 +35,8 @@ class StepRefreshPivotTable {
         if (!isCrosstab) {
           await pivotTableHelper.populatePivotTable(pivotTable, mstrTable, excelContext);
         }
+      } else {
+        throw new Error(ErrorMessages.OBJ_REMOVED_FROM_EXCEL);
       }
 
       operationStepDispatcher.completeRefreshPivotTable(objectWorkingId);

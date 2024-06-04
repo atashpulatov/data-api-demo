@@ -7,6 +7,7 @@ import { ObjectData } from '../../types/object-types';
 
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import { ErrorMessages } from '../../error/constants';
 import { ObjectImportType } from '../../mstr-object/constants';
 
 class StepHighlightObject {
@@ -23,10 +24,7 @@ class StepHighlightObject {
       // Highlight operation is not supported for images and pivot tables as Excel API does not support shape and pivot table object selection and as of now
       const { importType, pivotTableId, bindId } = objectData;
 
-      if (
-        importType === ObjectImportType.TABLE ||
-        importType === ObjectImportType.FORMATTED_DATA
-      ) {
+      if (importType === ObjectImportType.TABLE || importType === ObjectImportType.FORMATTED_DATA) {
         await officeApiHelper.onBindingObjectClick(objectData);
       } else {
         const excelContext = await officeApiHelper.getExcelContext();
@@ -36,10 +34,8 @@ class StepHighlightObject {
         if (importType === ObjectImportType.PIVOT_TABLE) {
           const pivotTable = await pivotTableHelper.getPivotTable(excelContext, pivotTableId);
 
-          // Omit the highlight operation, if the pivot table was removed manually from the worksheet.
           if (pivotTable.isNullObject) {
-            operationStepDispatcher.completeHighlightObject(objectData.objectWorkingId);
-            return;
+            throw new Error(ErrorMessages.OBJ_REMOVED_FROM_EXCEL);
           }
 
           worksheet = pivotTable.worksheet;
