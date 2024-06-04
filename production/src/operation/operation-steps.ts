@@ -210,7 +210,6 @@ const operationStepsMapFormattedTable = {
   [OperationTypes.CLEAR_DATA_OPERATION]: [
     OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
     OperationSteps.CHECK_OBJECT_STATUS,
-    OperationSteps.CLEAR_CROSSTAB_HEADERS,
     OperationSteps.CLEAR_TABLE_DATA,
     OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
     OperationSteps.COMPLETE_CLEAR_DATA,
