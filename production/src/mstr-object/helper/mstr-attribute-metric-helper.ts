@@ -74,14 +74,20 @@ class MstrAttributeMetricHelper {
    * @returns {Object[]} Array of metric objects with id and name properties
    */
   extractMetricsInRows = (body: any): any[] => {
+    const {
+      visualizationType,
+      definition: { grid },
+    } = body;
+    const { rows } = grid;
+
     const columns =
-      body.visualizationType === VisualizationTypes.COMPOUND_GRID
-        ? body.definition.grid.columnSets.reduce(
-            (allColumns: any, currColumnSet: any) => allColumns.concat(currColumnSet.columns),
-            []
-          )
-        : body.definition.grid.columns;
-    const { rows } = body.definition.grid;
+      visualizationType === VisualizationTypes.COMPOUND_GRID ||
+        visualizationType === VisualizationTypes.MICROCHARTS
+        ? grid.columnSets.reduce(
+          (allColumns: any, currColumnSet: any) => allColumns.concat(currColumnSet.columns),
+          []
+        )
+        : grid.columns;
 
     return this.extractMetrics(rows, columns);
   };
