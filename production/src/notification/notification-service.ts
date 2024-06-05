@@ -11,7 +11,7 @@ import {
   displayObjectWarning,
 } from '../redux-reducer/notification-reducer/notification-action-creators';
 import { removeObject } from '../redux-reducer/object-reducer/object-actions';
-import { cancelOperation } from '../redux-reducer/operation-reducer/operation-actions';
+import { cancelOperationByOperationId } from '../redux-reducer/operation-reducer/operation-actions';
 
 class NotificationService {
   reduxStore: any;
@@ -61,8 +61,8 @@ class NotificationService {
     this.reduxStore.dispatch(removeObject(objectWorkingId));
   };
 
-  cancelOperationFromNotification = (objectWorkingId: number): void => {
-    this.reduxStore.dispatch(cancelOperation(objectWorkingId));
+  cancelOperationFromNotification = (operationId: string): void => {
+    this.reduxStore.dispatch(cancelOperationByOperationId(operationId));
   };
 
   /**

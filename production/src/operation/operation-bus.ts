@@ -84,6 +84,7 @@ class OperationBus {
       return {
         operationType: currentOperation.operationType,
         objectWorkingId: currentOperation.objectWorkingId,
+        operationId: currentOperation.operationId,
         stepsQueue,
       };
     }
@@ -95,7 +96,8 @@ class OperationBus {
       return (
         previousOperationCopy.operationType === currentOperationToCompare.operationType &&
         previousOperationCopy.objectWorkingId === currentOperationToCompare.objectWorkingId &&
-        previousOperationCopy.stepsQueue === currentOperationToCompare.stepsQueue
+        previousOperationCopy.stepsQueue === currentOperationToCompare.stepsQueue &&
+        previousOperationCopy.operationId === currentOperationToCompare.operationId
       );
     }
     return false;

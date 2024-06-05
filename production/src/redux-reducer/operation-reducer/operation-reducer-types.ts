@@ -72,9 +72,10 @@ export interface OperationData {
   isTotalsRowVisible?: boolean;
   objectExist?: boolean;
   formattedData?: {
-    dimensions: { rows: number, columns: number };
+    dimensions: { rows: number; columns: number };
     sourceWorksheetId: string;
   };
+  operationId: string;
 }
 
 export interface OperationState {
@@ -92,6 +93,7 @@ export enum OperationActionTypes {
   MARK_STEP_COMPLETED = 'MARK_STEP_COMPLETED',
   UPDATE_OPERATION = 'UPDATE_OPERATION',
   CANCEL_OPERATION = 'CANCEL_OPERATION',
+  CANCEL_OPERATION_BY_OPERATION_ID = 'CANCEL_OPERATION_BY_OPERATION_ID',
 }
 
 export interface OperationPayload {
@@ -154,6 +156,11 @@ export interface CancelOperationAction extends Action {
   payload: { objectWorkingId: number };
 }
 
+export interface CancelOperationByOperationIdAction extends Action {
+  type: OperationActionTypes.CANCEL_OPERATION_BY_OPERATION_ID;
+  payload: { operationId: string };
+}
+
 export type OperationActions =
   | ImportOperationAction
   | RefreshOperationAction
@@ -164,4 +171,5 @@ export type OperationActions =
   | ClearDataOperationAction
   | MarkStepCompletedAction
   | UpdateOperationAction
-  | CancelOperationAction;
+  | CancelOperationAction
+  | CancelOperationByOperationIdAction;

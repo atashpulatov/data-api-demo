@@ -80,11 +80,13 @@ const createProgressNotification = (
   state: NotificationState,
   { operation }: { operation: OperationData }
 ): NotificationState => {
-  const { objectWorkingId, operationType } = operation;
+  const { objectWorkingId, operationType, operationId } = operation;
   let notificationButtons;
 
   if (operationType !== OperationTypes.CLEAR_DATA_OPERATION) {
-    notificationButtons = getNotificationButtons(getCancelButton(objectWorkingId, operationType));
+    notificationButtons = getNotificationButtons(
+      getCancelButton(objectWorkingId, operationType, operationId)
+    );
   }
 
   // DE288915: Avoid duplicate notifications, particularly those originating from Edit and Reprompt operations.
@@ -257,7 +259,11 @@ const getOkButton = (payload: any): any[] => [
   },
 ];
 
-const getCancelButton = (objectWorkingId: number, operationType: OperationTypes): any[] => [
+const getCancelButton = (
+  objectWorkingId: number,
+  operationType: OperationTypes,
+  operationId: string
+): any[] => [
   {
     type: 'basic',
     label: i18n.t('Cancel'),
@@ -265,7 +271,7 @@ const getCancelButton = (objectWorkingId: number, operationType: OperationTypes)
       if (operationType === OperationTypes.IMPORT_OPERATION) {
         notificationService.removeObjectFromNotification(objectWorkingId);
       }
-      notificationService.cancelOperationFromNotification(objectWorkingId);
+      notificationService.cancelOperationFromNotification(operationId);
       notificationService.dismissNotification(objectWorkingId);
     },
   },

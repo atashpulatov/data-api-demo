@@ -188,6 +188,7 @@ describe('Notification reducer', () => {
               stepsQueue: [],
               objectWorkingId: 123,
               operationType: OperationTypes.IMPORT_OPERATION,
+              operationId: 'someId',
             },
           },
         };
@@ -218,6 +219,7 @@ describe('Notification reducer', () => {
               stepsQueue: [],
               objectWorkingId: 123,
               operationType: OperationTypes.IMPORT_OPERATION,
+              operationId: 'someId',
             },
           },
         };
@@ -244,6 +246,7 @@ describe('Notification reducer', () => {
               stepsQueue: [],
               objectWorkingId: 123,
               operationType: OperationTypes.IMPORT_OPERATION,
+              operationId: 'someId',
             },
           },
         };
@@ -265,6 +268,7 @@ describe('Notification reducer', () => {
               stepsQueue: [],
               objectWorkingId: 123,
               operationType: OperationTypes.CLEAR_DATA_OPERATION,
+              operationId: 'someId',
             },
           },
         };
