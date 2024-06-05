@@ -117,6 +117,10 @@ class OperationStepDispatcher {
     );
   }
 
+  completeRemoveWorksheet(objectWorkingId: number): void {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, OperationSteps.REMOVE_WORKSHEET));
+  }
+
   completeCheckObjectStatus(objectWorkingId: number): void {
     this.reduxStore.dispatch(
       markStepCompleted(objectWorkingId, OperationSteps.CHECK_OBJECT_STATUS)

@@ -2,7 +2,7 @@ import stepSaveObjectInExcel from '../office/store/step-save-object-in-excel';
 
 import stepGetInstanceDefinition from '../mstr-object/instance/step-get-instance-definition';
 import stepGetObjectSettings from '../mstr-object/settings/step-get-object-settings';
-import stepExportExcelToCurrentWorkbook from '../mstr-object/step-export-excel-to-current-workbook'
+import stepExportExcelToCurrentWorkbook from '../mstr-object/step-export-excel-to-current-workbook';
 import stepGetObjectDetails from '../mstr-object/step-get-object-details';
 import stepMoveFormattedDataFromExportedToTargetWorkSheet from '../mstr-object/step-move-formatted-data-from-exported-to-target-worksheet';
 import stepDisplayNotificationCompleted from '../notification/step-display-notification-completed';
@@ -24,6 +24,7 @@ import stepRemovePivotTable from '../office/pivot-table/step-remove-pivot-table'
 import stepRemoveObjectBinding from '../office/remove/step-remove-object-binding';
 import stepRemoveObjectDetails from '../office/remove/step-remove-object-details';
 import stepRemoveObjectTable from '../office/remove/step-remove-object-table';
+import stepRemoveWorksheet from '../office/remove/step-remove-worksheet';
 import stepAddVisualizationPlaceholder from '../office/shapes/step-add-visualization-placeholder';
 import stepManipulateVisualizationImage from '../office/shapes/step-manipulate-visualization-image';
 import stepRemoveVisualizationImage from '../office/shapes/step-remove-visualization-image';
@@ -120,6 +121,8 @@ class SubscribeSteps {
       OperationSteps.REMOVE_OBJECT_TABLE,
       stepRemoveObjectTable.removeObjectTable
     );
+
+    operationBus.subscribe(OperationSteps.REMOVE_WORKSHEET, stepRemoveWorksheet.removeWorksheet);
 
     operationBus.subscribe(OperationSteps.HIGHLIGHT_OBJECT, stepHighlightObject.highlightObject);
 

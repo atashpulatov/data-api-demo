@@ -277,6 +277,49 @@ class OfficeApiWorksheetHelper {
 
     return rangeOrNullObject.isNullObject;
   }
+
+  /**
+   * Gets the number of visible Excel worksheets
+   *
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @returns Number of Excel worksheets
+   */
+  async getWorksheetsCount(excelContext: Excel.RequestContext): Promise<number> {
+    const { worksheets } = excelContext.workbook;
+    const worksheetsCount = worksheets.getCount(true);
+    await excelContext.sync();
+
+    return worksheetsCount.value;
+  }
+
+  /**
+   * Checks if worksheet with given ID is empty and removes it if the condition is true
+   * and if selected worksheet is not the only added worksheet.
+   *
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   * @param worksheetId unique ID of the Excel worksheet
+   */
+  async removeWorksheetIfEmpty(
+    excelContext: Excel.RequestContext,
+    worksheetId: string
+  ): Promise<void> {
+    const worksheetsCount = await this.getWorksheetsCount(excelContext);
+
+    if (worksheetsCount === 1) {
+      return;
+    }
+
+    const worksheet = excelContext.workbook.worksheets.getItem(worksheetId);
+    const rangeOrNullObject = worksheet.getUsedRangeOrNullObject(true);
+    const shapesCount = worksheet.shapes.getCount();
+
+    await excelContext.sync();
+
+    if (rangeOrNullObject.isNullObject && !shapesCount.value) {
+      worksheet.delete();
+      await excelContext.sync();
+    }
+  }
 }
 
 export const officeApiWorksheetHelper = new OfficeApiWorksheetHelper();

@@ -26,6 +26,7 @@ export enum OperationSteps {
   REMOVE_OBJECT_BINDING = 'REMOVE_OBJECT_BINDING',
   REMOVE_OBJECT_TABLE = 'REMOVE_OBJECT_TABLE',
   REMOVE_OBJECT_DETAILS = 'REMOVE_OBJECT_DETAILS',
+  REMOVE_WORKSHEET = 'REMOVE_WORKSHEET',
   HIGHLIGHT_OBJECT = 'HIGHLIGHT_OBJECT',
   CHECK_OBJECT_STATUS = 'CHECK_OBJECT_STATUS',
   CLEAR_CROSSTAB_HEADERS = 'CLEAR_CROSSTAB_HEADERS',
@@ -124,6 +125,7 @@ const operationStepsMapTable = {
     OperationSteps.REMOVE_OBJECT_DETAILS,
     OperationSteps.REMOVE_OBJECT_TABLE,
     OperationSteps.REMOVE_OBJECT_BINDING,
+    OperationSteps.REMOVE_WORKSHEET,
     OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
   ],
 
@@ -202,6 +204,7 @@ const operationStepsMapFormattedTable = {
     OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
     OperationSteps.REMOVE_OBJECT_TABLE,
     OperationSteps.REMOVE_OBJECT_BINDING,
+    OperationSteps.REMOVE_WORKSHEET,
     OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
   ],
 
@@ -260,6 +263,7 @@ const operationStepsMapImage = {
   [OperationTypes.REMOVE_OPERATION]: [
     OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
     OperationSteps.REMOVE_VISUALIZATION_IMAGE,
+    OperationSteps.REMOVE_WORKSHEET,
     OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
   ],
 
@@ -337,6 +341,7 @@ const operationStepsMapPivotTable = {
     OperationSteps.REMOVE_OBJECT_TABLE,
     OperationSteps.REMOVE_OBJECT_BINDING,
     OperationSteps.REMOVE_PIVOT_TABLE,
+    OperationSteps.REMOVE_WORKSHEET,
     OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
   ],
 
