@@ -129,7 +129,7 @@ class OfficeTableHelperRange {
 
     // Delete threshold shape group before deleting the entire table
     if (objectData?.shapeGroupId) {
-      officeShapeApiHelper.deleteShapeGroupLinkedToOfficeTable(prevOfficeTable, objectData.shapeGroupId, excelContext);
+      await officeShapeApiHelper.deleteShapeGroupLinkedToOfficeTable(prevOfficeTable, objectData.shapeGroupId, excelContext);
     }
 
     if (importType === ObjectImportType.FORMATTED_DATA && isCrosstab) {

@@ -50,7 +50,7 @@ class OfficeRemoveHelper {
 
     // Delete threshold shape group before deleting the entire table
     if (objectData?.shapeGroupId) {
-      officeShapeApiHelper.deleteShapeGroupLinkedToOfficeTable(officeTable, objectData.shapeGroupId, excelContext);
+      await officeShapeApiHelper.deleteShapeGroupLinkedToOfficeTable(officeTable, objectData.shapeGroupId, excelContext);
       delete objectData.shapeGroupId;
     }
 
