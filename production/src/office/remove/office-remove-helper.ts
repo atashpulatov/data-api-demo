@@ -5,6 +5,7 @@ import { officeShapeApiHelper } from '../shapes/office-shape-api-helper';
 import { ObjectData } from '../../types/object-types';
 
 import officeApiDataLoader from '../api/office-api-data-loader';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 class OfficeRemoveHelper {
   /**
@@ -37,7 +38,14 @@ class OfficeRemoveHelper {
     objectData: ObjectData,
     isClear = false
   ): Promise<void> {
-    const tableRange = officeTable.getDataBodyRange();
+    let tableRange = officeTable.getDataBodyRange();
+
+    // Get the entire table range except the last row to prevent the whole formatted crosstab table being cleared out on 'clear data'.
+    // Otherwise, table can not be restored (refresh operation will fail) on 'view data', due to bind id being lost (entire table being deleted).
+    if (objectData.importType === ObjectImportType.FORMATTED_DATA && objectData.isCrosstab) {
+      tableRange = tableRange.getResizedRange(-1, 0);
+    }
+
     excelContext.trackedObjects.add(tableRange);
 
     // Delete threshold shape group before deleting the entire table
