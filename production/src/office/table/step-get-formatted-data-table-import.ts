@@ -64,6 +64,7 @@ class StepGetFormattedDataTableImport {
                 worksheet,
                 groupData,
                 importType: objectData.importType,
+                formattedTableDimensions: dimensions
             };
 
             operationStepDispatcher.updateOperation(updatedOperation);

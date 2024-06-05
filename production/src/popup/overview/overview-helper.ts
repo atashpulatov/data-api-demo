@@ -426,14 +426,22 @@ class OverviewHelper {
         isPrompted = object.isPrompted;
       }
 
+      let rows = details?.excelTableSize?.rows;
+      let columns = details?.excelTableSize?.columns;
+
+      if (importType === ObjectImportType.FORMATTED_DATA) {
+        rows = object?.formattedTableDimensions?.rows;
+        columns = object?.formattedTableDimensions?.columns;
+      }
+
       return {
         objectWorkingId,
         mstrObjectType,
         name,
         worksheet: worksheet?.name,
         cell: startCell,
-        rows: details?.excelTableSize?.rows,
-        columns: details?.excelTableSize?.columns,
+        rows,
+        columns,
         objectType: objectImportTypeDictionary[importType as ObjectImportType],
         lastUpdated: refreshDate,
         status: {
@@ -646,13 +654,13 @@ class OverviewHelper {
     } as NotificationButtonsProps;
     const modifiedGlobalNotification = isGlobalWarning
       ? [
-          {
-            ...globalNotification,
-            children: OverviewGlobalNotificationButtons({
-              ...globalNotificationButtons,
-            }),
-          },
-        ]
+        {
+          ...globalNotification,
+          children: OverviewGlobalNotificationButtons({
+            ...globalNotificationButtons,
+          }),
+        },
+      ]
       : null;
 
     return modifiedGlobalNotification || modifiedWarnings;
