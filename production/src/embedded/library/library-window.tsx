@@ -222,9 +222,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
     popupHelper.officeMessageParent(message);
   }, []);
 
-  const { installSessionProlongingHandler } = sessionHelper;
-
-  const prolongSession = installSessionProlongingHandler(handleCancel);
+  const prolongSession = sessionHelper.installSessionProlongingHandler(handleCancel);
 
   const extendSession = useCallback(
     (message: any) => {

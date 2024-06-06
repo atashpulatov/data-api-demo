@@ -5,6 +5,8 @@ import { authenticationService } from '../authentication/auth-rest-service';
 import { homeHelper } from '../home/home-helper';
 import { userRestService } from '../home/user-rest-service';
 
+import { reduxStore } from '../store';
+
 import { ObjectData } from '../types/object-types';
 
 import { errorService } from '../error/error-handler';
@@ -15,33 +17,13 @@ import { httpStatusCodes, IncomingErrorStrings } from '../error/constants';
 export const EXTEND_SESSION = 'EXTEND_SESSION';
 const DEFAULT_SESSION_REFRESH_TIME = 60000;
 class SessionHelper {
-  reduxStore: any;
-
-  init = (reduxStore: any): void => {
-    this.reduxStore = reduxStore;
-
-    // bind methods
-    this.logOutRest = this.logOutRest.bind(this);
-    this.handleLogoutForPrivilegeMissing = this.handleLogoutForPrivilegeMissing.bind(this);
-    this.logOutRedirect = this.logOutRedirect.bind(this);
-    this.getSession = this.getSession.bind(this);
-    this.keepSessionAlive = this.keepSessionAlive.bind(this);
-    this.installSessionProlongingHandler = this.installSessionProlongingHandler.bind(this);
-    this.getUserInfo = this.getUserInfo.bind(this);
-    this.getUserAttributeFormPrivilege = this.getUserAttributeFormPrivilege.bind(this);
-    this.getCanUseOfficePrivilege = this.getCanUseOfficePrivilege.bind(this);
-    this.getUrl = this.getUrl.bind(this);
-    this.isDevelopment = this.isDevelopment.bind(this);
-    this.importObjectWithouPopup = this.importObjectWithouPopup.bind(this);
-  };
-
   /**
    * Handles terminating Rest session and logging out the user from plugin
    *
    */
   async logOutRest(): Promise<void> {
-    const { authToken } = this.reduxStore.getState().sessionReducer;
-    const { envUrl } = this.reduxStore.getState().sessionReducer;
+    const { authToken } = reduxStore.getState().sessionReducer;
+    const { envUrl } = reduxStore.getState().sessionReducer;
     try {
       authenticationService.logout(envUrl, authToken);
     } catch (error) {
@@ -93,7 +75,7 @@ class SessionHelper {
    * @return Information about current session
    */
   getSession(): any {
-    const currentStore = this.reduxStore.getState();
+    const currentStore = reduxStore.getState();
     const session = {
       USE_PROXY: false,
       envUrl: currentStore.sessionReducer.envUrl,
@@ -115,7 +97,7 @@ class SessionHelper {
    * @param onSessionExpire is callback function e.g closePopup()
    */
   async keepSessionAlive(onSessionExpire: () => void = null): Promise<void> {
-    const { envUrl, authToken } = this.reduxStore.getState().sessionReducer;
+    const { envUrl, authToken } = reduxStore.getState().sessionReducer;
     const { onLine } = window.navigator;
     try {
       if (authToken && onLine) {
@@ -161,7 +143,7 @@ class SessionHelper {
   async getUserInfo(): Promise<void> {
     let userData: any = {};
     const isDevelopment = this.isDevelopment();
-    const { getState } = this.reduxStore;
+    const { getState } = reduxStore;
     const envUrl = isDevelopment ? getState().sessionReducer.envUrl : homeHelper.saveLoginValues();
     const authToken = isDevelopment
       ? getState().sessionReducer.authToken
@@ -181,7 +163,6 @@ class SessionHelper {
   async getUserAttributeFormPrivilege(): Promise<void> {
     let canChooseAttrForm = false;
     const isDevelopment = this.isDevelopment();
-    const { reduxStore } = this;
     const envUrl = isDevelopment
       ? reduxStore.getState().sessionReducer.envUrl
       : homeHelper.saveLoginValues();
@@ -197,7 +178,6 @@ class SessionHelper {
   }
 
   async getCanUseOfficePrivilege(): Promise<boolean> {
-    const { reduxStore } = this;
     const isDevelopment = this.isDevelopment();
     const { envUrl } = reduxStore.getState().sessionReducer;
 
@@ -239,7 +219,7 @@ class SessionHelper {
    * @param object ObjectData needed for import
    */
   async importObjectWithouPopup(object: ObjectData): Promise<void> {
-    this.reduxStore.dispatch(importRequested(object));
+    reduxStore.dispatch(importRequested(object));
   }
 }
 

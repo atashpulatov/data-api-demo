@@ -9,7 +9,6 @@ const INVALID_SELECTION = 'InvalidSelection';
 describe('OfficeApiHelper', () => {
   beforeAll(() => {
     officeApiHelper.excel = {};
-    officeApiHelper.init(reduxStore);
   });
   it('should convert simple excel column name to number', () => {
     // given

@@ -5,7 +5,7 @@ import mstrAttributeMetricHelper from './helper/mstr-attribute-metric-helper';
 import { ReportDefinition } from './object-filter-helper-types';
 import officeConverterServiceV2 from './office-converter-service-v2';
 
-import { ReduxStore } from '../store';
+import { reduxStore } from '../store';
 
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { DossierData, TableDimensions, VisualizationInfo } from '../types/object-types';
@@ -183,14 +183,8 @@ function offsetCrosstabSubtotal(element: any, offset: number): void {
 }
 
 class MstrObjectRestService {
-  reduxStore: ReduxStore;
-
   constructor() {
     this.fetchContentGenerator = this.fetchContentGenerator.bind(this);
-  }
-
-  init(reduxStore: ReduxStore): void {
-    this.reduxStore = reduxStore;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -218,8 +212,8 @@ class MstrObjectRestService {
       mstrTable: { isCrosstab, visualizationType },
     } = instanceDefinition;
 
-    const { envUrl, authToken } = this.reduxStore.getState().sessionReducer;
-    const { supportForms } = this.reduxStore.getState().officeReducer;
+    const { envUrl, authToken } = reduxStore.getState().sessionReducer;
+    const { supportForms } = reduxStore.getState().officeReducer;
     const attrforms = { supportForms, displayAttrFormNames };
 
     let fetchedRows = 0;
@@ -306,7 +300,7 @@ class MstrObjectRestService {
     promptsAnswers: any;
     ignoreValidateRequiredCheck: boolean;
   }): any => {
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/promptsAnswers${ignoreValidateRequiredCheck ? '?ignoreValidateRequiredCheck=true' : ''}`;
     return request
@@ -331,7 +325,7 @@ class MstrObjectRestService {
     promptsAnswers: any;
     ignoreValidateRequiredCheck?: boolean;
   }): any => {
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/promptsAnswers${ignoreValidateRequiredCheck ? '?ignoreValidateRequiredCheck=true' : ''}`;
     return request
@@ -349,7 +343,7 @@ class MstrObjectRestService {
     projectId: string
   ): any => {
     // TODO: get rid of the getState
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/dossiers/instances`;
     const body = {
@@ -390,7 +384,7 @@ class MstrObjectRestService {
     limit?: number;
     displayAttrFormNames?: DisplayAttrFormNames;
   }): Promise<InstanceDefinition> => {
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const { supportForms } = storeState.officeReducer;
     const attrforms = { supportForms, displayAttrFormNames };
@@ -426,7 +420,7 @@ class MstrObjectRestService {
     body: any;
     displayAttrFormNames: DisplayAttrFormNames;
   }): Promise<InstanceDefinition> => {
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const { supportForms } = storeState.officeReducer;
     const attrforms = { supportForms, displayAttrFormNames };
@@ -443,7 +437,7 @@ class MstrObjectRestService {
   };
 
   createDossierInstance = (projectId: string, objectId: string, body: any = {}): any => {
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/dossiers/${objectId}/instances`;
     return request
@@ -460,7 +454,7 @@ class MstrObjectRestService {
     objectId: string,
     dossierInstanceId: string
   ): any => {
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/v2/dossiers/${objectId}/instances/${dossierInstanceId}/definition`;
     return request
@@ -472,7 +466,7 @@ class MstrObjectRestService {
   };
 
   deleteDossierInstance = (projectId: string, objectId: string, instanceId: string): any => {
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}`;
     return request
@@ -484,7 +478,7 @@ class MstrObjectRestService {
   };
 
   getDossierStatus = (dossierId: string, instanceId: string, projectId: string): any => {
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${dossierId}/instances/${instanceId}/status`;
 
@@ -511,7 +505,7 @@ class MstrObjectRestService {
     instanceId: string;
     displayAttrFormNames?: DisplayAttrFormNames;
   }): Promise<InstanceDefinition> => {
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const { supportForms } = storeState.officeReducer;
     const attrforms = { supportForms, displayAttrFormNames };
@@ -548,7 +542,7 @@ class MstrObjectRestService {
     instanceId: string;
     displayAttrFormNames: DisplayAttrFormNames;
   }): Promise<InstanceDefinition> => {
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const { supportForms } = storeState.officeReducer;
     const attrforms = { supportForms, displayAttrFormNames };
@@ -575,7 +569,7 @@ class MstrObjectRestService {
     projectId: string,
     mstrObjectType: MstrObjectTypes = reportObjectType
   ): any => {
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
     // visualisation does not have object type, all other objects has type represented by number
     // If we pass not a number we know its visualisation and we set type as 55 (document)
     if (typeof mstrObjectType.type !== 'number') {
@@ -613,7 +607,7 @@ class MstrObjectRestService {
     } else if (includeClosedPrompts === false) {
       query = '?closed=false';
     }
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts${query}`;
 
@@ -626,7 +620,7 @@ class MstrObjectRestService {
   };
 
   isPrompted = (objectId: string, projectId: string, objectTypeName: string): any => {
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
 
     let typePath;
@@ -660,7 +654,7 @@ class MstrObjectRestService {
    */
   getCubeInfo = (objectId: string, projectId: string): any =>
     new Promise((resolve, reject) => {
-      const storeState = this.reduxStore.getState();
+      const storeState = reduxStore.getState();
       const { envUrl, authToken } = storeState.sessionReducer;
       const fullPath = `${envUrl}/cubes?id=${objectId}`;
       // eslint-disable-next-line no-promise-executor-return
@@ -674,7 +668,7 @@ class MstrObjectRestService {
     });
 
   rePromptDossier = (dossierId: string, instanceId: string, projectId: string): any => {
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${dossierId}/instances/${instanceId}/rePrompt`;
 
@@ -699,7 +693,7 @@ class MstrObjectRestService {
     promptsAnswers: any;
     ignoreValidateRequiredCheck: boolean;
   }): any => {
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/prompts/answers${ignoreValidateRequiredCheck ? '?ignoreValidateRequiredCheck=true' : ''}`;
     return request
@@ -726,7 +720,7 @@ class MstrObjectRestService {
     instanceId: string,
     promptId: string
   ): any => {
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts/${promptId}/elements`;
 
@@ -753,7 +747,7 @@ class MstrObjectRestService {
     instanceId: string,
     promptId: string
   ): any => {
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts/${promptId}/objects`;
 
@@ -784,7 +778,7 @@ class MstrObjectRestService {
     visualizationKey: string,
     dimensions: { width: number; height: number }
   ): Promise<any> => {
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/visualizations/${visualizationKey}/image`;
     const { width, height } = dimensions;
@@ -823,7 +817,7 @@ class MstrObjectRestService {
    * @returns object containing Page-by elements and valid Page-by combinations
    */
   getPageByElements = (reportId: string, projectId: string, instanceId: string): any => {
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/v2/reports/${reportId}/instances/${instanceId}/pageBy/elements`;
 
@@ -843,7 +837,7 @@ class MstrObjectRestService {
    * @returns object containing the report's definition which includes "information", "sourceType", "dataSource", "grid" and perhaps "advancedProperties" and "timezone" if exist
    */
   getReportDefinition = (reportId: string, projectId: string): Promise<ReportDefinition> => {
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/model/reports/${reportId}?showFilterTokens=true`;
 
@@ -876,7 +870,7 @@ class MstrObjectRestService {
     visualizationKey: string;
     projectId: string;
   }): Promise<any> => {
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${dossierId}/instances/${dossierInstanceId}/excel`;
 
@@ -923,7 +917,7 @@ class MstrObjectRestService {
     reportInstanceId: string;
     projectId: string;
   }): Promise<any> => {
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/reports/${reportId}/instances/${reportInstanceId}/excel`;
 

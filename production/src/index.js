@@ -6,11 +6,10 @@ import { HomeHelper } from './home/home-helper';
 import officeReducerHelper from './office/store/office-reducer-helper';
 import { sessionHelper } from './storage/session-helper';
 
-import { reduxStore } from './store';
-
 import 'core-js/stable';
 import { diContainer } from './dependency-container';
 import i18next from './i18n';
+import { sessionActions } from './redux-reducer/session-reducer/session-actions';
 
 import './index.css';
 
@@ -38,7 +37,10 @@ function goReact() {
 
 function officeInitialize() {
   window.Office.onReady().then(async () => {
-    const homeHelperSingle = diContainer.initilizeSingle(HomeHelper, [reduxStore, sessionHelper]);
+    const homeHelperSingle = diContainer.initilizeSingle(HomeHelper, [
+      sessionActions,
+      sessionHelper,
+    ]);
 
     if (window.location.href.indexOf('popupType') === -1) {
       // Loading from sidebar

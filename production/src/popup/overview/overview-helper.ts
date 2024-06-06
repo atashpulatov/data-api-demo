@@ -11,6 +11,8 @@ import { pageByHelper } from '../../page-by/page-by-helper';
 import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-services/side-panel-notification-helper';
 import { popupHelper } from '../popup-helper';
 
+import { reduxStore } from '../../store';
+
 import { DialogPopup } from './overview-types';
 
 import i18n from '../../i18n';
@@ -44,21 +46,13 @@ export enum OverviewActionCommands {
 
 // rewrite everything
 class OverviewHelper {
-  store: any;
-
   sidePanelService: any;
 
   notificationService: any;
 
   sidePanelHelper: any;
 
-  init = (
-    reduxStore: any,
-    sidePanelService: any,
-    notificationService: any,
-    sidePanelHelper: any
-  ): void => {
-    this.store = reduxStore;
+  init = (sidePanelService: any, notificationService: any, sidePanelHelper: any): void => {
     this.sidePanelService = sidePanelService;
     this.notificationService = notificationService;
     this.sidePanelHelper = sidePanelHelper;
@@ -314,8 +308,7 @@ class OverviewHelper {
       this.handleDismissNotifications(response.objectWorkingIds);
     }
 
-    // eslint-disable-next-line no-case-declarations
-    const { callback } = this.store.getState().officeReducer?.popupData || {};
+    const { callback } = reduxStore.getState().officeReducer?.popupData || {};
 
     switch (response.command) {
       case OverviewActionCommands.IMPORT:
@@ -350,7 +343,7 @@ class OverviewHelper {
       case OverviewActionCommands.RANGE_TAKEN_CLOSE:
         await callback();
 
-        this.store.dispatch(executeNextRepromptTask());
+        reduxStore.dispatch(executeNextRepromptTask());
         officeReducerHelper.clearPopupData();
         break;
       case OverviewActionCommands.PAGE_BY_REFRESH_FAILED_CLOSE:

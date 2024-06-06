@@ -1,8 +1,6 @@
 import { authenticationService } from './auth-rest-service';
 import { authenticationHelper } from './authentication-helper';
 
-import { reduxStore } from '../store';
-
 import { errorService } from '../error/error-handler';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 
@@ -13,7 +11,7 @@ jest.mock('../redux-reducer/session-reducer/session-actions');
 
 describe('loginUser', () => {
   beforeAll(() => {
-    authenticationHelper.init(reduxStore, sessionActions, authenticationService, errorService);
+    authenticationHelper.init(sessionActions, authenticationService, errorService);
   });
   it('should return if error occured', () => {
     // given

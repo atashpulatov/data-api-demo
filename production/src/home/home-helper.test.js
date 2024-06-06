@@ -17,7 +17,7 @@ jest.mock('../redux-reducer/session-reducer/session-actions');
 
 describe('HomeHelper', () => {
   beforeAll(() => {
-    homeHelper.init(reduxStore, sessionActions, sessionHelper);
+    homeHelper.init(sessionActions, sessionHelper);
   });
 
   afterEach(() => {
@@ -179,13 +179,13 @@ describe('HomeHelper', () => {
 
       jest.spyOn(officeContext, 'isSetSupported').mockImplementation();
 
-      jest.spyOn(homeHelper.reduxStore, 'dispatch').mockImplementation();
+      jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
-      homeHelper.init(reduxStore, {}, {});
+      homeHelper.init({}, {});
       // when
       homeHelper.initSupportedFeaturesFlags();
       expect(officeContext.isSetSupported).toHaveBeenCalled();
-      expect(homeHelper.reduxStore.dispatch).toHaveBeenCalled();
+      expect(reduxStore.dispatch).toHaveBeenCalled();
     });
   });
 
@@ -219,9 +219,9 @@ describe('HomeHelper', () => {
 
       jest.spyOn(officeShapeApiHelper, 'getShape').mockImplementation(() => undefined);
 
-      jest.spyOn(homeHelper.reduxStore, 'dispatch').mockImplementation();
+      jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
-      homeHelper.init(reduxStore, {}, {});
+      homeHelper.init({}, {});
       // when
 
       setTimeout(async () => {

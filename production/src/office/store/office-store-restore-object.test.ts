@@ -26,18 +26,6 @@ const settingsMock = {
   saveAsync: jest.fn(),
 } as unknown as Office.Settings;
 
-describe('OfficeStoreRestoreObject init', () => {
-  it('init work as expected', () => {
-    // given
-    // when
-    // @ts-expect-error
-    officeStoreRestoreObject.init('initTest');
-
-    // then
-    expect(officeStoreRestoreObject.reduxStore).toEqual('initTest');
-  });
-});
-
 describe.each`
   expectedDispatchCallNo | expectedObjectsFromProperties | storedObjectParam     | restoredFromExcelObject
   ${0}                   | ${[]}                         | ${undefined}          | ${undefined}
@@ -63,9 +51,6 @@ describe.each`
       jest.clearAllMocks();
 
       internalData[OfficeSettingsEnum.storedObjects] = storedObjectParam;
-
-      // @ts-expect-error
-      officeStoreRestoreObject.init(reduxStore);
     });
 
     afterEach(() => {
@@ -143,8 +128,6 @@ describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     internalData[OfficeSettingsEnum.storedAnswers] = 'restoredAnswerFromExcelTest';
-    // @ts-expect-error
-    officeStoreRestoreObject.init(reduxStore);
   });
 
   afterEach(() => {

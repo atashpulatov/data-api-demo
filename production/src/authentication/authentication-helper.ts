@@ -2,22 +2,16 @@ import request from 'superagent';
 
 import { notificationService } from '../notification/notification-service';
 
-class AuthenticationHelper {
-  reduxStore: any;
+import { reduxStore } from '../store';
 
+class AuthenticationHelper {
   sessionActions: any;
 
   authenticationService: any;
 
   errorService: any;
 
-  init = (
-    reduxStore: any,
-    sessionActions: any,
-    authenticationService: any,
-    errorService: any
-  ): void => {
-    this.reduxStore = reduxStore;
+  init = (sessionActions: any, authenticationService: any, errorService: any): void => {
     this.sessionActions = sessionActions;
     this.authenticationService = authenticationService;
     this.errorService = errorService;
@@ -47,7 +41,7 @@ class AuthenticationHelper {
   };
 
   validateAuthToken = (): Promise<void> => {
-    const reduxStoreState = this.reduxStore.getState();
+    const reduxStoreState = reduxStore.getState();
     const { authToken } = reduxStoreState.sessionReducer;
     const { envUrl } = reduxStoreState.sessionReducer;
     return this.authenticationService.putSessions(envUrl, authToken);
@@ -60,7 +54,7 @@ class AuthenticationHelper {
    * @param {Object} checkInterval id of setInterval required to clear it on connection restored
    */
   doesConnectionExist = (checkInterval: any): void => {
-    const reduxStoreState = this.reduxStore.getState();
+    const reduxStoreState = reduxStore.getState();
     const { envUrl } = reduxStoreState.sessionReducer;
     const changedUrl = envUrl.slice(0, -3);
     const file = `${changedUrl}static/loader-mstr-office/assets/mstr_logo_32.png`;
@@ -87,7 +81,7 @@ class AuthenticationHelper {
    * @return {Object} Object containing username and envUrl (environment URL)
    */
   getCurrentMstrContext = (): { envUrl: string; username: string } => {
-    const { envUrl, username } = this.reduxStore.getState().sessionReducer;
+    const { envUrl, username } = reduxStore.getState().sessionReducer;
     return { envUrl, username };
   };
 
@@ -97,7 +91,7 @@ class AuthenticationHelper {
    * @return {String} Text with mstr user fullname
    */
   getCurrentMstrUserFullName = (): string => {
-    const { userFullName } = this.reduxStore.getState().sessionReducer;
+    const { userFullName } = reduxStore.getState().sessionReducer;
     return userFullName;
   };
 }

@@ -1,74 +1,71 @@
-import { fakeStore } from '../../__mocks__/fake-store';
+import { reduxStore } from '../store';
+
+import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import { ObjectData } from '../types/object-types';
 
 import { operationBus } from './operation-bus';
 import { OperationSteps } from './operation-steps';
 
 describe('OperationBus', () => {
   beforeAll(() => {
-    operationBus.init(fakeStore);
-  });
-
-  afterEach(() => {
-    fakeStore.resetState();
+    operationBus.init();
   });
 
   it('does not call subscriber when current step empty', () => {
     // given
-    fakeStore.addStep('justSomeStep' as OperationSteps);
-    operationBus.init(fakeStore);
     const subscriber = jest.fn();
     const subscribedStep = 'subscribed' as OperationSteps;
     operationBus.subscribe(subscribedStep, subscriber);
 
     // when
-    fakeStore.resetState();
+    operationBus.listener();
 
     // then
-    expect(subscriber).not.toBeCalled();
+    expect(subscriber).not.toHaveBeenCalled();
   });
 
   it('does not call subscriber when steps do not match', () => {
-    // given
-    operationBus.init(fakeStore);
+    operationBus.init();
     const subscriber = jest.fn();
     const subscribedStep = 'subscribed' as OperationSteps;
-    const postedStep = 'posted' as OperationSteps;
+    const operations = [
+      { stepsQueue: ['subscribed2'], objectWorkingId: 2137 },
+    ] as unknown as OperationData[];
+    const objects = [{ objectWorkingId: 2137 }] as unknown as ObjectData[];
+
+    jest
+      .spyOn(reduxStore, 'getState')
+      // @ts-expect-error
+      .mockReturnValue({ operationReducer: { operations }, objectReducer: { objects } });
+
     operationBus.subscribe(subscribedStep, subscriber);
 
     // when
-    fakeStore.addStep(postedStep);
+    operationBus.listener();
 
     // then
-    expect(subscriber).not.toBeCalled();
-  });
-
-  it('calls subscriber when matching step added', () => {
-    // given
-    operationBus.init(fakeStore);
-    const subscriber = jest.fn();
-    const subscribedStep = 'subscribed' as OperationSteps;
-    operationBus.subscribe(subscribedStep, subscriber);
-
-    // when
-    fakeStore.addStep(subscribedStep);
-
-    // then
-    expect(subscriber).toBeCalled();
+    expect(subscriber).not.toHaveBeenCalled();
   });
 
   it('calls subscriber when matching step is next', () => {
     // given
-    fakeStore.addStep('justSomeStep' as OperationSteps);
-    operationBus.init(fakeStore);
+    operationBus.init();
     const subscriber = jest.fn();
     const subscribedStep = 'subscribed' as OperationSteps;
+    const operations = [{ stepsQueue: [subscribedStep], objectWorkingId: 2137 }] as OperationData[];
+    const objects = [{ objectWorkingId: 2137 }] as unknown as ObjectData[];
+
+    jest
+      .spyOn(reduxStore, 'getState')
+      // @ts-expect-error
+      .mockReturnValue({ operationReducer: { operations }, objectReducer: { objects } });
+
     operationBus.subscribe(subscribedStep, subscriber);
-    fakeStore.addStep(subscribedStep);
 
     // when
-    fakeStore.removeFirstStep();
+    operationBus.listener();
 
     // then
-    expect(subscriber).toBeCalled();
+    expect(subscriber).toHaveBeenCalled();
   });
 });

@@ -3,6 +3,8 @@ import { Dispatch, SetStateAction } from 'react';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { officeApiCrosstabHelper } from './office-api-crosstab-helper';
 
+import { reduxStore } from '../../store';
+
 import { IncorrectInputTypeError } from '../../error/incorrect-input-type';
 import { OutsideOfRangeError } from '../../error/outside-of-range-error';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
@@ -21,12 +23,6 @@ const EXCEL_COL_LIMIT = 16384;
 const INVALID_SELECTION = 'InvalidSelection';
 
 class OfficeApiHelper {
-  reduxStore: any;
-
-  init(reduxStore: any): void {
-    this.reduxStore = reduxStore;
-  }
-
   /**
    * checks excel session and auth token
    *
@@ -111,14 +107,14 @@ class OfficeApiHelper {
 
       let defaultCellAddress;
 
-      const { activeCellAddress } = this.reduxStore.getState().officeReducer;
+      const { activeCellAddress } = reduxStore.getState().officeReducer;
       // If the active cell address is valid, then select the last active cell
       if (activeCellAddress) {
         defaultCellAddress = activeCellAddress;
       } else {
         defaultCellAddress = DEFAULT_CELL_POSITION;
         // Update the active cell address with default cell address
-        this.reduxStore.dispatch(officeActions.setActiveCellAddress(DEFAULT_CELL_POSITION));
+        reduxStore.dispatch(officeActions.setActiveCellAddress(DEFAULT_CELL_POSITION));
       }
 
       return defaultCellAddress;
@@ -157,7 +153,7 @@ class OfficeApiHelper {
 
       let defaultRangePosition;
 
-      const { activeCellAddress } = this.reduxStore.getState().officeReducer;
+      const { activeCellAddress } = reduxStore.getState().officeReducer;
       // If the active cell address is valid, then select the last active range
       if (activeCellAddress) {
         defaultRangePosition = await this.convertCellAddressToRangePosition(
@@ -167,7 +163,7 @@ class OfficeApiHelper {
       } else {
         defaultRangePosition = DEFAULT_RANGE_POSITION;
         // Update the active cell address with default cell address
-        this.reduxStore.dispatch(officeActions.setActiveCellAddress(DEFAULT_CELL_POSITION));
+        reduxStore.dispatch(officeActions.setActiveCellAddress(DEFAULT_CELL_POSITION));
       }
 
       return defaultRangePosition;

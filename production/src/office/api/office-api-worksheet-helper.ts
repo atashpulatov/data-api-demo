@@ -7,12 +7,6 @@ import { ProtectedSheetError } from '../../error/protected-sheets-error';
 import { ObjectImportType } from '../../mstr-object/constants';
 
 class OfficeApiWorksheetHelper {
-  reduxStore: any;
-
-  init(reduxStore: any): void {
-    this.reduxStore = reduxStore;
-  }
-
   /**
    * Returns true if specific worksheet is protected
    *

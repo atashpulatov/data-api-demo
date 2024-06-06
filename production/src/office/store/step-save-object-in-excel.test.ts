@@ -1,3 +1,4 @@
+import { reduxStore } from '../../store';
 import officeStoreObject from './office-store-object';
 
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
@@ -22,16 +23,6 @@ describe('StepSaveObjectInExcel', () => {
     jest.restoreAllMocks();
   });
 
-  it('init work as expected', () => {
-    // given
-    // when
-    // @ts-expect-error
-    stepSaveObjectInExcel.init('initTest');
-
-    // then
-    expect(stepSaveObjectInExcel.reduxStore).toEqual('initTest');
-  });
-
   it('saveObject should handle an error', async () => {
     // given
     const objectDataMock = {
@@ -51,8 +42,7 @@ describe('StepSaveObjectInExcel', () => {
       throw new Error('errorTest');
     });
 
-    // @ts-expect-error
-    stepSaveObjectInExcel.init({ dispatch: jest.fn() });
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
     // when
     await stepSaveObjectInExcel.saveObject(objectDataMock, {
@@ -60,7 +50,7 @@ describe('StepSaveObjectInExcel', () => {
     } as unknown as OperationData);
 
     // then
-    expect(stepSaveObjectInExcel.reduxStore.dispatch).toHaveBeenCalled();
+    expect(reduxStore.dispatch).toHaveBeenCalled();
     expect(officeStoreObject.saveObjectsInExcelStore).toBeCalledTimes(1);
     expect(console.error).toBeCalledTimes(1);
     expect(console.error).toBeCalledWith(new Error('errorTest'));
@@ -79,8 +69,10 @@ describe('StepSaveObjectInExcel', () => {
 
     jest.spyOn(operationStepDispatcher, 'completeSaveObjectInExcel').mockImplementation();
 
-    // @ts-expect-error
-    stepSaveObjectInExcel.init({ dispatch: jest.fn() });
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+
+    // mock redux dispatch
+
     // when
     await stepSaveObjectInExcel.saveObject(objectDataMock, {
       instanceDefinition: {

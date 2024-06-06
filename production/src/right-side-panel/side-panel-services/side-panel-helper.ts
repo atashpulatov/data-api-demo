@@ -6,6 +6,7 @@ import officeStoreHelper from '../../office/store/office-store-helper';
 import { pageByHelper } from '../../page-by/page-by-helper';
 
 import officeStoreObject from '../../office/store/office-store-object';
+import { reduxStore } from '../../store';
 
 import { MstrObjectTypes } from '../../mstr-object/mstr-object-types';
 import { DialogType } from '../../redux-reducer/popup-state-reducer/popup-state-reducer-types';
@@ -24,20 +25,11 @@ import initializationErrorDecorator from '../settings-side-panel/initialization-
 import { ObjectImportType } from '../../mstr-object/constants';
 
 class SidePanelHelper {
-  reduxStore: any;
-
-  init = (reduxStore: any): void => {
-    this.reduxStore = reduxStore;
-
-    this.clearRepromptTask = this.clearRepromptTask.bind(this);
-    this.createRepromptTask = this.createRepromptTask.bind(this);
-  };
-
   /**
    * Clears the reprompt task queue and resets the index.
    */
   clearRepromptTask(): void {
-    this.reduxStore.dispatch(clearRepromptTask());
+    reduxStore.dispatch(clearRepromptTask());
   }
 
   /**
@@ -51,7 +43,7 @@ class SidePanelHelper {
     pageBySiblings.forEach(async (pageByObject: ObjectData) => {
       const objectExist = await officeRemoveHelper.checkIfObjectExist(pageByObject, excelContext);
       if (objectExist) {
-        this.reduxStore.dispatch(
+        reduxStore.dispatch(
           removeRequested(pageByObject.objectWorkingId, pageByObject?.importType)
         );
       } else {
@@ -86,7 +78,8 @@ class SidePanelHelper {
           const popupType = isDossier
             ? DialogType.repromptDossierDataOverview
             : DialogType.repromptReportDataOverview;
-          this.reduxStore.dispatch(popupStateActions.setPopupType(popupType));
+          // @ts-expect-error
+          reduxStore.dispatch(popupStateActions.setPopupType(popupType));
         }
 
         // Based on the type of object, call the appropriate popup
@@ -94,7 +87,8 @@ class SidePanelHelper {
           ? popupActions.callForRepromptDossier(objectData)
           : popupActions.callForReprompt(objectData);
 
-        this.reduxStore.dispatch(popupAction);
+        // @ts-expect-error
+        reduxStore.dispatch(popupAction);
       },
     };
   }
@@ -132,18 +126,20 @@ class SidePanelHelper {
     }
 
     if (withEdit) {
-      this.reduxStore.dispatch(popupActions.callForDuplicate(object));
+      // @ts-expect-error
+      reduxStore.dispatch(popupActions.callForDuplicate(object));
     } else {
-      this.reduxStore.dispatch(duplicateRequested(object));
+      reduxStore.dispatch(duplicateRequested(object));
     }
   }
 
   @initializationErrorDecorator.initializationWrapper
   initializeClearDataFlags(): void {
-    officeStoreHelper.isFileSecured() &&
-      this.reduxStore.dispatch(officeActions.toggleSecuredFlag(true));
+    // @ts-expect-error
+    officeStoreHelper.isFileSecured() && reduxStore.dispatch(officeActions.toggleSecuredFlag(true));
     officeStoreHelper.isClearDataFailed() &&
-      this.reduxStore.dispatch(officeActions.toggleIsClearDataFailedFlag(true));
+      // @ts-expect-error
+      reduxStore.dispatch(officeActions.toggleIsClearDataFailedFlag(true));
   }
 }
 

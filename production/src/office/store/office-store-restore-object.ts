@@ -2,7 +2,7 @@ import { officeApiHelper } from '../api/office-api-helper';
 import officeReducerHelper from './office-reducer-helper';
 import officeStoreHelper from './office-store-helper';
 
-import { ReduxStore } from '../../store';
+import { reduxStore } from '../../store';
 
 import { ObjectData } from '../../types/object-types';
 
@@ -14,12 +14,6 @@ import { OfficeSettingsEnum } from '../../constants/office-constants';
 import { excludableObjectImportTypes, ObjectImportType } from '../../mstr-object/constants';
 
 class OfficeStoreRestoreObject {
-  reduxStore: ReduxStore;
-
-  init(reduxStore: ReduxStore): void {
-    this.reduxStore = reduxStore;
-  }
-
   /**
    * Transforms an array of objects by ensuring that the `promptsAnswers` property of each object is an array.
    * If an object is prompted, its `promptsAnswers` property is not an array, and its `mstrObjectType` is 55,
@@ -27,8 +21,8 @@ class OfficeStoreRestoreObject {
    * but with `promptsAnswers` transformed into an array.
    * If an object does not meet these conditions, it is included in the returned array as is.
    *
-   * @param {Array} objects - The array of objects to transform.
-   * @returns {Array} The transformed array of objects.
+   * @param objects - The array of objects to transform.
+   * @returns The transformed array of objects.
    */
   restoreLegacyPromptedAnswersToArrayInDossiers = (objects: any[]): ObjectData[] =>
     objects.map((object: any) => {
@@ -74,8 +68,7 @@ class OfficeStoreRestoreObject {
       objects = this.excludeObjects(objects, objectImportType);
     });
 
-    // @ts-expect-error
-    objects && this.reduxStore.dispatch(restoreAllObjects(objects));
+    objects && reduxStore.dispatch(restoreAllObjects(objects));
   };
 
   /**
@@ -198,8 +191,8 @@ class OfficeStoreRestoreObject {
     const answers = settings.get(OfficeSettingsEnum.storedAnswers) || [];
     // If answers happens to be an empty array then it is still necessary
     // to dispatch it to clear the answers in Redux store.
-    // @ts-expect-error
-    this.reduxStore.dispatch(restoreAllAnswers(answers));
+
+    reduxStore.dispatch(restoreAllAnswers(answers));
   };
 
   /**

@@ -1,4 +1,5 @@
 import { PageByConfiguration } from '@mstr/connector-components';
+import { Action } from 'redux';
 import { v4 as uuidv4 } from 'uuid';
 
 import { authenticationHelper } from '../authentication/authentication-helper';
@@ -6,6 +7,8 @@ import instanceDefinitionHelper from '../mstr-object/instance/instance-definitio
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { pageByHelper } from '../page-by/page-by-helper';
 import { OverviewActionCommands } from './overview/overview-helper';
+
+import { reduxStore } from '../store';
 
 import { PageByDataElement, PageByDisplayType } from '../page-by/page-by-types';
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
@@ -32,9 +35,6 @@ import { DisplayAttrFormNames, ObjectImportType } from '../mstr-object/constants
 const URL = `${window.location.href}`;
 
 class PopupController {
-  // TODO: Fix any types
-  reduxStore: any;
-
   sessionActions: any;
 
   popupActions: any;
@@ -45,8 +45,7 @@ class PopupController {
 
   dialog: Office.Dialog;
 
-  init = (reduxStore: any, sessionActions: any, popupActions: any, overviewHelper: any): void => {
-    this.reduxStore = reduxStore;
+  init = (sessionActions: any, popupActions: any, overviewHelper: any): void => {
     this.sessionActions = sessionActions;
     this.popupActions = popupActions;
     this.overviewHelper = overviewHelper;
@@ -57,14 +56,16 @@ class PopupController {
 
   clearPopupStateIfNeeded = (): void => {
     // TODO: convert this to a redux action
-    const { isDataOverviewOpen } = this.reduxStore.getState().popupStateReducer;
+    const { isDataOverviewOpen } = reduxStore.getState().popupStateReducer;
 
     if (!isDataOverviewOpen) {
-      this.reduxStore.dispatch(popupStateActions.onClearPopupState());
+      // @ts-expect-error
+      reduxStore.dispatch(popupStateActions.onClearPopupState());
     } else {
-      this.reduxStore.dispatch(officeActions.setIsDialogLoaded(false));
+      reduxStore.dispatch(officeActions.setIsDialogLoaded(false));
       // Clear reprompt/edit flags
-      this.reduxStore.dispatch(
+      reduxStore.dispatch(
+        // @ts-expect-error
         popupStateActions.setMstrData({
           isReprompt: undefined,
           isEdit: undefined,
@@ -74,7 +75,7 @@ class PopupController {
     // DE287911: Below line should always run, to ensure `editedObject` is not persisted.
     // We should evaluate adding better Redux Store clean-up after operations (Edit, Reprompt, etc.)
     // to ensure we aren't keeping old references around (e.g. editedObject, isReprompt, isEdit, etc.)
-    this.reduxStore.dispatch(this.popupActions.resetState());
+    reduxStore.dispatch(this.popupActions.resetState());
   };
 
   runPopupNavigation = async (): Promise<void> => {
@@ -95,9 +96,10 @@ class PopupController {
    * @param {*} isEdit
    */
   runRepromptPopup = async (reportParams: any, isEdit = true): Promise<void> => {
-    const { popupType } = this.reduxStore.getState().popupStateReducer;
+    const { popupType } = reduxStore.getState().popupStateReducer;
     const isOverviewReprompt = popupType && popupType === DialogType.repromptReportDataOverview;
-    this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: true, isEdit }));
+    // @ts-expect-error
+    reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: true, isEdit }));
     await this.runPopup(
       isOverviewReprompt ? popupType : DialogType.repromptingWindow,
       80,
@@ -111,9 +113,10 @@ class PopupController {
    * @param {*} reportParams
    */
   runRepromptDossierPopup = async (reportParams: any): Promise<void> => {
-    const { popupType } = this.reduxStore.getState().popupStateReducer;
+    const { popupType } = reduxStore.getState().popupStateReducer;
     const isOverviewReprompt = popupType && popupType === DialogType.repromptDossierDataOverview;
-    this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: true }));
+    // @ts-expect-error
+    reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: true }));
     await this.runPopup(
       isOverviewReprompt ? popupType : DialogType.dossierWindow,
       80,
@@ -138,10 +141,11 @@ class PopupController {
     reportParams: ReportParams = null
   ): Promise<void> => {
     const isDialogForMultipleRepromptOpen = this.getIsDialogAlreadyOpenForMultipleReprompt();
-    const { isDataOverviewOpen } = this.reduxStore.getState().popupStateReducer;
+    const { isDataOverviewOpen } = reduxStore.getState().popupStateReducer;
     const isRepromptOrOvieviewPopupOpen = isDialogForMultipleRepromptOpen || isDataOverviewOpen;
 
-    this.reduxStore.dispatch(popupStateActions.setMstrData({ popupType }));
+    // @ts-expect-error
+    reduxStore.dispatch(popupStateActions.setMstrData({ popupType }));
     this.reportParams = reportParams;
 
     try {
@@ -190,17 +194,19 @@ class PopupController {
                 // Event received on dialog close
                 Office.EventType.DialogEventReceived,
                 () => {
-                  this.reduxStore.dispatch(this.popupActions.resetState());
-                  this.reduxStore.dispatch(popupStateActions.onClearPopupState());
-                  this.reduxStore.dispatch(officeActions.hideDialog());
+                  reduxStore.dispatch(this.popupActions.resetState());
+                  // @ts-expect-error
+                  reduxStore.dispatch(popupStateActions.onClearPopupState());
+                  // @ts-expect-error
+                  reduxStore.dispatch(officeActions.hideDialog());
 
                   // Clear the reprompt task queue if the user closes the popup,
                   // as the user is no longer interested in continuing the multiple re-prompting task.
-                  this.reduxStore.dispatch(clearRepromptTask());
+                  reduxStore.dispatch(clearRepromptTask());
                 }
               );
 
-              this.reduxStore.dispatch(officeActions.showDialog());
+              reduxStore.dispatch(officeActions.showDialog());
             }
           }
         );
@@ -263,11 +269,11 @@ class PopupController {
       commandExecuteNextRepromptTask,
     } = selectorProperties;
 
-    const dialogType = this.reduxStore.getState().popupStateReducer.popupType;
-    const { isDataOverviewOpen } = this.reduxStore.getState().popupStateReducer;
+    const dialogType = reduxStore.getState().popupStateReducer.popupType;
+    const { isDataOverviewOpen } = reduxStore.getState().popupStateReducer;
 
     if (command === commandDialogLoaded) {
-      this.reduxStore.dispatch(officeActions.setIsDialogLoaded(true));
+      reduxStore.dispatch(officeActions.setIsDialogLoaded(true));
     }
 
     if (command === commandCloseDialog) {
@@ -276,7 +282,7 @@ class PopupController {
     }
 
     if (command === commandExecuteNextRepromptTask) {
-      this.reduxStore.dispatch(executeNextRepromptTask());
+      reduxStore.dispatch(executeNextRepromptTask());
 
       // If multiple reprompt queue is not empty, stop method here to prevent closing dialog.
       if (!isMultipleRepromptQueueEmpty) {
@@ -340,7 +346,7 @@ class PopupController {
 
           // Reset state if an error has occurred and show error message.
           if (isDataOverviewOpen) {
-            this.reduxStore.dispatch(this.popupActions.resetState());
+            reduxStore.dispatch(this.popupActions.resetState());
           }
           errorService.handleError(response.error);
           break;
@@ -375,17 +381,20 @@ class PopupController {
    * @param response Message received from the dialog
    * @param reportParams Contains information about the currently selected object
    */
-  onCommandOk = async (response: DialogResponse, reportParams: ReportParams): Promise<void> => {
+  onCommandOk = async (
+    response: DialogResponse,
+    reportParams: ReportParams
+  ): Promise<void | Action> => {
     if (!reportParams) {
       return this.handleOkCommand(response);
     }
 
     if (reportParams.duplicateMode) {
-      return this.reduxStore.dispatch(duplicateRequested(reportParams.object, response));
+      return reduxStore.dispatch(duplicateRequested(reportParams.object, response));
     }
 
     const reportPreviousState = this.getObjectPreviousState(reportParams);
-    return this.reduxStore.dispatch(editRequested(reportPreviousState, response));
+    return reduxStore.dispatch(editRequested(reportPreviousState, response));
   };
 
   /**
@@ -394,7 +403,10 @@ class PopupController {
    * @param response Message received from the dialog
    * @param reportParams Contains information about the currently selected object
    */
-  onCommandUpdate = async (response: DialogResponse, reportParams: ReportParams): Promise<void> => {
+  onCommandUpdate = async (
+    response: DialogResponse,
+    reportParams: ReportParams
+  ): Promise<void | Action> => {
     const { objectWorkingId } = response;
 
     const shouldRemovePages = pageByHelper.getShouldRemovePages(response, reportParams);
@@ -408,11 +420,11 @@ class PopupController {
     }
 
     if (reportParams.duplicateMode) {
-      return this.reduxStore.dispatch(duplicateRequested(reportParams.object, response));
+      return reduxStore.dispatch(duplicateRequested(reportParams.object, response));
     }
 
     const reportPreviousState = this.getObjectPreviousState(reportParams);
-    return this.reduxStore.dispatch(editRequested(reportPreviousState, response));
+    return reduxStore.dispatch(editRequested(reportPreviousState, response));
   };
 
   /**
@@ -479,7 +491,7 @@ class PopupController {
   handleImport = async (
     objectData: ObjectData,
     pageByConfigurations: PageByConfiguration[][]
-  ): Promise<void> => {
+  ): Promise<void | Action> => {
     const { mstrObjectType, importType } = objectData;
 
     let preparedInstanceDefinition;
@@ -491,14 +503,12 @@ class PopupController {
     const { pageBy } = preparedInstanceDefinition?.definition.grid ?? {};
 
     if (!pageBy?.length || importType === ObjectImportType.PIVOT_TABLE) {
-      return this.reduxStore.dispatch(
-        importRequested({ ...objectData }, preparedInstanceDefinition)
-      );
+      return reduxStore.dispatch(importRequested({ ...objectData }, preparedInstanceDefinition));
     }
 
     const pageByLinkId = uuidv4();
 
-    const { settingsReducer } = this.reduxStore.getState();
+    const { settingsReducer } = reduxStore.getState();
     const { pageByDisplaySetting } = settingsReducer;
 
     const parsedPageByConfigurations =
@@ -551,14 +561,14 @@ class PopupController {
     objectData: ObjectData,
     preparedInstanceDefinition: InstanceDefinition,
     pageByDisplayType: PageByDisplayType
-  ): void => {
+  ): Action => {
     const pageByData = {
       pageByLinkId,
       pageByDisplayType,
       elements: [] as PageByDataElement[],
     };
 
-    return this.reduxStore.dispatch(
+    return reduxStore.dispatch(
       importRequested({ ...objectData, pageByData }, preparedInstanceDefinition)
     );
   };
@@ -586,7 +596,7 @@ class PopupController {
         elements: validCombination,
       };
 
-      this.reduxStore.dispatch(
+      reduxStore.dispatch(
         importRequested(
           {
             ...objectData,
@@ -602,10 +612,10 @@ class PopupController {
 
   loadPending =
     (wrapped: any) =>
-      async (...args: any) => {
-        this.runPopup(DialogType.loadingPage, 30, 40);
-        return wrapped(...args);
-      };
+    async (...args: any) => {
+      this.runPopup(DialogType.loadingPage, 30, 40);
+      return wrapped(...args);
+    };
 
   closeDialog = (dialog: Office.Dialog): void => {
     try {
@@ -618,14 +628,16 @@ class PopupController {
   // Used to reset dialog-related state variables in Redux Store
   // and the dialog reference stored in the class object.
   resetDialogStates = (): void => {
-    this.reduxStore.dispatch(this.popupActions.resetState());
-    this.reduxStore.dispatch(popupStateActions.onClearPopupState());
-    this.reduxStore.dispatch(officeActions.hideDialog());
+    reduxStore.dispatch(this.popupActions.resetState());
+    // @ts-expect-error
+    reduxStore.dispatch(popupStateActions.onClearPopupState());
+    // @ts-expect-error
+    reduxStore.dispatch(officeActions.hideDialog());
     this.dialog = {} as unknown as Office.Dialog;
   };
 
   getObjectPreviousState = (reportParams: ReportParams): ObjectData => {
-    const { objects } = this.reduxStore.getState().objectReducer;
+    const { objects } = reduxStore.getState().objectReducer;
     const indexOfOriginalValues = objects.findIndex(
       (report: ObjectData) => report.bindId === reportParams.bindId
     );
@@ -641,12 +653,12 @@ class PopupController {
   };
 
   getIsMultipleRepromptQueueEmpty = (): boolean => {
-    const { index = 0, total = 0 } = this.reduxStore.getState().repromptsQueueReducer;
+    const { index = 0, total = 0 } = reduxStore.getState().repromptsQueueReducer;
     return total === 0 || (total >= 1 && index === total);
   };
 
   getIsDialogAlreadyOpenForMultipleReprompt = (): boolean => {
-    const { index = 0, total = 0 } = this.reduxStore.getState().repromptsQueueReducer;
+    const { index = 0, total = 0 } = reduxStore.getState().repromptsQueueReducer;
     return total > 1 && index > 1;
   };
 
@@ -657,7 +669,7 @@ class PopupController {
     dialogType: string
   ): Promise<void> => {
     // First, clear reprompt task queue if the user cancels the popup.
-    this.reduxStore.dispatch(clearRepromptTask());
+    reduxStore.dispatch(clearRepromptTask());
 
     if (!isMultipleRepromptQueueEmpty && !isDataOverviewOpen) {
       // Close dialog when user cancels or an error occurs, but only if there are objects left to Multiple Reprompt,

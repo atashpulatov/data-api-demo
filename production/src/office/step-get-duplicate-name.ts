@@ -1,4 +1,4 @@
-import { ReduxStore } from '../store';
+import { reduxStore } from '../store';
 
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../types/object-types';
@@ -7,12 +7,6 @@ import operationErrorHandler from '../operation/operation-error-handler';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 
 class StepGetDuplicateName {
-  reduxStore: ReduxStore;
-
-  init(reduxStore: ReduxStore): void {
-    this.reduxStore = reduxStore;
-  }
-
   /**
    * Assigns new name to duplicated object.
    *
@@ -100,7 +94,7 @@ class StepGetDuplicateName {
   checkAndSolveNameConflicts = (nameCandidate: string): string => {
     let finalNameCandidate = nameCandidate;
 
-    const { objects } = this.reduxStore.getState().objectReducer;
+    const { objects } = reduxStore.getState().objectReducer;
 
     const objectsNames = objects.map(({ name }) => name);
 

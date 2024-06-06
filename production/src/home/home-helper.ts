@@ -3,6 +3,7 @@ import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-hel
 import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
 
 import officeStoreRestoreObject from '../office/store/office-store-restore-object';
+import { reduxStore } from '../store';
 
 import { errorService } from '../error/error-handler';
 import { officeContext } from '../office/office-context';
@@ -14,20 +15,17 @@ import { ObjectImportType } from '../mstr-object/constants';
 const SHOW_HIDDEN_KEY = 'showHidden';
 
 export class HomeHelper {
-  reduxStore: any;
-
   sessionActions: any;
 
   sessionHelper: any;
 
-  init(reduxStore: any, sessionActions: any, sessionHelper: any): void {
-    this.reduxStore = reduxStore;
+  init(sessionActions: any, sessionHelper: any): void {
     this.sessionActions = sessionActions;
     this.sessionHelper = sessionHelper;
   }
 
   saveLoginValues(): string {
-    const { authToken } = this.reduxStore.getState().sessionReducer;
+    const { authToken } = reduxStore.getState().sessionReducer;
     const location = this.getWindowLocation();
     if (this.sessionHelper.isDevelopment()) {
       if (!authToken) {
@@ -65,7 +63,7 @@ export class HomeHelper {
         officeStoreRestoreObject.getExcelSettingValue(SHOW_HIDDEN_KEY);
       const showHiddenLocalStorage = this.getStorageItem(SHOW_HIDDEN_KEY);
       const showHidden = showHiddenOfficeSettings || showHiddenLocalStorage !== 'false';
-      const { dispatch } = this.reduxStore;
+      const { dispatch } = reduxStore;
       dispatch(configActions.setShowHidden(showHidden));
     } catch (error) {
       console.error(error);
@@ -101,7 +99,7 @@ export class HomeHelper {
 
   async secureData(objects: any[]): Promise<void> {
     try {
-      const { dispatch } = this.reduxStore;
+      const { dispatch } = reduxStore;
       officeActions.toggleIsConfirmFlag(false)(dispatch);
 
       setTimeout(async () => {
@@ -120,7 +118,7 @@ export class HomeHelper {
             }
           }
           triggerClearData &&
-            this.reduxStore.dispatch(clearDataRequested(object.objectWorkingId, object.importType));
+            reduxStore.dispatch(clearDataRequested(object.objectWorkingId, object.importType));
         }
       }, 0);
     } catch (error) {
@@ -157,15 +155,15 @@ export class HomeHelper {
     const isAdvancedWorksheetTrackingSupported =
       officeContext.isAdvancedWorksheetTrackingSupported();
 
-    this.reduxStore.dispatch(officeActions.setIsShapeAPISupported(isShapeAPISupported));
-    this.reduxStore.dispatch(
+    reduxStore.dispatch(officeActions.setIsShapeAPISupported(isShapeAPISupported));
+    reduxStore.dispatch(
       officeActions.setIsOverviewWindowAPISupported(isOverviewWindowAPISupported)
     );
-    this.reduxStore.dispatch(officeActions.setIsPivotTableSupported(isPivotTableSupported));
-    this.reduxStore.dispatch(
+    reduxStore.dispatch(officeActions.setIsPivotTableSupported(isPivotTableSupported));
+    reduxStore.dispatch(
       officeActions.setIsInsertWorksheetAPISupported(isInsertWorksheetAPISupported)
     );
-    this.reduxStore.dispatch(
+    reduxStore.dispatch(
       officeActions.setIsAdvancedWorksheetTrackingSupported(isAdvancedWorksheetTrackingSupported)
     );
   }

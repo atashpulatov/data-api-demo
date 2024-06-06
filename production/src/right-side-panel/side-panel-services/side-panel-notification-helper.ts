@@ -5,6 +5,8 @@ import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { pageByHelper } from '../../page-by/page-by-helper';
 import { sidePanelHelper } from './side-panel-helper';
 
+import { reduxStore } from '../../store';
+
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
 
@@ -14,12 +16,6 @@ import { updateOperation } from '../../redux-reducer/operation-reducer/operation
 import { ObjectImportType } from '../../mstr-object/constants';
 
 class SidePanelNotificationHelper {
-  reduxStore: any;
-
-  init(reduxStore: any): void {
-    this.reduxStore = reduxStore;
-  }
-
   /**
    * Creates or updates duplicate popup.
    * Saves the popup and the objectWorkingId in state of RightSidePanel.
@@ -315,7 +311,7 @@ class SidePanelNotificationHelper {
     activeCellAddress: string,
     insertNewWorksheet: boolean
   ): void => {
-    this.reduxStore.dispatch(
+    reduxStore.dispatch(
       updateOperation({
         objectWorkingId,
         startCell: insertNewWorksheet ? 'A1' : activeCellAddress,
@@ -334,7 +330,7 @@ class SidePanelNotificationHelper {
   setClearDataPopups = (handleViewData: () => void): any => {
     let popup = null;
 
-    const { isSecured, isClearDataFailed } = this.reduxStore.getState().officeReducer;
+    const { isSecured, isClearDataFailed } = reduxStore.getState().officeReducer;
     isSecured &&
       (popup = {
         type: PopupTypes.DATA_CLEARED,

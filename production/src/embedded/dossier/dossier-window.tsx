@@ -107,9 +107,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
     popupHelper.officeMessageParent(message);
   };
 
-  const { installSessionProlongingHandler } = sessionHelper;
-
-  const prolongSession = installSessionProlongingHandler(handleCancel);
+  const prolongSession = sessionHelper.installSessionProlongingHandler(handleCancel);
 
   const extendSession = useCallback(
     (message: any = {}) => {

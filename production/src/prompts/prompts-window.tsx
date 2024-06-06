@@ -94,8 +94,6 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
     setImportType(editedObjectImportType);
   }
 
-  const { installSessionProlongingHandler } = sessionHelper;
-
   const newPromptsAnswers = useRef([]);
   const [isPromptLoading, setIsPromptLoading] = useState(true);
   const [embeddedDocument, setEmbeddedDocument] = useState(null);
@@ -110,7 +108,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
     popupHelper.officeMessageParent(message);
   };
 
-  const prolongSession = installSessionProlongingHandler(closePopup);
+  const prolongSession = sessionHelper.installSessionProlongingHandler(closePopup);
 
   const messageReceived = useCallback(
     (message: any = {}) => {

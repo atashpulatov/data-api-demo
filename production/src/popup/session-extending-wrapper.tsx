@@ -13,8 +13,7 @@ export const SessionExtendingWrapper: React.FC<SessionExtendingWrapperProps> = (
   id,
   onSessionExpire,
 }) => {
-  const { installSessionProlongingHandler } = sessionHelper;
-  const prolongSession = installSessionProlongingHandler(onSessionExpire);
+  const prolongSession = sessionHelper.installSessionProlongingHandler(onSessionExpire);
   return (
     <div id={id} onClick={prolongSession} onKeyDown={prolongSession} role='none'>
       {children}

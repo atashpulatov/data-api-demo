@@ -1,12 +1,8 @@
 import request from 'superagent';
 
+import { reduxStore } from '../store';
+
 class UserRestService {
-  reduxStore: any;
-
-  init(reduxStore: any): void {
-    this.reduxStore = reduxStore;
-  }
-
   getUserInfo(authToken: string, envUrl: string): any {
     return request
       .get(`${envUrl}/sessions/userInfo`)
@@ -16,7 +12,7 @@ class UserRestService {
   }
 
   getUserPreference(preferenceName: string): any {
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/preferences/user/${preferenceName}`;
 
@@ -28,7 +24,7 @@ class UserRestService {
   }
 
   setUserPreference(preferenceName: string, preferenceValue: any): any {
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/preferences/user/${preferenceName}?value=${preferenceValue}`;
 
