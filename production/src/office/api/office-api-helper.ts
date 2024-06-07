@@ -493,22 +493,8 @@ class OfficeApiHelper {
     prevOfficeTable: any;
   }): string {
     const {
-      mstrTable: {
-        isCrosstab,
-        prevCrosstabDimensions,
-        crosstabHeaderDimensions,
-        toCrosstabChange,
-        fromCrosstabChange,
-      },
+      mstrTable: { isCrosstab, crosstabHeaderDimensions, toCrosstabChange },
     } = instanceDefinition;
-
-    if (fromCrosstabChange) {
-      return this.offsetCellBy(
-        startCell,
-        -(prevCrosstabDimensions.columnsY - 1),
-        -prevCrosstabDimensions.rowsX
-      );
-    }
 
     if (!toCrosstabChange && (!isCrosstab || prevOfficeTable)) {
       return startCell;
