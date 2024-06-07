@@ -38,7 +38,9 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     PARENT_TOGGLE = "//button[contains(@class, 'mstr-rc-3-switch--regular') and ancestor::label/div/span[contains(text(), '%s')]]"
     CHILD_TOGGLE = "//button[contains(@class, 'mstr-rc-3-switch--small') and ancestor::label/div[contains(text(), '%s')]]"
     DRAGGABLE_CHILD_TOGGLE = "//button[contains(@class, 'mstr-rc-3-switch--small') and ancestor::label/div[contains(text(), '%s')] and ancestor::li/button[contains(@class, 'mstr-rc-3-draggable-list__item-drag-handle')]]"
- 
+    
+    OBJECT_GROUP = ".mstr-cc-object-tile-group"
+    ACTIVE_OBJECT_GROUP = "//div[contains(@class, 'mstr-cc-object-tile-group-name') and text()='%s']/parent::div/parent::div[contains(@class, 'active')]"
     OBJECT_TILE = "//article[contains(@class, 'object-tile')]"
     OBJECT_TILE_BY_NUMBER = "(//article[contains(@class, 'object-tile')])[%d]"
     CONTEXT_MENU = "//li[contains(@class, 'context-menu-item')]/span[text()='%s']"
@@ -229,6 +231,11 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
         aria_checked_value = element.get_attribute("aria-checked")
         return aria_checked_value == "true"
     
+    def get_number_of_object_groups(self):
+        self.focus_on_add_in_frame()
+        number_of_object_groups = len(self.get_elements_by_css(RightPanelMainBrowserPage.OBJECT_GROUP))
+        return number_of_object_groups
+    
     def get_number_of_object_tiles(self):
         self.focus_on_add_in_frame()
         number_of_object_tiles = len(self.get_elements_by_xpath(RightPanelMainBrowserPage.OBJECT_TILE))
@@ -249,3 +256,7 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
             return element.is_displayed()
         except MstrException:
             return False
+    
+    def is_object_group_active(self, object_group_title):
+        self.focus_on_add_in_frame()
+        return self.check_if_element_exists_by_xpath(RightPanelMainBrowserPage.ACTIVE_OBJECT_GROUP % object_group_title)

@@ -158,6 +158,12 @@ def step_impl(context, option):
     is_option_checked = context.pages.right_panel_page().is_draggable_child_toggle_option_checked(option)
     AssertUtil.assert_simple(is_option_checked, True)
 
+@step('I verified that number of object groups in side panel is {expected_number_of_object_groups}')
+def step_impl(context, expected_number_of_object_groups):
+    result = context.pages.right_panel_page().get_number_of_object_groups()
+
+    AssertUtil.assert_simple(result, int(expected_number_of_object_groups))
+
 @step('I verified that number of objects in side panel is {expected_number_of_object_tiles}')
 def step_impl(context, expected_number_of_object_tiles):
     result = context.pages.right_panel_page().get_number_of_object_tiles()
@@ -176,3 +182,8 @@ def step_impl(context, display_option):
 def step_impl(context):
     result = context.pages.right_panel_page().is_settings_visible()
     AssertUtil.assert_simple(result, False)
+
+@step('I verified object group "{object_group_title}" is active')
+def step_impl(context, object_group_title):
+    result = context.pages.right_panel_page().is_object_group_active(object_group_title)
+    AssertUtil.assert_simple(result, True)
