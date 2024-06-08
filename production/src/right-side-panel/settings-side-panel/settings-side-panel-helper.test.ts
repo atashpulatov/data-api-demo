@@ -193,4 +193,23 @@ describe('SettingsSidePanelHelper', () => {
       type: SettingsActionTypes.SET_OBJECT_AND_WORKSHEET_NAMING_SETTING,
     });
   });
+
+  it('should initialize data auto refresh', async () => {
+    // given
+    jest.resetAllMocks();
+    const getUserPreferenceMock = jest
+      .spyOn(userRestService, 'getUserPreference')
+      .mockResolvedValue({ value: true });
+
+    await settingsSidePanelHelper.initWorksheetNamingAnswers();
+
+    // then
+    expect(getUserPreferenceMock).toHaveBeenCalledWith(
+      UserPreferenceKey.EXCEL_PAGE_BY_AND_WORKSHEET_NAMING
+    );
+    expect(reduxStore.dispatch).toHaveBeenCalledWith({
+      objectAndWorksheetNamingSetting: ObjectAndWorksheetNamingOption.PAGE_NAME,
+      type: SettingsActionTypes.SET_OBJECT_AND_WORKSHEET_NAMING_SETTING,
+    });
+  });
 });

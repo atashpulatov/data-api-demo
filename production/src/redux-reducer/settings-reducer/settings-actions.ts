@@ -6,6 +6,7 @@ import {
   LoadWorksheetObjectInfoSettingAction,
   ObjectInfoSetting,
   SetDefaultImportTypeAction,
+  SetEnableDataAutoRefresh,
   SetPageByDisplaySettingAction,
   SetPivotTableAddAttributesToColumnsAction,
   SetPivotTableAddMetricsToValuesAction,
@@ -110,6 +111,11 @@ const setPivotTableAddMetricsToValues = (
   payload,
 });
 
+const setEnableDataAutoRefresh = (payload: boolean): SetEnableDataAutoRefresh => ({
+  type: SettingsActionTypes.SET_ENABLE_DATA_AUTO_REFRESH,
+  payload,
+});
+
 export const settingsActions = {
   toggleImportAttributesAsTextFlag,
   toggleMergeCrosstabColumnsFlag,
@@ -124,4 +130,5 @@ export const settingsActions = {
   setDefaultImportType,
   setPivotTableAddAttributesToColumns,
   setPivotTableAddMetricsToValues,
+  setEnableDataAutoRefresh,
 };

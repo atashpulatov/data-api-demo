@@ -66,6 +66,15 @@ class SettingsSidePanelHelper {
     reduxStore.dispatch(officeActions.toggleReusePromptAnswersFlag(reusePromptAnswers) as any);
   };
 
+  toggleDataAutoRefresh = async (enableDataAutoRefresh: boolean): Promise<void> => {
+    await userRestService.setUserPreference(
+      UserPreferenceKey.EXCEL_DATA_AUTO_REFRESH,
+      enableDataAutoRefresh
+    );
+
+    reduxStore.dispatch(settingsActions.setEnableDataAutoRefresh(enableDataAutoRefresh));
+  };
+
   // OBJECT INFO SETTINGS
   /**
    * Safely parses a JSON string into an array of ObjectInfoSetting objects.
@@ -258,7 +267,7 @@ class SettingsSidePanelHelper {
       const item = worksheetSettings.find(i => i.key === key);
       if (item) {
         acc.push({
-          ...item
+          ...item,
         });
       }
       return acc;
@@ -325,6 +334,14 @@ class SettingsSidePanelHelper {
     reduxStore.dispatch(settingsActions.setWorksheetNamingSetting(value));
   }
 
+  @initializationErrorDecorator.initializationWrapper
+  async initDataAutoRefreshSetting(): Promise<void> {
+    const { value } = await userRestService.getUserPreference(
+      UserPreferenceKey.EXCEL_DATA_AUTO_REFRESH
+    );
+    reduxStore.dispatch(settingsActions.setEnableDataAutoRefresh(value === 'true'));
+  }
+
   // SETTINGS PANEL SECTIONS
   /**
    * Returns the settings section for the prompt settings.
@@ -347,6 +364,29 @@ class SettingsSidePanelHelper {
             value: reusePromptAnswers,
             description: i18n.t(
               'When this function is enabled, previously given answers to prompts will be shared automatically across dashboards and reports.'
+            ),
+          },
+        ],
+      },
+    ],
+  });
+
+  getAutoRefreshSection = (reusePromptAnswers: boolean): SettingsSection => ({
+    key: 'auto-refresh-settings',
+    label: i18n.t('Data Refresh'),
+    initialExpand: false,
+    settingsGroups: [
+      {
+        key: 'auto-refresh-settings',
+        type: SettingPanelSection.SWITCH,
+        onSwitch: this.toggleDataAutoRefresh,
+        settings: [
+          {
+            key: 'enable-auto-refresh-settings',
+            label: i18n.t('Auto Refresh'),
+            value: reusePromptAnswers,
+            description: i18n.t(
+              'If enabled, the data will be automatically refreshed each time you open the Excel document.'
             ),
           },
         ],

@@ -20,6 +20,7 @@ const useInitializeSidePanel = (
       await settingsSidePanelHelper.initPageByDisplayAnswers();
       await settingsSidePanelHelper.initWorksheetNamingAnswers();
       await settingsSidePanelHelper.initObjectInfoSettings();
+      await settingsSidePanelHelper.initDataAutoRefreshSetting();
       await formattingSettingsHelper.initImportFormattingSettings();
       await pivotTableSettingsHelper.initPivotTableSettings();
       sidePanelHelper.clearRepromptTask();
@@ -40,8 +41,8 @@ const useInitializeSidePanel = (
     }
 
     initializeSidePanelActiveSelectionChangedListener();
-  // disable exhaustive-deps rule because this effect should only run once
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // disable exhaustive-deps rule because this effect should only run once
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };
 

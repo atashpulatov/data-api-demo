@@ -15,6 +15,7 @@ export type SettingsState = {
   pageByDisplaySetting: PageByDisplayType;
   pivotTableAddAttributesToColumns: boolean;
   pivotTableAddMetricsToValues: boolean;
+  enableDataAutoRefresh: boolean;
 };
 
 export enum SettingsActionTypes {
@@ -31,6 +32,7 @@ export enum SettingsActionTypes {
   SET_DEFAULT_IMPORT_TYPE = 'SET_DEFAULT_IMPORT_TYPE',
   SET_PIVOT_TABLE_ADD_ATTRIBUTES_TO_COLUMNS = 'SET_PIVOT_TABLE_ADD_ATTRIBUTES_TO_COLUMNS',
   SET_PIVOT_TABLE_ADD_METRICS_TO_VALUES = 'SET_PIVOT_TABLE_ADD_METRICS_TO_VALUES',
+  SET_ENABLE_DATA_AUTO_REFRESH = 'SET_ENABLE_DATA_AUTO_REFRESH',
 }
 
 export interface ToggleMergeCrosstabColumnsFlagAction extends Action {
@@ -98,6 +100,11 @@ export interface SetPivotTableAddMetricsToValuesAction extends Action {
   payload: boolean;
 }
 
+export interface SetEnableDataAutoRefresh extends Action {
+  type: SettingsActionTypes.SET_ENABLE_DATA_AUTO_REFRESH;
+  payload: boolean;
+}
+
 export type SettingsActions =
   | ToggleMergeCrosstabColumnsFlagAction
   | ToggleImportAttributesAsTextFlagAction
@@ -111,7 +118,8 @@ export type SettingsActions =
   | SetPageByDisplaySettingAction
   | SetDefaultImportTypeAction
   | SetPivotTableAddAttributesToColumnsAction
-  | SetPivotTableAddMetricsToValuesAction;
+  | SetPivotTableAddMetricsToValuesAction
+  | SetEnableDataAutoRefresh;
 
 export type ObjectInfoSetting = {
   key: string;

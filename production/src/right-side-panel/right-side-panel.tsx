@@ -3,6 +3,7 @@ import { connect, useSelector } from 'react-redux';
 import { OfficeApplicationType, SidePanel } from '@mstr/connector-components';
 
 import { useGetFilteredObjectListForSidePanelDetails } from '../redux-reducer/settings-reducer/settings-hooks';
+import useAutoRefreshObjects from './side-panel-hooks/use-auto-refresh-objects';
 import { useDialogPanelCommunication } from './side-panel-hooks/use-dialog-panel-communication';
 import { useGetSidePanelPopup } from './side-panel-hooks/use-get-side-panel-popup';
 import { useGetUpdatedDuplicatePopup } from './side-panel-hooks/use-get-updated-duplicate-popup';
@@ -81,6 +82,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   );
   useDialogPanelCommunication();
   useGetSidePanelPopup({ setSidePanelPopup, sidePanelPopup });
+  useAutoRefreshObjects();
 
   const duplicatePopupParams = useGetUpdatedDuplicatePopup({ sidePanelPopup, setSidePanelPopup });
   const filteredObjects = useGetFilteredObjectListForSidePanelDetails(loadedObjectsWrapped);

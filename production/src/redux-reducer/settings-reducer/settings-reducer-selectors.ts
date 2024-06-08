@@ -59,6 +59,11 @@ const selectPivotTableAddMetricsToValues = createSelector(
   settingsState => settingsState.pivotTableAddMetricsToValues
 );
 
+const selectEnableDataAutoRefresh = createSelector(
+  [getSettingsState],
+  settingsState => settingsState.enableDataAutoRefresh
+);
+
 export const settingsReducerSelectors = {
   selectSidePanelObjectInfoSettings,
   selectSidePanelMainSwitchValue,
@@ -71,4 +76,5 @@ export const settingsReducerSelectors = {
   selectMergeCrosstabColumns,
   selectPivotTableAddAttributesToColumns,
   selectPivotTableAddMetricsToValues,
+  selectEnableDataAutoRefresh,
 };
