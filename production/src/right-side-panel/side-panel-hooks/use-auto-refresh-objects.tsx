@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-// import { selectObjects } from '../../redux-reducer/object-reducer/object-reducer-selectors';
+import objectsAutoRefreshHelper from '../../helpers/objects-auto-refresh-helpers';
+
+import { selectObjects } from '../../redux-reducer/object-reducer/object-reducer-selectors';
 import { settingsReducerSelectors } from '../../redux-reducer/settings-reducer/settings-reducer-selectors';
 
 const useAutoRefreshObjects = (): void => {
@@ -11,12 +13,12 @@ const useAutoRefreshObjects = (): void => {
   );
   // Get the list of available working items (objects) from the store.
   // This collection should be already restored from the document and persisted in the store.
-  //   const objects = useSelector(selectObjects);
+  const objects = useSelector(selectObjects);
 
   useEffect(() => {
     // Trigger auto-refresh when data auto-refresh user setting is enabled.
     if (isAutoRefreshObjectsEnabled) {
-      //   objectsAutoRefreshUtils.refreshAllOnLoad(objects);
+      objectsAutoRefreshHelper.refreshAllOnLoad(objects);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAutoRefreshObjectsEnabled]);

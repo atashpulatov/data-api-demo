@@ -199,17 +199,15 @@ describe('SettingsSidePanelHelper', () => {
     jest.resetAllMocks();
     const getUserPreferenceMock = jest
       .spyOn(userRestService, 'getUserPreference')
-      .mockResolvedValue({ value: true });
+      .mockResolvedValue({ value: 'true' });
 
-    await settingsSidePanelHelper.initWorksheetNamingAnswers();
+    await settingsSidePanelHelper.initDataAutoRefreshSetting();
 
     // then
-    expect(getUserPreferenceMock).toHaveBeenCalledWith(
-      UserPreferenceKey.EXCEL_PAGE_BY_AND_WORKSHEET_NAMING
-    );
+    expect(getUserPreferenceMock).toHaveBeenCalledWith(UserPreferenceKey.EXCEL_DATA_AUTO_REFRESH);
     expect(reduxStore.dispatch).toHaveBeenCalledWith({
-      objectAndWorksheetNamingSetting: ObjectAndWorksheetNamingOption.PAGE_NAME,
-      type: SettingsActionTypes.SET_OBJECT_AND_WORKSHEET_NAMING_SETTING,
+      payload: true,
+      type: SettingsActionTypes.SET_ENABLE_DATA_AUTO_REFRESH,
     });
   });
 });
