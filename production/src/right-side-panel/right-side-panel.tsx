@@ -82,6 +82,9 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   );
   useDialogPanelCommunication();
   useGetSidePanelPopup({ setSidePanelPopup, sidePanelPopup });
+
+  // Trigger auto-refresh when data auto-refresh user setting is enabled.
+  // and objects (working items) are fully restored.
   useAutoRefreshObjects();
 
   const duplicatePopupParams = useGetUpdatedDuplicatePopup({ sidePanelPopup, setSidePanelPopup });

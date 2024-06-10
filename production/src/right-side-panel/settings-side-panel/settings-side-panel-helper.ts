@@ -66,6 +66,11 @@ class SettingsSidePanelHelper {
     reduxStore.dispatch(officeActions.toggleReusePromptAnswersFlag(reusePromptAnswers) as any);
   };
 
+  /**
+   * Toggles the data auto refresh flag and updates the user preference.
+   * @param enableDataAutoRefresh - The current value of the data auto refresh flag.
+   * @returns A Promise that resolves when the user preference is updated.
+   */
   toggleDataAutoRefresh = async (enableDataAutoRefresh: boolean): Promise<void> => {
     await userRestService.setUserPreference(
       UserPreferenceKey.EXCEL_DATA_AUTO_REFRESH,
@@ -334,6 +339,10 @@ class SettingsSidePanelHelper {
     reduxStore.dispatch(settingsActions.setWorksheetNamingSetting(value));
   }
 
+  /**
+   * Initialize data auto refresh value.
+   * Fetches preference value from server and sets it to the store.
+   */
   @initializationErrorDecorator.initializationWrapper
   async initDataAutoRefreshSetting(): Promise<void> {
     const { value } = await userRestService.getUserPreference(
@@ -371,7 +380,12 @@ class SettingsSidePanelHelper {
     ],
   });
 
-  getAutoRefreshSection = (reusePromptAnswers: boolean): SettingsSection => ({
+  /**
+   * Returns the settings section for the data refresh settings.
+   * @param enableDataAutoRefresh  A boolean indicating whether to enabla data auto refresh.
+   * @returns The settings section for the data refresh settings.
+   */
+  getAutoRefreshSection = (enableDataAutoRefresh: boolean): SettingsSection => ({
     key: 'auto-refresh-settings',
     label: i18n.t('Data Refresh'),
     initialExpand: false,
@@ -384,7 +398,7 @@ class SettingsSidePanelHelper {
           {
             key: 'enable-auto-refresh-settings',
             label: i18n.t('Auto Refresh'),
-            value: reusePromptAnswers,
+            value: enableDataAutoRefresh,
             description: i18n.t(
               'If enabled, the data will be automatically refreshed each time you open the Excel document.'
             ),
