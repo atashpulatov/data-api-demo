@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-import objectsAutoRefreshHelper from '../../helpers/objects-auto-refresh-helpers';
+import autoRefreshHelper from '../side-panel-services/auto-refresh/auto-refresh-helpers';
 
 import { selectObjects } from '../../redux-reducer/object-reducer/object-reducer-selectors';
 import { settingsReducerSelectors } from '../../redux-reducer/settings-reducer/settings-reducer-selectors';
@@ -18,7 +18,7 @@ const useAutoRefreshObjects = (): void => {
   useEffect(() => {
     // Trigger auto-refresh when data auto-refresh user setting is enabled.
     if (isAutoRefreshObjectsEnabled) {
-      objectsAutoRefreshHelper.refreshAllOnLoad(objects);
+      autoRefreshHelper.refreshAllOnLoad(objects);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAutoRefreshObjectsEnabled]);

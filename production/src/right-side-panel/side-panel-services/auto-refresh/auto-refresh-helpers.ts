@@ -1,10 +1,10 @@
-import { sidePanelService } from '../right-side-panel/side-panel-services/side-panel-service';
+import { sidePanelService } from '../side-panel-service';
 
-import { ObjectData } from '../types/object-types';
+import { ObjectData } from '../../../types/object-types';
 
-import { OfficeSettingsEnum } from '../constants/office-constants';
+import { OfficeSettingsEnum } from '../../../constants/office-constants';
 
-class ObjectsAutoRefreshHelper {
+class AutoRefreshHelper {
   /**
    * This function is used to trigger an auto-refresh operation on a set of objects if data auto-refresh's
    * temporary parameter is currently disabled.
@@ -74,5 +74,5 @@ class ObjectsAutoRefreshHelper {
   };
 }
 
-const objectsAutoRefreshHelper = new ObjectsAutoRefreshHelper();
-export default objectsAutoRefreshHelper;
+const autoRefreshHelper = new AutoRefreshHelper();
+export default autoRefreshHelper;
