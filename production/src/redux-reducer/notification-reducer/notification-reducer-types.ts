@@ -1,3 +1,4 @@
+import { ReactElement } from 'react';
 import type { GlobalNotificationTypes, ObjectNotificationTypes } from '@mstr/connector-components';
 import type { Action } from 'redux';
 
@@ -42,6 +43,26 @@ export interface GlobalNotification {
 export interface NotificationState {
   notifications: Notification[];
   globalNotification: GlobalNotification;
+  sidePanelNotification: SidePanelNotification | null;
+}
+
+export interface SidePanelNotification {
+  title?: string;
+  dismissNotification?: () => void;
+  type?: string;
+  children?: ReactElement;
+}
+
+export enum SidePanelNotificationType {
+  IN_PROGRESS = 'IN_PROGRESS',
+  STOPPED = 'STOPPED',
+}
+
+export interface SidePanelNotificationButton {
+  label: string;
+  onClick: () => void;
+  className: string;
+  tooltip?: string;
 }
 
 export enum NotificationActionTypes {
@@ -61,6 +82,8 @@ export enum NotificationActionTypes {
   RESTORE_ALL_NOTIFICATIONS = 'RESTORE_ALL_NOTIFICATIONS',
   MARK_STEP_COMPLETED = 'MARK_STEP_COMPLETED',
   TOGGLE_SECURED_FLAG = 'TOGGLE_SECURED_FLAG',
+  SET_SIDE_PANEL_NOTIFICATION = 'SET_SIDE_PANEL_NOTIFICATION',
+  UPDATE_SIDE_PANEL_NOTIFICATION = 'UPDATE_SIDE_PANEL_NOTIFICATION',
 }
 
 export enum TitleOperationInProgressMap {
@@ -188,6 +211,16 @@ export interface ToggleSecuredFlagAction extends Action {
   isSecured: boolean;
 }
 
+export interface SetSidePanelNotificationAction extends Action {
+  type: NotificationActionTypes.SET_SIDE_PANEL_NOTIFICATION;
+  payload: SidePanelNotification;
+}
+
+export interface UpdateSidePanelNotificationAction extends Action {
+  type: NotificationActionTypes.UPDATE_SIDE_PANEL_NOTIFICATION;
+  payload: SidePanelNotification;
+}
+
 export type NotificationActions =
   | ImportOperationAction
   | RefreshOperationAction
@@ -207,4 +240,6 @@ export type NotificationActions =
   | ClearNotificationsAction
   | ClearGlobalNotificationAction
   | RestoreAllNotificationsAction
-  | CreateGlobalNotificationAction;
+  | CreateGlobalNotificationAction
+  | SetSidePanelNotificationAction
+  | UpdateSidePanelNotificationAction;
