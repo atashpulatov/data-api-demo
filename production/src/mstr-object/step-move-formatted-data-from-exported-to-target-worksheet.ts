@@ -1,5 +1,6 @@
 import { officeApiHelper } from '../office/api/office-api-helper';
-import { getShapeCollection } from './formatted-data-helper'
+import { officeApiService } from '../office/api/office-api-service';
+import { getShapeCollection } from './formatted-data-helper';
 
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../types/object-types';
@@ -11,8 +12,8 @@ import { OFFICE_TABLE_EXTA_ROW, TITLE_EXCLUDED_DEFAULT_START_CELL_POSITION } fro
 class StepMoveFormattedDataFromExportedToTargetWorkSheet {
   /**
    * Moves formatted data(table) from export engine worksheet to current active worksheet.
-   * Ultimately deletes the source worksheet(export engine worksheet) after copying 
-   * the table range from source worksheet to target. 
+   * Ultimately deletes the source worksheet(export engine worksheet) after copying
+   * the table range from source worksheet to target.
    *
    * This function is subscribed as one of the operation steps with the key MOVE_FORMATTED_DATA_FROM_EXPORT_ENGINE,
    * therefore should be called only via operation bus.
@@ -24,12 +25,20 @@ class StepMoveFormattedDataFromExportedToTargetWorkSheet {
    * @param operationData.formattedData.sourceWorksheetId Source worksheet id to copy the range from
    * @param operationData.excelContext Reference to Excel Context used by Excel API functions
    */
-  moveFormattedDataFromExportedToTargetWorkSheet = async (objectData: ObjectData, operationData: OperationData): Promise<void> => {
+  moveFormattedDataFromExportedToTargetWorkSheet = async (
+    objectData: ObjectData,
+    operationData: OperationData
+  ): Promise<void> => {
     console.group('Moving exported formatted data to the selected worksheet');
     console.time('Total');
 
     try {
-      const { startCell, instanceDefinition, formattedData: { sourceWorksheetId }, excelContext } = operationData;
+      const {
+        startCell,
+        instanceDefinition,
+        formattedData: { sourceWorksheetId },
+        excelContext,
+      } = operationData;
       const { isCrosstab, objectWorkingId, worksheet } = objectData;
 
       const { rows, columns } = instanceDefinition;
@@ -39,32 +48,36 @@ class StepMoveFormattedDataFromExportedToTargetWorkSheet {
         sourceTableRows = rows - OFFICE_TABLE_EXTA_ROW;
       }
 
-      // Remove one row from source table rows, as getRange() utlimately adds an additional 
+      // Remove one row from source table rows, as getRange() utlimately adds an additional
       // row to source table range.
-      // Note: Get range starting from 'A3', to exclude the visualization title 
-      const sourceTableRange = officeApiHelper.getRange(columns, TITLE_EXCLUDED_DEFAULT_START_CELL_POSITION, sourceTableRows - OFFICE_TABLE_EXTA_ROW);
-      const targetTableRange = officeApiHelper.getRange(columns, startCell, rows - OFFICE_TABLE_EXTA_ROW);
-
-      const targetWorksheet = officeApiHelper.getExcelSheetById(
-        excelContext,
-        worksheet.id
+      // Note: Get range starting from 'A3', to exclude the visualization title
+      const sourceTableRange = officeApiService.getRange(
+        columns,
+        TITLE_EXCLUDED_DEFAULT_START_CELL_POSITION,
+        sourceTableRows - OFFICE_TABLE_EXTA_ROW
+      );
+      const targetTableRange = officeApiService.getRange(
+        columns,
+        startCell,
+        rows - OFFICE_TABLE_EXTA_ROW
       );
 
-      const sourceWorksheet = officeApiHelper.getExcelSheetById(
-        excelContext,
-        sourceWorksheetId
-      );
+      const targetWorksheet = officeApiHelper.getExcelSheetById(excelContext, worksheet.id);
+
+      const sourceWorksheet = officeApiHelper.getExcelSheetById(excelContext, sourceWorksheetId);
 
       const previousShapeCollection = await getShapeCollection(targetWorksheet, excelContext);
       const tableShapesStartIndex = previousShapeCollection?.items?.length;
 
-      await officeApiHelper.copyRangeFromSourceWorksheet(
+      await officeApiService.copyRangeFromSourceWorksheet(
         {
           sourceTableRange,
           sourceWorksheet,
           targetTableRange,
-          targetWorksheet
-        }, excelContext);
+          targetWorksheet,
+        },
+        excelContext
+      );
 
       sourceWorksheet.delete();
       await excelContext.sync();
@@ -73,17 +86,23 @@ class StepMoveFormattedDataFromExportedToTargetWorkSheet {
 
       if (currentShapeCollection?.items?.length > 0) {
         // Group the shape collection of imported table
-        const shapeGroup = this.groupShapeCollection(currentShapeCollection, targetWorksheet, tableShapesStartIndex);
+        const shapeGroup = this.groupShapeCollection(
+          currentShapeCollection,
+          targetWorksheet,
+          tableShapesStartIndex
+        );
 
         shapeGroup.load('id');
         await excelContext.sync();
 
-        // Link the shape group to imported table 
+        // Link the shape group to imported table
         objectData.shapeGroupId = shapeGroup.id;
       }
 
       operationStepDispatcher.updateObject(objectData);
-      operationStepDispatcher.completeMoveFormattedDataFromExportedToTargetWorkSheet(objectWorkingId);
+      operationStepDispatcher.completeMoveFormattedDataFromExportedToTargetWorkSheet(
+        objectWorkingId
+      );
     } catch (error) {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
@@ -91,7 +110,7 @@ class StepMoveFormattedDataFromExportedToTargetWorkSheet {
       console.timeEnd('Total');
       console.groupEnd();
     }
-  }
+  };
 
   /**
    * Groupes the shape collection of imported table into one shape group and links it to imported table.
@@ -99,7 +118,11 @@ class StepMoveFormattedDataFromExportedToTargetWorkSheet {
    * @param shapeCollection Shape collection of imported table
    * @param worksheet Excel worksheet, where the object has been imported
    */
-  private groupShapeCollection(currentShapeCollection: Excel.ShapeCollection, worksheet: Excel.Worksheet, tableShapesStartIndex: number): Excel.Shape {
+  private groupShapeCollection(
+    currentShapeCollection: Excel.ShapeCollection,
+    worksheet: Excel.Worksheet,
+    tableShapesStartIndex: number
+  ): Excel.Shape {
     const { items } = currentShapeCollection;
 
     const shapeCollectionCount = items.length;
@@ -114,5 +137,6 @@ class StepMoveFormattedDataFromExportedToTargetWorkSheet {
   }
 }
 
-const stepMoveFormattedDataFromExportedToTargetWorkSheet = new StepMoveFormattedDataFromExportedToTargetWorkSheet();
+const stepMoveFormattedDataFromExportedToTargetWorkSheet =
+  new StepMoveFormattedDataFromExportedToTargetWorkSheet();
 export default stepMoveFormattedDataFromExportedToTargetWorkSheet;

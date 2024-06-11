@@ -3,22 +3,22 @@ import { useTranslation } from 'react-i18next';
 import { connect, useSelector } from 'react-redux';
 import { OverflowTooltip } from '@mstr/rc';
 
-import getDocumentationLocale from '../helpers/get-documentation-locale';
-import { notificationService } from '../notification/notification-service';
-import officeReducerHelper from '../office/store/office-reducer-helper';
-import { sessionHelper } from '../storage/session-helper';
+import { authenticationService } from '../../authentication/authentication-service';
+import getDocumentationLocale from '../../helpers/get-documentation-locale';
+import { notificationService } from '../../notification/notification-service';
+import officeReducerHelper from '../../office/store/office-reducer-helper';
 
-import packageJson from '../../package.json';
-import { errorService } from '../error/error-handler';
-import i18n from '../i18n';
-import { officeContext } from '../office/office-context';
-import { popupController } from '../popup/popup-controller';
-import { officeActions } from '../redux-reducer/office-reducer/office-actions';
-import { officeSelectors } from '../redux-reducer/office-reducer/office-reducer-selectors';
-import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
-import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
+import packageJson from '../../../package.json';
+import { errorService } from '../../error/error-handler';
 // @ts-expect-error
-import logo from './assets/mstr_logo.png';
+import logo from '../../home/assets/mstr_logo.png';
+import i18n from '../../i18n';
+import { officeContext } from '../../office/office-context';
+import { popupController } from '../../popup/popup-controller';
+import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
+import { officeSelectors } from '../../redux-reducer/office-reducer/office-reducer-selectors';
+import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
+import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
 
 import './settings-menu.scss';
 
@@ -38,12 +38,12 @@ async function logout(hideSettingsPopup: () => void): Promise<void> {
   try {
     hideSettingsPopup();
     notificationService.dismissNotifications();
-    await sessionHelper.logOutRest();
+    await authenticationService.logOutRest(errorService);
     sessionActions.logOut();
   } catch (error) {
     errorService.handleError(error);
   } finally {
-    sessionHelper.logOutRedirect(true);
+    authenticationService.logOutRedirect(true);
   }
 }
 

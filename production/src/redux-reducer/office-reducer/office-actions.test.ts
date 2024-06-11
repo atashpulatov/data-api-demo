@@ -1,5 +1,3 @@
-import officeStoreHelper from '../../office/store/office-store-helper';
-
 import { OfficeActionsTypes } from './office-reducer-types';
 
 import { officeActions } from './office-actions';
@@ -7,7 +5,7 @@ import { officeActions } from './office-actions';
 describe('Office Actions', () => {
   it('should dispatch proper toggleStoreSecuredFlag action', () => {
     // given
-    jest.spyOn(officeStoreHelper, 'setFileSecuredFlag').mockImplementation();
+
     const listener = jest.fn();
 
     // when
@@ -18,9 +16,6 @@ describe('Office Actions', () => {
       type: OfficeActionsTypes.TOGGLE_SECURED_FLAG,
       isSecured: true,
     });
-
-    expect(officeStoreHelper.setFileSecuredFlag).toBeCalledTimes(1);
-    expect(officeStoreHelper.setFileSecuredFlag).toBeCalledWith(true);
   });
 
   it('should dispatch proper toggleIsSettingsFlag action', () => {
@@ -94,7 +89,6 @@ describe('Office Actions', () => {
 
   it('should dispatch proper toggleIsClearDataFailedFlag action', () => {
     // given
-    jest.spyOn(officeStoreHelper, 'setIsClearDataFailed').mockImplementation();
     const listener = jest.fn();
 
     // when
@@ -105,8 +99,5 @@ describe('Office Actions', () => {
       type: OfficeActionsTypes.TOGGLE_IS_CLEAR_DATA_FAILED_FLAG,
       isClearDataFailed: true,
     });
-
-    expect(officeStoreHelper.setIsClearDataFailed).toBeCalledTimes(1);
-    expect(officeStoreHelper.setIsClearDataFailed).toBeCalledWith(true);
   });
 });

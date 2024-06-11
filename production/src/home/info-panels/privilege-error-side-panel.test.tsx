@@ -1,7 +1,7 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 
-import { sessionHelper } from '../../storage/session-helper';
+import { authenticationService } from '../../authentication/authentication-service';
 
 import '@testing-library/jest-dom'; // TODO check why tests are not passing without it
 import PrivilegeErrorSidePanel from './privilege-error-side-panel';
@@ -23,7 +23,7 @@ describe('PrivilegeErrorSidePanel', () => {
   it('handleTryAgain should be called when button is clicked', () => {
     // Given
     const handleLogoutForPrivilegeMissingSpy = jest
-      .spyOn(sessionHelper, 'handleLogoutForPrivilegeMissing')
+      .spyOn(authenticationService, 'handleLogoutForPrivilegeMissing')
       .mockImplementation();
 
     // When

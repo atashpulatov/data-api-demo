@@ -17,8 +17,6 @@ import { RootState } from '../store';
 
 import { ObjectData } from '../types/object-types';
 
-import { Confirmation } from '../home/confirmation';
-import { SettingsMenu } from '../home/settings-menu';
 import { popupController } from '../popup/popup-controller';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { notificationReducerSelectors } from '../redux-reducer/notification-reducer/notification-reducer-selectors';
@@ -27,6 +25,8 @@ import { officeSelectors } from '../redux-reducer/office-reducer/office-reducer-
 import { selectOperations } from '../redux-reducer/operation-reducer/operation-reducer-selectors';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { repromptsQueueSelector } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer-selector';
+import { Confirmation } from './confirmation/confirmation';
+import { SettingsMenu } from './settings-menu/settings-menu';
 import SettingsSidePanel from './settings-side-panel/settings-side-panel';
 
 import './right-side-panel.scss';

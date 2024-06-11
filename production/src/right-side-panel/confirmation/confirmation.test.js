@@ -1,12 +1,12 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 
-import { notificationService } from '../notification/notification-service';
-import { officeApiHelper } from '../office/api/office-api-helper';
-import { officeRemoveHelper } from '../office/remove/office-remove-helper';
-import { homeHelper } from './home-helper';
+import { notificationService } from '../../notification/notification-service';
+import { officeApiHelper } from '../../office/api/office-api-helper';
+import { officeRemoveHelper } from '../../office/remove/office-remove-helper';
+import { sidePanelService } from '../side-panel-services/side-panel-service';
 
-import { errorService } from '../error/error-handler';
+import { errorService } from '../../error/error-handler';
 import { ConfirmationNotConnected } from './confirmation';
 
 const createMockFilesArray = () => {
@@ -30,7 +30,9 @@ describe('Confirmation', () => {
 
   it('should call proper methods from secureData when Ok button is clicked', () => {
     // given
-    const mockSecureData = jest.spyOn(homeHelper, 'secureData').mockImplementation(() => jest.fn);
+    const mockSecureData = jest
+      .spyOn(sidePanelService, 'secureData')
+      .mockImplementation(() => jest.fn);
     const mockDismissAll = jest
       .spyOn(notificationService, 'dismissNotifications')
       .mockImplementation(() => jest.fn);

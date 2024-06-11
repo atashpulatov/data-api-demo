@@ -1,4 +1,4 @@
-import { officeApiHelper } from '../../office/api/office-api-helper';
+import { authenticationHelper } from '../../authentication/authentication-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 
 import { errorService } from '../../error/error-handler';
@@ -24,7 +24,7 @@ class SidePanelOperationDecorator {
         const { onLine } = window.navigator;
 
         if (onLine) {
-          await officeApiHelper.checkStatusOfSessions();
+          await authenticationHelper.checkStatusOfSessions();
           if (officeReducerHelper.noOperationInProgress()) {
             return await originalMethod.apply(target, args);
           }

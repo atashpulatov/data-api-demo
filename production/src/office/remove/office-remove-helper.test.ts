@@ -1,4 +1,4 @@
-import { homeHelper } from '../../home/home-helper';
+import { browserHelper } from '../../helpers/browser-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 import { officeRemoveHelper } from './office-remove-helper';
 
@@ -15,7 +15,9 @@ describe('OfficeRemoveHelper', () => {
     // given
     const isClear = true;
     const object = {
-      isCrosstab: true, crosstabHeaderDimensions: {}, name: 'object',
+      isCrosstab: true,
+      crosstabHeaderDimensions: {},
+      name: 'object',
       objectWorkingId: 1234567,
       objectId: 'objectId',
       projectId: 'projectId',
@@ -37,8 +39,18 @@ describe('OfficeRemoveHelper', () => {
 
     // then
     expect(removeTableMock).toBeCalledTimes(1);
-    expect(removeTableMock).toBeCalledWith(officeTable, excelContextMock, object, object.isCrosstab);
-    expect(removeTableMock).toBeCalledWith(officeTable, excelContextMock, object, object.isCrosstab);
+    expect(removeTableMock).toBeCalledWith(
+      officeTable,
+      excelContextMock,
+      object,
+      object.isCrosstab
+    );
+    expect(removeTableMock).toBeCalledWith(
+      officeTable,
+      excelContextMock,
+      object,
+      object.isCrosstab
+    );
     expect(getItemMock).toBeCalledTimes(1);
   });
 
@@ -231,7 +243,7 @@ describe('OfficeRemoveHelper', () => {
       .spyOn(officeRemoveHelper, 'deleteTableInChunks')
       .mockResolvedValue();
     const isMacAndSafariBasedMock = jest
-      .spyOn(homeHelper, 'isMacAndSafariBased')
+      .spyOn(browserHelper, 'isMacAndSafariBased')
       .mockReturnValue(isSafari);
 
     const objectData = {
@@ -240,10 +252,9 @@ describe('OfficeRemoveHelper', () => {
       objectId: 'objectId',
       projectId: 'projectId',
       mstrObjectType: {
-        name: 'report'
-      }
+        name: 'report',
+      },
     } as ObjectData;
-
 
     // when
     await officeRemoveHelper.removeExcelTable(officeTable, excelContextMock, objectData, isClear);

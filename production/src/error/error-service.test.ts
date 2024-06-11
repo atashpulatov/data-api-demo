@@ -1,37 +1,17 @@
-import { homeHelper } from '../home/home-helper';
-import { notificationService } from '../notification/notification-service';
-import { sessionHelper } from '../storage/session-helper';
-
-import { reduxStore } from '../store';
+import { browserHelper } from '../helpers/browser-helper';
 
 import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { popupController } from '../popup/popup-controller';
-import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import { errorService } from './error-handler';
 import { OutsideOfRangeError } from './outside-of-range-error';
 import { ErrorType } from './constants';
 import * as Constants from './constants';
 
-jest.mock('../storage/session-helper');
 jest.useFakeTimers();
 
-// TODO fix after adding object notifications
 describe('ErrorService', () => {
-  beforeAll(() => {
-    errorService.init(
-      sessionActions,
-      sessionHelper,
-      notificationService,
-      popupController,
-      reduxStore,
-      homeHelper
-    );
-    errorService.displayErrorNotification = jest.fn();
-    console.warn = jest.fn();
-  });
-  afterEach(() => {
+  beforeEach(() => {
     jest.clearAllMocks();
   });
 
@@ -178,8 +158,8 @@ describe('ErrorService', () => {
       // given
       const response = { body: { iServerCode: '-2147171501' } };
       const error = { status: 404, response };
-      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
-      const spyLogOut = jest.spyOn(errorService, 'fullLogOut');
+      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification').mockImplementation();
+      const spyLogOut = jest.spyOn(errorService, 'fullLogOut').mockImplementation();
       // when
       await errorService.handleError(error);
       // then
@@ -193,8 +173,8 @@ describe('ErrorService', () => {
         status: 401,
         response: { body: { code: '' } },
       };
-      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
-      const spyLogOut = jest.spyOn(errorService, 'fullLogOut');
+      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification').mockImplementation();
+      const spyLogOut = jest.spyOn(errorService, 'fullLogOut').mockImplementation();
       // when
       await errorService.handleError(error);
       jest.runOnlyPendingTimers();
@@ -209,7 +189,7 @@ describe('ErrorService', () => {
         status: 401,
         response: { body: { code: 'ERR003' } },
       };
-      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
+      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification').mockImplementation();
       // when
       await errorService.handleError(error);
       // then
@@ -227,7 +207,7 @@ describe('ErrorService', () => {
           },
         },
       };
-      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
+      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification').mockImplementation();
       // when
       await errorService.handleError(error);
       // then
@@ -237,7 +217,7 @@ describe('ErrorService', () => {
     it('should display notification and logout on BAD_REQUEST_ERR', async () => {
       // given
       const error = { response: { status: 400 } };
-      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
+      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification').mockImplementation();
       // when
       await errorService.handleError(error);
       // then
@@ -247,8 +227,8 @@ describe('ErrorService', () => {
     it('should display notification on CONNECTION_BROKEN_ERR and NOR logout if flag is true', async () => {
       // given
       const error = { message: 'Possible causes: the network is offline,' };
-      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
-      const spyLogOut = jest.spyOn(errorService, 'fullLogOut');
+      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification').mockImplementation();
+      const spyLogOut = jest.spyOn(errorService, 'fullLogOut').mockImplementation();
       // when
       await errorService.handleError(error);
       // then
@@ -259,7 +239,7 @@ describe('ErrorService', () => {
     it('should display notification on BadRequestError', async () => {
       // given
       const error = { response: { status: 400 } };
-      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
+      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification').mockImplementation();
       // when
       await errorService.handleError(error);
       // then
@@ -269,7 +249,7 @@ describe('ErrorService', () => {
     it('should display notification on OutsideOfRangeError ', async () => {
       // given
       const error = new OutsideOfRangeError();
-      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
+      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification').mockImplementation();
       // when
       await errorService.handleError(error);
       // then
@@ -279,7 +259,7 @@ describe('ErrorService', () => {
     it('should display notification on InternalServerError with no error body', async () => {
       // given
       const error = { status: 500 };
-      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
+      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification').mockImplementation();
       // when
       await errorService.handleError(error);
       // then
@@ -290,7 +270,7 @@ describe('ErrorService', () => {
       // given
       const response = { status: 500, body: { iServerCode: '-2147171501' } };
       const error = { response };
-      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
+      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification').mockImplementation();
       // when
       await errorService.handleError(error);
       // then
@@ -301,7 +281,7 @@ describe('ErrorService', () => {
       // given
       const response = { status: 500, body: { iServerCode: '-2147171502' } };
       const error = { response };
-      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
+      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification').mockImplementation();
       // when
       await errorService.handleError(error);
       // then
@@ -312,7 +292,7 @@ describe('ErrorService', () => {
       // given
       const response = { status: 500, body: { iServerCode: '-2147205488' } };
       const error = { response };
-      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
+      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification').mockImplementation();
       // when
       await errorService.handleError(error);
       // then
@@ -322,7 +302,7 @@ describe('ErrorService', () => {
       // given
       const response = { status: 500, body: { iServerCode: '-2147072488' } };
       const error = { response };
-      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
+      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification').mockImplementation();
       // when
       await errorService.handleError(error);
       // then
@@ -333,7 +313,7 @@ describe('ErrorService', () => {
       // given
       const response = { status: 500, body: { iServerCode: '-2147216373' } };
       const error = { response };
-      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
+      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification').mockImplementation();
       // when
       await errorService.handleError(error);
       // then
@@ -344,7 +324,7 @@ describe('ErrorService', () => {
       // given
       const response = { status: 403, body: { iServerCode: '-2147213784' } };
       const error = { response };
-      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
+      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification').mockImplementation();
       // when
       await errorService.handleError(error);
       // then
@@ -358,7 +338,7 @@ describe('ErrorService', () => {
         response,
         mstrObjectType: mstrObjectEnum.mstrObjectType.dossier.name,
       };
-      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
+      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification').mockImplementation();
       // when
       await errorService.handleError(error);
       // then
@@ -371,7 +351,8 @@ describe('ErrorService', () => {
         status: 401,
         response: { body: { code: '' } },
       };
-      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
+      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification').mockImplementation();
+      // @ts-expect-error
       global.setTimeout = jest.fn();
       // when
       await errorService.handleError(error);
@@ -383,8 +364,9 @@ describe('ErrorService', () => {
     it('should logout on EnvironmentNotFound', async () => {
       // given
       const error = { status: 404 };
-      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
+      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification').mockImplementation();
       // when
+      // @ts-expect-error
       await errorService.handleError(error, true);
       // then
       expect(spyMethod).toBeCalled();
@@ -396,7 +378,9 @@ describe('ErrorService', () => {
         name: 'RichApi.Error',
         message: "A table can't overlap another table. ",
       };
-      const notificationSpy = jest.spyOn(errorService, 'displayErrorNotification');
+      const notificationSpy = jest
+        .spyOn(errorService, 'displayErrorNotification')
+        .mockImplementation();
       // when
       await errorService.handleError(error);
       // then
@@ -409,7 +393,7 @@ describe('ErrorService', () => {
         response: { status: 404 },
         type: ErrorType.INVALID_VIZ_KEY,
       };
-      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
+      const spyMethod = jest.spyOn(errorService, 'displayErrorNotification').mockImplementation();
       // when
       await errorService.handleError(error);
       // then
@@ -474,7 +458,9 @@ describe('ErrorService', () => {
         name: 'RichApi.Error',
         message: 'Excel is not defined',
       };
-      const notificationSpy = jest.spyOn(errorService, 'displayErrorNotification');
+      const notificationSpy = jest
+        .spyOn(errorService, 'displayErrorNotification')
+        .mockImplementation();
       // when
       await errorService.handleError(error);
       // then
@@ -487,7 +473,9 @@ describe('ErrorService', () => {
         name: 'RichApi.Error',
         message: "A table can't overlap another table. ",
       };
-      const notificationSpy = jest.spyOn(errorService, 'displayErrorNotification');
+      const notificationSpy = jest
+        .spyOn(errorService, 'displayErrorNotification')
+        .mockImplementation();
 
       // when
       await errorService.handleError(error);
@@ -501,7 +489,9 @@ describe('ErrorService', () => {
         name: 'RichApi.Error',
         message: 'Generic error message',
       };
-      const notificationSpy = jest.spyOn(errorService, 'displayErrorNotification');
+      const notificationSpy = jest
+        .spyOn(errorService, 'displayErrorNotification')
+        .mockImplementation();
       // when
       await errorService.handleError(error);
       // then
@@ -511,7 +501,9 @@ describe('ErrorService', () => {
     it('should display notification on OutsideOfRangeError', async () => {
       // given
       const error = new OutsideOfRangeError();
-      const notificationSpy = jest.spyOn(errorService, 'displayErrorNotification');
+      const notificationSpy = jest
+        .spyOn(errorService, 'displayErrorNotification')
+        .mockImplementation();
       // when
       await errorService.handleError(error);
       // then
@@ -530,38 +522,13 @@ describe('ErrorService', () => {
       jest.spyOn(Constants, 'errorMessageFactory').mockReturnValue(() => 'error message');
 
       // When
+      // @ts-expect-error
       errorService.handleError(error, {
         dialogType: DialogType.importedDataOverview,
       });
 
       // Then
       expect(closePopupMock).toHaveBeenCalled();
-    });
-  });
-  describe('logout', () => {
-    it('should call fullLogout', async () => {
-      // given
-      const fullLogOutSpy = jest.spyOn(errorService, 'fullLogOut');
-      const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest');
-      const logOutSpy = jest.spyOn(sessionActions, 'logOut');
-      const logOutRedirectSpy = jest.spyOn(sessionHelper, 'logOutRedirect');
-      // when
-      await errorService.fullLogOut();
-      // then
-      expect(fullLogOutSpy).toBeCalled();
-      expect(logOutRestSpy).toBeCalled();
-      expect(logOutSpy).toBeCalled();
-      expect(logOutRedirectSpy).toBeCalled();
-    });
-
-    it('should handle LogoutError', async () => {
-      // given
-      const error = { message: 'error' };
-      const fullLogOutSpy = jest.spyOn(errorService, 'handleError');
-      // when
-      await errorService.handleError(error);
-      // then
-      expect(fullLogOutSpy).toBeCalled();
     });
   });
   it.each`
@@ -576,7 +543,7 @@ describe('ErrorService', () => {
       // given
       const mockHandleError = jest.spyOn(errorService, 'handleError').mockImplementation();
 
-      jest.spyOn(homeHelper, 'isMacAndSafariBased').mockReturnValueOnce(isMacAndSafariBased);
+      jest.spyOn(browserHelper, 'isMacAndSafariBased').mockReturnValueOnce(isMacAndSafariBased);
 
       // when
       errorService.handleSidePanelActionError(error);

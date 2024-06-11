@@ -1,8 +1,13 @@
 import { PopupTypes } from '@mstr/connector-components';
 
 import { authenticationHelper } from '../authentication/authentication-helper';
+import { authenticationService } from '../authentication/authentication-service';
+import { browserHelper } from '../helpers/browser-helper';
+import { notificationService } from '../notification/notification-service';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { pageByHelper } from '../page-by/page-by-helper';
+
+import { reduxStore } from '../store';
 
 import { PageByDisplayType } from '../page-by/page-by-types';
 import {
@@ -14,10 +19,18 @@ import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-red
 import i18n from '../i18n';
 import { getNotificationButtons } from '../notification/notification-buttons';
 import { OperationTypes } from '../operation/operation-type-names';
-import { deleteObjectNotification } from '../redux-reducer/notification-reducer/notification-action-creators';
+import { popupController } from '../popup/popup-controller';
+import {
+  clearGlobalNotification,
+  createSessionExpiredNotification,
+  deleteObjectNotification,
+  displayGlobalNotification,
+  displayObjectWarning,
+} from '../redux-reducer/notification-reducer/notification-action-creators';
 import { cancelOperation } from '../redux-reducer/operation-reducer/operation-actions';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
+import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import {
   errorMessageFactory,
   ErrorMessages,
@@ -33,34 +46,6 @@ const COLUMN_EXCEL_API_LIMIT = 5000;
 const TIMEOUT = 3000;
 
 class ErrorService {
-  sessionActions: any;
-
-  sessionHelper: any;
-
-  notificationService: any;
-
-  popupController: any;
-
-  reduxStore: any;
-
-  homeHelper: any;
-
-  init(
-    sessionActions: any,
-    sessionHelper: any,
-    notificationService: any,
-    popupController: any,
-    reduxStore: any,
-    homeHelper: any
-  ): void {
-    this.sessionActions = sessionActions;
-    this.sessionHelper = sessionHelper;
-    this.notificationService = notificationService;
-    this.popupController = popupController;
-    this.reduxStore = reduxStore;
-    this.homeHelper = homeHelper;
-  }
-
   /**
    * Handles error thrown during invoking side panel actions like refresh, edit etc.
    * For Webkit based clients (Safari, Excel for Mac)
@@ -73,7 +58,7 @@ class ErrorService {
     const castedError = String(error);
     const { CONNECTION_BROKEN } = IncomingErrorStrings;
     if (castedError.includes(CONNECTION_BROKEN)) {
-      if (this.homeHelper.isMacAndSafariBased()) {
+      if (browserHelper.isMacAndSafariBased()) {
         const connectionCheckerLoop = (): void => {
           const checkInterval = setInterval(() => {
             authenticationHelper.doesConnectionExist(checkInterval);
@@ -126,7 +111,7 @@ class ErrorService {
     } else if (errorType === ErrorType.PAGE_BY_IMPORT_ERR) {
       this.handlePageByImportError(objectWorkingId, errorMessage, callback);
     } else {
-      const { isDataOverviewOpen } = this.reduxStore?.getState()?.popupStateReducer || {};
+      const { isDataOverviewOpen } = reduxStore?.getState()?.popupStateReducer || {};
 
       // Only in Overview dialog, close reprompt dialog to show any error derived
       // from interaction with Prompts' dialog.
@@ -137,11 +122,14 @@ class ErrorService {
       // Mainly for Reprompt All workflow but covers others, close dialog if somehow remained open
       await this.closePopupIfOpen(!isDataOverviewOpen);
       // Show warning notification
-      this.notificationService.showObjectWarning(objectWorkingId, {
-        title: errorMessage,
-        message: details,
-        callback,
-      });
+      reduxStore.dispatch(
+        // @ts-expect-error
+        displayObjectWarning(objectWorkingId, {
+          title: errorMessage,
+          message: details,
+          callback,
+        })
+      );
     }
   };
 
@@ -164,7 +152,7 @@ class ErrorService {
     const { pageBySiblings, sourceObject } = pageByHelper.getAllPageByObjects(objectWorkingId);
     const allPageByObjects = [sourceObject, ...pageBySiblings];
 
-    const { operations } = this.reduxStore.getState().operationReducer as OperationState;
+    const { operations } = reduxStore.getState().operationReducer as OperationState;
     for (const sibling of pageBySiblings) {
       const isThereOperationForSibling = operations.some(
         operation => operation.objectWorkingId === sibling.objectWorkingId
@@ -237,15 +225,15 @@ class ErrorService {
    */
   clearOperationsForPageBySiblings = (objectWorkingId: number): void => {
     const { pageBySiblings } = pageByHelper.getAllPageByObjects(objectWorkingId);
-    const { operations } = this.reduxStore.getState().operationReducer;
+    const { operations } = reduxStore.getState().operationReducer;
 
     for (const sibling of pageBySiblings) {
       const isThereOperationForSibling = operations.some(
         (operation: OperationData) => operation.objectWorkingId === sibling.objectWorkingId
       );
       if (isThereOperationForSibling) {
-        this.reduxStore.dispatch(cancelOperation(sibling.objectWorkingId));
-        this.reduxStore.dispatch(deleteObjectNotification(sibling.objectWorkingId));
+        reduxStore.dispatch(cancelOperation(sibling.objectWorkingId));
+        reduxStore.dispatch(deleteObjectNotification(sibling.objectWorkingId));
       }
     }
   };
@@ -384,12 +372,12 @@ class ErrorService {
     const errorDetails = (error.response && error.response.text) || error.message || '';
     const details = errorMessage !== errorDetails ? errorDetails : '';
     if (type === ErrorType.UNAUTHORIZED_ERR) {
-      this.notificationService.sessionExpired();
+      reduxStore.dispatch(createSessionExpiredNotification());
       return;
     }
     const payload = this.createNotificationPayload(errorMessage, details);
     payload.children = this.getChildrenButtons();
-    this.notificationService.globalWarningAppeared(payload);
+    reduxStore.dispatch(displayGlobalNotification(payload));
   };
 
   /**
@@ -401,7 +389,7 @@ class ErrorService {
       {
         type: 'basic',
         label: i18n.t('OK'),
-        onClick: () => this.notificationService.globalNotificationDissapear(),
+        onClick: () => reduxStore.dispatch(clearGlobalNotification()),
       },
     ]);
 
@@ -503,10 +491,15 @@ class ErrorService {
    * Function logging out user from the application
    */
   async fullLogOut(): Promise<void> {
-    this.notificationService.dismissNotifications();
-    await this.sessionHelper.logOutRest();
-    this.sessionActions.logOut();
-    this.sessionHelper.logOutRedirect();
+    console.log('this', this);
+    notificationService.dismissNotifications();
+    console.log('this', this);
+    await authenticationService.logOutRest(this);
+    console.log('this', this);
+    sessionActions.logOut();
+    console.log('this', this);
+    authenticationService.logOutRedirect();
+    console.log('this', this);
   }
 
   /**
@@ -523,7 +516,7 @@ class ErrorService {
         type: 'basic',
         label: 'Ok',
         onClick: () => {
-          this.notificationService.globalNotificationDissapear();
+          reduxStore.dispatch(clearGlobalNotification());
         },
       },
     ];
@@ -541,17 +534,17 @@ class ErrorService {
    * * @param shouldClose flag indicated whether to close the dialog or not
    */
   closePopupIfOpen = async (shouldClose: boolean): Promise<void> => {
-    const storeState = this.reduxStore.getState();
+    const storeState = reduxStore.getState();
 
     const { isDialogOpen } = storeState.officeReducer;
 
     if (isDialogOpen && shouldClose) {
       const isDialogOpenForReprompt = storeState.repromptsQueueReducer?.total > 0;
 
-      await this.popupController.closeDialog(this.popupController.dialog);
-      this.popupController.resetDialogStates();
+      await popupController.closeDialog(popupController.dialog);
+      popupController.resetDialogStates();
       // clear Reprompt task queue if in Reprompt All workflow
-      isDialogOpenForReprompt && this.reduxStore.dispatch(clearRepromptTask());
+      isDialogOpenForReprompt && reduxStore.dispatch(clearRepromptTask());
     }
   };
 
@@ -562,7 +555,7 @@ class ErrorService {
    * available in the environment as it was deleted at the time of reprompting.
    */
   closePromptsDialogInOverview = (): void => {
-    const { repromptsQueueReducer, popupStateReducer } = this.reduxStore.getState();
+    const { repromptsQueueReducer, popupStateReducer } = reduxStore.getState();
 
     // Verify if there are any reprompts in queue to determine whether it's multiple re-prompt
     // triggered from overview (popupType is set to repromptDossierDataOverview or
@@ -578,8 +571,9 @@ class ErrorService {
         (popupType === DialogType.repromptDossierDataOverview ||
           popupType === DialogType.repromptReportDataOverview)
       ) {
-        this.reduxStore.dispatch(popupStateActions.setPopupType(DialogType.importedDataOverview));
-        this.popupController.runImportedDataOverviewPopup();
+        // @ts-expect-error
+        reduxStore.dispatch(popupStateActions.setPopupType(DialogType.importedDataOverview));
+        popupController.runImportedDataOverviewPopup();
       }
     }
   };

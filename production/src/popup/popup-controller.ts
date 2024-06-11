@@ -17,7 +17,6 @@ import { ObjectData } from '../types/object-types';
 import { DialogResponse, ReportParams } from './popup-controller-types';
 
 import { selectorProperties } from '../attribute-selector/selector-properties';
-import { errorService } from '../error/error-handler';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import {
@@ -41,14 +40,17 @@ class PopupController {
 
   overviewHelper: any;
 
+  errorService: any;
+
   reportParams: ReportParams;
 
   dialog: Office.Dialog;
 
-  init = (sessionActions: any, popupActions: any, overviewHelper: any): void => {
+  init = (sessionActions: any, popupActions: any, overviewHelper: any, errorService: any): void => {
     this.sessionActions = sessionActions;
     this.popupActions = popupActions;
     this.overviewHelper = overviewHelper;
+    this.errorService = errorService;
     // The following vars used to store references to current object reportParams and dialog
     this.reportParams = null;
     this.dialog = {} as unknown as Office.Dialog;
@@ -152,7 +154,7 @@ class PopupController {
       await authenticationHelper.validateAuthToken();
     } catch (error) {
       console.error({ error });
-      errorService.handleError(error);
+      this.errorService.handleError(error);
       return;
     }
 
@@ -212,7 +214,7 @@ class PopupController {
         );
       }
     } catch (error) {
-      errorService.handleError(error);
+      this.errorService.handleError(error);
     }
   };
 
@@ -348,7 +350,7 @@ class PopupController {
           if (isDataOverviewOpen) {
             reduxStore.dispatch(this.popupActions.resetState());
           }
-          errorService.handleError(response.error);
+          this.errorService.handleError(response.error);
           break;
         default:
           break;
@@ -362,8 +364,7 @@ class PopupController {
       }
     } catch (error) {
       console.error(error);
-      // @ts-expect-error TODO: convert error handler to TypeScript
-      errorService.handleError(error, { dialogType });
+      this.errorService.handleError(error, { dialogType });
     } finally {
       // always reset this.reportParams to prevent reusing old references in future popups
       this.reportParams = null;

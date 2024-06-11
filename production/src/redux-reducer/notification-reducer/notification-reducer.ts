@@ -18,12 +18,7 @@ import i18n from '../../i18n';
 import { getNotificationButtons } from '../../notification/notification-buttons';
 import { OperationSteps } from '../../operation/operation-steps';
 import { OperationTypes } from '../../operation/operation-type-names';
-import {
-  titleOperationCompletedMap,
-  titleOperationFailedMap,
-  titleOperationInProgressMap,
-} from './notification-title-maps';
-import { ErrorMessages } from '../../error/constants';
+import { titleOperationCompletedMap, titleOperationInProgressMap } from './notification-title-maps';
 
 const initialState: NotificationState = { notifications: [], globalNotification: { type: '' } };
 
@@ -85,7 +80,7 @@ const createProgressNotification = (
 
   if (operationType !== OperationTypes.CLEAR_DATA_OPERATION) {
     notificationButtons = getNotificationButtons(
-      getCancelButton(objectWorkingId, operationType, operationId)
+      notificationService.getCancelButton(objectWorkingId, operationType, operationId)
     );
   }
 
@@ -179,8 +174,8 @@ const displayNotificationWarning = (
     payload.objectWorkingId
   );
 
-  const buttons = getOkButton(payload);
-  const title = getTitle(payload, notificationToUpdate);
+  const buttons = notificationService.getOkButton(payload);
+  const title = notificationService.getTitle(payload, notificationToUpdate);
 
   const updatedNotification = {
     objectWorkingId: payload.objectWorkingId,
@@ -250,41 +245,6 @@ const restoreAllNotifications = (
   ...state,
   notifications: payload,
 });
-
-const getOkButton = (payload: any): any[] => [
-  {
-    type: 'basic',
-    label: i18n.t('OK'),
-    onClick: payload.notification.callback,
-  },
-];
-
-const getCancelButton = (
-  objectWorkingId: number,
-  operationType: OperationTypes,
-  operationId: string
-): any[] => [
-  {
-    type: 'basic',
-    label: i18n.t('Cancel'),
-    onClick: () => {
-      if (operationType === OperationTypes.IMPORT_OPERATION) {
-        notificationService.removeObjectFromNotification(objectWorkingId);
-      }
-      notificationService.cancelOperationFromNotification(operationId);
-      notificationService.dismissNotification(objectWorkingId);
-    },
-  },
-];
-
-function getTitle(
-  payload: { objectWorkingId: number; notification: Notification },
-  notificationToUpdate: Notification
-): string {
-  return payload.notification.title === ErrorMessages.GENERIC_SERVER_ERR
-    ? titleOperationFailedMap[notificationToUpdate.operationType as OperationTypesWithNotification]
-    : payload.notification.title;
-}
 
 function createNewState(
   state: NotificationState,

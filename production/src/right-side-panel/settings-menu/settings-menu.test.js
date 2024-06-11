@@ -3,17 +3,17 @@ import { Provider } from 'react-redux';
 import { fireEvent, render } from '@testing-library/react';
 import { createStore } from 'redux';
 
-import overflowHelper from '../helpers/helpers';
-import { sessionHelper } from '../storage/session-helper';
+import { authenticationService } from '../../authentication/authentication-service';
+import overflowHelper from '../../helpers/helpers';
 
-import { rootReducer } from '../store';
+import { rootReducer } from '../../store';
 
-import { errorService } from '../error/error-handler';
-import { popupController } from '../popup/popup-controller';
-import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
+import { errorService } from '../../error/error-handler';
+import { popupController } from '../../popup/popup-controller';
+import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
 import { SettingsMenuNotConnected } from './settings-menu';
 
-import { mockReports } from '../../__mocks__/mockData';
+import { mockReports } from '../../../__mocks__/mockData';
 
 describe('Settings Menu', () => {
   afterEach(() => {
@@ -86,9 +86,11 @@ describe('Settings Menu', () => {
 
   it('should log out on element logout click', async () => {
     // given
-    const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest').mockImplementation(() => {});
+    const logOutRestSpy = jest
+      .spyOn(authenticationService, 'logOutRest')
+      .mockImplementation(() => {});
     const logOutSpy = jest.spyOn(sessionActions, 'logOut');
-    const logOutRedirectSpy = jest.spyOn(sessionHelper, 'logOutRedirect');
+    const logOutRedirectSpy = jest.spyOn(authenticationService, 'logOutRedirect');
 
     const { getByText } = render(
       <Provider store={store}>
@@ -108,7 +110,7 @@ describe('Settings Menu', () => {
 
   it('should handle error on logout', () => {
     // given
-    const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest').mockImplementation(() => {
+    const logOutRestSpy = jest.spyOn(authenticationService, 'logOutRest').mockImplementation(() => {
       throw new Error();
     });
     const handleErrorSpy = jest.spyOn(errorService, 'handleError').mockImplementation();

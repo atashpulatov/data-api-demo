@@ -551,21 +551,21 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
 
     expect(result).toEqual([42]);
   });
-  it('getExcelSettingValue works as expected', () => {
-    // given
-    const key = 'settingsKey';
-    const value = 'value';
-    settingsMock.saveAsync = jest.fn();
-    settingsMock.set(key, value);
-    jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
+  // it('getExcelSettingValue works as expected', () => {
+  //   // given
+  //   const key = 'settingsKey';
+  //   const value = 'value';
+  //   settingsMock.saveAsync = jest.fn();
+  //   settingsMock.set(key, value);
+  //   jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
 
-    // when
-    const result = officeStoreRestoreObject.getExcelSettingValue(key);
+  //   // when
+  //   const result = officeStoreRestoreObject.getExcelSettingValue(key);
 
-    // then
-    expect(officeStoreHelper.getOfficeSettings).toBeCalledTimes(1);
-    expect(result).toEqual(value);
-  });
+  //   // then
+  //   expect(officeStoreHelper.getOfficeSettings).toBeCalledTimes(1);
+  //   expect(result).toEqual(value);
+  // });
   it('should transform prompted objects with mstrObjectType 55 and non-array promptsAnswers into array', () => {
     const objects = [
       { isPrompted: true, promptsAnswers: 'test', mstrObjectType: { type: 55 } },

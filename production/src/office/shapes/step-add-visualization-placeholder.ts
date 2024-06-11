@@ -1,4 +1,5 @@
 import { officeApiHelper } from '../api/office-api-helper';
+import { officeApiService } from '../api/office-api-service';
 
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
@@ -26,7 +27,7 @@ class StepAddVisualizationPlaceholder {
       const { objectWorkingId, shapeProps, name: visualizationName } = objectData;
       const excelContext = await officeApiHelper.getExcelContext();
 
-      const shape = await officeApiHelper.addGeometricShape(
+      const shape = await officeApiService.addGeometricShape(
         excelContext,
         shapeProps,
         visualizationName

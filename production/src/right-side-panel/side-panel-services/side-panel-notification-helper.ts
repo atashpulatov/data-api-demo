@@ -1,6 +1,6 @@
 import { PageByRefreshFailedOptions, PopupTypes } from '@mstr/connector-components';
 
-import { officeApiHelper } from '../../office/api/office-api-helper';
+import { officeApiService } from '../../office/api/office-api-service';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { pageByHelper } from '../../page-by/page-by-helper';
 import { sidePanelHelper } from './side-panel-helper';
@@ -49,7 +49,7 @@ class SidePanelNotificationHelper {
     setDuplicatedObjectId(objectWorkingId);
     setSidePanelPopup({
       type: PopupTypes.DUPLICATE,
-      activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
+      activeCell: officeApiService.getCellAddressWithDollars(activeCellAddress),
       onImport: (isActiveCellOptionSelected: boolean): void => {
         sidePanelHelper.duplicateObject(objectWorkingId, !isActiveCellOptionSelected, false);
         closePopup();
@@ -170,7 +170,7 @@ class SidePanelNotificationHelper {
 
     setSidePanelPopup({
       type: PopupTypes.RANGE_TAKEN,
-      activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
+      activeCell: officeApiService.getCellAddressWithDollars(activeCellAddress),
       onOk: (isActiveCellOptionSelected: boolean): void => {
         this.importInNewRange(objectWorkingId, activeCellAddress, !isActiveCellOptionSelected);
         officeReducerHelper.clearPopupData();

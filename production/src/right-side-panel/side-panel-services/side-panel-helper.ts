@@ -22,6 +22,7 @@ import { popupActions } from '../../redux-reducer/popup-reducer/popup-actions';
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
 import { clearRepromptTask } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import initializationErrorDecorator from '../settings-side-panel/initialization-error-decorator';
+import { OfficeSettingsEnum } from '../../constants/office-constants';
 import { ObjectImportType } from '../../mstr-object/constants';
 
 class SidePanelHelper {
@@ -135,11 +136,17 @@ class SidePanelHelper {
 
   @initializationErrorDecorator.initializationWrapper
   initializeClearDataFlags(): void {
-    // @ts-expect-error
-    officeStoreHelper.isFileSecured() && reduxStore.dispatch(officeActions.toggleSecuredFlag(true));
-    officeStoreHelper.isClearDataFailed() &&
+    if (officeStoreHelper.getPropertyValue(OfficeSettingsEnum.isSecured)) {
+      // @ts-expect-error
+      reduxStore.dispatch(officeActions.toggleSecuredFlag(true));
+      officeStoreHelper.setPropertyValue(OfficeSettingsEnum.isSecured, true);
+    }
+
+    if (officeStoreHelper.getPropertyValue(OfficeSettingsEnum.isClearDataFailed)) {
       // @ts-expect-error
       reduxStore.dispatch(officeActions.toggleIsClearDataFailedFlag(true));
+      officeStoreHelper.setPropertyValue(OfficeSettingsEnum.isClearDataFailed, true);
+    }
   }
 }
 

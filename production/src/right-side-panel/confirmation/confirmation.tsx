@@ -3,14 +3,14 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 
-import { notificationService } from '../notification/notification-service';
-import { homeHelper } from './home-helper';
+import { notificationService } from '../../notification/notification-service';
+import { sidePanelService } from '../side-panel-services/side-panel-service';
 
-import i18n from '../i18n';
-import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 // TODO replace with mstr-icon
 // @ts-expect-error
-import warningIcon from './assets/icon_conflict.svg';
+import warningIcon from '../../home/assets/icon_conflict.svg';
+import i18n from '../../i18n';
+import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 
 interface ConfirmationProps {
   objects?: any[];
@@ -20,7 +20,7 @@ interface ConfirmationProps {
 
 function clearData(objects: any[]): void {
   notificationService.dismissNotifications();
-  homeHelper.secureData(objects);
+  sidePanelService.secureData(objects);
 }
 
 export const ConfirmationNotConnected: React.FC<ConfirmationProps> = ({

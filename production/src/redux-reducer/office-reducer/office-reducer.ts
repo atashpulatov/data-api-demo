@@ -127,9 +127,11 @@ function setIsDialogLoaded(state: OfficeState, action: SetIsDialogLoadedAction):
 }
 
 function toggleSecuredFlag(state: OfficeState, action: ToggleSecuredFlagAction): OfficeState {
+  const { isSecured } = action;
+
   return {
     ...state,
-    isSecured: action.isSecured,
+    isSecured,
   };
 }
 
@@ -160,9 +162,10 @@ function toggleIsClearDataFailedFlag(
   state: OfficeState,
   action: ToggleIsClearDataFailedFlagAction
 ): OfficeState {
+  const { isClearDataFailed } = action;
   return {
     ...state,
-    isClearDataFailed: action.isClearDataFailed,
+    isClearDataFailed,
   };
 }
 
@@ -263,4 +266,3 @@ function setIsAdvancedWorksheetTrackingSupported(
     isAdvancedWorksheetTrackingSupported: action.isAdvancedWorksheetTrackingSupported,
   };
 }
-

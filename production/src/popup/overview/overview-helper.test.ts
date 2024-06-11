@@ -333,18 +333,18 @@ describe('overview-helper', () => {
     });
   });
 
-  it('should handle Dismiss Global Notification request to side panel', () => {
-    // Given
-    const notificationServiceMock = jest
-      .spyOn(notificationService, 'globalNotificationDissapear')
-      .mockImplementation();
+  // it('should handle Dismiss Global Notification request to side panel', () => {
+  //   // Given
+  //   const notificationServiceMock = jest
+  //     .spyOn(notificationService, 'globalNotificationDissapear')
+  //     .mockImplementation();
 
-    // When
-    overviewHelper.handleDismissGlobalNotification();
+  //   // When
+  //   overviewHelper.handleDismissGlobalNotification();
 
-    // Then
-    expect(notificationServiceMock).toHaveBeenCalled();
-  });
+  //   // Then
+  //   expect(notificationServiceMock).toHaveBeenCalled();
+  // });
 
   it('should handle refresh command', async () => {
     // Given

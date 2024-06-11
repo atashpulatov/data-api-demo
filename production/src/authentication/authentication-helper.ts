@@ -1,57 +1,55 @@
 import request from 'superagent';
 
-import { notificationService } from '../notification/notification-service';
+import { browserHelper } from '../helpers/browser-helper';
+import { officeApiHelper } from '../office/api/office-api-helper';
+import { authenticationRestApi } from './auth-rest-service';
 
 import { reduxStore } from '../store';
 
+import { clearGlobalNotification } from '../redux-reducer/notification-reducer/notification-action-creators';
+import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
+
 class AuthenticationHelper {
-  sessionActions: any;
-
-  authenticationService: any;
-
-  errorService: any;
-
-  init = (sessionActions: any, authenticationService: any, errorService: any): void => {
-    this.sessionActions = sessionActions;
-    this.authenticationService = authenticationService;
-    this.errorService = errorService;
+  loginUser = async (values: any): Promise<void> => {
+    sessionActions.enableLoading();
+    sessionActions.saveLoginValues(values);
+    const authToken = await authenticationRestApi.authenticate(
+      values.username,
+      values.password,
+      values.envUrl,
+      values.loginMode || 1
+    );
+    sessionActions.logIn(authToken);
   };
 
-  loginUser = async (err: any, values: any): Promise<void> => {
-    if (err) {
-      console.error(err);
-      return;
+  saveLoginValues(): string {
+    const { authToken } = reduxStore.getState().sessionReducer;
+    const location = browserHelper.getWindowLocation();
+    if (browserHelper.isDevelopment()) {
+      if (!authToken) {
+        sessionActions.logOut();
+      }
+    } else {
+      const currentPath = location.pathname;
+      const pathBeginning = currentPath.split('/apps/')[0];
+      const envUrl = `${location.origin}${pathBeginning}/api`;
+      const values = { envUrl };
+      sessionActions.saveLoginValues(values);
+      return values.envUrl;
     }
-    try {
-      this.sessionActions.enableLoading();
-      this.sessionActions.saveLoginValues(values);
-      const authToken = await this.authenticationService.authenticate(
-        values.username,
-        values.password,
-        values.envUrl,
-        values.loginMode || 1
-      );
-      this.sessionActions.logIn(authToken);
-    } catch (error) {
-      console.error(error);
-      this.errorService.handleError(error, { isLogout: true });
-    } finally {
-      this.sessionActions.disableLoading();
-    }
-  };
+  }
 
   validateAuthToken = (): Promise<void> => {
-    const reduxStoreState = reduxStore.getState();
-    const { authToken } = reduxStoreState.sessionReducer;
-    const { envUrl } = reduxStoreState.sessionReducer;
-    return this.authenticationService.putSessions(envUrl, authToken);
+    const { authToken, envUrl } = reduxStore.getState().sessionReducer;
+
+    return authenticationRestApi.putSessions(envUrl, authToken);
   };
 
   /**
    * Checks for internet connection by trying to access image resource
    * Clears the connection notification even if we get error from the server
    *
-   * @param {Object} checkInterval id of setInterval required to clear it on connection restored
+   * @param checkInterval id of setInterval required to clear it on connection restored
    */
   doesConnectionExist = (checkInterval: any): void => {
     const reduxStoreState = reduxStore.getState();
@@ -63,13 +61,13 @@ class AuthenticationHelper {
     request
       .head(`${file}?rand=${randomNum}`)
       .then(() => {
-        notificationService.connectionRestored();
+        reduxStore.dispatch(clearGlobalNotification());
         clearInterval(checkInterval);
       })
       .catch(error => {
         // if we get any response status it means that we are connected
         if (error.status) {
-          notificationService.connectionRestored();
+          reduxStore.dispatch(clearGlobalNotification());
           clearInterval(checkInterval);
         }
       });
@@ -94,6 +92,14 @@ class AuthenticationHelper {
     const { userFullName } = reduxStore.getState().sessionReducer;
     return userFullName;
   };
+
+  /**
+   * checks excel session and auth token
+   *
+   */
+  async checkStatusOfSessions(): Promise<void> {
+    await Promise.all([officeApiHelper.getExcelSessionStatus(), this.validateAuthToken()]);
+  }
 }
 
 export const authenticationHelper = new AuthenticationHelper();

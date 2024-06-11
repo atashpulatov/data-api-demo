@@ -1,6 +1,6 @@
 import { localizeDate } from '@mstr/connector-components';
 
-import { officeApiHelper } from '../office/api/office-api-helper';
+import { officeApiService } from '../office/api/office-api-service';
 import officeTableHelperRange from '../office/table/office-table-helper-range';
 import { pageByHelper } from '../page-by/page-by-helper';
 
@@ -202,7 +202,7 @@ export const getObjectDetailsRange = async ({
   objectDetailsStartCell: string;
   objectDetailsSize: number;
 }): Promise<Excel.Range> => {
-  const objectDetailsEndCell = officeApiHelper.offsetCellBy(
+  const objectDetailsEndCell = officeApiService.offsetCellBy(
     objectDetailsStartCell,
     objectDetailsSize - 1,
     0
@@ -288,14 +288,14 @@ export const checkRangeForObjectInfo = async ({
   // Top left cell of the range to check.
   const beginCell =
     objectSizeDifference <= 0
-      ? officeApiHelper.offsetCellBy(currentTableStartCell, objectSizeDifference, 0)
-      : officeApiHelper.offsetCellBy(currentTableStartCell, tableRows + headersToAddRow, 0);
+      ? officeApiService.offsetCellBy(currentTableStartCell, objectSizeDifference, 0)
+      : officeApiService.offsetCellBy(currentTableStartCell, tableRows + headersToAddRow, 0);
 
   // Bottom right cell of the range to check.
   const endCell =
     objectSizeDifference <= 0
-      ? officeApiHelper.offsetCellBy(currentTableStartCell, -1, columns + headersToAddColumn - 1)
-      : officeApiHelper.offsetCellBy(
+      ? officeApiService.offsetCellBy(currentTableStartCell, -1, columns + headersToAddColumn - 1)
+      : officeApiService.offsetCellBy(
           currentTableStartCell,
           tableRows + headersToAddRow + objectSizeDifference - 1,
           columns + headersToAddColumn - 1
