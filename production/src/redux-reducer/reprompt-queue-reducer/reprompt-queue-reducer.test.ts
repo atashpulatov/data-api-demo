@@ -16,6 +16,7 @@ describe('reprompt-queue-reducer', () => {
       index: 0,
       repromptsQueue: [],
       total: 0,
+      promptKeys: [],
     });
   });
 
@@ -29,6 +30,7 @@ describe('reprompt-queue-reducer', () => {
       payload: {
         callback: repromptCallback,
         isPrompted: isPrompted.isPrompted,
+        promptKey: 'test',
       },
       type: RepromptQueueActionTypes.ADD_REPROMPT_TASK,
     };
@@ -40,6 +42,7 @@ describe('reprompt-queue-reducer', () => {
           {
             callback: repromptCallback,
             isPrompted: isPrompted.isPrompted,
+            promptKey: 'test',
           },
         ],
         total: 1,

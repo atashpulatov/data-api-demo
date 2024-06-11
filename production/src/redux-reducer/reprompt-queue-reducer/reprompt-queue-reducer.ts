@@ -6,7 +6,12 @@ import {
   RepromptsQueueState,
 } from './reprompt-queue-reducer-types';
 
-const initialState: RepromptsQueueState = { repromptsQueue: [], index: 0, total: 0 };
+const initialState: RepromptsQueueState = {
+  repromptsQueue: [],
+  index: 0,
+  total: 0,
+  promptKeys: [],
+};
 
 export const repromptsQueueReducer = (
   // eslint-disable-next-line default-param-last
@@ -22,7 +27,16 @@ export const repromptsQueueReducer = (
 
     case RepromptQueueActionTypes.CLEAR_REPROMPT_TASKS:
       return clearRepromptTasks();
-
+    case RepromptQueueActionTypes.ADD_PROMPT_KEY: {
+      // Check if the key already exists in the array
+      const newPromptKeys = state.promptKeys.includes(action.payload)
+        ? state.promptKeys
+        : [...state.promptKeys, action.payload];
+      return {
+        ...state,
+        promptKeys: newPromptKeys,
+      };
+    }
     default:
       return state;
   }
@@ -31,11 +45,18 @@ export const repromptsQueueReducer = (
 const addRepromptTask = (
   state: RepromptsQueueState,
   action: AddRepromptTaskAction
-): RepromptsQueueState => ({
-  ...state,
-  repromptsQueue: [...state.repromptsQueue, action.payload],
-  total: action.payload.isPrompted ? state.total + 1 : state.total,
-});
+): RepromptsQueueState => {
+  // Check if the prompt key already exists in the array
+  const newPromptKeys: string[] = state.promptKeys.includes(action.payload.promptKey)
+    ? state.promptKeys
+    : [...state.promptKeys, action.payload.promptKey];
+  return {
+    ...state,
+    repromptsQueue: [...state.repromptsQueue, action.payload],
+    total: action.payload.isPrompted ? state.total + 1 : state.total,
+    promptKeys: newPromptKeys,
+  };
+};
 
 const executeNextRepromptTask = (state: RepromptsQueueState): RepromptsQueueState => {
   let { index } = state;

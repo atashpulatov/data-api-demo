@@ -14,7 +14,7 @@ import { handleLoginExcelDesktopInWindows } from '../utils/embedded-helper';
 import scriptInjectionHelper from '../utils/script-injection-helper';
 import { embeddedDossierHelper } from './embedded-dossier-helper';
 
-import { RootState } from '../../store';
+import { reduxStore, RootState } from '../../store';
 
 import {
   AnswersState,
@@ -25,6 +25,7 @@ import { VisualizationInfo } from '../../types/object-types';
 
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
+import { addPromptKey } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import { ErrorMessages } from '../../error/constants';
 
 import './dossier.css';
@@ -71,6 +72,7 @@ interface EmbeddedDossierProps {
   isMultipleRepromptWithReuse?: boolean;
   handleEmbeddedDossierVisibility?: (flag?: boolean) => void;
   isReprompt?: boolean;
+  promptKeys?: string[];
 }
 
 export default class EmbeddedDossierNotConnected extends React.Component {
@@ -319,6 +321,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       isMultipleRepromptWithReuse,
       handleEmbeddedDossierVisibility,
       isReprompt,
+      promptKeys,
     }: EmbeddedDossierProps = this.props;
     const {
       envUrl,
@@ -371,16 +374,27 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         givenPromptsAnswers as AnswersState[],
         previousPromptsAnswers
       );
-
-      // Proceed with opening prompt dialog if applicable.
-      await this.openPromptDialog(
-        dossierId,
-        instance,
-        projectId,
-        dossierOpenRequested,
-        isImportedObjectPrompted,
-        isMultipleRepromptWithReuse
-      );
+      // check if the key from the givenPromptsAnswers is present in the repromptQueueReducer set
+      const key = (givenPromptsAnswers[0] as AnswersState)?.answers[0]?.key;
+      let isKeyPresent = false;
+      Object.keys(promptKeys).forEach(promptKey => {
+        if (promptKey === key) {
+          isKeyPresent = true;
+        }
+      });
+      if (isMultipleRepromptWithReuse && !isKeyPresent) {
+        // Proceed with opening prompt dialog if applicable.
+        await this.openPromptDialog(
+          dossierId,
+          instance,
+          projectId,
+          dossierOpenRequested,
+          isImportedObjectPrompted,
+          isMultipleRepromptWithReuse
+        );
+        console.log('Prompt key added to the redux store', key);
+        reduxStore.dispatch(addPromptKey(key));
+      }
     } catch (error) {
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
       popupHelper.handlePopupErrors(error);
@@ -630,7 +644,7 @@ const mapStateToProps = (state: RootState): any => {
   };
   const { isReprompt = false } = popupStateReducer;
   const isMultipleRepromptWithReuse = reusePromptAnswers && repromptsQueueReducer.total > 1;
-
+  const { promptKeys } = state.repromptsQueueReducer;
   // Do not specify the instanceId if it is a multiple reprompt because, if it is specified,
   // the embedded dossier will not load the saved prompts and will use the default ones instead, the ones
   // in the definition when it was imported the first time.
@@ -652,6 +666,7 @@ const mapStateToProps = (state: RootState): any => {
     dossierOpenRequested,
     isPrompted,
     repromptsQueue: { ...repromptsQueueReducer },
+    promptKeys,
     isMultipleRepromptWithReuse,
     isReprompt,
   };

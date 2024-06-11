@@ -1,4 +1,5 @@
 import {
+  AddPromptKeyAction,
   AddRepromptTaskAction,
   ClearRepromptTasksAction,
   ExecuteNextRepromptTaskAction,
@@ -29,4 +30,13 @@ export function executeNextRepromptTask(): ExecuteNextRepromptTaskAction {
  */
 export function clearRepromptTask(): ClearRepromptTasksAction {
   return { type: RepromptQueueActionTypes.CLEAR_REPROMPT_TASKS };
+}
+
+/**
+ * Adds a unique key to the set of prompt keys.
+ * @param key The unique key to add.
+ * @returns The action to add the prompt key.
+ */
+export function addPromptKey(key: string): AddPromptKeyAction {
+  return { type: RepromptQueueActionTypes.ADD_PROMPT_KEY, payload: key };
 }
