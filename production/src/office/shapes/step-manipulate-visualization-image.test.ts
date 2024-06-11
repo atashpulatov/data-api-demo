@@ -1,5 +1,6 @@
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { officeApiHelper } from '../api/office-api-helper';
+import { officeApiService } from '../api/office-api-service';
 import { officeShapeApiHelper } from './office-shape-api-helper';
 
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
@@ -132,7 +133,7 @@ describe('stepManipulateVisualizationImage', () => {
     jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
     jest
-      .spyOn(officeApiHelper, 'getSelectedRangePosition')
+      .spyOn(officeApiService, 'getSelectedRangePosition')
       .mockImplementation(() => Promise.resolve({ top: 233, left: 454 }));
 
     jest
@@ -154,7 +155,7 @@ describe('stepManipulateVisualizationImage', () => {
     // then
     expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
     expect(mstrObjectRestService.getVisualizationImage).toBeCalledTimes(1);
-    expect(officeApiHelper.getSelectedRangePosition).toBeCalledTimes(1);
+    expect(officeApiService.getSelectedRangePosition).toBeCalledTimes(1);
     expect(officeShapeApiHelper.addImage).toBeCalledWith(
       excelContextMock,
       'AAAAAAAAAAA=',
@@ -193,7 +194,7 @@ describe('stepManipulateVisualizationImage', () => {
     jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
     jest
-      .spyOn(officeApiHelper, 'getSelectedRangePosition')
+      .spyOn(officeApiService, 'getSelectedRangePosition')
       .mockImplementation(() => Promise.resolve({ top: 233, left: 454 }));
 
     jest
@@ -219,7 +220,7 @@ describe('stepManipulateVisualizationImage', () => {
     // then
     expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
     expect(mstrObjectRestService.getVisualizationImage).toBeCalledTimes(1);
-    expect(officeApiHelper.getSelectedRangePosition).toBeCalledTimes(1);
+    expect(officeApiService.getSelectedRangePosition).toBeCalledTimes(1);
     expect(officeShapeApiHelper.addImage).toBeCalledWith(
       excelContextMock,
       'AAAAAAAAAAA=',
@@ -255,7 +256,7 @@ describe('stepManipulateVisualizationImage', () => {
     jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
     jest
-      .spyOn(officeApiHelper, 'getSelectedRangePosition')
+      .spyOn(officeApiService, 'getSelectedRangePosition')
       .mockImplementation(() => Promise.resolve({ top: 233, left: 454 }));
 
     jest
@@ -277,7 +278,7 @@ describe('stepManipulateVisualizationImage', () => {
     // then
     expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
     expect(mstrObjectRestService.getVisualizationImage).toBeCalledTimes(1);
-    expect(officeApiHelper.getSelectedRangePosition).toBeCalledTimes(1);
+    expect(officeApiService.getSelectedRangePosition).toBeCalledTimes(1);
     expect(officeShapeApiHelper.addImage).toBeCalledWith(
       excelContextMock,
       'AAAAAAAAAAA=',
@@ -309,7 +310,7 @@ describe('stepManipulateVisualizationImage', () => {
     jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
     jest
-      .spyOn(officeApiHelper, 'getSelectedRangePosition')
+      .spyOn(officeApiService, 'getSelectedRangePosition')
       .mockImplementation(() => Promise.resolve({ top: 233, left: 454 }));
 
     jest
@@ -335,7 +336,7 @@ describe('stepManipulateVisualizationImage', () => {
     // then
     expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
     expect(mstrObjectRestService.getVisualizationImage).toBeCalledTimes(1);
-    expect(officeApiHelper.getSelectedRangePosition).toBeCalledTimes(1);
+    expect(officeApiService.getSelectedRangePosition).toBeCalledTimes(1);
     expect(officeShapeApiHelper.addImage).toBeCalledWith(
       excelContextMock,
       'AAAAAAAAAAA=',
@@ -374,7 +375,7 @@ describe('stepManipulateVisualizationImage', () => {
     jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
     jest
-      .spyOn(officeApiHelper, 'getSelectedRangePosition')
+      .spyOn(officeApiService, 'getSelectedRangePosition')
       .mockImplementation(() => Promise.resolve({ top: 233, left: 454 }));
 
     jest
@@ -399,7 +400,7 @@ describe('stepManipulateVisualizationImage', () => {
 
     // then
     expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
-    expect(officeApiHelper.getSelectedRangePosition).toBeCalledTimes(1);
+    expect(officeApiService.getSelectedRangePosition).toBeCalledTimes(1);
     expect(mstrObjectRestService.getVisualizationImage).toBeCalledTimes(1);
     expect(officeShapeApiHelper.addImage).toBeCalledWith(
       excelContextMock,
@@ -421,7 +422,7 @@ describe('stepManipulateVisualizationImage', () => {
     jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(async () => excelContextMock);
 
     jest
-      .spyOn(officeApiHelper, 'getSelectedRangePosition')
+      .spyOn(officeApiService, 'getSelectedRangePosition')
       .mockImplementation(() => Promise.resolve({ top: 233, left: 454 }));
 
     jest.spyOn(mstrObjectRestService, 'getVisualizationImage').mockImplementation(() => {
@@ -438,7 +439,7 @@ describe('stepManipulateVisualizationImage', () => {
 
     // then
     expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
-    expect(officeApiHelper.getSelectedRangePosition).toBeCalledTimes(1);
+    expect(officeApiService.getSelectedRangePosition).toBeCalledTimes(1);
     expect(mstrObjectRestService.getVisualizationImage).toBeCalledTimes(1);
 
     expect(operationErrorHandler.handleOperationError).toBeCalledTimes(1);

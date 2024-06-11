@@ -1,8 +1,10 @@
 import { Dispatch, SetStateAction } from 'react';
 import { ObjectNotificationTypes } from '@mstr/connector-components';
 
+import { authenticationHelper } from '../../authentication/authentication-helper';
 import { notificationService } from '../../notification/notification-service';
 import { officeApiHelper } from '../../office/api/office-api-helper';
+import { officeApiService } from '../../office/api/office-api-service';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { sidePanelService } from './side-panel-service';
 
@@ -63,11 +65,11 @@ class SidePanelEventHelper {
       activeWorksheet.id && setActiveSheetId(activeWorksheet.id);
     }
     // initiatilize active cell address
-    const initialCellAddress = await officeApiHelper.getSelectedCell(excelContext);
+    const initialCellAddress = await officeApiService.getSelectedCell(excelContext);
 
     setActiveCellAddress(initialCellAddress);
 
-    await officeApiHelper.addOnSelectionChangedListener(
+    await officeApiService.addOnSelectionChangedListener(
       excelContext,
       setActiveCellAddress,
       setActiveSheetId,
@@ -108,7 +110,7 @@ class SidePanelEventHelper {
   async setOnDeletedTablesEvent(event: Excel.TableDeletedEventArgs): Promise<void> {
     const ObjectToDelete = officeReducerHelper.getObjectFromObjectReducerByBindId(event.tableId);
     notificationService.removeExistingNotification(ObjectToDelete.objectWorkingId);
-    await officeApiHelper.checkStatusOfSessions();
+    await authenticationHelper.checkStatusOfSessions();
     sidePanelService.remove(ObjectToDelete.objectWorkingId);
   }
 
@@ -118,7 +120,7 @@ class SidePanelEventHelper {
    * @param excelContext Reference to Excel Context used by Excel API functions
    */
   async setOnDeletedWorksheetEvent(excelContext: Excel.RequestContext): Promise<void> {
-    await officeApiHelper.checkStatusOfSessions();
+    await authenticationHelper.checkStatusOfSessions();
     excelContext.workbook.tables.load('items');
     await excelContext.sync();
 

@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { Spinner } from '@mstr/rc';
 
 import useOfficePrivilege from '../hooks/use-office-privilege';
 
-import { notificationService } from '../notification/notification-service';
+import { authenticationHelper } from '../authentication/authentication-helper';
+import { browserHelper } from '../helpers/browser-helper';
 import { sessionHelper } from '../storage/session-helper';
 import { homeHelper } from './home-helper';
 
@@ -15,6 +16,10 @@ import { Authenticate } from '../authentication/auth-component';
 import { DevelopmentImportList } from '../development-import-list';
 import i18n from '../i18n';
 import { SessionExtendingWrapper } from '../popup/session-extending-wrapper';
+import {
+  clearGlobalNotification,
+  createConnectionLostNotification,
+} from '../redux-reducer/notification-reducer/notification-action-creators';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
@@ -34,17 +39,18 @@ interface HomeProps {
   setPopupData?: (popupData: any) => void;
 }
 
-const IS_DEVELOPMENT = sessionHelper.isDevelopment();
+const IS_DEVELOPMENT = browserHelper.isDevelopment();
 
 async function getUserData(authToken: string | boolean): Promise<void> {
   if (authToken) {
-    homeHelper.getTokenFromStorage();
+    sessionHelper.getTokenFromStorage();
     await sessionHelper.getUserInfo();
     await sessionHelper.getUserAttributeFormPrivilege();
   }
 }
 
 export const HomeNotConnected: React.FC<HomeProps> = props => {
+  const dispatch = useDispatch();
   const {
     loading,
     isDialogOpen,
@@ -60,11 +66,13 @@ export const HomeNotConnected: React.FC<HomeProps> = props => {
   const [t] = useTranslation('common', { i18n });
 
   const handleConnectionRestored = (): void => {
-    notificationService.connectionRestored();
+    // @ts-expect-error
+    dispatch(clearGlobalNotification());
   };
   const handleConnectionLost = (): void => {
     if (!isDialogOpen) {
-      notificationService.connectionLost();
+      // @ts-expect-error
+      dispatch(createConnectionLostNotification);
     }
   };
 
@@ -79,13 +87,15 @@ export const HomeNotConnected: React.FC<HomeProps> = props => {
 
   useEffect(() => {
     if (!isDialogOpen && !window.navigator.onLine) {
-      notificationService.connectionLost();
+      // @ts-expect-error
+      dispatch(createConnectionLostNotification());
     }
-  }, [isDialogOpen]);
+  }, [dispatch, isDialogOpen]);
 
   useEffect(() => {
     if (!authToken) {
-      notificationService.sessionRestored();
+      // @ts-expect-error
+      dispatch(clearGlobalNotification());
     }
   });
 
@@ -95,8 +105,8 @@ export const HomeNotConnected: React.FC<HomeProps> = props => {
         homeHelper.initSupportedFeaturesFlags();
         await officeStoreRestoreObject.restoreObjectsFromExcelStore();
         officeStoreRestoreObject.restoreAnswersFromExcelStore();
-        homeHelper.saveLoginValues();
-        homeHelper.getTokenFromStorage();
+        authenticationHelper.saveLoginValues();
+        sessionHelper.getTokenFromStorage();
         hideDialog(); // hide error popup if visible
         toggleIsSettingsFlag(false); // hide settings menu if visible
         clearDialogState();

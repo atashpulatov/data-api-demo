@@ -1,4 +1,4 @@
-import { officeApiHelper } from '../api/office-api-helper';
+import { officeApiService } from '../api/office-api-service';
 
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
@@ -57,7 +57,7 @@ describe('StepBindOfficeTable', () => {
 
     jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockResolvedValue('tableNameTest');
 
-    jest.spyOn(officeApiHelper, 'bindNamedItem').mockImplementation();
+    jest.spyOn(officeApiService, 'bindNamedItem').mockImplementation();
 
     jest.spyOn(operationStepDispatcher, 'completeBindOfficeTable').mockImplementation();
 
@@ -72,8 +72,8 @@ describe('StepBindOfficeTable', () => {
       'name'
     );
 
-    expect(officeApiHelper.bindNamedItem).toBeCalledTimes(1);
-    expect(officeApiHelper.bindNamedItem).toBeCalledWith('tableNameTest', 'bindIdTest');
+    expect(officeApiService.bindNamedItem).toBeCalledTimes(1);
+    expect(officeApiService.bindNamedItem).toBeCalledWith('tableNameTest', 'bindIdTest');
 
     expect(operationStepDispatcher.completeBindOfficeTable).toBeCalledTimes(1);
     expect(operationStepDispatcher.completeBindOfficeTable).toBeCalledWith(2137);
@@ -100,7 +100,7 @@ describe('StepBindOfficeTable', () => {
 
     jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockResolvedValue('tableNameTest');
 
-    jest.spyOn(officeApiHelper, 'bindNamedItem').mockImplementation();
+    jest.spyOn(officeApiService, 'bindNamedItem').mockImplementation();
 
     jest.spyOn(operationStepDispatcher, 'completeBindOfficeTable').mockImplementation();
 
@@ -110,7 +110,7 @@ describe('StepBindOfficeTable', () => {
     // then
     expect(officeApiDataLoader.loadSingleExcelData).toBeCalledTimes(0);
 
-    expect(officeApiHelper.bindNamedItem).toBeCalledTimes(0);
+    expect(officeApiService.bindNamedItem).toBeCalledTimes(0);
 
     expect(operationStepDispatcher.completeBindOfficeTable).toBeCalledTimes(1);
     expect(operationStepDispatcher.completeBindOfficeTable).toBeCalledWith(2137);

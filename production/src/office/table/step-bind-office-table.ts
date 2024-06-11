@@ -1,4 +1,4 @@
-import { officeApiHelper } from '../api/office-api-helper';
+import { officeApiService } from '../api/office-api-service';
 
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
@@ -46,7 +46,7 @@ class StepBindOfficeTable {
           'name'
         );
 
-        await officeApiHelper.bindNamedItem(tableName, bindId);
+        await officeApiService.bindNamedItem(tableName, bindId);
       }
       if (isCrosstab) {
         officeTable.showHeaders = false;

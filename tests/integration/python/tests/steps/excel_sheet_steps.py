@@ -31,7 +31,13 @@ def step_impl(context, cell_name, expected_value):
 def step_impl(context, cell_name):
     result = context.pages.excel_sheet_page().get_cells_values([cell_name])
 
-    AssertUtil.assert_simple(result, [None])
+    AssertUtil.assert_simple(result, [''])
+
+@step('I verified that cell "{cell_name}" has format "{expected_format}"')
+def step_impl(context, cell_name, expected_format):
+    result = context.pages.excel_sheet_page().get_cells_formats([cell_name])
+
+    AssertUtil.assert_simple(result, [expected_format])
 
 
 @step("I verified that cells {cells_names} have values {expected_cells_values}")
@@ -41,6 +47,16 @@ def step_impl(context, cells_names, expected_cells_values):
     result = context.pages.excel_sheet_page().get_cells_values(param_cells_names)
 
     expected_result = json.loads(expected_cells_values)
+
+    AssertUtil.assert_simple(result, expected_result)
+
+@step("I verified that cells {cells_names} have formats {expected_cells_formats}")
+def step_impl(context, cells_names, expected_cells_formats):
+    param_cells_names = json.loads(cells_names)
+
+    result = context.pages.excel_sheet_page().get_cells_formats(param_cells_names)
+
+    expected_result = json.loads(expected_cells_formats)
 
     AssertUtil.assert_simple(result, expected_result)
 

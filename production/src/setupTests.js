@@ -33,4 +33,14 @@ global.Excel = {
   },
 };
 
+// There should be better way of doing this, but we are getting too much noise from console while running tests
+console.info = jest.fn();
+console.error = jest.fn();
+console.warn = jest.fn();
+console.time = jest.fn();
+console.timeEnd = jest.fn();
+console.group = jest.fn();
+console.groupEnd = jest.fn();
+console.groupCollapsed = jest.fn();
+
 diContainer.initializeAll();

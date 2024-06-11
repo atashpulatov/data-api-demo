@@ -1,4 +1,5 @@
 import { officeApiHelper } from '../api/office-api-helper';
+import { officeApiService } from '../api/office-api-service';
 import { pivotTableHelper } from '../pivot-table/pivot-table-helper';
 import { officeShapeApiHelper } from '../shapes/office-shape-api-helper';
 
@@ -43,7 +44,7 @@ describe('StepHighlightObject', () => {
     objectData = { importType: ObjectImportType.TABLE, objectWorkingId: 42 } as ObjectData;
 
     const onBindingObjectClick = jest
-      .spyOn(officeApiHelper, 'onBindingObjectClick')
+      .spyOn(officeApiService, 'onBindingObjectClick')
       .mockImplementation();
 
     // when

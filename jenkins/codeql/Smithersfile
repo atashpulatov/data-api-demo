@@ -4,7 +4,11 @@ job 'stage-2-codeql' do
   configure_common_items{}
 
   assigned_node_string 'rhel8_vra'
+  triggers do
+    github_push do
 
+    end
+  end
   builders do
     bash do
       script '#!/usr/bin/env bash

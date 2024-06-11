@@ -1,51 +1,24 @@
-import officeReducerHelper from '../office/store/office-reducer-helper';
-
-import { Notification } from '../redux-reducer/notification-reducer/notification-reducer-types';
-
 import {
-  clearGlobalNotification,
-  createConnectionLostNotification,
-  createSessionExpiredNotification,
-  deleteObjectNotification,
-  displayGlobalNotification,
-  displayObjectWarning,
-} from '../redux-reducer/notification-reducer/notification-action-creators';
+  Notification,
+  OperationTypesWithNotification,
+} from '../redux-reducer/notification-reducer/notification-reducer-types';
+
+import i18n from '../i18n';
+import { OperationTypes } from '../operation/operation-type-names';
+import { deleteObjectNotification } from '../redux-reducer/notification-reducer/notification-action-creators';
+import { titleOperationFailedMap } from '../redux-reducer/notification-reducer/notification-title-maps';
 import { removeObject } from '../redux-reducer/object-reducer/object-actions';
 import { cancelOperationByOperationId } from '../redux-reducer/operation-reducer/operation-actions';
+import { ErrorMessages } from '../error/constants';
 
 class NotificationService {
   reduxStore: any;
 
-  init = (reduxStore: any): void => {
+  officeReducerHelper: any;
+
+  init = (reduxStore: any, officeReducerHelper: any): void => {
     this.reduxStore = reduxStore;
-  };
-
-  connectionLost = (): void => {
-    this.reduxStore.dispatch(createConnectionLostNotification());
-  };
-
-  sessionExpired = (): void => {
-    this.reduxStore.dispatch(createSessionExpiredNotification());
-  };
-
-  connectionRestored = (): void => {
-    this.reduxStore.dispatch(clearGlobalNotification());
-  };
-
-  sessionRestored = (): void => {
-    this.reduxStore.dispatch(clearGlobalNotification());
-  };
-
-  globalWarningAppeared = (payload: any): void => {
-    this.reduxStore.dispatch(displayGlobalNotification(payload));
-  };
-
-  globalNotificationDissapear = (): void => {
-    this.reduxStore.dispatch(clearGlobalNotification());
-  };
-
-  showObjectWarning = (objectWorkingId: number, notification: Notification): void => {
-    this.reduxStore.dispatch(displayObjectWarning(objectWorkingId, notification));
+    this.officeReducerHelper = officeReducerHelper;
   };
 
   dismissNotification = (objectWorkingId: number): void => {
@@ -72,7 +45,7 @@ class NotificationService {
    */
   removeExistingNotification = (objectWorkingId: number): void => {
     const notification: any =
-      officeReducerHelper.getNotificationFromNotificationReducer(objectWorkingId);
+      this.officeReducerHelper.getNotificationFromNotificationReducer(objectWorkingId);
     if (notification) {
       this.callDismissNotification(notification);
     }
@@ -84,7 +57,6 @@ class NotificationService {
    * Works for notifications concerning finished operations.
    * For others it doesn't bring any effect.
    *
-   * @param {} notifications
    */
   dismissNotifications = (): void => {
     const currentState = this.reduxStore.getState();
@@ -104,6 +76,47 @@ class NotificationService {
     notification.dismissNotification && notification.dismissNotification();
     notification.callback && notification.callback();
   };
+
+  getOkButton(payload: any): any[] {
+    return [
+      {
+        type: 'basic',
+        label: i18n.t('OK'),
+        onClick: payload.notification.callback,
+      },
+    ];
+  }
+
+  getCancelButton(
+    objectWorkingId: number,
+    operationType: OperationTypes,
+    operationId: string
+  ): any[] {
+    return [
+      {
+        type: 'basic',
+        label: i18n.t('Cancel'),
+        onClick: () => {
+          if (operationType === OperationTypes.IMPORT_OPERATION) {
+            this.removeObjectFromNotification(objectWorkingId);
+          }
+          this.cancelOperationFromNotification(operationId);
+          this.dismissNotification(objectWorkingId);
+        },
+      },
+    ];
+  }
+
+  getTitle(
+    payload: { objectWorkingId: number; notification: Notification },
+    notificationToUpdate: Notification
+  ): string {
+    return payload.notification.title === ErrorMessages.GENERIC_SERVER_ERR
+      ? titleOperationFailedMap[
+          notificationToUpdate.operationType as OperationTypesWithNotification
+        ]
+      : payload.notification.title;
+  }
 }
 
 export const notificationService = new NotificationService();

@@ -1,7 +1,5 @@
 import { Dispatch } from 'react';
 
-import officeStoreHelper from '../../office/store/office-store-helper';
-
 import {
   OfficeActionsTypes,
   SetActiveCellAddressAction,
@@ -28,7 +26,6 @@ const hideDialog = () => (dispatch: Dispatch<any>) => {
 };
 
 const toggleSecuredFlag = (isSecured: boolean) => (dispatch: Dispatch<any>) => {
-  officeStoreHelper.setFileSecuredFlag(isSecured);
   dispatch({
     type: OfficeActionsTypes.TOGGLE_SECURED_FLAG,
     isSecured,
@@ -47,7 +44,6 @@ const toggleIsConfirmFlag = (isConfirm: boolean) => (dispatch: Dispatch<any>) =>
 };
 
 const toggleIsClearDataFailedFlag = (isClearDataFailed: boolean) => (dispatch: Dispatch<any>) => {
-  officeStoreHelper.setIsClearDataFailed(isClearDataFailed);
   dispatch({
     type: OfficeActionsTypes.TOGGLE_IS_CLEAR_DATA_FAILED_FLAG,
     isClearDataFailed,

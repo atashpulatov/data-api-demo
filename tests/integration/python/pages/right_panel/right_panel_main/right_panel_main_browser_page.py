@@ -35,6 +35,7 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
 
     IMPORTED_DATA_OVERVIEW = '.imported-data-overview'
 
+    TOGGLE = "//button[contains(@class, 'mstr-rc-3-switch--regular') and ancestor::label[contains(text(), '%s')]]"
     PARENT_TOGGLE = "//button[contains(@class, 'mstr-rc-3-switch--regular') and ancestor::label/div/span[contains(text(), '%s')]]"
     CHILD_TOGGLE = "//button[contains(@class, 'mstr-rc-3-switch--small') and ancestor::label/div[contains(text(), '%s')]]"
     DRAGGABLE_CHILD_TOGGLE = "//button[contains(@class, 'mstr-rc-3-switch--small') and ancestor::label/div[contains(text(), '%s')] and ancestor::li/button[contains(@class, 'mstr-rc-3-draggable-list__item-drag-handle')]]"
@@ -199,6 +200,19 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
         self._open_dots_menu()
 
         self.get_element_by_css(RightPanelMainBrowserPage.IMPORTED_DATA_OVERVIEW).click()
+
+    def toggle_setting(self, option, value):
+        element = self.get_element_by_xpath(RightPanelMainBrowserPage.TOGGLE % option)
+        aria_checked_value = element.get_attribute("aria-checked")
+        if aria_checked_value == 'true' and value == 'OFF':
+            element.click()
+        if aria_checked_value == 'false' and value == 'ON':
+            element.click()
+
+    def is_toggle_option_checked(self, option):
+        element = self.get_element_by_xpath(RightPanelMainBrowserPage.TOGGLE % option)
+        aria_checked_value = element.get_attribute("aria-checked")
+        return aria_checked_value == "true"
     
     def toggle_parent_setting(self, option, value):
         element = self.get_element_by_xpath(RightPanelMainBrowserPage.PARENT_TOGGLE % option)

@@ -1,49 +1,38 @@
 import officeReducerHelper from './office-reducer-helper';
 
+import { reduxStore } from '../../store';
+
 import { OperationTypes } from '../../operation/operation-type-names';
 import { ObjectImportType } from '../../mstr-object/constants';
 
-describe('OfficeReducerHelper init', () => {
-  it('init work as expected', () => {
-    // given
-    // when
-    officeReducerHelper.init('initTest');
-
-    // then
-    expect(officeReducerHelper.reduxStore).toEqual('initTest');
-  });
-});
+const mockObjects = [
+  { importType: ObjectImportType.TABLE },
+  { importType: ObjectImportType.IMAGE },
+];
+const reduxStoreMock = {
+  objectReducer: {
+    objects: mockObjects,
+  },
+  operationReducer: {
+    operations: [
+      { operationType: OperationTypes.HIGHLIGHT_OPERATION, objectWorkingId: 42 },
+      { operationType: OperationTypes.REFRESH_OPERATION, objectWorkingId: 69 },
+    ],
+  },
+  officeReducer: {
+    isShapeAPISupported: true,
+  },
+};
 
 describe('OfficeReducerHelper', () => {
   afterEach(() => {
     jest.resetAllMocks();
   });
 
-  const mockObjects = [
-    { importType: ObjectImportType.TABLE },
-    { importType: ObjectImportType.IMAGE },
-  ];
-  const reduxStoreMock = {
-    getState: () => ({
-      objectReducer: {
-        objects: mockObjects,
-      },
-      operationReducer: {
-        operations: [
-          { operationType: OperationTypes.HIGHLIGHT_OPERATION, objectWorkingId: 42 },
-          { operationType: OperationTypes.REFRESH_OPERATION, objectWorkingId: 69 },
-        ],
-      },
-      officeReducer: {
-        isShapeAPISupported: true,
-      },
-    }),
-  };
-
   it('getObjectsListFromObjectReducer works as expected', () => {
     // given
-    officeReducerHelper.init(reduxStoreMock);
-
+    // @ts-expect-error
+    jest.spyOn(reduxStore, 'getState').mockReturnValue(reduxStoreMock);
     // when
     const result = officeReducerHelper.getObjectsListFromObjectReducer();
 
@@ -53,7 +42,9 @@ describe('OfficeReducerHelper', () => {
 
   it('getOperationsListFromOperationReducer works as expected', () => {
     // given
-    officeReducerHelper.init(reduxStoreMock);
+    // @ts-expect-error
+    jest.spyOn(reduxStore, 'getState').mockReturnValue(reduxStoreMock);
+
     const expectedOperations = [
       { operationType: OperationTypes.REFRESH_OPERATION, objectWorkingId: 69 },
     ];
@@ -90,15 +81,14 @@ describe('OfficeReducerHelper', () => {
 
   it('clearPopupData should dispatch proper Redux action', () => {
     // given
-    officeReducerHelper.init(reduxStoreMock);
-    officeReducerHelper.reduxStore.dispatch = jest.fn();
+    reduxStore.dispatch = jest.fn();
 
     // when
     officeReducerHelper.clearPopupData();
 
     // then
-    expect(officeReducerHelper.reduxStore.dispatch).toHaveBeenCalledTimes(1);
-    expect(officeReducerHelper.reduxStore.dispatch).toHaveBeenCalledWith({
+    expect(reduxStore.dispatch).toHaveBeenCalledTimes(1);
+    expect(reduxStore.dispatch).toHaveBeenCalledWith({
       type: 'OFFICE_SET_POPUP_DATA',
     });
   });
@@ -119,15 +109,12 @@ describe('OfficeReducerHelper getObjectFromObjectReducerByBindId', () => {
     'getObjectFromObjectReducer works as expected',
     ({ expectedObject, bindIdParam, objectsParam }) => {
       // given
-      const reduxStoreMock = {
-        getState: () => ({
-          objectReducer: {
-            objects: objectsParam,
-          },
-        }),
-      };
-
-      officeReducerHelper.init(reduxStoreMock);
+      // @ts-expect-error
+      jest.spyOn(reduxStore, 'getState').mockReturnValue({
+        objectReducer: {
+          objects: objectsParam,
+        },
+      });
 
       // when
       const result = officeReducerHelper.getObjectFromObjectReducerByBindId(bindIdParam);

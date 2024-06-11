@@ -5,10 +5,9 @@ import {
   PopupTypes,
 } from '@mstr/connector-components';
 
-import { officeApiHelper } from '../../office/api/office-api-helper';
+import { officeApiService } from '../../office/api/office-api-service';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { pageByHelper } from '../../page-by/page-by-helper';
-import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-services/side-panel-notification-helper';
 import { popupHelper } from '../popup-helper';
 
 import { reduxStore } from '../../store';
@@ -52,10 +51,18 @@ class OverviewHelper {
 
   sidePanelHelper: any;
 
-  init = (sidePanelService: any, notificationService: any, sidePanelHelper: any): void => {
+  sidePanelNotificationHelper: any;
+
+  init = (
+    sidePanelService: any,
+    notificationService: any,
+    sidePanelHelper: any,
+    sidePanelNotificationHelper: any
+  ): void => {
     this.sidePanelService = sidePanelService;
     this.notificationService = notificationService;
     this.sidePanelHelper = sidePanelHelper;
+    this.sidePanelNotificationHelper = sidePanelNotificationHelper;
   };
 
   /**
@@ -337,7 +344,7 @@ class OverviewHelper {
         });
         break;
       case OverviewActionCommands.RANGE_TAKEN_OK:
-        sidePanelNotificationHelper.importInNewRange(response.objectWorkingId, null, true);
+        this.sidePanelNotificationHelper.importInNewRange(response.objectWorkingId, null, true);
         officeReducerHelper.clearPopupData();
         break;
       case OverviewActionCommands.RANGE_TAKEN_CLOSE:
@@ -348,18 +355,18 @@ class OverviewHelper {
         break;
       case OverviewActionCommands.PAGE_BY_REFRESH_FAILED_CLOSE:
       case OverviewActionCommands.PAGE_BY_DUPLICATE_FAILED_CLOSE:
-        sidePanelNotificationHelper.clearPopupDataAndRunCallback(callback);
+        this.sidePanelNotificationHelper.clearPopupDataAndRunCallback(callback);
         break;
       case OverviewActionCommands.PAGE_BY_IMPORT_FAILED_CLOSE:
         await this.sidePanelHelper.revertPageByImportForSiblings(response.objectWorkingId);
-        sidePanelNotificationHelper.clearPopupDataAndRunCallback(callback);
+        this.sidePanelNotificationHelper.clearPopupDataAndRunCallback(callback);
         break;
       case OverviewActionCommands.PAGE_BY_REFRESH_FAILED_EDIT:
-        sidePanelNotificationHelper.clearPopupDataAndRunCallback(callback);
+        this.sidePanelNotificationHelper.clearPopupDataAndRunCallback(callback);
         await this.sidePanelService.edit(response.objectWorkingId);
         break;
       case OverviewActionCommands.PAGE_BY_REFRESH_FAILED_REMOVE:
-        sidePanelNotificationHelper.clearPopupDataAndRunCallback(callback);
+        this.sidePanelNotificationHelper.clearPopupDataAndRunCallback(callback);
         pageByHelper.handleRemovingMultiplePages(response.objectWorkingId);
         break;
       case OverviewActionCommands.RENAME:
@@ -476,7 +483,7 @@ class OverviewHelper {
 
     setDialogPopup({
       type: PopupTypes.DUPLICATE,
-      activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
+      activeCell: officeApiService.getCellAddressWithDollars(activeCellAddress),
       onImport: isActiveCellOptionSelected => {
         onDuplicate(objectWorkingIds, !isActiveCellOptionSelected, false);
         setDialogPopup(null);

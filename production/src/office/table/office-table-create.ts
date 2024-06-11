@@ -3,7 +3,7 @@ import {
   insertAndFormatObjectDetails,
 } from '../../mstr-object/object-info-helper';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
-import { officeApiHelper } from '../api/office-api-helper';
+import { officeApiService } from '../api/office-api-service';
 import { officeApiWorksheetHelper } from '../api/office-api-worksheet-helper';
 import getOfficeTableHelper from './get-office-table-helper';
 import officeTableHelperRange from './office-table-helper-range';
@@ -85,7 +85,7 @@ class OfficeTableCreate {
     if (insertNewWorksheet) {
       startCell = 'A1';
     } else if (!startCell) {
-      startCell = await officeApiHelper.getSelectedCell(excelContext);
+      startCell = await officeApiService.getSelectedCell(excelContext);
     }
     const { worksheetObjectInfoSettings } = reduxStore.getState().settingsReducer;
 
@@ -98,7 +98,7 @@ class OfficeTableCreate {
 
     const objectDetailsStartCell = startCell;
     if (objectDetailsSize > 0) {
-      startCell = officeApiHelper.offsetCellBy(startCell, objectDetailsSize, 0);
+      startCell = officeApiService.offsetCellBy(startCell, objectDetailsSize, 0);
     }
 
     const tableStartCell = this.getTableStartCell(
@@ -108,7 +108,7 @@ class OfficeTableCreate {
       tableChanged
     );
 
-    const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
+    const tableRange = officeApiService.getRange(columns, tableStartCell, rows);
     const range = this.getObjectRange(tableStartCell, worksheet, tableRange, mstrTable);
 
     excelContext.trackedObjects.add(range);
@@ -162,10 +162,9 @@ class OfficeTableCreate {
       startCell,
       excelContext,
       objectDetailsSize,
-      importType
+      importType,
     });
   }
-
 
   /**
    * Creates an office table if it's a new import or if the number of columns of an existing table changes.
@@ -197,7 +196,7 @@ class OfficeTableCreate {
     instanceDefinition: InstanceDefinition;
     excelContext: Excel.RequestContext;
     startCell: string;
-    rangeDimensions: { rows: number, columns: number };
+    rangeDimensions: { rows: number; columns: number };
     tableName?: string;
     prevOfficeTable?: Excel.Table;
     tableChanged?: boolean;
@@ -225,23 +224,23 @@ class OfficeTableCreate {
     if (insertNewWorksheet) {
       startCell = 'A1';
     } else if (!startCell) {
-      startCell = await officeApiHelper.getSelectedCell(excelContext);
+      startCell = await officeApiService.getSelectedCell(excelContext);
     }
 
     let { rows } = rangeDimensions;
     const { columns } = rangeDimensions;
 
-    // Add single row to crosstabular tables, to be able to copy formatted data range onto the imported office table. 
+    // Add single row to crosstabular tables, to be able to copy formatted data range onto the imported office table.
     // Otherwise the imported office table will be deleted, due to being entirely overlapped by copied formatted data.
     if (isCrosstab) {
       rows += OFFICE_TABLE_EXTA_ROW;
     }
 
-    // Remove one row from source table rows, as getRange() utlimately adds an additional 
+    // Remove one row from source table rows, as getRange() utlimately adds an additional
     // row to source table range
-    const tableRange = officeApiHelper.getRange(columns, startCell, rows - OFFICE_TABLE_EXTA_ROW);
+    const tableRange = officeApiService.getRange(columns, startCell, rows - OFFICE_TABLE_EXTA_ROW);
 
-    const range = worksheet.getRange(tableRange)
+    const range = worksheet.getRange(tableRange);
 
     excelContext.trackedObjects.add(range);
 
@@ -270,7 +269,7 @@ class OfficeTableCreate {
       startCell,
       excelContext,
       importType,
-      dimensions: { rows, columns }
+      dimensions: { rows, columns },
     });
   }
 
@@ -334,7 +333,7 @@ class OfficeTableCreate {
     const { rowsX: prevRowsX, columnsY: prevColumnsY } = prevCrosstabDimensions;
     const { rowsX, columnsY } = crosstabHeaderDimensions;
 
-    let tableStartCell = officeApiHelper.getTableStartCell({
+    let tableStartCell = officeApiService.getTableStartCell({
       startCell,
       instanceDefinition,
       prevOfficeTable,
@@ -346,9 +345,9 @@ class OfficeTableCreate {
       isCrosstab
     ) {
       if (tableChanged) {
-        tableStartCell = officeApiHelper.offsetCellBy(tableStartCell, columnsY - 1, rowsX);
+        tableStartCell = officeApiService.offsetCellBy(tableStartCell, columnsY - 1, rowsX);
       } else {
-        tableStartCell = officeApiHelper.offsetCellBy(
+        tableStartCell = officeApiService.offsetCellBy(
           tableStartCell,
           columnsY - prevColumnsY,
           rowsX - prevRowsX
@@ -388,7 +387,7 @@ class OfficeTableCreate {
     excelContext: Excel.RequestContext;
     objectDetailsSize?: number;
     importType: ObjectImportType;
-    dimensions?: any
+    dimensions?: any;
   }): Promise<any> {
     const { isCrosstab } = mstrTable;
     try {
@@ -421,7 +420,7 @@ class OfficeTableCreate {
         startCell,
         groupData: { key: id, title: name, index },
         objectDetailsSize,
-        dimensions
+        dimensions,
       };
     } catch (error) {
       await excelContext.sync();

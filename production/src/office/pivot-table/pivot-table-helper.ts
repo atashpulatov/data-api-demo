@@ -88,7 +88,7 @@ class PivotTableHelper {
     if (!mstrTable) {
       return;
     }
-    
+
     const { pivotTableAddAttributesToColumns, pivotTableAddMetricsToValues } =
       reduxStore.getState().settingsReducer;
 

@@ -1,7 +1,8 @@
-/* eslint-disable no-import-assign */
+import { authenticationHelper } from '../../authentication/authentication-helper';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
+import officeStoreHelper from '../../office/store/office-store-helper';
 import { sidePanelHelper } from './side-panel-helper';
 import { SidePanelService, sidePanelService } from './side-panel-service';
 
@@ -16,7 +17,7 @@ import * as toggleFlag from '../../redux-reducer/office-reducer/office-actions';
 describe('SidePanelService', () => {
   jest.useFakeTimers();
 
-  officeApiHelper.checkStatusOfSessions = jest.fn();
+  authenticationHelper.checkStatusOfSessions = jest.fn();
   officeReducerHelper.noOperationInProgress = jest.fn().mockReturnValue(true);
 
   afterEach(() => {
@@ -177,14 +178,13 @@ describe('SidePanelService', () => {
   it('handleViewData should change flags and refresh objects', async () => {
     // given
     const mockedSessionCheck = jest
-      .spyOn(officeApiHelper, 'checkStatusOfSessions')
+      .spyOn(authenticationHelper, 'checkStatusOfSessions')
       .mockImplementation();
     const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
     const mockedRefresh = jest.spyOn(SidePanelService.prototype, 'refresh').mockImplementation();
-    // @ts-expect-error
-    toggleFlag.toggleSecuredFlag = jest.fn();
-    // @ts-expect-error
-    toggleFlag.toggleIsClearDataFailedFlag = jest.fn();
+    jest.spyOn(toggleFlag.officeActions, 'toggleIsClearDataFailedFlag').mockImplementation();
+    jest.spyOn(toggleFlag.officeActions, 'toggleSecuredFlag').mockImplementation();
+    jest.spyOn(officeStoreHelper, 'setPropertyValue').mockImplementation();
 
     // when
     await sidePanelService.viewData();

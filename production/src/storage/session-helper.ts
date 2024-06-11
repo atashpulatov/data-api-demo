@@ -1,9 +1,12 @@
 // @ts-expect-error
 import throttle from 'lodash.throttle';
 
-import { authenticationService } from '../authentication/auth-rest-service';
-import { homeHelper } from '../home/home-helper';
+import { authenticationRestApi } from '../authentication/auth-rest-service';
+import { authenticationHelper } from '../authentication/authentication-helper';
+import { browserHelper } from '../helpers/browser-helper';
+import { storageHelper } from '../helpers/storage-helper';
 import { userRestService } from '../home/user-rest-service';
+import officeStoreHelper from '../office/store/office-store-helper';
 
 import { reduxStore } from '../store';
 
@@ -17,58 +20,6 @@ import { httpStatusCodes, IncomingErrorStrings } from '../error/constants';
 export const EXTEND_SESSION = 'EXTEND_SESSION';
 const DEFAULT_SESSION_REFRESH_TIME = 60000;
 class SessionHelper {
-  /**
-   * Handles terminating Rest session and logging out the user from plugin
-   *
-   */
-  async logOutRest(): Promise<void> {
-    const { authToken } = reduxStore.getState().sessionReducer;
-    const { envUrl } = reduxStore.getState().sessionReducer;
-    try {
-      authenticationService.logout(envUrl, authToken);
-    } catch (error) {
-      errorService.handleError(error, { isLogout: true } as any);
-    }
-  }
-
-  /**
-   * Handles terminating Rest session and logging out the user from plugin
-   * with redirect to login page from Privilege Error Screen
-   */
-  async handleLogoutForPrivilegeMissing(): Promise<void> {
-    try {
-      await this.logOutRest();
-      sessionActions.logOut();
-    } catch (error) {
-      errorService.handleError(error);
-    } finally {
-      this.logOutRedirect(true);
-    }
-  }
-
-  /**
-   * Redirect to user to the login page. If it's development mode
-   * we can optionally refresh to avoid stale cache issues when
-   * changing users.
-   *
-   * @param shouldReload Reload on logout when in development
-   */
-  logOutRedirect(shouldReload = false): void {
-    const isDevelopment = this.isDevelopment();
-    if (!isDevelopment) {
-      const currentPath = window.location.pathname;
-      const pathBeginning = currentPath.split('/apps/')[0];
-      const loginParams = 'source=addin-mstr-office';
-      const url = encodeURI(`${pathBeginning}/static/loader-mstr-office/index.html?${loginParams}`);
-      window.location.replace(url);
-    } else {
-      sessionActions.disableLoading();
-      if (shouldReload) {
-        window.location.reload();
-      }
-    }
-  }
-
   /**
    * Return Information about envUrl, authToken and USE_PROXY from redux store
    *
@@ -101,7 +52,7 @@ class SessionHelper {
     const { onLine } = window.navigator;
     try {
       if (authToken && onLine) {
-        await authenticationService.putSessions(envUrl, authToken);
+        await authenticationRestApi.putSessions(envUrl, authToken);
       }
     } catch (error) {
       if (onSessionExpire && error.response && error.response.statusCode) {
@@ -142,12 +93,14 @@ class SessionHelper {
    */
   async getUserInfo(): Promise<void> {
     let userData: any = {};
-    const isDevelopment = this.isDevelopment();
+    const isDevelopment = browserHelper.isDevelopment();
     const { getState } = reduxStore;
-    const envUrl = isDevelopment ? getState().sessionReducer.envUrl : homeHelper.saveLoginValues();
+    const envUrl = isDevelopment
+      ? getState().sessionReducer.envUrl
+      : authenticationHelper.saveLoginValues();
     const authToken = isDevelopment
       ? getState().sessionReducer.authToken
-      : homeHelper.getTokenFromStorage();
+      : this.getTokenFromStorage();
     try {
       userData = await userRestService.getUserInfo(authToken, envUrl);
       !userData.userInitials && sessionActions.saveUserInfo(userData);
@@ -162,15 +115,15 @@ class SessionHelper {
    */
   async getUserAttributeFormPrivilege(): Promise<void> {
     let canChooseAttrForm = false;
-    const isDevelopment = this.isDevelopment();
+    const isDevelopment = browserHelper.isDevelopment();
     const envUrl = isDevelopment
       ? reduxStore.getState().sessionReducer.envUrl
-      : homeHelper.saveLoginValues();
+      : authenticationHelper.saveLoginValues();
     const authToken = isDevelopment
       ? reduxStore.getState().sessionReducer.authToken
-      : homeHelper.getTokenFromStorage();
+      : this.getTokenFromStorage();
     try {
-      canChooseAttrForm = await authenticationService.getAttributeFormPrivilege(envUrl, authToken);
+      canChooseAttrForm = await authenticationRestApi.getAttributeFormPrivilege(envUrl, authToken);
       sessionActions.setAttrFormPrivilege(canChooseAttrForm);
     } catch (error) {
       console.error(error);
@@ -178,37 +131,29 @@ class SessionHelper {
   }
 
   async getCanUseOfficePrivilege(): Promise<boolean> {
-    const isDevelopment = this.isDevelopment();
+    const isDevelopment = browserHelper.isDevelopment();
     const { envUrl } = reduxStore.getState().sessionReducer;
 
     const authToken = isDevelopment
       ? reduxStore.getState().sessionReducer.authToken
-      : homeHelper.getTokenFromStorage();
-    const canUseOffice = await authenticationService.getOfficePrivilege(envUrl, authToken);
+      : this.getTokenFromStorage();
+    const canUseOffice = await authenticationRestApi.getOfficePrivilege(envUrl, authToken);
 
     return canUseOffice;
   }
 
   /**
-   * Return Url of the current page
+   * With the introduction of http-only we cannot get the iSession token from the cookies
+   * Retrieve the stored token from localstorage or Excel settings and save in redux store
    *
-   * @return Page Url
+   * @returns iSession token
    */
-  getUrl(): string {
-    return window.location.href;
-  }
-
-  /**
-   * Checks what type of build is currently used
-   *
-   * @return Determines if used build is development or test build
-   */
-  isDevelopment(): boolean {
-    try {
-      const isDevelopment = ['development', 'test'].includes(process.env.NODE_ENV);
-      return isDevelopment;
-    } catch (error) {
-      return false;
+  getTokenFromStorage(): string {
+    const iSession =
+      storageHelper.getStorageItem('iSession') || officeStoreHelper.getPropertyValue('iSession');
+    if (iSession) {
+      sessionActions.logIn(iSession);
+      return iSession;
     }
   }
 

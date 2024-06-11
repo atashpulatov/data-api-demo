@@ -10,6 +10,7 @@ import { reduxStore } from '../../store';
 import { MstrObjectTypes } from '../../mstr-object/mstr-object-types';
 import { ObjectData } from '../../types/object-types';
 
+import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 import * as operationActions from '../../redux-reducer/operation-reducer/operation-actions';
 import { popupActions } from '../../redux-reducer/popup-reducer/popup-actions';
 
@@ -146,14 +147,17 @@ describe('SidePanelHelper', () => {
 
   it('should call toggleSecureFlag if file is secured', () => {
     // given
-    jest.spyOn(officeStoreHelper, 'isFileSecured').mockReturnValue(true);
-    jest.spyOn(officeStoreHelper, 'isClearDataFailed').mockReturnValue(true);
-    const distchMock = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+    jest.spyOn(officeStoreHelper, 'getPropertyValue').mockReturnValueOnce(true);
+    jest.spyOn(officeStoreHelper, 'getPropertyValue').mockReturnValueOnce(true);
+    jest.spyOn(officeStoreHelper, 'setPropertyValue').mockImplementation();
+    jest.spyOn(officeActions, 'toggleIsClearDataFailedFlag').mockImplementation();
+    jest.spyOn(officeActions, 'toggleSecuredFlag').mockImplementation();
+    const dispatchMock = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
     // when
     sidePanelHelper.initializeClearDataFlags();
 
     // then
-    expect(distchMock).toHaveBeenCalledTimes(2);
+    expect(dispatchMock).toHaveBeenCalledTimes(2);
   });
 });

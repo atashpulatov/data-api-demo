@@ -12,7 +12,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
     ANT_BUTTON = '.ant-btn'
 
-    IMPORT_BUTTON_ELEM = 'import'
+    IMPORT_BUTTON_ELEM = 'import-data'
     BACK_BUTTON_ELEM = 'back'
     CANCEL_BUTTON_ELEM = 'cancel'
 
