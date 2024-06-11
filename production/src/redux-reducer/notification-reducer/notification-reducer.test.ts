@@ -31,6 +31,7 @@ describe('Notification reducer', () => {
     expect(resultState).toEqual({
       notifications: [],
       globalNotification: { type: '' },
+      sidePanelBanner: null,
     });
   });
 
@@ -38,7 +39,7 @@ describe('Notification reducer', () => {
     const initialState: NotificationState = {
       notifications: [],
       globalNotification: { type: '' },
-      sidePanelNotification: {},
+      sidePanelBanner: {},
     };
 
     describe('createGlobalNotification', () => {
@@ -62,7 +63,7 @@ describe('Notification reducer', () => {
         const initialStateExistingGlobal: NotificationState = {
           notifications: [],
           globalNotification: { type: 'some notification' },
-          sidePanelNotification: {},
+          sidePanelBanner: null,
         };
         const expectedNotification = {
           type: 'some type',
@@ -87,7 +88,7 @@ describe('Notification reducer', () => {
         const initialStateExistingGlobal: NotificationState = {
           notifications: [],
           globalNotification: { type: 'some type', message: 'some value' },
-          sidePanelNotification: {},
+          sidePanelBanner: null,
         };
         const action: ClearGlobalNotificationAction = {
           type: NotificationActionTypes.REMOVE_GLOBAL_NOTIFICATION,
@@ -161,7 +162,7 @@ describe('Notification reducer', () => {
         },
       ],
       globalNotification: { type: 'some type' },
-      sidePanelNotification: {},
+      sidePanelBanner: {},
     };
 
     const updatedStateProgress = {

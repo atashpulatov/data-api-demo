@@ -43,26 +43,19 @@ export interface GlobalNotification {
 export interface NotificationState {
   notifications: Notification[];
   globalNotification: GlobalNotification;
-  sidePanelNotification: SidePanelNotification | null;
+  sidePanelBanner: SidePanelBanner | null;
 }
 
-export interface SidePanelNotification {
+export interface SidePanelBanner {
   title?: string;
   dismissNotification?: () => void;
   type?: string;
   children?: ReactElement;
 }
 
-export enum SidePanelNotificationType {
+export enum SidePanelBannerType {
   IN_PROGRESS = 'IN_PROGRESS',
   STOPPED = 'STOPPED',
-}
-
-export interface SidePanelNotificationButton {
-  label: string;
-  onClick: () => void;
-  className: string;
-  tooltip?: string;
 }
 
 export enum NotificationActionTypes {
@@ -82,8 +75,8 @@ export enum NotificationActionTypes {
   RESTORE_ALL_NOTIFICATIONS = 'RESTORE_ALL_NOTIFICATIONS',
   MARK_STEP_COMPLETED = 'MARK_STEP_COMPLETED',
   TOGGLE_SECURED_FLAG = 'TOGGLE_SECURED_FLAG',
-  SET_SIDE_PANEL_NOTIFICATION = 'SET_SIDE_PANEL_NOTIFICATION',
-  UPDATE_SIDE_PANEL_NOTIFICATION = 'UPDATE_SIDE_PANEL_NOTIFICATION',
+  SET_SIDE_PANEL_BANNER = 'SET_SIDE_PANEL_BANNER',
+  UPDATE_SIDE_PANEL_BANNER = 'UPDATE_SIDE_PANEL_BANNER',
 }
 
 export enum TitleOperationInProgressMap {
@@ -211,14 +204,14 @@ export interface ToggleSecuredFlagAction extends Action {
   isSecured: boolean;
 }
 
-export interface SetSidePanelNotificationAction extends Action {
-  type: NotificationActionTypes.SET_SIDE_PANEL_NOTIFICATION;
-  payload: SidePanelNotification;
+export interface SetSidePanelBannerAction extends Action {
+  type: NotificationActionTypes.SET_SIDE_PANEL_BANNER;
+  payload: SidePanelBanner;
 }
 
-export interface UpdateSidePanelNotificationAction extends Action {
-  type: NotificationActionTypes.UPDATE_SIDE_PANEL_NOTIFICATION;
-  payload: SidePanelNotification;
+export interface UpdateSidePanelBannerAction extends Action {
+  type: NotificationActionTypes.UPDATE_SIDE_PANEL_BANNER;
+  payload: SidePanelBanner;
 }
 
 export type NotificationActions =
@@ -241,5 +234,5 @@ export type NotificationActions =
   | ClearGlobalNotificationAction
   | RestoreAllNotificationsAction
   | CreateGlobalNotificationAction
-  | SetSidePanelNotificationAction
-  | UpdateSidePanelNotificationAction;
+  | SetSidePanelBannerAction
+  | UpdateSidePanelBannerAction;

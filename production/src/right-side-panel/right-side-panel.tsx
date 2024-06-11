@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { OfficeApplicationType, SidePanel } from '@mstr/connector-components';
-import { SidePanelNotificationProps } from '@mstr/connector-components/lib/notification/side-panel/side-panel-notification-types';
+import { SidePanelBannerProps } from '@mstr/connector-components/lib/side-panel/banner/side-panel-banner-types';
 
 import { useGetFilteredObjectListForSidePanelDetails } from '../redux-reducer/settings-reducer/settings-hooks';
 import useAutoRefreshObjects from './side-panel-hooks/use-auto-refresh-objects';
@@ -23,7 +23,7 @@ import { Confirmation } from '../home/confirmation';
 import { SettingsMenu } from '../home/settings-menu';
 import { popupController } from '../popup/popup-controller';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
-import { setSidePanelNotification } from '../redux-reducer/notification-reducer/notification-action-creators';
+import { setSidePanelBanner } from '../redux-reducer/notification-reducer/notification-action-creators';
 import { notificationReducerSelectors } from '../redux-reducer/notification-reducer/notification-reducer-selectors';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { officeSelectors } from '../redux-reducer/office-reducer/office-reducer-selectors';
@@ -93,9 +93,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   const filteredObjects = useGetFilteredObjectListForSidePanelDetails(loadedObjectsWrapped);
   // Get side panel notification used to display the notification in the side panel, either
   // to show banner to allow user to stop refresh all operations (Multiple objects or auto-refresh).
-  const sidePanelNotification = useSelector(
-    notificationReducerSelectors.selectSidePanelNotification
-  );
+  const sidePanelBanner = useSelector(notificationReducerSelectors.selectSidePanelBanner);
 
   // Update ref when value changes
   useEffect(() => {
@@ -111,10 +109,10 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
       )
     );
     // If operations are empty, remove the side panel notification banner.
-    if (operations?.length <= 1 && sidePanelNotification?.type) {
-      reduxStore.dispatch(setSidePanelNotification(null));
+    if (operations?.length <= 1 && sidePanelBanner?.type) {
+      reduxStore.dispatch(setSidePanelBanner(null));
     }
-  }, [loadedObjects, notifications, operations, sidePanelNotification]);
+  }, [loadedObjects, notifications, operations, sidePanelBanner]);
 
   const showOverviewModal = (objectName: string): void => {
     popupController.runImportedDataOverviewPopup();
@@ -159,7 +157,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
           onShowInOverviewClick={showOverviewModal}
           isPopupRendered={isDialogOpen}
           applicationType={OfficeApplicationType.EXCEL}
-          sidePanelNotification={sidePanelNotification as SidePanelNotificationProps}
+          banner={sidePanelBanner as SidePanelBannerProps}
         />
       )}
     </>

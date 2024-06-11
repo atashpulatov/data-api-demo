@@ -12,9 +12,9 @@ import {
   Notification,
   NotificationActionTypes,
   RestoreAllNotificationsAction,
-  SetSidePanelNotificationAction,
-  SidePanelNotification,
-  UpdateSidePanelNotificationAction,
+  SetSidePanelBannerAction,
+  SidePanelBanner,
+  UpdateSidePanelBannerAction,
 } from './notification-reducer-types';
 
 export const createConnectionLostNotification = (): CreateConnectionLostNotificationAction => ({
@@ -72,16 +72,14 @@ export const createGlobalNotification = (
   payload: globalNotification,
 });
 
-export const setSidePanelNotification = (
-  sidePanelNotification: SidePanelNotification
-): SetSidePanelNotificationAction => ({
-  type: NotificationActionTypes.SET_SIDE_PANEL_NOTIFICATION,
-  payload: sidePanelNotification,
+export const setSidePanelBanner = (sidePanelBanner: SidePanelBanner): SetSidePanelBannerAction => ({
+  type: NotificationActionTypes.SET_SIDE_PANEL_BANNER,
+  payload: sidePanelBanner,
 });
 
-export const updateSidePanelNotification = (
-  sidePanelNotification: SidePanelNotification
-): UpdateSidePanelNotificationAction => ({
-  type: NotificationActionTypes.UPDATE_SIDE_PANEL_NOTIFICATION,
-  payload: sidePanelNotification,
+export const updateSidePanelBanner = (
+  sidePanelBanner: SidePanelBanner
+): UpdateSidePanelBannerAction => ({
+  type: NotificationActionTypes.UPDATE_SIDE_PANEL_BANNER,
+  payload: sidePanelBanner,
 });

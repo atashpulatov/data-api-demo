@@ -1,5 +1,6 @@
 import { ReactElement } from 'react';
 import { PopupProps } from '@mstr/connector-components';
+import { SidePanelBannerButtons } from '@mstr/connector-components/lib/side-panel/banner/side-panel-banner-buttons';
 
 import { notificationService } from '../../notification/notification-service';
 import { officeApiHelper } from '../../office/api/office-api-helper';
@@ -12,8 +13,8 @@ import officeStoreObject from '../../office/store/office-store-object';
 import { reduxStore } from '../../store';
 
 import {
-  SidePanelNotification,
-  SidePanelNotificationType,
+  SidePanelBanner,
+  SidePanelBannerType,
 } from '../../redux-reducer/notification-reducer/notification-reducer-types';
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
@@ -24,8 +25,8 @@ import { OperationTypes } from '../../operation/operation-type-names';
 import { popupController } from '../../popup/popup-controller';
 import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import {
-  setSidePanelNotification,
-  updateSidePanelNotification,
+  setSidePanelBanner,
+  updateSidePanelBanner,
 } from '../../redux-reducer/notification-reducer/notification-action-creators';
 import { updateObject } from '../../redux-reducer/object-reducer/object-actions';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
@@ -39,7 +40,6 @@ import {
   addRepromptTask,
   executeNextRepromptTask,
 } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
-import { SidePanelNotificationButtons } from './side-panel-notification-buttons';
 import sidePanelOperationDecorator from './side-panel-operation-decorator';
 
 export class SidePanelService {
@@ -87,13 +87,13 @@ export class SidePanelService {
    * @param className
    * @returns
    */
-  getSidePanelNotificationButtons(
+  getSidePanelBannerButtons(
     title: string,
     onClickHandler: () => void,
     className: string,
     tooltip?: string
   ): ReactElement {
-    return SidePanelNotificationButtons({
+    return SidePanelBannerButtons({
       buttons: [{ label: title, onClick: onClickHandler, className, tooltip }],
     });
   }
@@ -102,18 +102,18 @@ export class SidePanelService {
    * Shows the refresh in progress notification in the side panel.
    * Generates the handler objects and dispatches notification to the side panel.
    */
-  showRefreshInProgressNotification(operations: OperationData[]): void {
+  showRefreshInProgressBanner(operations: OperationData[]): void {
     // Close banner notification handler
     const onDismissHandler = (): void => {
-      reduxStore.dispatch(setSidePanelNotification(null));
+      reduxStore.dispatch(setSidePanelBanner(null));
     };
 
     // Stop refresh all operation handler
     const onClickHandler = (): void => {
       reduxStore.dispatch(
-        updateSidePanelNotification({
+        updateSidePanelBanner({
           title: i18n.t('Stopping...'),
-          type: SidePanelNotificationType.STOPPED,
+          type: SidePanelBannerType.STOPPED,
           dismissNotification: onDismissHandler,
         })
       );
@@ -129,21 +129,20 @@ export class SidePanelService {
         }
       });
 
-      reduxStore.dispatch(setSidePanelNotification(null));
+      reduxStore.dispatch(setSidePanelBanner(null));
     };
 
-    const buttons = this.getSidePanelNotificationButtons('', onClickHandler, 'stop-button', 'Stop');
+    const buttons = this.getSidePanelBannerButtons('', onClickHandler, 'stop-button', 'Stop');
 
-    const sidePanelNotificationObj = {
+    const sidePanelBannerObj = {
       title: 'Refresh in progress...',
-      type: SidePanelNotificationType.IN_PROGRESS,
+      type: SidePanelBannerType.IN_PROGRESS,
       dismissNotification: onDismissHandler,
       children: buttons,
-    } as SidePanelNotification;
+    } as SidePanelBanner;
 
     // Dispatch the notification to the side panel to show the SidePanelNotification component.
-    sidePanelNotificationObj &&
-      reduxStore.dispatch(setSidePanelNotification(sidePanelNotificationObj));
+    sidePanelBannerObj && reduxStore.dispatch(setSidePanelBanner(sidePanelBannerObj));
   }
 
   /**
@@ -161,7 +160,7 @@ export class SidePanelService {
     });
 
     const { operations } = reduxStore.getState().operationReducer;
-    this.showRefreshInProgressNotification(operations);
+    this.showRefreshInProgressBanner(operations);
   }
 
   /**
