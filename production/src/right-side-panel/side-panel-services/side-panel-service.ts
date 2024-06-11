@@ -120,7 +120,6 @@ export class SidePanelService {
         updateSidePanelBanner({
           title: i18n.t('Stopping...'),
           type: SidePanelBannerType.STOPPED,
-          dismissNotification: onDismissHandler,
         })
       );
 
@@ -143,7 +142,7 @@ export class SidePanelService {
     const sidePanelBannerObj = {
       title: 'Refresh in progress...',
       type: SidePanelBannerType.IN_PROGRESS,
-      dismissNotification: onDismissHandler,
+      dismissBanner: onDismissHandler,
       children: buttons,
     } as SidePanelBanner;
 
