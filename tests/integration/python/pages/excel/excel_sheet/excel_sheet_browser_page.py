@@ -34,6 +34,8 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
 
     EXCEL_FONT_NAME_INPUT_ID = 'FontName_New-input'
 
+    EXCEL_FORMAT_INPUT_ID = 'NumberFormatNew-input'
+
     BOLD_BUTTON = '[data-unique-id="Ribbon-Bold"]'
     FONT_COLOR_DROPDOWN_BUTTON_CSS = 'div[data-unique-id="Ribbon-FontColor"]>button:nth-of-type(2)'
     FILL_COLOR_DROPDOWN_BUTTON_CSS = 'div[data-unique-id="Ribbon-FillColor"]>button:nth-of-type(2)'
@@ -84,6 +86,19 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
 
         return value.strip() if value else value
 
+    def get_cells_formats(self, cells):
+        result = []
+
+        for cell in cells:
+            result.append(self._get_cell_format(cell))
+
+        return result
+
+    def _get_cell_format(self, cell):
+        self.go_to_cell(cell)
+
+        return self._get_selected_cell_format()
+
     def go_to_cell(self, cell):
         self._select_cell_or_range(cell)
 
@@ -125,8 +140,13 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
 
         # adjust number formatting to account for other locales
         formatted_value = ExcelUtil.format_cell_value(cell_value)
-
         return formatted_value if formatted_value else ''
+    
+    def _get_selected_cell_format(self):
+        format_input = self.get_element_by_id(ExcelSheetBrowserPage.EXCEL_FORMAT_INPUT_ID)
+
+        return format_input.get_attribute(ExcelSheetBrowserPage.ATTRIBUTE_NAME_VALUE)
+
 
     def write_value_in_cell(self, cell, value):
         self.go_to_cell(cell)
