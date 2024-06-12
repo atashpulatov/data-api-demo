@@ -38,6 +38,6 @@ export function clearRepromptTask(): ClearRepromptTasksAction {
  * @returns The action to add the prompt key.
  */
 export const addMultiplePromptKeys = (keys: string[]): AddMultiplePromptKeysAction => ({
-  type: RepromptQueueActionTypes.ADD_MULTIPLE_PROMPT_KEYS,
+  type: RepromptQueueActionTypes.ADD_MULTIPLE_PROMPT_KEYS_TASK,
   payload: keys,
 });
