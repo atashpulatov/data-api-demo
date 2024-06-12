@@ -29,9 +29,9 @@ export const repromptsQueueReducer = (
     case RepromptQueueActionTypes.CLEAR_REPROMPT_TASKS:
       return clearRepromptTasks();
 
-    case RepromptQueueActionTypes.ADD_MULTIPLE_PROMPT_KEYS: {
+    case RepromptQueueActionTypes.ADD_MULTIPLE_PROMPT_KEYS:
       return addMultiplePromptKeysTask(action, state);
-    }
+
     default:
       return state;
   }
