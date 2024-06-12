@@ -28,16 +28,7 @@ export const repromptsQueueReducer = (
 
     case RepromptQueueActionTypes.CLEAR_REPROMPT_TASKS:
       return clearRepromptTasks();
-    case RepromptQueueActionTypes.ADD_PROMPT_KEY: {
-      // Check if the key already exists in the array
-      const newPromptKeys = state.promptKeys.includes(action.payload)
-        ? state.promptKeys
-        : [...state.promptKeys, action.payload];
-      return {
-        ...state,
-        promptKeys: newPromptKeys,
-      };
-    }
+
     case RepromptQueueActionTypes.ADD_MULTIPLE_PROMPT_KEYS: {
       return addMultiplePromptKeysTask(action, state);
     }
@@ -66,6 +57,7 @@ const executeNextRepromptTask = (state: RepromptsQueueState): RepromptsQueueStat
   // then reset queue and index by returning initial state.
   return { ...initialState };
 };
+
 const addMultiplePromptKeysTask = (
   action: AddMultiplePromptKeysAction,
   state: RepromptsQueueState
