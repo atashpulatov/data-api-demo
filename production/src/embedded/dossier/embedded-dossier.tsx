@@ -25,7 +25,7 @@ import { VisualizationInfo } from '../../types/object-types';
 
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
-import { addPromptKey } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
+import { addMultiplePromptKeys } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import { ErrorMessages } from '../../error/constants';
 
 import './dossier.css';
@@ -309,6 +309,15 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     }
   };
 
+  collectKeys = (promptObjects: any[], keys: string[] = []): string[] => {
+    promptObjects.forEach(promptObject => {
+      if (!keys.includes(promptObject?.key)) {
+        keys.push(promptObject?.key);
+      }
+    });
+    return keys;
+  };
+
   loadEmbeddedDossier = async (container: any): Promise<void> => {
     const {
       mstrData,
@@ -374,26 +383,23 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         givenPromptsAnswers as AnswersState[],
         previousPromptsAnswers
       );
-      // check if the key from the givenPromptsAnswers is present in the repromptQueueReducer set
-      const key = (givenPromptsAnswers[0] as AnswersState)?.answers[0]?.key;
-      let isKeyPresent = false;
-      Object.keys(promptKeys).forEach(promptKey => {
-        if (promptKey === key) {
-          isKeyPresent = true;
+
+      // check if all keys from promptObjectAnswers are present in the promptKeys set
+      if (isMultipleRepromptWithReuse) {
+        const allPromptKeys = this.collectKeys(promptObjectAnswers);
+        const areAllKeysPresent = allPromptKeys.every(key => promptKeys.includes(key));
+        if (!areAllKeysPresent) {
+          // Proceed with opening prompt dialog if applicable.
+          await this.openPromptDialog(
+            dossierId,
+            instance,
+            projectId,
+            dossierOpenRequested,
+            isImportedObjectPrompted,
+            isMultipleRepromptWithReuse
+          );
+          reduxStore.dispatch(addMultiplePromptKeys(allPromptKeys));
         }
-      });
-      if (isMultipleRepromptWithReuse && !isKeyPresent) {
-        // Proceed with opening prompt dialog if applicable.
-        await this.openPromptDialog(
-          dossierId,
-          instance,
-          projectId,
-          dossierOpenRequested,
-          isImportedObjectPrompted,
-          isMultipleRepromptWithReuse
-        );
-        console.log('Prompt key added to the redux store', key);
-        reduxStore.dispatch(addPromptKey(key));
       }
     } catch (error) {
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;

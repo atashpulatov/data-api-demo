@@ -1,4 +1,5 @@
 import {
+  AddMultiplePromptKeysAction,
   AddPromptKeyAction,
   AddRepromptTaskAction,
   ClearRepromptTasksAction,
@@ -40,3 +41,8 @@ export function clearRepromptTask(): ClearRepromptTasksAction {
 export function addPromptKey(key: string): AddPromptKeyAction {
   return { type: RepromptQueueActionTypes.ADD_PROMPT_KEY, payload: key };
 }
+
+export const addMultiplePromptKeys = (keys: string[]): AddMultiplePromptKeysAction => ({
+  type: RepromptQueueActionTypes.ADD_MULTIPLE_PROMPT_KEYS,
+  payload: keys,
+});
