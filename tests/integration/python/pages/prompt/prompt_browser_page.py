@@ -12,6 +12,7 @@ class PromptBrowserPage(BaseBrowserPage):
     PROMPT_RUN_BUTTON_CSS = '#run'
     PROMPTED_DOSSIER_RUN_BUTTON_CSS = '.mstrPromptEditorButtonRun'
     PROMPT_LIST_ELEM_CSS = '.mstrPromptTOCListItemIndex'
+    PROMPT_OBJECT_SELECTED_ITEM_ELEM = '.mstrListBlockItem[aria-label="2016"]'
     PROMPT_OBJECT_SELECTED_ITEM_CSS = '.mstrListCartCellSelectedView .mstrListBlockItemName'
     PROMPT_OBJECT_AVAILABLE_ITEM_CSS = '.mstrListCartCellAvailableView .mstrListBlockItemName'
     PROMPT_OBJECT_QUESTION_CONTAINER_CSS = '.mstrPromptQuestion'
@@ -182,6 +183,9 @@ class PromptBrowserPage(BaseBrowserPage):
 
         self._check_prompt_name(prompt_number, prompt_name)
 
+        # self.get_element_by_css(PromptBrowserPage.PROMPT_OBJECT_SELECTED_ITEM_ELEM);
+        # .double_click()
+
         answer = self.find_element_by_text_in_elements_list_by_css_safe(
             selector,
             item,
@@ -267,6 +271,8 @@ class PromptBrowserPage(BaseBrowserPage):
         name_found_in_prompt_container = prompt_container.get_element_by_css(
             PromptBrowserPage.PROMPT_QUESTION_TITLE_NAME_CSS
         ).text
+
+        print ('name_found_in_prompt_container', name_found_in_prompt_container)
 
         if name_found_in_prompt_container == prompt_name:
             return

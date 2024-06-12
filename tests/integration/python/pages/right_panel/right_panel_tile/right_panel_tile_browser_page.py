@@ -22,7 +22,10 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     RIGHT_PANEL_TILE = '.object-tile-list > article:nth-child(%s) > div > .object-tile-wrapper'
     RIGHT_PANEL_TILE_NOTIFICATION = '.object-tile-list > article:nth-child(%s) > div > .notification-container'
 
-    RIGHT_PANEL_TILE_BUTTON_PREFIX = RIGHT_PANEL_TILE + ' .icon-bar '
+    RIGHT_PANEL_TILE_ICON_BAR_CONTAINER = RIGHT_PANEL_TILE + ' > .object-tile-content > .object-tile-header > .icon-bar-container > '
+    RIGHT_PANEL_TILE_CONTEXT_MENU_CONTAINER = RIGHT_PANEL_TILE_ICON_BAR_CONTAINER + '.multiselection-context-menu > .context-menu-container > '
+
+    RIGHT_PANEL_TILE_BUTTON_PREFIX = RIGHT_PANEL_TILE_ICON_BAR_CONTAINER + '.icon-bar > '
 
     RIGHT_PANEL_TILE_NOTIFICATION_CANCEL_BUTTON = RIGHT_PANEL_TILE_NOTIFICATION + \
                                                   ' .progress-bar-notification-button-container > button'
@@ -38,9 +41,9 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
     #Change index due to implementation of F38412 Re-use prompt answers across multiple prompts when importing content via the MicroStrategy add-in for Excel
     REPROMPT_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(1)'
-    REFRESH_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(2)'
-    OPTIONS_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(3)'
-    EDIT_OPTION_FOR_OBJECT = RIGHT_PANEL_TILE + '.object-tile-wrapper .context-menu-list li:nth-child(1)'
+    REFRESH_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + '''button[aria-label='Refresh button']'''
+    OPTIONS_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + '''button[aria-label='Misc menu button']'''
+    EDIT_OPTION_FOR_OBJECT = RIGHT_PANEL_TILE_CONTEXT_MENU_CONTAINER + '.context-menu-wrapper > .context-menu-list >' + '''li[aria-label='Edit']'''
     CHECKBOX_FOR_OBJECT = RIGHT_PANEL_TILE + ' .mstr-rc-3-selector'
     SELECT_ALL_CHECKBOX = '#master-checkbox'
     REPROMPT_BUTTON_FOR_ALL = '.multiselection-reprompt-button'
@@ -177,7 +180,10 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
             button.click()
 
     def click_refresh(self, tile_no):
-        self._click_tile_button(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT, tile_no)
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_css(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT % tile_no).click()
+        # self._click_tile_button(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT, tile_no)
     
     def click_refresh_without_prompt(self, tile_no):
         self._click_tile_button(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_NORMAL_DOSSIER, tile_no)
