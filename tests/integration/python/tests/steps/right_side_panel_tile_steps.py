@@ -261,12 +261,6 @@ def step_impl(context, object_number):
 
     AssertUtil.assert_simple(is_message_displayed, False)
 
-@step('I verified that the object {object_number} tile has popup displayed')
-def step_impl(context, object_number):
-    is_message_displayed = context.pages.right_panel_tile_page().verify_object_has_popup_displayed(object_number)
-
-    AssertUtil.assert_simple(is_message_displayed, True)
-
 
 @step('I waited for object {object_number} to have message on successful operation: "{expected_message}"')
 def step_impl(context, object_number, expected_message):

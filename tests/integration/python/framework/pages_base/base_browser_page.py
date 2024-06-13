@@ -15,7 +15,7 @@ class BaseBrowserPage(BasePage):
     LIBRARY_FRAME_ELEM = '.library-window > div > iframe'
     ADD_IN_FRAME_ELEM = '.AddinIframe[src*="static/loader-mstr-office"]'
     ADD_IN_ROOT_ELEM = 'root'
-    PROMPT_FRAME_ELEM = '.dossier-iframe > iframe'
+    PROMPT_FRAME_ELEM = '.promptsContainer > iframe'
     POPUP_WRAPPER_ID = 'popup-wrapper'
     UPLOAD_MENU_ID = 'UploadMenu'
 

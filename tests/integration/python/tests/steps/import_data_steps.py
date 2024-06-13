@@ -266,10 +266,6 @@ def step_impl(context):
 def step_impl(context):
     context.pages.import_data_page().hover_over_import_image_button()
 
-@step('I hover over Import Action button')
-def step_impl(context):
-    context.pages.import_data_page().hover_over_import_action_button()
-
 @step('I hover over Import button on Edit')
 def step_impl(context):
     context.pages.import_data_page().hover_over_import_on_edit_button()
@@ -283,10 +279,6 @@ def step_impl(context, expected_tooltip_text):
 @step('I verified that tooltip for Import button shows message "{expected_tooltip_text}"')
 def step_impl(context, expected_tooltip_text):
     tooltip_text = context.pages.import_data_page().get_tooltip_message_for_button()
-
-    print ('---------------------')
-    print (tooltip_text)
-    print ('=====================')
 
     AssertUtil.assert_simple(tooltip_text, expected_tooltip_text)
 

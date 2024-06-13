@@ -15,8 +15,8 @@ Feature: F39446 - Ability to import visualization as image in Excel
         And I verified that Import button is enabled
         And I verified that Prepare Data button is disabled
         And I clicked Import button without checking results
-        And I unselected "England" as an answer for "1. Country" prompt - object prompt
-        And I unselected "Web" as an answer for "1. Country" prompt - object prompt
+        And I unselected in dashboard prompt "England" as an answer for "1. Country" prompt - object prompt
+        And I unselected in dashboard prompt "Web" as an answer for "1. Country" prompt - object prompt
         And I clicked Run button for prompted dossier if prompts not already answered
         And I waited for dossier to load successfully
         And I verified that Import button is disabled
@@ -44,8 +44,8 @@ Feature: F39446 - Ability to import visualization as image in Excel
     # Reprompt formatted grid
         When I clicked Reprompt on object 1
         And I waited for Prompt Dialog is ready
-        And I unselected "USA" as an answer for "1. Country" prompt - object prompt
-        And I selected "Web" as an answer for "1. Country" prompt - object prompt
+        And I unselected in dashboard prompt "USA" as an answer for "1. Country" prompt - object prompt
+        And I selected in dashboard prompt "Web" as an answer for "1. Country" prompt - object prompt
         And I clicked Run button for prompted dossier if prompts not already answered
         And I closed last notification
         Then I verified that cells ["A1", "B2", "C3"] have values ["Year", "Web", "Electronics"]

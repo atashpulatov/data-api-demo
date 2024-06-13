@@ -12,67 +12,59 @@ Feature: F39446 - Ability to import visualization as image in Excel
         And I verified that Import button is disabled
         And I verified that Prepare Data button is disabled
         And I found and selected object "Reprompt - Prompt on Category"
-        And I verified that Prepare Data button is disabled
-        And I verified that Import Action button is enabled
-        And I clicked Import dropdown button
-        And I verified that "Import Formatted Data" item in Import dropdown is enabled
-        And I selected "Import Formatted Data" item in Import dropdown
-        And I clicked Import button without checking results
-        And I unselected "Movies" as an answer for "1. Choose elements of Category." prompt - object prompt
-        And I unselected "Music" as an answer for "1. Choose elements of Category." prompt - object prompt
-        And I selected "Books" as an answer for "1. Choose elements of Category." prompt - object prompt
-        And I clicked Run button for prompted dossier if prompts not already answered
-        And I waited for dossier to load successfully
-        And I verified that Import button is disabled
-
-    # Verify the tooltip for import button
-        And I hover over Import button
-        Then I verified that tooltip for Import button shows message "This button is currently disabled because you didn’t select any data" 
-
-    # Import formatted grid into worksheet
-        And I selected visualization "Visualization 1"
+        And I verified that Prepare Data button is enabled
         And I verified that Import Action button is enabled
         And I clicked Import dropdown button
         And I verified that "Import Formatted Data" item in Import dropdown is enabled
         And I selected "Import Formatted Data" item in Import dropdown
         And I clicked Import Action button without checking results
+        And I unselected "Movies" as an answer for "1. Category" prompt - object prompt
+        And I unselected "Music" as an answer for "1. Category" prompt - object prompt
+        And I selected "Books" as an answer for "1. Category" prompt - object prompt
+
+    # Import formatted grid into worksheet
+        And I clicked Run button
         And I closed last notification
-        Then I verified that cells ["A1", "B2", "C3"] have values ["Year", "Atlanta", "Electronics"]
+        And I verified that cell "C3" has value "$681,179"
 
     # Refresh formatted grid
         When I clicked Refresh on object 1
         And I closed notification on object 1
-        Then I verified that cells ["A1", "B2", "C3"] have values ["Year", "Atlanta", "Electronics"]
+        And I verified that cell "C3" has value "$681,179"
 
 
     # Reprompt formatted grid
         When I clicked Reprompt on object 1
         And I waited for Prompt Dialog is ready
-        And I unselected "USA" as an answer for "1. Country" prompt - object prompt
-        And I selected "Web" as an answer for "1. Country" prompt - object prompt
-        And I clicked Run button for prompted dossier if prompts not already answered
+        And I unselected "Books" as an answer for "1. Category" prompt - object prompt
+        And I selected "Electronics" as an answer for "1. Category" prompt - object prompt
+        And I clicked Run button
         And I closed last notification
-        Then I verified that cells ["A1", "B2", "C3"] have values ["Year", "Web", "Electronics"]
+        And I verified that cell "C3" has value "$6,610,260"
 
     # Edit formatted grid and import formatted compound grid
         When I clicked Edit object 1
-        And I waited for dossier to load successfully
-        And I selected visualization "Visualization 1"
-        And I verified that Import button on Edit is enabled
-        And I clicked import formatted data
+        And I waited for Run button to be enabled
+        And I selected "Books" as an answer for "1. Category" prompt - object prompt
+        And I clicked Run button
+        And I verified that Columns & Filters Selection is visible
+        And I verified that counter of "metrics" shows "2" of "2" selected
+        And I verified that counter of "attributes" shows "2" of "2" selected
+        And I verified that counter of "filters" shows "0" of "2" selected
+        And I clicked Import button in Columns and Filters Selection without success check
         And I closed last notification  
-        Then I verified that cells ["A1", "B2", "C3"] have values ["Year", "Web", "Electronics"]
+        And I verified that cell "C3" has value "$4,970,513"
 
     # Clear entire data
         When I clicked clear data
         And I waited for Clear Data overlay to have title "Data Cleared!"
         And I verified that the Clear Data overlay displayed message "MicroStrategy data has been removed from the workbook. Click 'View Data' to import it again."
-        Then I verified that cells ["A1", "C1", "B3", "C4"] have values ["Year", "Category", "", ""]
+        Then I verified that cells ["A1", "C1", "B3", "C4"] have values ["Year", "Cost", "", ""]
 
     # View cleared data    
         And I clicked view data
         And I closed last notification
-        Then I verified that cells ["A1", "C1", "B3", "C4"] have values ["Year", "Revenue", "", "Movies"]    
+        Then I verified that cells ["A1", "C1", "B3", "C4"] have values ["Year", "Cost", "Electronics", "$681,179"]    
 
     # Duplicate formatted grid into active cell
         When I selected cell "X52"
@@ -80,8 +72,8 @@ Feature: F39446 - Ability to import visualization as image in Excel
         Then I selected Active Cell option in Duplicate popup
         And I clicked Import button in Duplicate popup without checking results
         And I closed last notification
-        Then I verified that object number 1 is called "Visualization 1 (2)"
-        And I verified that cell "Y53" has value "Web"
+        Then I verified that object number 1 is called "Reprompt - Prompt on Category (2)"
+        And I verified that cell "Y53" has value "Books"
 
     # Remove duplicated formatted grid
         When I removed object 1 using context menu
@@ -93,7 +85,7 @@ Feature: F39446 - Ability to import visualization as image in Excel
         And I clicked Import button in Duplicate popup without checking results
         And I closed last notification
         And I selected worksheet number 2
-        Then I verified that cell "C4" has value "Movies"
+        Then I verified that cell "C4" has value "$681,179"
 
         And I logged out
 
