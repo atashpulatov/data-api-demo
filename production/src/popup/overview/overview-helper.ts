@@ -5,6 +5,7 @@ import {
   PopupTypes,
 } from '@mstr/connector-components';
 
+import { notificationService } from '../../notification/notification-service';
 import { officeApiService } from '../../office/api/office-api-service';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { pageByHelper } from '../../page-by/page-by-helper';
@@ -12,10 +13,16 @@ import { popupHelper } from '../popup-helper';
 
 import { reduxStore } from '../../store';
 
+import {
+  GlobalNotification,
+  Notification,
+} from '../../redux-reducer/notification-reducer/notification-reducer-types';
 import { DialogPopup } from './overview-types';
 
 import i18n from '../../i18n';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
+import { clearGlobalNotification } from '../../redux-reducer/notification-reducer/notification-action-creators';
+import { cancelOperationByOperationId } from '../../redux-reducer/operation-reducer/operation-actions';
 import { executeNextRepromptTask } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import {
   NotificationButtonsProps,
@@ -47,20 +54,12 @@ export enum OverviewActionCommands {
 class OverviewHelper {
   sidePanelService: any;
 
-  notificationService: any;
-
   sidePanelHelper: any;
 
   sidePanelNotificationHelper: any;
 
-  init = (
-    sidePanelService: any,
-    notificationService: any,
-    sidePanelHelper: any,
-    sidePanelNotificationHelper: any
-  ): void => {
+  init = (sidePanelService: any, sidePanelHelper: any, sidePanelNotificationHelper: any): void => {
     this.sidePanelService = sidePanelService;
-    this.notificationService = notificationService;
     this.sidePanelHelper = sidePanelHelper;
     this.sidePanelNotificationHelper = sidePanelNotificationHelper;
   };
@@ -125,11 +124,16 @@ class OverviewHelper {
    * Sends message with dismiss notification command to the Side Panel
    *
    * @param objectWorkingIds Unique Ids of the objects allowing to reference specific objects
+   * @param operationId Unique Id of the operation allowing to reference specific operation
    */
-  async sendDismissNotificationRequest(objectWorkingIds: number[]): Promise<void> {
+  async sendDismissNotificationRequest(
+    objectWorkingIds: number[],
+    operationId: string
+  ): Promise<void> {
     popupHelper.officeMessageParent({
       command: OverviewActionCommands.DISMISS_NOTIFICATION,
       objectWorkingIds,
+      operationId,
     });
   }
 
@@ -277,19 +281,14 @@ class OverviewHelper {
    * Handles dismissing object notifications for given objectWorkingIds
    *
    * @param objectWorkingIds Unique Ids of the objects allowing to reference specific objects
+   * @param operationId Unique Id of the operation allowing to reference specific operation
    */
-  handleDismissNotifications = (objectWorkingIds: number[]): void => {
+  handleDismissNotifications = (objectWorkingIds: number[], operationId: string): void => {
+    console.log('operationId', operationId);
+    operationId && reduxStore.dispatch(cancelOperationByOperationId(operationId));
     objectWorkingIds?.forEach(objectWorkingId => {
-      this.notificationService.removeExistingNotification(objectWorkingId);
+      notificationService.removeExistingNotification(objectWorkingId);
     });
-  };
-
-  /**
-   * Handles dismissing global notification
-   *
-   */
-  handleDismissGlobalNotification = (): void => {
-    this.notificationService.globalNotificationDissapear();
   };
 
   /**
@@ -301,20 +300,11 @@ class OverviewHelper {
     command: OverviewActionCommands;
     objectWorkingId?: number;
     objectWorkingIds?: number[];
+    operationId?: string;
     insertNewWorksheet?: boolean;
     withEdit?: boolean;
     newName?: string;
   }): Promise<void> {
-    // DE288915: Only trigger dismiss notifications if the command is not edit or reprompt
-    // For Edit and Re-prompt, dismissal is taken care in the notification reducer itself.
-    // This is to avoid dispatching notification dismissals and avoid conflicts.
-    if (
-      response.command !== OverviewActionCommands.EDIT &&
-      response.command !== OverviewActionCommands.REPROMPT
-    ) {
-      this.handleDismissNotifications(response.objectWorkingIds);
-    }
-
     const { callback } = reduxStore.getState().officeReducer?.popupData || {};
 
     switch (response.command) {
@@ -376,10 +366,10 @@ class OverviewHelper {
         this.sidePanelService.highlightObject(response.objectWorkingId);
         break;
       case OverviewActionCommands.DISMISS_NOTIFICATION:
-        this.handleDismissNotifications(response.objectWorkingIds);
+        this.handleDismissNotifications(response.objectWorkingIds, response.operationId);
         break;
       case OverviewActionCommands.DISMISS_GLOBAL_NOTIFICATION:
-        this.handleDismissGlobalNotification();
+        reduxStore.dispatch(clearGlobalNotification());
         break;
       default:
         console.warn('Unhandled dialog command: ', response.command);
@@ -611,8 +601,8 @@ class OverviewHelper {
     notifications,
     globalNotification,
   }: {
-    notifications?: any[];
-    globalNotification?: any;
+    notifications?: Notification[];
+    globalNotification?: GlobalNotification;
   }): any => {
     const { t } = i18n;
 
@@ -626,7 +616,8 @@ class OverviewHelper {
         buttons: [
           {
             label: t('OK'),
-            onClick: () => this.sendDismissNotificationRequest([warning.objectWorkingId]),
+            onClick: () =>
+              this.sendDismissNotificationRequest([warning.objectWorkingId], warning.operationId),
           },
         ],
       } as NotificationButtonsProps;

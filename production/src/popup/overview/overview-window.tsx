@@ -87,7 +87,10 @@ export const OverviewWindow: React.FC = () => {
           notification.type === ObjectNotificationTypes.SUCCESS &&
           notification.operationType === OperationTypes.REMOVE_OPERATION
         ) {
-          overviewHelper.sendDismissNotificationRequest([notification.objectWorkingId]);
+          overviewHelper.sendDismissNotificationRequest(
+            [notification.objectWorkingId],
+            notification.operationId
+          );
         }
       }, 500);
     });

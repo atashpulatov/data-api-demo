@@ -287,7 +287,7 @@ describe('Notification reducer', () => {
         // given
         const action: MoveNotificationToInProgressAction = {
           type: NotificationActionTypes.MOVE_NOTIFICATION_TO_IN_PROGRESS,
-          payload: { objectWorkingId: 12 },
+          payload: { objectWorkingId: 12, operationId: 'someId' },
         };
 
         // when
@@ -302,11 +302,11 @@ describe('Notification reducer', () => {
         // given
         const actionForRemove: MoveNotificationToInProgressAction = {
           type: NotificationActionTypes.MOVE_NOTIFICATION_TO_IN_PROGRESS,
-          payload: { objectWorkingId: 123 },
+          payload: { objectWorkingId: 123, operationId: 'someId' },
         };
         const actionForClear: MoveNotificationToInProgressAction = {
           type: NotificationActionTypes.MOVE_NOTIFICATION_TO_IN_PROGRESS,
-          payload: { objectWorkingId: 1234 },
+          payload: { objectWorkingId: 1234, operationId: 'someId' },
         };
 
         // when
@@ -338,7 +338,7 @@ describe('Notification reducer', () => {
         // given
         const actionForImport: DisplayNotificationCompletedAction = {
           type: NotificationActionTypes.DISPLAY_NOTIFICATION_COMPLETED,
-          payload: { objectWorkingId: 12 },
+          payload: { objectWorkingId: 12, dismissNotificationCallback: jest.fn() },
         };
 
         // when
@@ -348,36 +348,6 @@ describe('Notification reducer', () => {
         expect(resultState.notifications[0].type).toEqual('success');
         expect(resultState.notifications[0].title).toEqual('Import successful');
         expect(resultState.notifications[0].dismissNotification).toBeDefined();
-      });
-
-      it('should assign proper method for operation other than remove', () => {
-        // given
-        const actionForImport: DisplayNotificationCompletedAction = {
-          type: NotificationActionTypes.DISPLAY_NOTIFICATION_COMPLETED,
-          payload: { objectWorkingId: 12 },
-        };
-        const resultState = notificationReducer(initialStateProgress, actionForImport);
-
-        // when
-        resultState.notifications[0].dismissNotification();
-
-        // then
-        expect(mockedDismissNotification).toBeCalled();
-      });
-
-      it('should assign proper method for remove operation', () => {
-        // given
-        const actionForRemove: DisplayNotificationCompletedAction = {
-          type: NotificationActionTypes.DISPLAY_NOTIFICATION_COMPLETED,
-          payload: { objectWorkingId: 123 },
-        };
-        const resultState = notificationReducer(initialStateProgress, actionForRemove);
-
-        // when
-        resultState.notifications[1].dismissNotification();
-
-        // then
-        expect(mockedDismissSuccessfulRemoveNotification).toBeCalled();
       });
     });
 

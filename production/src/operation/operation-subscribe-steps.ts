@@ -37,10 +37,11 @@ import stepGetFormattedDataTableImport from '../office/table/step-get-formatted-
 import stepGetOfficeTableEditRefresh from '../office/table/step-get-office-table-edit-refresh';
 import stepGetOfficeTableImport from '../office/table/step-get-office-table-import';
 import stepModifyObject from '../popup/step-modify-object';
+import { operationBus } from './operation-bus';
 import { OperationSteps } from './operation-steps';
 
 class SubscribeSteps {
-  init = (operationBus: any): void => {
+  init = (): void => {
     operationBus.subscribe(OperationSteps.MODIFY_OBJECT, stepModifyObject.modifyObject);
 
     operationBus.subscribe(

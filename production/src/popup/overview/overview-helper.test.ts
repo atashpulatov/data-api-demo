@@ -309,12 +309,13 @@ describe('overview-helper', () => {
       .spyOn(popupHelper, 'officeMessageParent')
       .mockImplementation();
     // When
-    overviewHelper.sendDismissNotificationRequest(objectWorkingIds);
+    overviewHelper.sendDismissNotificationRequest(objectWorkingIds, 'operationId');
 
     // Then
     expect(officeMessageParentMock).toHaveBeenCalledWith({
       command: OverviewActionCommands.DISMISS_NOTIFICATION,
       objectWorkingIds,
+      operationId: 'operationId',
     });
   });
 
@@ -332,19 +333,6 @@ describe('overview-helper', () => {
       command: OverviewActionCommands.DISMISS_GLOBAL_NOTIFICATION,
     });
   });
-
-  // it('should handle Dismiss Global Notification request to side panel', () => {
-  //   // Given
-  //   const notificationServiceMock = jest
-  //     .spyOn(notificationService, 'globalNotificationDissapear')
-  //     .mockImplementation();
-
-  //   // When
-  //   overviewHelper.handleDismissGlobalNotification();
-
-  //   // Then
-  //   expect(notificationServiceMock).toHaveBeenCalled();
-  // });
 
   it('should handle refresh command', async () => {
     // Given

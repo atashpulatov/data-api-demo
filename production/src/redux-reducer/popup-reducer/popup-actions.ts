@@ -1,5 +1,8 @@
 import { Dispatch } from 'redux';
 
+import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
+import { visualizationInfoService } from '../../mstr-object/visualization-info-service';
+
 import { ObjectData } from '../../types/object-types';
 import { PopupActionTypes } from './popup-reducer-types';
 
@@ -9,30 +12,11 @@ import { DisplayAttrFormNames } from '../../mstr-object/constants';
 class PopupActions {
   errorService: any;
 
-  officeReducerHelper: any;
-
-  popupHelper: any;
-
-  mstrObjectRestService: any;
-
   popupController: any;
 
-  visualizationInfoService: any;
-
-  init = (
-    errorService: any,
-    officeReducerHelper: any,
-    popupHelper: any,
-    mstrObjectRestService: any,
-    popupController: any,
-    visualizationInfoService: any
-  ): void => {
+  init = (errorService: any, popupController: any): void => {
     this.errorService = errorService;
-    this.officeReducerHelper = officeReducerHelper;
-    this.popupHelper = popupHelper;
-    this.mstrObjectRestService = mstrObjectRestService;
     this.popupController = popupController;
-    this.visualizationInfoService = visualizationInfoService;
   };
 
   callForReprompt = (objectData: ObjectData) => async (dispatch: Dispatch<any>) => {
@@ -50,6 +34,7 @@ class PopupActions {
       type: PopupActionTypes.SET_REPORT_N_FILTERS,
       editedObject: objectData,
     });
+
     if (objectData.isPrompted) {
       this.popupController.runRepromptPopup(objectData);
     } else {
@@ -147,7 +132,7 @@ class PopupActions {
   prepareDossierForEdit = async (editedDossier: any): Promise<void> => {
     const { projectId, objectId, manipulationsXML, visualizationInfo } = editedDossier;
 
-    const instance = await this.mstrObjectRestService.createDossierInstance(projectId, objectId, {
+    const instance = await mstrObjectRestService.createDossierInstance(projectId, objectId, {
       ...manipulationsXML,
       disableManipulationsAutoSaving: true,
       persistViewState: true,
@@ -155,13 +140,12 @@ class PopupActions {
 
     let updatedVisualizationInfo;
     try {
-      ({ vizInfo: updatedVisualizationInfo } =
-        await this.visualizationInfoService.getVisualizationInfo(
-          projectId,
-          objectId,
-          visualizationInfo.visualizationKey,
-          instance.mid
-        ));
+      ({ vizInfo: updatedVisualizationInfo } = await visualizationInfoService.getVisualizationInfo(
+        projectId,
+        objectId,
+        visualizationInfo.visualizationKey,
+        instance.mid
+      ));
     } catch (ignoreError) {
       // Ignored
     }
@@ -186,7 +170,7 @@ class PopupActions {
   prepareDossierForReprompt = async (repromptedDossier: any): Promise<void> => {
     const { projectId, objectId, manipulationsXML, visualizationInfo } = repromptedDossier;
 
-    const instance = await this.mstrObjectRestService.createDossierInstance(projectId, objectId, {
+    const instance = await mstrObjectRestService.createDossierInstance(projectId, objectId, {
       ...manipulationsXML,
       disableManipulationsAutoSaving: true,
       persistViewState: true,
@@ -194,23 +178,18 @@ class PopupActions {
 
     let updatedVisualizationInfo;
     try {
-      ({ vizInfo: updatedVisualizationInfo } =
-        await this.visualizationInfoService.getVisualizationInfo(
-          projectId,
-          objectId,
-          visualizationInfo.visualizationKey,
-          instance.mid
-        ));
+      ({ vizInfo: updatedVisualizationInfo } = await visualizationInfoService.getVisualizationInfo(
+        projectId,
+        objectId,
+        visualizationInfo.visualizationKey,
+        instance.mid
+      ));
     } catch (ignoreError) {
       // Ignored
     }
 
     // Re-prompt the dossier to open prompts' popup
-    const resp = await this.mstrObjectRestService.rePromptDossier(
-      objectId,
-      instance.mid,
-      projectId
-    );
+    const resp = await mstrObjectRestService.rePromptDossier(objectId, instance.mid, projectId);
 
     // Update dossier's instanceId with the new one
     repromptedDossier.instanceId = resp && resp.mid ? resp.mid : instance.mid;

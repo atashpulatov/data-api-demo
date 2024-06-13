@@ -22,6 +22,7 @@ export interface Notification {
   title: string;
   type: ObjectNotificationTypes;
   operationType: OperationTypes;
+  operationId?: string;
   percentage?: number;
   isFetchingComplete?: boolean;
   isIndeterminate?: boolean;
@@ -52,6 +53,8 @@ export enum NotificationActionTypes {
   CLEAR_DATA_OPERATION = 'CLEAR_DATA_OPERATION',
   DUPLICATE_OPERATION = 'DUPLICATE_OPERATION',
   DELETE_NOTIFICATION = 'DELETE_NOTIFICATION',
+  DISMISS_SINGLE_NOTIFICATION = 'DISMISS_SINGLE_NOTIFICATION',
+  DISMISS_ALL_NOTIFICATIONS = 'DISMISS_ALL_NOTIFICATIONS',
   MOVE_NOTIFICATION_TO_IN_PROGRESS = 'MOVE_NOTIFICATION_TO_IN_PROGRESS',
   DISPLAY_NOTIFICATION_COMPLETED = 'DISPLAY_NOTIFICATION_COMPLETED',
   CREATE_GLOBAL_NOTIFICATION = 'CREATE_GLOBAL_NOTIFICATION',
@@ -123,12 +126,12 @@ export interface EditOperationAction extends Action {
 
 export interface MoveNotificationToInProgressAction extends Action {
   type: NotificationActionTypes.MOVE_NOTIFICATION_TO_IN_PROGRESS;
-  payload: { objectWorkingId: number };
+  payload: { objectWorkingId: number; operationId: string };
 }
 
 export interface DisplayNotificationCompletedAction extends Action {
   type: NotificationActionTypes.DISPLAY_NOTIFICATION_COMPLETED;
-  payload: { objectWorkingId: number };
+  payload: { objectWorkingId: number; dismissNotificationCallback: () => void };
 }
 
 export interface CreateConnectionLostNotificationAction extends Action {
@@ -153,6 +156,14 @@ export interface DisplayGlobalNotificationAction extends Action {
 export interface DeleteObjectNotificationAction extends Action {
   type: NotificationActionTypes.DELETE_NOTIFICATION;
   payload: { objectWorkingId: number };
+}
+export interface DismissSingleNotificationAction extends Action {
+  type: NotificationActionTypes.DISMISS_SINGLE_NOTIFICATION;
+  payload: { objectWorkingId: number };
+}
+
+export interface DismissAllNotificationsAction extends Action {
+  type: NotificationActionTypes.DISMISS_ALL_NOTIFICATIONS;
 }
 
 export interface DisplayObjectWarningAction extends Action {
@@ -203,6 +214,8 @@ export type NotificationActions =
   | CreateSessionExpiredNotificationAction
   | DisplayGlobalNotificationAction
   | DeleteObjectNotificationAction
+  | DismissSingleNotificationAction
+  | DismissAllNotificationsAction
   | DisplayObjectWarningAction
   | ClearNotificationsAction
   | ClearGlobalNotificationAction

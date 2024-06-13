@@ -1,11 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { connect, useSelector } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { OverflowTooltip } from '@mstr/rc';
+import { Dispatch } from 'redux';
 
 import { authenticationService } from '../../authentication/authentication-service';
 import getDocumentationLocale from '../../helpers/get-documentation-locale';
-import { notificationService } from '../../notification/notification-service';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 
 import packageJson from '../../../package.json';
@@ -15,6 +15,7 @@ import logo from '../../home/assets/mstr_logo.png';
 import i18n from '../../i18n';
 import { officeContext } from '../../office/office-context';
 import { popupController } from '../../popup/popup-controller';
+import { dismissAllObjectsNotifications } from '../../redux-reducer/notification-reducer/notification-action-creators';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 import { officeSelectors } from '../../redux-reducer/office-reducer/office-reducer-selectors';
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
@@ -34,10 +35,11 @@ interface SettingsMenuProps {
 
 const APP_VERSION = packageJson.build;
 
-async function logout(hideSettingsPopup: () => void): Promise<void> {
+async function logout(hideSettingsPopup: () => void, dispatch: Dispatch): Promise<void> {
   try {
     hideSettingsPopup();
-    notificationService.dismissNotifications();
+    // @ts-expect-error
+    dispatch(dismissAllObjectsNotifications());
     await authenticationService.logOutRest(errorService);
     sessionActions.logOut();
   } catch (error) {
@@ -57,6 +59,8 @@ export const SettingsMenuNotConnected: React.FC<SettingsMenuProps> = ({
   toggleSettingsPanelLoadedFlag,
   setIsDataOverviewOpen,
 }) => {
+  const dispatch = useDispatch();
+
   const [t] = useTranslation('common', { i18n });
 
   const isSecured = useSelector(officeSelectors.selectIsSecured);
@@ -235,8 +239,8 @@ export const SettingsMenuNotConnected: React.FC<SettingsMenuProps> = ({
         tabIndex={0}
         id='logOut'
         role='menuitem'
-        onClick={() => logout(hideSettingsPopup)}
-        onKeyPress={() => logout(hideSettingsPopup)}
+        onClick={() => logout(hideSettingsPopup, dispatch)}
+        onKeyPress={() => logout(hideSettingsPopup, dispatch)}
       >
         {t('Log Out')}
       </li>

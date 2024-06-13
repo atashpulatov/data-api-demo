@@ -6,7 +6,7 @@ import { authenticationHelper } from '../authentication/authentication-helper';
 import instanceDefinitionHelper from '../mstr-object/instance/instance-definition-helper';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { pageByHelper } from '../page-by/page-by-helper';
-import { OverviewActionCommands } from './overview/overview-helper';
+import overviewHelper, { OverviewActionCommands } from './overview/overview-helper';
 
 import { reduxStore } from '../store';
 
@@ -24,6 +24,7 @@ import {
   editRequested,
   importRequested,
 } from '../redux-reducer/operation-reducer/operation-actions';
+import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import {
   clearRepromptTask,
@@ -34,22 +35,13 @@ import { DisplayAttrFormNames, ObjectImportType } from '../mstr-object/constants
 const URL = `${window.location.href}`;
 
 class PopupController {
-  sessionActions: any;
-
-  popupActions: any;
-
-  overviewHelper: any;
-
   errorService: any;
 
   reportParams: ReportParams;
 
   dialog: Office.Dialog;
 
-  init = (sessionActions: any, popupActions: any, overviewHelper: any, errorService: any): void => {
-    this.sessionActions = sessionActions;
-    this.popupActions = popupActions;
-    this.overviewHelper = overviewHelper;
+  init = (errorService: any): void => {
     this.errorService = errorService;
     // The following vars used to store references to current object reportParams and dialog
     this.reportParams = null;
@@ -77,7 +69,8 @@ class PopupController {
     // DE287911: Below line should always run, to ensure `editedObject` is not persisted.
     // We should evaluate adding better Redux Store clean-up after operations (Edit, Reprompt, etc.)
     // to ensure we aren't keeping old references around (e.g. editedObject, isReprompt, isEdit, etc.)
-    reduxStore.dispatch(this.popupActions.resetState());
+    // @ts-expect-error
+    reduxStore.dispatch(popupActions.resetState());
   };
 
   runPopupNavigation = async (): Promise<void> => {
@@ -196,7 +189,8 @@ class PopupController {
                 // Event received on dialog close
                 Office.EventType.DialogEventReceived,
                 () => {
-                  reduxStore.dispatch(this.popupActions.resetState());
+                  // @ts-expect-error
+                  reduxStore.dispatch(popupActions.resetState());
                   // @ts-expect-error
                   reduxStore.dispatch(popupStateActions.onClearPopupState());
                   // @ts-expect-error
@@ -316,11 +310,13 @@ class PopupController {
         dialogType === DialogType.importedDataOverview ||
         this.isDataRangeCommandForMultipleRepromptDialogInOverview(dialogType, command)
       ) {
-        return this.overviewHelper.handleOverviewActionCommand(response);
+        // @ts-expect-error
+        return overviewHelper.handleOverviewActionCommand(response);
       }
 
       if (dialogType === DialogType.dossierWindow || dialogType === DialogType.repromptingWindow) {
-        await this.overviewHelper.handleOverviewActionCommand(response);
+        // @ts-expect-error
+        await overviewHelper.handleOverviewActionCommand(response);
       }
 
       switch (command) {
@@ -348,7 +344,8 @@ class PopupController {
 
           // Reset state if an error has occurred and show error message.
           if (isDataOverviewOpen) {
-            reduxStore.dispatch(this.popupActions.resetState());
+            // @ts-expect-error
+            reduxStore.dispatch(popupActions.resetState());
           }
           this.errorService.handleError(response.error);
           break;
@@ -629,7 +626,8 @@ class PopupController {
   // Used to reset dialog-related state variables in Redux Store
   // and the dialog reference stored in the class object.
   resetDialogStates = (): void => {
-    reduxStore.dispatch(this.popupActions.resetState());
+    // @ts-expect-error
+    reduxStore.dispatch(popupActions.resetState());
     // @ts-expect-error
     reduxStore.dispatch(popupStateActions.onClearPopupState());
     // @ts-expect-error

@@ -3,7 +3,6 @@ import { PopupTypes } from '@mstr/connector-components';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { authenticationService } from '../authentication/authentication-service';
 import { browserHelper } from '../helpers/browser-helper';
-import { notificationService } from '../notification/notification-service';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { pageByHelper } from '../page-by/page-by-helper';
 
@@ -24,6 +23,7 @@ import {
   clearGlobalNotification,
   createSessionExpiredNotification,
   deleteObjectNotification,
+  dismissAllObjectsNotifications,
   displayGlobalNotification,
   displayObjectWarning,
 } from '../redux-reducer/notification-reducer/notification-action-creators';
@@ -491,15 +491,10 @@ class ErrorService {
    * Function logging out user from the application
    */
   async fullLogOut(): Promise<void> {
-    console.log('this', this);
-    notificationService.dismissNotifications();
-    console.log('this', this);
+    reduxStore.dispatch(dismissAllObjectsNotifications());
     await authenticationService.logOutRest(this);
-    console.log('this', this);
     sessionActions.logOut();
-    console.log('this', this);
     authenticationService.logOutRedirect();
-    console.log('this', this);
   }
 
   /**

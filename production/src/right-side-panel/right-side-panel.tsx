@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { connect, useSelector } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { OfficeApplicationType, SidePanel } from '@mstr/connector-components';
 
 import { useGetFilteredObjectListForSidePanelDetails } from '../redux-reducer/settings-reducer/settings-hooks';
@@ -8,7 +8,6 @@ import { useGetSidePanelPopup } from './side-panel-hooks/use-get-side-panel-popu
 import { useGetUpdatedDuplicatePopup } from './side-panel-hooks/use-get-updated-duplicate-popup';
 import useInitializeSidePanel from './side-panel-hooks/use-initialize-side-panel';
 
-import { notificationService } from '../notification/notification-service';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { sidePanelNotificationHelper } from './side-panel-services/side-panel-notification-helper';
 import { sidePanelService } from './side-panel-services/side-panel-service';
@@ -19,6 +18,7 @@ import { ObjectData } from '../types/object-types';
 
 import { popupController } from '../popup/popup-controller';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { dismissAllObjectsNotifications } from '../redux-reducer/notification-reducer/notification-action-creators';
 import { notificationReducerSelectors } from '../redux-reducer/notification-reducer/notification-reducer-selectors';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { officeSelectors } from '../redux-reducer/office-reducer/office-reducer-selectors';
@@ -52,6 +52,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   setPrefilteredSourceObjectName,
   setIsDataOverviewOpen,
 }) => {
+  const dispatch = useDispatch();
   const [sidePanelPopup, setSidePanelPopup] = useState(null);
   const [loadedObjectsWrapped, setLoadedObjectsWrapped] = useState(loadedObjects);
   const [activeSheetId, setActiveSheetId] = useState('');
@@ -132,7 +133,10 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
           onSettingsClick={() => toggleIsSettingsFlag(!isSettings)}
           confirmationWindow={isConfirm && <Confirmation />}
           globalNotification={globalNotification}
-          onSelectAll={notificationService.dismissNotifications}
+          onSelectAll={() => {
+            // @ts-expect-error
+            dispatch(dismissAllObjectsNotifications());
+          }}
           shouldDisableActions={!officeReducerHelper.noOperationInProgress()}
           onRefreshAllPagesClick={pageByLinkId =>
             sidePanelService.refreshAllPages(pageByLinkId, setSidePanelPopup, loadedObjects)
