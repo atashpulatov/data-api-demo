@@ -27,7 +27,7 @@ def step_impl(context):
 
 @step('I clicked import formatted data')
 def step_impl(context):
-    context.pages.import_dossier_page().click_import_formatted_data()
+    context.pages.import_dossier_page().click_import_formatted_data_without_waiting_for_results()
 
 
 
