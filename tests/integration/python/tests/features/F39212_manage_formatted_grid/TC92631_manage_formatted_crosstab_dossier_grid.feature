@@ -1,7 +1,7 @@
-@image_excel
-Feature: F39446 - Ability to import visualization as image in Excel
+@formatted_grid
+Feature: F39212 - Ability to import formatted grids into Excel worksheet
     
-    Scenario: [TC92631] - Import image for visualization dossier in Excel plugin
+    Scenario: [TC92631] - Manage formatted crosstab dossier grid
         Given I initialized Excel
 
         When I logged in as default user
