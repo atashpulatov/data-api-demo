@@ -209,6 +209,35 @@ def step_impl(context, context_menu_option, object_number):
     context.pages.right_panel_page().click_context_menu_item(context_menu_option, int(object_number))
 
 
+@step('I verified that "{option}" setting in Pivot section is ON')
+def step_impl(context, option):
+    is_option_disabled = context.pages.right_panel_page().is_toggle_pivot_table_option_checked(option)
+
+    AssertUtil.assert_simple(is_option_disabled, True)
+
+
+@step('I verified that "{option}" setting in Pivot section is OFF')
+def step_impl(context, option):
+    is_option_disabled = context.pages.right_panel_page().is_toggle_pivot_table_option_checked(option)
+
+    AssertUtil.assert_simple(is_option_disabled, False)
+
+
+@step('I toggle the "{option}" setting in Pivot section to ON')
+def step_impl(context, option):
+    context.pages.right_panel_page().toggle_pivot_table_option(option, 'true')
+
+
+@step('I toggle the "{option}" setting in Pivot section to OFF')
+def step_impl(context, option):
+    context.pages.right_panel_page().toggle_pivot_table_option(option, 'false')
+
+
+@step('I changed default import type to "{option_name}"')
+def step_impl(context, option_name):
+    context.pages.right_panel_page().change_default_import_type(option_name)
+
+
 @step('I selected "{display_option}" display option')
 def step_impl(context, display_option):
     context.pages.right_panel_page().click_display_option(display_option)
@@ -217,9 +246,12 @@ def step_impl(context, display_option):
 @step('I verified Settings is NOT visible')
 def step_impl(context):
     result = context.pages.right_panel_page().is_settings_visible()
+
     AssertUtil.assert_simple(result, False)
+
 
 @step('I verified object group "{object_group_title}" is active')
 def step_impl(context, object_group_title):
     result = context.pages.right_panel_page().is_object_group_active(object_group_title)
+
     AssertUtil.assert_simple(result, True)

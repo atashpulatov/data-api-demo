@@ -91,6 +91,13 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
     TOOLTIP_CSS = '.__react_component_tooltip'
 
+    PIVOT_TABLE_HEADER = '#FieldListTaskPaneTaskPaneTitle'
+    PIVOT_TABLE_FIELD_XPATH = '//div[@data-automationid="ListCell"][.//div[@title="%s"]]//input[@type="checkbox"]'
+    PIVOT_TABLE_OPTION_IN_SECTION_XPATH = '//div[@data-testid="fieldWell"][.//div[text()="%s"]][.//div[text()="%s"]]'
+    PIVOT_TABLE_CLOSE_BUTTON_XPATH = '//button[@aria-label="Close"]'
+
+    SETTINGS_BUTTON = '.settings-button'
+
     def wait_for_import_to_finish_successfully(self, timeout=Const.LONG_TIMEOUT):
         self._wait_for_operation_with_status(MessageConst.IMPORT_SUCCESSFUL_TEXT, timeout)
 
@@ -509,6 +516,31 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
                 return True
         return False
     
+    def is_pivot_table_present(self):
+
+        pivot_table_header = self.get_element_by_css(RightPanelTileBrowserPage.PIVOT_TABLE_HEADER)
+        
+        if pivot_table_header:
+            return pivot_table_header.is_displayed()
+        else:
+            return False
+        
+    def open_settings_menu():
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_css(RightPanelTileBrowserPage.SETTINGS_BUTTON).click()
+        self.get_element_by_name('Settings').click()
+
+    def toggle_pivot_table_checkbox(option):
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_xpath(RightPanelTileBrowserPage.PIVOT_TABLE_FIELD_XPATH % option).click()
+
+    def is_option_present_in_section(option, section_name):
+        self.focus_on_add_in_frame()
+
+        return self.check_if_element_exists_by_xpath(RightPanelTileBrowserPage.PIVOT_TABLE_OPTION_IN_SECTION_XPATH % (option, section_name))
+    
     def get_object_message(self, object_number, group_number):
         self.focus_on_add_in_frame()
 
@@ -542,3 +574,8 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_frame()
 
         self._hover_over_tile_in_group(object_number, group_number)
+
+    def close_pitvot_window(self):
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_css(RightPanelTileBrowserPage.PIVOT_TABLE_CLOSE_BUTTON_XPATH).click()
