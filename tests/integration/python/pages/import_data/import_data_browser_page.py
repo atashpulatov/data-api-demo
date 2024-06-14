@@ -69,13 +69,12 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
     COLUMN_HEADER = '''div[aria-label='%s']'''
     BUTTON_TOOLTIP = '.mstr-rc-3-tooltip__content'
-    IMAGE_IMPORT_BUTTON_TOOLTIP = '.mstr-rc-standard-tooltip__content'
 
     ATTRIBUTE_METRIC_SELECTOR_ITEM_CSS = '.mstrmojo-FilterBox .item-wrapper'
 
     LIBRARY_VIEW = '''button[aria-label='%s']'''
     GRID_VIEW_OBJECT = '''div[aria-label='%s']'''
-    LIST_VIEW_OBJECT = '''div[aria-label='%s']'''
+    LIST_VIEW_OBJECT = '''div[data-itemname='%s']'''
     CONENT_DISC_OBJECT = '//div[@data-itemname="%s"]/../../..//div[contains(@class,"mstrd-DossierItemRow-linkOverlay")]'
 
     LIBRARY_ICON = '.mstr-nav-icon.icon-library'
@@ -314,7 +313,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
     def verify_if_import_formatted_data_button_enabled(self):
         self.focus_on_add_in_popup_frame()
-        element = self.get_element_by_css(ImportDataBrowserPage.IMPORT_FORMATTED_DATA_BUTTON_ELEM)
+        element = self.get_element_by_id(ImportDataBrowserPage.IMPORT_FORMATTED_DATA_BUTTON_ELEM)
         return element.get_attribute(ImportDataBrowserPage.IMPORT_BUTTON_DISABLED) is None
 
     def get_item_in_import_dropdown(self, item_name):
@@ -361,7 +360,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
     def hover_over_import_formatted_data_button(self):
         self.focus_on_add_in_popup_frame()
 
-        self.get_element_by_css(ImportDataBrowserPage.IMPORT_FORMATTED_DATA_BUTTON_ELEM).move_to()
+        self.get_element_by_id(ImportDataBrowserPage.IMPORT_FORMATTED_DATA_BUTTON_ELEM).move_to()
 
     def hover_over_import_image_button(self):
         self.focus_on_add_in_popup_frame()
@@ -372,11 +371,6 @@ class ImportDataBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_popup_frame()
 
         return self.get_element_by_css(ImportDataBrowserPage.BUTTON_TOOLTIP).text
-    
-    def get_tooltip_message_for_image_button(self):
-        self.focus_on_add_in_popup_frame()
-
-        return self.get_element_by_css(ImportDataBrowserPage.IMAGE_IMPORT_BUTTON_TOOLTIP).text
 
     def scroll_objects_list_by_number_of_pages(self, number):
         for i in range(int(number)):

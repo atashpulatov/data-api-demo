@@ -43,10 +43,6 @@ def step_impl(context, object_number):
 def step_impl(context, object_number):
     context.pages.right_panel_tile_page().click_refresh(object_number)
 
-@step('I clicked Refresh on without prompt object {object_number}')
-def step_impl(context, object_number):
-    context.pages.right_panel_tile_page().click_refresh_without_prompt(object_number)
-
 @step('I clicked Reprompt on object {object_number}')
 def step_impl(context, object_number):
     context.pages.right_panel_tile_page().click_reprompt(object_number)

@@ -51,12 +51,6 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     
     NOTIFICATION_BUTTON = '.warning-notification-button-container'
 
-    #Change index for image import feature
-    REFRESH_BUTTON_FOR_NORMAL_DOSSIER = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(1)'
-    OPTIONS_BUTTON_FOR_NORMAL_DOSSIER = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(2)'
-
-
-
     NAME_INPUT_FOR_OBJECT = RIGHT_PANEL_TILE + ' .rename-input.view-only'
     NAME_INPUT_TEXT_FOR_OBJECT = RIGHT_PANEL_TILE + ' .rename-input.editable'
 
@@ -183,10 +177,6 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_frame()
 
         self.get_element_by_css(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT % tile_no).click()
-        # self._click_tile_button(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT, tile_no)
-    
-    def click_refresh_without_prompt(self, tile_no):
-        self._click_tile_button(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_NORMAL_DOSSIER, tile_no)
 
     def hover_refresh(self, tile_no):
         self._hover_over_tile_button(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT, tile_no)
