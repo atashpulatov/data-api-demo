@@ -1,5 +1,5 @@
 import { authenticationHelper } from '../authentication/authentication-helper';
-import { officeApiHelper } from '../office/api/office-api-helper';
+import { officeApiService } from '../office/api/office-api-service';
 import { mstrObjectRestService } from './mstr-object-rest-service';
 import { FiltersText, PromptObject } from './object-filter-helper-types';
 
@@ -184,9 +184,9 @@ export const getTableOperationAndStartCell = ({
   let startCell: string;
 
   if (!tableMoved && objectDetailsSizeChanged) {
-    startCell = officeApiHelper.offsetCellBy(tableStartCell, -previousObjectDetailsSize, 0);
+    startCell = officeApiService.offsetCellBy(tableStartCell, -previousObjectDetailsSize, 0);
   } else {
-    startCell = officeApiHelper.offsetCellBy(tableStartCell, -newObjectDetailsSize, 0);
+    startCell = officeApiService.offsetCellBy(tableStartCell, -newObjectDetailsSize, 0);
   }
 
   if (isNewStartCellSelected) startCell = tableStartCell;

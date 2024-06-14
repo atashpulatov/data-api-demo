@@ -1,4 +1,5 @@
 import { officeApiHelper } from '../api/office-api-helper';
+import { officeApiService } from '../api/office-api-service';
 import { pivotTableHelper } from '../pivot-table/pivot-table-helper';
 import { officeShapeApiHelper } from '../shapes/office-shape-api-helper';
 
@@ -25,7 +26,7 @@ class StepHighlightObject {
       const { importType, pivotTableId, bindId } = objectData;
 
       if (importType === ObjectImportType.TABLE || importType === ObjectImportType.FORMATTED_DATA) {
-        await officeApiHelper.onBindingObjectClick(objectData);
+        await officeApiService.onBindingObjectClick(objectData);
       } else {
         const excelContext = await officeApiHelper.getExcelContext();
 

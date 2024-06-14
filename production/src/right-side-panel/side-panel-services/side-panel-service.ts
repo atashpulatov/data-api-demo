@@ -2,7 +2,10 @@ import { PopupProps } from '@mstr/connector-components';
 
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
+import { officeShapeApiHelper } from '../../office/shapes/office-shape-api-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
+import officeStoreHelper from '../../office/store/office-store-helper';
+import { popupHelper } from '../../redux-reducer/popup-reducer/popup-helper';
 import { sidePanelHelper } from './side-panel-helper';
 import { sidePanelNotificationHelper } from './side-panel-notification-helper';
 
@@ -11,22 +14,25 @@ import { reduxStore } from '../../store';
 
 import { ObjectData } from '../../types/object-types';
 
+import { dialogController } from '../../dialog/dialog-controller';
+import { errorService } from '../../error/error-handler';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-import { popupController } from '../../popup/popup-controller';
 import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { updateObject } from '../../redux-reducer/object-reducer/object-actions';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 import {
+  clearDataRequested,
   highlightRequested,
   refreshRequested,
   removeRequested,
 } from '../../redux-reducer/operation-reducer/operation-actions';
-import { popupActions } from '../../redux-reducer/popup-reducer/popup-actions';
 import {
   addRepromptTask,
   executeNextRepromptTask,
 } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import sidePanelOperationDecorator from './side-panel-operation-decorator';
+import { OfficeSettingsEnum } from '../../constants/office-constants';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 export class SidePanelService {
   /**
@@ -37,7 +43,7 @@ export class SidePanelService {
   async addData(): Promise<void> {
     // @ts-expect-error
     reduxStore.dispatch(navigationTreeActions.cancelImportRequest());
-    await popupController.runPopupNavigation();
+    await dialogController.runPopupNavigation();
   }
 
   /**
@@ -88,13 +94,46 @@ export class SidePanelService {
   async viewData(): Promise<void> {
     // @ts-expect-error
     reduxStore.dispatch(officeActions.toggleSecuredFlag(false));
+    officeStoreHelper.setPropertyValue(OfficeSettingsEnum.isSecured, false);
+
     // @ts-expect-error
     reduxStore.dispatch(officeActions.toggleIsClearDataFailedFlag(false));
+    officeStoreHelper.setPropertyValue(OfficeSettingsEnum.isClearDataFailed, false);
+
     this.refresh(
       ...officeReducerHelper
         .getObjectsListFromObjectReducer()
         .map(({ objectWorkingId }) => objectWorkingId)
     );
+  }
+
+  async secureData(objects: any[]): Promise<void> {
+    try {
+      const { dispatch } = reduxStore;
+      officeActions.toggleIsConfirmFlag(false)(dispatch);
+
+      setTimeout(async () => {
+        const excelContext = await officeApiHelper.getExcelContext();
+        await officeApiWorksheetHelper.checkIfAnySheetProtected(excelContext, objects);
+
+        for (const object of objects) {
+          // Bypass the image object if it was deleted from worksheet manually to not block
+          // the queue of clear data operation.
+          let triggerClearData = true;
+          if (object?.importType === ObjectImportType.IMAGE) {
+            const shapeInWorksheet =
+              object?.bindId && (await officeShapeApiHelper.getShape(excelContext, object.bindId));
+            if (!shapeInWorksheet) {
+              triggerClearData = false;
+            }
+          }
+          triggerClearData &&
+            reduxStore.dispatch(clearDataRequested(object.objectWorkingId, object.importType));
+        }
+      }, 0);
+    } catch (error) {
+      errorService.handleError(error);
+    }
   }
 
   /**
@@ -146,11 +185,9 @@ export class SidePanelService {
       await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
 
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-        // @ts-expect-error
-        reduxStore.dispatch(popupActions.callForEditDossier(objectData));
+        await popupHelper.callForEditDossier(objectData);
       } else {
-        // @ts-expect-error
-        reduxStore.dispatch(popupActions.callForEdit(objectData));
+        popupHelper.callForEdit(objectData);
       }
     }
   }

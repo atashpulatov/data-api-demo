@@ -57,17 +57,21 @@ def step_impl(context, object_number):
 def step_impl(context, object_number):
     context.pages.right_panel_tile_page().hover_reprompt(object_number)
 
+
 @step('I clicked select all checkbox')
 def step_impl(context):
     context.pages.right_panel_tile_page().click_select_all()
+
 
 @step('I clicked Reprompt button for select all')
 def step_impl(context):
     context.pages.right_panel_tile_page().click_reprompt_for_select_all()
 
+
 @step('I clicked Refresh button for select all')
 def step_impl(context):
     context.pages.right_panel_tile_page().click_refresh_for_select_all()
+
 
 @step('I verified that tooltip "{expected_tooltip_text}" is displayed on object {object_number}')
 def step_impl(context, expected_tooltip_text, object_number):
@@ -131,16 +135,19 @@ def step_impl(context, object_number, expected_name):
     result = context.pages.right_panel_tile_page().get_object_path(object_number)
     AssertUtil.assert_simple(result, expected_name)
 
+
 @step('I verified that path name in inner html for object number {object_number} displays "{expected_name}"')
 def step_impl(context, object_number, expected_name):
     result = context.pages.right_panel_tile_page().get_object_path_from_innerHtml(object_number)
     AssertUtil.assert_simple(html.unescape(result), expected_name)
+
 
 @step('I verified that sub title for object number {object_number} displays "{expected_title}"')
 def step_impl(context, object_number, expected_title):
     result = context.pages.right_panel_tile_page().get_object_sub_title(expected_title)
 
     AssertUtil.assert_simple(html.unescape(result.get_attribute("innerHTML")), expected_title)
+
 
 @step('I changed object {object_number} name to "{new_object_name}" using icon')
 def step_impl(context, object_number, new_object_name):
@@ -156,17 +163,21 @@ def step_impl(context, object_number, new_object_name):
 def step_impl(context, object_number):
     context.pages.right_panel_tile_page().remove_object_using_icon(object_number)
 
+
 @step('I removed object {object_number} using context menu')
 def step_impl(context, object_number):
     context.pages.right_panel_tile_page().remove_object_using_context_menu(object_number)
+
 
 @step('I duplicate object {object_number} using context menu without prompt')
 def step_impl(context, object_number):
     context.pages.right_panel_tile_page().duplicate_object_using_context_menu_without_prompt(object_number)
 
+
 @step('I edit object {object_number} using context menu without prompt')
 def step_impl(context, object_number):
     context.pages.right_panel_tile_page().edit_object_using_context_menu_without_prompt(object_number)
+
 
 @step('I waited for object to be refreshed successfully')
 def step_impl(context):
@@ -176,6 +187,7 @@ def step_impl(context):
 @step('I waited for object to be imported successfully')
 def step_impl(context):
     context.pages.right_panel_tile_page().wait_for_import_object_to_finish_successfully()
+
 
 @step('I hover over import successfull message')
 def step_impl(context):
@@ -265,17 +277,70 @@ def step_impl(context, object_number, expected_message):
         expected_message
     )
 
+
 @step('I verified that the object {object_number} action in warning box is "{warning_message}"')
 def step_impl(context, object_number, warning_message):
     action_in_progress_name = context.pages.right_panel_tile_page().get_object_action_in_progress_name(object_number)
     AssertUtil.assert_not_equal(action_in_progress_name, warning_message)
+
 
 @step('I verified that right click context menu has {expected_menu_items} items')
 def step_impl(context, expected_menu_items):
     actual_menu_items = context.pages.right_panel_tile_page().get_right_click_menu_items()
     AssertUtil.assert_simple(actual_menu_items, int(expected_menu_items))
 
+
 @step('I verified that context menu has "{expected_menu_items}" button')
 def step_impl(context, expected_menu_items):
     found = context.pages.right_panel_tile_page().get_context_menu_item_for_name(expected_menu_items)
     AssertUtil.assert_simple(found, True)
+
+
+@step('I verified that object {object_number} in group {group_number} has displayed message "{expected_message}"')
+def step_impl(context, object_number, group_number, expected_message):
+    displayed_message = context.pages.right_panel_tile_page().get_object_message(object_number, group_number)
+
+    AssertUtil.assert_simple(displayed_message, expected_message)
+
+
+@step('I clicked Refresh for object {object_number} in group {group_number}')
+def step_impl(context, object_number, group_number):
+    context.pages.right_panel_tile_page().click_refresh_in_group(object_number, group_number)
+
+
+@step('I clicked Edit in options for object {object_number} in group {group_number}')
+def step_impl(context, object_number, group_number):
+    context.pages.right_panel_tile_page().click_edit_in_group(object_number, group_number)
+
+
+@step('I clicked Duplicate in options for object {object_number} in group {group_number}')
+def step_impl(context, object_number, group_number):
+    context.pages.right_panel_tile_page().click_duplicate_in_group(object_number, group_number)
+
+
+@step('I closed notification for object {object_number} in group {group_number}')
+def step_impl(context, object_number, group_number):
+    context.pages.right_panel_tile_page().close_object_notification_in_group_on_hover(object_number, group_number)
+
+
+@step('I verify object is imported as Pivot Table')
+def step_impl(context):
+    pivot_table_present = context.pages.right_panel_tile_page().is_pivot_table_present()
+
+    AssertUtil.assert_simple(pivot_table_present, True)
+
+
+@step('I clicked "{option_name}" checkbox in Pivot Table section')
+def step_impl(context, option_name):
+    pivot_table_present = context.pages.right_panel_tile_page().toggle_pivot_table_checkbox(option_name)
+
+
+@step('I verified "{option_name}" is in "{section_name}" section')
+def step_impl(context, option_name, section_name):
+    option_present_in_section = context.pages.right_panel_tile_page().is_option_present_in_section(option_name, section_name)
+
+    AssertUtil.assert_simple(option_present_in_section, True)
+
+@step('I closed PivotTable window')
+def step_impl(context, option_name, section_name):
+    option_present_in_section = context.pages.right_panel_tile_page().close_pitvot_window()

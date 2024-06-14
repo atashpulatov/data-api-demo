@@ -1,4 +1,4 @@
-import { homeHelper } from '../../home/home-helper';
+import { browserHelper } from '../../helpers/browser-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 import { officeShapeApiHelper } from '../shapes/office-shape-api-helper';
 
@@ -50,7 +50,11 @@ class OfficeRemoveHelper {
 
     // Delete threshold shape group before deleting the entire table
     if (objectData?.shapeGroupId) {
-      await officeShapeApiHelper.deleteShapeGroupLinkedToOfficeTable(officeTable, objectData.shapeGroupId, excelContext);
+      await officeShapeApiHelper.deleteShapeGroupLinkedToOfficeTable(
+        officeTable,
+        objectData.shapeGroupId,
+        excelContext
+      );
       delete objectData.shapeGroupId;
     }
 
@@ -58,7 +62,7 @@ class OfficeRemoveHelper {
       excelContext.runtime.enableEvents = false;
       await excelContext.sync();
 
-      if (homeHelper.isMacAndSafariBased()) {
+      if (browserHelper.isMacAndSafariBased()) {
         await this.deleteTableInChunks(excelContext, officeTable);
       } else {
         officeTable.delete();

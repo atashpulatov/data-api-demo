@@ -1,0 +1,120 @@
+@use '~@mstr/rc/es/assets/scss/msdl_universal.scss' as *;
+
+.popup-buttons {
+  padding: 19px 20px;
+  text-align: right;
+  background-color: #fff;
+
+  .mstr-rc-3-button {
+    height: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-left: 14px;
+    vertical-align: top;
+
+    .button-tooltip {
+      height: 30px;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
+
+  #back {
+    float: left;
+    margin-left: 0;
+    margin-right: auto;
+  }
+
+  .mstr-rc-3-button-with-options {
+    &__dropdown-button {
+      padding-left: 5px;
+      padding-right: 5px;
+      margin-left: 0;
+    }
+
+    &__divider {
+      height: 30px;
+    }
+  }
+
+  span .mstr-rc-3-button {
+    margin-left: 0 !important;
+  }
+
+  > span {
+    margin-left: 14px;
+  }
+}
+
+.mstr-rc-3-button:disabled {
+  opacity: 0.5;
+}
+
+.mstr-rc-3-tooltip-source {
+  display: inline;
+}
+
+#data-preview:focus:not(:hover) {
+  background-color: white;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.popup-buttons .ant-btn.ant-btn-primary[disabled],
+.ant-btn.ant-btn-primary[disabled]:hover {
+  color: #ffffff;
+  background: #1c91dc;
+  border: 1px solid #1c91dc;
+}
+
+#root .button-tooltip[style='display: inline-block; cursor: not-allowed;'] {
+  cursor: default !important;
+}
+
+.ant-popover-inner-content {
+  max-width: 100%;
+}
+
+.dossier-iframe,
+.library-iframe {
+  position: relative;
+  top: 0;
+  left: 0;
+  max-height: calc(100vh - 125px);
+  min-width: 530px;
+}
+
+.dossier-iframe {
+  min-height: calc(100vh - 125px);
+}
+
+.library-iframe {
+  min-height: calc(100vh - 125px);
+}
+
+@media (max-width: 530px) {
+  .dossier-window .popup-buttons,
+  .library-window .popup-buttons {
+    margin-bottom: 15px;
+  }
+
+  .dossier-window,
+  .library-window {
+    height: 100vh;
+    overflow-x: scroll;
+    overflow-y: hidden;
+  }
+
+  .dossier-iframe,
+  .library-iframe {
+    min-height: calc(100vh - 160px);
+    max-height: calc(100vh - 160px);
+  }
+}
+
+// Allow dropdown options to extend the width of the container beyond max-width of 200px
+.import-button__dropdown {
+  max-width: initial;
+}

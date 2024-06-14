@@ -5,14 +5,14 @@ import { ObjectWindowTitle, PageByConfiguration } from '@mstr/connector-componen
 import { Spinner } from '@mstr/rc';
 
 import { authenticationHelper } from '../authentication/authentication-helper';
+import { dialogHelper } from '../dialog/dialog-helper';
+import { dialogViewSelectorHelper } from '../dialog/dialog-view-selector-helper';
 import scriptInjectionHelper from '../embedded/utils/script-injection-helper';
 import {
   prepareGivenPromptAnswers,
   preparePromptedReport,
 } from '../helpers/prompts-handling-helper';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
-import { popupHelper } from '../popup/popup-helper';
-import { popupViewSelectorHelper } from '../popup/popup-view-selector-helper';
 import { EXTEND_SESSION, sessionHelper } from '../storage/session-helper';
 
 import { RootState } from '../store';
@@ -27,9 +27,9 @@ import { RepromptsQueueState } from '../redux-reducer/reprompt-queue-reducer/rep
 import { SessionState } from '../redux-reducer/session-reducer/session-reducer-types';
 
 import { selectorProperties } from '../attribute-selector/selector-properties';
+import { DialogButtons } from '../dialog/dialog-buttons/dialog-buttons';
 import i18n from '../i18n';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
@@ -105,7 +105,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
   const closePopup = (): void => {
     const { commandCancel } = selectorProperties;
     const message = { command: commandCancel };
-    popupHelper.officeMessageParent(message);
+    dialogHelper.officeMessageParent(message);
   };
 
   const prolongSession = sessionHelper.installSessionProlongingHandler(closePopup);
@@ -128,7 +128,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
             }),
           },
         };
-        popupHelper.handlePopupErrors(newErrorObject);
+        dialogHelper.handlePopupErrors(newErrorObject);
       }
       const { data: postMessage, origin } = message;
       const { origin: targetOrigin } = window;
@@ -178,7 +178,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
     if (error.title !== 'Notification') {
       // TODO: improve this, so it doesn't depend on i18n
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
-      popupHelper.handlePopupErrors(error);
+      dialogHelper.handlePopupErrors(error);
     }
   };
 
@@ -187,12 +187,12 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
     projectId: string,
     pageByConfigurations?: PageByConfiguration[][]
   ): void =>
-    popupHelper.officeMessageParent({
+    dialogHelper.officeMessageParent({
       command: selectorProperties.commandOnUpdate,
       chosenObjectId: chosenObjectIdLocal,
       projectId,
       chosenObjectSubtype: editedObject.chosenObjectSubtype,
-      body: popupViewSelectorHelper.createBody(
+      body: dialogViewSelectorHelper.createBody(
         editedObject.selectedAttributes,
         editedObject.selectedMetrics,
         editedObject.selectedFilters,
@@ -228,7 +228,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
       }
 
       if (editedObject.pageByData && pageByDisplaySetting === PageByDisplayType.SELECT_PAGES) {
-        popupViewSelectorHelper.handleRequestPageByModalOpen({
+        dialogViewSelectorHelper.handleRequestPageByModalOpen({
           ...props,
           objectId: chosenObjectIdLocal,
           projectId,
@@ -393,7 +393,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
         });
       } catch (error) {
         console.error({ error });
-        popupHelper.handlePopupErrors(error);
+        dialogHelper.handlePopupErrors(error);
       }
     },
     [
@@ -430,7 +430,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
         }
       }
     } catch (error) {
-      popupHelper.handlePopupErrors(error);
+      dialogHelper.handlePopupErrors(error);
     }
   };
 
@@ -493,7 +493,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
         {t('Loading...')}
       </Spinner>
       <PromptsContainer postMount={onPromptsContainerMount} />
-      <PopupButtons
+      <DialogButtons
         handleOk={handleRun}
         handleCancel={closePopup}
         hideSecondary
@@ -547,7 +547,7 @@ export const mapStateToProps = (state: RootState): any => {
     mstrData,
     importSubtotal,
     editedObject: {
-      ...popupHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege),
+      ...dialogHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege),
     },
     popupState: { ...popupStateReducer },
     session: { ...sessionReducer },

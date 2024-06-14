@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 
-import { popupHelper } from '../../popup/popup-helper';
+import { dialogHelper } from '../../dialog/dialog-helper';
 import { handleLoginExcelDesktopInWindows } from '../utils/embedded-helper';
 import scriptInjectionHelper from '../utils/script-injection-helper';
 
@@ -50,7 +50,7 @@ export const EmbeddedLibraryNotConnected: React.FC<EmbeddedLibraryTypes> = props
   const onEmbeddedError = (error: any): void => {
     const { title } = error;
     if (title !== 'Notification') {
-      popupHelper.handlePopupErrors(error);
+      dialogHelper.handlePopupErrors(error);
     }
   };
 
@@ -106,7 +106,7 @@ export const EmbeddedLibraryNotConnected: React.FC<EmbeddedLibraryTypes> = props
         );
       }
     } catch (error) {
-      popupHelper.handlePopupErrors(error);
+      dialogHelper.handlePopupErrors(error);
     }
   };
 

@@ -3,6 +3,7 @@ import { pivotTableHelper } from '../office/pivot-table/pivot-table-helper';
 import { officeRemoveHelper } from '../office/remove/office-remove-helper';
 import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
+import officeStoreHelper from '../office/store/office-store-helper';
 
 import officeStoreObject from '../office/store/office-store-object';
 import { reduxStore } from '../store';
@@ -20,6 +21,7 @@ import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { cancelOperation } from '../redux-reducer/operation-reducer/operation-actions';
 import { executeNextRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import { OperationTypes } from './operation-type-names';
+import { OfficeSettingsEnum } from '../constants/office-constants';
 import { ObjectImportType } from '../mstr-object/constants';
 
 class OperationErrorHandler {
@@ -184,6 +186,7 @@ class OperationErrorHandler {
     }
 
     officeActions.toggleIsClearDataFailedFlag(true)(reduxStore.dispatch);
+    officeStoreHelper.setPropertyValue(OfficeSettingsEnum.isClearDataFailed, true);
   }
 
   /**

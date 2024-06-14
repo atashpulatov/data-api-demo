@@ -1,4 +1,5 @@
 import { officeApiHelper } from './office-api-helper';
+import { officeApiService } from './office-api-service';
 
 import { reduxStore } from '../../store';
 
@@ -8,13 +9,13 @@ const INVALID_SELECTION = 'InvalidSelection';
 // FIXME: these were disabled anyway. Needs to be redone.
 describe('OfficeApiHelper', () => {
   beforeAll(() => {
-    officeApiHelper.excel = {};
+    officeApiService.excel = {};
   });
   it('should convert simple excel column name to number', () => {
     // given
     const columnName = 'A';
     // when
-    const result = officeApiHelper.lettersToNumber(columnName);
+    const result = officeApiService.lettersToNumber(columnName);
     // then
     expect(result).toEqual(1);
   });
@@ -22,7 +23,7 @@ describe('OfficeApiHelper', () => {
     // given
     const columnName = 'CA';
     // when
-    const result = officeApiHelper.lettersToNumber(columnName);
+    const result = officeApiService.lettersToNumber(columnName);
     // then
     expect(result).toEqual(79);
   });
@@ -32,7 +33,7 @@ describe('OfficeApiHelper', () => {
     let result;
     // when
     try {
-      result = officeApiHelper.lettersToNumber(columnName);
+      result = officeApiService.lettersToNumber(columnName);
     } catch (error) {
       // then
       expect(error).toBeInstanceOf(Error);
@@ -45,7 +46,7 @@ describe('OfficeApiHelper', () => {
     let result;
     // when
     try {
-      result = officeApiHelper.lettersToNumber(columnName);
+      result = officeApiService.lettersToNumber(columnName);
     } catch (error) {
       // then
       expect(error).toBeInstanceOf(Error);
@@ -57,7 +58,7 @@ describe('OfficeApiHelper', () => {
     const headerCount = 12;
     const startCell = 'A1';
     // when
-    const result = officeApiHelper.getRange(headerCount, startCell);
+    const result = officeApiService.getRange(headerCount, startCell);
     // then
     expect(result).toEqual('A1:L1');
   });
@@ -67,7 +68,7 @@ describe('OfficeApiHelper', () => {
     const headerCount = 12;
     const startCell = 'AL1234';
     // when
-    const result = officeApiHelper.getRange(headerCount, startCell);
+    const result = officeApiService.getRange(headerCount, startCell);
     // then
     expect(result).toEqual('AL1234:AW1234');
   });
@@ -77,7 +78,7 @@ describe('OfficeApiHelper', () => {
     const headerCount = 1;
     const startCell = 'A1';
     // when
-    const result = officeApiHelper.getRange(headerCount, startCell);
+    const result = officeApiService.getRange(headerCount, startCell);
     // then
     expect(result).toEqual('A1:A1');
   });
@@ -87,7 +88,7 @@ describe('OfficeApiHelper', () => {
     const headerCount = 1001;
     const startCell = 'A1';
     // when
-    const result = officeApiHelper.getRange(headerCount, startCell);
+    const result = officeApiService.getRange(headerCount, startCell);
     // then
     expect(result).toEqual('A1:ALM1');
   });
@@ -98,7 +99,7 @@ describe('OfficeApiHelper', () => {
     const startCell = 'A1';
     const rowCount = 1000;
     // when
-    const result = officeApiHelper.getRange(headerCount, startCell, rowCount);
+    const result = officeApiService.getRange(headerCount, startCell, rowCount);
     // then
     expect(result).toEqual('A1:ALM1001');
   });
@@ -110,7 +111,7 @@ describe('OfficeApiHelper', () => {
     let result;
     // when
     try {
-      result = officeApiHelper.getRange(headerCount, startCell);
+      result = officeApiService.getRange(headerCount, startCell);
     } catch (error) {
       // then
       expect(error).toBeInstanceOf(Error);
@@ -125,7 +126,7 @@ describe('OfficeApiHelper', () => {
     let result;
     // when
     try {
-      result = officeApiHelper.getRange(headerCount, startCell);
+      result = officeApiService.getRange(headerCount, startCell);
     } catch (error) {
       // then
       expect(error).toBeInstanceOf(Error);
@@ -149,7 +150,7 @@ describe('OfficeApiHelper', () => {
         sync: mockSync,
       };
       // when
-      const result = await officeApiHelper.getSelectedCell(context);
+      const result = await officeApiService.getSelectedCell(context);
       // then
       expect(context.workbook.getSelectedRange).toBeCalled();
       expect(getCellMock).toBeCalled();
@@ -173,7 +174,7 @@ describe('OfficeApiHelper', () => {
         sync: mockSync,
       };
       // when
-      const result = await officeApiHelper.getSelectedCell(context);
+      const result = await officeApiService.getSelectedCell(context);
       // then
       expect(context.workbook.getSelectedRange).toBeCalled();
       expect(getCellMock).toBeCalled();
@@ -202,7 +203,7 @@ describe('OfficeApiHelper', () => {
         .mockReturnValueOnce({ officeReducer: { activeCellAddress: 'CD34' } });
 
       // when
-      const result = await officeApiHelper.getSelectedCell(context);
+      const result = await officeApiService.getSelectedCell(context);
       // then
       expect(result).toEqual('CD34');
     });
@@ -226,7 +227,7 @@ describe('OfficeApiHelper', () => {
         .mockReturnValueOnce({ officeReducer: { activeCellAddress: null } });
 
       // when
-      const result = await officeApiHelper.getSelectedCell(context);
+      const result = await officeApiService.getSelectedCell(context);
       // then
       expect(result).toEqual('A1');
     });
@@ -276,7 +277,7 @@ describe('OfficeApiHelper', () => {
         sync: mockSync,
       };
       // when
-      const result = await officeApiHelper.getSelectedRangePosition(context);
+      const result = await officeApiService.getSelectedRangePosition(context);
       // then
       expect(result).toEqual({ top: 244, left: 345 });
     });
@@ -299,11 +300,11 @@ describe('OfficeApiHelper', () => {
         .spyOn(reduxStore, 'getState')
         .mockReturnValueOnce({ officeReducer: { activeCellAddress: 'CD34' } });
       jest
-        .spyOn(officeApiHelper, 'convertCellAddressToRangePosition')
+        .spyOn(officeApiService, 'convertCellAddressToRangePosition')
         .mockReturnValueOnce({ top: 244, left: 345 });
 
       // when
-      const result = await officeApiHelper.getSelectedRangePosition(context);
+      const result = await officeApiService.getSelectedRangePosition(context);
       // then
       expect(result).toEqual({ top: 244, left: 345 });
     });
@@ -327,7 +328,7 @@ describe('OfficeApiHelper', () => {
         .mockReturnValueOnce({ officeReducer: { activeCellAddress: null } });
 
       // when
-      const result = await officeApiHelper.getSelectedRangePosition(context);
+      const result = await officeApiService.getSelectedRangePosition(context);
       // then
       expect(result).toEqual({ top: 0, left: 0 });
     });
@@ -367,7 +368,7 @@ describe('OfficeApiHelper', () => {
         sync: mock,
       };
       // when
-      const shape = await officeApiHelper.addGeometricShape(
+      const shape = await officeApiService.addGeometricShape(
         excelContextMock,
         shapeProps,
         'visualizationName'

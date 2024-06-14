@@ -7,7 +7,10 @@ import {
   CreateGlobalNotificationAction,
   CreateSessionExpiredNotificationAction,
   DeleteObjectNotificationAction,
+  DismissAllNotificationsAction,
+  DismissSingleNotificationAction,
   DisplayGlobalNotificationAction,
+  DisplayNotificationCompletedAction,
   DisplayObjectWarningAction,
   Notification,
   NotificationActionTypes,
@@ -39,6 +42,17 @@ export const deleteObjectNotification = (
   payload: { objectWorkingId },
 });
 
+export const dismissSingleNotification = (
+  objectWorkingId: number
+): DismissSingleNotificationAction => ({
+  type: NotificationActionTypes.DISMISS_SINGLE_NOTIFICATION,
+  payload: { objectWorkingId },
+});
+
+export const dismissAllObjectsNotifications = (): DismissAllNotificationsAction => ({
+  type: NotificationActionTypes.DISMISS_ALL_NOTIFICATIONS,
+});
+
 export const displayObjectWarning = (
   objectWorkingId: number,
   notification: Notification
@@ -67,4 +81,12 @@ export const createGlobalNotification = (
 ): CreateGlobalNotificationAction => ({
   type: NotificationActionTypes.CREATE_GLOBAL_NOTIFICATION,
   payload: globalNotification,
+});
+
+export const displaySuccessNotification = (
+  objectWorkingId: number,
+  dismissNotificationCallback: () => void
+): DisplayNotificationCompletedAction => ({
+  type: NotificationActionTypes.DISPLAY_NOTIFICATION_COMPLETED,
+  payload: { objectWorkingId, dismissNotificationCallback },
 });

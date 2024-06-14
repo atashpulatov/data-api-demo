@@ -2,7 +2,6 @@ import { Action } from 'redux';
 
 export type OfficeState = {
   isSecured: boolean;
-  shouldRenderSettings: boolean;
   isClearDataFailed: boolean;
   isConfirm: boolean;
   isSettings: boolean;
@@ -68,10 +67,6 @@ export interface ToggleIsSettingsFlagAction extends Action {
 export interface ToggleIsConfirmFlagAction extends Action {
   type: OfficeActionsTypes.TOGGLE_IS_CONFIRM_FLAG;
   isConfirm: boolean;
-}
-
-export interface ToggleRenderSettingsFlagAction extends Action {
-  type: OfficeActionsTypes.TOGGLE_RENDER_SETTINGS_FLAG;
 }
 
 export interface ToggleIsClearDataFailedFlagAction extends Action {
@@ -140,7 +135,6 @@ export type OfficeActions =
   | ToggleSecuredFlagAction
   | ToggleIsSettingsFlagAction
   | ToggleIsConfirmFlagAction
-  | ToggleRenderSettingsFlagAction
   | ToggleIsClearDataFailedFlagAction
   | ToggleSettingsPanelLoadedFlagAction
   | ToggleReusePromptAnswersFlagAction

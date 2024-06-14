@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 // @ts-ignore
 import { AttributeMetricFilter, ErrorBoundary } from '@mstr/mstr-react-library';
 
-import { popupHelper } from '../popup/popup-helper';
+import { dialogHelper } from '../dialog/dialog-helper';
 
 import { RootState } from '../store';
 
@@ -171,7 +171,7 @@ const mapStateToProps = (state: RootState): any => {
     chosenObject,
     supportForms,
     editedObject: {
-      ...popupHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege),
+      ...dialogHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege),
     },
     popupState: { ...popupStateReducer },
     session: { ...sessionReducer },

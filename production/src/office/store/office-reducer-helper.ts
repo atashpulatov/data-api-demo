@@ -1,3 +1,5 @@
+import { reduxStore } from '../../store';
+
 import { Notification } from '../../redux-reducer/notification-reducer/notification-reducer-types';
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
@@ -7,22 +9,13 @@ import { officeActions } from '../../redux-reducer/office-reducer/office-actions
 import { ObjectImportType } from '../../mstr-object/constants';
 
 class OfficeReducerHelper {
-  reduxStore: any;
-
-  init(reduxStore: any): void {
-    this.reduxStore = reduxStore;
-
-    this.getObjectFromObjectReducerByObjectWorkingId =
-      this.getObjectFromObjectReducerByObjectWorkingId.bind(this);
-  }
-
   /**
    * Function return array of objects from objects reducer
    *
    * @return  Contains all currently existing objects
    */
   getObjectsListFromObjectReducer = (): ObjectData[] => {
-    const state = this.reduxStore.getState();
+    const state = reduxStore.getState();
     const { objects } = state.objectReducer;
 
     return objects;
@@ -34,7 +27,7 @@ class OfficeReducerHelper {
    * @return Contains all currently existing operations
    */
   getOperationsListFromOperationReducer = (): OperationData[] =>
-    this.reduxStore
+    reduxStore
       .getState()
       .operationReducer.operations.filter(
         (operation: OperationData) => operation.operationType !== OperationTypes.HIGHLIGHT_OPERATION
@@ -56,7 +49,7 @@ class OfficeReducerHelper {
    * @return
    */
   getObjectFromObjectReducerByBindId = (bindId: string): ObjectData => {
-    const { objects } = this.reduxStore.getState().objectReducer;
+    const { objects } = reduxStore.getState().objectReducer;
     return objects.find((object: ObjectData) => object.bindId === bindId);
   };
 
@@ -67,7 +60,7 @@ class OfficeReducerHelper {
    * @return
    */
   getObjectFromObjectReducerByObjectWorkingId(objectWorkingId: number): ObjectData {
-    const { objects } = this.reduxStore.getState().objectReducer;
+    const { objects } = reduxStore.getState().objectReducer;
     return objects.find((object: ObjectData) => object.objectWorkingId === objectWorkingId);
   }
 
@@ -78,7 +71,7 @@ class OfficeReducerHelper {
    * @return {Object}
    */
   getNotificationFromNotificationReducer = (objectWorkingId: number): Notification => {
-    const { notifications } = this.reduxStore.getState().notificationReducer;
+    const { notifications } = reduxStore.getState().notificationReducer;
     return notifications.find(
       (notification: any) => notification.objectWorkingId === objectWorkingId
     );
@@ -90,7 +83,7 @@ class OfficeReducerHelper {
    * @param popupData Contains data about popup to be displayed
    */
   displayPopup = (popupData: any): void => {
-    this.reduxStore.dispatch(officeActions.setPopupData(popupData));
+    reduxStore.dispatch(officeActions.setPopupData(popupData));
   };
 
   /**
@@ -98,7 +91,7 @@ class OfficeReducerHelper {
    *
    */
   clearPopupData = (): void => {
-    this.reduxStore.dispatch(officeActions.clearPopupData());
+    reduxStore.dispatch(officeActions.clearPopupData());
   };
 
   /**
@@ -111,7 +104,7 @@ class OfficeReducerHelper {
    */
   checkExcelApiSupport = (objectImportType: ObjectImportType): boolean => {
     const { isShapeAPISupported, isInsertWorksheetAPISupported, isPivotTableSupported } =
-      this.reduxStore.getState().officeReducer;
+      reduxStore.getState().officeReducer;
 
     switch (objectImportType) {
       case ObjectImportType.IMAGE:

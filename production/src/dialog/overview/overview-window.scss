@@ -1,0 +1,36 @@
+$footer-height: 50px;
+$title-height: 40px;
+$margin-data-overview: 20px;
+
+.data-overview-wrapper {
+  margin: $margin-data-overview;
+  user-select: none;
+  -webkit-user-select: none;
+
+  .data-overview-container {
+    width: 100%;
+    height: calc(100vh - $title-height - $footer-height);
+
+    .notification-overlay {
+      width: calc(100% - (2 * $margin-data-overview));
+      height: calc(100% - (2 * $margin-data-overview));
+    }
+  }
+
+  .overview-close-button {
+    float: right;
+    margin-top: 20px;
+  }
+}
+
+.mstr-rc-3-grid-with-filter__filter-panel {
+  &--unpinned {
+    max-height: calc(100% - 40px);
+    min-height: calc(80% - 40px);
+    position: absolute;
+  }
+
+  &--hidden {
+    display: none;
+  }
+}

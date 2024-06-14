@@ -2,7 +2,7 @@ import { moduleProxy } from '../module-proxy';
 
 import { PrivilegeIds } from '../constants/office-constants';
 
-class AuthenticationService {
+class AuthenticationRestApi {
   moduleProxy: {
     request: any;
     moduleProxy: any;
@@ -12,7 +12,7 @@ class AuthenticationService {
     this.moduleProxy = proxy;
   }
 
-  authenticate(username: string, password: string, envUrl: string, loginMode = 1): void {
+  authenticate(username: string, password: string, envUrl: string, loginMode = 1): string {
     return this.moduleProxy.request
       .post(`${envUrl}/auth/login`)
       .send({ username, password, loginMode })
@@ -102,4 +102,4 @@ class AuthenticationService {
       .then((res: any) => res.body);
   }
 }
-export const authenticationService = new AuthenticationService(moduleProxy);
+export const authenticationRestApi = new AuthenticationRestApi(moduleProxy);

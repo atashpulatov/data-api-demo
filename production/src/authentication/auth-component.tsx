@@ -7,7 +7,9 @@ import { authenticationHelper } from './authentication-helper';
 import { AuthenticateComponent } from './auth-component-types';
 import { InputProps, LoginProps, SelectInputProps } from './basic-login-types';
 
+import { errorService } from '../error/error-handler';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
+import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import defaultLoginProps from './default-login-props';
 
 import './basic-login.scss';
@@ -59,7 +61,14 @@ export const AuthenticateNotConnected: FC<AuthenticateComponent> = props => {
     async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       if (event.currentTarget.checkValidity()) {
-        await authenticationHelper.loginUser(null, formData);
+        try {
+          await authenticationHelper.loginUser(formData);
+        } catch (error) {
+          console.error(error);
+          errorService.handleError(error, { isLogout: true } as any);
+        } finally {
+          sessionActions.disableLoading();
+        }
       }
     },
     [formData]

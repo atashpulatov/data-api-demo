@@ -13,199 +13,160 @@ Feature: F39228 - Introduce Excel add-in formatting settings for importing as te
      When I click back button in Settings
       And I clicked Import Data button
       And I found and selected object "Date format report"
-      And I clicked Import button
-      And I closed last notification
+      And I selected import type "Import Data" and clicked import
+      And I waited for object to be imported successfully
+      And I closed notification for object 1 in group 1
 
     # Verify the state of imported grid with importAsText OFF
-     Then I verified that cell "A4" has value "30/12/2023"
-      And I verified that cell "A3" has value "30/12/2024"
-      And I verified that cell "A2" has value "12.30.2023"
-      And I verified that cell "A4" has format "Date"
-      And I verified that cell "A3" has format "Custom"
-      And I verified that cell "A2" has format "General"
+     Then I verified that cells ["A4", "A3", "A2"] have values ["12/30/2023", "30-Dec", "12.30.2023"]
+      And I verified that cells ["A4", "A3", "A2"] have formats ["Date", "Custom", "General"]
 
-      And I verified that cell "B4" has value "01/01/2021"
+      And I verified that cell "B4" has value "Jan-21"
       And I verified that cell "B4" has format "Custom"
 
-      And I verified that cell "C5" has value "Mai 2022"
-      And I verified that cell "C6" has value "01/04/2022"
-      And I verified that cell "C5" has format "General"
-      And I verified that cell "C6" has format "Custom"
-
+      And I verified that cells ["C5", "C6"] have values ["Mai 2022", "Apr-22"]
+      And I verified that cells ["C5", "C6"] have formats ["General", "Custom"]
 
     # Change the settings to import all data as text
-       When I open Settings in Dots Menu
-        And I clicked "Import" section on Settings menu
-        And I click on "Import data as text" setting
-       Then I verified "Import data as text" setting is ON
+     When I open Settings in Dots Menu
+      And I clicked "Import" section on Settings menu
+      And I toggled the "Import data as text" setting to "ON"
+     Then I verified "Import data as text" setting is ON
 
-      When I click back button in Settings
-       And I added a new worksheet
-       And I clicked Import Data button
-       And I found and selected object "Date format report"
-       And I clicked Import button
-       And I closed last notification
+     When I click back button in Settings
+      And I added a new worksheet
+      And I clicked Add Data button
+      And I found and selected object "Date format report"
+      And I selected import type "Import Data" and clicked import
+      And I waited for object to be imported successfully
+      And I closed notification for object 1 in group 2
 
     # Verify the state of imported grid with importAsText ON
-      Then I verified that cell "A4" has value "12/30/2023"
-       And I verified that cell "A3" has value "12/30"
-       And I verified that cell "A2" has value "12.30.2023"
-       And I verified that cell "A4" has format "Text"
-       And I verified that cell "A3" has format "Text"
-       And I verified that cell "A2" has format "Text"
+     Then I verified that cells ["A4", "A3", "A2"] have values ["12/30/2023", "12/30", "12.30.2023"]
+      And I verified that cells ["A4", "A3", "A2"] have formats ["Text", "Text", "Text"]
 
-       And I verified that cell "B4" has value "January 2021"
-       And I verified that cell "B4" has format "Text"
+      And I verified that cell "B4" has value "January 2021"
+      And I verified that cell "B4" has format "Text"
 
-       And I verified that cell "C5" has value "Mai 2022"
-       And I verified that cell "C6" has value "April 2022"
-       And I verified that cell "C5" has format "Text"
-       And I verified that cell "C6" has format "Text"
+      And I verified that cells ["C5", "C6"] have values ["Mai 2022", "April 2022"]
+      And I verified that cells ["C5", "C6"] have formats ["Text", "Text"]
 
     # Change the settings to importAsText OFF
-      When I open Settings in Dots Menu
-       And I clicked "Import" section on Settings menu
-       And I click on "Import data as text" setting
-      Then I verified "Import data as text" setting is OFF
-
-    # Edit the imported grid
-     When I clicked Edit object 2
-      And I clicked attribute "Date(en)"
-      And I clicked Import button in Columns and Filters Selection
+     When I open Settings in Dots Menu
+      And I clicked "Import" section on Settings menu
+      And I toggled the "Import data as text" setting to "OFF"
+     Then I verified "Import data as text" setting is OFF
+      And I click back button in Settings
       And I closed all notifications
 
-    # Verify the state of imported grid with importAsText OFF
-     When I click back button in Settings
-     Then I verified that cell "A4" has value "30/12/2023"
-      And I verified that cell "A3" has value "30/12/2024"
-      And I verified that cell "A2" has value "12.30.2023"
-      And I verified that cell "A4" has format "Date"
-      And I verified that cell "A3" has format "Custom"
-      And I verified that cell "A2" has format "General"
+    # Edit the imported grid
+     When I clicked Edit in options for object 1 in group 2
+      And I clicked attribute "Date (en)"
+      And I clicked Import button in Columns and Filters Selection without success check
+      And I closed notification for object 1 in group 2
 
-      And I verified that cell "B5" has value "Mai 2022"
-      And I verified that cell "B6" has value "01/04/2022"
-      And I verified that cell "B5" has format "General"
-      And I verified that cell "B6" has format "Custom"
+    # Verify the state of imported grid with importAsText OFF
+     Then I verified that cells ["A4", "A3", "A2"] have values ["12/30/2023", "30-Dec", "12.30.2023"]
+      And I verified that cells ["A4", "A3", "A2"] have formats ["Date", "Custom", "General"]
+
+      And I verified that cells ["B5", "B6"] have values ["Mai 2022", "Apr-22"]
+      And I verified that cells ["B5", "B6"] have formats ["General", "Custom"]
 
     # Change the settings to importAsText ON
      When I open Settings in Dots Menu
       And I clicked "Import" section on Settings menu
-      And I click on "Import data as text" setting
+      And I toggled the "Import data as text" setting to "ON"
      Then I verified "Import data as text" setting is ON
 
     # Refresh and check the state of imported grid with importAsText ON
      When I click back button in Settings
-      And I clicked Refresh on object 2
+      And I clicked Refresh for object 1 in group 2
       And I closed all notifications
 
     # Verify the state of imported grid with importAsText ON doesn't change after refresh
-     When I click back button in Settings
-     Then I verified that cell "A4" has value "30/12/2023"
-      And I verified that cell "A3" has value "30/12/2024"
-      And I verified that cell "A2" has value "12.30.2023"
-      And I verified that cell "A4" has format "Date"
-      And I verified that cell "A3" has format "Custom"
-      And I verified that cell "A2" has format "General"
+     Then I verified that cells ["A4", "A3", "A2"] have values ["12/30/2023", "30-Dec", "12.30.2023"]
+      And I verified that cells ["A4", "A3", "A2"] have formats ["Date", "Custom", "General"]
 
-      And I verified that cell "B5" has value "Mai 2022"
-      And I verified that cell "B6" has value "01/04/2022"
-      And I verified that cell "B5" has format "General"
-      And I verified that cell "B6" has format "Custom"
+      And I verified that cells ["B5", "B6"] have values ["Mai 2022", "Apr-22"]
+      And I verified that cells ["B5", "B6"] have formats ["General", "Custom"]
 
     # Import "Shoe Size and tracking number Report" with importAsText ON
      When I selected cell "E1"
       And I clicked Add Data button
       And I found and selected object "Shoe Size and tracking number Report"
-      And I clicked Import button
-      And I closed last notification
+      And I selected import type "Import Data" and clicked import
+      And I closed notification for object 1 in group 2
 
     # Verify the state of imported grid with importAsText ON
-     Then I verified that cell "E2" has format "Text"
-      And I verified that cell "E3" has format "Text"
-      And I verified that cell "E4" has format "Text"
-      And I verified that cell "F2" has format "Text"
-      And I verified that cell "F4" has format "Text"
-      And I verified that cell "G4" has format "Text"
-      And I verified that cell "H2" has format "General"
-      And I verified that cell "H3" has format "General"
-      And I verified that cell "H4" has format "General"
+     Then I verified that cells ["E2", "E3", "E4", "F2", "F4", "G4", "H2", "H3", "H4"] have formats ["Text", "Text", "Text", "Text", "Text", "Text", "General", "General", "General"]
 
      # Change the settings to importAsText OFF
      When I open Settings in Dots Menu
       And I clicked "Import" section on Settings menu
-      And I click on "Import data as text" setting
+      And I toggled the "Import data as text" setting to "OFF"
      Then I verified "Import data as text" setting is OFF
 
       # Duplicate the imported grid
      When I click back button in Settings
       And I selected cell "J1"
-      And I clicked Duplicate on object 3
+      And I clicked Duplicate in options for object 1 in group 2
       And I selected Active Cell option in Duplicate popup
-      And I clicked Import button in Duplicate popup
-      And I closed last notification
+      And I clicked Import button in Duplicate popup without checking results
+      And I closed notification for object 1 in group 2
 
      # Verify the state of duplicated grid with importAsText OFF
-     Then I verified that cell "J2" has format "Text"
-      And I verified that cell "J3" has format "Text"
-      And I verified that cell "J4" has format "Text"
-      And I verified that cell "K2" has format "Text"
-      And I verified that cell "K4" has format "Text"
-      And I verified that cell "L4" has format "Text"
-      And I verified that cell "M2" has format "General"
-      And I verified that cell "M3" has format "General"
-      And I verified that cell "M4" has format "General"
-
+     Then I verified that cells ["J2", "J3", "J4", "K2", "K4", "L4", "M2", "M3", "M4"] have formats ["Text", "Text", "Text", "Text", "Text", "Text", "General", "General", "General"]
 
      # Import the "Shoe Size and tracking number Report" with importAsText OFF
-      When I selected cell "P1"
-       And I clicked Add Data button
-       And I found and selected object "Shoe Size and tracking number Report"
-       And I clicked Import button
-       And I closed last notification
+     When I selected cell "P1"
+      And I clicked Add Data button
+      And I found and selected object "Shoe Size and tracking number Report"
+      And I selected import type "Import Data" and clicked import
+      And I closed notification for object 1 in group 2
 
       # Verify the state of imported grid with importAsText OFF
-      Then I verified that cell "P1" has format "General"
-       And I verified that cell "P1" has value "1"
+     Then I verified that cell "P2" has format "General"
+      And I verified that cell "P2" has value "1"
 
-       And I verified that cell "Q2" has format "Custom"
-       And I verified that cell "Q2" has value "09/07/2024"
+      And I verified that cell "Q2" has format "Custom"
+      And I verified that cell "Q2" has value "9-Jul"
 
-       And I verified that cell "R2" has format "Number"
-       And I verified that cell "R2" has value "1,23456789012345E+24"
+      And I verified that cell "R2" has format "Number"
+      And I verified that cell "R2" has value "1,234,567,890,123,450,000,000,000"
 
-       And I verified that cell "S2" has format "General"
-       And I verified that cell "S2" has value "50"
+      And I verified that cell "S2" has format "General"
+      And I verified that cell "S2" has value "50"
 
-
-      When I added a new worksheet
-       And I clicked Import Data button
-       And I found and selected object "Signs report"
-       And I clicked Import button
-       And I clicked Import button and saw error "An error has occurred in Excel. There was an internal error while processing the request."
-       And I clicked OK on error
+     When I added a new worksheet
+      And I clicked Add Data button
+      And I found and selected object "Signs report"
+      And I selected import type "Import Data" and clicked import
+      And I verified that object 1 in group 3 has displayed message "An error has occurred in Excel. The argument is invalid or missing or has an incorrect format."
+      And I closed all warning notifications
 
       # Change the settings to importAsText ON
-      When I open Settings in Dots Menu
-       And I clicked "Import" section on Settings menu
-       And I click on "Import data as text" setting
-      Then I verified "Import data as text" setting is ON
+     When I open Settings in Dots Menu
+      And I clicked "Import" section on Settings menu
+      And I toggled the "Import data as text" setting to "ON"
+     Then I verified "Import data as text" setting is ON
+      And I click back button in Settings
 
-      When I added a new worksheet
-       And I clicked Import Data button
-       And I found and selected object "Signs report"
-       And I clicked Import button
-       And I closed last notification
+     When I added a new worksheet
+      And I clicked Add Data button
+      And I found and selected object "Signs report"
+      And I selected import type "Import Data" and clicked import
+      And I closed notification for object 1 in group 3
 
       # Verify the state of imported grid with importAsText ON
-     Then I verified that cell "A2" has format "Text"
-      And I verified that cell "A3" has format "Text"
-      And I verified that cell "A14" has format "Text"
-      And I verified that cell "B4" has format "Text"
-      And I verified that cell "B8" has format "Text"
-      And I verified that cell "C8" has format "General"
-      And I verified that cell "B8" has value ""
+     Then I verified that cells ["A2", "A3", "A14", "B4", "B8", "C8"] have formats ["Text", "Text", "Text", "Text", "Text", "General"]
+      And I verified that cell "B8" is empty
 
-     When I manually input the value "1" in cell "B8"
+     When I entered text "1" into cell "B8" after selecting it
      Then I verified that cell "B8" has value "1"
+
+     When I open Settings in Dots Menu
+      And I clicked "Import" section on Settings menu
+      And I toggled the "Import data as text" setting to "OFF"
+     Then I verified "Import data as text" setting is OFF
+
       And I logged out

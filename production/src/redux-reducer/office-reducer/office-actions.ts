@@ -1,7 +1,5 @@
 import { Dispatch } from 'react';
 
-import officeStoreHelper from '../../office/store/office-store-helper';
-
 import {
   OfficeActionsTypes,
   SetActiveCellAddressAction,
@@ -28,7 +26,6 @@ const hideDialog = () => (dispatch: Dispatch<any>) => {
 };
 
 const toggleSecuredFlag = (isSecured: boolean) => (dispatch: Dispatch<any>) => {
-  officeStoreHelper.setFileSecuredFlag(isSecured);
   dispatch({
     type: OfficeActionsTypes.TOGGLE_SECURED_FLAG,
     isSecured,
@@ -47,7 +44,6 @@ const toggleIsConfirmFlag = (isConfirm: boolean) => (dispatch: Dispatch<any>) =>
 };
 
 const toggleIsClearDataFailedFlag = (isClearDataFailed: boolean) => (dispatch: Dispatch<any>) => {
-  officeStoreHelper.setIsClearDataFailed(isClearDataFailed);
   dispatch({
     type: OfficeActionsTypes.TOGGLE_IS_CLEAR_DATA_FAILED_FLAG,
     isClearDataFailed,
@@ -69,10 +65,6 @@ const toggleReusePromptAnswersFlag = (reusePromptAnswers: boolean) => (dispatch:
   });
 };
 
-const toggleRenderSettingsFlag = () => (dispatch: Dispatch<any>) => {
-  dispatch({ type: OfficeActionsTypes.TOGGLE_RENDER_SETTINGS_FLAG });
-};
-
 const toggleImportAsPivotTableFlag =
   (isImportAsPivotTableSupported: boolean) => (dispatch: Dispatch<any>) => {
     dispatch({
@@ -85,10 +77,6 @@ const setActiveCellAddress = (activeCellAddress: string): SetActiveCellAddressAc
   type: OfficeActionsTypes.SET_ACTIVE_CELL_ADDRESS,
   activeCellAddress,
 });
-
-const updateActiveCellAddress = (activeCellAddress: string) => (dispatch: Dispatch<any>) => {
-  dispatch(setActiveCellAddress(activeCellAddress));
-};
 
 const setPopupData = (popupData: any): SetPopupDataAction => ({
   type: OfficeActionsTypes.SET_POPUP_DATA,
@@ -138,10 +126,8 @@ export const officeActions = {
   toggleIsClearDataFailedFlag,
   toggleSettingsPanelLoadedFlag,
   toggleReusePromptAnswersFlag,
-  toggleRenderSettingsFlag,
   toggleImportAsPivotTableFlag,
   setActiveCellAddress,
-  updateActiveCellAddress,
   setPopupData,
   clearPopupData,
   setIsShapeAPISupported,

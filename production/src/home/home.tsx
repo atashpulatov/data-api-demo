@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { Spinner } from '@mstr/rc';
 
 import useOfficePrivilege from '../hooks/use-office-privilege';
+import { useResetDialog } from '../hooks/use-reset-dialog';
 
-import { notificationService } from '../notification/notification-service';
+import { authenticationHelper } from '../authentication/authentication-helper';
+import { browserHelper } from '../helpers/browser-helper';
 import { sessionHelper } from '../storage/session-helper';
 import { homeHelper } from './home-helper';
 
@@ -13,10 +15,12 @@ import officeStoreRestoreObject from '../office/store/office-store-restore-objec
 
 import { Authenticate } from '../authentication/auth-component';
 import { DevelopmentImportList } from '../development-import-list';
+import { SessionExtendingWrapper } from '../dialog/session-extending-wrapper';
 import i18n from '../i18n';
-import { SessionExtendingWrapper } from '../popup/session-extending-wrapper';
-import { officeActions } from '../redux-reducer/office-reducer/office-actions';
-import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
+import {
+  clearGlobalNotification,
+  createConnectionLostNotification,
+} from '../redux-reducer/notification-reducer/notification-action-creators';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import { RightSidePanel } from '../right-side-panel/right-side-panel';
 import { HomeDialog } from './home-dialog';
@@ -28,31 +32,24 @@ interface HomeProps {
   loading?: boolean;
   isDialogOpen?: boolean;
   authToken?: string | boolean;
-  hideDialog?: () => void;
-  toggleIsSettingsFlag?: (flag: boolean) => void;
-  clearDialogState?: () => void;
-  setPopupData?: (popupData: any) => void;
 }
 
-const IS_DEVELOPMENT = sessionHelper.isDevelopment();
+const IS_DEVELOPMENT = browserHelper.isDevelopment();
 
 async function getUserData(authToken: string | boolean): Promise<void> {
   if (authToken) {
-    homeHelper.getTokenFromStorage();
+    sessionHelper.getTokenFromStorage();
     await sessionHelper.getUserInfo();
     await sessionHelper.getUserAttributeFormPrivilege();
   }
 }
 
 export const HomeNotConnected: React.FC<HomeProps> = props => {
+  const dispatch = useDispatch();
   const {
     loading,
     isDialogOpen,
     authToken,
-    hideDialog,
-    toggleIsSettingsFlag,
-    clearDialogState,
-    setPopupData,
   } = props;
 
   const canUseOffice = useOfficePrivilege(authToken as string);
@@ -60,13 +57,17 @@ export const HomeNotConnected: React.FC<HomeProps> = props => {
   const [t] = useTranslation('common', { i18n });
 
   const handleConnectionRestored = (): void => {
-    notificationService.connectionRestored();
+    // @ts-expect-error
+    dispatch(clearGlobalNotification());
   };
   const handleConnectionLost = (): void => {
     if (!isDialogOpen) {
-      notificationService.connectionLost();
+      // @ts-expect-error
+      dispatch(createConnectionLostNotification);
     }
   };
+
+  useResetDialog();
 
   useEffect(() => {
     window.addEventListener('online', handleConnectionRestored);
@@ -79,13 +80,15 @@ export const HomeNotConnected: React.FC<HomeProps> = props => {
 
   useEffect(() => {
     if (!isDialogOpen && !window.navigator.onLine) {
-      notificationService.connectionLost();
+      // @ts-expect-error
+      dispatch(createConnectionLostNotification());
     }
-  }, [isDialogOpen]);
+  }, [dispatch, isDialogOpen]);
 
   useEffect(() => {
     if (!authToken) {
-      notificationService.sessionRestored();
+      // @ts-expect-error
+      dispatch(clearGlobalNotification());
     }
   });
 
@@ -95,19 +98,15 @@ export const HomeNotConnected: React.FC<HomeProps> = props => {
         homeHelper.initSupportedFeaturesFlags();
         await officeStoreRestoreObject.restoreObjectsFromExcelStore();
         officeStoreRestoreObject.restoreAnswersFromExcelStore();
-        homeHelper.saveLoginValues();
-        homeHelper.getTokenFromStorage();
-        hideDialog(); // hide error popup if visible
-        toggleIsSettingsFlag(false); // hide settings menu if visible
-        clearDialogState();
-        setPopupData(null);
+        authenticationHelper.saveLoginValues();
+        sessionHelper.getTokenFromStorage();
         sessionActions.disableLoading();
       } catch (error) {
         console.error(error);
       }
     }
     initializeHome();
-  }, [hideDialog, toggleIsSettingsFlag, clearDialogState, setPopupData]);
+  }, []);
 
   useEffect(() => {
     getUserData(authToken);
@@ -144,17 +143,8 @@ function mapStateToProps(state: any): any {
     loading: state.sessionReducer.loading,
     isDialogOpen: state.officeReducer.isDialogOpen,
     authToken: state.sessionReducer.authToken,
-    shouldRenderSettings: state.officeReducer.shouldRenderSettings,
     canUseOffice: state.sessionReducer.canUseOffice,
   };
 }
 
-const mapDispatchToProps = {
-  toggleRenderSettingsFlag: officeActions.toggleRenderSettingsFlag,
-  hideDialog: officeActions.hideDialog,
-  toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
-  clearDialogState: popupStateActions.onClearPopupState,
-  setPopupData: officeActions.setPopupData,
-};
-
-export const Home = connect(mapStateToProps, mapDispatchToProps)(HomeNotConnected);
+export const Home = connect(mapStateToProps)(HomeNotConnected);

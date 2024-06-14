@@ -1,5 +1,6 @@
 import stepSaveObjectInExcel from '../office/store/step-save-object-in-excel';
 
+import stepModifyObject from '../dialog/step-modify-object';
 import stepGetInstanceDefinition from '../mstr-object/instance/step-get-instance-definition';
 import stepGetObjectSettings from '../mstr-object/settings/step-get-object-settings';
 import stepExportExcelToCurrentWorkbook from '../mstr-object/step-export-excel-to-current-workbook';
@@ -36,11 +37,11 @@ import stepGetFormattedDataTableEditRefresh from '../office/table/step-get-forma
 import stepGetFormattedDataTableImport from '../office/table/step-get-formatted-data-table-import';
 import stepGetOfficeTableEditRefresh from '../office/table/step-get-office-table-edit-refresh';
 import stepGetOfficeTableImport from '../office/table/step-get-office-table-import';
-import stepModifyObject from '../popup/step-modify-object';
+import { operationBus } from './operation-bus';
 import { OperationSteps } from './operation-steps';
 
 class SubscribeSteps {
-  init = (operationBus: any): void => {
+  init = (): void => {
     operationBus.subscribe(OperationSteps.MODIFY_OBJECT, stepModifyObject.modifyObject);
 
     operationBus.subscribe(

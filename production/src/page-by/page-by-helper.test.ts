@@ -220,7 +220,7 @@ describe('Page-by helper', () => {
 
   it('getPageByConfigurations should work properly', () => {
     // given
-    officeReducerHelper.reduxStore.getState = jest.fn().mockImplementation(() => ({
+    reduxStore.getState = jest.fn().mockImplementation(() => ({
       objectReducer: {
         objects: [
           {
@@ -255,13 +255,13 @@ describe('Page-by helper', () => {
   });
 
   it.each`
-    pageBy                       | pageByDisplaySetting              | importType                          | expectedResult
-    ${[]}                        | ${PageByDisplayType.SELECT_PAGES} | ${ObjectImportType.TABLE}           | ${0}
-    ${pageByDataResponse.pageBy} | ${PageByDisplayType.DEFAULT_PAGE} | ${ObjectImportType.IMAGE}           | ${false}
+    pageBy                       | pageByDisplaySetting              | importType                         | expectedResult
+    ${[]}                        | ${PageByDisplayType.SELECT_PAGES} | ${ObjectImportType.TABLE}          | ${0}
+    ${pageByDataResponse.pageBy} | ${PageByDisplayType.DEFAULT_PAGE} | ${ObjectImportType.IMAGE}          | ${false}
     ${pageByDataResponse.pageBy} | ${PageByDisplayType.ALL_PAGES}    | ${ObjectImportType.FORMATTED_DATA} | ${false}
-    ${pageByDataResponse.pageBy} | ${PageByDisplayType.SELECT_PAGES} | ${ObjectImportType.PIVOT_TABLE}     | ${false}
-    ${pageByDataResponse.pageBy} | ${PageByDisplayType.SELECT_PAGES} | ${ObjectImportType.TABLE}           | ${true}
-    ${pageByDataResponse.pageBy} | ${PageByDisplayType.SELECT_PAGES} | ${ObjectImportType.IMAGE}           | ${true}
+    ${pageByDataResponse.pageBy} | ${PageByDisplayType.SELECT_PAGES} | ${ObjectImportType.PIVOT_TABLE}    | ${false}
+    ${pageByDataResponse.pageBy} | ${PageByDisplayType.SELECT_PAGES} | ${ObjectImportType.TABLE}          | ${true}
+    ${pageByDataResponse.pageBy} | ${PageByDisplayType.SELECT_PAGES} | ${ObjectImportType.IMAGE}          | ${true}
     ${pageByDataResponse.pageBy} | ${PageByDisplayType.SELECT_PAGES} | ${ObjectImportType.FORMATTED_DATA} | ${true}
   `(
     'should return $expectedResult when pageBy is $pageBy, pageByDisplaySetting is $pageByDisplaySetting, and importType is $importType',

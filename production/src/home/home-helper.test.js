@@ -1,10 +1,13 @@
+import { authenticationHelper } from '../authentication/authentication-helper';
+import { browserHelper } from '../helpers/browser-helper';
+import { storageHelper } from '../helpers/storage-helper';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
+import officeStoreHelper from '../office/store/office-store-helper';
 import { sessionHelper } from '../storage/session-helper';
 import { homeHelper } from './home-helper';
 
-import officeStoreRestoreObject from '../office/store/office-store-restore-object';
 import { reduxStore } from '../store';
 
 import { officeContext } from '../office/office-context';
@@ -12,14 +15,7 @@ import { configActions } from '../redux-reducer/config-reducer/config-actions';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import { ObjectImportType } from '../mstr-object/constants';
 
-jest.mock('../storage/session-helper');
-jest.mock('../redux-reducer/session-reducer/session-actions');
-
 describe('HomeHelper', () => {
-  beforeAll(() => {
-    homeHelper.init(sessionActions, sessionHelper);
-  });
-
   afterEach(() => {
     jest.restoreAllMocks();
   });
@@ -27,43 +23,41 @@ describe('HomeHelper', () => {
   describe('saveLoginValues', () => {
     it('should trigger logout because of missing authToken and running on localhost', () => {
       // given
-      jest.spyOn(sessionHelper, 'isDevelopment').mockReturnValueOnce(true);
+      jest
+        .spyOn(reduxStore, 'getState')
+        .mockReturnValueOnce({ sessionReducer: { authToken: null } });
+      jest.spyOn(browserHelper, 'isDevelopment').mockReturnValueOnce(true);
       sessionActions.logOut = jest.fn();
       // when
-      homeHelper.saveLoginValues();
+      authenticationHelper.saveLoginValues();
       // then
       expect(sessionActions.logOut).toBeCalled();
     });
-    it('should return', () => {
-      // given
-      sessionActions.logOut = jest.fn();
-      jest
-        .spyOn(reduxStore, 'getState')
-        .mockReturnValueOnce({ sessionReducer: { authToken: 'someToken' } });
-      // when
-      homeHelper.saveLoginValues();
-      // then
-      expect(sessionActions.logOut).not.toBeCalled();
-    });
     it('prepare envUrl and save it to store', () => {
       // given
-      jest.spyOn(homeHelper, 'getWindowLocation').mockReturnValueOnce({
+      sessionActions.logOut = jest.fn();
+      jest.spyOn(browserHelper, 'getWindowLocation').mockReturnValueOnce({
         origin: 'https://some-env.microstrategy.com/',
         pathname: 'MicroStrategyLibrary/apps/addin-mstr-office/index.html?source=addin-mstr-office',
       });
-      sessionActions.logOut = jest.fn();
+      jest.spyOn(browserHelper, 'isDevelopment').mockReturnValueOnce(false);
       jest
         .spyOn(reduxStore, 'getState')
         .mockReturnValueOnce({ sessionReducer: { authToken: 'someToken' } });
+
+      const logOutMock = jest.spyOn(sessionActions, 'logOut').mockImplementation();
+      const saveLoginValuesMock = jest
+        .spyOn(sessionActions, 'saveLoginValues')
+        .mockImplementation();
+
       const expectedCalledUrl = {
         envUrl: 'https://some-env.microstrategy.com/MicroStrategyLibrary/api',
       };
       // when
-      homeHelper.saveLoginValues();
+      authenticationHelper.saveLoginValues();
       // then
-      expect(sessionActions.logOut).not.toBeCalled();
-      expect(sessionActions.saveLoginValues).toBeCalled();
-      expect(sessionActions.saveLoginValues).toBeCalledWith(expectedCalledUrl);
+      expect(logOutMock).not.toHaveBeenCalled();
+      expect(saveLoginValuesMock).toHaveBeenCalledWith(expectedCalledUrl);
     });
   });
   describe('getParsedCookies', () => {
@@ -76,7 +70,7 @@ describe('HomeHelper', () => {
         otherCookie: '1',
         iSession: exampleToken,
       };
-      jest.spyOn(homeHelper, 'getDocumentCookie').mockReturnValueOnce(exampleCookies);
+      jest.spyOn(browserHelper, 'getDocumentCookie').mockReturnValueOnce(exampleCookies);
       // when
       const resultCookieArray = homeHelper.getParsedCookies();
       // then
@@ -87,48 +81,50 @@ describe('HomeHelper', () => {
     it('should not save when there is no iSession', () => {
       // given
       const iSession = null;
-      jest.spyOn(homeHelper, 'getStorageItem').mockReturnValueOnce(iSession);
-      jest.spyOn(officeStoreRestoreObject, 'getExcelSettingValue').mockReturnValueOnce(iSession);
+      jest.spyOn(storageHelper, 'getStorageItem').mockReturnValueOnce(iSession);
+      jest.spyOn(officeStoreHelper, 'getPropertyValue').mockReturnValueOnce(iSession);
+      const logInMock = jest.spyOn(sessionActions, 'logIn').mockImplementation();
       // when
-      homeHelper.getTokenFromStorage();
+      sessionHelper.getTokenFromStorage();
       // then
-      expect(sessionActions.logIn).not.toBeCalled();
+      expect(logInMock).not.toHaveBeenCalled();
     });
     it('should save authToken when there is iSession in Excel settings', () => {
       // given
       const iSession = 'token';
-      jest.spyOn(homeHelper, 'getStorageItem').mockReturnValueOnce(null);
-      jest.spyOn(officeStoreRestoreObject, 'getExcelSettingValue').mockReturnValueOnce(iSession);
+      jest.spyOn(storageHelper, 'getStorageItem').mockReturnValueOnce(null);
+      jest.spyOn(officeStoreHelper, 'getPropertyValue').mockReturnValueOnce(iSession);
+      const logInMock = jest.spyOn(sessionActions, 'logIn').mockImplementation();
       // when
-      homeHelper.getTokenFromStorage();
+      sessionHelper.getTokenFromStorage();
       // then
-      expect(sessionActions.logIn).toBeCalled();
-      expect(sessionActions.logIn).toBeCalledWith(iSession);
+      expect(logInMock).toHaveBeenCalledWith(iSession);
     });
     it('should save authToken when there is iSession in storage', () => {
       // given
       const iSession = 'token';
-      jest.spyOn(homeHelper, 'getStorageItem').mockReturnValueOnce(iSession);
+      jest.spyOn(storageHelper, 'getStorageItem').mockReturnValueOnce(iSession);
+      const logInMock = jest.spyOn(sessionActions, 'logIn').mockImplementation();
       // when
-      homeHelper.getTokenFromStorage();
+      sessionHelper.getTokenFromStorage();
       // then
-      expect(sessionActions.logIn).toBeCalled();
-      expect(sessionActions.logIn).toBeCalledWith(iSession);
+
+      expect(logInMock).toHaveBeenCalledWith(iSession);
     });
     it('should return window location', () => {
       // given
-      const locationHelper = jest.spyOn(homeHelper, 'getWindowLocation');
+      const locationHelper = jest.spyOn(browserHelper, 'getWindowLocation');
       // when
-      const location = homeHelper.getWindowLocation();
+      const location = browserHelper.getWindowLocation();
       // then
       expect(locationHelper).toBeCalled();
       expect(location).toBeTruthy();
     });
     it('should return document cookie', () => {
       // given
-      const cookieHelper = jest.spyOn(homeHelper, 'getDocumentCookie');
+      const cookieHelper = jest.spyOn(browserHelper, 'getDocumentCookie');
       // when
-      homeHelper.getDocumentCookie();
+      browserHelper.getDocumentCookie();
       // then
       expect(cookieHelper).toBeCalled();
     });
@@ -146,10 +142,8 @@ describe('HomeHelper', () => {
       'should dispatch setSHowHidden action with correct payload',
       ({ excelSettingValue, localStorageValue, expectedShowHiddenPayload }) => {
         // given
-        jest
-          .spyOn(officeStoreRestoreObject, 'getExcelSettingValue')
-          .mockReturnValue(excelSettingValue);
-        jest.spyOn(homeHelper, 'getStorageItem').mockReturnValue(localStorageValue);
+        jest.spyOn(officeStoreHelper, 'getPropertyValue').mockReturnValue(excelSettingValue);
+        jest.spyOn(storageHelper, 'getStorageItem').mockReturnValue(localStorageValue);
         const actionPayloadSpy = jest.spyOn(configActions, 'setShowHidden');
         const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
@@ -158,7 +152,7 @@ describe('HomeHelper', () => {
 
         // then
         expect(actionPayloadSpy).toHaveBeenCalledWith(expectedShowHiddenPayload);
-        expect(mockedDispatch).toBeCalledTimes(1);
+        expect(mockedDispatch).toHaveBeenCalledTimes(1);
       }
     );
   });
@@ -181,7 +175,6 @@ describe('HomeHelper', () => {
 
       jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
-      homeHelper.init({}, {});
       // when
       homeHelper.initSupportedFeaturesFlags();
       expect(officeContext.isSetSupported).toHaveBeenCalled();
@@ -220,8 +213,6 @@ describe('HomeHelper', () => {
       jest.spyOn(officeShapeApiHelper, 'getShape').mockImplementation(() => undefined);
 
       jest.spyOn(reduxStore, 'dispatch').mockImplementation();
-
-      homeHelper.init({}, {});
       // when
 
       setTimeout(async () => {
