@@ -3,7 +3,6 @@ import { PopupTypes } from '@mstr/connector-components';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { authenticationService } from '../authentication/authentication-service';
 import { browserHelper } from '../helpers/browser-helper';
-import { notificationService } from '../notification/notification-service';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { pageByHelper } from '../page-by/page-by-helper';
 
@@ -16,14 +15,15 @@ import {
 } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 
+import { dialogController } from '../dialog/dialog-controller';
 import i18n from '../i18n';
 import { getNotificationButtons } from '../notification/notification-buttons';
 import { OperationTypes } from '../operation/operation-type-names';
-import { popupController } from '../popup/popup-controller';
 import {
   clearGlobalNotification,
   createSessionExpiredNotification,
   deleteObjectNotification,
+  dismissAllObjectsNotifications,
   displayGlobalNotification,
   displayObjectWarning,
 } from '../redux-reducer/notification-reducer/notification-action-creators';
@@ -491,15 +491,10 @@ class ErrorService {
    * Function logging out user from the application
    */
   async fullLogOut(): Promise<void> {
-    console.log('this', this);
-    notificationService.dismissNotifications();
-    console.log('this', this);
+    reduxStore.dispatch(dismissAllObjectsNotifications());
     await authenticationService.logOutRest(this);
-    console.log('this', this);
     sessionActions.logOut();
-    console.log('this', this);
     authenticationService.logOutRedirect();
-    console.log('this', this);
   }
 
   /**
@@ -541,8 +536,8 @@ class ErrorService {
     if (isDialogOpen && shouldClose) {
       const isDialogOpenForReprompt = storeState.repromptsQueueReducer?.total > 0;
 
-      await popupController.closeDialog(popupController.dialog);
-      popupController.resetDialogStates();
+      await dialogController.closeDialog(dialogController.dialog);
+      dialogController.resetDialogStates();
       // clear Reprompt task queue if in Reprompt All workflow
       isDialogOpenForReprompt && reduxStore.dispatch(clearRepromptTask());
     }
@@ -573,7 +568,7 @@ class ErrorService {
       ) {
         // @ts-expect-error
         reduxStore.dispatch(popupStateActions.setPopupType(DialogType.importedDataOverview));
-        popupController.runImportedDataOverviewPopup();
+        dialogController.runImportedDataOverviewPopup();
       }
     }
   };

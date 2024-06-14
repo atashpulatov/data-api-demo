@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-import { popupController } from '../../popup/popup-controller';
+import { dialogController } from '../../dialog/dialog-controller';
 import { notificationReducerSelectors } from '../../redux-reducer/notification-reducer/notification-reducer-selectors';
 import { selectObjects } from '../../redux-reducer/object-reducer/object-reducer-selectors';
 import { officeSelectors } from '../../redux-reducer/office-reducer/office-reducer-selectors';
@@ -21,7 +21,7 @@ export const useDialogPanelCommunication = (): void => {
 
   useEffect(() => {
     if (isDialogLoaded) {
-      popupController.sendMessageToDialog(
+      dialogController.sendMessageToDialog(
         JSON.stringify({
           popupType,
           objects,

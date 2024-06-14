@@ -8,9 +8,9 @@ import { DataPreviewButton } from './data-preview-button';
 import { ImportButton } from './dialog-import-button/import-button';
 import { PrepareDataButton } from './prepare-data-button';
 
-import './popup-buttons.scss';
+import './dialog-buttons.scss';
 
-interface PopupButtonsProps {
+interface DialogButtonsProps {
   handleOk?: () => void;
   handleSecondary?: () => void;
   shouldShowImportAsVisualization?: boolean;
@@ -27,7 +27,7 @@ interface PopupButtonsProps {
   isImportReport?: boolean;
 }
 
-export const PopupButtons: React.FC<PopupButtonsProps> = ({
+export const DialogButtons: React.FC<DialogButtonsProps> = ({
   handleOk,
   handleSecondary,
   handleCancel,

@@ -303,5 +303,10 @@
    "Report Filter": "Berichtsfilter",
    "Report Limits": "Berichtsgrenzwerte",
    "View Filter": "Ansichtsfilter",
-   "Selected non-grid visualization cannot be imported as formatted data": "Die ausgewählte Nicht-Tabellen-Visualisierung kann nicht als formatierte Daten importiert werden"
+   "Selected non-grid visualization cannot be imported as formatted data": "Die ausgewählte Nicht-Tabellen-Visualisierung kann nicht als formatierte Daten importiert werden",
+   "Data Refresh": "Datenaktualisierung",
+   "Auto Refresh": "Automatische Aktualisierung",
+   "If enabled, the data will be automatically refreshed each time you open the Excel document.": "Bei aktivierter Option werden die Daten bei jedem Öffnen der PowerPoint-Präsentation automatisch aktualisiert.",
+   "Refresh in progress...": "Aktualisierung wird durchgeführt...",
+   "Stop refresh": "Aktualisierung anhalten"
 }

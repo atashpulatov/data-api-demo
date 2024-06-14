@@ -2,17 +2,17 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { fireEvent, render } from '@testing-library/react';
 
-import { reduxStore } from '../store';
+import { reduxStore } from '../../store';
 
-import { officeActions } from '../redux-reducer/office-reducer/office-actions';
-import { PopupButtons } from './popup-buttons/popup-buttons';
+import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
+import { DialogButtons } from './dialog-buttons';
 
-describe('PopupButtons', () => {
+describe('Dialog Buttons', () => {
   it('should NOT display prepare data when secondary action NOT provided', () => {
     // when
     const { queryByText } = render(
       <Provider store={reduxStore}>
-        <PopupButtons />
+        <DialogButtons />
       </Provider>
     );
     // then
@@ -25,7 +25,7 @@ describe('PopupButtons', () => {
     // when
     const { getByText } = render(
       <Provider store={reduxStore}>
-        <PopupButtons handleSecondary={secondaryAction} hideSecondary={false} />
+        <DialogButtons handleSecondary={secondaryAction} hideSecondary={false} />
       </Provider>
     );
     // then
@@ -38,7 +38,7 @@ describe('PopupButtons', () => {
     // when
     const { getByText } = render(
       <Provider store={reduxStore}>
-        <PopupButtons handleBack={handleBack} />
+        <DialogButtons handleBack={handleBack} />
       </Provider>
     );
     // then
@@ -49,7 +49,7 @@ describe('PopupButtons', () => {
     // when
     const { queryByText } = render(
       <Provider store={reduxStore}>
-        <PopupButtons />
+        <DialogButtons />
       </Provider>
     );
     // then
@@ -61,7 +61,7 @@ describe('PopupButtons', () => {
     const secondaryAction = jest.fn();
     const { getByText } = render(
       <Provider store={reduxStore}>
-        <PopupButtons handleSecondary={secondaryAction} />
+        <DialogButtons handleSecondary={secondaryAction} />
       </Provider>
     );
     const secondaryButton = getByText('Prepare Data');
@@ -76,7 +76,7 @@ describe('PopupButtons', () => {
     // when
     const { getByText } = render(
       <Provider store={reduxStore}>
-        <PopupButtons disableActiveActions={disableActiveActions} />
+        <DialogButtons disableActiveActions={disableActiveActions} />
       </Provider>
     );
 
@@ -91,7 +91,7 @@ describe('PopupButtons', () => {
     // when
     const { getByText } = render(
       <Provider store={reduxStore}>
-        <PopupButtons isPublished={false} />
+        <DialogButtons isPublished={false} />
       </Provider>
     );
 
@@ -106,7 +106,7 @@ describe('PopupButtons', () => {
     // when
     const { queryByText } = render(
       <Provider store={reduxStore}>
-        <PopupButtons hideSecondary />
+        <DialogButtons hideSecondary />
       </Provider>
     );
     // then
@@ -117,7 +117,7 @@ describe('PopupButtons', () => {
     // when
     const { getByText } = render(
       <Provider store={reduxStore}>
-        <PopupButtons hideSecondary={false} />
+        <DialogButtons hideSecondary={false} />
       </Provider>
     );
     // then
@@ -130,7 +130,7 @@ describe('PopupButtons', () => {
     // when
     const { getByText } = render(
       <Provider store={reduxStore}>
-        <PopupButtons shouldShowImportAsVisualization />
+        <DialogButtons shouldShowImportAsVisualization />
       </Provider>
     );
     // then
@@ -144,7 +144,7 @@ describe('PopupButtons', () => {
     // when
     const { getByText } = render(
       <Provider store={reduxStore}>
-        <PopupButtons isImportReport />
+        <DialogButtons isImportReport />
       </Provider>
     );
     // then
@@ -158,7 +158,7 @@ describe('PopupButtons', () => {
     // when
     const { getByText } = render(
       <Provider store={reduxStore}>
-        <PopupButtons />
+        <DialogButtons />
       </Provider>
     );
     // then

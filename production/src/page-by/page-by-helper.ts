@@ -6,7 +6,7 @@ import officeReducerHelper from '../office/store/office-reducer-helper';
 
 import { reduxStore } from '../store';
 
-import { DialogResponse, ReportParams } from '../popup/popup-controller-types';
+import { DialogResponse, ReportParams } from '../dialog/dialog-controller-types';
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectAndWorksheetNamingOption } from '../right-side-panel/settings-side-panel/settings-side-panel-types';
 import { ObjectData } from '../types/object-types';

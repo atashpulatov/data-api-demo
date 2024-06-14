@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import officeReducerHelper from '../../office/store/office-reducer-helper';
-import { popupHelper } from '../popup-helper';
+import { dialogHelper } from '../dialog-helper';
 
 import { reduxStore } from '../../store';
 
@@ -45,7 +45,7 @@ const useStateSyncOnDialogMessage = (): void => {
   useEffect(() => {
     // Send message to the Right side panel when overview dialog is loaded
     const message = { command: selectorProperties.commandDialogLoaded };
-    popupHelper.officeMessageParent(message);
+    dialogHelper.officeMessageParent(message);
   }, []);
 };
 

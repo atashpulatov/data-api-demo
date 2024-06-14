@@ -2,6 +2,8 @@ import officeStoreHelper from '../office/store/office-store-helper';
 
 import { reduxStore } from '../store';
 
+import { NotificationActionTypes } from '../redux-reducer/notification-reducer/notification-reducer-types';
+
 import { updateObject } from '../redux-reducer/object-reducer/object-actions';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import {
@@ -140,11 +142,10 @@ class OperationStepDispatcher {
     reduxStore.dispatch(updateObject(updatedObject));
   }
 
-  moveNotificationToInProgress(objectWorkingId: number): void {
+  moveNotificationToInProgress(objectWorkingId: number, operationId: string): void {
     reduxStore.dispatch({
-      // @ts-expect-error
-      type: OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS,
-      payload: { objectWorkingId },
+      type: NotificationActionTypes.MOVE_NOTIFICATION_TO_IN_PROGRESS,
+      payload: { objectWorkingId, operationId },
     });
   }
 
@@ -152,14 +153,6 @@ class OperationStepDispatcher {
     reduxStore.dispatch(
       markStepCompleted(objectWorkingId, OperationSteps.MOVE_NOTIFICATION_TO_IN_PROGRESS)
     );
-  }
-
-  displaySuccessNotification(objectWorkingId: number): void {
-    reduxStore.dispatch({
-      // @ts-expect-error
-      type: OperationSteps.DISPLAY_NOTIFICATION_COMPLETED,
-      payload: { objectWorkingId },
-    });
   }
 
   completeDisplaySuccessNotification(objectWorkingId: number): void {

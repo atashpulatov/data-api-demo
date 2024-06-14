@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { connect, useSelector } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { OfficeApplicationType, SidePanel } from '@mstr/connector-components';
 import { SidePanelBannerProps } from '@mstr/connector-components/lib/side-panel/banner/side-panel-banner-types';
 
@@ -10,7 +10,6 @@ import { useGetSidePanelPopup } from './side-panel-hooks/use-get-side-panel-popu
 import { useGetUpdatedDuplicatePopup } from './side-panel-hooks/use-get-updated-duplicate-popup';
 import useInitializeSidePanel from './side-panel-hooks/use-initialize-side-panel';
 
-import { notificationService } from '../notification/notification-service';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { sidePanelNotificationHelper } from './side-panel-services/side-panel-notification-helper';
 import { sidePanelService } from './side-panel-services/side-panel-service';
@@ -19,8 +18,8 @@ import { reduxStore, RootState } from '../store';
 
 import { ObjectData } from '../types/object-types';
 
-import { popupController } from '../popup/popup-controller';
-import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { dialogController } from '../dialog/dialog-controller';
+import { dismissAllObjectsNotifications } from '../redux-reducer/notification-reducer/notification-action-creators';
 import { setSidePanelBanner } from '../redux-reducer/notification-reducer/notification-action-creators';
 import { notificationReducerSelectors } from '../redux-reducer/notification-reducer/notification-reducer-selectors';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
@@ -40,7 +39,6 @@ interface RightSidePanelProps {
   isSettings?: boolean;
   settingsPanelLoaded?: boolean;
   toggleIsSettingsFlag?: (flag?: boolean) => void;
-  updateActiveCellAddress?: (cellAddress?: string) => void;
   setPrefilteredSourceObjectName?: (objectName: string) => void;
   setIsDataOverviewOpen?: (isDataOverviewOpen: boolean) => void;
 }
@@ -51,10 +49,10 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   isSettings,
   settingsPanelLoaded,
   toggleIsSettingsFlag,
-  updateActiveCellAddress,
   setPrefilteredSourceObjectName,
   setIsDataOverviewOpen,
 }) => {
+  const dispatch = useDispatch();
   const [sidePanelPopup, setSidePanelPopup] = useState(null);
   const [loadedObjectsWrapped, setLoadedObjectsWrapped] = useState(loadedObjects);
   const [activeSheetId, setActiveSheetId] = useState('');
@@ -77,11 +75,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   // Use ref so this value can be used in event listener callback
   const isAnyPopupOrSettingsDisplayedRef = useRef(isAnyPopupOrSettingsDisplayed);
 
-  useInitializeSidePanel(
-    updateActiveCellAddress,
-    setActiveSheetId,
-    isAnyPopupOrSettingsDisplayedRef
-  );
+  useInitializeSidePanel(setActiveSheetId, isAnyPopupOrSettingsDisplayedRef);
   useDialogPanelCommunication();
   useGetSidePanelPopup({ setSidePanelPopup, sidePanelPopup });
 
@@ -115,7 +109,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   }, [loadedObjects, notifications, operations, sidePanelBanner]);
 
   const showOverviewModal = (objectName: string): void => {
-    popupController.runImportedDataOverviewPopup();
+    dialogController.runImportedDataOverviewPopup();
     setPrefilteredSourceObjectName(objectName);
     setIsDataOverviewOpen(true);
   };
@@ -146,7 +140,10 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
           onSettingsClick={() => toggleIsSettingsFlag(!isSettings)}
           confirmationWindow={isConfirm && <Confirmation />}
           globalNotification={globalNotification}
-          onSelectAll={notificationService.dismissNotifications}
+          onSelectAll={() => {
+            // @ts-expect-error
+            dispatch(dismissAllObjectsNotifications());
+          }}
           shouldDisableActions={!officeReducerHelper.noOperationInProgress()}
           onRefreshAllPagesClick={pageByLinkId =>
             sidePanelService.refreshAllPages(pageByLinkId, setSidePanelPopup, loadedObjects)
@@ -178,9 +175,7 @@ export const mapStateToProps = (state: RootState): any => {
 };
 
 const mapDispatchToProps = {
-  cancelCurrentImportRequest: navigationTreeActions.cancelImportRequest,
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
-  updateActiveCellAddress: officeActions.updateActiveCellAddress,
   setPrefilteredSourceObjectName: popupStateActions.setPrefilteredSourceObjectName,
   setIsDataOverviewOpen: popupStateActions.setIsDataOverviewOpen,
 };

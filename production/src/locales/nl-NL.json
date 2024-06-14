@@ -303,5 +303,10 @@
    "Report Filter": "Rapportfilter",
    "Report Limits": "Rapportlimieten",
    "View Filter": "Weergavefilter",
-   "Selected non-grid visualization cannot be imported as formatted data": "Geselecteerde visualisatie zonder raster kan niet geïmporteerd worden als opgemaakte gegevens"
+   "Selected non-grid visualization cannot be imported as formatted data": "Geselecteerde visualisatie zonder raster kan niet geïmporteerd worden als opgemaakte gegevens",
+   "Data Refresh": "Gegevens vernieuwen",
+   "Auto Refresh": "Automatisch vernieuwen",
+   "If enabled, the data will be automatically refreshed each time you open the Excel document.": "Als deze optie is ingeschakeld, worden de gegevens automatisch vernieuwd elke keer dat u de PowerPoint-presentatie opent.",
+   "Refresh in progress...": "Vernieuwen wordt uitgevoerd ...",
+   "Stop refresh": "Vernieuwen stoppen"
 }

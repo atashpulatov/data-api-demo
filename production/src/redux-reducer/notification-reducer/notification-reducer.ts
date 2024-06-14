@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { ObjectNotificationTypes } from '@mstr/connector-components';
 
-import { notificationService } from '../../notification/notification-service';
+import { notificationServiceHelper } from '../../notification/notification-service-helper';
 
 import type { OperationData } from '../operation-reducer/operation-reducer-types';
 import {
@@ -17,6 +17,7 @@ import {
 
 import i18n from '../../i18n';
 import { getNotificationButtons } from '../../notification/notification-buttons';
+import { getNotificationCancelButton } from '../../notification/notification-cancel-button';
 import { OperationSteps } from '../../operation/operation-steps';
 import { OperationTypes } from '../../operation/operation-type-names';
 import { titleOperationCompletedMap, titleOperationInProgressMap } from './notification-title-maps';
@@ -71,6 +72,12 @@ export const notificationReducer = (
     case NotificationActionTypes.RESTORE_ALL_NOTIFICATIONS:
       return restoreAllNotifications(state, action.payload);
 
+    case NotificationActionTypes.DISMISS_SINGLE_NOTIFICATION:
+      return dismissSingleNotification(state, action.payload);
+
+    case NotificationActionTypes.DISMISS_ALL_NOTIFICATIONS:
+      return dismissAllNotifications(state);
+
     case NotificationActionTypes.SET_SIDE_PANEL_BANNER:
       return setSidePanelBanner(state, action.payload);
     default:
@@ -86,9 +93,7 @@ const createProgressNotification = (
   let notificationButtons;
 
   if (operationType !== OperationTypes.CLEAR_DATA_OPERATION) {
-    notificationButtons = getNotificationButtons(
-      notificationService.getCancelButton(objectWorkingId, operationType, operationId)
-    );
+    notificationButtons = getNotificationCancelButton(objectWorkingId, operationType, operationId);
   }
 
   // DE288915: Avoid duplicate notifications, particularly those originating from Edit and Reprompt operations.
@@ -109,7 +114,7 @@ const createProgressNotification = (
 
 const moveNotificationToInProgress = (
   state: NotificationState,
-  payload: { objectWorkingId: number }
+  payload: { objectWorkingId: number; operationId: string }
 ): NotificationState => {
   const { notificationToUpdate, notificationToUpdateIndex } = getNotificationToUpdate(
     state,
@@ -124,6 +129,7 @@ const moveNotificationToInProgress = (
       ]
     ),
     isIndeterminate: getIsIndeterminate(notificationToUpdate),
+    operationId: payload.operationId,
   };
 
   delete updatedNotification.children;
@@ -132,7 +138,7 @@ const moveNotificationToInProgress = (
 
 const displayNotificationCompleted = (
   state: NotificationState,
-  payload: { objectWorkingId: number }
+  payload: { objectWorkingId: number; dismissNotificationCallback: any }
 ): NotificationState => {
   const { notificationToUpdate, notificationToUpdateIndex } = getNotificationToUpdate(
     state,
@@ -147,13 +153,7 @@ const displayNotificationCompleted = (
         notificationToUpdate.operationType as OperationTypesWithNotification
       ]
     ),
-    dismissNotification:
-      notificationToUpdate.operationType === OperationTypes.REMOVE_OPERATION
-        ? () =>
-            notificationService.dismissSuccessfulRemoveNotification(
-              notificationToUpdate.objectWorkingId
-            )
-        : () => notificationService.dismissNotification(notificationToUpdate.objectWorkingId),
+    dismissNotification: payload.dismissNotificationCallback,
   };
   return createNewState(state, notificationToUpdateIndex, updatedNotification);
 };
@@ -173,6 +173,56 @@ const deleteNotification = (
   return newState;
 };
 
+const dismissSingleNotification = (
+  state: NotificationState,
+  payload: { objectWorkingId: number }
+): NotificationState => {
+  const { notifications } = state;
+
+  const newNotifications = notifications.filter(
+    ({ objectWorkingId }) => objectWorkingId !== payload.objectWorkingId
+  );
+
+  // TODO: figure out if this is needed
+  // const singleNotification = notifications.find(
+  //   notification => notification.objectWorkingId === payload.objectWorkingId
+  // );
+  // if (singleNotification) {
+  //   if (singleNotification.dismissNotification) {
+  //     singleNotification.dismissNotification();
+  //   } else if (singleNotification.callback) {
+  //     singleNotification.callback();
+  //   }
+  // }
+
+  return {
+    notifications: newNotifications,
+    globalNotification: state.globalNotification,
+  };
+};
+
+const dismissAllNotifications = (state: NotificationState): NotificationState => {
+  const { notifications } = state;
+
+  // TODO: figure out if this is needed
+  // notifications.forEach(({ dismissNotification, callback }) => {
+  //   if (dismissNotification) {
+  //     // dismissNotification();
+  //   } else if (callback) {
+  //     callback();
+  //   }
+  // });
+
+  const newNotifications = notifications.filter(
+    ({ type }) => type !== ObjectNotificationTypes.SUCCESS
+  );
+
+  return {
+    notifications: newNotifications,
+    globalNotification: state.globalNotification,
+  };
+};
+
 const displayNotificationWarning = (
   state: NotificationState,
   payload: { objectWorkingId: number; notification: Notification }
@@ -182,8 +232,8 @@ const displayNotificationWarning = (
     payload.objectWorkingId
   );
 
-  const buttons = notificationService.getOkButton(payload);
-  const title = notificationService.getTitle(payload, notificationToUpdate);
+  const buttons = notificationServiceHelper.getOkButton(payload);
+  const title = notificationServiceHelper.getTitle(payload, notificationToUpdate);
 
   const updatedNotification = {
     objectWorkingId: payload.objectWorkingId,
@@ -193,6 +243,7 @@ const displayNotificationWarning = (
     children: getNotificationButtons(buttons),
     callback: payload.notification.callback,
     operationType: notificationToUpdate.operationType,
+    operationId: notificationToUpdate.operationId,
   };
 
   return createNewState(state, notificationToUpdateIndex, updatedNotification);

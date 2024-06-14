@@ -65,10 +65,6 @@ const toggleReusePromptAnswersFlag = (reusePromptAnswers: boolean) => (dispatch:
   });
 };
 
-const toggleRenderSettingsFlag = () => (dispatch: Dispatch<any>) => {
-  dispatch({ type: OfficeActionsTypes.TOGGLE_RENDER_SETTINGS_FLAG });
-};
-
 const toggleImportAsPivotTableFlag =
   (isImportAsPivotTableSupported: boolean) => (dispatch: Dispatch<any>) => {
     dispatch({
@@ -81,10 +77,6 @@ const setActiveCellAddress = (activeCellAddress: string): SetActiveCellAddressAc
   type: OfficeActionsTypes.SET_ACTIVE_CELL_ADDRESS,
   activeCellAddress,
 });
-
-const updateActiveCellAddress = (activeCellAddress: string) => (dispatch: Dispatch<any>) => {
-  dispatch(setActiveCellAddress(activeCellAddress));
-};
 
 const setPopupData = (popupData: any): SetPopupDataAction => ({
   type: OfficeActionsTypes.SET_POPUP_DATA,
@@ -134,10 +126,8 @@ export const officeActions = {
   toggleIsClearDataFailedFlag,
   toggleSettingsPanelLoadedFlag,
   toggleReusePromptAnswersFlag,
-  toggleRenderSettingsFlag,
   toggleImportAsPivotTableFlag,
   setActiveCellAddress,
-  updateActiveCellAddress,
   setPopupData,
   clearPopupData,
   setIsShapeAPISupported,

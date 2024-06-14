@@ -303,5 +303,10 @@
    "Report Filter": "報告篩選條件",
    "Report Limits": "報告限制",
    "View Filter": "檢視篩選條件",
-   "Selected non-grid visualization cannot be imported as formatted data": "已選取的非資料格視覺效果無法彙入為格式化資料"
+   "Selected non-grid visualization cannot be imported as formatted data": "已選取的非資料格視覺效果無法彙入為格式化資料",
+   "Data Refresh": "資料重新整理",
+   "Auto Refresh": "自動重新整理",
+   "If enabled, the data will be automatically refreshed each time you open the Excel document.": "若已啟用每次您開啟 PowerPoint 簡報時資料都會自動重新整理。",
+   "Refresh in progress...": "重新整理進行中...",
+   "Stop refresh": "停止重新整理"
 }

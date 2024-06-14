@@ -3,6 +3,7 @@ import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import officeStoreHelper from '../../office/store/office-store-helper';
+import { popupHelper } from '../../redux-reducer/popup-reducer/popup-helper';
 import { sidePanelHelper } from './side-panel-helper';
 
 import { reduxStore } from '../../store';
@@ -12,7 +13,6 @@ import { ObjectData } from '../../types/object-types';
 
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 import * as operationActions from '../../redux-reducer/operation-reducer/operation-actions';
-import { popupActions } from '../../redux-reducer/popup-reducer/popup-actions';
 
 describe('SidePanelHelper', () => {
   jest.useFakeTimers();
@@ -25,8 +25,8 @@ describe('SidePanelHelper', () => {
     operationActions.duplicateRequested = jest.fn().mockReturnValue('duplicateRequestedTest');
 
     // @ts-ignore
-    callForDuplicateOriginal = popupActions.duplicateRequested;
-    popupActions.callForDuplicate = jest.fn().mockReturnValue('callForDuplicateTest');
+    callForDuplicateOriginal = popupHelper.duplicateRequested;
+    popupHelper.callForDuplicate = jest.fn().mockReturnValue('callForDuplicateTest');
   });
 
   afterEach(() => {
@@ -36,7 +36,7 @@ describe('SidePanelHelper', () => {
   afterAll(() => {
     // @ts-ignore
     operationActions.duplicateRequested = duplicateRequestedOriginal;
-    popupActions.callForDuplicate = callForDuplicateOriginal;
+    popupHelper.callForDuplicate = callForDuplicateOriginal;
   });
 
   it('should dispatch duplicateRequested for duplicate with import', () => {
@@ -104,8 +104,8 @@ describe('SidePanelHelper', () => {
     sidePanelHelper.duplicateObject(objectWorkingId, insertNewWorksheet, withEdit);
     // then
     expect(getObjectFromObjectReducerByObjectWorkingId).toBeCalledWith(objectWorkingId);
-    expect(popupActions.callForDuplicate).toBeCalledTimes(1);
-    expect(popupActions.callForDuplicate).toBeCalledWith(expectedObject);
+    expect(popupHelper.callForDuplicate).toBeCalledTimes(1);
+    expect(popupHelper.callForDuplicate).toBeCalledWith(expectedObject);
   });
 
   it.each`
@@ -119,7 +119,7 @@ describe('SidePanelHelper', () => {
       const mockObject = {
         bindId: '1',
         mstrObjectType: { name: objectType } as MstrObjectTypes,
-      };
+      } as ObjectData;
 
       const mockedGetExcelContext = jest
         .spyOn(officeApiHelper, 'getExcelContext')
@@ -127,6 +127,10 @@ describe('SidePanelHelper', () => {
       const mockedisSheetProtected = jest
         .spyOn(officeApiWorksheetHelper, 'isCurrentReportSheetProtected')
         .mockImplementation();
+      officeReducerHelper.getObjectFromObjectReducerByBindId;
+      const mockedGetObjectFromObjectReducerByBindId = jest
+        .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByBindId')
+        .mockReturnValue(mockObject);
       const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
       // when
@@ -139,9 +143,10 @@ describe('SidePanelHelper', () => {
 
       // then
       expect(isPrompted).toBeTruthy();
-      expect(mockedGetExcelContext).toBeCalled();
-      expect(mockedisSheetProtected).toBeCalled();
-      expect(mockedDispatch).toBeCalled();
+      expect(mockedGetExcelContext).toHaveBeenCalled();
+      expect(mockedisSheetProtected).toHaveBeenCalled();
+      expect(mockedGetObjectFromObjectReducerByBindId).toHaveBeenCalled();
+      expect(mockedDispatch).toHaveBeenCalled();
     }
   );
 

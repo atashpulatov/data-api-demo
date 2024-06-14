@@ -303,5 +303,10 @@
    "Report Filter": "Rapportfilter",
    "Report Limits": "Rapportgränser",
    "View Filter": "Vyfilter",
-   "Selected non-grid visualization cannot be imported as formatted data": "Vald visualisering utan rutnät kan inte importeras som formaterad data"
+   "Selected non-grid visualization cannot be imported as formatted data": "Vald visualisering utan rutnät kan inte importeras som formaterad data",
+   "Data Refresh": "Datauppdatering",
+   "Auto Refresh": "Automatisk uppdatering",
+   "If enabled, the data will be automatically refreshed each time you open the Excel document.": "Om detta aktiveras kommer data automatiskt att uppdateras varje gång du öppnar PowerPoint-presentationen.",
+   "Refresh in progress...": "Uppdatering pågår...",
+   "Stop refresh": "Avbryt uppdateringen"
 }

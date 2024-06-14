@@ -303,5 +303,10 @@
    "Report Filter": "报表筛选器",
    "Report Limits": "报表限制",
    "View Filter": "视图筛选器",
-   "Selected non-grid visualization cannot be imported as formatted data": "选定的非表格可视化效果无法导入为格式数据"
+   "Selected non-grid visualization cannot be imported as formatted data": "选定的非表格可视化效果无法导入为格式数据",
+   "Data Refresh": "数据刷新",
+   "Auto Refresh": "自动刷新",
+   "If enabled, the data will be automatically refreshed each time you open the Excel document.": "启用后数据将在您每次打开 PowerPoint 演示文稿时自动刷新。",
+   "Refresh in progress...": "正在刷新...",
+   "Stop refresh": "停止刷新"
 }

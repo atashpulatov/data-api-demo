@@ -2,14 +2,14 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/react';
 
-import { popupHelper } from '../popup/popup-helper';
+import { dialogHelper } from '../dialog/dialog-helper';
 import { EXTEND_SESSION, sessionHelper } from '../storage/session-helper';
 
 import { reduxStore } from '../store';
 
 import { PromptsWindowNotConnected } from './prompts-window';
 
-jest.mock('../popup/popup-helper');
+jest.mock('../dialog/dialog-helper');
 
 describe('PromptsWindowNotConnected', () => {
   const mstrData = {
@@ -128,7 +128,7 @@ describe('PromptsWindowNotConnected', () => {
 
   it('handlePopupErrors should be called on proper messageReceived', () => {
     // given
-    popupHelper.handlePopupErrors = jest.fn();
+    dialogHelper.handlePopupErrors = jest.fn();
     const givenMessage = {
       data: {
         value: { statusCode: 201, iServerErrorCode: 1234, message: 'test' },
@@ -166,12 +166,12 @@ describe('PromptsWindowNotConnected', () => {
 
     fireEvent(window, new MessageEvent('message', givenMessage));
     // then
-    expect(popupHelper.handlePopupErrors).toBeCalledWith(expectedObject);
+    expect(dialogHelper.handlePopupErrors).toBeCalledWith(expectedObject);
   });
 
   it('handlePopupErrors should not be called on different messageReceived', () => {
     // given
-    popupHelper.handlePopupErrors = jest.fn();
+    dialogHelper.handlePopupErrors = jest.fn();
     const givenMessage = { data: 'test' };
 
     // when
@@ -189,7 +189,7 @@ describe('PromptsWindowNotConnected', () => {
 
     fireEvent(window, new MessageEvent('message', givenMessage));
     // then
-    expect(popupHelper.handlePopupErrors).not.toBeCalled();
+    expect(dialogHelper.handlePopupErrors).not.toBeCalled();
   });
 
   it('keepSessionAlive should be called on EXTEND_SESSION message', () => {

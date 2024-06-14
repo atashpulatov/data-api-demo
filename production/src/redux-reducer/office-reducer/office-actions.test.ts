@@ -74,19 +74,6 @@ describe('Office Actions', () => {
     });
   });
 
-  it('should dispatch proper toggleRenderSettingsFlag action', () => {
-    // given
-    const listener = jest.fn();
-
-    // when
-    officeActions.toggleRenderSettingsFlag()(listener);
-
-    // then
-    expect(listener).toHaveBeenCalledWith({
-      type: OfficeActionsTypes.TOGGLE_RENDER_SETTINGS_FLAG,
-    });
-  });
-
   it('should dispatch proper toggleIsClearDataFailedFlag action', () => {
     // given
     const listener = jest.fn();
