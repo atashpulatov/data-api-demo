@@ -189,15 +189,15 @@ def step_impl(context):
 
     AssertUtil.assert_simple(is_disabled, False)
 
-@step('I verified that Import button on Edit is enabled')
+@step('I verified that Import Formatted Data button is enabled')
 def step_impl(context):
-    is_disabled = context.pages.import_data_page().verify_if_import_button_on_edit_is_enabled()
+    is_disabled = context.pages.import_data_page().verify_if_import_formatted_data_button_enabled()
 
     AssertUtil.assert_simple(is_disabled, True)
 
-@step('I verified that Import button on Edit is disabled')
+@step('I verified that Import Formatted Data button is disabled')
 def step_impl(context):
-    is_disabled = context.pages.import_data_page().verify_if_import_button_on_edit_is_enabled()
+    is_disabled = context.pages.import_data_page().verify_if_import_formatted_data_button_enabled()
 
     AssertUtil.assert_simple(is_disabled, False)
 
@@ -266,9 +266,9 @@ def step_impl(context):
 def step_impl(context):
     context.pages.import_data_page().hover_over_import_image_button()
 
-@step('I hover over Import button on Edit')
+@step('I hover over Import Formatted Data button')
 def step_impl(context):
-    context.pages.import_data_page().hover_over_import_on_edit_button()
+    context.pages.import_data_page().hover_over_import_formatted_data_button()
     
 @step('I verified that tooltip for Import image button shows message "{expected_tooltip_text}"')
 def step_impl(context, expected_tooltip_text):

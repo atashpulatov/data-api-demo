@@ -54,7 +54,7 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
         When I clicked Edit object 1
         And I waited for dossier to load successfully
         And I selected visualization "Visualization 1"
-        And I verified that Import button on Edit is enabled
+        And I verified that Import Formatted Data button is enabled
         And I clicked import formatted data without waiting for results
         And I closed last notification  
         And I verified that cell "B2" has value "Web"

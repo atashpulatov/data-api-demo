@@ -49,8 +49,8 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
         And I selected dossier page or chapter 1
     # Verify the tooltip for import button on non-grid visualization selection
         And I selected visualization "Pie Chart"
-        And I verified that Import button on Edit is disabled
-        And I hover over Import button on Edit
+        And I verified that Import Formatted Data button is disabled
+        And I hover over Import Formatted Data button
         Then I verified that tooltip for Import button shows message "Selected non-grid visualization cannot be imported as formatted data"     
     # Then import formatted compound grid    
         And I selected visualization "Compound Grid"
