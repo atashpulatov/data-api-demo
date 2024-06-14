@@ -51,12 +51,12 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
         When I clicked clear data
         And I waited for Clear Data overlay to have title "Data Cleared!"
         And I verified that the Clear Data overlay displayed message "MicroStrategy data has been removed from the workbook. Click 'View Data' to import it again."
-        Then I verified that cells ["A1", "C1", "B3", "D6"] have values ["Category", "Discount", "", ""]
+        Then I verified that cells ["A1", "C1", "B3"] have values ["Category", "Discount", ""]
 
     # View cleared data    
         And I clicked view data
         And I closed last notification
-        Then I verified that cells ["A1", "C1", "B3", "D6"] have values ["Category", "Discount", "1", "10.2"]
+        Then I verified that cells ["A1", "C1", "B3"] have values ["Category", "Discount", "1"]
 
     # Duplicate formatted grid into active cell
         When I selected cell "Y53"

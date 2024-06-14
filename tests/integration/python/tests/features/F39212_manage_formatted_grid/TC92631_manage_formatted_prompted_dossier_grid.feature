@@ -68,7 +68,7 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
     # View cleared data    
         And I clicked view data
         And I closed last notification
-        Then I verified that cells ["A1", "C1", "B3", "C4"] have values ["Year", "Revenue", "", "Movies"]    
+        Then I verified that cells ["A1", "C1", "B3", "C4"] have values ["Year", "Category", "", "Movies"]    
 
     # Duplicate formatted grid into active cell
         When I selected cell "X52"

@@ -11,7 +11,7 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
         And I verified that the Import Data popup show "Grid View"
         And I verified that Import button is disabled
         And I verified that Prepare Data button is disabled
-        And I found and selected object "(AUTO) Multiple Visualization Dossier"
+        And I found and selected object "(AUTO) Formatted Multiple Visualization Dossier"
         And I verified that Import button is enabled
         And I verified that Prepare Data button is disabled
         And I clicked Import button without checking results
