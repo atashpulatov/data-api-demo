@@ -303,5 +303,10 @@
    "Report Filter": "Rapportfilter",
    "Report Limits": "Rapportgrænser",
    "View Filter": "Vis filter",
-   "Selected non-grid visualization cannot be imported as formatted data": "De valgte visualiseringer uden gitter kan ikke importeres som formaterede data"
+   "Selected non-grid visualization cannot be imported as formatted data": "De valgte visualiseringer uden gitter kan ikke importeres som formaterede data",
+   "Data Refresh": "Dataopdatering",
+   "Auto Refresh": "Automatisk opdatering",
+   "If enabled, the data will be automatically refreshed each time you open the Excel document.": "Hvis det er aktiveret, opdateres dataene automatisk, hver gang du åbner PowerPoint-præsentationen.",
+   "Refresh in progress...": "Opdatering i gang...",
+   "Stop refresh": "Stop opdatering"
 }
