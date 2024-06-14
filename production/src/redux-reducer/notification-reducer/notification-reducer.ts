@@ -296,7 +296,7 @@ const deleteAllNotifications = (
     ? {
         notifications: [],
         globalNotification: state.globalNotification,
-        sidePanelBannerNotification: {},
+        sidePanelBannerNotification: null,
       }
     : state;
 

@@ -49,7 +49,7 @@ export interface NotificationState {
 }
 
 export interface SidePanelBanner extends SidePanelBannerProps {
-  type?: string;
+  type?: SidePanelBannerType;
 }
 
 export enum SidePanelBannerType {
