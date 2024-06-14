@@ -10,7 +10,6 @@ import {
   ToggleIsConfirmFlagAction,
   ToggleIsSettingsFlagAction,
   TogglePivotTableSupportedFlagAction,
-  ToggleRenderSettingsFlagAction,
   ToggleReusePromptAnswersFlagAction,
   ToggleSecuredFlagAction,
   ToggleSettingsPanelLoadedFlagAction,
@@ -24,7 +23,6 @@ describe('officeReducer', () => {
   beforeEach(() => {
     // default state should be empty
     expect(officeStore.getState()).toEqual({
-      shouldRenderSettings: false,
       isSettings: false,
       isConfirm: false,
       supportForms: true,
@@ -127,18 +125,6 @@ describe('officeReducer', () => {
     const newState = officeReducer(oldState, action);
     // then
     expect(newState).toEqual({ isConfirm: true, isSettings: false });
-  });
-
-  it('should return new proper state in case of toggleRenderSettingsFlag action', () => {
-    // given
-    const oldState: any = { isSettings: false, shouldRenderSettings: false };
-    const action: ToggleRenderSettingsFlagAction = {
-      type: OfficeActionsTypes.TOGGLE_RENDER_SETTINGS_FLAG,
-    };
-    // when
-    const newState = officeReducer(oldState, action);
-    // then
-    expect(newState).toEqual({ isSettings: false, shouldRenderSettings: true });
   });
 
   it('should set IsClearDataFailed to given value on toggleIsClearDataFailedFlag', () => {

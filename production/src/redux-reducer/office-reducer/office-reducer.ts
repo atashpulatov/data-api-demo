@@ -20,7 +20,6 @@ import {
 } from './office-reducer-types';
 
 const initialState: OfficeState = {
-  shouldRenderSettings: false,
   isConfirm: false,
   isSettings: false,
   supportForms: true,
@@ -59,9 +58,6 @@ export const officeReducer = (state = initialState, action: OfficeActions): Offi
 
     case OfficeActionsTypes.TOGGLE_IS_CONFIRM_FLAG:
       return toggleIsConfirmFlag(state, action);
-
-    case OfficeActionsTypes.TOGGLE_RENDER_SETTINGS_FLAG:
-      return toggleRenderSettingsFlag(state);
 
     case OfficeActionsTypes.TOGGLE_IS_CLEAR_DATA_FAILED_FLAG:
       return toggleIsClearDataFailedFlag(state, action);
@@ -146,14 +142,6 @@ function toggleIsConfirmFlag(state: OfficeState, action: ToggleIsConfirmFlagActi
   return {
     ...state,
     isConfirm: action.isConfirm,
-    isSettings: false,
-  };
-}
-
-function toggleRenderSettingsFlag(state: OfficeState): OfficeState {
-  return {
-    ...state,
-    shouldRenderSettings: !state.shouldRenderSettings,
     isSettings: false,
   };
 }

@@ -379,11 +379,9 @@ class OfficeApiService {
    * As event handler, resets the active cell value via callback and then updates it with new value.
    *
    * @param excelContext Reference to Excel Context used by Excel API functions
-   * @param setActiveCellAddress Callback to save the active cell address value.
    */
   async addOnSelectionChangedListener(
     excelContext: Excel.RequestContext,
-    setActiveCellAddress: Function,
     setActiveSheetId: Dispatch<SetStateAction<string>>,
     isAnyPopupOrSettingsDisplayedRef: React.MutableRefObject<boolean>
   ): Promise<void> {
@@ -400,7 +398,7 @@ class OfficeApiService {
         }
         // active cell address will always be updated
         const activeCellAddress = await this.getSelectedCell(excelContext);
-        setActiveCellAddress(activeCellAddress);
+        reduxStore.dispatch(officeActions.setActiveCellAddress(activeCellAddress));
       } catch (e) {
         console.warn('Cannot update active selection');
       }

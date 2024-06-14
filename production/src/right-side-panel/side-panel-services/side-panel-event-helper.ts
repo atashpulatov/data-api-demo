@@ -15,6 +15,7 @@ import { ObjectData } from '../../types/object-types';
 
 import { officeContext } from '../../office/office-context';
 import { updateObjects } from '../../redux-reducer/object-reducer/object-actions';
+import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 import initializationErrorDecorator from '../settings-side-panel/initialization-error-decorator';
 
 class SidePanelEventHelper {
@@ -43,14 +44,12 @@ class SidePanelEventHelper {
   }
 
   /**
-   * Gets initial active cell address and stores it state of RightSidePanel via callback.
-   * Creates event listener for cell selection change and passes a state setter callback to event handler.
+   * Gets initial active cell address and stores it in state of RightSidePanel.
+   * Creates event listener for cell selection change
    *
-   * @param {Function} setActiveCellAddress Callback to modify the activeCellAddress in state of RightSidePanel
    */
   @initializationErrorDecorator.initializationWrapper
   async initActiveSelectionChangedListener(
-    setActiveCellAddress: (cellAddress: string) => void,
     setActiveSheetId: Dispatch<SetStateAction<string>>,
     isAnyPopupOrSettingsDisplayedRef: React.MutableRefObject<boolean>
   ): Promise<void> {
@@ -67,11 +66,10 @@ class SidePanelEventHelper {
     // initiatilize active cell address
     const initialCellAddress = await officeApiService.getSelectedCell(excelContext);
 
-    setActiveCellAddress(initialCellAddress);
+    reduxStore.dispatch(officeActions.setActiveCellAddress(initialCellAddress));
 
     await officeApiService.addOnSelectionChangedListener(
       excelContext,
-      setActiveCellAddress,
       setActiveSheetId,
       isAnyPopupOrSettingsDisplayedRef
     );

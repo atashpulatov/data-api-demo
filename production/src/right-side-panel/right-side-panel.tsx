@@ -17,7 +17,6 @@ import { RootState } from '../store';
 import { ObjectData } from '../types/object-types';
 
 import { dialogController } from '../dialog/dialog-controller';
-import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { dismissAllObjectsNotifications } from '../redux-reducer/notification-reducer/notification-action-creators';
 import { notificationReducerSelectors } from '../redux-reducer/notification-reducer/notification-reducer-selectors';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
@@ -37,7 +36,6 @@ interface RightSidePanelProps {
   isSettings?: boolean;
   settingsPanelLoaded?: boolean;
   toggleIsSettingsFlag?: (flag?: boolean) => void;
-  updateActiveCellAddress?: (cellAddress?: string) => void;
   setPrefilteredSourceObjectName?: (objectName: string) => void;
   setIsDataOverviewOpen?: (isDataOverviewOpen: boolean) => void;
 }
@@ -48,7 +46,6 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   isSettings,
   settingsPanelLoaded,
   toggleIsSettingsFlag,
-  updateActiveCellAddress,
   setPrefilteredSourceObjectName,
   setIsDataOverviewOpen,
 }) => {
@@ -76,7 +73,6 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   const isAnyPopupOrSettingsDisplayedRef = useRef(isAnyPopupOrSettingsDisplayed);
 
   useInitializeSidePanel(
-    updateActiveCellAddress,
     setActiveSheetId,
     isAnyPopupOrSettingsDisplayedRef
   );
@@ -167,9 +163,7 @@ export const mapStateToProps = (state: RootState): any => {
 };
 
 const mapDispatchToProps = {
-  cancelCurrentImportRequest: navigationTreeActions.cancelImportRequest,
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
-  updateActiveCellAddress: officeActions.updateActiveCellAddress,
   setPrefilteredSourceObjectName: popupStateActions.setPrefilteredSourceObjectName,
   setIsDataOverviewOpen: popupStateActions.setIsDataOverviewOpen,
 };
