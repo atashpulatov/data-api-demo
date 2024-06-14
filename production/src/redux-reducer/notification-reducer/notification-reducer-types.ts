@@ -45,16 +45,17 @@ export interface GlobalNotification {
 export interface NotificationState {
   notifications: Notification[];
   globalNotification: GlobalNotification;
-  sidePanelBannerNotification: SidePanelBanner | null;
+  sidePanelBannerNotification: SidePanelBanner;
 }
 
 export interface SidePanelBanner extends SidePanelBannerProps {
-  type?: SidePanelBannerType;
+  type: SidePanelBannerType;
 }
 
 export enum SidePanelBannerType {
   IN_PROGRESS = 'IN_PROGRESS',
   STOPPED = 'STOPPED',
+  NONE = 'NONE',
 }
 
 export enum NotificationActionTypes {

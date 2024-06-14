@@ -13,6 +13,7 @@ import {
   OperationTypesWithNotification,
   OperationTypesWithProgressNotification,
   SidePanelBanner,
+  SidePanelBannerType,
 } from './notification-reducer-types';
 
 import i18n from '../../i18n';
@@ -25,7 +26,7 @@ import { titleOperationCompletedMap, titleOperationInProgressMap } from './notif
 const initialState: NotificationState = {
   notifications: [],
   globalNotification: { type: '' },
-  sidePanelBannerNotification: null,
+  sidePanelBannerNotification: { type: SidePanelBannerType.NONE },
 };
 
 export const notificationReducer = (
@@ -285,7 +286,7 @@ const createGlobalNotification = (
 const removeGlobalNotification = (state: NotificationState): NotificationState => ({
   notifications: [...state.notifications],
   globalNotification: { type: '' },
-  sidePanelBannerNotification: null,
+  sidePanelBannerNotification: { type: SidePanelBannerType.NONE },
 });
 
 const deleteAllNotifications = (
@@ -296,7 +297,7 @@ const deleteAllNotifications = (
     ? {
         notifications: [],
         globalNotification: state.globalNotification,
-        sidePanelBannerNotification: null,
+        sidePanelBannerNotification: { type: SidePanelBannerType.NONE },
       }
     : state;
 

@@ -112,7 +112,7 @@ export class SidePanelService {
   showRefreshInProgressBanner(operations: OperationData[]): void {
     // Close banner notification handler
     const onDismissHandler = (): void => {
-      reduxStore.dispatch(setSidePanelBannerNotification(null));
+      reduxStore.dispatch(setSidePanelBannerNotification({ type: SidePanelBannerType.NONE }));
     };
 
     // Stop refresh all operation handler
@@ -135,7 +135,7 @@ export class SidePanelService {
         }
       });
 
-      reduxStore.dispatch(setSidePanelBannerNotification(null));
+      reduxStore.dispatch(setSidePanelBannerNotification({ type: SidePanelBannerType.NONE }));
     };
 
     const buttons = this.getSidePanelBannerButtons('', onClickHandler, i18n.t('Stop refresh'));
