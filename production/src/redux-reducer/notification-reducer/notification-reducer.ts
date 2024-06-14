@@ -73,10 +73,6 @@ export const notificationReducer = (
 
     case NotificationActionTypes.SET_SIDE_PANEL_BANNER:
       return setSidePanelBanner(state, action.payload);
-
-    case NotificationActionTypes.UPDATE_SIDE_PANEL_BANNER:
-      return updateSidePanelBanner(state, action.payload);
-
     default:
       return state;
   }
@@ -262,14 +258,6 @@ const restoreAllNotifications = (
 });
 
 const setSidePanelBanner = (
-  state: NotificationState,
-  payload: SidePanelBanner
-): NotificationState => ({
-  ...state,
-  sidePanelBanner: payload,
-});
-
-const updateSidePanelBanner = (
   state: NotificationState,
   payload: SidePanelBanner
 ): NotificationState => ({

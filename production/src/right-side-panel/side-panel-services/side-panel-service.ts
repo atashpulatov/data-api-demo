@@ -27,10 +27,7 @@ import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { OperationTypes } from '../../operation/operation-type-names';
 import { popupController } from '../../popup/popup-controller';
 import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
-import {
-  setSidePanelBanner,
-  updateSidePanelBanner,
-} from '../../redux-reducer/notification-reducer/notification-action-creators';
+import { setSidePanelBanner } from '../../redux-reducer/notification-reducer/notification-action-creators';
 import { updateObject } from '../../redux-reducer/object-reducer/object-actions';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 import {
@@ -117,7 +114,7 @@ export class SidePanelService {
     // Stop refresh all operation handler
     const onClickHandler = (): void => {
       reduxStore.dispatch(
-        updateSidePanelBanner({
+        setSidePanelBanner({
           title: i18n.t('Stopping...'),
           type: SidePanelBannerType.STOPPED,
         })
@@ -142,7 +139,7 @@ export class SidePanelService {
     const sidePanelBannerObj = {
       title: 'Refresh in progress...',
       type: SidePanelBannerType.IN_PROGRESS,
-      dismissBanner: onDismissHandler,
+      onDismissBanner: onDismissHandler,
       children: buttons,
     } as SidePanelBanner;
 

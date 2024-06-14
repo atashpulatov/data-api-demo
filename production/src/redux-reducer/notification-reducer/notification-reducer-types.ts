@@ -74,7 +74,6 @@ export enum NotificationActionTypes {
   MARK_STEP_COMPLETED = 'MARK_STEP_COMPLETED',
   TOGGLE_SECURED_FLAG = 'TOGGLE_SECURED_FLAG',
   SET_SIDE_PANEL_BANNER = 'SET_SIDE_PANEL_BANNER',
-  UPDATE_SIDE_PANEL_BANNER = 'UPDATE_SIDE_PANEL_BANNER',
 }
 
 export enum TitleOperationInProgressMap {
@@ -207,11 +206,6 @@ export interface SetSidePanelBannerAction extends Action {
   payload: SidePanelBanner;
 }
 
-export interface UpdateSidePanelBannerAction extends Action {
-  type: NotificationActionTypes.UPDATE_SIDE_PANEL_BANNER;
-  payload: SidePanelBanner;
-}
-
 export type NotificationActions =
   | ImportOperationAction
   | RefreshOperationAction
@@ -232,5 +226,4 @@ export type NotificationActions =
   | ClearGlobalNotificationAction
   | RestoreAllNotificationsAction
   | CreateGlobalNotificationAction
-  | SetSidePanelBannerAction
-  | UpdateSidePanelBannerAction;
+  | SetSidePanelBannerAction;
