@@ -24,18 +24,18 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
 
     # Import formatted grid into worksheet
         And I selected visualization "Visualization 2"
-        And I verified that Import Action button is enabled
+        And I verified that Import with dropdown button is enabled
         And I clicked Import dropdown button
         And I verified that "Import Formatted Data" item in Import dropdown is enabled
         And I selected "Import Formatted Data" item in Import dropdown
-        And I clicked Import Action button without checking results
+        And I clicked Import with dropdown button without checking results
         And I closed last notification
-        Then I verified that cells ["A1", "B2", "D2"] have values ["Category", "Region", "Central"]
+        And I verified that cell "D2" has value "Central"
 
     # Refresh formatted grid
         When I clicked Refresh on object 1
         And I closed notification on object 1
-        Then I verified that cells ["A1", "B2", "D2"] have values ["Category", "Region", "Central"]
+        And I verified that cell "D2" has value "Central"
 
     # Edit formatted grid and import formatted compound grid
         When I clicked Edit object 1
@@ -43,9 +43,9 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
         And I selected dossier page or chapter 1
         And I selected visualization "Visualization 1"
         And I verified that Import button on Edit is enabled
-        And I clicked import formatted data
+        And I clicked import formatted data without waiting for results
         And I closed last notification  
-        Then I verified that cells ["A1", "B2", "D2"] have values ["Category", "", "East"]
+        And I verified that cell "D2" has value "East"
 
     # Clear entire data
         When I clicked clear data

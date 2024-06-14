@@ -48,7 +48,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
     IMPORT_BUTTON_ELEM = 'import'
     IMPORT_ON_EDIT_BUTTON_ELEM = '.popup-buttons.popup-footer > button:nth-child(1)' 
-    IMPORT_ACTION_BUTTON_ELEM = '.import-button__action-button'
+    IMPORT_WITH_DROPDOWN_BUTTON_ELEM = '.mstr-rc-3-button-with-options > .import-button__action-button'
     IMPORT_DROPDOWN_BUTTON_ELEM = '.import-button__dropdown-button'
     ITEM_IN_IMPORT_DROPDOWN_ELEM = '''li[aria-label='%s']'''
 
@@ -206,9 +206,9 @@ class ImportDataBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_popup_frame()
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_IMAGE_BUTTON_ELEM).click()
 
-    def click_import_action_button_without_checking_results(self):
+    def click_import_with_dropdown_button_without_checking_results(self):
         self.focus_on_add_in_popup_frame()
-        self.get_element_by_css(ImportDataBrowserPage.IMPORT_ACTION_BUTTON_ELEM).click()
+        self.get_element_by_css(ImportDataBrowserPage.IMPORT_WITH_DROPDOWN_BUTTON_ELEM).click()
         
     def click_import_button_to_import_with_error(self, error_message):
         self.focus_on_add_in_popup_frame()
@@ -307,19 +307,15 @@ class ImportDataBrowserPage(BaseBrowserPage):
         element = self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM)
         return element.get_attribute(ImportDataBrowserPage.IMPORT_BUTTON_DISABLED) is None
 
-    def verify_if_import_action_button_is_enabled(self):
+    def verify_if_import_with_dropdown_button_is_enabled(self):
         self.focus_on_add_in_popup_frame()
-        element = self.get_element_by_css(ImportDataBrowserPage.IMPORT_ACTION_BUTTON_ELEM)
+        element = self.get_element_by_css(ImportDataBrowserPage.IMPORT_WITH_DROPDOWN_BUTTON_ELEM)
         return element.get_attribute(ImportDataBrowserPage.IMPORT_BUTTON_DISABLED) is None
 
     def verify_if_import_button_on_edit_is_enabled(self):
         self.focus_on_add_in_popup_frame()
         element = self.get_element_by_css(ImportDataBrowserPage.IMPORT_ON_EDIT_BUTTON_ELEM)
         return element.get_attribute(ImportDataBrowserPage.IMPORT_BUTTON_DISABLED) is None
-
-    def click_import_action_button(self):
-        self.focus_on_add_in_popup_frame()
-        self.get_element_by_css(ImportDataBrowserPage.IMPORT_ACTION_BUTTON_ELEM).click()
 
     def get_item_in_import_dropdown(self, item_name):
         self.focus_on_add_in_popup_frame()
@@ -371,11 +367,6 @@ class ImportDataBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_popup_frame()
 
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_IMAGE_BUTTON_ELEM).move_to()   
-
-    def hover_over_import_action_button(self):
-        self.focus_on_add_in_popup_frame()
-
-        self.get_element_by_id(ImportDataBrowserPage.IMPORT_ACTION_BUTTON_ELEM).move_to()   
 
     def get_tooltip_message_for_button(self):
         self.focus_on_add_in_popup_frame()

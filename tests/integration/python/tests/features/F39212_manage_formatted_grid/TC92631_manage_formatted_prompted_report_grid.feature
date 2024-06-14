@@ -13,11 +13,11 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
         And I verified that Prepare Data button is disabled
         And I found and selected object "Reprompt - Prompt on Category"
         And I verified that Prepare Data button is enabled
-        And I verified that Import Action button is enabled
+        And I verified that Import with dropdown button is enabled
         And I clicked Import dropdown button
         And I verified that "Import Formatted Data" item in Import dropdown is enabled
         And I selected "Import Formatted Data" item in Import dropdown
-        And I clicked Import Action button without checking results
+        And I clicked Import with dropdown button without checking results
         And I unselected "Movies" as an answer for "1. Category" prompt - object prompt
         And I unselected "Music" as an answer for "1. Category" prompt - object prompt
         And I selected "Books" as an answer for "1. Category" prompt - object prompt
@@ -51,7 +51,7 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
         And I verified that counter of "metrics" shows "2" of "2" selected
         And I verified that counter of "attributes" shows "2" of "2" selected
         And I verified that counter of "filters" shows "0" of "2" selected
-        And I clicked Import button in Columns and Filters Selection without success check
+        And I clicked Import Formatted Data button in Columns and Filters Selection without success check
         And I closed last notification  
         And I verified that cell "C3" has value "$4,970,513"
 

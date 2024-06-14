@@ -71,9 +71,9 @@ def step_impl(context):
 def step_impl(context):
     context.pages.import_data_page().click_import_image_button_without_checking_results()
 
-@step('I clicked Import Action button without checking results')
+@step('I clicked Import with dropdown button without checking results')
 def step_impl(context):
-    context.pages.import_data_page().click_import_action_button_without_checking_results()
+    context.pages.import_data_page().click_import_with_dropdown_button_without_checking_results()
 
 @step('I clicked Import dropdown button')
 def step_impl(context):
@@ -183,9 +183,9 @@ def step_impl(context):
 
     AssertUtil.assert_simple(is_disabled, True)
 
-@step('I verified that Import Action button is disabled')
+@step('I verified that Import with dropdown button is disabled')
 def step_impl(context):
-    is_disabled = context.pages.import_data_page().verify_if_import_action_button_is_enabled()
+    is_disabled = context.pages.import_data_page().verify_if_import_with_dropdown_button_is_enabled()
 
     AssertUtil.assert_simple(is_disabled, False)
 
@@ -202,9 +202,9 @@ def step_impl(context):
     AssertUtil.assert_simple(is_disabled, False)
 
 
-@step('I verified that Import Action button is enabled')
+@step('I verified that Import with dropdown button is enabled')
 def step_impl(context):
-    is_disabled = context.pages.import_data_page().verify_if_import_action_button_is_enabled()
+    is_disabled = context.pages.import_data_page().verify_if_import_with_dropdown_button_is_enabled()
 
     AssertUtil.assert_simple(is_disabled, True)
 

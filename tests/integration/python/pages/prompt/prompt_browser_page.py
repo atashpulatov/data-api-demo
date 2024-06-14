@@ -278,8 +278,6 @@ class PromptBrowserPage(BaseBrowserPage):
             PromptBrowserPage.PROMPT_QUESTION_TITLE_NAME_CSS
         ).text
 
-        print ('name_found_in_prompt_container', name_found_in_prompt_container)
-
         if name_found_in_prompt_container == prompt_name:
             return
 

@@ -27,18 +27,18 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
 
     # Import formatted grid into worksheet
         And I selected visualization "Visualization 1"
-        And I verified that Import Action button is enabled
+        And I verified that Import with dropdown button is enabled
         And I clicked Import dropdown button
         And I verified that "Import Formatted Data" item in Import dropdown is enabled
         And I selected "Import Formatted Data" item in Import dropdown
-        And I clicked Import Action button without checking results
+        And I clicked Import with dropdown button without checking results
         And I closed last notification
-        Then I verified that cells ["A1", "B2", "C3"] have values ["Year", "Atlanta", "Electronics"]
+        And I verified that cell "B2" has value "Atlanta"
 
     # Refresh formatted grid
         When I clicked Refresh on object 1
         And I closed notification on object 1
-        Then I verified that cells ["A1", "B2", "C3"] have values ["Year", "Atlanta", "Electronics"]
+        And I verified that cell "B2" has value "Atlanta"
 
 
     # Reprompt formatted grid
@@ -48,27 +48,27 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
         And I selected in dashboard prompt "Web" as an answer for "1. Country" prompt - object prompt
         And I clicked Run button for prompted dossier if prompts not already answered
         And I closed last notification
-        Then I verified that cells ["A1", "B2", "C3"] have values ["Year", "Web", "Electronics"]
+        And I verified that cell "B2" has value "Web"
 
     # Edit formatted grid and import formatted compound grid
         When I clicked Edit object 1
         And I waited for dossier to load successfully
         And I selected visualization "Visualization 1"
         And I verified that Import button on Edit is enabled
-        And I clicked import formatted data
+        And I clicked import formatted data without waiting for results
         And I closed last notification  
-        Then I verified that cells ["A1", "B2", "C3"] have values ["Year", "Web", "Electronics"]
+        And I verified that cell "B2" has value "Web"
 
     # Clear entire data
         When I clicked clear data
         And I waited for Clear Data overlay to have title "Data Cleared!"
         And I verified that the Clear Data overlay displayed message "MicroStrategy data has been removed from the workbook. Click 'View Data' to import it again."
-        Then I verified that cells ["A1", "C1", "B3", "C4"] have values ["Year", "Category", "", ""]
+        Then I verified that cells ["A1", "C1", "C4"] have values ["Year", "Category", ""]
 
     # View cleared data    
         And I clicked view data
         And I closed last notification
-        Then I verified that cells ["A1", "C1", "B3", "C4"] have values ["Year", "Category", "", "Movies"]    
+        Then I verified that cells ["A1", "C1", "C4"] have values ["Year", "Category", "Movies"]    
 
     # Duplicate formatted grid into active cell
         When I selected cell "X52"

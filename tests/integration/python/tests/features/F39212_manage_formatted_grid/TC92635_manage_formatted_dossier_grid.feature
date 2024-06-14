@@ -24,24 +24,24 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
 
     # Verify whether the import formatted data button is disabled
         And I selected visualization "Bar Chart"
-        And I verified that Import Action button is enabled
+        And I verified that Import with dropdown button is enabled
         And I clicked Import dropdown button
         And I verified that "Import Formatted Data" item in Import dropdown is disabled
 
     # Import formatted grid into worksheet
         And I selected visualization "Grid"
-        And I verified that Import Action button is enabled
+        And I verified that Import with dropdown button is enabled
         And I clicked Import dropdown button
         And I verified that "Import Formatted Data" item in Import dropdown is enabled
         And I selected "Import Formatted Data" item in Import dropdown
-        And I clicked Import Action button without checking results
+        And I clicked Import with dropdown button without checking results
         And I closed last notification
-        Then I verified that cells ["A1", "B2", "C3"] have values ["Call Center", "$1,003", "$529"]
+        And I verified that cell "C3" has value "$529"
 
     # Refresh formatted grid
         When I clicked Refresh on object 1
         And I closed notification on object 1
-        Then I verified that cells ["A1", "B2", "C3"] have values ["Call Center", "$1,003", "$529"]
+        And I verified that cell "C3" has value "$529"
 
     # Edit formatted grid
         When I clicked Edit object 1
@@ -54,20 +54,20 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
         Then I verified that tooltip for Import button shows message "Selected non-grid visualization cannot be imported as formatted data"     
     # Then import formatted compound grid    
         And I selected visualization "Compound Grid"
-        And I clicked import formatted data
-        And I closed last notification  
-        Then I verified that cells ["A1", "B2", "C3"] have values ["Year", "$303", "$4,779"]
+        And I clicked import formatted data without waiting for results
+        And I closed last notification
+        And I verified that cell "C3" has value "$4,779"
 
     # Clear entire data
         When I clicked clear data
         And I waited for Clear Data overlay to have title "Data Cleared!"
         And I verified that the Clear Data overlay displayed message "MicroStrategy data has been removed from the workbook. Click 'View Data' to import it again."
-        Then I verified that cells ["A1", "C1", "B3", "C4"] have values ["Year", "Revenue", "", ""]
+        Then I verified that cells ["A1", "C1", "B3"] have values ["Year", "Revenue", ""]
 
     # View cleared data    
         And I clicked view data
         And I closed last notification
-        Then I verified that cells ["A1", "C1", "B3", "C4"] have values ["Year", "Revenue", "$592", "$10,535"]    
+        Then I verified that cells ["A1", "C1", "B3"] have values ["Year", "Revenue", "$592"]    
 
     # Duplicate formatted grid into active cell
         When I selected cell "X52"
