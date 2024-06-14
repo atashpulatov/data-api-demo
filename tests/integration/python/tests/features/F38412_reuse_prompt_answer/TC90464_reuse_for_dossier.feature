@@ -29,12 +29,12 @@ Feature: F38412 - Re-use prompt answers across multiple prompts when importing c
       And I clicked import dossier without waiting for results
       And I verified in dossier prompt "USA" is a selected answer for "1. Country" prompt - object prompt
       And I verified in dossier prompt "Canada" is a available answer for "1. Country" prompt - object prompt
-      And I selected in dossier prompt "Canada" as an answer for "1. Country" prompt - object prompt
+      And I selected in dashboard prompt "Canada" as an answer for "1. Country" prompt - object prompt
       And I verified in dossier prompt "Canada" is a selected answer for "1. Country" prompt - object prompt
       And I verified in dossier prompt "Northeast" is a selected answer for "2. Select Region" prompt - object prompt
       And I verified in dossier prompt "Northwest" is a selected answer for "2. Select Region" prompt - object prompt
       And I verified in dossier prompt "Mid-Atlantic" is a available answer for "2. Select Region" prompt - object prompt
-      And I selected in dossier prompt "Mid-Atlantic" as an answer for "2. Select Region" prompt - object prompt
+      And I selected in dashboard prompt "Mid-Atlantic" as an answer for "2. Select Region" prompt - object prompt
       And I verified in dossier prompt "Mid-Atlantic" is a selected answer for "2. Select Region" prompt - object prompt
       And I clicked Run button for prompted dossier if prompts not already answered
       And I selected Visualization "Visualization 1"

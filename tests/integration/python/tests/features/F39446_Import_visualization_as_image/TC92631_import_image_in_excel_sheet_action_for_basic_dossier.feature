@@ -35,7 +35,7 @@ Feature: F39446 - Ability to import visualization as image in Excel
 
 
     # check the image refresh button function
-        When I clicked Refresh on without prompt object 1
+        When I clicked Refresh on object 1
         Then I verified excel sheet has a image inserted
         Then I verified excel sheet has total 1 images
 

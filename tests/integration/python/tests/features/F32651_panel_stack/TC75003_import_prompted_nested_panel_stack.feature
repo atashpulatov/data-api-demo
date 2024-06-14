@@ -22,7 +22,7 @@ Feature: F32651 - Enable authors to create information-rich dossiers with Panel 
 
      When I clicked Edit object 1
       And I clicked re-prompt button
-      And I selected in dossier prompt "Electronics" as an answer for "1. Category" prompt - object prompt
+      And I selected in dashboard prompt "Electronics" as an answer for "1. Category" prompt - object prompt
       And I clicked Run button for prompted dossier if prompts not already answered
       And I selected panel stack "Panel 2"
       And I selected Visualization "Bar graph on a panel stack"
@@ -37,7 +37,7 @@ Feature: F32651 - Enable authors to create information-rich dossiers with Panel 
       And I selected Active Cell option in Duplicate popup
       And I clicked Edit button in Duplicate popup
       And I clicked re-prompt button
-      And I selected in dossier prompt "Movies" as an answer for "1. Category" prompt - object prompt
+      And I selected in dashboard prompt "Movies" as an answer for "1. Category" prompt - object prompt
       And I clicked Run button for prompted dossier if prompts not already answered
       And I selected Visualization "Bar graph on a panel stack"
       And I clicked import dossier to duplicate
