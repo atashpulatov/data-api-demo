@@ -1,6 +1,7 @@
 import { ReactElement } from 'react';
 import { PopupProps } from '@mstr/connector-components';
 import { SidePanelBannerButtons } from '@mstr/connector-components/lib/side-panel/banner/side-panel-banner-buttons';
+import { SidePanelBannerButtonTypes } from '@mstr/connector-components/lib/side-panel/banner/side-panel-banner-types';
 
 import { notificationService } from '../../notification/notification-service';
 import { officeApiHelper } from '../../office/api/office-api-helper';
@@ -93,11 +94,12 @@ export class SidePanelService {
   getSidePanelBannerButtons(
     title: string,
     onClickHandler: () => void,
-    className: string,
     tooltip?: string
   ): ReactElement {
     return SidePanelBannerButtons({
-      buttons: [{ label: title, onClick: onClickHandler, className, tooltip }],
+      buttons: [
+        { label: title, onClick: onClickHandler, type: SidePanelBannerButtonTypes.STOP, tooltip },
+      ],
     });
   }
 
@@ -134,7 +136,7 @@ export class SidePanelService {
       reduxStore.dispatch(setSidePanelBanner(null));
     };
 
-    const buttons = this.getSidePanelBannerButtons('', onClickHandler, 'stop-button', 'Stop');
+    const buttons = this.getSidePanelBannerButtons('', onClickHandler, 'Stop');
 
     const sidePanelBannerObj = {
       title: 'Refresh in progress...',
