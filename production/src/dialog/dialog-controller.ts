@@ -14,7 +14,7 @@ import { PageByDataElement, PageByDisplayType } from '../page-by/page-by-types';
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 import { ObjectData } from '../types/object-types';
-import { DialogResponse, ReportParams } from './popup-controller-types';
+import { DialogResponse, ReportParams } from './dialog-controller-types';
 
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
@@ -34,7 +34,7 @@ import { DisplayAttrFormNames, ObjectImportType } from '../mstr-object/constants
 
 const URL = `${window.location.href}`;
 
-class PopupController {
+class DialogController {
   errorService: any;
 
   reportParams: ReportParams;
@@ -69,7 +69,6 @@ class PopupController {
     // DE287911: Below line should always run, to ensure `editedObject` is not persisted.
     // We should evaluate adding better Redux Store clean-up after operations (Edit, Reprompt, etc.)
     // to ensure we aren't keeping old references around (e.g. editedObject, isReprompt, isEdit, etc.)
-    // @ts-expect-error
     reduxStore.dispatch(popupActions.resetState());
   };
 
@@ -189,7 +188,6 @@ class PopupController {
                 // Event received on dialog close
                 Office.EventType.DialogEventReceived,
                 () => {
-                  // @ts-expect-error
                   reduxStore.dispatch(popupActions.resetState());
                   // @ts-expect-error
                   reduxStore.dispatch(popupStateActions.onClearPopupState());
@@ -344,7 +342,6 @@ class PopupController {
 
           // Reset state if an error has occurred and show error message.
           if (isDataOverviewOpen) {
-            // @ts-expect-error
             reduxStore.dispatch(popupActions.resetState());
           }
           this.errorService.handleError(response.error);
@@ -626,7 +623,6 @@ class PopupController {
   // Used to reset dialog-related state variables in Redux Store
   // and the dialog reference stored in the class object.
   resetDialogStates = (): void => {
-    // @ts-expect-error
     reduxStore.dispatch(popupActions.resetState());
     // @ts-expect-error
     reduxStore.dispatch(popupStateActions.onClearPopupState());
@@ -688,5 +684,5 @@ class PopupController {
   };
 }
 
-export const popupController = new PopupController();
-export const { loadPending } = popupController;
+export const dialogController = new DialogController();
+export const { loadPending } = dialogController;

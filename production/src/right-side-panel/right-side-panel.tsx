@@ -16,7 +16,7 @@ import { RootState } from '../store';
 
 import { ObjectData } from '../types/object-types';
 
-import { popupController } from '../popup/popup-controller';
+import { dialogController } from '../dialog/dialog-controller';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { dismissAllObjectsNotifications } from '../redux-reducer/notification-reducer/notification-action-creators';
 import { notificationReducerSelectors } from '../redux-reducer/notification-reducer/notification-reducer-selectors';
@@ -102,7 +102,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   }, [loadedObjects, notifications, operations]);
 
   const showOverviewModal = (objectName: string): void => {
-    popupController.runImportedDataOverviewPopup();
+    dialogController.runImportedDataOverviewPopup();
     setPrefilteredSourceObjectName(objectName);
     setIsDataOverviewOpen(true);
   };

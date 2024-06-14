@@ -11,7 +11,7 @@ import { reduxStore } from '../../store';
 
 import { ObjectData } from '../../types/object-types';
 
-import { popupController } from '../../popup/popup-controller';
+import { dialogController } from '../../dialog/dialog-controller';
 import * as toggleFlag from '../../redux-reducer/office-reducer/office-actions';
 
 describe('SidePanelService', () => {
@@ -27,7 +27,7 @@ describe('SidePanelService', () => {
   it('should open popup', async () => {
     // given
     const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
-    const mockedRunPopup = jest.spyOn(popupController, 'runPopupNavigation').mockImplementation();
+    const mockedRunPopup = jest.spyOn(dialogController, 'runPopupNavigation').mockImplementation();
     // when
     sidePanelHelper.clearRepromptTask();
     await sidePanelService.addData();

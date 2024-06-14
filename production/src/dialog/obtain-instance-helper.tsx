@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Spinner } from '@mstr/rc';
 
-import { popupHelper } from './popup-helper';
-import { popupViewSelectorHelper } from './popup-view-selector-helper';
+import { dialogHelper } from './dialog-helper';
+import { dialogViewSelectorHelper } from './dialog-view-selector-helper';
 
 import i18n from '../i18n';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
@@ -12,7 +12,7 @@ import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 
 const ObtainInstanceHelperNotConnected: React.FC = props => {
   useEffect(() => {
-    popupViewSelectorHelper.obtainInstanceWithPromptsAnswers(props);
+    dialogViewSelectorHelper.obtainInstanceWithPromptsAnswers(props);
   }, [props]);
 
   return (
@@ -40,7 +40,7 @@ function mapStateToProps(state: any): any {
   return {
     ...navigationTree,
     editedObject: {
-      ...popupHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege),
+      ...dialogHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege),
     },
     popupType,
     importType,

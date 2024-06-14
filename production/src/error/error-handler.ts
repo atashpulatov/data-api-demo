@@ -15,10 +15,10 @@ import {
 } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 
+import { dialogController } from '../dialog/dialog-controller';
 import i18n from '../i18n';
 import { getNotificationButtons } from '../notification/notification-buttons';
 import { OperationTypes } from '../operation/operation-type-names';
-import { popupController } from '../popup/popup-controller';
 import {
   clearGlobalNotification,
   createSessionExpiredNotification,
@@ -536,8 +536,8 @@ class ErrorService {
     if (isDialogOpen && shouldClose) {
       const isDialogOpenForReprompt = storeState.repromptsQueueReducer?.total > 0;
 
-      await popupController.closeDialog(popupController.dialog);
-      popupController.resetDialogStates();
+      await dialogController.closeDialog(dialogController.dialog);
+      dialogController.resetDialogStates();
       // clear Reprompt task queue if in Reprompt All workflow
       isDialogOpenForReprompt && reduxStore.dispatch(clearRepromptTask());
     }
@@ -568,7 +568,7 @@ class ErrorService {
       ) {
         // @ts-expect-error
         reduxStore.dispatch(popupStateActions.setPopupType(DialogType.importedDataOverview));
-        popupController.runImportedDataOverviewPopup();
+        dialogController.runImportedDataOverviewPopup();
       }
     }
   };

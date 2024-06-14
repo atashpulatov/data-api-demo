@@ -2,6 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { dialogHelper } from '../../dialog/dialog-helper';
 import {
   ObjectExecutionStatus,
   prepareGivenPromptAnswers,
@@ -9,7 +10,6 @@ import {
 } from '../../helpers/prompts-handling-helper';
 import { convertPixelsToPoints } from '../../helpers/visualization-image-utils';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
-import { popupHelper } from '../../popup/popup-helper';
 import { handleLoginExcelDesktopInWindows } from '../utils/embedded-helper';
 import scriptInjectionHelper from '../utils/script-injection-helper';
 import { embeddedDossierHelper } from './embedded-dossier-helper';
@@ -206,7 +206,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     if (error.title !== 'Notification') {
       // TODO: improve this, so it doesn't depend on i18n
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
-      popupHelper.handlePopupErrors(error);
+      dialogHelper.handlePopupErrors(error);
     }
   };
 
@@ -383,7 +383,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       );
     } catch (error) {
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
-      popupHelper.handlePopupErrors(error);
+      dialogHelper.handlePopupErrors(error);
     }
 
     // Do not proceeed with the embedded dossier creation if the instance is not ready.
@@ -626,7 +626,7 @@ const mapStateToProps = (state: RootState): any => {
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const isEdit = chosenObjectName === DEFAULT_PROJECT_NAME;
   const editedObject = {
-    ...popupHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege),
+    ...dialogHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege),
   };
   const { isReprompt = false } = popupStateReducer;
   const isMultipleRepromptWithReuse = reusePromptAnswers && repromptsQueueReducer.total > 1;

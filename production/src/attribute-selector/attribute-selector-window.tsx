@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
 
+import { dialogHelper } from '../dialog/dialog-helper';
+import { dialogViewSelectorHelper } from '../dialog/dialog-view-selector-helper';
 import instanceDefinitionHelper from '../mstr-object/instance/instance-definition-helper';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { pageByHelper } from '../page-by/page-by-helper';
-import { popupHelper } from '../popup/popup-helper';
-import { popupViewSelectorHelper } from '../popup/popup-view-selector-helper';
 
 import { RootState } from '../store';
 
-import { DialogResponse } from '../popup/popup-controller-types';
+import { DialogResponse } from '../dialog/dialog-controller-types';
 import { AttributeSelectorWindowNotConnectedProps } from './attribute-selector-types';
 
-import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
+import { DialogButtons } from '../dialog/dialog-buttons/dialog-buttons';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { navigationTreeSelectors } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer-selectors';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
@@ -54,7 +54,7 @@ export const AttributeSelectorWindowNotConnected: React.FC<
   const handleCancel = (): void => {
     const { commandCancel } = selectorProperties;
     const message = { command: commandCancel };
-    popupHelper.officeMessageParent(message);
+    dialogHelper.officeMessageParent(message);
   };
 
   const handleImport = async (message: DialogResponse): Promise<void> => {
@@ -96,18 +96,18 @@ export const AttributeSelectorWindowNotConnected: React.FC<
     const shouldOpenPageByModal = pageByHelper.getShouldOpenPageByModal(pageBy, importType);
 
     if (shouldOpenPageByModal) {
-      await popupViewSelectorHelper.handleRequestPageByModalOpen({
+      await dialogViewSelectorHelper.handleRequestPageByModalOpen({
         objectId,
         projectId,
         instanceId: instance.instanceId,
         requestPageByModalOpen,
         importCallback: pageByConfigurations => {
-          popupHelper.officeMessageParent({ ...message, isPageBy, pageByConfigurations });
+          dialogHelper.officeMessageParent({ ...message, isPageBy, pageByConfigurations });
         },
       });
     } else {
       const pageByData = isPageBy ? editedObject?.pageByData : undefined;
-      popupHelper.officeMessageParent({ ...message, isPageBy, pageByData });
+      dialogHelper.officeMessageParent({ ...message, isPageBy, pageByData });
     }
   };
 
@@ -184,10 +184,10 @@ export const AttributeSelectorWindowNotConnected: React.FC<
         resetTriggerUpdate={resetTriggerUpdate}
         openModal={isModalOpen}
         closeModal={() => setIsModalOpen(false)}
-        handlePopupErrors={popupHelper.handlePopupErrors}
+        handlePopupErrors={dialogHelper.handlePopupErrors}
         isEdit={isEdit}
       />
-      <PopupButtons
+      <DialogButtons
         disableActiveActions={!attributesSelected}
         handleBack={(!isEdit || isPrompted) && (handleBack as () => void)}
         handleOk={handleOk}

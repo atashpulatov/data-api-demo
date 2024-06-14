@@ -9,7 +9,7 @@ import { notificationService } from '../../notification/notification-service';
 import { officeApiService } from '../../office/api/office-api-service';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { pageByHelper } from '../../page-by/page-by-helper';
-import { popupHelper } from '../popup-helper';
+import { dialogHelper } from '../dialog-helper';
 
 import { reduxStore } from '../../store';
 
@@ -69,7 +69,7 @@ class OverviewHelper {
    *
    */
   async sendImportRequest(): Promise<void> {
-    popupHelper.officeMessageParent({ command: OverviewActionCommands.IMPORT });
+    dialogHelper.officeMessageParent({ command: OverviewActionCommands.IMPORT });
   }
 
   /**
@@ -78,7 +78,7 @@ class OverviewHelper {
    * @param objectWorkingId Unique Id of the objects allowing to reference specific objects
    */
   async sendEditRequest(objectWorkingId: number): Promise<void> {
-    popupHelper.officeMessageParent({
+    dialogHelper.officeMessageParent({
       command: OverviewActionCommands.EDIT,
       objectWorkingId,
     });
@@ -90,7 +90,7 @@ class OverviewHelper {
    * @param objectWorkingIds Unique Ids of the objects allowing to reference specific objects
    */
   async sendRepromptRequest(objectWorkingIds: number[]): Promise<void> {
-    popupHelper.officeMessageParent({
+    dialogHelper.officeMessageParent({
       command: OverviewActionCommands.REPROMPT,
       objectWorkingIds,
     });
@@ -102,7 +102,7 @@ class OverviewHelper {
    * @param objectWorkingIds Unique Ids of the objects allowing to reference specific objects
    */
   async sendRefreshRequest(objectWorkingIds: number[]): Promise<void> {
-    popupHelper.officeMessageParent({
+    dialogHelper.officeMessageParent({
       command: OverviewActionCommands.REFRESH,
       objectWorkingIds,
     });
@@ -114,7 +114,7 @@ class OverviewHelper {
    * @param objectWorkingIds Unique Ids of the objects allowing to reference specific objects
    */
   async sendDeleteRequest(objectWorkingIds: number[]): Promise<void> {
-    popupHelper.officeMessageParent({
+    dialogHelper.officeMessageParent({
       command: OverviewActionCommands.REMOVE,
       objectWorkingIds,
     });
@@ -130,7 +130,7 @@ class OverviewHelper {
     objectWorkingIds: number[],
     operationId: string
   ): Promise<void> {
-    popupHelper.officeMessageParent({
+    dialogHelper.officeMessageParent({
       command: OverviewActionCommands.DISMISS_NOTIFICATION,
       objectWorkingIds,
       operationId,
@@ -142,7 +142,7 @@ class OverviewHelper {
    *
    */
   async sendDismissGlobalNotificationRequest(): Promise<void> {
-    popupHelper.officeMessageParent({
+    dialogHelper.officeMessageParent({
       command: OverviewActionCommands.DISMISS_GLOBAL_NOTIFICATION,
     });
   }
@@ -159,7 +159,7 @@ class OverviewHelper {
     insertNewWorksheet: boolean,
     withEdit: boolean
   ): void {
-    popupHelper.officeMessageParent({
+    dialogHelper.officeMessageParent({
       command: OverviewActionCommands.DUPLICATE,
       objectWorkingIds,
       insertNewWorksheet,
@@ -173,7 +173,7 @@ class OverviewHelper {
    * @param objectWorkingId Unique Id of the object allowing to reference specific object
    */
   handleRangeTakenOk = (objectWorkingId: number): void => {
-    popupHelper.officeMessageParent({
+    dialogHelper.officeMessageParent({
       command: OverviewActionCommands.RANGE_TAKEN_OK,
       objectWorkingId,
     });
@@ -185,7 +185,7 @@ class OverviewHelper {
    * @param objectWorkingId Unique Id of the object allowing to reference specific object
    */
   handleRangeTakenClose = (objectWorkingId: number): void => {
-    popupHelper.officeMessageParent({
+    dialogHelper.officeMessageParent({
       command: OverviewActionCommands.RANGE_TAKEN_CLOSE,
       objectWorkingId,
     });
@@ -197,7 +197,7 @@ class OverviewHelper {
    * @param objectWorkingId Unique Id of the object allowing to reference specific object
    */
   handlePageByRefreshFailedClose = (objectWorkingId: number): void => {
-    popupHelper.officeMessageParent({
+    dialogHelper.officeMessageParent({
       command: OverviewActionCommands.PAGE_BY_REFRESH_FAILED_CLOSE,
       objectWorkingId,
     });
@@ -209,7 +209,7 @@ class OverviewHelper {
    * @param objectWorkingId Unique Id of the object allowing to reference specific object
    */
   handlePageByDuplicateFailedClose = (objectWorkingId: number): void => {
-    popupHelper.officeMessageParent({
+    dialogHelper.officeMessageParent({
       command: OverviewActionCommands.PAGE_BY_DUPLICATE_FAILED_CLOSE,
       objectWorkingId,
     });
@@ -221,7 +221,7 @@ class OverviewHelper {
    * @param objectWorkingId Unique Id of the object allowing to reference specific object
    */
   handlePageByImportFailedClose = (objectWorkingId: number): void => {
-    popupHelper.officeMessageParent({
+    dialogHelper.officeMessageParent({
       command: OverviewActionCommands.PAGE_BY_IMPORT_FAILED_CLOSE,
       objectWorkingId,
     });
@@ -233,7 +233,7 @@ class OverviewHelper {
    * @param objectWorkingId Unique Id of the object allowing to reference specific object
    */
   handlePageByRefreshFailedEdit = (objectWorkingId: number): void => {
-    popupHelper.officeMessageParent({
+    dialogHelper.officeMessageParent({
       command: OverviewActionCommands.PAGE_BY_REFRESH_FAILED_EDIT,
       objectWorkingId,
     });
@@ -245,7 +245,7 @@ class OverviewHelper {
    * @param objectWorkingId Unique Id of the object allowing to reference specific object
    */
   handlePageByRefreshFailedRemove = (objectWorkingId: number): void => {
-    popupHelper.officeMessageParent({
+    dialogHelper.officeMessageParent({
       command: OverviewActionCommands.PAGE_BY_REFRESH_FAILED_REMOVE,
       objectWorkingId,
     });
@@ -258,7 +258,7 @@ class OverviewHelper {
    * @param newName Updated name of the renamed object
    */
   async sendRenameRequest(objectWorkingId: number, newName: string): Promise<void> {
-    popupHelper.officeMessageParent({
+    dialogHelper.officeMessageParent({
       command: OverviewActionCommands.RENAME,
       objectWorkingId,
       newName,
@@ -271,7 +271,7 @@ class OverviewHelper {
    * @param objectWorkingId Unique Id of the object allowing to reference specific object
    */
   async sendGoToWorksheetRequest(objectWorkingId: number): Promise<void> {
-    popupHelper.officeMessageParent({
+    dialogHelper.officeMessageParent({
       command: OverviewActionCommands.GO_TO_WORKSHEET,
       objectWorkingId,
     });

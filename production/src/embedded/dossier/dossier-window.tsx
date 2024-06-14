@@ -7,9 +7,9 @@ import { MSTRIcon } from '@mstr/mstr-react-library';
 import { Spinner } from '@mstr/rc';
 
 import { authenticationHelper } from '../../authentication/authentication-helper';
+import { dialogHelper } from '../../dialog/dialog-helper';
+import overviewHelper from '../../dialog/overview/overview-helper';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
-import overviewHelper from '../../popup/overview/overview-helper';
-import { popupHelper } from '../../popup/popup-helper';
 import { EXTEND_SESSION, sessionHelper } from '../../storage/session-helper';
 
 import { RootState } from '../../store';
@@ -18,9 +18,9 @@ import { EditedObject } from '../../redux-reducer/popup-reducer/popup-reducer-ty
 import { RepromptsQueueState } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer-types';
 
 import { selectorProperties } from '../../attribute-selector/selector-properties';
+import { DialogButtons } from '../../dialog/dialog-buttons/dialog-buttons';
 import i18n from '../../i18n';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
@@ -104,7 +104,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
   const handleCancel = (): void => {
     const { commandCancel } = selectorProperties;
     const message = { command: commandCancel };
-    popupHelper.officeMessageParent(message);
+    dialogHelper.officeMessageParent(message);
   };
 
   const prolongSession = sessionHelper.installSessionProlongingHandler(handleCancel);
@@ -192,7 +192,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
             const { ERR009 } = errorCodes;
             if (error.response && error.response.body.code === ERR009) {
               // Close popup if session expired
-              popupHelper.handlePopupErrors(error);
+              dialogHelper.handlePopupErrors(error);
             } else {
               isVizSupported = false;
             }
@@ -237,7 +237,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
       preparedInstanceId: instanceId.current,
       isEdit,
     };
-    popupHelper.officeMessageParent(message);
+    dialogHelper.officeMessageParent(message);
   }, [
     chapterKey,
     chosenObjectId,
@@ -321,7 +321,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
 
   const validateSession = useCallback(() => {
     authenticationHelper.validateAuthToken().catch(error => {
-      popupHelper.handlePopupErrors(error);
+      dialogHelper.handlePopupErrors(error);
     });
   }, []);
 
@@ -374,7 +374,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
               handleEmbeddedDossierVisibility={handleEmbeddedDossierVisibility}
             />
           </div>
-          <PopupButtons
+          <DialogButtons
             handleOk={handleOk}
             handleCancel={handleCancel}
             handleBack={!isEdit && handleBack}
@@ -427,7 +427,7 @@ function mapStateToProps(state: RootState): any {
     editedObject && editedObject.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const editedObjectParse = {
-    ...popupHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege),
+    ...dialogHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege),
   };
   editedObjectParse.importType = editedObject?.importType;
   return {

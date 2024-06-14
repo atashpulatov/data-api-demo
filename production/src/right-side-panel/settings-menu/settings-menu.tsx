@@ -9,12 +9,12 @@ import getDocumentationLocale from '../../helpers/get-documentation-locale';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 
 import packageJson from '../../../package.json';
+import { dialogController } from '../../dialog/dialog-controller';
 import { errorService } from '../../error/error-handler';
 // @ts-expect-error
 import logo from '../../home/assets/mstr_logo.png';
 import i18n from '../../i18n';
 import { officeContext } from '../../office/office-context';
-import { popupController } from '../../popup/popup-controller';
 import { dismissAllObjectsNotifications } from '../../redux-reducer/notification-reducer/notification-action-creators';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 import { officeSelectors } from '../../redux-reducer/office-reducer/office-reducer-selectors';
@@ -105,7 +105,7 @@ export const SettingsMenuNotConnected: React.FC<SettingsMenuProps> = ({
     }
 
     toggleIsSettingsFlag(false);
-    popupController.runImportedDataOverviewPopup();
+    dialogController.runImportedDataOverviewPopup();
     setIsDataOverviewOpen(true);
   };
 

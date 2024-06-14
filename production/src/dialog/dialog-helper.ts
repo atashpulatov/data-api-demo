@@ -1,7 +1,7 @@
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { officeContext } from '../office/office-context';
 
-class PopupHelper {
+class DialogHelper {
   handlePopupErrors(error: any): void {
     const errorObj = error && {
       status: error.status,
@@ -120,4 +120,4 @@ class PopupHelper {
   }
 }
 
-export const popupHelper = new PopupHelper();
+export const dialogHelper = new DialogHelper();

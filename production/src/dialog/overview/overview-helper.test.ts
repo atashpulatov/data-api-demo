@@ -6,7 +6,7 @@ import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { sidePanelHelper } from '../../right-side-panel/side-panel-services/side-panel-helper';
 import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-services/side-panel-notification-helper';
 import { sidePanelService } from '../../right-side-panel/side-panel-services/side-panel-service';
-import { popupHelper } from '../popup-helper';
+import { dialogHelper } from '../dialog-helper';
 import overviewHelper, { OverviewActionCommands } from './overview-helper';
 
 import { reduxStore, RootState } from '../../store';
@@ -30,7 +30,7 @@ describe('overview-helper', () => {
   it('should send refresh request to side panel', () => {
     // Given
     const officeMessageParentMock = jest
-      .spyOn(popupHelper, 'officeMessageParent')
+      .spyOn(dialogHelper, 'officeMessageParent')
       .mockImplementation();
     // When
     overviewHelper.sendRefreshRequest(objectWorkingIds);
@@ -45,7 +45,7 @@ describe('overview-helper', () => {
   it('should send edit request to side panel', () => {
     // Given
     const officeMessageParentMock = jest
-      .spyOn(popupHelper, 'officeMessageParent')
+      .spyOn(dialogHelper, 'officeMessageParent')
       .mockImplementation();
     // When
     overviewHelper.sendEditRequest(objectWorkingIds[0]);
@@ -60,7 +60,7 @@ describe('overview-helper', () => {
   it('should send reprompt request to side panel', () => {
     // Given
     const officeMessageParentMock = jest
-      .spyOn(popupHelper, 'officeMessageParent')
+      .spyOn(dialogHelper, 'officeMessageParent')
       .mockImplementation();
     // When
     overviewHelper.sendRepromptRequest(objectWorkingIds);
@@ -75,7 +75,7 @@ describe('overview-helper', () => {
   it('should send delete request to side panel', () => {
     // Given
     const officeMessageParentMock = jest
-      .spyOn(popupHelper, 'officeMessageParent')
+      .spyOn(dialogHelper, 'officeMessageParent')
       .mockImplementation();
     // When
     overviewHelper.sendDeleteRequest(objectWorkingIds);
@@ -90,7 +90,7 @@ describe('overview-helper', () => {
   it('should send duplicate request to side panel', () => {
     // Given
     const officeMessageParentMock = jest
-      .spyOn(popupHelper, 'officeMessageParent')
+      .spyOn(dialogHelper, 'officeMessageParent')
       .mockImplementation();
 
     // When
@@ -109,7 +109,7 @@ describe('overview-helper', () => {
     // Given
     const objectWorkingId = objectWorkingIds[0];
     const officeMessageParentMock = jest
-      .spyOn(popupHelper, 'officeMessageParent')
+      .spyOn(dialogHelper, 'officeMessageParent')
       .mockImplementation();
 
     // When
@@ -126,7 +126,7 @@ describe('overview-helper', () => {
     // Given
     const objectWorkingId = objectWorkingIds[0];
     const officeMessageParentMock = jest
-      .spyOn(popupHelper, 'officeMessageParent')
+      .spyOn(dialogHelper, 'officeMessageParent')
       .mockImplementation();
 
     // When
@@ -143,7 +143,7 @@ describe('overview-helper', () => {
     // Given
     const objectWorkingId = objectWorkingIds[0];
     const officeMessageParentMock = jest
-      .spyOn(popupHelper, 'officeMessageParent')
+      .spyOn(dialogHelper, 'officeMessageParent')
       .mockImplementation();
 
     // When
@@ -160,7 +160,7 @@ describe('overview-helper', () => {
     // Given
     const objectWorkingId = objectWorkingIds[0];
     const officeMessageParentMock = jest
-      .spyOn(popupHelper, 'officeMessageParent')
+      .spyOn(dialogHelper, 'officeMessageParent')
       .mockImplementation();
 
     // When
@@ -176,7 +176,7 @@ describe('overview-helper', () => {
     // Given
     const objectWorkingId = objectWorkingIds[0];
     const officeMessageParentMock = jest
-      .spyOn(popupHelper, 'officeMessageParent')
+      .spyOn(dialogHelper, 'officeMessageParent')
       .mockImplementation();
 
     // When
@@ -193,7 +193,7 @@ describe('overview-helper', () => {
     // Given
     const objectWorkingId = objectWorkingIds[0];
     const officeMessageParentMock = jest
-      .spyOn(popupHelper, 'officeMessageParent')
+      .spyOn(dialogHelper, 'officeMessageParent')
       .mockImplementation();
 
     // When
@@ -210,7 +210,7 @@ describe('overview-helper', () => {
     // Given
     const objectWorkingId = objectWorkingIds[0];
     const officeMessageParentMock = jest
-      .spyOn(popupHelper, 'officeMessageParent')
+      .spyOn(dialogHelper, 'officeMessageParent')
       .mockImplementation();
 
     // When
@@ -272,7 +272,7 @@ describe('overview-helper', () => {
     // Given
     const objectWorkingId = objectWorkingIds[0];
     const officeMessageParentMock = jest
-      .spyOn(popupHelper, 'officeMessageParent')
+      .spyOn(dialogHelper, 'officeMessageParent')
       .mockImplementation();
 
     // When
@@ -290,7 +290,7 @@ describe('overview-helper', () => {
     // Given
     const objectWorkingId = objectWorkingIds[0];
     const officeMessageParentMock = jest
-      .spyOn(popupHelper, 'officeMessageParent')
+      .spyOn(dialogHelper, 'officeMessageParent')
       .mockImplementation();
 
     // When
@@ -306,7 +306,7 @@ describe('overview-helper', () => {
   it('should send Dismiss Notification request to side panel', () => {
     // Given
     const officeMessageParentMock = jest
-      .spyOn(popupHelper, 'officeMessageParent')
+      .spyOn(dialogHelper, 'officeMessageParent')
       .mockImplementation();
     // When
     overviewHelper.sendDismissNotificationRequest(objectWorkingIds, 'operationId');
@@ -322,7 +322,7 @@ describe('overview-helper', () => {
   it('should send Dismiss Global Notification request to side panel', () => {
     // Given
     const officeMessageParentMock = jest
-      .spyOn(popupHelper, 'officeMessageParent')
+      .spyOn(dialogHelper, 'officeMessageParent')
       .mockImplementation();
 
     // When

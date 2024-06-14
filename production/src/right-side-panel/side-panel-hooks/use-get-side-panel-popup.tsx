@@ -6,8 +6,8 @@ import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { sidePanelNotificationHelper } from '../side-panel-services/side-panel-notification-helper';
 import { sidePanelService } from '../side-panel-services/side-panel-service';
 
+import { dialogController } from '../../dialog/dialog-controller';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-import { popupController } from '../../popup/popup-controller';
 import { officeSelectors } from '../../redux-reducer/office-reducer/office-reducer-selectors';
 import { popupStateSelectors } from '../../redux-reducer/popup-state-reducer/popup-state-reducer-selectors';
 import { repromptsQueueSelector } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer-selector';
@@ -80,7 +80,7 @@ export const useGetSidePanelPopup = ({
         objectData.mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
       const isReport = objectData.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
       if ((isDossier || isReport) && isSidePanelBlocked && !isDataOverviewOpen) {
-        popupController.sendMessageToDialog(JSON.stringify({ popupData }));
+        dialogController.sendMessageToDialog(JSON.stringify({ popupData }));
       }
     } else if (
       sidePanelPopup?.type === PopupTypes.RANGE_TAKEN ||

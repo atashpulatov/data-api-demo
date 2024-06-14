@@ -1,5 +1,5 @@
+import { dialogHelper } from '../dialog/dialog-helper';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
-import { popupHelper } from '../popup/popup-helper';
 
 import {
   AnswersState,
@@ -333,5 +333,5 @@ export async function preparePromptedReport(
 export const handleExecuteNextRepromptTask = (): void => {
   const { commandExecuteNextRepromptTask } = selectorProperties;
   const message = { command: commandExecuteNextRepromptTask };
-  popupHelper.officeMessageParent(message);
+  dialogHelper.officeMessageParent(message);
 };

@@ -14,8 +14,8 @@ import officeStoreRestoreObject from '../office/store/office-store-restore-objec
 
 import { Authenticate } from '../authentication/auth-component';
 import { DevelopmentImportList } from '../development-import-list';
+import { SessionExtendingWrapper } from '../dialog/session-extending-wrapper';
 import i18n from '../i18n';
-import { SessionExtendingWrapper } from '../popup/session-extending-wrapper';
 import {
   clearGlobalNotification,
   createConnectionLostNotification,

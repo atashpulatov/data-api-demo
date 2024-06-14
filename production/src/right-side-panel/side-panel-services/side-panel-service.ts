@@ -5,6 +5,7 @@ import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-
 import { officeShapeApiHelper } from '../../office/shapes/office-shape-api-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import officeStoreHelper from '../../office/store/office-store-helper';
+import { popupHelper } from '../../redux-reducer/popup-reducer/popup-helper';
 import { sidePanelHelper } from './side-panel-helper';
 import { sidePanelNotificationHelper } from './side-panel-notification-helper';
 
@@ -13,9 +14,9 @@ import { reduxStore } from '../../store';
 
 import { ObjectData } from '../../types/object-types';
 
+import { dialogController } from '../../dialog/dialog-controller';
 import { errorService } from '../../error/error-handler';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-import { popupController } from '../../popup/popup-controller';
 import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { updateObject } from '../../redux-reducer/object-reducer/object-actions';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
@@ -25,7 +26,6 @@ import {
   refreshRequested,
   removeRequested,
 } from '../../redux-reducer/operation-reducer/operation-actions';
-import { popupActions } from '../../redux-reducer/popup-reducer/popup-actions';
 import {
   addRepromptTask,
   executeNextRepromptTask,
@@ -43,7 +43,7 @@ export class SidePanelService {
   async addData(): Promise<void> {
     // @ts-expect-error
     reduxStore.dispatch(navigationTreeActions.cancelImportRequest());
-    await popupController.runPopupNavigation();
+    await dialogController.runPopupNavigation();
   }
 
   /**
@@ -185,11 +185,9 @@ export class SidePanelService {
       await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
 
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-        // @ts-expect-error
-        reduxStore.dispatch(popupActions.callForEditDossier(objectData));
+        await popupHelper.callForEditDossier(objectData);
       } else {
-        // @ts-expect-error
-        reduxStore.dispatch(popupActions.callForEdit(objectData));
+        popupHelper.callForEdit(objectData);
       }
     }
   }
