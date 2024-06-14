@@ -27,6 +27,7 @@ import { dialogController } from '../../dialog/dialog-controller';
 import { errorService } from '../../error/error-handler';
 import i18n from '../../i18n';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
+import { OperationTypes } from '../../operation/operation-type-names';
 import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { setSidePanelBanner } from '../../redux-reducer/notification-reducer/notification-action-creators';
 import { updateObject } from '../../redux-reducer/object-reducer/object-actions';

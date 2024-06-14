@@ -19,8 +19,10 @@ import { reduxStore, RootState } from '../store';
 import { ObjectData } from '../types/object-types';
 
 import { dialogController } from '../dialog/dialog-controller';
-import { dismissAllObjectsNotifications } from '../redux-reducer/notification-reducer/notification-action-creators';
-import { setSidePanelBanner } from '../redux-reducer/notification-reducer/notification-action-creators';
+import {
+  dismissAllObjectsNotifications,
+  setSidePanelBanner,
+} from '../redux-reducer/notification-reducer/notification-action-creators';
 import { notificationReducerSelectors } from '../redux-reducer/notification-reducer/notification-reducer-selectors';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { officeSelectors } from '../redux-reducer/office-reducer/office-reducer-selectors';

@@ -198,6 +198,7 @@ const dismissSingleNotification = (
   return {
     notifications: newNotifications,
     globalNotification: state.globalNotification,
+    sidePanelBanner: state.sidePanelBanner,
   };
 };
 
@@ -220,6 +221,7 @@ const dismissAllNotifications = (state: NotificationState): NotificationState =>
   return {
     notifications: newNotifications,
     globalNotification: state.globalNotification,
+    sidePanelBanner: state.sidePanelBanner,
   };
 };
 
