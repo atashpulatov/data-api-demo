@@ -285,7 +285,7 @@ const createGlobalNotification = (
 const removeGlobalNotification = (state: NotificationState): NotificationState => ({
   notifications: [...state.notifications],
   globalNotification: { type: '' },
-  sidePanelBannerNotification: {},
+  sidePanelBannerNotification: null,
 });
 
 const deleteAllNotifications = (

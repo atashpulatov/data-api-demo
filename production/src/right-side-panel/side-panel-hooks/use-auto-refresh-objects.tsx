@@ -20,8 +20,7 @@ const useAutoRefreshObjects = (): void => {
     if (isAutoRefreshObjectsEnabled) {
       autoRefreshHelper.refreshAllOnLoad(objects);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAutoRefreshObjectsEnabled]);
+  }, [isAutoRefreshObjectsEnabled, objects]);
 };
 
 export default useAutoRefreshObjects;

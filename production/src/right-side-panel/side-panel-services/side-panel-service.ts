@@ -85,10 +85,12 @@ export class SidePanelService {
   }
 
   /**
+   * Generates the side panel banner buttons.
+   * Consisted of only one button for stopping the refresh operation.
    *
-   * @param title
-   * @param onClickHandler
-   * @param className
+   * @param title - string to show as message in banner
+   * @param onClickHandler - handler to be called when button is clicked
+   * @param tooltip - string to show as tooltip for the button
    * @returns
    */
   getSidePanelBannerButtons(

@@ -24,12 +24,12 @@ class AutoRefreshHelper {
         if (objectWorkingIds.length > 0) {
           sidePanelService.refresh(...objectWorkingIds);
         }
-
-        this.setShouldTriggerDataAutoRefresh(false);
       }
     } catch (error) {
-      this.setShouldTriggerDataAutoRefresh(false);
+      console.error('Error occurred while triggering auto-refresh on load:', error);
       throw error; // Consider re-throwing the error for the caller to handle
+    } finally {
+      this.setShouldTriggerDataAutoRefresh(false);
     }
   };
 
@@ -40,7 +40,7 @@ class AutoRefreshHelper {
    * which is stored as a string. It then compares this value to the string 'true'
    * to convert it to a boolean, and returns this boolean value.
    *
-   * @returns {boolean} - The value of DATA_AUTO_REFRESH from the session storage,
+   * @returns - The value of DATA_AUTO_REFRESH from the session storage,
    * converted to a boolean. Returns true if SHOULD_TRIGGER_DATA_AUTO_REFRESH is 'true', and false otherwise.
    */
   getShouldTriggerDataAutoRefresh = (): boolean => {
@@ -64,7 +64,7 @@ class AutoRefreshHelper {
    * The `sessionStorage.setItem` method is used to store the value. The boolean is converted to a string
    * using the `toString` method before it's stored, because `sessionStorage` can only store strings.
    *
-   * @param {boolean} shouldTriggerDataAutoRefresh - The value to be stored in the session storage.
+   * @param shouldTriggerDataAutoRefresh - The value to be stored in the session storage.
    */
   setShouldTriggerDataAutoRefresh = (shouldTriggerDataAutoRefresh: boolean): void => {
     sessionStorage.setItem(
