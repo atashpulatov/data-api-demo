@@ -29,7 +29,7 @@ import i18n from '../../i18n';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { OperationTypes } from '../../operation/operation-type-names';
 import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
-import { setSidePanelBanner } from '../../redux-reducer/notification-reducer/notification-action-creators';
+import { setSidePanelBannerNotification } from '../../redux-reducer/notification-reducer/notification-action-creators';
 import { updateObject } from '../../redux-reducer/object-reducer/object-actions';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 import {
@@ -110,13 +110,13 @@ export class SidePanelService {
   showRefreshInProgressBanner(operations: OperationData[]): void {
     // Close banner notification handler
     const onDismissHandler = (): void => {
-      reduxStore.dispatch(setSidePanelBanner(null));
+      reduxStore.dispatch(setSidePanelBannerNotification(null));
     };
 
     // Stop refresh all operation handler
     const onClickHandler = (): void => {
       reduxStore.dispatch(
-        setSidePanelBanner({
+        setSidePanelBannerNotification({
           title: i18n.t('Stopping...'),
           type: SidePanelBannerType.STOPPED,
         })
@@ -133,7 +133,7 @@ export class SidePanelService {
         }
       });
 
-      reduxStore.dispatch(setSidePanelBanner(null));
+      reduxStore.dispatch(setSidePanelBannerNotification(null));
     };
 
     const buttons = this.getSidePanelBannerButtons('', onClickHandler, i18n.t('Stop refresh'));
@@ -146,7 +146,7 @@ export class SidePanelService {
     } as SidePanelBanner;
 
     // Dispatch the notification to the side panel to show the SidePanelNotification component.
-    sidePanelBannerObj && reduxStore.dispatch(setSidePanelBanner(sidePanelBannerObj));
+    sidePanelBannerObj && reduxStore.dispatch(setSidePanelBannerNotification(sidePanelBannerObj));
   }
 
   /**

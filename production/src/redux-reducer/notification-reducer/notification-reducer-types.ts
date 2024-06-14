@@ -45,7 +45,7 @@ export interface GlobalNotification {
 export interface NotificationState {
   notifications: Notification[];
   globalNotification: GlobalNotification;
-  sidePanelBanner: SidePanelBanner | null;
+  sidePanelBannerNotification: SidePanelBanner | null;
 }
 
 export interface SidePanelBanner extends SidePanelBannerProps {

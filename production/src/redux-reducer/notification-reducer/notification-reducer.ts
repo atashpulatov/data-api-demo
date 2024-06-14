@@ -25,7 +25,7 @@ import { titleOperationCompletedMap, titleOperationInProgressMap } from './notif
 const initialState: NotificationState = {
   notifications: [],
   globalNotification: { type: '' },
-  sidePanelBanner: null,
+  sidePanelBannerNotification: null,
 };
 
 export const notificationReducer = (
@@ -79,7 +79,7 @@ export const notificationReducer = (
       return dismissAllNotifications(state);
 
     case NotificationActionTypes.SET_SIDE_PANEL_BANNER:
-      return setSidePanelBanner(state, action.payload);
+      return setSidePanelBannerNotification(state, action.payload);
     default:
       return state;
   }
@@ -165,7 +165,7 @@ const deleteNotification = (
   const newState = {
     notifications: [...state.notifications],
     globalNotification: state.globalNotification,
-    sidePanelBanner: state.sidePanelBanner,
+    sidePanelBannerNotification: state.sidePanelBannerNotification,
   };
   newState.notifications = newState.notifications.filter(
     notification => notification.objectWorkingId !== payload.objectWorkingId
@@ -198,7 +198,7 @@ const dismissSingleNotification = (
   return {
     notifications: newNotifications,
     globalNotification: state.globalNotification,
-    sidePanelBanner: state.sidePanelBanner,
+    sidePanelBannerNotification: state.sidePanelBannerNotification,
   };
 };
 
@@ -221,7 +221,7 @@ const dismissAllNotifications = (state: NotificationState): NotificationState =>
   return {
     notifications: newNotifications,
     globalNotification: state.globalNotification,
-    sidePanelBanner: state.sidePanelBanner,
+    sidePanelBannerNotification: state.sidePanelBannerNotification,
   };
 };
 
@@ -285,7 +285,7 @@ const createGlobalNotification = (
 const removeGlobalNotification = (state: NotificationState): NotificationState => ({
   notifications: [...state.notifications],
   globalNotification: { type: '' },
-  sidePanelBanner: {},
+  sidePanelBannerNotification: {},
 });
 
 const deleteAllNotifications = (
@@ -293,7 +293,11 @@ const deleteAllNotifications = (
   action: { isSecured: boolean }
 ): NotificationState =>
   action.isSecured
-    ? { notifications: [], globalNotification: state.globalNotification, sidePanelBanner: {} }
+    ? {
+        notifications: [],
+        globalNotification: state.globalNotification,
+        sidePanelBannerNotification: {},
+      }
     : state;
 
 const clearNotifications = (state: NotificationState): NotificationState => ({
@@ -310,12 +314,12 @@ const restoreAllNotifications = (
   notifications: payload,
 });
 
-const setSidePanelBanner = (
+const setSidePanelBannerNotification = (
   state: NotificationState,
   payload: SidePanelBanner
 ): NotificationState => ({
   ...state,
-  sidePanelBanner: payload,
+  sidePanelBannerNotification: payload,
 });
 
 function createNewState(
@@ -326,7 +330,7 @@ function createNewState(
   const newState = {
     notifications: [...state.notifications],
     globalNotification: state.globalNotification,
-    sidePanelBanner: state.sidePanelBanner,
+    sidePanelBannerNotification: state.sidePanelBannerNotification,
   };
   newState.notifications.splice(notificationToUpdateIndex, 1, updatedNotification);
   return newState;

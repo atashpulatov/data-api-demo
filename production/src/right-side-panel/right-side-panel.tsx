@@ -21,7 +21,7 @@ import { ObjectData } from '../types/object-types';
 import { dialogController } from '../dialog/dialog-controller';
 import {
   dismissAllObjectsNotifications,
-  setSidePanelBanner,
+  setSidePanelBannerNotification,
 } from '../redux-reducer/notification-reducer/notification-action-creators';
 import { notificationReducerSelectors } from '../redux-reducer/notification-reducer/notification-reducer-selectors';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
@@ -89,7 +89,9 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   const filteredObjects = useGetFilteredObjectListForSidePanelDetails(loadedObjectsWrapped);
   // Get side panel notification used to display the notification in the side panel, either
   // to show banner to allow user to stop refresh all operations (Multiple objects or auto-refresh).
-  const sidePanelBanner = useSelector(notificationReducerSelectors.selectSidePanelBanner);
+  const bannerNotification = useSelector(
+    notificationReducerSelectors.selectSidePanelBannerNotification
+  );
 
   // Update ref when value changes
   useEffect(() => {
@@ -105,10 +107,10 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
       )
     );
     // If operations are empty, remove the side panel notification banner.
-    if (operations?.length <= 1 && sidePanelBanner?.type) {
-      reduxStore.dispatch(setSidePanelBanner(null));
+    if (operations?.length <= 1 && bannerNotification?.type) {
+      reduxStore.dispatch(setSidePanelBannerNotification(null));
     }
-  }, [loadedObjects, notifications, operations, sidePanelBanner]);
+  }, [loadedObjects, notifications, operations, bannerNotification]);
 
   const showOverviewModal = (objectName: string): void => {
     dialogController.runImportedDataOverviewPopup();
@@ -156,7 +158,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
           onShowInOverviewClick={showOverviewModal}
           isPopupRendered={isDialogOpen}
           applicationType={OfficeApplicationType.EXCEL}
-          banner={sidePanelBanner as SidePanelBannerProps}
+          banner={bannerNotification as SidePanelBannerProps}
         />
       )}
     </>

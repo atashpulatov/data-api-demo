@@ -93,7 +93,9 @@ export const displaySuccessNotification = (
   payload: { objectWorkingId, dismissNotificationCallback },
 });
 
-export const setSidePanelBanner = (sidePanelBanner: SidePanelBanner): SetSidePanelBannerAction => ({
+export const setSidePanelBannerNotification = (
+  bannerNotification: SidePanelBanner
+): SetSidePanelBannerAction => ({
   type: NotificationActionTypes.SET_SIDE_PANEL_BANNER,
-  payload: sidePanelBanner,
+  payload: bannerNotification,
 });
