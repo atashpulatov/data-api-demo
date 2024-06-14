@@ -1,7 +1,7 @@
 @formatted_grid
 Feature: F39212 - Ability to import formatted grids into Excel worksheet
     
-    Scenario: [TC92631] - Manage formatted prompted report grid
+    Scenario: E2E - Manage formatted prompted report grid
         Given I initialized Excel
 
         When I logged in as default user
