@@ -136,10 +136,10 @@ export class SidePanelService {
       reduxStore.dispatch(setSidePanelBanner(null));
     };
 
-    const buttons = this.getSidePanelBannerButtons('', onClickHandler, 'Stop');
+    const buttons = this.getSidePanelBannerButtons('', onClickHandler, i18n.t('Stop refresh'));
 
     const sidePanelBannerObj = {
-      title: 'Refresh in progress...',
+      title: i18n.t('Refresh in progress...'),
       type: SidePanelBannerType.IN_PROGRESS,
       onDismissBanner: onDismissHandler,
       children: buttons,
