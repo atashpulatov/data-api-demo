@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { OfficeApplicationType, SidePanel } from '@mstr/connector-components';
-import { SidePanelBannerProps } from '@mstr/connector-components/lib/side-panel/banner/side-panel-banner-types';
 
 import { useGetFilteredObjectListForSidePanelDetails } from '../redux-reducer/settings-reducer/settings-hooks';
 import useAutoRefreshObjects from './side-panel-hooks/use-auto-refresh-objects';
@@ -159,11 +158,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
           onShowInOverviewClick={showOverviewModal}
           isPopupRendered={isDialogOpen}
           applicationType={OfficeApplicationType.EXCEL}
-          banner={
-            bannerNotification?.type === SidePanelBannerType.NONE
-              ? null
-              : (bannerNotification as SidePanelBannerProps)
-          }
+          banner={bannerNotification?.type === SidePanelBannerType.NONE ? null : bannerNotification}
         />
       )}
     </>
