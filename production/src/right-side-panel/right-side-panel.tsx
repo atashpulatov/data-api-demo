@@ -16,7 +16,6 @@ import { sidePanelService } from './side-panel-services/side-panel-service';
 import { reduxStore, RootState } from '../store';
 
 import { SidePanelBannerType } from '../redux-reducer/notification-reducer/notification-reducer-types';
-import { ObjectData } from '../types/object-types';
 
 import { dialogController } from '../dialog/dialog-controller';
 import {
@@ -24,6 +23,7 @@ import {
   setSidePanelBannerNotification,
 } from '../redux-reducer/notification-reducer/notification-action-creators';
 import { notificationReducerSelectors } from '../redux-reducer/notification-reducer/notification-reducer-selectors';
+import { selectObjects } from '../redux-reducer/object-reducer/object-reducer-selectors';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { officeSelectors } from '../redux-reducer/office-reducer/office-reducer-selectors';
 import { selectOperations } from '../redux-reducer/operation-reducer/operation-reducer-selectors';
@@ -36,7 +36,6 @@ import SettingsSidePanel from './settings-side-panel/settings-side-panel';
 import './right-side-panel.scss';
 
 interface RightSidePanelProps {
-  loadedObjects: ObjectData[];
   isConfirm?: boolean;
   isSettings?: boolean;
   settingsPanelLoaded?: boolean;
@@ -46,7 +45,6 @@ interface RightSidePanelProps {
 }
 
 export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
-  loadedObjects,
   isConfirm,
   isSettings,
   settingsPanelLoaded,
@@ -55,9 +53,6 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   setIsDataOverviewOpen,
 }) => {
   const dispatch = useDispatch();
-  const [sidePanelPopup, setSidePanelPopup] = useState(null);
-  const [loadedObjectsWrapped, setLoadedObjectsWrapped] = useState(loadedObjects);
-  const [activeSheetId, setActiveSheetId] = useState('');
 
   const operations = useSelector(selectOperations);
   const globalNotification = useSelector(notificationReducerSelectors.selectGlobalNotification);
@@ -65,6 +60,11 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   const isSidePanelBlocked = useSelector(repromptsQueueSelector.doesRepromptQueueContainItems);
   const isDialogOpen = useSelector(officeSelectors.selectIsDialogOpen);
   const popupData = useSelector(officeSelectors.selectPopupData);
+  const loadedObjects = useSelector(selectObjects);
+
+  const [sidePanelPopup, setSidePanelPopup] = useState(null);
+  const [activeSheetId, setActiveSheetId] = useState('');
+  const [loadedObjectsWrapped, setLoadedObjectsWrapped] = useState(loadedObjects);
 
   // Represents whether any popup (notifications, Office dialog, sidepanel popup) or settings are visible
   const isAnyPopupOrSettingsDisplayed =
@@ -166,12 +166,9 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
 };
 
 export const mapStateToProps = (state: RootState): any => {
-  const { objects } = state.objectReducer;
-
   const { isConfirm, isSettings, settingsPanelLoaded } = state.officeReducer;
 
   return {
-    loadedObjects: objects,
     isConfirm,
     isSettings,
     settingsPanelLoaded,

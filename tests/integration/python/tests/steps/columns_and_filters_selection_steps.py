@@ -37,6 +37,10 @@ def step_impl(context):
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().click_import_button_without_success_check()
 
+@step('I clicked Import Formatted Data button in Columns and Filters Selection without success check')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().click_import_formatted_data_button_without_success_check()
+
 
 @step('I clicked Import button in Columns and Filters Selection to duplicate object')
 def step_impl(context):
