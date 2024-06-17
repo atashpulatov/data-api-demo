@@ -43,12 +43,6 @@ def step_impl(context, object_number):
 def step_impl(context, object_number):
     context.pages.right_panel_tile_page().click_refresh(object_number)
 
-
-@step('I clicked Refresh on without prompt object {object_number}')
-def step_impl(context, object_number):
-    context.pages.right_panel_tile_page().click_refresh_without_prompt(object_number)
-
-
 @step('I clicked Reprompt on object {object_number}')
 def step_impl(context, object_number):
     context.pages.right_panel_tile_page().click_reprompt(object_number)
@@ -327,3 +321,26 @@ def step_impl(context, object_number, group_number):
 @step('I closed notification for object {object_number} in group {group_number}')
 def step_impl(context, object_number, group_number):
     context.pages.right_panel_tile_page().close_object_notification_in_group_on_hover(object_number, group_number)
+
+
+@step('I verify object is imported as Pivot Table')
+def step_impl(context):
+    pivot_table_present = context.pages.right_panel_tile_page().is_pivot_table_present()
+
+    AssertUtil.assert_simple(pivot_table_present, True)
+
+
+@step('I clicked "{option_name}" checkbox in Pivot Table section')
+def step_impl(context, option_name):
+    pivot_table_present = context.pages.right_panel_tile_page().toggle_pivot_table_checkbox(option_name)
+
+
+@step('I verified "{option_name}" is in "{section_name}" section')
+def step_impl(context, option_name, section_name):
+    option_present_in_section = context.pages.right_panel_tile_page().is_option_present_in_section(option_name, section_name)
+
+    AssertUtil.assert_simple(option_present_in_section, True)
+
+@step('I closed PivotTable window')
+def step_impl(context, option_name, section_name):
+    option_present_in_section = context.pages.right_panel_tile_page().close_pitvot_window()

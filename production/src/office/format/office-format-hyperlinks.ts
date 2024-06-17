@@ -11,9 +11,41 @@ class OfficeFormatHyperlinks {
    * @returns {Boolean} is valid url
    */
   isValidUrl(str: string): boolean {
-    const urlRegExp =
-      /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
-    return urlRegExp.test(str);
+    try {
+      const newUrl = new URL(str);
+      const { hostname, protocol } = newUrl;
+      const allowedProtocols = ['http:', 'https:', 'ftp:'];
+      const excludedIpAddressGroups = ['0', '10', '127', '169.254', '192.168'];
+
+      const isProtocolValid = (): boolean => allowedProtocols.includes(protocol);
+
+      // checks if host has missing authority - nothing between '//' and '/'
+      const hasMissingAuthority = (): boolean => str.includes('///');
+
+      // checks if hostname consists only of digits and dots
+      const isPotentialIpAddress = (): boolean => /^[\d.]+$/.test(hostname);
+
+      // checks if host is an IP address in the private range 172.16.0.0 to 172.31.255.255
+      const isInPrivate172Range = (): boolean => {
+        const parts = hostname.split('.');
+        if (parts.length === 4 && parts[0] === '172') {
+          const secondOctet = parseInt(parts[1], 10);
+          if (secondOctet >= 16 && secondOctet <= 31) {
+            return true;
+          }
+        }
+        return false;
+      };
+
+      const isIpAddressGroupExcluded = (): boolean =>
+        isPotentialIpAddress() &&
+        (isInPrivate172Range() ||
+          excludedIpAddressGroups.some(group => hostname.startsWith(group)));
+
+      return !(hasMissingAuthority() || !isProtocolValid() || isIpAddressGroupExcluded());
+    } catch (err) {
+      return false;
+    }
   }
 
   /**
@@ -38,26 +70,26 @@ class OfficeFormatHyperlinks {
 
     // HTMLTag
     if (baseFormType === FORM_TYPE_HTML) {
-      // stores value of href in capture group 1
-      const hrefRegExp = /<a\s[^]*?\s?href=['"]([^]*?)['"][^]*>/;
+      // stores value of href attribute (in capture group 2) that is surrounded by the same type of non-escaped quotes
+      const hrefRegExp = /href=(['"])(.*?)(?<!\\)\1/;
 
       // stores text content in capture group 1
-      const textRegExp = /<a[^]+['"]>([^]+)<\/a>/;
+      const textRegExp = /<a[\s\S]*?['"]>([\s\S]*)<\/a>/;
 
       const hrefMatch = string.match(hrefRegExp);
-      let textMatch = string.match(textRegExp);
+      const textMatch = string.match(textRegExp);
 
       // If there is no href or is not valid url we cannot make a hyperlink
-      if (!hrefMatch || hrefMatch[0] === '' || !this.isValidUrl(hrefMatch[1])) {
+      if (!hrefMatch || hrefMatch[0] === '' || !this.isValidUrl(hrefMatch[2])) {
         return null;
       }
 
       // If there is no text use hyperlink
       if (!textMatch || textMatch[0] === '' || textMatch[1] === '') {
-        textMatch = hrefMatch;
+        return { address: hrefMatch[2], textToDisplay: hrefMatch[2] };
       }
 
-      return { address: hrefMatch[1], textToDisplay: textMatch[1] };
+      return { address: hrefMatch[2], textToDisplay: textMatch[1] };
     }
 
     return null;

@@ -303,5 +303,10 @@
    "Report Filter": "Filtro de informe",
    "Report Limits": "Límites del informe",
    "View Filter": "Ver filtro",
-   "Selected non-grid visualization cannot be imported as formatted data": "La visualización que no es de cuadrícula seleccionada no se puede importar como datos con formato"
+   "Selected non-grid visualization cannot be imported as formatted data": "La visualización que no es de cuadrícula seleccionada no se puede importar como datos con formato",
+   "Data Refresh": "Actualización de datos",
+   "Auto Refresh": "Actualización automática",
+   "If enabled, the data will be automatically refreshed each time you open the Excel document.": "Si se activa, los datos se actualizarán automáticamente cada vez que abra la presentación de PowerPoint.",
+   "Refresh in progress...": "Actualización en curso...",
+   "Stop refresh": "Detener actualización"
 }

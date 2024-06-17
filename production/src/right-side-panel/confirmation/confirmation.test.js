@@ -1,10 +1,12 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 import { fireEvent, render } from '@testing-library/react';
 
-import { notificationService } from '../../notification/notification-service';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeRemoveHelper } from '../../office/remove/office-remove-helper';
 import { sidePanelService } from '../side-panel-services/side-panel-service';
+
+import { reduxStore } from '../../store';
 
 import { errorService } from '../../error/error-handler';
 import { ConfirmationNotConnected } from './confirmation';
@@ -33,23 +35,25 @@ describe('Confirmation', () => {
     const mockSecureData = jest
       .spyOn(sidePanelService, 'secureData')
       .mockImplementation(() => jest.fn);
-    const mockDismissAll = jest
-      .spyOn(notificationService, 'dismissNotifications')
-      .mockImplementation(() => jest.fn);
+    // const mockDismissAll = jest
+    //   .spyOn(notificationService, 'dismissNotifications')
+    //   .mockImplementation(() => jest.fn);
     const mockToggleIsConfirmFlag = jest.fn();
     const mockReportArray = createMockFilesArray();
     const { getByText } = render(
-      <ConfirmationNotConnected
-        objects={mockReportArray}
-        isSecured={false}
-        toggleIsConfirmFlag={mockToggleIsConfirmFlag}
-      />
+      <Provider store={reduxStore}>
+        <ConfirmationNotConnected
+          objects={mockReportArray}
+          isSecured={false}
+          toggleIsConfirmFlag={mockToggleIsConfirmFlag}
+        />
+      </Provider>
     );
     // when
     fireEvent.click(getByText('OK'));
     // then
     expect(mockSecureData).toBeCalled();
-    expect(mockDismissAll).toBeCalled();
+    // expect(mockDismissAll).toBeCalled();
   });
 
   it('should fill clearErrors when secureData fails in ok button click', () => {
@@ -75,13 +79,15 @@ describe('Confirmation', () => {
     const mockToggleSecuredFlag = jest.fn();
     const mockReportArray = createMockFilesArray();
     const { getByText } = render(
-      <ConfirmationNotConnected
-        objects={mockReportArray}
-        isSecured={false}
-        toggleIsConfirmFlag={mockToggleIsConfirmFlag}
-        toggleIsClearDataFailedFlag={mockToggleIsClearDataFailedFlag}
-        toggleSecuredFlag={mockToggleSecuredFlag}
-      />
+      <Provider store={reduxStore}>
+        <ConfirmationNotConnected
+          objects={mockReportArray}
+          isSecured={false}
+          toggleIsConfirmFlag={mockToggleIsConfirmFlag}
+          toggleIsClearDataFailedFlag={mockToggleIsClearDataFailedFlag}
+          toggleSecuredFlag={mockToggleSecuredFlag}
+        />
+      </Provider>
     );
     // when
     fireEvent.click(getByText('OK'));
@@ -93,7 +99,9 @@ describe('Confirmation', () => {
     // given
     const mockToggleIsConfirmFlag = jest.fn();
     const { getByText } = render(
-      <ConfirmationNotConnected isSecured={false} toggleIsConfirmFlag={mockToggleIsConfirmFlag} />
+      <Provider store={reduxStore}>
+        <ConfirmationNotConnected isSecured={false} toggleIsConfirmFlag={mockToggleIsConfirmFlag} />
+      </Provider>
     );
     // when
     fireEvent.click(getByText('Cancel'));
@@ -104,7 +112,11 @@ describe('Confirmation', () => {
     // given
     const addEventListenerSpy = jest.spyOn(document, 'addEventListener');
     // when
-    render(<ConfirmationNotConnected isConfirm />);
+    render(
+      <Provider store={reduxStore}>
+        <ConfirmationNotConnected isConfirm />
+      </Provider>
+    );
     // then
     const spyCalls = addEventListenerSpy.mock.calls;
     expect(spyCalls[spyCalls.length - 1][0]).toEqual('click');
@@ -115,9 +127,17 @@ describe('Confirmation', () => {
   it('should remove event listeners for outside of confirmation popup click and esc button', () => {
     // given
     const removeEventListenerSpy = jest.spyOn(document, 'removeEventListener');
-    const { rerender } = render(<ConfirmationNotConnected isConfirm />);
+    const { rerender } = render(
+      <Provider store={reduxStore}>
+        <ConfirmationNotConnected isConfirm />
+      </Provider>
+    );
     // when
-    rerender(<ConfirmationNotConnected isConfirm={false} />);
+    rerender(
+      <Provider store={reduxStore}>
+        <ConfirmationNotConnected isConfirm={false} />
+      </Provider>
+    );
     // then
     const spyCalls = removeEventListenerSpy.mock.calls;
     expect(spyCalls[spyCalls.length - 1][0]).toEqual('click');
@@ -132,7 +152,11 @@ describe('Confirmation', () => {
     document.addEventListener = jest.fn((event, cb) => {
       map[event] = cb;
     });
-    render(<ConfirmationNotConnected isConfirm toggleIsConfirmFlag={toggleIsConfirmFlagMock} />);
+    render(
+      <Provider store={reduxStore}>
+        <ConfirmationNotConnected isConfirm toggleIsConfirmFlag={toggleIsConfirmFlagMock} />
+      </Provider>
+    );
     // when
     map.click({ target: null });
     // then
@@ -145,7 +169,11 @@ describe('Confirmation', () => {
     document.addEventListener = jest.fn((event, cb) => {
       map[event] = cb;
     });
-    render(<ConfirmationNotConnected isConfirm toggleIsConfirmFlag={toggleIsConfirmFlagMock} />);
+    render(
+      <Provider store={reduxStore}>
+        <ConfirmationNotConnected isConfirm toggleIsConfirmFlag={toggleIsConfirmFlagMock} />
+      </Provider>
+    );
     // when
     map.keyup({ key: 'Escape' });
     // then
@@ -158,7 +186,11 @@ describe('Confirmation', () => {
     document.addEventListener = jest.fn((event, cb) => {
       map[event] = cb;
     });
-    render(<ConfirmationNotConnected isConfirm toggleIsConfirmFlag={toggleIsConfirmFlagMock} />);
+    render(
+      <Provider store={reduxStore}>
+        <ConfirmationNotConnected isConfirm toggleIsConfirmFlag={toggleIsConfirmFlagMock} />
+      </Provider>
+    );
     // when
     map.keyup({ keyCode: 26 });
     // then

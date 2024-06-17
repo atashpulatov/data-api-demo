@@ -4,6 +4,7 @@ import { connect, useDispatch } from 'react-redux';
 import { Spinner } from '@mstr/rc';
 
 import useOfficePrivilege from '../hooks/use-office-privilege';
+import { useResetDialog } from '../hooks/use-reset-dialog';
 
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { browserHelper } from '../helpers/browser-helper';
@@ -14,14 +15,12 @@ import officeStoreRestoreObject from '../office/store/office-store-restore-objec
 
 import { Authenticate } from '../authentication/auth-component';
 import { DevelopmentImportList } from '../development-import-list';
+import { SessionExtendingWrapper } from '../dialog/session-extending-wrapper';
 import i18n from '../i18n';
-import { SessionExtendingWrapper } from '../popup/session-extending-wrapper';
 import {
   clearGlobalNotification,
   createConnectionLostNotification,
 } from '../redux-reducer/notification-reducer/notification-action-creators';
-import { officeActions } from '../redux-reducer/office-reducer/office-actions';
-import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import { RightSidePanel } from '../right-side-panel/right-side-panel';
 import { HomeDialog } from './home-dialog';
@@ -33,10 +32,6 @@ interface HomeProps {
   loading?: boolean;
   isDialogOpen?: boolean;
   authToken?: string | boolean;
-  hideDialog?: () => void;
-  toggleIsSettingsFlag?: (flag: boolean) => void;
-  clearDialogState?: () => void;
-  setPopupData?: (popupData: any) => void;
 }
 
 const IS_DEVELOPMENT = browserHelper.isDevelopment();
@@ -51,15 +46,7 @@ async function getUserData(authToken: string | boolean): Promise<void> {
 
 export const HomeNotConnected: React.FC<HomeProps> = props => {
   const dispatch = useDispatch();
-  const {
-    loading,
-    isDialogOpen,
-    authToken,
-    hideDialog,
-    toggleIsSettingsFlag,
-    clearDialogState,
-    setPopupData,
-  } = props;
+  const { loading, isDialogOpen, authToken } = props;
 
   const canUseOffice = useOfficePrivilege(authToken as string);
 
@@ -75,6 +62,8 @@ export const HomeNotConnected: React.FC<HomeProps> = props => {
       dispatch(createConnectionLostNotification);
     }
   };
+
+  useResetDialog();
 
   useEffect(() => {
     window.addEventListener('online', handleConnectionRestored);
@@ -107,17 +96,13 @@ export const HomeNotConnected: React.FC<HomeProps> = props => {
         officeStoreRestoreObject.restoreAnswersFromExcelStore();
         authenticationHelper.saveLoginValues();
         sessionHelper.getTokenFromStorage();
-        hideDialog(); // hide error popup if visible
-        toggleIsSettingsFlag(false); // hide settings menu if visible
-        clearDialogState();
-        setPopupData(null);
         sessionActions.disableLoading();
       } catch (error) {
         console.error(error);
       }
     }
     initializeHome();
-  }, [hideDialog, toggleIsSettingsFlag, clearDialogState, setPopupData]);
+  }, []);
 
   useEffect(() => {
     getUserData(authToken);
@@ -129,7 +114,6 @@ export const HomeNotConnected: React.FC<HomeProps> = props => {
   const sidePanelToRender = (): React.JSX.Element => {
     if (authToken) {
       if (canUseOffice) {
-        // @ts-expect-error
         return <RightSidePanel />;
       }
       return <PrivilegeErrorSidePanel />;
@@ -154,17 +138,8 @@ function mapStateToProps(state: any): any {
     loading: state.sessionReducer.loading,
     isDialogOpen: state.officeReducer.isDialogOpen,
     authToken: state.sessionReducer.authToken,
-    shouldRenderSettings: state.officeReducer.shouldRenderSettings,
     canUseOffice: state.sessionReducer.canUseOffice,
   };
 }
 
-const mapDispatchToProps = {
-  toggleRenderSettingsFlag: officeActions.toggleRenderSettingsFlag,
-  hideDialog: officeActions.hideDialog,
-  toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
-  clearDialogState: popupStateActions.onClearPopupState,
-  setPopupData: officeActions.setPopupData,
-};
-
-export const Home = connect(mapStateToProps, mapDispatchToProps)(HomeNotConnected);
+export const Home = connect(mapStateToProps)(HomeNotConnected);

@@ -2,7 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { fireEvent, render } from '@testing-library/react';
 
-import { popupHelper } from '../popup/popup-helper';
+import { dialogHelper } from '../dialog/dialog-helper';
 
 import { reduxStore } from '../store';
 
@@ -10,7 +10,7 @@ import { AttributeSelectorWindowNotConnected } from './attribute-selector-window
 import { ObjectImportType } from '../mstr-object/constants';
 
 jest.mock('../office/office-context');
-jest.mock('../popup/popup-helper');
+jest.mock('../dialog/dialog-helper');
 
 describe('AttributeSelectorWindow', () => {
   it('should render attribute selector elements', () => {
@@ -88,7 +88,7 @@ describe('AttributeSelectorWindow', () => {
       </Provider>
     );
 
-    const officeMessageParentSpy = jest.spyOn(popupHelper, 'officeMessageParent');
+    const officeMessageParentSpy = jest.spyOn(dialogHelper, 'officeMessageParent');
     officeMessageParentSpy.mockClear();
 
     const cancelButton = getByText('Cancel');

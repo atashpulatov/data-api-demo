@@ -24,7 +24,10 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     RIGHT_PANEL_TILE_IN_GROUP = RIGHT_PANEL_TILE_GROUP + RIGHT_PANEL_TILE
     RIGHT_PANEL_TILE_NOTIFICATION = '.object-tile-list > article:nth-child(%s) > div > .notification-container'
 
-    RIGHT_PANEL_TILE_BUTTON_PREFIX = RIGHT_PANEL_TILE + ' .icon-bar '
+    RIGHT_PANEL_TILE_ICON_BAR_CONTAINER = RIGHT_PANEL_TILE + ' > .object-tile-content > .object-tile-header > .icon-bar-container > '
+    RIGHT_PANEL_TILE_CONTEXT_MENU_CONTAINER = RIGHT_PANEL_TILE_ICON_BAR_CONTAINER + '.multiselection-context-menu > .context-menu-container > '
+
+    RIGHT_PANEL_TILE_BUTTON_PREFIX = RIGHT_PANEL_TILE_ICON_BAR_CONTAINER + '.icon-bar > '
 
     RIGHT_PANEL_TILE_NOTIFICATION_CANCEL_BUTTON = RIGHT_PANEL_TILE_NOTIFICATION + \
                                                   ' .progress-bar-notification-button-container > button'
@@ -40,11 +43,11 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     PROGRESS_COUNT_SEPARATOR = '/'
 
     #Change index due to implementation of F38412 Re-use prompt answers across multiple prompts when importing content via the MicroStrategy add-in for Excel
-    REPROMPT_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-last-of-type(3)'
-    REFRESH_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-last-of-type(2)'
-    OPTIONS_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-last-of-type(1)'
-    EDIT_OPTION_FOR_OBJECT = RIGHT_PANEL_TILE + '.object-tile-wrapper .context-menu-list li:nth-child(1)'
-    DUPLICATE_OPTION_FOR_OBJECT = RIGHT_PANEL_TILE + '.object-tile-wrapper .context-menu-list li:nth-child(2)'
+    REPROMPT_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(1)'
+    REFRESH_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + '''button[aria-label='Refresh button']'''
+    OPTIONS_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + '''button[aria-label='Misc menu button']'''
+    EDIT_OPTION_FOR_OBJECT = RIGHT_PANEL_TILE_CONTEXT_MENU_CONTAINER + '.context-menu-wrapper > .context-menu-list >' + '''li[aria-label='Edit']'''
+    DUPLICATE_OPTION_FOR_OBJECT = RIGHT_PANEL_TILE_CONTEXT_MENU_CONTAINER + '.context-menu-wrapper > .context-menu-list >' + '''li[aria-label='Duplicate']'''
     CHECKBOX_FOR_OBJECT = RIGHT_PANEL_TILE + ' .mstr-rc-3-selector'
     SELECT_ALL_CHECKBOX = '#master-checkbox'
     REPROMPT_BUTTON_FOR_ALL = '.multiselection-reprompt-button'
@@ -56,12 +59,6 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     DUPLICATE_OPTION_FOR_OBJECT_IN_GROUP = RIGHT_PANEL_TILE_GROUP + DUPLICATE_OPTION_FOR_OBJECT
     
     NOTIFICATION_BUTTON = '.warning-notification-button-container'
-
-    #Change index for image import feature
-    REFRESH_BUTTON_FOR_NORMAL_DOSSIER = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(1)'
-    OPTIONS_BUTTON_FOR_NORMAL_DOSSIER = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(2)'
-
-
 
     NAME_INPUT_FOR_OBJECT = RIGHT_PANEL_TILE + ' .rename-input.view-only'
     NAME_INPUT_TEXT_FOR_OBJECT = RIGHT_PANEL_TILE + ' .rename-input.editable'
@@ -90,6 +87,13 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     ACTION_STATUS_PENDING = 'Pending'
 
     TOOLTIP_CSS = '.__react_component_tooltip'
+
+    PIVOT_TABLE_HEADER = '#FieldListTaskPaneTaskPaneTitle'
+    PIVOT_TABLE_FIELD_XPATH = '//div[@data-automationid="ListCell"][.//div[@title="%s"]]//input[@type="checkbox"]'
+    PIVOT_TABLE_OPTION_IN_SECTION_XPATH = '//div[@data-testid="fieldWell"][.//div[text()="%s"]][.//div[text()="%s"]]'
+    PIVOT_TABLE_CLOSE_BUTTON_XPATH = '//button[@aria-label="Close"]'
+
+    SETTINGS_BUTTON = '.settings-button'
 
     def wait_for_import_to_finish_successfully(self, timeout=Const.LONG_TIMEOUT):
         self._wait_for_operation_with_status(MessageConst.IMPORT_SUCCESSFUL_TEXT, timeout)
@@ -186,10 +190,9 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
             button.click()
 
     def click_refresh(self, tile_no):
-        self._click_tile_button(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT, tile_no)
-    
-    def click_refresh_without_prompt(self, tile_no):
-        self._click_tile_button(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_NORMAL_DOSSIER, tile_no)
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_css(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT % tile_no).click()
 
     def hover_refresh(self, tile_no):
         self._hover_over_tile_button(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT, tile_no)
@@ -509,6 +512,31 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
                 return True
         return False
     
+    def is_pivot_table_present(self):
+
+        pivot_table_header = self.get_element_by_css(RightPanelTileBrowserPage.PIVOT_TABLE_HEADER)
+        
+        if pivot_table_header:
+            return pivot_table_header.is_displayed()
+        else:
+            return False
+        
+    def open_settings_menu():
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_css(RightPanelTileBrowserPage.SETTINGS_BUTTON).click()
+        self.get_element_by_name('Settings').click()
+
+    def toggle_pivot_table_checkbox(option):
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_xpath(RightPanelTileBrowserPage.PIVOT_TABLE_FIELD_XPATH % option).click()
+
+    def is_option_present_in_section(option, section_name):
+        self.focus_on_add_in_frame()
+
+        return self.check_if_element_exists_by_xpath(RightPanelTileBrowserPage.PIVOT_TABLE_OPTION_IN_SECTION_XPATH % (option, section_name))
+    
     def get_object_message(self, object_number, group_number):
         self.focus_on_add_in_frame()
 
@@ -542,3 +570,8 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_frame()
 
         self._hover_over_tile_in_group(object_number, group_number)
+
+    def close_pitvot_window(self):
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_css(RightPanelTileBrowserPage.PIVOT_TABLE_CLOSE_BUTTON_XPATH).click()

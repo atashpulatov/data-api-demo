@@ -8,8 +8,8 @@ import overflowHelper from '../../helpers/helpers';
 
 import { rootReducer } from '../../store';
 
+import { dialogController } from '../../dialog/dialog-controller';
 import { errorService } from '../../error/error-handler';
-import { popupController } from '../../popup/popup-controller';
 import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
 import { SettingsMenuNotConnected } from './settings-menu';
 
@@ -35,7 +35,7 @@ describe('Settings Menu', () => {
   it('should open Imported Data Overview popup on proper menu element click', () => {
     // given
     const runImportedDataOverviewPopupSpy = jest
-      .spyOn(popupController, 'runImportedDataOverviewPopup')
+      .spyOn(dialogController, 'runImportedDataOverviewPopup')
       .mockImplementation(() => {});
     const toggleIsSettingsFlag = jest.fn();
     const setIsDataOverviewOpen = jest.fn();

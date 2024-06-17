@@ -35,7 +35,8 @@ describe('SidePanelService', () => {
         id: mockActiveWorksheetId,
       }));
 
-    const mockSetActiveCellAddress = jest.fn();
+    const spyDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+
     const mockSetActiveSheetId = jest.fn();
     const mockIsAnyPopupOrSettingsDisplayed = false;
 
@@ -45,19 +46,17 @@ describe('SidePanelService', () => {
 
     // when
     await sidePanelEventHelper.initActiveSelectionChangedListener(
-      mockSetActiveCellAddress,
       mockSetActiveSheetId,
       mockIsAnyPopupOrSettingsDisplayed
     );
     // then
-    expect(spyGetExcelContext).toBeCalled();
-    expect(spyGetSelectedCell).toBeCalledWith(mockContext);
-    expect(spyGetCurrentExcelSheet).toBeCalledWith(mockContext);
-    expect(mockSetActiveCellAddress).toBeCalledWith(mockActiveCell);
-    expect(mockSetActiveSheetId).toBeCalledWith(mockActiveWorksheetId);
-    expect(spyAddOnSelectionChangedListener).toBeCalledWith(
+    expect(spyGetExcelContext).toHaveBeenCalled();
+    expect(spyGetSelectedCell).toHaveBeenCalledWith(mockContext);
+    expect(spyGetCurrentExcelSheet).toHaveBeenCalledWith(mockContext);
+    expect(spyDispatch).toHaveBeenCalled();
+    expect(mockSetActiveSheetId).toHaveBeenCalledWith(mockActiveWorksheetId);
+    expect(spyAddOnSelectionChangedListener).toHaveBeenCalledWith(
       mockContext,
-      mockSetActiveCellAddress,
       mockSetActiveSheetId,
       mockIsAnyPopupOrSettingsDisplayed
     );

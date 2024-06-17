@@ -8,7 +8,7 @@ import {
   PopupStateActionTypes,
 } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 
-import { Popup } from '../popup/popup';
+import { Dialog } from '../dialog/dialog';
 
 const DialogEntryPoint: React.FC = () => {
   useEffect(() => {
@@ -31,7 +31,7 @@ const DialogEntryPoint: React.FC = () => {
 
   return (
     <Provider store={reduxStore}>
-      <Popup />
+      <Dialog />
     </Provider>
   );
 };

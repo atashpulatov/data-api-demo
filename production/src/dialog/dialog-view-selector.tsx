@@ -4,9 +4,9 @@ import { PageBy } from '@mstr/connector-components';
 
 import { handleExecuteNextRepromptTask } from '../helpers/prompts-handling-helper';
 import { pageByHelper } from '../page-by/page-by-helper';
+import { dialogHelper } from './dialog-helper';
+import { dialogViewSelectorHelper } from './dialog-view-selector-helper';
 import { ObtainInstanceHelper } from './obtain-instance-helper';
-import { popupHelper } from './popup-helper';
-import { popupViewSelectorHelper } from './popup-view-selector-helper';
 
 import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 
@@ -23,7 +23,7 @@ import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-st
 import { MultipleRepromptTransitionPage } from './multiple-reprompt-transition-page/multiple-reprompt-transition-page';
 import { OverviewWindow } from './overview/overview-window';
 
-interface PopupViewSelectorProps {
+interface DialogViewSelectorProps {
   authToken?: string;
   popupType?: DialogType;
   isPrompted?: boolean;
@@ -63,7 +63,7 @@ const renderProperComponent = (popupType: DialogType): any => {
   }
 };
 
-export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = props => {
+export const DialogViewSelectorNotConnected: React.FC<DialogViewSelectorProps> = props => {
   const dispatch = useDispatch();
   const {
     authToken,
@@ -87,7 +87,7 @@ export const PopupViewSelectorNotConnected: React.FC<PopupViewSelectorProps> = p
   );
   const editedObject = useSelector(popupSelectors.selectEditedObject);
 
-  const popupType = popupViewSelectorHelper.setPopupType(props, popupTypeProps);
+  const popupType = dialogViewSelectorHelper.setPopupType(props, popupTypeProps);
 
   const getPageByConfiguration = useCallback(
     () =>
@@ -180,7 +180,7 @@ function mapStateToProps(state: any): any {
     ...navigationTree,
     authToken,
     editedObject: {
-      ...popupHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege),
+      ...dialogHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege),
     },
     preparedInstance,
     propsToPass: { ...popupStateReducer },
@@ -205,7 +205,7 @@ const mapDispatchToProps = {
   selectObject: navigationTreeActions.selectObject,
 };
 
-export const PopupViewSelector = connect(
+export const DialogViewSelector = connect(
   mapStateToProps,
   mapDispatchToProps
-)(PopupViewSelectorNotConnected);
+)(DialogViewSelectorNotConnected);

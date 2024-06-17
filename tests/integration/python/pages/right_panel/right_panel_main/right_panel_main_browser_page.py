@@ -39,7 +39,10 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     PARENT_TOGGLE = "//button[contains(@class, 'mstr-rc-3-switch--regular') and ancestor::label/div/span[contains(text(), '%s')]]"
     CHILD_TOGGLE = "//button[contains(@class, 'mstr-rc-3-switch--small') and ancestor::label/div[contains(text(), '%s')]]"
     DRAGGABLE_CHILD_TOGGLE = "//button[contains(@class, 'mstr-rc-3-switch--small') and ancestor::label/div[contains(text(), '%s')] and ancestor::li/button[contains(@class, 'mstr-rc-3-draggable-list__item-drag-handle')]]"
-    
+    DEFAULT_IMPORT_FORMAT_DROPDOWN_XPATH = '//label[contains(text(), "Default import format:")]//input'
+    DEFAULT_IMPORT_FORMAT_DROPDOWN_OPTION_XPATH = '//ul[contains(@class, "mstr-rc-3-dropdown__list")]//li[@aria-label="%s"]'
+    PIVOT_TABLE_OPTION_BUTTON_XPATH = '//div[@class="settings-panel__accordion mstr-rc-3-accordion"]//ul[.//label[text()="%s"]]//button'
+   
     OBJECT_GROUP = ".mstr-cc-object-tile-group"
     ACTIVE_OBJECT_GROUP = "//div[contains(@class, 'mstr-cc-object-tile-group-name') and text()='%s']/parent::div/parent::div[contains(@class, 'active')]"
     OBJECT_TILE = "//article[contains(@class, 'object-tile')]"
@@ -259,6 +262,25 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
         element = self.get_element_by_xpath(RightPanelMainBrowserPage.OBJECT_TILE_BY_NUMBER % object_number)
         element.right_click()
         self.get_element_by_xpath(RightPanelMainBrowserPage.CONTEXT_MENU % context_menu_option).click()
+
+    def is_toggle_pivot_table_option_checked(self, option):
+        toggle_button = self.get_element_by_xpath(RightPanelMainBrowserPage.PIVOT_TABLE_OPTION_BUTTON_XPATH % option)
+        aria_checked_value = toggle_button.get_attribute("aria-checked")
+        return aria_checked_value == "true"
+
+    def toggle_pivot_table_option(self, option, value_to_toggle_to):
+        toggle_button = self.get_element_by_xpath(RightPanelMainBrowserPage.PIVOT_TABLE_OPTION_BUTTON_XPATH % option)
+        aria_checked_value = toggle_button.get_attribute("aria-checked")
+        if aria_checked_value == value_to_toggle_to:
+            return
+        toggle_button.click()
+
+    def change_default_import_type(self, option_name):
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_xpath(RightPanelMainBrowserPage.DEFAULT_IMPORT_FORMAT_DROPDOWN_XPATH).click()
+        self.get_element_by_xpath(RightPanelMainBrowserPage.DEFAULT_IMPORT_FORMAT_DROPDOWN_OPTION_XPATH % option_name).click()
+
 
     def click_display_option(self, display_option):
         element = self.get_element_by_xpath(RightPanelMainBrowserPage.PAGE_BY_DISPLAY_OPTION % display_option)

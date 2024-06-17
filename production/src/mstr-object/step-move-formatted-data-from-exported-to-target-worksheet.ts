@@ -67,7 +67,7 @@ class StepMoveFormattedDataFromExportedToTargetWorkSheet {
       const sourceWorksheet = officeApiHelper.getExcelSheetById(excelContext, sourceWorksheetId);
 
       const previousShapeCollection = await getShapeCollection(targetWorksheet, excelContext);
-      const tableShapesStartIndex = previousShapeCollection?.items?.length;
+      const tableShapesStartIndex = previousShapeCollection?.items?.length || 0;
 
       await officeApiService.copyRangeFromSourceWorksheet(
         {
@@ -83,8 +83,9 @@ class StepMoveFormattedDataFromExportedToTargetWorkSheet {
       await excelContext.sync();
 
       const currentShapeCollection = await getShapeCollection(targetWorksheet, excelContext);
+      const tableShapesEndIndex = currentShapeCollection?.items?.length || 0;
 
-      if (currentShapeCollection?.items?.length > 0) {
+      if (tableShapesEndIndex > 0 && tableShapesEndIndex > tableShapesStartIndex) {
         // Group the shape collection of imported table
         const shapeGroup = this.groupShapeCollection(
           currentShapeCollection,

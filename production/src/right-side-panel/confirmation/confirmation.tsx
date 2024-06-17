@@ -1,15 +1,15 @@
 /* eslint-disable react/no-danger */
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 
-import { notificationService } from '../../notification/notification-service';
 import { sidePanelService } from '../side-panel-services/side-panel-service';
 
 // TODO replace with mstr-icon
 // @ts-expect-error
 import warningIcon from '../../home/assets/icon_conflict.svg';
 import i18n from '../../i18n';
+import { dismissAllObjectsNotifications } from '../../redux-reducer/notification-reducer/notification-action-creators';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 
 interface ConfirmationProps {
@@ -18,16 +18,12 @@ interface ConfirmationProps {
   toggleIsConfirmFlag?: (flag?: boolean) => void;
 }
 
-function clearData(objects: any[]): void {
-  notificationService.dismissNotifications();
-  sidePanelService.secureData(objects);
-}
-
 export const ConfirmationNotConnected: React.FC<ConfirmationProps> = ({
   objects,
   isConfirm,
   toggleIsConfirmFlag,
 }) => {
+  const dispatch = useDispatch();
   const [t] = useTranslation('common', { i18n });
 
   useEffect(() => {
@@ -100,7 +96,11 @@ export const ConfirmationNotConnected: React.FC<ConfirmationProps> = ({
             className='ant-btn'
             id='confirm-btn'
             type='button'
-            onClick={() => clearData(objects)}
+            onClick={() => {
+              // @ts-expect-error
+              dispatch(dismissAllObjectsNotifications());
+              sidePanelService.secureData(objects);
+            }}
           >
             {t('OK')}
           </button>

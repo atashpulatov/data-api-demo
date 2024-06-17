@@ -3,7 +3,7 @@ import { PageByConfiguration } from '@mstr/connector-components';
 import { ObjectExecutionStatus } from '../helpers/prompts-handling-helper';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { pageByHelper } from '../page-by/page-by-helper';
-import { popupHelper } from './popup-helper';
+import { dialogHelper } from './dialog-helper';
 
 import { RequestPageByModalOpenData } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer-types';
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
@@ -15,7 +15,7 @@ import { DisplayAttrFormNames } from '../mstr-object/constants';
 
 const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
-class PopupViewSelectorHelper {
+class DialogViewSelectorHelper {
   /**
    * Determines whether the currently open dialog is displaying the prompts editor for a report
    * in the Overview dialog, or from the SidePanel.
@@ -154,7 +154,7 @@ class PopupViewSelectorHelper {
       try {
         instanceDefinition = await getInstance(configAnsPrompts as any);
       } catch (error) {
-        popupHelper.handlePopupErrors(error);
+        dialogHelper.handlePopupErrors(error);
       }
       count += 1;
     }
@@ -294,7 +294,7 @@ class PopupViewSelectorHelper {
       }
     }
     props.startImport();
-    popupHelper.officeMessageParent(message);
+    dialogHelper.officeMessageParent(message);
   }
 
   /**
@@ -335,4 +335,4 @@ class PopupViewSelectorHelper {
   }
 }
 
-export const popupViewSelectorHelper = new PopupViewSelectorHelper();
+export const dialogViewSelectorHelper = new DialogViewSelectorHelper();

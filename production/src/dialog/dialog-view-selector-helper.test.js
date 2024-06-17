@@ -1,8 +1,8 @@
-import { popupViewSelectorHelper } from './popup-view-selector-helper';
+import { dialogViewSelectorHelper } from './dialog-view-selector-helper';
 
 import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 
-describe('PopupViewSelectorHelper', () => {
+describe('Dialog View Selector Helper', () => {
   describe('composeFilter', () => {
     const filter1 = 'filter1';
     const filter1Element1 = `${filter1}:1`;
@@ -86,7 +86,7 @@ describe('PopupViewSelectorHelper', () => {
       'should return $expectedResult when composeFilter was called with $givenFilter',
       ({ givenFilter, expectedResult }) => {
         // when
-        const result = popupViewSelectorHelper.composeFilter(givenFilter);
+        const result = dialogViewSelectorHelper.composeFilter(givenFilter);
         // then
         expect(result).toStrictEqual(expectedResult);
       }
@@ -100,14 +100,14 @@ describe('PopupViewSelectorHelper', () => {
       ];
 
       repromptPopupTypes.forEach(popupType => {
-        expect(popupViewSelectorHelper.isRepromptReportPopupType(popupType)).toBe(true);
+        expect(dialogViewSelectorHelper.isRepromptReportPopupType(popupType)).toBe(true);
       });
     });
 
     it('should return false for non-reprompt popup types', () => {
       const nonRepromptPopupType = 'nonRepromptPopupType';
 
-      expect(popupViewSelectorHelper.isRepromptReportPopupType(nonRepromptPopupType)).toBe(false);
+      expect(dialogViewSelectorHelper.isRepromptReportPopupType(nonRepromptPopupType)).toBe(false);
     });
 
     it('should proceed to import if conditions are met', () => {
@@ -119,10 +119,10 @@ describe('PopupViewSelectorHelper', () => {
       const popupType = DialogType.dossierWindow;
 
       const proceedToImportSpy = jest
-        .spyOn(popupViewSelectorHelper, 'proceedToImport')
+        .spyOn(dialogViewSelectorHelper, 'proceedToImport')
         .mockImplementation(() => undefined);
 
-      const result = popupViewSelectorHelper.setPopupType(props, popupType);
+      const result = dialogViewSelectorHelper.setPopupType(props, popupType);
 
       expect(proceedToImportSpy).toHaveBeenCalled();
       // Assuming proceedToImport doesn't return a value
@@ -138,14 +138,14 @@ describe('PopupViewSelectorHelper', () => {
       const popupType = DialogType.dossierWindow;
 
       const isInstanceWithPromptsAnsweredSpy = jest
-        .spyOn(popupViewSelectorHelper, 'isInstanceWithPromptsAnswered')
+        .spyOn(dialogViewSelectorHelper, 'isInstanceWithPromptsAnswered')
         .mockImplementation(() => false);
 
       const arePromptsAnsweredSpy = jest
-        .spyOn(popupViewSelectorHelper, 'arePromptsAnswered')
+        .spyOn(dialogViewSelectorHelper, 'arePromptsAnswered')
         .mockImplementation(() => true);
 
-      const result = popupViewSelectorHelper.setPopupType(props, popupType);
+      const result = dialogViewSelectorHelper.setPopupType(props, popupType);
 
       expect(isInstanceWithPromptsAnsweredSpy).toHaveBeenCalled();
       expect(arePromptsAnsweredSpy).toHaveBeenCalled();
@@ -160,7 +160,7 @@ describe('PopupViewSelectorHelper', () => {
       },
     };
 
-    const result = popupViewSelectorHelper.getPromptedReportPopupType(props);
+    const result = dialogViewSelectorHelper.getPromptedReportPopupType(props);
 
     expect(result).toBe(DialogType.multipleRepromptTransitionPage);
   });
@@ -172,7 +172,7 @@ describe('PopupViewSelectorHelper', () => {
       },
     };
 
-    const result = popupViewSelectorHelper.getPromptedReportPopupType(props);
+    const result = dialogViewSelectorHelper.getPromptedReportPopupType(props);
 
     expect(result).toBe(DialogType.editFilters);
   });

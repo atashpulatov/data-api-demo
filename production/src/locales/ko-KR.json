@@ -303,5 +303,10 @@
    "Report Filter": "리포트 필터",
    "Report Limits": "리포트 제한",
    "View Filter": "뷰 필터",
-   "Selected non-grid visualization cannot be imported as formatted data": "선택한 비그리드 시각화를 포맷된 데이터로 가져올 수 없습니다."
+   "Selected non-grid visualization cannot be imported as formatted data": "선택한 비그리드 시각화를 포맷된 데이터로 가져올 수 없습니다.",
+   "Data Refresh": "데이터 새로 고침",
+   "Auto Refresh": "자동 새로 고침",
+   "If enabled, the data will be automatically refreshed each time you open the Excel document.": "활성화한 경우 PowerPoint 프레젠테이션을 열 때마다 데이터가 자동으로 새로 고침됩니다.",
+   "Refresh in progress...": "새로 고침 진행 중...",
+   "Stop refresh": "새로 고침 중지"
 }

@@ -11,7 +11,7 @@ import { Button } from '@mstr/rc';
 import useGetOverviewWindowErrorPopup from './use-get-overview-window-error-popup';
 import useStateSyncOnDialogMessage from './use-state-sync-on-dialog-message';
 
-import { popupHelper } from '../popup-helper';
+import { dialogHelper } from '../dialog-helper';
 import overviewHelper from './overview-helper';
 
 import { selectorProperties } from '../../attribute-selector/selector-properties';
@@ -60,7 +60,7 @@ export const OverviewWindow: React.FC = () => {
   const handleCloseDialog = (): void => {
     const { commandCloseDialog } = selectorProperties;
     const message = { command: commandCloseDialog };
-    popupHelper.officeMessageParent(message);
+    dialogHelper.officeMessageParent(message);
   };
 
   const handleDuplicate = async (objectWorkingIds: number[]): Promise<void> =>
@@ -87,7 +87,10 @@ export const OverviewWindow: React.FC = () => {
           notification.type === ObjectNotificationTypes.SUCCESS &&
           notification.operationType === OperationTypes.REMOVE_OPERATION
         ) {
-          overviewHelper.sendDismissNotificationRequest([notification.objectWorkingId]);
+          overviewHelper.sendDismissNotificationRequest(
+            [notification.objectWorkingId],
+            notification.operationId
+          );
         }
       }, 500);
     });

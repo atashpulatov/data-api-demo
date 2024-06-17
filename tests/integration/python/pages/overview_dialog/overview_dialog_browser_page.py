@@ -28,7 +28,6 @@ class OverviewDialogBrowserPage(BaseBrowserPage):
     CLEAR_SEARCH_BOX = '//button[@aria-label="Clear search field"]'
     OBJECT_ROW = '//span[contains(text(), "%s")]'
     NEW_SHEET_ELEMENT_ID = 'new_sheet'
-    DELETE_POPUP = '//dialog//div[contains(text(),"Delete")]'
     DELETE_POPUP_BUTTON = '//dialog//button[text()="Delete"]'
     FILTER_PANEL = '//div[@id="filter-panel"]'
     FILTER_PANEL_OPTION = '//div[@id="filter-panel"]//button[text()="%s"]'
@@ -37,7 +36,7 @@ class OverviewDialogBrowserPage(BaseBrowserPage):
     FILTER_DETAILS = '//span[text()="Filtered By:"]'
     FILTER_DETAILS_BUTTON = '//button[text()="%s"]'
     OBJECT_ROW_NULL_STATUS = '//div[@class="ag-status-bar-left"]//div[@class="ag-status-name-value ag-status-panel ag-status-panel-total-and-filtered-row-count"]//span[text()="0"]'
-    IMPORT_DUPLICATE_POPUP = '//div[@class="base-popup"]//button[text()="Import"]'
+    IMPORT_DUPLICATE_POPUP = '//div[@class="base-popup"]//button[text()="Duplicate"]'
     GRID_ROW = "//div[contains(@class, 'ag-row-level-0')]"
     BUTTON = "//button[text()='%s']"
 
@@ -130,7 +129,7 @@ class OverviewDialogBrowserPage(BaseBrowserPage):
     def is_delete_popup_visible(self):
         self.focus_on_add_in_popup_frame()
 
-        element = self.get_element_by_xpath(OverviewDialogBrowserPage.DELETE_POPUP)
+        element = self.get_element_by_xpath(OverviewDialogBrowserPage.DELETE_POPUP_BUTTON)
 
         return element.is_displayed()
 
