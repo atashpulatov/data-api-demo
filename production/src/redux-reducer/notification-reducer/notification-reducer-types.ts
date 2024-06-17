@@ -1,4 +1,3 @@
-import { ReactElement } from 'react';
 import type { GlobalNotificationTypes, ObjectNotificationTypes } from '@mstr/connector-components';
 import { SidePanelBannerProps } from '@mstr/connector-components/lib/side-panel/banner/side-panel-banner-types';
 import type { Action } from 'redux';
