@@ -158,7 +158,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
           onShowInOverviewClick={showOverviewModal}
           isPopupRendered={isDialogOpen}
           applicationType={OfficeApplicationType.EXCEL}
-          banner={bannerNotification?.type === SidePanelBannerType.NONE ? null : bannerNotification}
+          banner={bannerNotification?.type !== SidePanelBannerType.NONE  && bannerNotification}
         />
       )}
     </>
