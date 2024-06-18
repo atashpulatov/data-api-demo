@@ -39,7 +39,7 @@ export const RightSidePanel: React.FC = () => {
   const loadedObjects = useSelector(selectObjects);
   const isConfirm = useSelector(officeSelectors.selectIsConfirm);
   const isSettings = useSelector(officeSelectors.selectIsSettings);
-  const settingsPanelLoaded = useSelector(officeSelectors.selectSettingsPanelLoaded);
+  const isSettingsPanelLoaded = useSelector(officeSelectors.selectIsSettingsPanelLoaded);
 
   const [sidePanelPopup, setSidePanelPopup] = useState(null);
   const [activeSheetId, setActiveSheetId] = useState('');
@@ -52,7 +52,7 @@ export const RightSidePanel: React.FC = () => {
     isDialogOpen ||
     popupData ||
     isSettings ||
-    settingsPanelLoaded;
+    isSettingsPanelLoaded;
   // Use ref so this value can be used in event listener callback
   const isAnyPopupOrSettingsDisplayedRef = useRef(isAnyPopupOrSettingsDisplayed);
 
@@ -86,7 +86,7 @@ export const RightSidePanel: React.FC = () => {
   return (
     <>
       {isSidePanelBlocked && <div className='block-side-panel-ui' />}
-      {settingsPanelLoaded ? (
+      {isSettingsPanelLoaded ? (
         <SettingsSidePanel />
       ) : (
         <SidePanel

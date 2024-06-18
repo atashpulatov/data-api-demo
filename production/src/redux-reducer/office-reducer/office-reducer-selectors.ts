@@ -71,11 +71,6 @@ const selectIsSettings = createSelector(
   (officeReducer: OfficeState) => officeReducer.isSettings
 );
 
-const selectSettingsPanelLoaded = createSelector(
-  [getOfficeState],
-  (officeReducer: OfficeState) => officeReducer.settingsPanelLoaded
-);
-
 const selectIsOverviewWindowAPISupported = createSelector(
   [getOfficeState],
   (officeReducer: OfficeState) => officeReducer.isOverviewWindowAPISupported
@@ -100,7 +95,6 @@ export const officeSelectors = {
   selectIsSettingsPanelLoaded,
   selectIsAdvancedWorksheetTrackingSupported,
   selectIsSettings,
-  selectSettingsPanelLoaded,
   selectIsOverviewWindowAPISupported,
   selectIsConfirm,
 };
