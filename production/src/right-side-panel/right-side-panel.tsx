@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   OfficeApplicationType,
   SidePanel,
@@ -16,8 +16,6 @@ import useInitializeSidePanel from './side-panel-hooks/use-initialize-side-panel
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { sidePanelNotificationHelper } from './side-panel-services/side-panel-notification-helper';
 import { sidePanelService } from './side-panel-services/side-panel-service';
-
-import { RootState } from '../store';
 
 import { dialogController } from '../dialog/dialog-controller';
 import {
@@ -37,23 +35,7 @@ import SettingsSidePanel from './settings-side-panel/settings-side-panel';
 
 import './right-side-panel.scss';
 
-interface RightSidePanelProps {
-  isConfirm?: boolean;
-  isSettings?: boolean;
-  settingsPanelLoaded?: boolean;
-  toggleIsSettingsFlag?: (flag?: boolean) => void;
-  setPrefilteredSourceObjectName?: (objectName: string) => void;
-  setIsDataOverviewOpen?: (isDataOverviewOpen: boolean) => void;
-}
-
-export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
-  isConfirm,
-  isSettings,
-  settingsPanelLoaded,
-  toggleIsSettingsFlag,
-  setPrefilteredSourceObjectName,
-  setIsDataOverviewOpen,
-}) => {
+export const RightSidePanel: React.FC = () => {
   const dispatch = useDispatch();
 
   const operations = useSelector(selectOperations);
@@ -63,6 +45,9 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
   const isDialogOpen = useSelector(officeSelectors.selectIsDialogOpen);
   const popupData = useSelector(officeSelectors.selectPopupData);
   const loadedObjects = useSelector(selectObjects);
+  const isConfirm = useSelector(officeSelectors.selectIsConfirm);
+  const isSettings = useSelector(officeSelectors.selectIsSettings);
+  const isSettingsPanelLoaded = useSelector(officeSelectors.selectIsSettingsPanelLoaded);
 
   const [sidePanelPopup, setSidePanelPopup] = useState(null);
   const [activeSheetId, setActiveSheetId] = useState('');
@@ -75,7 +60,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
     isDialogOpen ||
     popupData ||
     isSettings ||
-    settingsPanelLoaded;
+    isSettingsPanelLoaded;
   // Use ref so this value can be used in event listener callback
   const isAnyPopupOrSettingsDisplayedRef = useRef(isAnyPopupOrSettingsDisplayed);
 
@@ -116,13 +101,13 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
 
   const showOverviewModal = (objectName: string): void => {
     dialogController.runImportedDataOverviewPopup();
-    setPrefilteredSourceObjectName(objectName);
-    setIsDataOverviewOpen(true);
+    popupStateActions.setPrefilteredSourceObjectName(objectName);
+    popupStateActions.setIsDataOverviewOpen(true);
   };
   return (
     <>
       {isSidePanelBlocked && <div className='block-side-panel-ui' />}
-      {settingsPanelLoaded ? (
+      {isSettingsPanelLoaded ? (
         <SettingsSidePanel />
       ) : (
         <SidePanel
@@ -143,7 +128,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
           popup={!isDialogOpen && sidePanelPopup}
           // @ts-expect-error
           settingsMenu={isSettings && <SettingsMenu />}
-          onSettingsClick={() => toggleIsSettingsFlag(!isSettings)}
+          onSettingsClick={() => officeActions.toggleIsSettingsFlag(!isSettings)}
           confirmationWindow={isConfirm && <Confirmation />}
           globalNotification={globalNotification}
           onSelectAll={() => {
@@ -168,24 +153,3 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
     </>
   );
 };
-
-export const mapStateToProps = (state: RootState): any => {
-  const { isConfirm, isSettings, settingsPanelLoaded } = state.officeReducer;
-
-  return {
-    isConfirm,
-    isSettings,
-    settingsPanelLoaded,
-  };
-};
-
-const mapDispatchToProps = {
-  toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
-  setPrefilteredSourceObjectName: popupStateActions.setPrefilteredSourceObjectName,
-  setIsDataOverviewOpen: popupStateActions.setIsDataOverviewOpen,
-};
-
-export const RightSidePanel = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(RightSidePanelNotConnected);
