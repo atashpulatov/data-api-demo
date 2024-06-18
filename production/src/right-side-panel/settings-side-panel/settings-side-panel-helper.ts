@@ -66,6 +66,20 @@ class SettingsSidePanelHelper {
     reduxStore.dispatch(officeActions.toggleReusePromptAnswersFlag(reusePromptAnswers) as any);
   };
 
+  /**
+   * Toggles the data auto refresh flag and updates the user preference.
+   * @param enableDataAutoRefresh - The current value of the data auto refresh flag.
+   * @returns A Promise that resolves when the user preference is updated.
+   */
+  toggleDataAutoRefresh = async (enableDataAutoRefresh: boolean): Promise<void> => {
+    await userRestService.setUserPreference(
+      UserPreferenceKey.EXCEL_DATA_AUTO_REFRESH,
+      enableDataAutoRefresh
+    );
+
+    reduxStore.dispatch(settingsActions.setEnableDataAutoRefresh(enableDataAutoRefresh));
+  };
+
   // OBJECT INFO SETTINGS
   /**
    * Safely parses a JSON string into an array of ObjectInfoSetting objects.
@@ -258,7 +272,7 @@ class SettingsSidePanelHelper {
       const item = worksheetSettings.find(i => i.key === key);
       if (item) {
         acc.push({
-          ...item
+          ...item,
         });
       }
       return acc;
@@ -325,6 +339,18 @@ class SettingsSidePanelHelper {
     reduxStore.dispatch(settingsActions.setWorksheetNamingSetting(value));
   }
 
+  /**
+   * Initialize data auto refresh value.
+   * Fetches preference value from server and sets it to the store.
+   */
+  @initializationErrorDecorator.initializationWrapper
+  async initDataAutoRefreshSetting(): Promise<void> {
+    const { value } = await userRestService.getUserPreference(
+      UserPreferenceKey.EXCEL_DATA_AUTO_REFRESH
+    );
+    reduxStore.dispatch(settingsActions.setEnableDataAutoRefresh(value === 'true'));
+  }
+
   // SETTINGS PANEL SECTIONS
   /**
    * Returns the settings section for the prompt settings.
@@ -347,6 +373,34 @@ class SettingsSidePanelHelper {
             value: reusePromptAnswers,
             description: i18n.t(
               'When this function is enabled, previously given answers to prompts will be shared automatically across dashboards and reports.'
+            ),
+          },
+        ],
+      },
+    ],
+  });
+
+  /**
+   * Returns the settings section for the data refresh settings.
+   * @param enableDataAutoRefresh  A boolean indicating whether to enabla data auto refresh.
+   * @returns The settings section for the data refresh settings.
+   */
+  getAutoRefreshSection = (enableDataAutoRefresh: boolean): SettingsSection => ({
+    key: 'auto-refresh-settings',
+    label: i18n.t('Data Refresh'),
+    initialExpand: false,
+    settingsGroups: [
+      {
+        key: 'auto-refresh-settings',
+        type: SettingPanelSection.SWITCH,
+        onSwitch: this.toggleDataAutoRefresh,
+        settings: [
+          {
+            key: 'enable-auto-refresh-settings',
+            label: i18n.t('Auto Refresh'),
+            value: enableDataAutoRefresh,
+            description: i18n.t(
+              'If enabled, the data will be automatically refreshed each time you open the Excel document.'
             ),
           },
         ],

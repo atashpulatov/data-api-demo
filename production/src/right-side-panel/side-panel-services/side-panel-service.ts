@@ -1,5 +1,9 @@
-import { PopupProps } from '@mstr/connector-components';
+import { ReactElement } from 'react';
+import { PopupProps, SidePanelBannerStatus } from '@mstr/connector-components';
+import { SidePanelBannerButtons } from '@mstr/connector-components/lib/side-panel/banner/side-panel-banner-buttons';
+import { SidePanelBannerButtonTypes } from '@mstr/connector-components/lib/side-panel/banner/side-panel-banner-types';
 
+import { notificationService } from '../../notification/notification-service';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
 import { officeShapeApiHelper } from '../../office/shapes/office-shape-api-helper';
@@ -12,12 +16,20 @@ import { sidePanelNotificationHelper } from './side-panel-notification-helper';
 import officeStoreObject from '../../office/store/office-store-object';
 import { reduxStore } from '../../store';
 
+import {
+  SidePanelBanner,
+  TitleOperationInProgressMap,
+} from '../../redux-reducer/notification-reducer/notification-reducer-types';
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
 
 import { dialogController } from '../../dialog/dialog-controller';
 import { errorService } from '../../error/error-handler';
+import i18n from '../../i18n';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
+import { OperationTypes } from '../../operation/operation-type-names';
 import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { setSidePanelBannerNotification } from '../../redux-reducer/notification-reducer/notification-action-creators';
 import { updateObject } from '../../redux-reducer/object-reducer/object-actions';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 import {
@@ -73,6 +85,88 @@ export class SidePanelService {
   }
 
   /**
+   * Generates the side panel banner buttons.
+   * Consisted of only one button for stopping the refresh operation.
+   *
+   * @param title - string to show as message in banner
+   * @param onClickHandler - handler to be called when button is clicked
+   * @param tooltip - string to show as tooltip for the button
+   * @returns
+   */
+  getSidePanelBannerButtons(
+    title: string,
+    onClickHandler: () => void,
+    tooltip?: string
+  ): ReactElement {
+    return SidePanelBannerButtons({
+      buttons: [
+        { label: title, onClick: onClickHandler, type: SidePanelBannerButtonTypes.STOP, tooltip },
+      ],
+    });
+  }
+
+  /**
+   * Shows the refresh in progress notification in the side panel.
+   * Generates the handler objects and dispatches notification to the side panel.
+   */
+  showRefreshInProgressBanner(operations: OperationData[]): void {
+    // Close banner notification handler
+    const onDismissHandler = (): void => {
+      reduxStore.dispatch(setSidePanelBannerNotification({ type: SidePanelBannerStatus.NONE }));
+    };
+
+    // Stop refresh all operation handler
+    const onClickHandler = (): void => {
+      reduxStore.dispatch(
+        setSidePanelBannerNotification({
+          title: i18n.t('Stopping...'),
+          type: SidePanelBannerStatus.STOPPED,
+        })
+      );
+
+      // Get current notifications and create a map for easy access
+      const { notifications } = reduxStore.getState().notificationReducer;
+      const notificationMap = notifications.reduce((map, notification) => {
+        map.set(notification.objectWorkingId, notification);
+        return map;
+      }, new Map());
+
+      if (notificationMap) {
+        // Filter out the refresh operations and cancel the corresponding notification
+        // only if the notification associated with the operation is in pending state.
+        operations
+          ?.filter(operation => operation.operationType === OperationTypes.REFRESH_OPERATION)
+          .forEach((operation: OperationData) => {
+            const { operationId, objectWorkingId } = operation;
+            const operationNotification = notificationMap.get(objectWorkingId);
+            // Cancel the operation only if its notification is in pending state
+            if (
+              operationNotification?.objectWorkingId === objectWorkingId &&
+              operationNotification.title === TitleOperationInProgressMap.PENDING_OPERATION
+            ) {
+              notificationService.cancelOperationFromNotification(operationId);
+              notificationService.dismissNotification(objectWorkingId);
+            }
+          });
+      }
+
+      reduxStore.dispatch(setSidePanelBannerNotification({ type: SidePanelBannerStatus.NONE }));
+    };
+
+    const buttons = this.getSidePanelBannerButtons('', onClickHandler, i18n.t('Stop refresh'));
+
+    const sidePanelBannerObj = {
+      title: i18n.t('Refresh in progress...'),
+      type: SidePanelBannerStatus.IN_PROGRESS,
+      onDismissBanner: onDismissHandler,
+      children: buttons,
+    } as SidePanelBanner;
+
+    // Dispatch the notification to the side panel to show the SidePanelNotification component.
+    sidePanelBannerObj && reduxStore.dispatch(setSidePanelBannerNotification(sidePanelBannerObj));
+  }
+
+  /**
    * Handles the refresh object and refresh selected.
    * Creates refresh operation per each passed objectWorkingId
    *
@@ -85,6 +179,9 @@ export class SidePanelService {
         officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
       reduxStore.dispatch(refreshRequested(objectWorkingId, sourceObject?.importType));
     });
+
+    const { operations } = reduxStore.getState().operationReducer;
+    this.showRefreshInProgressBanner(operations);
   }
 
   /**

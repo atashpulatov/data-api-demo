@@ -70,7 +70,7 @@ describe('SidePanelService', () => {
     await sidePanelService.refresh(...objectWorkingIds);
     // then
 
-    expect(mockedDispatch).toHaveBeenCalledTimes(objectWorkingIds.length);
+    expect(mockedDispatch).toHaveBeenCalledTimes(6);
   });
 
   it('should remove objects', async () => {

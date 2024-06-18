@@ -1,4 +1,9 @@
-import type { GlobalNotificationTypes, ObjectNotificationTypes } from '@mstr/connector-components';
+import type {
+  GlobalNotificationTypes,
+  ObjectNotificationTypes,
+  SidePanelBannerStatus,
+} from '@mstr/connector-components';
+import { SidePanelBannerProps } from '@mstr/connector-components/lib/side-panel/banner/side-panel-banner-types';
 import type { Action } from 'redux';
 
 import type { OperationData } from '../operation-reducer/operation-reducer-types';
@@ -43,6 +48,11 @@ export interface GlobalNotification {
 export interface NotificationState {
   notifications: Notification[];
   globalNotification: GlobalNotification;
+  sidePanelBannerNotification: SidePanelBanner;
+}
+
+export interface SidePanelBanner extends SidePanelBannerProps {
+  type: SidePanelBannerStatus;
 }
 
 export enum NotificationActionTypes {
@@ -64,6 +74,7 @@ export enum NotificationActionTypes {
   RESTORE_ALL_NOTIFICATIONS = 'RESTORE_ALL_NOTIFICATIONS',
   MARK_STEP_COMPLETED = 'MARK_STEP_COMPLETED',
   TOGGLE_SECURED_FLAG = 'TOGGLE_SECURED_FLAG',
+  SET_SIDE_PANEL_BANNER = 'SET_SIDE_PANEL_BANNER',
 }
 
 export enum TitleOperationInProgressMap {
@@ -199,6 +210,12 @@ export interface ToggleSecuredFlagAction extends Action {
   isSecured: boolean;
 }
 
+export interface SetSidePanelBannerAction extends Action {
+  type: NotificationActionTypes.SET_SIDE_PANEL_BANNER;
+  payload: SidePanelBanner;
+  [key: string]: any;
+}
+
 export type NotificationActions =
   | ImportOperationAction
   | RefreshOperationAction
@@ -220,4 +237,5 @@ export type NotificationActions =
   | ClearNotificationsAction
   | ClearGlobalNotificationAction
   | RestoreAllNotificationsAction
-  | CreateGlobalNotificationAction;
+  | CreateGlobalNotificationAction
+  | SetSidePanelBannerAction;

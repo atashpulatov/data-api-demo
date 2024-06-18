@@ -1,8 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { OfficeApplicationType, SidePanel } from '@mstr/connector-components';
+import {
+  OfficeApplicationType,
+  SidePanel,
+  SidePanelBannerStatus,
+} from '@mstr/connector-components';
 
 import { useGetFilteredObjectListForSidePanelDetails } from '../redux-reducer/settings-reducer/settings-hooks';
+import useAutoRefreshObjects from './side-panel-hooks/use-auto-refresh-objects';
 import { useDialogPanelCommunication } from './side-panel-hooks/use-dialog-panel-communication';
 import { useGetSidePanelPopup } from './side-panel-hooks/use-get-side-panel-popup';
 import { useGetUpdatedDuplicatePopup } from './side-panel-hooks/use-get-updated-duplicate-popup';
@@ -13,7 +18,10 @@ import { sidePanelNotificationHelper } from './side-panel-services/side-panel-no
 import { sidePanelService } from './side-panel-services/side-panel-service';
 
 import { dialogController } from '../dialog/dialog-controller';
-import { dismissAllObjectsNotifications } from '../redux-reducer/notification-reducer/notification-action-creators';
+import {
+  dismissAllObjectsNotifications,
+  setSidePanelBannerNotification,
+} from '../redux-reducer/notification-reducer/notification-action-creators';
 import { notificationReducerSelectors } from '../redux-reducer/notification-reducer/notification-reducer-selectors';
 import { selectObjects } from '../redux-reducer/object-reducer/object-reducer-selectors';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
@@ -60,8 +68,17 @@ export const RightSidePanel: React.FC = () => {
   useDialogPanelCommunication();
   useGetSidePanelPopup({ setSidePanelPopup, sidePanelPopup });
 
+  // Trigger auto-refresh when data auto-refresh user setting is enabled.
+  // and objects (working items) are fully restored.
+  useAutoRefreshObjects();
+
   const duplicatePopupParams = useGetUpdatedDuplicatePopup({ sidePanelPopup, setSidePanelPopup });
   const filteredObjects = useGetFilteredObjectListForSidePanelDetails(loadedObjectsWrapped);
+  // Get side panel notification used to display the notification in the side panel, either
+  // to show banner to allow user to stop refresh all operations (Multiple objects or auto-refresh).
+  const bannerNotification = useSelector(
+    notificationReducerSelectors.selectSidePanelBannerNotification
+  );
 
   // Update ref when value changes
   useEffect(() => {
@@ -76,7 +93,11 @@ export const RightSidePanel: React.FC = () => {
         operations
       )
     );
-  }, [loadedObjects, notifications, operations]);
+    // If operations are empty, remove the side panel notification banner.
+    if (operations?.length <= 1 && bannerNotification?.type !== SidePanelBannerStatus.NONE) {
+      dispatch(setSidePanelBannerNotification({ type: SidePanelBannerStatus.NONE }));
+    }
+  }, [loadedObjects, notifications, operations, bannerNotification, dispatch]);
 
   const showOverviewModal = (objectName: string): void => {
     dialogController.runImportedDataOverviewPopup();
@@ -124,6 +145,9 @@ export const RightSidePanel: React.FC = () => {
           onShowInOverviewClick={showOverviewModal}
           isPopupRendered={isDialogOpen}
           applicationType={OfficeApplicationType.EXCEL}
+          banner={
+            bannerNotification.type === SidePanelBannerStatus.NONE ? undefined : bannerNotification
+          }
         />
       )}
     </>

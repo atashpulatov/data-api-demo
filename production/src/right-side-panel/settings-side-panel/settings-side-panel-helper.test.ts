@@ -193,4 +193,21 @@ describe('SettingsSidePanelHelper', () => {
       type: SettingsActionTypes.SET_OBJECT_AND_WORKSHEET_NAMING_SETTING,
     });
   });
+
+  it('should initialize data auto refresh', async () => {
+    // given
+    jest.resetAllMocks();
+    const getUserPreferenceMock = jest
+      .spyOn(userRestService, 'getUserPreference')
+      .mockResolvedValue({ value: 'true' });
+
+    await settingsSidePanelHelper.initDataAutoRefreshSetting();
+
+    // then
+    expect(getUserPreferenceMock).toHaveBeenCalledWith(UserPreferenceKey.EXCEL_DATA_AUTO_REFRESH);
+    expect(reduxStore.dispatch).toHaveBeenCalledWith({
+      payload: true,
+      type: SettingsActionTypes.SET_ENABLE_DATA_AUTO_REFRESH,
+    });
+  });
 });

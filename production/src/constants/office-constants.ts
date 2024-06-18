@@ -11,4 +11,5 @@ export enum OfficeSettingsEnum {
   loadedReportProperties = 'reportProperties',
   isSecured = 'isSecured',
   isClearDataFailed = 'isClearDataFailed',
+  shouldTriggerDataAutoRefresh = 'shouldTriggerDataAutoRefresh',
 }
