@@ -1,5 +1,4 @@
 import { sortObjectWorkingIds } from '@mstr/connector-components';
-import { LoadedObject } from '@mstr/connector-components/lib/loaded-objects/object-tile/object-tile-types';
 
 import { sidePanelService } from '../side-panel-service';
 
@@ -21,7 +20,7 @@ class AutoRefreshHelper {
       const shouldTriggerDataAutoRefresh = this.getShouldTriggerDataAutoRefresh();
 
       if (shouldTriggerDataAutoRefresh) {
-        const loadedObjects = Object.values(objects) as unknown as LoadedObject[];
+        const loadedObjects = Object.values(objects) as any[];
 
         const objectWorkingIds = loadedObjects.reduce((ids, object) => {
           ids.push(object.objectWorkingId);
@@ -32,7 +31,9 @@ class AutoRefreshHelper {
         if (objectWorkingIds.length > 0) {
           // Need to maintain a top to bottom order of object operations,
           // thus, need to apply some sorting here
-          objectWorkingIds.sort((a, b) => sortObjectWorkingIds(a, b, loadedObjects));
+          objectWorkingIds.sort((a: number, b: number) =>
+            sortObjectWorkingIds(a, b, loadedObjects)
+          );
 
           sidePanelService.refresh(...objectWorkingIds);
         }
