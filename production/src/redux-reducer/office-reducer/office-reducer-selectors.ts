@@ -81,6 +81,11 @@ const selectIsOverviewWindowAPISupported = createSelector(
   (officeReducer: OfficeState) => officeReducer.isOverviewWindowAPISupported
 );
 
+const selectIsConfirm = createSelector(
+  [getOfficeState],
+  (officeReducer: OfficeState) => officeReducer.isConfirm
+);
+
 export const officeSelectors = {
   selectIsPivotTableSupported,
   selectIsShapeAPISupported,
@@ -97,4 +102,5 @@ export const officeSelectors = {
   selectIsSettings,
   selectSettingsPanelLoaded,
   selectIsOverviewWindowAPISupported,
+  selectIsConfirm,
 };
