@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { PopupProps } from '@mstr/connector-components';
+import { PopupProps, SidePanelBannerStatus } from '@mstr/connector-components';
 import { SidePanelBannerButtons } from '@mstr/connector-components/lib/side-panel/banner/side-panel-banner-buttons';
 import { SidePanelBannerButtonTypes } from '@mstr/connector-components/lib/side-panel/banner/side-panel-banner-types';
 
@@ -18,7 +18,7 @@ import { reduxStore } from '../../store';
 
 import {
   SidePanelBanner,
-  SidePanelBannerType,
+  TitleOperationInProgressMap,
 } from '../../redux-reducer/notification-reducer/notification-reducer-types';
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
@@ -112,7 +112,7 @@ export class SidePanelService {
   showRefreshInProgressBanner(operations: OperationData[]): void {
     // Close banner notification handler
     const onDismissHandler = (): void => {
-      reduxStore.dispatch(setSidePanelBannerNotification({ type: SidePanelBannerType.NONE }));
+      reduxStore.dispatch(setSidePanelBannerNotification({ type: SidePanelBannerStatus.NONE }));
     };
 
     // Stop refresh all operation handler
@@ -120,29 +120,44 @@ export class SidePanelService {
       reduxStore.dispatch(
         setSidePanelBannerNotification({
           title: i18n.t('Stopping...'),
-          type: SidePanelBannerType.STOPPED,
+          type: SidePanelBannerStatus.STOPPED,
         })
       );
 
-      operations?.forEach((operation: OperationData) => {
-        if (
-          operation?.operationType === OperationTypes.REFRESH_OPERATION &&
-          operation.stepsQueue?.length >= 15
-        ) {
-          const { operationId, objectWorkingId } = operation;
-          notificationService.cancelOperationFromNotification(operationId);
-          notificationService.dismissNotification(objectWorkingId);
-        }
-      });
+      // Get current notifications and create a map for easy access
+      const { notifications } = reduxStore.getState().notificationReducer;
+      const notificationMap = notifications.reduce((map, notification) => {
+        map.set(notification.objectWorkingId, notification);
+        return map;
+      }, new Map());
 
-      reduxStore.dispatch(setSidePanelBannerNotification({ type: SidePanelBannerType.NONE }));
+      if (notificationMap) {
+        // Filter out the refresh operations and cancel the corresponding notification
+        // only if the notification associated with the operation is in pending state.
+        operations
+          ?.filter(operation => operation.operationType === OperationTypes.REFRESH_OPERATION)
+          .forEach((operation: OperationData) => {
+            const { operationId, objectWorkingId } = operation;
+            const operationNotification = notificationMap.get(objectWorkingId);
+            // Cancel the operation only if its notification is in pending state
+            if (
+              operationNotification?.objectWorkingId === objectWorkingId &&
+              operationNotification.title === TitleOperationInProgressMap.PENDING_OPERATION
+            ) {
+              notificationService.cancelOperationFromNotification(operationId);
+              notificationService.dismissNotification(objectWorkingId);
+            }
+          });
+      }
+
+      reduxStore.dispatch(setSidePanelBannerNotification({ type: SidePanelBannerStatus.NONE }));
     };
 
     const buttons = this.getSidePanelBannerButtons('', onClickHandler, i18n.t('Stop refresh'));
 
     const sidePanelBannerObj = {
       title: i18n.t('Refresh in progress...'),
-      type: SidePanelBannerType.IN_PROGRESS,
+      type: SidePanelBannerStatus.IN_PROGRESS,
       onDismissBanner: onDismissHandler,
       children: buttons,
     } as SidePanelBanner;

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { ObjectNotificationTypes } from '@mstr/connector-components';
+import { ObjectNotificationTypes, SidePanelBannerStatus } from '@mstr/connector-components';
 
 import { notificationServiceHelper } from '../../notification/notification-service-helper';
 
@@ -13,7 +13,6 @@ import {
   OperationTypesWithNotification,
   OperationTypesWithProgressNotification,
   SidePanelBanner,
-  SidePanelBannerType,
 } from './notification-reducer-types';
 
 import i18n from '../../i18n';
@@ -26,7 +25,7 @@ import { titleOperationCompletedMap, titleOperationInProgressMap } from './notif
 const initialState: NotificationState = {
   notifications: [],
   globalNotification: { type: '' },
-  sidePanelBannerNotification: { type: SidePanelBannerType.NONE },
+  sidePanelBannerNotification: { type: SidePanelBannerStatus.NONE },
 };
 
 export const notificationReducer = (
@@ -286,7 +285,7 @@ const createGlobalNotification = (
 const removeGlobalNotification = (state: NotificationState): NotificationState => ({
   notifications: [...state.notifications],
   globalNotification: { type: '' },
-  sidePanelBannerNotification: { type: SidePanelBannerType.NONE },
+  sidePanelBannerNotification: { type: SidePanelBannerStatus.NONE },
 });
 
 const deleteAllNotifications = (
@@ -297,7 +296,7 @@ const deleteAllNotifications = (
     ? {
         notifications: [],
         globalNotification: state.globalNotification,
-        sidePanelBannerNotification: { type: SidePanelBannerType.NONE },
+        sidePanelBannerNotification: { type: SidePanelBannerStatus.NONE },
       }
     : state;
 

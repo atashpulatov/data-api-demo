@@ -1,4 +1,8 @@
-import type { GlobalNotificationTypes, ObjectNotificationTypes } from '@mstr/connector-components';
+import type {
+  GlobalNotificationTypes,
+  ObjectNotificationTypes,
+  SidePanelBannerStatus,
+} from '@mstr/connector-components';
 import { SidePanelBannerProps } from '@mstr/connector-components/lib/side-panel/banner/side-panel-banner-types';
 import type { Action } from 'redux';
 
@@ -48,13 +52,7 @@ export interface NotificationState {
 }
 
 export interface SidePanelBanner extends SidePanelBannerProps {
-  type: SidePanelBannerType;
-}
-
-export enum SidePanelBannerType {
-  IN_PROGRESS = 'IN_PROGRESS',
-  STOPPED = 'STOPPED',
-  NONE = 'NONE',
+  type: SidePanelBannerStatus;
 }
 
 export enum NotificationActionTypes {
