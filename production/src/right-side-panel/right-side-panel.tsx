@@ -13,7 +13,7 @@ import officeReducerHelper from '../office/store/office-reducer-helper';
 import { sidePanelNotificationHelper } from './side-panel-services/side-panel-notification-helper';
 import { sidePanelService } from './side-panel-services/side-panel-service';
 
-import { reduxStore, RootState } from '../store';
+import { RootState } from '../store';
 
 import { SidePanelBannerType } from '../redux-reducer/notification-reducer/notification-reducer-types';
 
@@ -108,9 +108,9 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
     );
     // If operations are empty, remove the side panel notification banner.
     if (operations?.length <= 1 && bannerNotification?.type !== SidePanelBannerType.NONE) {
-      reduxStore.dispatch(setSidePanelBannerNotification({ type: SidePanelBannerType.NONE }));
+      dispatch(setSidePanelBannerNotification({ type: SidePanelBannerType.NONE }));
     }
-  }, [loadedObjects, notifications, operations, bannerNotification]);
+  }, [loadedObjects, notifications, operations, bannerNotification, dispatch]);
 
   const showOverviewModal = (objectName: string): void => {
     dialogController.runImportedDataOverviewPopup();
@@ -158,7 +158,7 @@ export const RightSidePanelNotConnected: React.FC<RightSidePanelProps> = ({
           onShowInOverviewClick={showOverviewModal}
           isPopupRendered={isDialogOpen}
           applicationType={OfficeApplicationType.EXCEL}
-          banner={bannerNotification?.type !== SidePanelBannerType.NONE  && bannerNotification}
+          banner={bannerNotification?.type !== SidePanelBannerType.NONE && bannerNotification}
         />
       )}
     </>

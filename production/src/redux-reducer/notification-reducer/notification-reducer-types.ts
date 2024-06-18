@@ -215,6 +215,7 @@ export interface ToggleSecuredFlagAction extends Action {
 export interface SetSidePanelBannerAction extends Action {
   type: NotificationActionTypes.SET_SIDE_PANEL_BANNER;
   payload: SidePanelBanner;
+  [key: string]: any;
 }
 
 export type NotificationActions =
