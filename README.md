@@ -74,7 +74,7 @@ Add-in for Microsoft Office applications and MicroStrategy.
         Contact: Fred Bloggs (fbloggs)
 -->
 
-Team: PA-MSFT-365
+Team:  AC-MSFT-365
 
 Contact: Piotr Nastaj (pnastaj)  
 
