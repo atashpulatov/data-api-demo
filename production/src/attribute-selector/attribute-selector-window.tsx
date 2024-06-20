@@ -20,7 +20,7 @@ import { AttributeSelector } from './attribute-selector';
 import { selectorProperties } from './selector-properties';
 import { DisplayAttrFormNames } from '../mstr-object/constants';
 
-import '../home/home.css';
+import '../home/home.scss';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
 

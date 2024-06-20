@@ -13,7 +13,7 @@ import { sessionActions } from '../redux-reducer/session-reducer/session-actions
 import defaultLoginProps from './default-login-props';
 
 import './basic-login.scss';
-import './auth-component.css';
+import './auth-component.scss';
 
 const Input = (props: InputProps): React.ReactElement => {
   const { label } = props;

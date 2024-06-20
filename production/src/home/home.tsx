@@ -26,7 +26,7 @@ import { RightSidePanel } from '../right-side-panel/right-side-panel';
 import { HomeDialog } from './home-dialog';
 import PrivilegeErrorSidePanel from './info-panels/privilege-error-side-panel';
 
-import './home.css';
+import './home.scss';
 
 interface HomeProps {
   loading?: boolean;

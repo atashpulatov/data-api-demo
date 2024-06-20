@@ -27,7 +27,7 @@ import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 import { ErrorMessages } from '../../error/constants';
 
-import './dossier.css';
+import './dossier.scss';
 
 const { microstrategy, Office } = window;
 

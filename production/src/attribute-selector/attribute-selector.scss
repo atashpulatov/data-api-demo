@@ -6,3 +6,12 @@
   .item-title {
   width: auto;
 }
+
+.attribute-selector-window {
+  user-select: none;
+  -webkit-user-select: none;
+
+  .dialog-footer {
+    min-width: 650px;
+  }
+}

@@ -26,7 +26,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     SUBTOTALS_TOGGLE_CONTAINER = '.subtotal-container'
     SUBTOTALS_TOGGLE = SUBTOTALS_TOGGLE_CONTAINER + ' button.ant-switch'
 
-    FOOTER_BUTTON_CSS = '.popup-buttons.popup-footer button'
+    FOOTER_BUTTON_CSS = '.dialog-buttons.dialog-footer button'
     BACK_BUTTON_ID = 'back'
 
     def __init__(self):

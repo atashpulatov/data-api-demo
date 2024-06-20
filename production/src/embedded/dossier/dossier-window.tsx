@@ -28,7 +28,7 @@ import { EmbeddedDossier } from './embedded-dossier';
 import { errorCodes } from '../../error/constants';
 import { ObjectImportType } from '../../mstr-object/constants';
 
-import './dossier.css';
+import './dossier.scss';
 
 interface DossierWindowProps {
   chosenObjectId: string;

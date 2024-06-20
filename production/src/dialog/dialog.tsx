@@ -26,7 +26,7 @@ export const Dialog: React.FC = () => {
   }, []);
 
   return (
-    <SessionExtendingWrapper id='popup-wrapper' onSessionExpire={closePopup}>
+    <SessionExtendingWrapper id='dialog-wrapper' onSessionExpire={closePopup}>
       <InternetConnectionError />
       <DialogViewSelector />
     </SessionExtendingWrapper>

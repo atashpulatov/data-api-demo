@@ -59,7 +59,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
     ADD_TO_LIBRARY_BUTTON_TEXT = 'Add to Library'
     ADD_TO_LIBRARY_BUTTON_SEARCH_TIMEOUT = 5
 
-    CLOSE_IMPORT_DATA_BUTTON = '.popup-buttons > button'
+    CLOSE_IMPORT_DATA_BUTTON = '.dialog-buttons > button'
     FILTERS_BUTTON = '.filter-button'
     FILTERS_SELECTED_NUMBER = '.filters-selected'
 

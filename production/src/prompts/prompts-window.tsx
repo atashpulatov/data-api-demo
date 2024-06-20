@@ -38,8 +38,8 @@ import { PromptsContainer } from './prompts-container';
 import { ErrorMessages } from '../error/constants';
 import { ObjectImportType } from '../mstr-object/constants';
 
-import '../home/home.css';
-import '../index.css';
+import '../home/home.scss';
+import '../index.scss';
 import './prompts-window.scss';
 
 interface PromptsWindowProps {

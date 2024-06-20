@@ -9,7 +9,7 @@ import { EmbeddedLibraryTypes } from './embedded-library-types';
 
 import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 
-import './library.css';
+import './library.scss';
 
 const { microstrategy, Office } = window;
 

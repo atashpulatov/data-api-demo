@@ -26,7 +26,7 @@ import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup
 import { EmbeddedLibrary } from './embedded-library';
 import { DisplayAttrFormNames, ObjectImportType } from '../../mstr-object/constants';
 
-import './library.css';
+import './library.scss';
 
 const {
   isPrompted,

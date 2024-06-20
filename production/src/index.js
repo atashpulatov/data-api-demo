@@ -14,7 +14,7 @@ import i18next from './i18n';
 import { operationBus } from './operation/operation-bus';
 import subscribeSteps from './operation/operation-subscribe-steps';
 
-import './index.css';
+import './index.scss';
 
 const LazySidebar = lazy(() => import('./entry-point/sidebar-entry-point'));
 const LazyDialog = lazy(() => import('./entry-point/dialog-entry-point'));
