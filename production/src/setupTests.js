@@ -2,8 +2,14 @@
 import React from 'react';
 import 'regenerator-runtime';
 
+import overviewHelper from './dialog/overview/overview-helper';
+import { sidePanelHelper } from './right-side-panel/side-panel-services/side-panel-helper';
+import { sidePanelNotificationHelper } from './right-side-panel/side-panel-services/side-panel-notification-helper';
+import { sidePanelService } from './right-side-panel/side-panel-services/side-panel-service';
+
 import '@testing-library/jest-dom';
-import { diContainer } from './dependency-container';
+import { operationBus } from './operation/operation-bus';
+import subscribeSteps from './operation/operation-subscribe-steps';
 
 import 'jest-localstorage-mock';
 
@@ -43,4 +49,6 @@ console.group = jest.fn();
 console.groupEnd = jest.fn();
 console.groupCollapsed = jest.fn();
 
-diContainer.initializeAll();
+operationBus.init();
+subscribeSteps.init();
+overviewHelper.init(sidePanelService, sidePanelHelper, sidePanelNotificationHelper);

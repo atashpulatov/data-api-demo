@@ -1,9 +1,10 @@
 import { browserHelper } from '../helpers/browser-helper';
+import sidePanelOperationDecorator from '../right-side-panel/side-panel-services/side-panel-operation-decorator';
+import { errorService } from './error-service';
 
 import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { errorService } from './error-handler';
 import { OutsideOfRangeError } from './outside-of-range-error';
 import { ErrorType } from './constants';
 import * as Constants from './constants';
@@ -518,11 +519,10 @@ describe('ErrorService', () => {
         type: ErrorType.UNAUTHORIZED_ERR,
       };
 
-      const closePopupMock = jest.spyOn(errorService, 'closePopupIfOpen').mockImplementation();
+      const closePopupMock = jest.spyOn(errorService, 'closeDialogIfOpen').mockImplementation();
       jest.spyOn(Constants, 'errorMessageFactory').mockReturnValue(() => 'error message');
 
       // When
-      // @ts-expect-error
       errorService.handleError(error, {
         dialogType: DialogType.importedDataOverview,
       });
@@ -546,7 +546,7 @@ describe('ErrorService', () => {
       jest.spyOn(browserHelper, 'isMacAndSafariBased').mockReturnValueOnce(isMacAndSafariBased);
 
       // when
-      errorService.handleSidePanelActionError(error);
+      sidePanelOperationDecorator.handleSidePanelActionError(error);
       // then
 
       expect(mockHandleError).toHaveBeenCalledTimes(handleErrorCalledTimes);

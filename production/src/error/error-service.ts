@@ -1,8 +1,7 @@
 import { PopupTypes } from '@mstr/connector-components';
 
-import { authenticationHelper } from '../authentication/authentication-helper';
 import { authenticationService } from '../authentication/authentication-service';
-import { browserHelper } from '../helpers/browser-helper';
+import { dialogControllerHelper } from '../dialog/dialog-controller-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { pageByHelper } from '../page-by/page-by-helper';
 
@@ -15,7 +14,6 @@ import {
 } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 
-import { dialogController } from '../dialog/dialog-controller';
 import i18n from '../i18n';
 import { getNotificationButtons } from '../notification/notification-buttons';
 import { OperationTypes } from '../operation/operation-type-names';
@@ -41,59 +39,60 @@ import {
   stringMessageToErrorType,
 } from './constants';
 
-const CONNECTION_CHECK_TIMEOUT = 3000;
 const COLUMN_EXCEL_API_LIMIT = 5000;
 const TIMEOUT = 3000;
 
+interface Options {
+  isLogout?: boolean;
+  dialogType?: DialogType | null;
+  dialog?: Office.Dialog | null;
+  objectWorkingId?: number | null;
+  callback?: (() => Promise<void>) | null;
+  operationData?: OperationData | null;
+}
+
 class ErrorService {
   /**
-   * Handles error thrown during invoking side panel actions like refresh, edit etc.
-   * For Webkit based clients (Safari, Excel for Mac)
-   * it checks for network connection with custom implementation
-   * This logic allows us to provide user with connection lost notification
+   * Main function to handle errors
    *
-   * @param error Plain error object thrown by method calls.
-   */
-  handleSidePanelActionError = (error: any): void => {
-    const castedError = String(error);
-    const { CONNECTION_BROKEN } = IncomingErrorStrings;
-    if (castedError.includes(CONNECTION_BROKEN)) {
-      if (browserHelper.isMacAndSafariBased()) {
-        const connectionCheckerLoop = (): void => {
-          const checkInterval = setInterval(() => {
-            authenticationHelper.doesConnectionExist(checkInterval);
-          }, CONNECTION_CHECK_TIMEOUT);
-        };
-
-        connectionCheckerLoop();
-      }
-      return;
-    }
-    this.handleError(error);
-  };
-
-  /**
-   * Handles error that is related to specific object on side panel
-   *
-   * @param objectWorkingId Unique Id of the object allowing to reference specific object
    * @param error Error object that was thrown
-   * @param callback Function to be called after clikc on warning notification
-   * @param operationData Data about the operation that was performed
+   * @param options Object with additional options
    */
-  handleObjectBasedError = async (
-    objectWorkingId: number,
-    error: any,
-    callback: () => Promise<void>,
-    operationData: OperationData
-  ): Promise<void> => {
+  handleError = async (error: any, options: Options = {}): Promise<void> => {
+    const { isLogout, dialogType, dialog, objectWorkingId, callback, operationData } = options;
     const errorType = this.getErrorType(error, operationData);
-    if (error.Code === 5012) {
-      this.handleError(error);
-    }
     const errorMessage = errorMessageFactory(errorType)({ error });
     const details = this.getErrorDetails(error, errorMessage);
 
-    // todo: convert this to a switch case and move the implementations inside to separate functions
+    const shouldCloseDialog =
+      dialogType === DialogType.importedDataOverview &&
+      [ErrorType.UNAUTHORIZED_ERR, ErrorType.CONNECTION_BROKEN_ERR].includes(errorType);
+
+    if (objectWorkingId) {
+      this.handleErrorBasedOnType(
+        errorType,
+        objectWorkingId,
+        errorMessage,
+        details,
+        callback,
+        dialog
+      );
+    } else {
+      this.displayErrorNotification(error, errorType, errorMessage);
+    }
+
+    this.closeDialogIfOpen(dialog, shouldCloseDialog);
+    this.checkForLogout(errorType, isLogout);
+  };
+
+  handleErrorBasedOnType(
+    errorType: ErrorType,
+    objectWorkingId: number,
+    errorMessage: any,
+    details: string,
+    callback: () => Promise<void>,
+    dialog: Office.Dialog
+  ): void {
     if (errorType === ErrorType.OVERLAPPING_TABLES_ERR) {
       const popupData = {
         type: PopupTypes.RANGE_TAKEN,
@@ -120,7 +119,7 @@ class ErrorService {
       }
 
       // Mainly for Reprompt All workflow but covers others, close dialog if somehow remained open
-      await this.closePopupIfOpen(!isDataOverviewOpen);
+      this.closeDialogIfOpen(dialog, !isDataOverviewOpen);
       // Show warning notification
       reduxStore.dispatch(
         // @ts-expect-error
@@ -131,7 +130,7 @@ class ErrorService {
         })
       );
     }
-  };
+  }
 
   /**
    * Handles page by refresh error
@@ -236,38 +235,6 @@ class ErrorService {
         reduxStore.dispatch(deleteObjectNotification(sibling.objectWorkingId));
       }
     }
-  };
-
-  /**
-   * Maion function to handle errors
-   *
-   * @param error Error object that was thrown
-   * @param options Object with additional options
-   */
-  // TODO combine with handleObjectBasedError
-  handleError = async (
-    error: any,
-    options = {
-      chosenObjectName: 'Report',
-      isLogout: false,
-      dialogType: null as any,
-    }
-  ): Promise<void> => {
-    const { isLogout, dialogType, ...parameters } = options;
-    const errorType = this.getErrorType(error);
-    const errorMessage = errorMessageFactory(errorType)({
-      error,
-      ...parameters,
-    });
-
-    const shouldClosePopup =
-      dialogType === DialogType.importedDataOverview &&
-      [ErrorType.UNAUTHORIZED_ERR, ErrorType.CONNECTION_BROKEN_ERR].includes(errorType);
-
-    await this.closePopupIfOpen(shouldClosePopup);
-
-    this.displayErrorNotification(error, errorType, errorMessage);
-    this.checkForLogout(errorType, isLogout);
   };
 
   /**
@@ -482,9 +449,9 @@ class ErrorService {
    * @param options Object with additional options
    * @returns Error message
    */
-  getErrorMessage = (error: any, options = { chosenObjectName: 'Report' }): ErrorMessages => {
+  getErrorMessage = (error: any): ErrorMessages => {
     const errorType = this.getErrorType(error);
-    return errorMessageFactory(errorType)({ error, ...options });
+    return errorMessageFactory(errorType)({ error });
   };
 
   /**
@@ -528,16 +495,15 @@ class ErrorService {
    * Also clearing Reprompt task queue if dialog was open for Reprompt workflow.
    * * @param shouldClose flag indicated whether to close the dialog or not
    */
-  closePopupIfOpen = async (shouldClose: boolean): Promise<void> => {
+  closeDialogIfOpen = (dialog: Office.Dialog, shouldClose: boolean): void => {
     const storeState = reduxStore.getState();
-
     const { isDialogOpen } = storeState.officeReducer;
 
     if (isDialogOpen && shouldClose) {
       const isDialogOpenForReprompt = storeState.repromptsQueueReducer?.total > 0;
 
-      await dialogController.closeDialog(dialogController.dialog);
-      dialogController.resetDialogStates();
+      dialog && dialogControllerHelper.closeDialog(dialog);
+      dialogControllerHelper.resetDialogStates();
       // clear Reprompt task queue if in Reprompt All workflow
       isDialogOpenForReprompt && reduxStore.dispatch(clearRepromptTask());
     }
@@ -568,7 +534,7 @@ class ErrorService {
       ) {
         // @ts-expect-error
         reduxStore.dispatch(popupStateActions.setPopupType(DialogType.importedDataOverview));
-        dialogController.runImportedDataOverviewPopup();
+        dialogControllerHelper.clearPopupStateIfNeeded();
       }
     }
   };

@@ -1,3 +1,4 @@
+import { errorService } from '../../error/error-service';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { visualizationInfoService } from '../../mstr-object/visualization-info-service';
 
@@ -6,7 +7,6 @@ import { reduxStore } from '../../store';
 import { ObjectData } from '../../types/object-types';
 
 import { dialogController } from '../../dialog/dialog-controller';
-import { errorService } from '../../error/error-handler';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { popupActions } from './popup-actions';
 

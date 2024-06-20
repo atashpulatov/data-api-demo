@@ -3,6 +3,7 @@ import { PopupProps, SidePanelBannerStatus } from '@mstr/connector-components';
 import { SidePanelBannerButtons } from '@mstr/connector-components/lib/side-panel/banner/side-panel-banner-buttons';
 import { SidePanelBannerButtonTypes } from '@mstr/connector-components/lib/side-panel/banner/side-panel-banner-types';
 
+import { errorService } from '../../error/error-service';
 import { notificationService } from '../../notification/notification-service';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
@@ -24,7 +25,6 @@ import { OperationData } from '../../redux-reducer/operation-reducer/operation-r
 import { ObjectData } from '../../types/object-types';
 
 import { dialogController } from '../../dialog/dialog-controller';
-import { errorService } from '../../error/error-handler';
 import i18n from '../../i18n';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { OperationTypes } from '../../operation/operation-type-names';

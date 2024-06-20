@@ -1,6 +1,5 @@
+import { errorService } from '../../error/error-service';
 import officeStoreHelper from './office-store-helper';
-
-import { errorService } from '../../error/error-handler';
 
 describe.each`
   officeParam

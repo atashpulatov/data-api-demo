@@ -284,7 +284,6 @@ class OverviewHelper {
    * @param operationId Unique Id of the operation allowing to reference specific operation
    */
   handleDismissNotifications = (objectWorkingIds: number[], operationId: string): void => {
-    console.log('operationId', operationId);
     operationId && reduxStore.dispatch(cancelOperationByOperationId(operationId));
     objectWorkingIds?.forEach(objectWorkingId => {
       notificationService.removeExistingNotification(objectWorkingId);

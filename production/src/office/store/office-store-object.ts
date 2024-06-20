@@ -1,3 +1,4 @@
+import { errorService } from '../../error/error-service';
 import officeReducerHelper from './office-reducer-helper';
 import officeStoreHelper from './office-store-helper';
 
@@ -5,7 +6,6 @@ import { reduxStore } from '../../store';
 
 import { ObjectData } from '../../types/object-types';
 
-import { errorService } from '../../error/error-handler';
 import { removeObject } from '../../redux-reducer/object-reducer/object-actions';
 import { OfficeSettingsEnum } from '../../constants/office-constants';
 import { excludableObjectImportTypes, ObjectImportType } from '../../mstr-object/constants';

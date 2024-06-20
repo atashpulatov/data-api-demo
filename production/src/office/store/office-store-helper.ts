@@ -1,4 +1,5 @@
-import { errorService } from '../../error/error-handler';
+import { errorService } from '../../error/error-service';
+
 import { RunOutsideOfficeError } from '../../error/run-outside-office-error';
 
 class OfficeStoreHelper {

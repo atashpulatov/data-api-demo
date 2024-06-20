@@ -1,28 +1,22 @@
-import { PageByConfiguration } from '@mstr/connector-components';
 import { Action } from 'redux';
-import { v4 as uuidv4 } from 'uuid';
 
 import { authenticationHelper } from '../authentication/authentication-helper';
-import instanceDefinitionHelper from '../mstr-object/instance/instance-definition-helper';
+import { errorService } from '../error/error-service';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { pageByHelper } from '../page-by/page-by-helper';
+import { dialogControllerHelper } from './dialog-controller-helper';
 import overviewHelper, { OverviewActionCommands } from './overview/overview-helper';
 
 import { reduxStore } from '../store';
 
-import { PageByDataElement, PageByDisplayType } from '../page-by/page-by-types';
-import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
-import { ObjectData } from '../types/object-types';
 import { DialogResponse, ReportParams } from './dialog-controller-types';
 
 import { selectorProperties } from '../attribute-selector/selector-properties';
-import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import {
   duplicateRequested,
   editRequested,
-  importRequested,
 } from '../redux-reducer/operation-reducer/operation-actions';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
@@ -30,50 +24,16 @@ import {
   clearRepromptTask,
   executeNextRepromptTask,
 } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
-import { DisplayAttrFormNames, ObjectImportType } from '../mstr-object/constants';
 
 const URL = `${window.location.href}`;
 
 class DialogController {
-  errorService: any;
+  reportParams = null as ReportParams;
 
-  reportParams: ReportParams;
-
-  dialog: Office.Dialog;
-
-  init = (errorService: any): void => {
-    this.errorService = errorService;
-    // The following vars used to store references to current object reportParams and dialog
-    this.reportParams = null;
-    this.dialog = {} as unknown as Office.Dialog;
-  };
-
-  clearPopupStateIfNeeded = (): void => {
-    // TODO: convert this to a redux action
-    const { isDataOverviewOpen } = reduxStore.getState().popupStateReducer;
-
-    if (!isDataOverviewOpen) {
-      // @ts-expect-error
-      reduxStore.dispatch(popupStateActions.onClearPopupState());
-    } else {
-      reduxStore.dispatch(officeActions.setIsDialogLoaded(false));
-      // Clear reprompt/edit flags
-      reduxStore.dispatch(
-        // @ts-expect-error
-        popupStateActions.setMstrData({
-          isReprompt: undefined,
-          isEdit: undefined,
-        })
-      );
-    }
-    // DE287911: Below line should always run, to ensure `editedObject` is not persisted.
-    // We should evaluate adding better Redux Store clean-up after operations (Edit, Reprompt, etc.)
-    // to ensure we aren't keeping old references around (e.g. editedObject, isReprompt, isEdit, etc.)
-    reduxStore.dispatch(popupActions.resetState());
-  };
+  dialog = {} as Office.Dialog;
 
   runPopupNavigation = async (): Promise<void> => {
-    this.clearPopupStateIfNeeded();
+    dialogControllerHelper.clearPopupStateIfNeeded();
     await this.runPopup(DialogType.libraryWindow, 80, 80);
   };
 
@@ -86,8 +46,8 @@ class DialogController {
    * Note that both the Edit and Reprompt workflows will call this function.
    * The isEdit parameter determines whether the Reprompt screen should
    * be followed by the Edit Filters screen.
-   * @param {*} reportParams
-   * @param {*} isEdit
+   * @param reportParams
+   * @param isEdit
    */
   runRepromptPopup = async (reportParams: any, isEdit = true): Promise<void> => {
     const { popupType } = reduxStore.getState().popupStateReducer;
@@ -104,7 +64,7 @@ class DialogController {
 
   /**
    * This method is used to run the Dossier's re-prompt popup from the Excel add-in
-   * @param {*} reportParams
+   * @param reportParams
    */
   runRepromptDossierPopup = async (reportParams: any): Promise<void> => {
     const { popupType } = reduxStore.getState().popupStateReducer;
@@ -124,7 +84,7 @@ class DialogController {
   };
 
   runImportedDataOverviewPopup = async (): Promise<void> => {
-    this.clearPopupStateIfNeeded();
+    dialogControllerHelper.clearPopupStateIfNeeded();
     await this.runPopup(DialogType.importedDataOverview, 80, 80, null);
   };
 
@@ -134,7 +94,8 @@ class DialogController {
     width: number,
     reportParams: ReportParams = null
   ): Promise<void> => {
-    const isDialogForMultipleRepromptOpen = this.getIsDialogAlreadyOpenForMultipleReprompt();
+    const isDialogForMultipleRepromptOpen =
+      dialogControllerHelper.getIsDialogAlreadyOpenForMultipleReprompt();
     const { isDataOverviewOpen } = reduxStore.getState().popupStateReducer;
     const isRepromptOrOvieviewPopupOpen = isDialogForMultipleRepromptOpen || isDataOverviewOpen;
 
@@ -142,18 +103,11 @@ class DialogController {
     reduxStore.dispatch(popupStateActions.setMstrData({ popupType }));
     this.reportParams = reportParams;
 
-    try {
-      await authenticationHelper.validateAuthToken();
-    } catch (error) {
-      console.error({ error });
-      this.errorService.handleError(error);
-      return;
-    }
-
     const url = URL;
     const splittedUrl = url.split('?'); // we need to get rid of any query params
 
     try {
+      await authenticationHelper.validateAuthToken();
       await officeApiHelper.getExcelSessionStatus();
       if (isRepromptOrOvieviewPopupOpen) {
         // US530793: If dialog already open, send message to dialog to reload with new object data.
@@ -206,7 +160,7 @@ class DialogController {
         );
       }
     } catch (error) {
-      this.errorService.handleError(error);
+      errorService.handleError(error);
     }
   };
 
@@ -248,7 +202,7 @@ class DialogController {
     reportParams: ReportParams,
     arg: any
   ): Promise<void> => {
-    const isMultipleRepromptQueueEmpty = this.getIsMultipleRepromptQueueEmpty();
+    const isMultipleRepromptQueueEmpty = dialogControllerHelper.getIsMultipleRepromptQueueEmpty();
     const { message } = arg;
     const response: DialogResponse = JSON.parse(message);
 
@@ -271,8 +225,8 @@ class DialogController {
     }
 
     if (command === commandCloseDialog) {
-      this.closeDialog(dialog);
-      this.resetDialogStates();
+      dialogControllerHelper.closeDialog(dialog);
+      dialogControllerHelper.resetDialogStates();
     }
 
     if (command === commandExecuteNextRepromptTask) {
@@ -291,7 +245,7 @@ class DialogController {
       if (isMultipleRepromptQueueEmptyAndOverviewClosed) {
         // We will only close dialog if not in Multiple Reprompt workflow
         // or if the Multiple Reprompt queue has been cleared up.
-        this.closeDialog(dialog);
+        dialogControllerHelper.closeDialog(dialog);
       }
       if (command !== commandError) {
         await officeApiHelper.getExcelSessionStatus(); // checking excel session status
@@ -344,7 +298,7 @@ class DialogController {
           if (isDataOverviewOpen) {
             reduxStore.dispatch(popupActions.resetState());
           }
-          this.errorService.handleError(response.error);
+          errorService.handleError(response.error);
           break;
         default:
           break;
@@ -358,14 +312,14 @@ class DialogController {
       }
     } catch (error) {
       console.error(error);
-      this.errorService.handleError(error, { dialogType });
+      errorService.handleError(error, { dialogType });
     } finally {
       // always reset this.reportParams to prevent reusing old references in future popups
       this.reportParams = null;
       if (isMultipleRepromptQueueEmptyAndOverviewClosed) {
         // We will only reset popup related states when not in Multiple Reprompt workflow
         // or if the Multiple Reprompt queue has been cleared up.
-        this.resetDialogStates();
+        dialogControllerHelper.resetDialogStates();
       }
     }
   };
@@ -381,14 +335,14 @@ class DialogController {
     reportParams: ReportParams
   ): Promise<void | Action> => {
     if (!reportParams) {
-      return this.handleOkCommand(response);
+      return dialogControllerHelper.handleOkCommand(response);
     }
 
     if (reportParams.duplicateMode) {
       return reduxStore.dispatch(duplicateRequested(reportParams.object, response));
     }
 
-    const reportPreviousState = this.getObjectPreviousState(reportParams);
+    const reportPreviousState = dialogControllerHelper.getObjectPreviousState(reportParams);
     return reduxStore.dispatch(editRequested(reportPreviousState, response));
   };
 
@@ -411,198 +365,15 @@ class DialogController {
     }
 
     if (!reportParams || shouldRemovePages) {
-      return this.handleUpdateCommand(response);
+      return dialogControllerHelper.handleUpdateCommand(response);
     }
 
     if (reportParams.duplicateMode) {
       return reduxStore.dispatch(duplicateRequested(reportParams.object, response));
     }
 
-    const reportPreviousState = this.getObjectPreviousState(reportParams);
+    const reportPreviousState = dialogControllerHelper.getObjectPreviousState(reportParams);
     return reduxStore.dispatch(editRequested(reportPreviousState, response));
-  };
-
-  /**
-   * Transforms the response from the dialog into an object data structure, and then calls the handleImport method.
-   *
-   * @param response Message received from the dialog
-   */
-  handleUpdateCommand = async (response: DialogResponse): Promise<void> => {
-    const objectData = {
-      name: response.chosenObjectName,
-      objectWorkingId: response.objectWorkingId,
-      objectId: response.chosenObjectId,
-      projectId: response.projectId,
-      mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(response.chosenObjectSubtype),
-      body: response.body,
-      dossierData: response.dossierData,
-      promptsAnswers: response.promptsAnswers,
-      importType: response.importType,
-      isPrompted:
-        response.promptsAnswers?.length > 0 && response.promptsAnswers[0].answers?.length > 0,
-      instanceId: response.instanceId,
-      subtotalsInfo: response.subtotalsInfo,
-      displayAttrFormNames: response.displayAttrFormNames,
-      definition: { filters: response.filterDetails },
-      pageByData: response.pageByData,
-    };
-
-    await this.handleImport(objectData, response.pageByConfigurations);
-  };
-
-  /**
-   * Transforms the response from the dialog into an object data structure, and then calls the handleImport method.
-   *
-   * @param response Message received from the dialog
-   */
-  handleOkCommand = async (response: DialogResponse): Promise<void> => {
-    if (response.chosenObject) {
-      const objectData = {
-        name: response.chosenObjectName,
-        dossierData: response.dossierData,
-        objectId: response.chosenObject,
-        projectId: response.chosenProject,
-        mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(response.chosenSubtype),
-        importType: response.importType,
-        isPrompted: response.isPrompted || response.promptsAnswers?.answers?.length > 0,
-        promptsAnswers: response.promptsAnswers,
-        visualizationInfo: response.visualizationInfo,
-        preparedInstanceId: response.preparedInstanceId,
-        definition: { filters: response.filterDetails },
-        displayAttrFormNames: response.displayAttrFormNames,
-      };
-
-      await this.handleImport(objectData, response.pageByConfigurations);
-    }
-  };
-
-  /**
-   * Method used for handling import of the object selected by the user.
-   * For Page-by Reports, it will loop through all valid combinations of Page-by elements, creating new import request for each.
-   *
-   * @param objectData Contains information about the MSTR object
-   * @param pageByConfigurations Contains information about Page-by configurations selected in the Page-by modal
-   */
-  handleImport = async (
-    objectData: ObjectData,
-    pageByConfigurations: PageByConfiguration[][]
-  ): Promise<void | Action> => {
-    const { mstrObjectType, importType } = objectData;
-
-    let preparedInstanceDefinition;
-
-    if (mstrObjectType === mstrObjectEnum.mstrObjectType.report) {
-      preparedInstanceDefinition = await instanceDefinitionHelper.createReportInstance(objectData);
-    }
-
-    const { pageBy } = preparedInstanceDefinition?.definition.grid ?? {};
-
-    if (!pageBy?.length || importType === ObjectImportType.PIVOT_TABLE) {
-      return reduxStore.dispatch(importRequested({ ...objectData }, preparedInstanceDefinition));
-    }
-
-    const pageByLinkId = uuidv4();
-
-    const { settingsReducer } = reduxStore.getState();
-    const { pageByDisplaySetting } = settingsReducer;
-
-    const parsedPageByConfigurations =
-      pageByConfigurations && pageByHelper.parseSelectedPageByConfigurations(pageByConfigurations);
-
-    const validPageByData = await pageByHelper.getValidPageByData(
-      objectData,
-      preparedInstanceDefinition
-    );
-
-    switch (pageByDisplaySetting) {
-      case PageByDisplayType.DEFAULT_PAGE:
-        return this.handleDefaultPageImport(
-          pageByLinkId,
-          objectData,
-          preparedInstanceDefinition,
-          pageByDisplaySetting
-        );
-      case PageByDisplayType.ALL_PAGES:
-        return this.handleMultiplePagesImport(
-          pageByLinkId,
-          validPageByData,
-          objectData,
-          preparedInstanceDefinition,
-          pageByDisplaySetting
-        );
-      case PageByDisplayType.SELECT_PAGES:
-        return this.handleMultiplePagesImport(
-          pageByLinkId,
-          parsedPageByConfigurations,
-          objectData,
-          preparedInstanceDefinition,
-          pageByDisplaySetting
-        );
-      default:
-        break;
-    }
-  };
-
-  /**
-   * Method used for handling import of a deafult Page-by attributes combination of the object.
-   *
-   * @param pageByLinkId Unique identifier of the Page-by sibling
-   * @param objectData Contains information about the MSTR object
-   * @param preparedInstanceDefinition Contains information about the object's instance
-   * @param pageByDisplayType Contains information about the currently selected Page-by display setting
-   */
-  handleDefaultPageImport = (
-    pageByLinkId: string,
-    objectData: ObjectData,
-    preparedInstanceDefinition: InstanceDefinition,
-    pageByDisplayType: PageByDisplayType
-  ): Action => {
-    const pageByData = {
-      pageByLinkId,
-      pageByDisplayType,
-      elements: [] as PageByDataElement[],
-    };
-
-    return reduxStore.dispatch(
-      importRequested({ ...objectData, pageByData }, preparedInstanceDefinition)
-    );
-  };
-
-  /**
-   * Method used for handling import multiple valid Page-by attributes combinations of the object.
-   *
-   * @param pageByLinkId Unique identifier of the Page-by sibling
-   * @param pageByCombinations Contains information about the valid Page-by elements combinations
-   * @param objectData Contains information about the MSTR object
-   * @param preparedInstanceDefinition Contains information about the object's instance
-   * @param pageByDisplayType Contains information about the currently selected Page-by display setting
-   */
-  handleMultiplePagesImport = (
-    pageByLinkId: string,
-    pageByCombinations: PageByDataElement[][],
-    objectData: ObjectData,
-    preparedInstanceDefinition: InstanceDefinition,
-    pageByDisplayType: PageByDisplayType
-  ): void => {
-    pageByCombinations.forEach((validCombination, pageByIndex) => {
-      const pageByData = {
-        pageByLinkId,
-        pageByDisplayType,
-        elements: validCombination,
-      };
-
-      reduxStore.dispatch(
-        importRequested(
-          {
-            ...objectData,
-            pageByData,
-            insertNewWorksheet: true,
-          },
-          preparedInstanceDefinition,
-          pageByIndex
-        )
-      );
-    });
   };
 
   loadPending =
@@ -611,51 +382,6 @@ class DialogController {
       this.runPopup(DialogType.loadingPage, 30, 40);
       return wrapped(...args);
     };
-
-  closeDialog = (dialog: Office.Dialog): void => {
-    try {
-      return dialog.close();
-    } catch (e) {
-      console.info('Attempted to close an already closed dialog');
-    }
-  };
-
-  // Used to reset dialog-related state variables in Redux Store
-  // and the dialog reference stored in the class object.
-  resetDialogStates = (): void => {
-    reduxStore.dispatch(popupActions.resetState());
-    // @ts-expect-error
-    reduxStore.dispatch(popupStateActions.onClearPopupState());
-    // @ts-expect-error
-    reduxStore.dispatch(officeActions.hideDialog());
-    this.dialog = {} as unknown as Office.Dialog;
-  };
-
-  getObjectPreviousState = (reportParams: ReportParams): ObjectData => {
-    const { objects } = reduxStore.getState().objectReducer;
-    const indexOfOriginalValues = objects.findIndex(
-      (report: ObjectData) => report.bindId === reportParams.bindId
-    );
-    const originalValues = objects[indexOfOriginalValues];
-
-    if (originalValues.displayAttrFormNames) {
-      return { ...originalValues };
-    }
-    return {
-      ...originalValues,
-      displayAttrFormNames: DisplayAttrFormNames.AUTOMATIC,
-    };
-  };
-
-  getIsMultipleRepromptQueueEmpty = (): boolean => {
-    const { index = 0, total = 0 } = reduxStore.getState().repromptsQueueReducer;
-    return total === 0 || (total >= 1 && index === total);
-  };
-
-  getIsDialogAlreadyOpenForMultipleReprompt = (): boolean => {
-    const { index = 0, total = 0 } = reduxStore.getState().repromptsQueueReducer;
-    return total > 1 && index > 1;
-  };
 
   manageDialogType = async (
     isMultipleRepromptQueueEmpty: boolean,
@@ -670,8 +396,8 @@ class DialogController {
       // Close dialog when user cancels or an error occurs, but only if there are objects left to Multiple Reprompt,
       // since we were previously keeping the dialog open in between objects.
       // Otherwise, the dialog will close and reset popup state anyway, so no need to do it here.
-      this.closeDialog(dialog);
-      this.resetDialogStates();
+      dialogControllerHelper.closeDialog(dialog);
+      dialogControllerHelper.resetDialogStates();
     } else if (
       isDataOverviewOpen &&
       (dialogType === DialogType.repromptDossierDataOverview ||

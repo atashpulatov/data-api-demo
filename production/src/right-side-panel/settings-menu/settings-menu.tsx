@@ -5,12 +5,12 @@ import { OverflowTooltip } from '@mstr/rc';
 import { Dispatch } from 'redux';
 
 import { authenticationService } from '../../authentication/authentication-service';
+import { errorService } from '../../error/error-service';
 import getDocumentationLocale from '../../helpers/get-documentation-locale';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 
 import packageJson from '../../../package.json';
 import { dialogController } from '../../dialog/dialog-controller';
-import { errorService } from '../../error/error-handler';
 // @ts-expect-error
 import logo from '../../home/assets/mstr_logo.png';
 import i18n from '../../i18n';

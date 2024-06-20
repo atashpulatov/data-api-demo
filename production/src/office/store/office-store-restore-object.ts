@@ -1,3 +1,4 @@
+import { errorService } from '../../error/error-service';
 import { officeApiHelper } from '../api/office-api-helper';
 import officeReducerHelper from './office-reducer-helper';
 import officeStoreHelper from './office-store-helper';
@@ -6,7 +7,6 @@ import { reduxStore } from '../../store';
 
 import { ObjectData } from '../../types/object-types';
 
-import { errorService } from '../../error/error-handler';
 import { restoreAllAnswers } from '../../redux-reducer/answers-reducer/answers-actions';
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
 import officeApiDataLoader from '../api/office-api-data-loader';

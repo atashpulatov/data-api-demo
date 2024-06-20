@@ -2,13 +2,13 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { fireEvent, render } from '@testing-library/react';
 
+import { errorService } from '../../error/error-service';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeRemoveHelper } from '../../office/remove/office-remove-helper';
 import { sidePanelService } from '../side-panel-services/side-panel-service';
 
 import { reduxStore } from '../../store';
 
-import { errorService } from '../../error/error-handler';
 import { ConfirmationNotConnected } from './confirmation';
 
 const createMockFilesArray = () => {

@@ -2,12 +2,17 @@ import React, { lazy, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Spinner } from '@mstr/rc';
 
+import overviewHelper from './dialog/overview/overview-helper';
 import { homeHelper } from './home/home-helper';
 import officeReducerHelper from './office/store/office-reducer-helper';
+import { sidePanelHelper } from './right-side-panel/side-panel-services/side-panel-helper';
+import { sidePanelNotificationHelper } from './right-side-panel/side-panel-services/side-panel-notification-helper';
+import { sidePanelService } from './right-side-panel/side-panel-services/side-panel-service';
 
 import 'core-js/stable';
-import { diContainer } from './dependency-container';
 import i18next from './i18n';
+import { operationBus } from './operation/operation-bus';
+import subscribeSteps from './operation/operation-subscribe-steps';
 
 import './index.css';
 
@@ -62,7 +67,10 @@ function officeInitialize() {
       });
     }
     goReact();
-    diContainer.initializeAll();
+    // @todo: move this to a better place, temporary solution
+    overviewHelper.init(sidePanelService, sidePanelHelper, sidePanelNotificationHelper);
+    operationBus.init();
+    subscribeSteps.init();
   });
 }
 

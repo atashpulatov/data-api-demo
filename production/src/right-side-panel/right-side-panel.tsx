@@ -128,7 +128,7 @@ export const RightSidePanel: React.FC = () => {
           popup={!isDialogOpen && sidePanelPopup}
           // @ts-expect-error
           settingsMenu={isSettings && <SettingsMenu />}
-          onSettingsClick={() => officeActions.toggleIsSettingsFlag(!isSettings)}
+          onSettingsClick={() => officeActions.toggleIsSettingsFlag(!isSettings)(dispatch)}
           confirmationWindow={isConfirm && <Confirmation />}
           globalNotification={globalNotification}
           onSelectAll={() => {

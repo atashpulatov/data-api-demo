@@ -1,7 +1,11 @@
 import { authenticationHelper } from '../../authentication/authentication-helper';
+import { errorService } from '../../error/error-service';
+import { browserHelper } from '../../helpers/browser-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 
-import { errorService } from '../../error/error-handler';
+import { IncomingErrorStrings } from '../../error/constants';
+
+const CONNECTION_CHECK_TIMEOUT = 3000;
 
 class SidePanelOperationDecorator {
   /**
@@ -30,12 +34,38 @@ class SidePanelOperationDecorator {
           }
         }
       } catch (error) {
-        errorService.handleSidePanelActionError(error);
+        this.handleSidePanelActionError(error);
       }
     };
 
     return descriptor;
   }
+
+  /**
+   * Handles error thrown during invoking side panel actions like refresh, edit etc.
+   * For Webkit based clients (Safari, Excel for Mac)
+   * it checks for network connection with custom implementation
+   * This logic allows us to provide user with connection lost notification
+   *
+   * @param error Plain error object thrown by method calls.
+   */
+  handleSidePanelActionError = (error: any): void => {
+    const castedError = String(error);
+    const { CONNECTION_BROKEN } = IncomingErrorStrings;
+    if (castedError.includes(CONNECTION_BROKEN)) {
+      if (browserHelper.isMacAndSafariBased()) {
+        const connectionCheckerLoop = (): void => {
+          const checkInterval = setInterval(() => {
+            authenticationHelper.doesConnectionExist(checkInterval);
+          }, CONNECTION_CHECK_TIMEOUT);
+        };
+
+        connectionCheckerLoop();
+      }
+      return;
+    }
+    errorService.handleError(error);
+  };
 }
 
 const sidePanelOperationDecorator = new SidePanelOperationDecorator();
