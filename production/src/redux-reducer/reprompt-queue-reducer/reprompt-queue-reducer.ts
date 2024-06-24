@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import {
-  AddMultiplePromptKeysAction,
   AddRepromptTaskAction,
+  EditOperationAction,
   RepromptQueueActions,
   RepromptQueueActionTypes,
   RepromptsQueueState,
@@ -29,7 +29,7 @@ export const repromptsQueueReducer = (
     case RepromptQueueActionTypes.CLEAR_REPROMPT_TASKS:
       return clearRepromptTasks();
 
-    case RepromptQueueActionTypes.ADD_MULTIPLE_PROMPT_KEYS_TASK:
+    case RepromptQueueActionTypes.EDIT_OPERATION:
       return addMultiplePromptKeysTask(action, state);
 
     default:
@@ -59,11 +59,11 @@ const executeNextRepromptTask = (state: RepromptsQueueState): RepromptsQueueStat
 };
 
 const addMultiplePromptKeysTask = (
-  action: AddMultiplePromptKeysAction,
+  action: EditOperationAction,
   state: RepromptsQueueState
 ): RepromptsQueueState => {
-  const newPromptKeys = action.payload.reduce(
-    (acc, key) => {
+  const newPromptKeys = action.payload.operation.objectEditedData.promptKeys.reduce(
+    (acc: any[], key: any) => {
       if (!acc.includes(key)) {
         acc.push(key);
       }

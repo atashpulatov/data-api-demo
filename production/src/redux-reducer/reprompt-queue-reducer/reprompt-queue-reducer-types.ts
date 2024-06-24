@@ -11,6 +11,7 @@ export enum RepromptQueueActionTypes {
   EXECUTE_NEXT_REPROMPT_TASK = 'EXECUTE_NEXT_REPROMPT_TASK',
   CLEAR_REPROMPT_TASKS = 'CLEAR_REPROMPT_TASKS',
   ADD_MULTIPLE_PROMPT_KEYS_TASK = 'ADD_MULTIPLE_PROMPT_KEYS_TASK',
+  EDIT_OPERATION = 'EDIT_OPERATION',
 }
 
 export interface RepromptQueueTask {
@@ -32,13 +33,13 @@ export interface ClearRepromptTasksAction extends Action {
   type: RepromptQueueActionTypes.CLEAR_REPROMPT_TASKS;
 }
 
-export interface AddMultiplePromptKeysAction extends Action {
-  type: RepromptQueueActionTypes.ADD_MULTIPLE_PROMPT_KEYS_TASK;
-  payload: string[];
+export interface EditOperationAction extends Action {
+  type: RepromptQueueActionTypes.EDIT_OPERATION;
+  payload: any; // Replace 'any' with the appropriate type
 }
 
 export type RepromptQueueActions =
   | AddRepromptTaskAction
   | ExecuteNextRepromptTaskAction
   | ClearRepromptTasksAction
-  | AddMultiplePromptKeysAction;
+  | EditOperationAction;

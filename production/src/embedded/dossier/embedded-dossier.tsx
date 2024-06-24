@@ -14,7 +14,7 @@ import { handleLoginExcelDesktopInWindows } from '../utils/embedded-helper';
 import scriptInjectionHelper from '../utils/script-injection-helper';
 import { embeddedDossierHelper } from './embedded-dossier-helper';
 
-import { reduxStore, RootState } from '../../store';
+import { RootState } from '../../store';
 
 import {
   AnswersState,
@@ -25,7 +25,7 @@ import { VisualizationInfo } from '../../types/object-types';
 
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
-import { addMultiplePromptKeys } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
+// import { addMultiplePromptKeys } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import { ErrorMessages } from '../../error/constants';
 
 import './dossier.css';
@@ -63,6 +63,8 @@ interface EmbeddedDossierProps {
   handleInstanceIdChange?: () => void;
   handleIframeLoadEvent?: () => void;
   handleEmbeddedDossierLoad?: () => void;
+  // add promptKeys to the method signature
+  handleUniquePromptKeys?: (keys: string[]) => void;
   reusePromptAnswers?: boolean;
   previousPromptsAnswers?: PromptsAnswer[];
   dossierOpenRequested?: boolean;
@@ -329,6 +331,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       isPrompted,
       isMultipleRepromptWithReuse,
       handleEmbeddedDossierVisibility,
+      handleUniquePromptKeys,
       isReprompt,
       promptKeys,
     }: EmbeddedDossierProps = this.props;
@@ -398,7 +401,8 @@ export default class EmbeddedDossierNotConnected extends React.Component {
             isImportedObjectPrompted,
             isMultipleRepromptWithReuse
           );
-          reduxStore.dispatch(addMultiplePromptKeys(allPromptKeys));
+          //    reduxStore.dispatch(addMultiplePromptKeys(allPromptKeys));
+          handleUniquePromptKeys(allPromptKeys);
         }
       }
     } catch (error) {
@@ -597,7 +601,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
 
     // Persist in Redux only the answers for the current prompt object.
     handlePromptAnswer(this.dossierData.promptsAnswers);
-
     if (this.embeddedDossier) {
       const payload = await this.embeddedDossier.getSelectedVizKeys();
       if (Object.keys(payload).length > 0) {

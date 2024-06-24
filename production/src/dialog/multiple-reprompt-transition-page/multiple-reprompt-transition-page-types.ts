@@ -7,5 +7,6 @@ export interface MultipleRepromptTransitionPageTypes {
   popupData: {
     objectWorkingId: number;
   };
+  promptKeys: string[];
   editedObject: EditedObject;
 }

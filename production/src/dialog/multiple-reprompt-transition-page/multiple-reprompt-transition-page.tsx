@@ -83,16 +83,18 @@ const mapStateToProps = (state: {
     repromptsQueue: { bindId: string }[];
     index: number;
     total: number;
+    promptKeys: string[];
   };
   popupReducer: any;
 }): MultipleRepromptTransitionPageTypes => {
   const { repromptsQueueReducer, officeReducer, popupReducer } = state;
-  const { total, repromptsQueue } = repromptsQueueReducer;
-
+  const { total, repromptsQueue, promptKeys } = repromptsQueueReducer;
+  console.log('repromptKeys', promptKeys);
   return {
     nextObjectBindId: repromptsQueue[0]?.bindId || '',
     nextObjectIndex: total - repromptsQueue.length,
     total,
+    promptKeys,
     popupData: officeReducer.popupData,
     editedObject: popupReducer.editedObject,
   };

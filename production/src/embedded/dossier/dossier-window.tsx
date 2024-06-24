@@ -50,6 +50,7 @@ interface DossierWindowProps {
 export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => {
   const [t] = useTranslation('common', { i18n });
   const [promptsAnswers, setPromptsAnswers] = useState([]);
+  const [promptKeys, setPromptKeys] = useState([]);
   const instanceId = useRef('');
   const [vizualizationsData, setVizualizationsData] = useState([]);
   const [lastSelectedViz, setLastSelectedViz] = useState<any>({});
@@ -228,6 +229,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
       chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
       isPrompted: promptsAnswers?.length > 0,
       promptsAnswers,
+      promptKeys,
       importType,
       visualizationInfo: {
         chapterKey,
@@ -246,6 +248,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
     instanceId,
     isEdit,
     promptsAnswers,
+    promptKeys,
     visualizationKey,
     vizDimensions,
     importType,
@@ -311,6 +314,13 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
     [vizualizationsData]
   );
 
+  const handleUniquePromptKeys = useCallback(
+    (newPromptKeys: any) => {
+      setPromptKeys(newPromptKeys);
+    },
+    [setPromptKeys]
+  );
+
   /**
    * Change state of component so that informative message is showed only after embedded dossier is loaded.
    *
@@ -368,6 +378,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
               // @ts-expect-error
               handleSelection={handleSelection}
               handlePromptAnswer={handlePromptAnswer}
+              handleUniquePromptKeys={handleUniquePromptKeys}
               handleInstanceIdChange={handleInstanceIdChange}
               handleIframeLoadEvent={validateSession}
               handleEmbeddedDossierLoad={handleEmbeddedDossierLoad}
