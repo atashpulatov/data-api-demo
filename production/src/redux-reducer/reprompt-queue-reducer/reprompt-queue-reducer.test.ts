@@ -1,6 +1,7 @@
 import {
   AddRepromptTaskAction,
   ClearRepromptTasksAction,
+  EditOperationAction,
   ExecuteNextRepromptTaskAction,
   RepromptQueueActions,
   RepromptQueueActionTypes,
@@ -99,5 +100,48 @@ describe('reprompt-queue-reducer', () => {
       repromptsQueue: [],
       total: 0,
     });
+  });
+
+  it('should handle addMultiplePromptKeysTask correctly', () => {
+    const actionWithPromptKeys: EditOperationAction = {
+      type: RepromptQueueActionTypes.EDIT_OPERATION,
+      payload: {
+        operation: {
+          objectEditedData: {
+            promptKeys: ['key1', 'key2'],
+          },
+        },
+      },
+    };
+
+    const actionWithoutPromptKeys: EditOperationAction = {
+      type: RepromptQueueActionTypes.EDIT_OPERATION,
+      payload: {
+        operation: {
+          objectEditedData: {},
+        },
+      },
+    };
+
+    // State before the action
+    const initialState = {
+      index: 0,
+      repromptsQueue: [] as any[],
+      total: 0,
+      promptKeys: ['existingKey'],
+    };
+
+    // When promptKeys are present
+    expect(RepromptQueueReducer.repromptsQueueReducer(initialState, actionWithPromptKeys)).toEqual({
+      index: 0,
+      repromptsQueue: [] as any[],
+      total: 0,
+      promptKeys: ['existingKey', 'key1', 'key2'],
+    });
+
+    // When promptKeys are absent
+    expect(
+      RepromptQueueReducer.repromptsQueueReducer(initialState, actionWithoutPromptKeys)
+    ).toEqual(initialState);
   });
 });
