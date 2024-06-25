@@ -17,7 +17,6 @@ export enum RepromptQueueActionTypes {
 export interface RepromptQueueTask {
   callback: () => void;
   isPrompted: boolean;
-  promptKey: string;
 }
 
 export interface AddRepromptTaskAction extends Action {

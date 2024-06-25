@@ -30,7 +30,6 @@ describe('reprompt-queue-reducer', () => {
       payload: {
         callback: repromptCallback,
         isPrompted: isPrompted.isPrompted,
-        promptKey: 'test',
       },
       type: RepromptQueueActionTypes.ADD_REPROMPT_TASK,
     };
@@ -38,11 +37,11 @@ describe('reprompt-queue-reducer', () => {
     if (isPrompted.isPrompted) {
       expect(RepromptQueueReducer.repromptsQueueReducer(undefined, action)).toEqual({
         index: 0,
+        promptKeys: [],
         repromptsQueue: [
           {
             callback: repromptCallback,
             isPrompted: isPrompted.isPrompted,
-            promptKey: 'test',
           },
         ],
         total: 1,
@@ -50,6 +49,7 @@ describe('reprompt-queue-reducer', () => {
     } else {
       expect(RepromptQueueReducer.repromptsQueueReducer(undefined, action)).toEqual({
         index: 0,
+        promptKeys: [],
         repromptsQueue: [
           {
             callback: repromptCallback,
@@ -95,6 +95,7 @@ describe('reprompt-queue-reducer', () => {
 
     expect(RepromptQueueReducer.repromptsQueueReducer(undefined, action)).toEqual({
       index: 0,
+      promptKeys: [],
       repromptsQueue: [],
       total: 0,
     });
