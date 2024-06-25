@@ -96,11 +96,15 @@ function updateObjects(
 }
 
 function removeObject(state: ObjectState, objectWorkingId: number): ObjectState {
-  const objectToRemoveIndex = getObjectIndex(state.objects, objectWorkingId);
-  if (objectToRemoveIndex !== -1) {
-    const newObjects = [...state.objects];
-    newObjects.splice(objectToRemoveIndex, 1);
-    return { objects: newObjects };
+  try {
+    const objectToRemoveIndex = getObjectIndex(state.objects, objectWorkingId);
+    if (objectToRemoveIndex !== -1) {
+      const newObjects = [...state.objects];
+      newObjects.splice(objectToRemoveIndex, 1);
+      return { objects: newObjects };
+    }
+  } catch (error) {
+    return state;
   }
 }
 

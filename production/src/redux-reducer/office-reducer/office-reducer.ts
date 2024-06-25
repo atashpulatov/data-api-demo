@@ -4,6 +4,7 @@ import {
   OfficeActionsTypes,
   OfficeState,
   SetActiveCellAddressAction,
+  SetDialogToOpenAction,
   SetIsAdvancedWorksheetTrackingSupported,
   SetIsDialogLoadedAction,
   SetIsInsertWorksheetAPISupportedAction,
@@ -27,6 +28,7 @@ const initialState: OfficeState = {
   popupData: null,
   isDialogOpen: false,
   isDialogLoaded: false,
+  dialogToOpen: null,
   settingsPanelLoaded: false,
   reusePromptAnswers: false,
   isSecured: false,
@@ -49,6 +51,9 @@ export const officeReducer = (state = initialState, action: OfficeActions): Offi
 
     case OfficeActionsTypes.SET_IS_DIALOG_LOADED:
       return setIsDialogLoaded(state, action);
+
+    case OfficeActionsTypes.SET_DIALOG_TO_OPEN:
+      return setDialogToOpen(state, action);
 
     case OfficeActionsTypes.TOGGLE_SECURED_FLAG:
       return toggleSecuredFlag(state, action);
@@ -121,6 +126,11 @@ function setIsDialogLoaded(state: OfficeState, action: SetIsDialogLoadedAction):
     isDialogLoaded: action.isDialogLoaded,
   };
 }
+
+const setDialogToOpen = (state: OfficeState, action: SetDialogToOpenAction): OfficeState => ({
+  ...state,
+  dialogToOpen: action.dialogToOpen,
+});
 
 function toggleSecuredFlag(state: OfficeState, action: ToggleSecuredFlagAction): OfficeState {
   const { isSecured } = action;

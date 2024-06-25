@@ -1,5 +1,5 @@
 import { browserHelper } from '../helpers/browser-helper';
-import sidePanelOperationDecorator from '../right-side-panel/side-panel-services/side-panel-operation-decorator';
+import { SidePanelOperationDecorator } from '../right-side-panel/side-panel-services/side-panel-operation-decorator';
 import { errorService } from './error-service';
 
 import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
@@ -546,7 +546,7 @@ describe('ErrorService', () => {
       jest.spyOn(browserHelper, 'isMacAndSafariBased').mockReturnValueOnce(isMacAndSafariBased);
 
       // when
-      sidePanelOperationDecorator.handleSidePanelActionError(error);
+      SidePanelOperationDecorator.handleSidePanelActionError(error);
       // then
 
       expect(mockHandleError).toHaveBeenCalledTimes(handleErrorCalledTimes);

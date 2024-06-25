@@ -14,7 +14,8 @@ import useStateSyncOnDialogMessage from './use-state-sync-on-dialog-message';
 import { dialogHelper } from '../dialog-helper';
 import overviewHelper from './overview-helper';
 
-import { selectorProperties } from '../../attribute-selector/selector-properties';
+import { DialogCommands } from '../dialog-controller-types';
+
 import i18n from '../../i18n';
 import { OperationTypes } from '../../operation/operation-type-names';
 import { notificationReducerSelectors } from '../../redux-reducer/notification-reducer/notification-reducer-selectors';
@@ -58,8 +59,7 @@ export const OverviewWindow: React.FC = () => {
   );
 
   const handleCloseDialog = (): void => {
-    const { commandCloseDialog } = selectorProperties;
-    const message = { command: commandCloseDialog };
+    const message = { command: DialogCommands.COMMAND_CLOSE_DIALOG };
     dialogHelper.officeMessageParent(message);
   };
 
@@ -87,7 +87,7 @@ export const OverviewWindow: React.FC = () => {
           notification.type === ObjectNotificationTypes.SUCCESS &&
           notification.operationType === OperationTypes.REMOVE_OPERATION
         ) {
-          overviewHelper.sendDismissNotificationRequest(
+          overviewHelper.sendDismissRemovedObjectsRequest(
             [notification.objectWorkingId],
             notification.operationId
           );

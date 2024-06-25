@@ -248,7 +248,7 @@ class DialogControllerHelper {
   getObjectPreviousState = (reportParams: ReportParams): ObjectData => {
     const { objects } = reduxStore.getState().objectReducer;
     const indexOfOriginalValues = objects.findIndex(
-      (report: ObjectData) => report.bindId === reportParams.bindId
+      (report: ObjectData) => report.bindId === reportParams.object.bindId
     );
     const originalValues = objects[indexOfOriginalValues];
 

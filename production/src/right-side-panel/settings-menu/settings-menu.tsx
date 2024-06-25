@@ -9,8 +9,11 @@ import { errorService } from '../../error/error-service';
 import getDocumentationLocale from '../../helpers/get-documentation-locale';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 
+import { reduxStore } from '../../store';
+
+import { DialogToOpen } from '../../redux-reducer/office-reducer/office-reducer-types';
+
 import packageJson from '../../../package.json';
-import { dialogController } from '../../dialog/dialog-controller';
 // @ts-expect-error
 import logo from '../../home/assets/mstr_logo.png';
 import i18n from '../../i18n';
@@ -18,7 +21,6 @@ import { officeContext } from '../../office/office-context';
 import { dismissAllObjectsNotifications } from '../../redux-reducer/notification-reducer/notification-action-creators';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 import { officeSelectors } from '../../redux-reducer/office-reducer/office-reducer-selectors';
-import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
 import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
 
 import './settings-menu.scss';
@@ -30,7 +32,6 @@ interface SettingsMenuProps {
   toggleIsSettingsFlag: (flag: boolean) => void;
   toggleIsConfirmFlag: (flag: boolean) => void;
   toggleSettingsPanelLoadedFlag: (flag: boolean) => void;
-  setIsDataOverviewOpen: (flag: boolean) => void;
 }
 
 const APP_VERSION = packageJson.build;
@@ -57,7 +58,6 @@ export const SettingsMenuNotConnected: React.FC<SettingsMenuProps> = ({
   toggleIsConfirmFlag,
   toggleIsSettingsFlag,
   toggleSettingsPanelLoadedFlag,
-  setIsDataOverviewOpen,
 }) => {
   const dispatch = useDispatch();
 
@@ -103,10 +103,8 @@ export const SettingsMenuNotConnected: React.FC<SettingsMenuProps> = ({
     if (isSecured) {
       return;
     }
-
     toggleIsSettingsFlag(false);
-    dialogController.runImportedDataOverviewPopup();
-    setIsDataOverviewOpen(true);
+    reduxStore.dispatch(officeActions.setDialogToOpen(DialogToOpen.IMPORTED_DATA_OVERVIEW_POPUP));
   };
 
   const showConfirmationPopup = (): void => {
@@ -268,6 +266,5 @@ const mapDispatchToProps = {
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
   toggleIsConfirmFlag: officeActions.toggleIsConfirmFlag,
   toggleSettingsPanelLoadedFlag: officeActions.toggleSettingsPanelLoadedFlag,
-  setIsDataOverviewOpen: popupStateActions.setIsDataOverviewOpen,
 };
 export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(SettingsMenuNotConnected);

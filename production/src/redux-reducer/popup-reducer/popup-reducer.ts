@@ -3,6 +3,8 @@ import {
   PopupActions,
   PopupActionTypes,
   PopupState,
+  SetIsDuplicateAction,
+  SetIsEditAction,
   SetPreparedReportAction,
   SetReportNFiltersAction,
   SwitchImportSubtotalsOnEditAction,
@@ -19,6 +21,12 @@ export const popupReducer = (state = initialState, action: PopupActions): PopupS
 
     case PopupActionTypes.SET_PREPARED_REPORT:
       return setPreparedReport(state, action);
+
+    case PopupActionTypes.SET_IS_EDIT:
+      return setIsEdit(state, action);
+
+    case PopupActionTypes.SET_IS_DUPLICATE:
+      return setIsDuplicate(state, action);
 
     case PopupActionTypes.CLEAR_EDITED_OBJECT:
       return clearEditedObject(state);
@@ -40,6 +48,16 @@ export const popupReducer = (state = initialState, action: PopupActions): PopupS
 const setReportNFilters = (state: PopupState, action: SetReportNFiltersAction): PopupState => ({
   ...state,
   editedObject: action.editedObject,
+});
+
+const setIsEdit = (state: PopupState, action: SetIsEditAction): PopupState => ({
+  ...state,
+  isEdit: action.isEdit,
+});
+
+const setIsDuplicate = (state: PopupState, action: SetIsDuplicateAction): PopupState => ({
+  ...state,
+  isDuplicate: action.isDuplicate,
 });
 
 const setPreparedReport = (state: PopupState, action: SetPreparedReportAction): PopupState => {

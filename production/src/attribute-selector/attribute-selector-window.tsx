@@ -9,7 +9,7 @@ import { pageByHelper } from '../page-by/page-by-helper';
 
 import { RootState } from '../store';
 
-import { DialogResponse } from '../dialog/dialog-controller-types';
+import { DialogCommands, DialogResponse } from '../dialog/dialog-controller-types';
 import { AttributeSelectorWindowNotConnectedProps } from './attribute-selector-types';
 
 import { DialogButtons } from '../dialog/dialog-buttons/dialog-buttons';
@@ -17,7 +17,6 @@ import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/
 import { navigationTreeSelectors } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer-selectors';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { AttributeSelector } from './attribute-selector';
-import { selectorProperties } from './selector-properties';
 import { DisplayAttrFormNames } from '../mstr-object/constants';
 
 import '../home/home.scss';
@@ -52,8 +51,7 @@ export const AttributeSelectorWindowNotConnected: React.FC<
   };
 
   const handleCancel = (): void => {
-    const { commandCancel } = selectorProperties;
-    const message = { command: commandCancel };
+    const message = { command: DialogCommands.COMMAND_CANCEL };
     dialogHelper.officeMessageParent(message);
   };
 
@@ -135,7 +133,7 @@ export const AttributeSelectorWindowNotConnected: React.FC<
       DisplayAttrFormNames.AUTOMATIC;
 
     const message = {
-      command: selectorProperties.commandOnUpdate,
+      command: DialogCommands.COMMAND_ON_UPDATE,
       objectWorkingId: editedObject?.objectWorkingId,
       chosenObjectId,
       projectId,

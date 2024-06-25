@@ -7,7 +7,7 @@ import { IncomingErrorStrings } from '../../error/constants';
 
 const CONNECTION_CHECK_TIMEOUT = 3000;
 
-class SidePanelOperationDecorator {
+export class SidePanelOperationDecorator {
   /**
    * Wraps functions with try-catch. All throw error will be pass and handled by handleError function.
    *
@@ -34,7 +34,7 @@ class SidePanelOperationDecorator {
           }
         }
       } catch (error) {
-        this.handleSidePanelActionError(error);
+        SidePanelOperationDecorator.handleSidePanelActionError(error);
       }
     };
 
@@ -49,7 +49,7 @@ class SidePanelOperationDecorator {
    *
    * @param error Plain error object thrown by method calls.
    */
-  handleSidePanelActionError = (error: any): void => {
+  static handleSidePanelActionError = (error: any): void => {
     const castedError = String(error);
     const { CONNECTION_BROKEN } = IncomingErrorStrings;
     if (castedError.includes(CONNECTION_BROKEN)) {

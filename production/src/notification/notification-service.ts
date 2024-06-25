@@ -1,8 +1,9 @@
+import officeReducerHelper from '../office/store/office-reducer-helper';
+
 import { reduxStore } from '../store';
 
 import {
   deleteObjectNotification,
-  dismissAllObjectsNotifications,
   dismissSingleNotification,
 } from '../redux-reducer/notification-reducer/notification-action-creators';
 import { removeObject } from '../redux-reducer/object-reducer/object-actions';
@@ -11,10 +12,6 @@ import { cancelOperationByOperationId } from '../redux-reducer/operation-reducer
 class NotificationService {
   dismissNotification = (objectWorkingId: number): void => {
     reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
-  };
-
-  dismissAllNotifications = (): void => {
-    reduxStore.dispatch(dismissAllObjectsNotifications());
   };
 
   dismissSuccessfulRemoveNotification = (objectWorkingId: number): void => {
@@ -28,6 +25,16 @@ class NotificationService {
 
   cancelOperationFromNotification = (operationId: string): void => {
     reduxStore.dispatch(cancelOperationByOperationId(operationId));
+  };
+
+  /**
+   * Clears the rendered popup data and runs the provided callback.
+   *
+   * @param callback Callback to run after clearing the popup data.
+   */
+  clearPopupDataAndRunCallback = (callback: () => void): void => {
+    officeReducerHelper.clearPopupData();
+    callback();
   };
 
   /**

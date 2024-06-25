@@ -1,11 +1,12 @@
 import { ObjectData } from '../../types/object-types';
-import { PopupActionTypes } from './popup-reducer-types';
+import { PopupActionTypes, SetIsDuplicateAction, SetIsEditAction } from './popup-reducer-types';
 
 import { DisplayAttrFormNames } from '../../mstr-object/constants';
 
-const setReportAndFilters = (objectData: ObjectData): any => ({
+const setReportAndFilters = (objectData: ObjectData, isDuplicate = false): any => ({
   type: PopupActionTypes.SET_REPORT_N_FILTERS,
   editedObject: objectData,
+  isDuplicate,
 });
 
 const preparePromptedReport = (instanceId: string, chosenObjectData: any): any => ({
@@ -28,6 +29,16 @@ const updateDisplayAttrFormOnEdit = (data: DisplayAttrFormNames): any => ({
   data,
 });
 
+const setIsEdit = (isEdit: boolean): SetIsEditAction => ({
+  type: PopupActionTypes.SET_IS_EDIT,
+  isEdit,
+});
+
+const setIsDuplicate = (isDuplicate: boolean): SetIsDuplicateAction => ({
+  type: PopupActionTypes.SET_IS_DUPLICATE,
+  isDuplicate,
+});
+
 export const popupActions = {
   setReportAndFilters,
   preparePromptedReport,
@@ -35,4 +46,6 @@ export const popupActions = {
   switchImportSubtotalsOnEdit,
   clearEditedObject,
   updateDisplayAttrFormOnEdit,
+  setIsEdit,
+  setIsDuplicate,
 };

@@ -10,6 +10,7 @@ export type OfficeState = {
   popupData: any;
   isDialogOpen: boolean;
   isDialogLoaded: boolean;
+  dialogToOpen: DialogToOpen;
   settingsPanelLoaded: boolean;
   reusePromptAnswers: boolean;
   isShapeAPISupported: boolean;
@@ -19,10 +20,20 @@ export type OfficeState = {
   isAdvancedWorksheetTrackingSupported: boolean;
 };
 
+export enum DialogToOpen {
+  REPROMPT_POPUP = 'REPROMPT_POPUP',
+  EDIT_FILTERS_POPUP = 'EDIT_FILTERS_POPUP',
+  REPROMPT_DOSSIER_POPUP = 'REPROMPT_DOSSIER_POPUP',
+  EDIT_DOSSIER_POPUP = 'EDIT_DOSSIER_POPUP',
+  IMPORTED_DATA_OVERVIEW_POPUP = 'IMPORTED_DATA_OVERVIEW_POPUP',
+  POPUP_NAVIGATION = 'POPUP_NAVIGATION',
+}
+
 export enum OfficeActionsTypes {
   SHOW_DIALOG = 'OFFICE_SHOW_DIALOG',
   HIDE_DIALOG = 'OFFICE_HIDE_DIALOG',
   SET_IS_DIALOG_LOADED = 'OFFICE_SET_IS_DIALOG_LOADED',
+  SET_DIALOG_TO_OPEN = 'OFFICE_SET_DIALOG_TO_OPEN',
   TOGGLE_SECURED_FLAG = 'OFFICE_TOGGLE_SECURED_FLAG',
   TOGGLE_IS_SETTINGS_FLAG = 'OFFICE_TOGGLE_IS_SETTINGS_FLAG',
   TOGGLE_IS_CONFIRM_FLAG = 'OFFICE_TOGGLE_IS_CONFIRM_FLAG',
@@ -52,6 +63,11 @@ export interface HideDialogAction extends Action {
 export interface SetIsDialogLoadedAction extends Action {
   type: OfficeActionsTypes.SET_IS_DIALOG_LOADED;
   isDialogLoaded: boolean;
+}
+
+export interface SetDialogToOpenAction extends Action {
+  type: OfficeActionsTypes.SET_DIALOG_TO_OPEN;
+  dialogToOpen: DialogToOpen;
 }
 
 export interface ToggleSecuredFlagAction extends Action {
@@ -132,6 +148,7 @@ export type OfficeActions =
   | ShowDialogAction
   | HideDialogAction
   | SetIsDialogLoadedAction
+  | SetDialogToOpenAction
   | ToggleSecuredFlagAction
   | ToggleIsSettingsFlagAction
   | ToggleIsConfirmFlagAction

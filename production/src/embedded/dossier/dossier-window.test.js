@@ -7,7 +7,8 @@ import { sessionHelper } from '../../storage/session-helper';
 
 import { reduxStore } from '../../store';
 
-import { selectorProperties } from '../../attribute-selector/selector-properties';
+import { DialogCommands } from '../../dialog/dialog-controller-types';
+
 import { DossierWindowNotConnected } from './dossier-window';
 
 jest.mock('../../dialog/dialog-helper');
@@ -33,8 +34,7 @@ describe('Dossierwindow', () => {
 
   it('should call proper method on cancel action', () => {
     // given
-    const { commandCancel } = selectorProperties;
-    const message = { command: commandCancel };
+    const message = { command: DialogCommands.COMMAND_CANCEL };
     jest.spyOn(dialogHelper, 'officeMessageParent');
 
     // when

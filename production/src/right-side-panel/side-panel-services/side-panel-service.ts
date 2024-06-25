@@ -21,10 +21,10 @@ import {
   SidePanelBanner,
   TitleOperationInProgressMap,
 } from '../../redux-reducer/notification-reducer/notification-reducer-types';
+import { DialogToOpen } from '../../redux-reducer/office-reducer/office-reducer-types';
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
 
-import { dialogController } from '../../dialog/dialog-controller';
 import i18n from '../../i18n';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { OperationTypes } from '../../operation/operation-type-names';
@@ -55,7 +55,7 @@ export class SidePanelService {
   async addData(): Promise<void> {
     // @ts-expect-error
     reduxStore.dispatch(navigationTreeActions.cancelImportRequest());
-    await dialogController.runPopupNavigation();
+    reduxStore.dispatch(officeActions.setDialogToOpen(DialogToOpen.POPUP_NAVIGATION));
   }
 
   /**

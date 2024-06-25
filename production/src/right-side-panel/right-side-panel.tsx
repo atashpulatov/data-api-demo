@@ -12,12 +12,16 @@ import { useDialogPanelCommunication } from './side-panel-hooks/use-dialog-panel
 import { useGetSidePanelPopup } from './side-panel-hooks/use-get-side-panel-popup';
 import { useGetUpdatedDuplicatePopup } from './side-panel-hooks/use-get-updated-duplicate-popup';
 import useInitializeSidePanel from './side-panel-hooks/use-initialize-side-panel';
+import { useOpenDialog } from './side-panel-hooks/use-open-dialog';
 
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { sidePanelNotificationHelper } from './side-panel-services/side-panel-notification-helper';
 import { sidePanelService } from './side-panel-services/side-panel-service';
 
-import { dialogController } from '../dialog/dialog-controller';
+import { reduxStore } from '../store';
+
+import { DialogToOpen } from '../redux-reducer/office-reducer/office-reducer-types';
+
 import {
   dismissAllObjectsNotifications,
   setSidePanelBannerNotification,
@@ -65,6 +69,7 @@ export const RightSidePanel: React.FC = () => {
   const isAnyPopupOrSettingsDisplayedRef = useRef(isAnyPopupOrSettingsDisplayed);
 
   useInitializeSidePanel(setActiveSheetId, isAnyPopupOrSettingsDisplayedRef);
+  useOpenDialog();
   useDialogPanelCommunication();
   useGetSidePanelPopup({ setSidePanelPopup, sidePanelPopup });
 
@@ -100,9 +105,8 @@ export const RightSidePanel: React.FC = () => {
   }, [loadedObjects, notifications, operations, bannerNotification, dispatch]);
 
   const showOverviewModal = (objectName: string): void => {
-    dialogController.runImportedDataOverviewPopup();
     popupStateActions.setPrefilteredSourceObjectName(objectName);
-    popupStateActions.setIsDataOverviewOpen(true);
+    reduxStore.dispatch(officeActions.setDialogToOpen(DialogToOpen.IMPORTED_DATA_OVERVIEW_POPUP));
   };
   return (
     <>

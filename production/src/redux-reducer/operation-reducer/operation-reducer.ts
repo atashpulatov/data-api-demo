@@ -101,7 +101,9 @@ function cancelOperationByOperationId(
   const processedOperationIndex = state.operations.findIndex(
     operation => operation.operationId === operationId
   );
-  state.operations.splice(processedOperationIndex, 1);
+  if (processedOperationIndex !== -1) {
+    state.operations.splice(processedOperationIndex, 1);
+  }
   return { ...state };
 }
 

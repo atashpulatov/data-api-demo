@@ -1,4 +1,5 @@
-import { selectorProperties } from '../attribute-selector/selector-properties';
+import { DialogCommands } from './dialog-controller-types';
+
 import { officeContext } from '../office/office-context';
 
 class DialogHelper {
@@ -9,9 +10,8 @@ class DialogHelper {
       response: error.response,
       type: error.type,
     };
-    const { commandError } = selectorProperties;
     const message = {
-      command: commandError,
+      command: DialogCommands.COMMAND_ERROR,
       error: errorObj,
     };
     this.officeMessageParent(message);

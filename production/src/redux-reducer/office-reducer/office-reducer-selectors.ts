@@ -56,6 +56,11 @@ const selectIsDialogOpen = createSelector(
   officeState => officeState.isDialogOpen
 );
 
+const selectDialogToOpen = createSelector(
+  [getOfficeState],
+  officeState => officeState.dialogToOpen
+);
+
 const selectIsSettingsPanelLoaded = createSelector(
   [getOfficeState],
   officeState => officeState.settingsPanelLoaded
@@ -92,6 +97,7 @@ export const officeSelectors = {
   selectIsClearDataFailed,
   selectIsDialogLoaded,
   selectIsDialogOpen,
+  selectDialogToOpen,
   selectIsSettingsPanelLoaded,
   selectIsAdvancedWorksheetTrackingSupported,
   selectIsSettings,

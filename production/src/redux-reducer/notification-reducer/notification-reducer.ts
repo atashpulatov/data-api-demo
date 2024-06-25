@@ -183,18 +183,6 @@ const dismissSingleNotification = (
     ({ objectWorkingId }) => objectWorkingId !== payload.objectWorkingId
   );
 
-  // TODO: figure out if this is needed
-  // const singleNotification = notifications.find(
-  //   notification => notification.objectWorkingId === payload.objectWorkingId
-  // );
-  // if (singleNotification) {
-  //   if (singleNotification.dismissNotification) {
-  //     singleNotification.dismissNotification();
-  //   } else if (singleNotification.callback) {
-  //     singleNotification.callback();
-  //   }
-  // }
-
   return {
     notifications: newNotifications,
     globalNotification: state.globalNotification,
@@ -204,15 +192,6 @@ const dismissSingleNotification = (
 
 const dismissAllNotifications = (state: NotificationState): NotificationState => {
   const { notifications } = state;
-
-  // TODO: figure out if this is needed
-  // notifications.forEach(({ dismissNotification, callback }) => {
-  //   if (dismissNotification) {
-  //     // dismissNotification();
-  //   } else if (callback) {
-  //     callback();
-  //   }
-  // });
 
   const newNotifications = notifications.filter(
     ({ type }) => type !== ObjectNotificationTypes.SUCCESS

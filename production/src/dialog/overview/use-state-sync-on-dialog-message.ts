@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { dialogHelper } from '../dialog-helper';
@@ -6,8 +7,8 @@ import { dialogHelper } from '../dialog-helper';
 import { reduxStore } from '../../store';
 
 import { DialogType } from '../../redux-reducer/popup-state-reducer/popup-state-reducer-types';
+import { DialogCommands } from '../dialog-controller-types';
 
-import { selectorProperties } from '../../attribute-selector/selector-properties';
 import {
   createGlobalNotification,
   restoreAllNotifications,
@@ -16,6 +17,8 @@ import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-act
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 
 const useStateSyncOnDialogMessage = (): void => {
+  const dispatch = useDispatch();
+
   useEffect(() => {
     // Get Message from Right side panel
     Office.context.ui.addHandlerAsync(Office.EventType.DialogParentMessageReceived, msg => {
@@ -44,9 +47,9 @@ const useStateSyncOnDialogMessage = (): void => {
 
   useEffect(() => {
     // Send message to the Right side panel when overview dialog is loaded
-    const message = { command: selectorProperties.commandDialogLoaded };
+    const message = { command: DialogCommands.COMMAND_DIALOG_LOADED };
     dialogHelper.officeMessageParent(message);
-  }, []);
+  }, [dispatch]);
 };
 
 export default useStateSyncOnDialogMessage;

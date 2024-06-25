@@ -15,9 +15,9 @@ import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-servic
 import { pageByHelper } from '../../page-by/page-by-helper';
 import { EXTEND_SESSION, sessionHelper } from '../../storage/session-helper';
 
+import { DialogCommands } from '../../dialog/dialog-controller-types';
 import { ItemType, LibraryWindowProps } from './library-window-types';
 
-import { selectorProperties } from '../../attribute-selector/selector-properties';
 import { DialogButtons } from '../../dialog/dialog-buttons/dialog-buttons';
 import i18n from '../../i18n';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
@@ -217,8 +217,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
    * sends a command to cancel the object selection and closes the popup
    */
   const handleCancel = useCallback(() => {
-    const { commandCancel } = selectorProperties;
-    const message = { command: commandCancel };
+    const message = { command: DialogCommands.COMMAND_CANCEL };
     dialogHelper.officeMessageParent(message);
   }, []);
 

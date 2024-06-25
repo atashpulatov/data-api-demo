@@ -1,8 +1,10 @@
+import { ObjectData } from '../../types/object-types';
 import {
   ObjectActionTypes,
   ObjectState,
   RemoveObjectAction,
   UpdateObjectAction,
+  UpdateObjectsAction,
 } from './object-reducer-types';
 
 import { OperationTypes } from '../../operation/operation-type-names';
@@ -205,10 +207,10 @@ describe('objectReducer', () => {
   describe('deleteObject', () => {
     it('should throw error if object does not exist in array', () => {
       // given
-      const someId = 123;
-      const action: RemoveObjectAction = {
-        type: ObjectActionTypes.REMOVE_OBJECT,
-        payload: someId,
+      const someIds = [123] as Partial<ObjectData>[];
+      const action: UpdateObjectsAction = {
+        type: ObjectActionTypes.UPDATE_OBJECTS,
+        payload: someIds,
       };
 
       // when

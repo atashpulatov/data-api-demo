@@ -46,7 +46,19 @@ export interface FilterDetails {
 export interface ReportParams {
   bindId?: string;
   mstrObjectType?: typeof mstrObjectType;
-  duplicateMode?: any;
+  isDuplicate?: boolean;
   object?: any;
   pageByData?: PageByData;
+}
+
+export enum DialogCommands {
+  COMMAND_OK = 'command_ok',
+  COMMAND_SECONDARY = 'command_secondary',
+  COMMAND_CANCEL = 'command_cancel',
+  COMMAND_ON_UPDATE = 'commandOnUpdate',
+  COMMAND_ERROR = 'commandError',
+  COMMAND_BROWSE_UPDATE = 'commandBrowseUpdate',
+  COMMAND_DIALOG_LOADED = 'commandDialogLoaded',
+  COMMAND_CLOSE_DIALOG = 'commandCloseDialog',
+  COMMAND_EXECUTE_NEXT_REPROMPT_TASK = 'commandExecuteNextRepromptTask',
 }

@@ -4,7 +4,8 @@ import { libraryErrorController } from '@mstr/mstr-react-library';
 
 import { dialogHelper } from './dialog-helper';
 
-import { selectorProperties } from '../attribute-selector/selector-properties';
+import { DialogCommands } from './dialog-controller-types';
+
 import i18n from '../i18n';
 import { DialogViewSelector } from './dialog-view-selector';
 import InternetConnectionError from './internet-connection-error';
@@ -20,8 +21,7 @@ export const Dialog: React.FC = () => {
   }, []);
 
   const closePopup = useCallback(() => {
-    const { commandCancel } = selectorProperties;
-    const message = { command: commandCancel };
+    const message = { command: DialogCommands.COMMAND_CANCEL };
     dialogHelper.officeMessageParent(message);
   }, []);
 
