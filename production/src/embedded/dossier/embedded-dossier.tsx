@@ -25,7 +25,6 @@ import { VisualizationInfo } from '../../types/object-types';
 
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
-// import { addMultiplePromptKeys } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import { ErrorMessages } from '../../error/constants';
 
 import './dossier.css';
@@ -63,7 +62,6 @@ interface EmbeddedDossierProps {
   handleInstanceIdChange?: () => void;
   handleIframeLoadEvent?: () => void;
   handleEmbeddedDossierLoad?: () => void;
-  // add promptKeys to the method signature
   handleUniquePromptKeys?: (keys: string[]) => void;
   reusePromptAnswers?: boolean;
   previousPromptsAnswers?: PromptsAnswer[];
@@ -401,7 +399,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
             isImportedObjectPrompted,
             isMultipleRepromptWithReuse
           );
-          //    reduxStore.dispatch(addMultiplePromptKeys(allPromptKeys));
           handleUniquePromptKeys(allPromptKeys);
         }
       }
