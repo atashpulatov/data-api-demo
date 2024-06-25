@@ -34,7 +34,7 @@ export interface ClearRepromptTasksAction extends Action {
 
 export interface EditOperationAction extends Action {
   type: RepromptQueueActionTypes.EDIT_OPERATION;
-  payload: any; // Replace 'any' with the appropriate type
+  payload: any;
 }
 
 export type RepromptQueueActions =
