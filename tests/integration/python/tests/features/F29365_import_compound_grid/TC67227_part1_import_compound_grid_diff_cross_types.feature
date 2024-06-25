@@ -11,7 +11,7 @@ Feature: F29365 - Import compound grid
       And I waited for dossier to load successfully
       And I selected dossier page or chapter 2
       And I selected visualization "tabular"
-      And I clicked import dossier
+      And I selected import type "Import Data" and clicked import
       And I closed last notification
 
      Then I verified that cells ["A1", "B2", "C3"] have values ["Category", "$2,070,816", "$4,289,603"]
@@ -23,10 +23,10 @@ Feature: F29365 - Import compound grid
       And I waited for dossier to load successfully
       And I selected dossier page or chapter 3
       And I selected visualization "crosstab"
-      And I clicked import dossier
+      And I selected import type "Import Data" and clicked import
       And I closed last notification
 
-     Then I verified that cells ["G1", "G2", "G4"] have values ["Books", "Art & Architecture", "370160.583"]
+     Then I verified that cells ["G1", "G2", "G3"] have values ["Books", "Art & Architecture", "370160.583"]
 
      When I selected cell "AG1"
       And I clicked Add Data button
@@ -35,9 +35,9 @@ Feature: F29365 - Import compound grid
       And I waited for dossier to load successfully
       And I selected dossier page or chapter 4
       And I selected visualization "combination crosstab and tabular"
-      And I clicked import dossier
+      And I selected import type "Import Data" and clicked import
       And I closed last notification
 
-     Then I verified that cells ["AG3", "AH2", "AL4"] have values ["Subcategory", "Cost", "$480,173"]
+     Then I verified that cells ["AG2", "AH2", "AL3"] have values ["Subcategory", "Cost", "$480,173"]
 
       And I logged out

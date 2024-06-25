@@ -14,7 +14,7 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     MENU_SETTING_OPTION = '//button[normalize-space(.)="%s"]'
 
     SELECT_ALL_TILES = 'div.object-tile-container-header > span > span > '
-    SELECT_ALL_TILES_CHECKBOX = '.object-tile-container-header .checkbox-cell'
+    SELECT_ALL_TILES_CHECKBOX = '.object-tile-container-header .mstr-rc-3-selector'
     REFRESH_SELECTED_BUTTON = SELECT_ALL_TILES + 'button:nth-of-type(3)'
     REMOVE_SELECTED_BUTTON = SELECT_ALL_TILES + 'button:nth-of-type(4)'
 

@@ -6,14 +6,14 @@ Feature: F29365 - Import compound grid from dossier to Excel
 
      When I logged in as default user
       And I clicked Import Data button
-      And I found and selected object "Kind of compound grids - with prompt"
+      And I found and selected object "Kind of compound grids - with prompt - copy"
       And I clicked Import button to open Import Dossier
       And I clicked Run button for prompted dossier if prompts not already answered
       And I selected dossier page or chapter 1
       And I selected visualization "Visualization 1"
-      And I clicked import dossier
+      And I selected import type "Import Data" and clicked import
       And I closed all notifications
 
-     Then I verified that cells ["C2", "A7", "E4"] have values ["Profit", "2014 Q4", "$63,938"]
+     Then I verified that cells ["C2", "A6", "E3"] have values ["Profit", "2014 Q4", "$63,938"]
 
       And I logged out

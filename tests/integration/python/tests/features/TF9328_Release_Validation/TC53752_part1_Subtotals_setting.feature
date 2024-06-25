@@ -6,15 +6,14 @@ Feature: TF9328 - Release Validation
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-      And I found object by ID "51DB6FC611EA638917E80080EFD5ACB1" and selected "Report based on cube with subtotals"
+      And I found and selected object "Report based on cube with subtotals"
       And I clicked Prepare Data button
      Then I verified that Columns & Filters Selection is visible
       And I verified subtotal toggle is visible
 
      When I selected all attributes
       And I selected all metrics
-      And I clicked Import button in Columns and Filters Selection
+      And I selected import type "Import Data" and clicked import
       And I closed last notification
      Then I verified that cells ["B1", "J3", "H3"] have values ["Item Type", "81320.96", "Maximum"]
       And I verified that bold button is selected for cell "H3"
@@ -37,7 +36,7 @@ Feature: TF9328 - Release Validation
 
      When I added a new worksheet
       And I clicked Add Data button
-      And I found object by ID "300DBAFA4A1D8EC546AC6AB8CDE7834E" and selected "Report with a subtotal & prompt"
+      And I found and selected object "Report with a subtotal & prompt"
       And I clicked Prepare Data button
       And I waited for Run button to be enabled
       And I selected "Books" as an answer for "1. Category" prompt - object prompt
@@ -47,7 +46,7 @@ Feature: TF9328 - Release Validation
 
      When I selected all attributes
       And I selected all metrics
-      And I clicked Import button in Columns and Filters Selection
+      And I selected import type "Import Data" and clicked import
       And I waited for object to be imported successfully
       And I closed last notification
      Then I verified that cells ["B1", "C7", "B8"] have values ["Subcategory", "$1,164", "Total"]
@@ -73,14 +72,14 @@ Feature: TF9328 - Release Validation
 
      When I added a new worksheet
       And I clicked Add Data button
-      And I found object by ID "B570B68011EA637625CE0080EF65F1FA" and selected "Report with crosstab and subtotals"
+      And I found and selected object "Report with a subtotal & prompt"
       And I clicked Prepare Data button
      Then I verified that Columns & Filters Selection is visible
       And I verified subtotal toggle is visible
 
      When I selected all attributes
       And I selected all metrics
-      And I clicked Import button in Columns and Filters Selection
+      And I selected import type "Import Data" and clicked import
       And I waited for object to be imported successfully
       And I closed last notification
      Then I verified that cells ["B1", "B7", "C4", "W9"] have values ["Region", "Total", "", "$1"]

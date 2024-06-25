@@ -11,9 +11,9 @@ class AddInLoginBrowserPage(BaseBrowserPage):
     AUTH_ERROR_TITLE_TEXT = 'Authentication Error'
     AUTH_ERROR_OK_BUTTON_ID = "ActionLinkContainer"
 
-    PRIVILEGES_ERROR_MESSAGE_ELEM = '#dontHaveAccessHeader'
+    PRIVILEGES_ERROR_MESSAGE_ELEM = '#no-privilege-screen'
     PRIVILEGES_ERROR_MESSAGE_TEXT = 'You do not have the rights to access MicroStrategy for Office'
-    PRIVILEGES_ERROR_TRY_AGAIN_BUTTON_ID = 'tryAgainSpan'
+    PRIVILEGES_ERROR_TRY_AGAIN_BUTTON_CSS = 'button[aria-label="Try Again"]'
 
     ADDIN_SESSION_COOKIE_NAME = 'JSESSIONID'
 
@@ -52,7 +52,7 @@ class AddInLoginBrowserPage(BaseBrowserPage):
             AddInLoginBrowserPage.PRIVILEGES_ERROR_MESSAGE_ELEM, 
             AddInLoginBrowserPage.PRIVILEGES_ERROR_MESSAGE_TEXT
         )
-        self.get_element_by_id(AddInLoginBrowserPage.PRIVILEGES_ERROR_TRY_AGAIN_BUTTON_ID).click()
+        self.get_element_by_css(AddInLoginBrowserPage.PRIVILEGES_ERROR_TRY_AGAIN_BUTTON_CSS).click()
 
     def close_login_pop_up(self):
         self.switch_to_login_pop_up_window()
