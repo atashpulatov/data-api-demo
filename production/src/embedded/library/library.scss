@@ -25,6 +25,7 @@
     position: relative;
     top: 0;
     left: 0;
+    min-height: calc(100vh - 125px);
     max-height: calc(100vh - 125px);
     min-width: 530px;
     border-top: 1px solid $msdl-divider-gray_SOLID;
