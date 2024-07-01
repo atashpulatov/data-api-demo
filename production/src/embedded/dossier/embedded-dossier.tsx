@@ -309,7 +309,8 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     }
   };
 
-  collectKeys = (promptObjects: any[], keys: string[] = []): string[] => {
+  // Collect all unique prompt keys from prompt objects
+  collectPromptKeys = (promptObjects: any[], keys: string[] = []): string[] => {
     promptObjects.forEach(promptObject => {
       if (!keys.includes(promptObject?.key)) {
         keys.push(promptObject?.key);
@@ -387,7 +388,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
 
       // check if all keys from promptObjectAnswers are present in the promptKeys set
       if (isMultipleRepromptWithReuse) {
-        const allPromptKeys = this.collectKeys(promptObjectAnswers);
+        const allPromptKeys = this.collectPromptKeys(promptObjectAnswers);
         const areAllKeysPresent = allPromptKeys.every(key => promptKeys.includes(key));
         if (!areAllKeysPresent) {
           // Proceed with opening prompt dialog if applicable.
