@@ -88,6 +88,7 @@ const mapStateToProps = (state: {
 }): MultipleRepromptTransitionPageTypes => {
   const { repromptsQueueReducer, officeReducer, popupReducer } = state;
   const { total, repromptsQueue } = repromptsQueueReducer;
+
   return {
     nextObjectBindId: repromptsQueue[0]?.bindId || '',
     nextObjectIndex: total - repromptsQueue.length,
