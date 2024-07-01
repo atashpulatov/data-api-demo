@@ -1,7 +1,6 @@
 import {
   AddRepromptTaskAction,
   ClearRepromptTasksAction,
-  EditOperationAction,
   ExecuteNextRepromptTaskAction,
   RepromptQueueActionTypes,
   RepromptQueueTask,
@@ -31,13 +30,3 @@ export function executeNextRepromptTask(): ExecuteNextRepromptTaskAction {
 export function clearRepromptTask(): ClearRepromptTasksAction {
   return { type: RepromptQueueActionTypes.CLEAR_REPROMPT_TASKS };
 }
-
-/**
- * Adds unique keys to the set of prompt keys.
- * @param key The unique keys to add.
- * @returns The action to add the prompt key.
- */
-export const addMultiplePromptKeys = (keys: string[]): EditOperationAction => ({
-  type: RepromptQueueActionTypes.EDIT_OPERATION,
-  payload: keys,
-});
