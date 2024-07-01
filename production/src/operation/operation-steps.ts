@@ -358,6 +358,5 @@ export const operationsMap = {
   [ObjectImportType.TABLE]: operationStepsMapTable,
   [ObjectImportType.PIVOT_TABLE]: operationStepsMapPivotTable,
   [ObjectImportType.FORMATTED_DATA]: operationStepsMapFormattedTable,
-  [ObjectImportType.FORMATTED_TABLE]: operationStepsMapFormattedTable,
   [ObjectImportType.IMAGE]: operationStepsMapImage,
 };
