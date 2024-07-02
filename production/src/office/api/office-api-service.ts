@@ -176,8 +176,24 @@ class OfficeApiService {
     const { sourceTableRange, sourceWorksheet, targetTableRange, targetWorksheet } =
       rangeMigrationInfo;
 
-    targetWorksheet.getRange(targetTableRange).copyFrom(sourceWorksheet.getRange(sourceTableRange));
+    const sourceRange = sourceWorksheet.getRange(sourceTableRange);
+    excelContext.trackedObjects.add(sourceRange);
+
+    // Retrieve the column properties of source table
+    const sourceRangeColumnWidth = sourceRange.getColumnProperties({ format: { columnWidth: true } });
     await excelContext.sync();
+
+    const targetRange = targetWorksheet.getRange(targetTableRange);
+    excelContext.trackedObjects.add(targetRange);
+
+    // Copy the range from source worksheet to target worksheet.
+    targetRange.copyFrom(sourceRange);
+
+    // Apply the column properties of exported source table to target table
+    targetRange.setColumnProperties(sourceRangeColumnWidth.m_value);
+    await excelContext.sync();
+
+    excelContext.trackedObjects.remove([sourceRange, targetRange]);
   }
 
   /**
