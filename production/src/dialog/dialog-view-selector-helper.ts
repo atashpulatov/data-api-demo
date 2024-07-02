@@ -8,8 +8,8 @@ import { dialogHelper } from './dialog-helper';
 import { RequestPageByModalOpenData } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer-types';
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
+import { DialogCommands } from './dialog-controller-types';
 
-import { selectorProperties } from '../attribute-selector/selector-properties';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { DisplayAttrFormNames } from '../mstr-object/constants';
 
@@ -264,7 +264,7 @@ class DialogViewSelectorHelper {
     }
 
     const message = {
-      command: selectorProperties.commandOk,
+      command: DialogCommands.COMMAND_OK,
       chosenObject: props.chosenObjectId,
       chosenProject: props.chosenProjectId,
       chosenSubtype: props.chosenSubtype,
@@ -288,8 +288,8 @@ class DialogViewSelectorHelper {
       const { isReprompt } = props.dossierData;
       // skip this part if report contains no selected attribiutes/metrics/filters
       if (isReprompt && !this.wasReportJustImported(props)) {
-        message.command = selectorProperties.commandOnUpdate;
         const { selectedAttributes, selectedMetrics, selectedFilters } = props.editedObject;
+        message.command = DialogCommands.COMMAND_ON_UPDATE;
         message.body = this.createBody(selectedAttributes, selectedMetrics, selectedFilters, false);
       }
     }

@@ -6,9 +6,6 @@ import { Definition, SubtotalsInfo } from '../../types/object-types';
 
 import { DisplayAttrFormNames, ObjectImportType } from '../../mstr-object/constants';
 
-// TODO: refactor.
-// this is a temporary initial version. it should be improved
-
 export interface MstrData {
   chosenObjectId?: string;
   chosenObjectName?: string;
@@ -41,6 +38,7 @@ export interface PopupState {
   preparedInstance?: any;
   isReprompt?: boolean;
   isEdit?: boolean;
+  isDuplicate?: boolean;
 }
 export enum PopupActionTypes {
   RESET_STATE = 'POPUP_RESET_STATE',
@@ -49,6 +47,8 @@ export enum PopupActionTypes {
   SWITCH_IMPORT_SUBTOTALS_ON_EDIT = 'POPUP_SWITCH_IMPORT_SUBTOTALS_ON_EDIT',
   CLEAR_EDITED_OBJECT = 'POPUP_CLEAR_EDITED_OBEJECT',
   UPDATE_DISPLAY_ATTR_FORM_ON_EDIT = 'POPUP_UPDATE_DISPLAY_ATTR_FORM_ON_EDIT',
+  SET_IS_EDIT = 'POPUP_SET_IS_EDIT',
+  SET_IS_DUPLICATE = 'POPUP_SET_IS_DUPLICATE',
 }
 
 export interface SetReportNFiltersAction extends Action {
@@ -75,6 +75,15 @@ export interface UpdateDisplayAttrFormOnEditAction extends Action {
   type: PopupActionTypes.UPDATE_DISPLAY_ATTR_FORM_ON_EDIT;
   data: DisplayAttrFormNames; // Replace 'any' with the appropriate type
 }
+export interface SetIsEditAction extends Action {
+  type: PopupActionTypes.SET_IS_EDIT;
+  isEdit: boolean;
+}
+
+export interface SetIsDuplicateAction extends Action {
+  type: PopupActionTypes.SET_IS_DUPLICATE;
+  isDuplicate: boolean;
+}
 
 export interface ResetStateAction extends Action {
   type: PopupActionTypes.RESET_STATE;
@@ -84,6 +93,8 @@ export type PopupActions =
   | SetReportNFiltersAction
   | SetPreparedReportAction
   | ClearEditedObjectAction
+  | SetIsEditAction
+  | SetIsDuplicateAction
   | SwitchImportSubtotalsOnEditAction
   | UpdateDisplayAttrFormOnEditAction
   | ResetStateAction;

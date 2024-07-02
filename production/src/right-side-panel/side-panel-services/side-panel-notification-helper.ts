@@ -1,8 +1,10 @@
 import { PageByRefreshFailedOptions, PopupTypes } from '@mstr/connector-components';
 
+import { notificationService } from '../../notification/notification-service';
 import { officeApiService } from '../../office/api/office-api-service';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { pageByHelper } from '../../page-by/page-by-helper';
+import { operationService } from '../../redux-reducer/operation-reducer/operation-service';
 import { sidePanelHelper } from './side-panel-helper';
 
 import { reduxStore } from '../../store';
@@ -12,7 +14,6 @@ import { ObjectData } from '../../types/object-types';
 
 import { calculateLoadingProgress } from '../../operation/operation-loading-progress';
 import { OperationTypes } from '../../operation/operation-type-names';
-import { updateOperation } from '../../redux-reducer/operation-reducer/operation-actions';
 import { ObjectImportType } from '../../mstr-object/constants';
 
 class SidePanelNotificationHelper {
@@ -47,6 +48,7 @@ class SidePanelNotificationHelper {
       setDuplicatedObjectId(null);
     };
     setDuplicatedObjectId(objectWorkingId);
+
     setSidePanelPopup({
       type: PopupTypes.DUPLICATE,
       activeCell: officeApiService.getCellAddressWithDollars(activeCellAddress),
@@ -165,14 +167,18 @@ class SidePanelNotificationHelper {
     callback: () => () => Promise<void>;
   }): void => {
     const onCancel = (): void => {
-      this.clearPopupDataAndRunCallback(callback);
+      notificationService.clearPopupDataAndRunCallback(callback);
     };
 
     setSidePanelPopup({
       type: PopupTypes.RANGE_TAKEN,
       activeCell: officeApiService.getCellAddressWithDollars(activeCellAddress),
       onOk: (isActiveCellOptionSelected: boolean): void => {
-        this.importInNewRange(objectWorkingId, activeCellAddress, !isActiveCellOptionSelected);
+        operationService.importInNewRange(
+          objectWorkingId,
+          activeCellAddress,
+          !isActiveCellOptionSelected
+        );
         officeReducerHelper.clearPopupData();
       },
       onCancel,
@@ -205,11 +211,11 @@ class SidePanelNotificationHelper {
     edit: (objectWorkingId: number) => void;
   }): void => {
     const onCancel = (): void => {
-      this.clearPopupDataAndRunCallback(callback);
+      notificationService.clearPopupDataAndRunCallback(callback);
     };
 
     const onOk = (refreshFailedOptions: PageByRefreshFailedOptions): void => {
-      this.clearPopupDataAndRunCallback(callback);
+      notificationService.clearPopupDataAndRunCallback(callback);
       switch (refreshFailedOptions) {
         case PageByRefreshFailedOptions.EDIT_AND_REIMPORT:
           edit(objectWorkingId);
@@ -250,8 +256,8 @@ class SidePanelNotificationHelper {
     callback: () => Promise<void>;
   }): void => {
     const onOk = async (): Promise<void> => {
-      await sidePanelHelper.revertPageByImportForSiblings(objectWorkingId);
-      this.clearPopupDataAndRunCallback(callback);
+      await operationService.revertPageByImportForSiblings(objectWorkingId);
+      notificationService.clearPopupDataAndRunCallback(callback);
     };
 
     setSidePanelPopup({
@@ -279,7 +285,7 @@ class SidePanelNotificationHelper {
     callback: () => Promise<void>;
   }): void => {
     const onOk = async (): Promise<void> => {
-      this.clearPopupDataAndRunCallback(callback);
+      notificationService.clearPopupDataAndRunCallback(callback);
     };
 
     setSidePanelPopup({
@@ -287,39 +293,6 @@ class SidePanelNotificationHelper {
       selectedObjects,
       onOk,
     });
-  };
-
-  /**
-   * Clears the rendered popup data and runs the provided callback.
-   *
-   * @param callback Callback to run after clearing the popup data.
-   */
-  clearPopupDataAndRunCallback = (callback: () => void): void => {
-    officeReducerHelper.clearPopupData();
-    callback();
-  };
-
-  /**
-   * Dispatches new data to redux in order to repeat step of the operation.
-   *
-   * @param objectWorkingId  Uniqe id of source object for duplication.
-   * @param activeCellAddress  Adress of selected cell in excel.
-   * @param insertNewWorksheet  specify if the object will be imported on new worksheet
-   */
-  importInNewRange = (
-    objectWorkingId: number,
-    activeCellAddress: string,
-    insertNewWorksheet: boolean
-  ): void => {
-    reduxStore.dispatch(
-      updateOperation({
-        objectWorkingId,
-        startCell: insertNewWorksheet ? 'A1' : activeCellAddress,
-        repeatStep: true,
-        tableChanged: true,
-        insertNewWorksheet,
-      })
-    );
   };
 
   /**

@@ -1,0 +1,63 @@
+@use '~@mstr/rc/es/assets/scss/msdl_universal.scss' as *;
+
+.dossier-window {
+  .title-bar {
+    min-width: 500px;
+    margin: 20px 15px 10px 15px;
+
+    > span {
+      font-size: 18px;
+      color: $msdl-black;
+      font-weight: 500;
+    }
+  }
+
+  .dossier-window-information-text {
+    font-size: 11px;
+    color: $msdl-gray;
+    margin-left: 4px;
+  }
+
+  .dossier-window-information-frame {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    text-align: center;
+    line-height: 26px;
+  }
+
+  .dossier-window-information-icon,
+  .preview-info-icon svg {
+    max-height: 16px;
+    max-width: 16px;
+  }
+
+  .dossier-iframe {
+    position: relative;
+    top: 0;
+    left: 0;
+    min-height: calc(100vh - 125px);
+    max-height: calc(100vh - 125px);
+    min-width: 530px;
+  }
+}
+
+#dialog-wrapper .dossier-window {
+  .empty {
+    position: fixed;
+    left: 0;
+    top: 57px;
+    width: 100%;
+    height: calc(100% - 125px); /* 125px = 57px (top distance) + 68px (button row height) */
+  }
+
+  .dossier-window-embedded {
+    position: relative;
+    z-index: 0;
+  }
+
+  .dossier-window-embedded-empty {
+    position: relative;
+    z-index: -1;
+  }
+}

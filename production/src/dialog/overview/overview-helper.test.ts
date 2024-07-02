@@ -3,13 +3,15 @@ import { LoadedObject } from '@mstr/connector-components/lib/loaded-objects/obje
 
 import { notificationService } from '../../notification/notification-service';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
+import { operationService } from '../../redux-reducer/operation-reducer/operation-service';
 import { sidePanelHelper } from '../../right-side-panel/side-panel-services/side-panel-helper';
-import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-services/side-panel-notification-helper';
 import { sidePanelService } from '../../right-side-panel/side-panel-services/side-panel-service';
 import { dialogHelper } from '../dialog-helper';
-import overviewHelper, { OverviewActionCommands } from './overview-helper';
+import overviewHelper from './overview-helper';
 
 import { reduxStore, RootState } from '../../store';
+
+import { OverviewActionCommands } from './overview-types';
 
 import { OperationTypes } from '../../operation/operation-type-names';
 
@@ -425,7 +427,7 @@ describe('overview-helper', () => {
     };
 
     const importInNewRangeMock = jest
-      .spyOn(sidePanelNotificationHelper, 'importInNewRange')
+      .spyOn(operationService, 'importInNewRange')
       .mockImplementation();
     const clearPopupDataMock = jest
       .spyOn(officeReducerHelper, 'clearPopupData')

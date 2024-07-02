@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { OfficeApplicationType, SideInfoPanel } from '@mstr/connector-components';
 
 import { authenticationService } from '../../authentication/authentication-service';
+import { errorService } from '../../error/error-service';
 
-import { errorService } from '../../error/error-handler';
 import i18n from '../../i18n';
 
 const PrivilegeErrorSidePanel: React.FC = () => {

@@ -303,7 +303,13 @@ class OfficeApiWorksheetHelper {
       return;
     }
 
-    const worksheet = excelContext.workbook.worksheets.getItem(worksheetId);
+    const worksheet = excelContext.workbook.worksheets.getItemOrNullObject(worksheetId);
+    await excelContext.sync();
+
+    if (worksheet.isNullObject) {
+      return;
+    }
+
     const rangeOrNullObject = worksheet.getUsedRangeOrNullObject(true);
     const shapesCount = worksheet.shapes.getCount();
 

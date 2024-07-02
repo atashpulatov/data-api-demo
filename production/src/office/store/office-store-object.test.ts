@@ -1,4 +1,5 @@
 /* eslint-disable no-import-assign */
+import { errorService } from '../../error/error-service';
 import officeStoreHelper from './office-store-helper';
 
 import { reduxStore } from '../../store';
@@ -6,7 +7,6 @@ import officeStoreObject from './office-store-object';
 
 import { ObjectData } from '../../types/object-types';
 
-import { errorService } from '../../error/error-handler';
 import * as objectActions from '../../redux-reducer/object-reducer/object-actions';
 import { excludableObjectImportTypes, ObjectImportType } from '../../mstr-object/constants';
 

@@ -28,7 +28,7 @@ import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reduce
 import { repromptsQueueSelector } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer-selector';
 import { ErrorMessages } from '../../error/constants';
 
-import './dossier.css';
+import './dossier.scss';
 
 const { microstrategy, Office } = window;
 

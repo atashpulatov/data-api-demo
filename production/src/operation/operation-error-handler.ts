@@ -1,3 +1,4 @@
+import { errorService } from '../error/error-service';
 import { officeApiCrosstabHelper } from '../office/api/office-api-crosstab-helper';
 import { pivotTableHelper } from '../office/pivot-table/pivot-table-helper';
 import { officeRemoveHelper } from '../office/remove/office-remove-helper';
@@ -14,7 +15,6 @@ import {
 } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../types/object-types';
 
-import { errorService } from '../error/error-handler';
 import { deleteObjectNotification } from '../redux-reducer/notification-reducer/notification-action-creators';
 import { removeObject, restoreObjectBackup } from '../redux-reducer/object-reducer/object-actions';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
@@ -40,12 +40,11 @@ class OperationErrorHandler {
   ): Promise<void> {
     const callback = this.getCallback(objectData, operationData);
     if (callback) {
-      await errorService.handleObjectBasedError(
-        objectData.objectWorkingId,
-        error,
+      errorService.handleError(error, {
+        objectWorkingId: objectData.objectWorkingId,
+        operationData,
         callback,
-        operationData
-      );
+      });
     }
   }
 

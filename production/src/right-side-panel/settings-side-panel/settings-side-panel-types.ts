@@ -27,6 +27,7 @@ export enum UserPreferenceKey {
   EXCEL_DEFAULT_IMPORT_TYPE = 'excelDefaultImportFormat',
   EXCEL_PIVOT_TABLE_ADD_ATTRIBUTES_TO_COLUMNS = 'excelPivotTableAddAttributesToColumns',
   EXCEL_PIVOT_TABLE_ADD_METRICS_TO_VALUES = 'excelPivotTableAddMetricsToValues',
+  EXCEL_DATA_AUTO_REFRESH = 'excelDataAutoRefresh',
 }
 
 export const EXCEL_IMPORT_ATTRIBUTES_AS_TEXT = 'excelImportAttributesAsText';

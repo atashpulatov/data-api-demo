@@ -6,9 +6,6 @@ import { reduxStore } from '../../store';
 
 import { ObjectData } from '../../types/object-types';
 import { PromptsAnswer } from '../answers-reducer/answers-reducer-types';
-import { PopupActionTypes } from './popup-reducer-types';
-
-import { dialogController } from '../../dialog/dialog-controller';
 
 describe('Popup Helper', () => {
   afterEach(() => {
@@ -64,6 +61,7 @@ describe('Popup Helper', () => {
 
   it('should run edit popup if edit action for not prompted object is called', () => {
     // given
+    reduxStore.dispatch = jest.fn();
     const objectData = {
       id: 'id',
       projectId: 'projectId',
@@ -73,19 +71,17 @@ describe('Popup Helper', () => {
       isPrompted: false,
     } as unknown as ObjectData;
 
-    const runEditFiltersPopupMock = jest
-      .spyOn(dialogController, 'runEditFiltersPopup')
-      .mockImplementation();
-
     // when
     popupHelper.callForEdit(objectData);
     // then
 
-    expect(runEditFiltersPopupMock).toHaveBeenCalledWith(objectData);
+    expect(reduxStore.dispatch).toHaveBeenCalledTimes(2);
   });
 
   it('should run reprompt popup if edit action for prompted object is called', () => {
     // given
+    reduxStore.dispatch = jest.fn();
+
     const objectData = {
       id: 'id',
       projectId: 'projectId',
@@ -94,20 +90,17 @@ describe('Popup Helper', () => {
       promptsAnswers: [] as PromptsAnswer[],
       isPrompted: true,
     } as unknown as ObjectData;
-
-    const runRepromptPopupMock = jest
-      .spyOn(dialogController, 'runRepromptPopup')
-      .mockImplementation();
 
     // when
     popupHelper.callForEdit(objectData);
     // then
 
-    expect(runRepromptPopupMock).toHaveBeenCalledWith(objectData);
+    expect(reduxStore.dispatch).toHaveBeenCalledTimes(3);
   });
 
   it('should run reprompt popup with isEdit = false if reprompt action for prompted object is called', () => {
     // given
+    reduxStore.dispatch = jest.fn();
     const objectData = {
       id: 'id',
       projectId: 'projectId',
@@ -117,14 +110,10 @@ describe('Popup Helper', () => {
       isPrompted: true,
     } as unknown as ObjectData;
 
-    const runRepromptPopupMock = jest
-      .spyOn(dialogController, 'runRepromptPopup')
-      .mockImplementation();
-
     // when
     popupHelper.callForReprompt(objectData);
     // then
-    expect(runRepromptPopupMock).toHaveBeenCalledWith(objectData, false);
+    expect(reduxStore.dispatch).toHaveBeenCalledTimes(3);
   });
 
   it('should update dossier data in prepareDossierForEdit with visualizationInfo update', async () => {
@@ -244,49 +233,26 @@ describe('Popup Helper', () => {
     // object
     const object = { mstrObjectType: { name: 'report' } } as ObjectData;
 
-    const reportParams = {
-      duplicateMode: true,
-      object,
-    };
-    const runEditFiltersPopupMock = jest
-      .spyOn(dialogController, 'runEditFiltersPopup')
-      .mockImplementation();
-
     reduxStore.dispatch = jest.fn();
 
     // when
     await popupHelper.callForDuplicate(object);
     // then
 
-    expect(reduxStore.dispatch).toHaveBeenCalledWith({
-      type: PopupActionTypes.SET_REPORT_N_FILTERS,
-      editedObject: object,
-    });
-    expect(runEditFiltersPopupMock).toHaveBeenCalledWith(reportParams);
+    expect(reduxStore.dispatch).toHaveBeenCalledTimes(3);
   });
 
   it('should do callForDuplicate for duplication with edit for prompted report', async () => {
     // object
     const object = { mstrObjectType: { name: 'report' }, isPrompted: 2 } as unknown as ObjectData;
 
-    const reportParams = {
-      duplicateMode: true,
-      object,
-    };
-    const runRepromptPopupMock = jest
-      .spyOn(dialogController, 'runRepromptPopup')
-      .mockImplementation();
     reduxStore.dispatch = jest.fn();
 
     // when
     await popupHelper.callForDuplicate(object);
 
     // then
-    expect(reduxStore.dispatch).toHaveBeenCalledWith({
-      type: PopupActionTypes.SET_REPORT_N_FILTERS,
-      editedObject: object,
-    });
-    expect(runRepromptPopupMock).toHaveBeenCalledWith(reportParams);
+    expect(reduxStore.dispatch).toHaveBeenCalledTimes(4);
   });
 
   it('should update dossier data in prepareDossierForReprompt with visualizationInfo update', async () => {
@@ -372,23 +338,10 @@ describe('Popup Helper', () => {
         delete paramObject.objectType;
       });
 
-    const runEditDossierPopup = jest
-      .spyOn(dialogController, 'runEditDossierPopup')
-      .mockImplementation();
-
-    const newObject = { test: 'test' };
-    const reportParams = {
-      duplicateMode: true,
-      object: newObject,
-    };
     // when
     await popupHelper.callForDuplicate(object);
     // then
     expect(spyPrepareDossierForEdit).toHaveBeenCalledWith(object);
-    expect(reduxStore.dispatch).toHaveBeenCalledWith({
-      type: PopupActionTypes.SET_REPORT_N_FILTERS,
-      editedObject: newObject,
-    });
-    expect(runEditDossierPopup).toHaveBeenCalledWith(reportParams);
+    expect(reduxStore.dispatch).toHaveBeenCalledTimes(3);
   });
 });

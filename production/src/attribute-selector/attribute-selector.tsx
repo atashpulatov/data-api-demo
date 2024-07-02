@@ -23,7 +23,7 @@ import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import { errorCodes, ErrorMessages } from '../error/constants';
 import { DisplayAttrFormNames, displayAttrFormNamesOptions } from '../mstr-object/constants';
 
-import './attribute-selector.css';
+import './attribute-selector.scss';
 
 const mapToLegacyMstrData = (
   chosenObject: MstrDataProps,

@@ -59,7 +59,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
     ADD_TO_LIBRARY_BUTTON_TEXT = 'Add to Library'
     ADD_TO_LIBRARY_BUTTON_SEARCH_TIMEOUT = 5
 
-    CLOSE_IMPORT_DATA_BUTTON = '.popup-buttons > button'
+    CLOSE_IMPORT_DATA_BUTTON = '.dialog-buttons > button'
     FILTERS_BUTTON = '.filter-button'
     FILTERS_SELECTED_NUMBER = '.filters-selected'
 
@@ -216,6 +216,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
         self.right_panel_tile_browser_page.wait_for_operation_error_and_accept(error_message)
 
     def click_import_button_to_import_with_global_error(self, error_message):
+        self.focus_on_add_in_popup_frame()
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
 
         self.right_panel_tile_browser_page.wait_for_operation_global_error_and_accept(error_message)

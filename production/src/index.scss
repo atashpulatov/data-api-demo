@@ -1,0 +1,149 @@
+@use '~@mstr/rc/es/assets/scss/msdl_universal.scss' as *;
+@import '~antd/dist/antd.css';
+
+#root {
+  height: 100%;
+  overflow: hidden;
+}
+
+#measure-text {
+  position: fixed;
+  right: -100px;
+  top: -100px;
+  visibility: hidden;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+.hidden {
+  display: none;
+}
+
+.js-focus-visible :focus:not(.focus-visible) {
+  outline: none;
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  border: 1px solid $msdl-divider-gray_SOLID;
+  position: relative;
+  height: 68px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  min-width: 530px;
+}
+
+.loading-spinner {
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+  gap: 0 !important;
+  left: 0;
+  top: 57px;
+  width: 100%;
+  height: calc(100% - 125px); /* 125px = 57px (top distance) + 68px (button row height) */
+}
+
+// ANTD OVERRIDES
+.ant-popover .ant-popover-inner-content {
+  min-width: 38px;
+  max-width: 100%;
+  padding: 8px;
+  text-align: left;
+  background-color: $msdl-black;
+  color: $msdl-white;
+  border-radius: 4px;
+  font-size: 12px;
+  overflow-wrap: break-word;
+}
+
+.ant-popover-placement-bottom > .ant-popover-content > div.ant-popover-arrow,
+.ant-popover-placement-bottomRight > .ant-popover-content > div.ant-popover-arrow,
+.ant-popover-placement-topRight > .ant-popover-content > div.ant-popover-arrow,
+.ant-popover-placement-topLeft > .ant-popover-content > div.ant-popover-arrow,
+.ant-popover-placement-top > .ant-popover-content > div.ant-popover-arrow {
+  border-color: $msdl-black;
+}
+
+.ant-btn::after,
+.ant-radio-checked::after {
+  display: none;
+}
+
+.ant-switch .ant-click-animating-node {
+  animation: none;
+}
+
+.ant-radio-input:focus + .ant-radio-inner {
+  box-shadow: none;
+}
+
+.ant-btn:focus:not(.focus-visible),
+.ant-input:focus:not(.focus-visible) {
+  outline: none;
+}
+
+.ant-btn-primary.focus-visible {
+  color: $msdl-white;
+}
+
+.ant-radio-input.focus-visible + .ant-radio-inner {
+  outline: $msdl-border-blue_SOLID solid 3px;
+  outline: -webkit-focus-ring-color auto 4px;
+}
+
+.ant-btn {
+  background-color: $msdl-white;
+  border-color: $msdl-border-gray_SOLID;
+  color: $msdl-black;
+  font-size: 14px;
+  min-width: 92px;
+
+  &:hover {
+    background-color: $msdl-divider-gray_SOLID;
+    border-color: $msdl-border-gray_SOLID;
+    color: $msdl-black;
+  }
+
+  &:active {
+    background-color: $msdl-divider-gray-dark_SOLID;
+    border-color: $msdl-border-gray_SOLID;
+    color: $msdl-black;
+  }
+
+  &:disabled,
+  &[disabled]:hover {
+    background-color: $msdl-white;
+    border-color: $msdl-border-gray_SOLID;
+    color: $msdl-black;
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  &-primary {
+    background-color: $msdl-cell-fill-blue;
+    border-color: $msdl-cell-fill-blue;
+    color: $msdl-white;
+    font-size: 14px;
+
+    &:hover,
+    &:active {
+      background-color: $msdl-hover-blue;
+      border-color: $msdl-hover-blue;
+      color: $msdl-white;
+    }
+
+    &:disabled,
+    &[disabled]:hover {
+      background-color: $msdl-cell-fill-blue;
+      border-color: $msdl-cell-fill-blue;
+      color: $msdl-white;
+      opacity: 0.5;
+      cursor: default;
+    }
+  }
+}

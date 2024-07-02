@@ -15,6 +15,8 @@ import {
   Notification,
   NotificationActionTypes,
   RestoreAllNotificationsAction,
+  SetSidePanelBannerAction,
+  SidePanelBanner,
 } from './notification-reducer-types';
 
 export const createConnectionLostNotification = (): CreateConnectionLostNotificationAction => ({
@@ -89,4 +91,11 @@ export const displaySuccessNotification = (
 ): DisplayNotificationCompletedAction => ({
   type: NotificationActionTypes.DISPLAY_NOTIFICATION_COMPLETED,
   payload: { objectWorkingId, dismissNotificationCallback },
+});
+
+export const setSidePanelBannerNotification = (
+  bannerNotification: SidePanelBanner
+): SetSidePanelBannerAction => ({
+  type: NotificationActionTypes.SET_SIDE_PANEL_BANNER,
+  payload: bannerNotification,
 });

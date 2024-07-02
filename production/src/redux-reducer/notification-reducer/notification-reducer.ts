@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { ObjectNotificationTypes } from '@mstr/connector-components';
+import { ObjectNotificationTypes, SidePanelBannerStatus } from '@mstr/connector-components';
 
 import { notificationServiceHelper } from '../../notification/notification-service-helper';
 
@@ -12,6 +12,7 @@ import {
   NotificationState,
   OperationTypesWithNotification,
   OperationTypesWithProgressNotification,
+  SidePanelBanner,
 } from './notification-reducer-types';
 
 import i18n from '../../i18n';
@@ -21,7 +22,11 @@ import { OperationSteps } from '../../operation/operation-steps';
 import { OperationTypes } from '../../operation/operation-type-names';
 import { titleOperationCompletedMap, titleOperationInProgressMap } from './notification-title-maps';
 
-const initialState: NotificationState = { notifications: [], globalNotification: { type: '' } };
+const initialState: NotificationState = {
+  notifications: [],
+  globalNotification: { type: '' },
+  sidePanelBannerNotification: { type: SidePanelBannerStatus.NONE },
+};
 
 export const notificationReducer = (
   // eslint-disable-next-line default-param-last
@@ -72,6 +77,9 @@ export const notificationReducer = (
 
     case NotificationActionTypes.DISMISS_ALL_NOTIFICATIONS:
       return dismissAllNotifications(state);
+
+    case NotificationActionTypes.SET_SIDE_PANEL_BANNER:
+      return setSidePanelBannerNotification(state, action.payload);
     default:
       return state;
   }
@@ -157,6 +165,7 @@ const deleteNotification = (
   const newState = {
     notifications: [...state.notifications],
     globalNotification: state.globalNotification,
+    sidePanelBannerNotification: state.sidePanelBannerNotification,
   };
   newState.notifications = newState.notifications.filter(
     notification => notification.objectWorkingId !== payload.objectWorkingId
@@ -174,35 +183,15 @@ const dismissSingleNotification = (
     ({ objectWorkingId }) => objectWorkingId !== payload.objectWorkingId
   );
 
-  // TODO: figure out if this is needed
-  // const singleNotification = notifications.find(
-  //   notification => notification.objectWorkingId === payload.objectWorkingId
-  // );
-  // if (singleNotification) {
-  //   if (singleNotification.dismissNotification) {
-  //     singleNotification.dismissNotification();
-  //   } else if (singleNotification.callback) {
-  //     singleNotification.callback();
-  //   }
-  // }
-
   return {
     notifications: newNotifications,
     globalNotification: state.globalNotification,
+    sidePanelBannerNotification: state.sidePanelBannerNotification,
   };
 };
 
 const dismissAllNotifications = (state: NotificationState): NotificationState => {
   const { notifications } = state;
-
-  // TODO: figure out if this is needed
-  // notifications.forEach(({ dismissNotification, callback }) => {
-  //   if (dismissNotification) {
-  //     // dismissNotification();
-  //   } else if (callback) {
-  //     callback();
-  //   }
-  // });
 
   const newNotifications = notifications.filter(
     ({ type }) => type !== ObjectNotificationTypes.SUCCESS
@@ -211,6 +200,7 @@ const dismissAllNotifications = (state: NotificationState): NotificationState =>
   return {
     notifications: newNotifications,
     globalNotification: state.globalNotification,
+    sidePanelBannerNotification: state.sidePanelBannerNotification,
   };
 };
 
@@ -274,13 +264,20 @@ const createGlobalNotification = (
 const removeGlobalNotification = (state: NotificationState): NotificationState => ({
   notifications: [...state.notifications],
   globalNotification: { type: '' },
+  sidePanelBannerNotification: { type: SidePanelBannerStatus.NONE },
 });
 
 const deleteAllNotifications = (
   state: NotificationState,
   action: { isSecured: boolean }
 ): NotificationState =>
-  action.isSecured ? { notifications: [], globalNotification: state.globalNotification } : state;
+  action.isSecured
+    ? {
+        notifications: [],
+        globalNotification: state.globalNotification,
+        sidePanelBannerNotification: { type: SidePanelBannerStatus.NONE },
+      }
+    : state;
 
 const clearNotifications = (state: NotificationState): NotificationState => ({
   ...state,
@@ -296,6 +293,14 @@ const restoreAllNotifications = (
   notifications: payload,
 });
 
+const setSidePanelBannerNotification = (
+  state: NotificationState,
+  payload: SidePanelBanner
+): NotificationState => ({
+  ...state,
+  sidePanelBannerNotification: payload,
+});
+
 function createNewState(
   state: NotificationState,
   notificationToUpdateIndex: number,
@@ -304,6 +309,7 @@ function createNewState(
   const newState = {
     notifications: [...state.notifications],
     globalNotification: state.globalNotification,
+    sidePanelBannerNotification: state.sidePanelBannerNotification,
   };
   newState.notifications.splice(notificationToUpdateIndex, 1, updatedNotification);
   return newState;

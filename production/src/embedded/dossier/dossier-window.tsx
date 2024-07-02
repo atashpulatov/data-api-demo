@@ -14,10 +14,10 @@ import { EXTEND_SESSION, sessionHelper } from '../../storage/session-helper';
 
 import { RootState } from '../../store';
 
+import { DialogCommands } from '../../dialog/dialog-controller-types';
 import { EditedObject } from '../../redux-reducer/popup-reducer/popup-reducer-types';
 import { RepromptsQueueState } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer-types';
 
-import { selectorProperties } from '../../attribute-selector/selector-properties';
 import { DialogButtons } from '../../dialog/dialog-buttons/dialog-buttons';
 import i18n from '../../i18n';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
@@ -28,7 +28,7 @@ import { EmbeddedDossier } from './embedded-dossier';
 import { errorCodes } from '../../error/constants';
 import { ObjectImportType } from '../../mstr-object/constants';
 
-import './dossier.css';
+import './dossier.scss';
 
 interface DossierWindowProps {
   chosenObjectId: string;
@@ -103,8 +103,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
     importType === ObjectImportType.FORMATTED_DATA && !isChosenVisOfGridType;
 
   const handleCancel = (): void => {
-    const { commandCancel } = selectorProperties;
-    const message = { command: commandCancel };
+    const message = { command: DialogCommands.COMMAND_CANCEL };
     dialogHelper.officeMessageParent(message);
   };
 
@@ -222,7 +221,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
 
   const handleOk = useCallback(() => {
     const message = {
-      command: selectorProperties.commandOk,
+      command: DialogCommands.COMMAND_OK,
       chosenObjectName,
       chosenObject: chosenObjectId,
       chosenProject: chosenProjectId,

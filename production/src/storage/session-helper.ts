@@ -3,6 +3,7 @@ import throttle from 'lodash.throttle';
 
 import { authenticationRestApi } from '../authentication/auth-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
+import { errorService } from '../error/error-service';
 import { browserHelper } from '../helpers/browser-helper';
 import { storageHelper } from '../helpers/storage-helper';
 import { userRestService } from '../home/user-rest-service';
@@ -12,7 +13,6 @@ import { reduxStore } from '../store';
 
 import { ObjectData } from '../types/object-types';
 
-import { errorService } from '../error/error-handler';
 import { importRequested } from '../redux-reducer/operation-reducer/operation-actions';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import { httpStatusCodes, IncomingErrorStrings } from '../error/constants';
@@ -105,7 +105,7 @@ class SessionHelper {
       userData = await userRestService.getUserInfo(authToken, envUrl);
       !userData.userInitials && sessionActions.saveUserInfo(userData);
     } catch (error) {
-      errorService.handleError(error, { isLogout: !isDevelopment } as any);
+      errorService.handleError(error, { isLogout: !isDevelopment });
     }
   }
 

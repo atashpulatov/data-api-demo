@@ -6,13 +6,12 @@ Feature: TF9328 - Release Validation
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-      And I found object by ID "4571B7217A41907D0CF2F9A2B39DBF08" and selected "MultiMetricKPI and ComparisonKPI for Excel"
+      And I found and selected object "MultiMetricKPI and ComparisonKPI for Excel"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I selected dossier page or chapter 1
       And I selected visualization "Multi Metric KPI"
-      And I clicked import dossier
+      And I selected import type "Import Data" and clicked import
       And I closed last notification
      Then I verified that cells ["A2", "D2", "C66"] have values ["Boots", "7547.07", "14135.00"]
 

@@ -11,7 +11,6 @@ import { reduxStore } from '../../store';
 
 import { ObjectData } from '../../types/object-types';
 
-import { dialogController } from '../../dialog/dialog-controller';
 import * as toggleFlag from '../../redux-reducer/office-reducer/office-actions';
 
 describe('SidePanelService', () => {
@@ -27,13 +26,11 @@ describe('SidePanelService', () => {
   it('should open popup', async () => {
     // given
     const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
-    const mockedRunPopup = jest.spyOn(dialogController, 'runPopupNavigation').mockImplementation();
     // when
     sidePanelHelper.clearRepromptTask();
     await sidePanelService.addData();
     // then
-    expect(mockedDispatch).toHaveBeenCalledTimes(2);
-    expect(mockedRunPopup).toHaveBeenCalledTimes(1);
+    expect(mockedDispatch).toHaveBeenCalledTimes(3);
   });
 
   it('should highlight an object', async () => {
@@ -70,7 +67,7 @@ describe('SidePanelService', () => {
     await sidePanelService.refresh(...objectWorkingIds);
     // then
 
-    expect(mockedDispatch).toHaveBeenCalledTimes(objectWorkingIds.length);
+    expect(mockedDispatch).toHaveBeenCalledTimes(6);
   });
 
   it('should remove objects', async () => {

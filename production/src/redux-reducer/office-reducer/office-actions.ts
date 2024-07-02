@@ -1,8 +1,10 @@
 import { Dispatch } from 'react';
 
 import {
+  DialogToOpen,
   OfficeActionsTypes,
   SetActiveCellAddressAction,
+  SetDialogToOpenAction,
   SetIsAdvancedWorksheetTrackingSupported,
   SetIsDialogLoadedAction,
   SetIsInsertWorksheetAPISupportedAction,
@@ -24,6 +26,11 @@ const hideDialog = () => (dispatch: Dispatch<any>) => {
   dispatch(setIsDialogLoaded(false));
   dispatch({ type: OfficeActionsTypes.HIDE_DIALOG });
 };
+
+const setDialogToOpen = (dialogToOpen: DialogToOpen): SetDialogToOpenAction => ({
+  type: OfficeActionsTypes.SET_DIALOG_TO_OPEN,
+  dialogToOpen,
+});
 
 const toggleSecuredFlag = (isSecured: boolean) => (dispatch: Dispatch<any>) => {
   dispatch({
@@ -120,6 +127,7 @@ export const officeActions = {
   showDialog,
   hideDialog,
   setIsDialogLoaded,
+  setDialogToOpen,
   toggleSecuredFlag,
   toggleIsSettingsFlag,
   toggleIsConfirmFlag,

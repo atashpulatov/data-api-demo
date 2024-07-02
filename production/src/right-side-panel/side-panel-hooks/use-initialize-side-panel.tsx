@@ -16,6 +16,7 @@ const useInitializeSidePanel = (
       await settingsSidePanelHelper.initPageByDisplayAnswers();
       await settingsSidePanelHelper.initWorksheetNamingAnswers();
       await settingsSidePanelHelper.initObjectInfoSettings();
+      await settingsSidePanelHelper.initDataAutoRefreshSetting();
       await formattingSettingsHelper.initImportFormattingSettings();
       await pivotTableSettingsHelper.initPivotTableSettings();
       sidePanelHelper.clearRepromptTask();

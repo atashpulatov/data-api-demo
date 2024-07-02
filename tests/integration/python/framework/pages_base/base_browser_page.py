@@ -16,7 +16,7 @@ class BaseBrowserPage(BasePage):
     ADD_IN_FRAME_ELEM = '.AddinIframe[src*="static/loader-mstr-office"]'
     ADD_IN_ROOT_ELEM = 'root'
     PROMPT_FRAME_ELEM = '.promptsContainer > iframe'
-    POPUP_WRAPPER_ID = 'popup-wrapper'
+    DIALOG_WRAPPER_ID = 'dialog-wrapper'
     UPLOAD_MENU_ID = 'UploadMenu'
 
     def switch_to_window_by_index(self, index):
@@ -76,7 +76,7 @@ class BaseBrowserPage(BasePage):
 
             self._switch_to_frame(add_in_popup_frame_element)
 
-            if self.check_if_element_exists_by_id(BaseBrowserPage.POPUP_WRAPPER_ID, timeout=Const.SHORT_TIMEOUT):
+            if self.check_if_element_exists_by_id(BaseBrowserPage.DIALOG_WRAPPER_ID, timeout=Const.SHORT_TIMEOUT):
                 return
 
             self.pause(Const.ELEMENT_SEARCH_RETRY_INTERVAL)

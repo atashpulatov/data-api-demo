@@ -6,13 +6,12 @@ Feature: TF9328 - Release Validation
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-      And I found object by ID "9DD1B3FB11EC9F9F74E70080EF3C54EE" and selected "gauge_for_excel"
+      And I found and selected object "gauge_for_excel"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I selected dossier page or chapter 1
       And I selected visualization "Visualization for Excel"
-      And I clicked import dossier
+      And I selected import type "Import Data" and clicked import
       And I closed last notification
      Then I verified that cells ["A2", "C5", "G9"] have values ["Book", "25390", "138705444"]
 

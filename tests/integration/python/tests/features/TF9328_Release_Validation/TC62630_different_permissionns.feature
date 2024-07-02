@@ -9,17 +9,16 @@ Feature: TF9328 - Release Validation
 
      When I logged in with username "No library" and empty password
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-      And I found object by ID "32765C5C11E79D5927C10080EF753106" and selected "Multinational Bank Dossier"
+      And I found and selected object "Multinational Bank Dossier"
      Then I clicked Import button and saw global error "This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty."
 
      When I clicked Import Data button
-      And I found object by ID "300DBAFA4A1D8EC546AC6AB8CDE7834E" and selected "Report with a subtotal & prompt"
+      And I found and selected object "Report with a subtotal & prompt"
      Then I clicked Import button and saw global error "This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty."
 
-     When I clicked Import Data button
-      And I found object by ID "13CFD83A458A68655A13CBA8D7C62CD5" and selected "01 Basic Report"
-      And I clicked Import button
+    When I clicked Import Data button
+      And I found and selected object "01 Basic Report"
+      And I selected import type "Import Data" and clicked import
      Then I verified that cells ["A2", "C3"] have values ["Central", "Loren"]
       And I logged out
 
@@ -27,18 +26,18 @@ Feature: TF9328 - Release Validation
       And I added a new worksheet
       And I clicked Add Data button
       And I ensured that MyLibrary Switch is OFF
-      And I found object by ID "32765C5C11E79D5927C10080EF753106" and selected "Multinational Bank Dossier"
+      And I found and selected object "Multinational Bank Dossier"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I selected visualization "Actual Profit vs. Target Profit"
-      And I clicked import dossier
+      And I selected import type "Import Data" and clicked import
       And I closed last notification
      Then I verified that cells ["A2", "D2"] have values ["Metrics", "Profit Actual"]
       And I verified that object number 1 is called "Actual Profit vs. Target Profit"
 
      When I added a new worksheet
       And I clicked Add Data button
-      And I found object by ID "300DBAFA4A1D8EC546AC6AB8CDE7834E" and selected "Report with a subtotal & prompt"
+      And I found and selected object "Report with a subtotal & prompt"
       And I clicked Import button without checking results
       And I waited for Run button to be enabled
       And I selected "Books" as an answer for "1. Category" prompt - object prompt
@@ -49,8 +48,8 @@ Feature: TF9328 - Release Validation
 
      When I added a new worksheet
       And I clicked Add Data button
-      And I found object by ID "13CFD83A458A68655A13CBA8D7C62CD5" and selected "01 Basic Report"
-      And I clicked Import button
+      And I found and selected object "01 Basic Report"
+      And I selected import type "Import Data" and clicked import
      Then I verified that cells ["A2", "C3"] have values ["Central", "Loren"]
 
       And I logged out

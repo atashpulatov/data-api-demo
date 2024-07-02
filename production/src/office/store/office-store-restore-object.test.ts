@@ -1,4 +1,5 @@
 /* eslint-disable no-import-assign */
+import { errorService } from '../../error/error-service';
 import officeReducerHelper from './office-reducer-helper';
 import officeStoreHelper from './office-store-helper';
 
@@ -7,7 +8,6 @@ import officeStoreRestoreObject from './office-store-restore-object';
 
 import { ObjectData } from '../../types/object-types';
 
-import { errorService } from '../../error/error-handler';
 import * as answersActions from '../../redux-reducer/answers-reducer/answers-actions';
 import * as objectActions from '../../redux-reducer/object-reducer/object-actions';
 import { OfficeSettingsEnum } from '../../constants/office-constants';

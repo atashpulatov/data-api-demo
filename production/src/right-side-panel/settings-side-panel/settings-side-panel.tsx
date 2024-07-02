@@ -28,6 +28,7 @@ const SettingsSidePanel: React.FC<any> = () => {
   const worksheetMainSwitchValue = useSelector(
     settingsReducerSelectors.selectWorksheetMainSwitchValue
   );
+  const enableDataAutoRefresh = useSelector(settingsReducerSelectors.selectEnableDataAutoRefresh);
 
   const importAttributesAsText = useSelector(settingsReducerSelectors.selectImportAttributesAsText);
 
@@ -43,7 +44,8 @@ const SettingsSidePanel: React.FC<any> = () => {
     settingsReducerSelectors.selectPivotTableAddMetricsToValues
   );
 
-  const { getPromptSection, getObjectInfoSection, getPageBySection } = settingsSidePanelHelper;
+  const { getPromptSection, getObjectInfoSection, getPageBySection, getAutoRefreshSection } =
+    settingsSidePanelHelper;
 
   const { getImportFormattingSection } = formattingSettingsHelper;
 
@@ -60,6 +62,7 @@ const SettingsSidePanel: React.FC<any> = () => {
       worksheetMainSwitchValue
     ),
     getPivotTableSection(pivotTableAddAttributesToColumns, pivotTableAddMetricsToValues),
+    getAutoRefreshSection(enableDataAutoRefresh),
   ];
 
   return (

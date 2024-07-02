@@ -3,7 +3,8 @@ import React from 'react';
 import 'regenerator-runtime';
 
 import '@testing-library/jest-dom';
-import { diContainer } from './dependency-container';
+import { operationBus } from './operation/operation-bus';
+import subscribeSteps from './operation/operation-subscribe-steps';
 
 import 'jest-localstorage-mock';
 
@@ -43,4 +44,5 @@ console.group = jest.fn();
 console.groupEnd = jest.fn();
 console.groupCollapsed = jest.fn();
 
-diContainer.initializeAll();
+operationBus.init();
+subscribeSteps.init();

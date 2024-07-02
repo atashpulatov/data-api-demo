@@ -1,11 +1,11 @@
 import { waitFor } from '@testing-library/react';
 import { createStore } from 'redux';
 
+import { errorService } from '../error/error-service';
 import { browserHelper } from '../helpers/browser-helper';
 import { authenticationRestApi } from './auth-rest-service';
 import { authenticationService } from './authentication-service';
 
-import { errorService } from '../error/error-handler';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import { sessionReducer } from '../redux-reducer/session-reducer/session-reducer';
 

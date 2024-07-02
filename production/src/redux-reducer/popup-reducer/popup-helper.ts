@@ -1,20 +1,22 @@
+import { errorService } from '../../error/error-service';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { visualizationInfoService } from '../../mstr-object/visualization-info-service';
 
 import { reduxStore } from '../../store';
 
 import { ObjectData } from '../../types/object-types';
+import { DialogToOpen } from '../office-reducer/office-reducer-types';
 
-import { dialogController } from '../../dialog/dialog-controller';
-import { errorService } from '../../error/error-handler';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
+import { officeActions } from '../office-reducer/office-actions';
 import { popupActions } from './popup-actions';
 
 class PopupHelper {
   callForReprompt = (objectData: ObjectData): void => {
     objectData.objectType = objectData.mstrObjectType;
     reduxStore.dispatch(popupActions.setReportAndFilters(objectData));
-    dialogController.runRepromptPopup(objectData, false);
+    reduxStore.dispatch(officeActions.setDialogToOpen(DialogToOpen.REPROMPT_POPUP));
+    reduxStore.dispatch(popupActions.setIsEdit(false));
   };
 
   callForEdit = (objectData: ObjectData): void => {
@@ -22,10 +24,10 @@ class PopupHelper {
     reduxStore.dispatch(popupActions.setReportAndFilters(objectData));
 
     if (objectData.isPrompted) {
-      dialogController.runRepromptPopup(objectData);
+      reduxStore.dispatch(popupActions.setIsEdit(true));
+      reduxStore.dispatch(officeActions.setDialogToOpen(DialogToOpen.REPROMPT_POPUP));
     } else {
-      // @ts-expect-error
-      dialogController.runEditFiltersPopup(objectData);
+      reduxStore.dispatch(officeActions.setDialogToOpen(DialogToOpen.EDIT_FILTERS_POPUP));
     }
   };
 
@@ -39,7 +41,7 @@ class PopupHelper {
     }
 
     reduxStore.dispatch(popupActions.setReportAndFilters(objectData));
-    dialogController.runRepromptDossierPopup(objectData);
+    reduxStore.dispatch(officeActions.setDialogToOpen(DialogToOpen.REPROMPT_DOSSIER_POPUP));
   };
 
   callForEditDossier = async (objectData: ObjectData): Promise<void> => {
@@ -47,8 +49,7 @@ class PopupHelper {
       await this.prepareDossierForEdit(objectData);
 
       reduxStore.dispatch(popupActions.setReportAndFilters(objectData));
-      // @ts-expect-error
-      dialogController.runEditDossierPopup(objectData);
+      reduxStore.dispatch(officeActions.setDialogToOpen(DialogToOpen.EDIT_DOSSIER_POPUP));
     } catch (error) {
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
       errorService.handleError(error);
@@ -71,19 +72,16 @@ class PopupHelper {
         await this.prepareDossierForEdit(objectData);
       }
 
+      reduxStore.dispatch(popupActions.setIsDuplicate(true));
       reduxStore.dispatch(popupActions.setReportAndFilters(objectData));
 
-      const reportParams = {
-        duplicateMode: true,
-        object: objectData,
-      };
-
       if (isDossier) {
-        dialogController.runEditDossierPopup(reportParams);
+        reduxStore.dispatch(officeActions.setDialogToOpen(DialogToOpen.EDIT_DOSSIER_POPUP));
       } else if (objectData.isPrompted) {
-        dialogController.runRepromptPopup(reportParams);
+        reduxStore.dispatch(popupActions.setIsEdit(true));
+        reduxStore.dispatch(officeActions.setDialogToOpen(DialogToOpen.REPROMPT_POPUP));
       } else {
-        dialogController.runEditFiltersPopup(reportParams);
+        reduxStore.dispatch(officeActions.setDialogToOpen(DialogToOpen.EDIT_FILTERS_POPUP));
       }
     } catch (error) {
       if (isDossier) {

@@ -1,4 +1,4 @@
-import { ObjectNotificationTypes } from '@mstr/connector-components';
+import { ObjectNotificationTypes, SidePanelBannerStatus } from '@mstr/connector-components';
 
 import { notificationService } from '../../notification/notification-service';
 
@@ -31,6 +31,7 @@ describe('Notification reducer', () => {
     expect(resultState).toEqual({
       notifications: [],
       globalNotification: { type: '' },
+      sidePanelBannerNotification: { type: SidePanelBannerStatus.NONE },
     });
   });
 
@@ -38,6 +39,7 @@ describe('Notification reducer', () => {
     const initialState: NotificationState = {
       notifications: [],
       globalNotification: { type: '' },
+      sidePanelBannerNotification: { type: SidePanelBannerStatus.NONE },
     };
 
     describe('createGlobalNotification', () => {
@@ -61,6 +63,7 @@ describe('Notification reducer', () => {
         const initialStateExistingGlobal: NotificationState = {
           notifications: [],
           globalNotification: { type: 'some notification' },
+          sidePanelBannerNotification: { type: SidePanelBannerStatus.NONE },
         };
         const expectedNotification = {
           type: 'some type',
@@ -85,6 +88,7 @@ describe('Notification reducer', () => {
         const initialStateExistingGlobal: NotificationState = {
           notifications: [],
           globalNotification: { type: 'some type', message: 'some value' },
+          sidePanelBannerNotification: { type: SidePanelBannerStatus.NONE },
         };
         const action: ClearGlobalNotificationAction = {
           type: NotificationActionTypes.REMOVE_GLOBAL_NOTIFICATION,
@@ -158,6 +162,7 @@ describe('Notification reducer', () => {
         },
       ],
       globalNotification: { type: 'some type' },
+      sidePanelBannerNotification: { type: SidePanelBannerStatus.NONE },
     };
 
     const updatedStateProgress = {

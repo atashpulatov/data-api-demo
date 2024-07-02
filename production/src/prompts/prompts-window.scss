@@ -12,3 +12,7 @@
 .prompts-iframe {
   border-top: 1px solid $msdl-divider-gray_SOLID;
 }
+
+.promptsContainer + .dialog-footer {
+  position: fixed;
+}

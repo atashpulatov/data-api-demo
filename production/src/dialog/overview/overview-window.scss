@@ -21,16 +21,16 @@ $margin-data-overview: 20px;
     float: right;
     margin-top: 20px;
   }
-}
 
-.mstr-rc-3-grid-with-filter__filter-panel {
-  &--unpinned {
-    max-height: calc(100% - 40px);
-    min-height: calc(80% - 40px);
-    position: absolute;
-  }
+  .mstr-rc-3-grid-with-filter__filter-panel {
+    &--unpinned {
+      max-height: calc(100% - 40px);
+      min-height: calc(80% - 40px);
+      position: absolute;
+    }
 
-  &--hidden {
-    display: none;
+    &--hidden {
+      display: none;
+    }
   }
 }

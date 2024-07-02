@@ -16,6 +16,7 @@ import { ObjectData } from '../../types/object-types';
 import { officeContext } from '../../office/office-context';
 import { updateObjects } from '../../redux-reducer/object-reducer/object-actions';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
+import { removeRequested } from '../../redux-reducer/operation-reducer/operation-actions';
 import initializationErrorDecorator from '../settings-side-panel/initialization-error-decorator';
 
 class SidePanelEventHelper {
@@ -106,10 +107,13 @@ class SidePanelEventHelper {
    * @param event Contains information about deleted object
    */
   async setOnDeletedTablesEvent(event: Excel.TableDeletedEventArgs): Promise<void> {
-    const ObjectToDelete = officeReducerHelper.getObjectFromObjectReducerByBindId(event.tableId);
-    notificationService.removeExistingNotification(ObjectToDelete.objectWorkingId);
+    const { objectWorkingId, importType } = officeReducerHelper.getObjectFromObjectReducerByBindId(
+      event.tableId
+    );
+
+    notificationService.removeExistingNotification(objectWorkingId);
     await authenticationHelper.checkStatusOfSessions();
-    sidePanelService.remove(ObjectToDelete.objectWorkingId);
+    reduxStore.dispatch(removeRequested(objectWorkingId, importType));
   }
 
   /**

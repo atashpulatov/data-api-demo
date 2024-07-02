@@ -4,12 +4,11 @@ import { fireEvent, render } from '@testing-library/react';
 import { createStore } from 'redux';
 
 import { authenticationService } from '../../authentication/authentication-service';
+import { errorService } from '../../error/error-service';
 import overflowHelper from '../../helpers/helpers';
 
-import { rootReducer } from '../../store';
+import { reduxStore, rootReducer } from '../../store';
 
-import { dialogController } from '../../dialog/dialog-controller';
-import { errorService } from '../../error/error-handler';
 import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
 import { SettingsMenuNotConnected } from './settings-menu';
 
@@ -34,11 +33,9 @@ describe('Settings Menu', () => {
 
   it('should open Imported Data Overview popup on proper menu element click', () => {
     // given
-    const runImportedDataOverviewPopupSpy = jest
-      .spyOn(dialogController, 'runImportedDataOverviewPopup')
-      .mockImplementation(() => {});
     const toggleIsSettingsFlag = jest.fn();
     const setIsDataOverviewOpen = jest.fn();
+    reduxStore.dispatch = jest.fn();
 
     const { getByText } = render(
       <Provider store={store}>
@@ -55,8 +52,8 @@ describe('Settings Menu', () => {
     fireEvent.click(importedDataOverviewMenuOption);
 
     // then
-    expect(runImportedDataOverviewPopupSpy).toBeCalled();
-    expect(toggleIsSettingsFlag).toBeCalledWith(false);
+    expect(reduxStore.dispatch).toHaveBeenCalled();
+    expect(toggleIsSettingsFlag).toHaveBeenCalledWith(false);
   });
 
   it('should open Confirm popup on proper menu element click', () => {

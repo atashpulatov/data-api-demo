@@ -9,6 +9,9 @@ import { notificationService } from '../../notification/notification-service';
 import { officeApiService } from '../../office/api/office-api-service';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { pageByHelper } from '../../page-by/page-by-helper';
+import { operationService } from '../../redux-reducer/operation-reducer/operation-service';
+import { sidePanelHelper } from '../../right-side-panel/side-panel-services/side-panel-helper';
+import { sidePanelService } from '../../right-side-panel/side-panel-services/side-panel-service';
 import { dialogHelper } from '../dialog-helper';
 
 import { reduxStore } from '../../store';
@@ -17,11 +20,14 @@ import {
   GlobalNotification,
   Notification,
 } from '../../redux-reducer/notification-reducer/notification-reducer-types';
-import { DialogPopup } from './overview-types';
+import { DialogToOpen } from '../../redux-reducer/office-reducer/office-reducer-types';
+import { DialogPopup, OverviewActionCommands } from './overview-types';
 
 import i18n from '../../i18n';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { clearGlobalNotification } from '../../redux-reducer/notification-reducer/notification-action-creators';
+import { removeObject } from '../../redux-reducer/object-reducer/object-actions';
+import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 import { cancelOperationByOperationId } from '../../redux-reducer/operation-reducer/operation-actions';
 import { executeNextRepromptTask } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import {
@@ -30,40 +36,7 @@ import {
 } from './overview-global-notification-buttons';
 import { ObjectImportType, objectImportTypeDictionary } from '../../mstr-object/constants';
 
-export enum OverviewActionCommands {
-  IMPORT = 'overview-import',
-  EDIT = 'overview-edit',
-  REFRESH = 'overview-refresh',
-  REMOVE = 'overview-remove',
-  DUPLICATE = 'overview-duplicate',
-  REPROMPT = 'overview-reprompt',
-  RANGE_TAKEN_OK = 'overview-range-taken-ok',
-  RANGE_TAKEN_CLOSE = 'overview-range-taken-close',
-  PAGE_BY_REFRESH_FAILED_CLOSE = 'overview-page-by-refresh-failed-close',
-  PAGE_BY_DUPLICATE_FAILED_CLOSE = 'overview-page-by-duplicate-failed-close',
-  PAGE_BY_IMPORT_FAILED_CLOSE = 'overview-page-by-import-failed-close',
-  PAGE_BY_REFRESH_FAILED_EDIT = 'overview-page-by-refresh-failed-edit',
-  PAGE_BY_REFRESH_FAILED_REMOVE = 'overview-page-by-refresh-failed-remove',
-  RENAME = 'overview-rename',
-  GO_TO_WORKSHEET = 'overview-go-to-worksheet',
-  DISMISS_NOTIFICATION = 'overview-dismiss-notification',
-  DISMISS_GLOBAL_NOTIFICATION = 'overview-dismiss-global-notification',
-}
-
-// rewrite everything
 class OverviewHelper {
-  sidePanelService: any;
-
-  sidePanelHelper: any;
-
-  sidePanelNotificationHelper: any;
-
-  init = (sidePanelService: any, sidePanelHelper: any, sidePanelNotificationHelper: any): void => {
-    this.sidePanelService = sidePanelService;
-    this.sidePanelHelper = sidePanelHelper;
-    this.sidePanelNotificationHelper = sidePanelNotificationHelper;
-  };
-
   /**
    * Sends message with import command to the Side Panel
    *
@@ -132,6 +105,23 @@ class OverviewHelper {
   ): Promise<void> {
     dialogHelper.officeMessageParent({
       command: OverviewActionCommands.DISMISS_NOTIFICATION,
+      objectWorkingIds,
+      operationId,
+    });
+  }
+
+  /**
+   * Sends message with dismiss removed objects command to the Side Panel
+   *
+   * @param objectWorkingIds Unique Ids of the objects allowing to reference specific objects
+   * @param operationId Unique Id of the operation allowing to reference specific operation
+   */
+  async sendDismissRemovedObjectsRequest(
+    objectWorkingIds: number[],
+    operationId: string
+  ): Promise<void> {
+    dialogHelper.officeMessageParent({
+      command: OverviewActionCommands.DISMISS_REMOVED_OBJECT,
       objectWorkingIds,
       operationId,
     });
@@ -284,10 +274,23 @@ class OverviewHelper {
    * @param operationId Unique Id of the operation allowing to reference specific operation
    */
   handleDismissNotifications = (objectWorkingIds: number[], operationId: string): void => {
-    console.log('operationId', operationId);
     operationId && reduxStore.dispatch(cancelOperationByOperationId(operationId));
     objectWorkingIds?.forEach(objectWorkingId => {
       notificationService.removeExistingNotification(objectWorkingId);
+    });
+  };
+
+  /**
+   * Handles dismissing removed object for given objectWorkingIds
+   *
+   * @param objectWorkingIds Unique Ids of the objects allowing to reference specific objects
+   * @param operationId Unique Id of the operation allowing to reference specific operation
+   */
+  handleDismissRemovedObjects = (objectWorkingIds: number[], operationId: string): void => {
+    operationId && reduxStore.dispatch(cancelOperationByOperationId(operationId));
+    objectWorkingIds?.forEach(objectWorkingId => {
+      notificationService.removeExistingNotification(objectWorkingId);
+      reduxStore.dispatch(removeObject(objectWorkingId));
     });
   };
 
@@ -309,24 +312,23 @@ class OverviewHelper {
 
     switch (response.command) {
       case OverviewActionCommands.IMPORT:
-        await this.sidePanelService.addData();
+        reduxStore.dispatch(officeActions.setDialogToOpen(DialogToOpen.POPUP_NAVIGATION));
         break;
       case OverviewActionCommands.EDIT:
-        // DE288915: Edit should not dismiss the notifications from here.
-        await this.sidePanelService.edit(response.objectWorkingId);
+        await sidePanelService.edit(response.objectWorkingId);
         break;
       case OverviewActionCommands.REPROMPT:
-        this.sidePanelService.reprompt(response.objectWorkingIds, true);
+        sidePanelService.reprompt(response.objectWorkingIds, true);
         break;
       case OverviewActionCommands.REFRESH:
-        this.sidePanelService.refresh(...response.objectWorkingIds);
+        sidePanelService.refresh(...response.objectWorkingIds);
         break;
       case OverviewActionCommands.REMOVE:
-        this.sidePanelService.remove(...response.objectWorkingIds);
+        sidePanelService.remove(...response.objectWorkingIds);
         break;
       case OverviewActionCommands.DUPLICATE:
         response.objectWorkingIds.forEach(objectWorkingId => {
-          this.sidePanelHelper.duplicateObject(
+          sidePanelHelper.duplicateObject(
             objectWorkingId,
             response.insertNewWorksheet,
             response.withEdit
@@ -334,7 +336,7 @@ class OverviewHelper {
         });
         break;
       case OverviewActionCommands.RANGE_TAKEN_OK:
-        this.sidePanelNotificationHelper.importInNewRange(response.objectWorkingId, null, true);
+        operationService.importInNewRange(response.objectWorkingId, null, true);
         officeReducerHelper.clearPopupData();
         break;
       case OverviewActionCommands.RANGE_TAKEN_CLOSE:
@@ -345,28 +347,31 @@ class OverviewHelper {
         break;
       case OverviewActionCommands.PAGE_BY_REFRESH_FAILED_CLOSE:
       case OverviewActionCommands.PAGE_BY_DUPLICATE_FAILED_CLOSE:
-        this.sidePanelNotificationHelper.clearPopupDataAndRunCallback(callback);
+        notificationService.clearPopupDataAndRunCallback(callback);
         break;
       case OverviewActionCommands.PAGE_BY_IMPORT_FAILED_CLOSE:
-        await this.sidePanelHelper.revertPageByImportForSiblings(response.objectWorkingId);
-        this.sidePanelNotificationHelper.clearPopupDataAndRunCallback(callback);
+        await operationService.revertPageByImportForSiblings(response.objectWorkingId);
+        notificationService.clearPopupDataAndRunCallback(callback);
         break;
       case OverviewActionCommands.PAGE_BY_REFRESH_FAILED_EDIT:
-        this.sidePanelNotificationHelper.clearPopupDataAndRunCallback(callback);
-        await this.sidePanelService.edit(response.objectWorkingId);
+        notificationService.clearPopupDataAndRunCallback(callback);
+        await sidePanelService.edit(response.objectWorkingId);
         break;
       case OverviewActionCommands.PAGE_BY_REFRESH_FAILED_REMOVE:
-        this.sidePanelNotificationHelper.clearPopupDataAndRunCallback(callback);
+        notificationService.clearPopupDataAndRunCallback(callback);
         pageByHelper.handleRemovingMultiplePages(response.objectWorkingId);
         break;
       case OverviewActionCommands.RENAME:
-        this.sidePanelService.rename(response.objectWorkingId, response.newName);
+        sidePanelService.rename(response.objectWorkingId, response.newName);
         break;
       case OverviewActionCommands.GO_TO_WORKSHEET:
-        this.sidePanelService.highlightObject(response.objectWorkingId);
+        sidePanelService.highlightObject(response.objectWorkingId);
         break;
       case OverviewActionCommands.DISMISS_NOTIFICATION:
         this.handleDismissNotifications(response.objectWorkingIds, response.operationId);
+        break;
+      case OverviewActionCommands.DISMISS_REMOVED_OBJECT:
+        this.handleDismissRemovedObjects(response.objectWorkingIds, response.operationId);
         break;
       case OverviewActionCommands.DISMISS_GLOBAL_NOTIFICATION:
         reduxStore.dispatch(clearGlobalNotification());
@@ -637,13 +642,13 @@ class OverviewHelper {
     } as NotificationButtonsProps;
     const modifiedGlobalNotification = isGlobalWarning
       ? [
-          {
-            ...globalNotification,
-            children: OverviewGlobalNotificationButtons({
-              ...globalNotificationButtons,
-            }),
-          },
-        ]
+        {
+          ...globalNotification,
+          children: OverviewGlobalNotificationButtons({
+            ...globalNotificationButtons,
+          }),
+        },
+      ]
       : null;
 
     return modifiedGlobalNotification || modifiedWarnings;

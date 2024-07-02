@@ -17,6 +17,7 @@ import { EXTEND_SESSION, sessionHelper } from '../storage/session-helper';
 
 import { RootState } from '../store';
 
+import { DialogCommands } from '../dialog/dialog-controller-types';
 import { PageByDisplayType } from '../page-by/page-by-types';
 import {
   EditedObject,
@@ -26,7 +27,6 @@ import {
 import { RepromptsQueueState } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer-types';
 import { SessionState } from '../redux-reducer/session-reducer/session-reducer-types';
 
-import { selectorProperties } from '../attribute-selector/selector-properties';
 import { DialogButtons } from '../dialog/dialog-buttons/dialog-buttons';
 import i18n from '../i18n';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
@@ -38,8 +38,8 @@ import { PromptsContainer } from './prompts-container';
 import { ErrorMessages } from '../error/constants';
 import { ObjectImportType } from '../mstr-object/constants';
 
-import '../home/home.css';
-import '../index.css';
+import '../home/home.scss';
+import '../index.scss';
 import './prompts-window.scss';
 
 interface PromptsWindowProps {
@@ -103,8 +103,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
   const [t] = useTranslation('common', { i18n });
 
   const closePopup = (): void => {
-    const { commandCancel } = selectorProperties;
-    const message = { command: commandCancel };
+    const message = { command: DialogCommands.COMMAND_CANCEL };
     dialogHelper.officeMessageParent(message);
   };
 
@@ -188,7 +187,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
     pageByConfigurations?: PageByConfiguration[][]
   ): void =>
     dialogHelper.officeMessageParent({
-      command: selectorProperties.commandOnUpdate,
+      command: DialogCommands.COMMAND_ON_UPDATE,
       chosenObjectId: chosenObjectIdLocal,
       projectId,
       chosenObjectSubtype: editedObject.chosenObjectSubtype,

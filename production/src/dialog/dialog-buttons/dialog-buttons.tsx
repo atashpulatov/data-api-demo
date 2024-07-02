@@ -63,7 +63,7 @@ export const DialogButtons: React.FC<DialogButtonsProps> = ({
   const shouldRenderImportButton = !hideOk;
 
   return (
-    <div className='popup-buttons popup-footer'>
+    <div className='dialog-buttons dialog-footer'>
       {handleBack && <BackButton handleBack={handleBack} />}
       {shouldRenderDataPreviewButton && (
         <DataPreviewButton onPreviewClick={onPreviewClick} disableReason={disableReason} />

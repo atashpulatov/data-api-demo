@@ -13,7 +13,6 @@ Feature: TS41441 - Sanity checks
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
       And I found object "Seasonal"
       And I cleared search box
       And I found object "no_such_object"
@@ -80,7 +79,7 @@ Feature: TS41441 - Sanity checks
       And I selected filter "Region" with all elements
       And I clicked Data Preview button
       And I clicked Close Preview button
-      And I clicked Import button in Columns and Filters Selection
+      And I selected import type "Import Data" and clicked import
       And I waited for object to be imported successfully
       And I closed last notification
       And I selected cell "H1"
@@ -88,7 +87,7 @@ Feature: TS41441 - Sanity checks
       And I found object "100_dataset"
       And I found object "100_report"
       And I cleared search box
-      And I found object by ID "8738171C11E97AED00000080EF155102" and selected "100_dataset"
+      And I found and selected object "100_dataset"
      Then I verified that the background color of the first object is "#f0f7fe"
 
      When I clicked Prepare Data button

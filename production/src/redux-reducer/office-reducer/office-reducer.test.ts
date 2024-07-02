@@ -27,6 +27,7 @@ describe('officeReducer', () => {
       isConfirm: false,
       supportForms: true,
       activeCellAddress: null,
+      dialogToOpen: null,
       popupData: null,
       isDialogOpen: false,
       isDialogLoaded: false,

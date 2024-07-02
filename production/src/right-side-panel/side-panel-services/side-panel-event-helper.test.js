@@ -8,6 +8,8 @@ import { sidePanelService } from './side-panel-service';
 
 import { reduxStore } from '../../store';
 
+import { ObjectImportType } from '../../mstr-object/constants';
+
 describe('SidePanelService', () => {
   afterEach(() => {
     jest.restoreAllMocks();
@@ -64,7 +66,7 @@ describe('SidePanelService', () => {
 
   it('should remove objects in setOnDeletedTablesEvent', async () => {
     // given
-    const object = { objectWorkingId: 1, bindId: 1 };
+    const object = { objectWorkingId: 123, bindId: 1, importType: ObjectImportType.TABLE };
     const eventObject = { tableId: 1 };
 
     const mockedExcelContext = jest
@@ -76,7 +78,8 @@ describe('SidePanelService', () => {
     const mockedRemoveNotification = jest
       .spyOn(notificationService, 'removeExistingNotification')
       .mockImplementation();
-    const mockedRemove = jest.spyOn(sidePanelService, 'remove').mockImplementation();
+
+    reduxStore.dispatch = jest.fn();
 
     // when
     await sidePanelEventHelper.setOnDeletedTablesEvent(eventObject);
@@ -84,8 +87,7 @@ describe('SidePanelService', () => {
     expect(mockedExcelContext).toBeCalled();
     expect(mockedGetObjects).toBeCalled();
     expect(mockedRemoveNotification).toBeCalled();
-    expect(mockedRemove).toBeCalled();
-    expect(mockedRemove).toBeCalledWith(1);
+    expect(reduxStore.dispatch).toHaveBeenCalled();
   });
 
   it('should remove objects in setOnDeletedWorksheetEvent', async () => {

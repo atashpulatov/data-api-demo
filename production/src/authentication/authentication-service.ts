@@ -17,7 +17,7 @@ class AuthenticationService {
       const { authToken, envUrl } = reduxStore.getState().sessionReducer;
       authenticationRestApi.logout(envUrl, authToken);
     } catch (error) {
-      errorService.handleError(error, { isLogout: true } as any);
+      errorService.handleError(error, { isLogout: true });
     }
   }
 
