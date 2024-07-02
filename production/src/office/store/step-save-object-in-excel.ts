@@ -23,8 +23,9 @@ class StepSaveObjectInExcel {
    * @param instanceDefinition Object containing information about MSTR object
    */
   prepareObjectData(objectData: ObjectData, instanceDefinition: InstanceDefinition): void {
+    const { rows, columns, mstrTable } = instanceDefinition;
+
     if (objectData.importType === ObjectImportType.TABLE) {
-      const { rows, columns, mstrTable } = instanceDefinition;
       const { crosstabHeaderDimensions } = mstrTable;
 
       objectData.previousTableDimensions = { rows, columns };
@@ -40,7 +41,10 @@ class StepSaveObjectInExcel {
         excelTableSize.rows += columnsY - 1;
         excelTableSize.columns += rowsX;
       }
+    } else if (objectData.importType === ObjectImportType.FORMATTED_DATA) {
+      objectData.details.excelTableSize = { rows, columns };
     }
+
     objectData.refreshDate = Date.now();
     delete objectData.preparedInstanceId;
   }

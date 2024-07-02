@@ -83,7 +83,6 @@ class StepGetFormattedDataTableEditRefresh {
           title: name,
           index: position,
         },
-        formattedTableDimensions: dimensions
       };
 
       operationStepDispatcher.updateOperation(updatedOperation);

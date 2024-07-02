@@ -161,7 +161,6 @@ export interface ObjectData {
   bindIdToBeDuplicated?: string;
   shapeProps?: any;
   shapeGroupId?: string;
-  formattedTableDimensions?: TableDimensions;
   // TODO fix type
   visualizationInfo?: false | VisualizationInfo;
   objectSettings?: ObjectSettings;
