@@ -642,13 +642,13 @@ class OverviewHelper {
     } as NotificationButtonsProps;
     const modifiedGlobalNotification = isGlobalWarning
       ? [
-          {
-            ...globalNotification,
-            children: OverviewGlobalNotificationButtons({
-              ...globalNotificationButtons,
-            }),
-          },
-        ]
+        {
+          ...globalNotification,
+          children: OverviewGlobalNotificationButtons({
+            ...globalNotificationButtons,
+          }),
+        },
+      ]
       : null;
 
     return modifiedGlobalNotification || modifiedWarnings;
