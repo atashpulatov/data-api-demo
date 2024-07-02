@@ -50,7 +50,7 @@ interface DossierWindowProps {
 export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => {
   const [t] = useTranslation('common', { i18n });
   const [promptsAnswers, setPromptsAnswers] = useState([]);
-  const [promptKeys, setPromptKeys] = useState([]);
+  const [promptKeys, setPromptKeys] = useState<string[]>([]);
   const instanceId = useRef('');
   const [vizualizationsData, setVizualizationsData] = useState([]);
   const [lastSelectedViz, setLastSelectedViz] = useState<any>({});
@@ -315,7 +315,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
   );
 
   const handleUniquePromptKeys = useCallback(
-    (newPromptKeys: any) => {
+    (newPromptKeys: string[]) => {
       setPromptKeys(newPromptKeys);
     },
     [setPromptKeys]

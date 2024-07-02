@@ -67,7 +67,7 @@ const addMultiplePromptKeysTask = (
   }
 
   const newPromptKeys = action.payload.operation.objectEditedData.promptKeys.reduce(
-    (acc: any[], key: any) => {
+    (acc: string[], key: string) => {
       if (!acc.includes(key)) {
         acc.push(key);
       }

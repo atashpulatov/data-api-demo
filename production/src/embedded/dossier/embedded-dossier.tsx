@@ -25,6 +25,7 @@ import { VisualizationInfo } from '../../types/object-types';
 
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
+import { repromptsQueueSelector } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer-selector';
 import { ErrorMessages } from '../../error/constants';
 
 import './dossier.css';
@@ -651,7 +652,7 @@ const mapStateToProps = (state: RootState): any => {
   };
   const { isReprompt = false } = popupStateReducer;
   const isMultipleRepromptWithReuse = reusePromptAnswers && repromptsQueueReducer.total > 1;
-  const { promptKeys } = state.repromptsQueueReducer;
+  const promptKeys = repromptsQueueSelector.selectPromptKeys(state); // Use the selector here
   // Do not specify the instanceId if it is a multiple reprompt because, if it is specified,
   // the embedded dossier will not load the saved prompts and will use the default ones instead, the ones
   // in the definition when it was imported the first time.
