@@ -13,11 +13,6 @@ const projectId = 'B7CA92F04B9FAE8D941C3E9B7E0CD754';
 const visualizationKey = 'W56';
 
 describe('MstrObjectRestService', () => {
-  beforeAll(() => {
-    // @ts-ignore
-    mstrObjectRestService.init(reduxStore);
-  });
-
   it('Initialization of MstrObjectRestService should be successful', () => {
     expect(mstrObjectRestService).toBeDefined();
   });
@@ -27,7 +22,7 @@ describe('MstrObjectRestService', () => {
       global.fetch = jest.fn(() =>
         Promise.resolve(new Response(new ArrayBuffer(100), { status: 200, statusText: 'OK' }))
       );
-      mstrObjectRestService.reduxStore.getState = jest.fn().mockImplementation(() => ({
+      reduxStore.getState = jest.fn().mockImplementation(() => ({
         sessionReducer: {
           envUrl: 'envUrl',
           authToken: 'sg8lqk4gndagkv5uvcpq2k46i0',
@@ -58,7 +53,7 @@ describe('MstrObjectRestService', () => {
           )
         )
       );
-      mstrObjectRestService.reduxStore.getState = jest.fn().mockImplementation(() => ({
+      reduxStore.getState = jest.fn().mockImplementation(() => ({
         sessionReducer: {
           envUrl: 'envUrl',
           authToken: 'sg8lqk4gndagkv5uvcpq2k46i0',
@@ -81,20 +76,18 @@ describe('MstrObjectRestService', () => {
       global.fetch = jest.fn((): any =>
         Promise.resolve({ body: new ArrayBuffer(100), status: 200, statusText: 'OK' })
       );
-      mstrObjectRestService.reduxStore.getState = jest.fn().mockImplementation(() => ({
+      reduxStore.getState = jest.fn().mockImplementation(() => ({
         sessionReducer: {
           envUrl: 'envUrl',
           authToken: 'sg8lqk4gndagkv5uvcpq2k46i0',
         },
       }));
-      const excelWorkbook = await mstrObjectRestService.exportDossierToExcel(
-        {
-          dossierId,
-          dossierInstanceId,
-          visualizationKey,
-          projectId
-        }
-      );
+      const excelWorkbook = await mstrObjectRestService.exportDossierToExcel({
+        dossierId,
+        dossierInstanceId,
+        visualizationKey,
+        projectId,
+      });
       expect(excelWorkbook).toBeDefined();
     });
   });
@@ -104,19 +97,17 @@ describe('MstrObjectRestService', () => {
       global.fetch = jest.fn((): any =>
         Promise.resolve({ body: new ArrayBuffer(100), status: 200, statusText: 'OK' })
       );
-      mstrObjectRestService.reduxStore.getState = jest.fn().mockImplementation(() => ({
+      reduxStore.getState = jest.fn().mockImplementation(() => ({
         sessionReducer: {
           envUrl: 'envUrl',
           authToken: 'sg8lqk4gndagkv5uvcpq2k46i0',
         },
       }));
-      const excelWorkbook = await mstrObjectRestService.exportReportToExcel(
-        {
-          reportId,
-          reportInstanceId,
-          projectId
-        }
-      );
+      const excelWorkbook = await mstrObjectRestService.exportReportToExcel({
+        reportId,
+        reportInstanceId,
+        projectId,
+      });
       expect(excelWorkbook).toBeDefined();
     });
   });

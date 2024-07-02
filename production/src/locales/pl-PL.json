@@ -303,5 +303,10 @@
    "Report Filter": "Filtr raportu",
    "Report Limits": "Ograniczenia raportu",
    "View Filter": "Filtr widoku",
-   "Selected non-grid visualization cannot be imported as formatted data": "Wybranej wizualizacji bez tabeli nie można zaimportować jako sformatowanych danych"
+   "Selected non-grid visualization cannot be imported as formatted data": "Wybranej wizualizacji bez tabeli nie można zaimportować jako sformatowanych danych",
+   "Data Refresh": "Odświeżanie danych",
+   "Auto Refresh": "Automatyczne odświeżanie",
+   "If enabled, the data will be automatically refreshed each time you open the Excel document.": "Jeśli jest włączona, dane będą automatycznie odświeżane przy każdym otwarciu prezentacji PowerPoint.",
+   "Refresh in progress...": "Odświeżanie w toku...",
+   "Stop refresh": "Zatrzymaj odświeżanie"
 }

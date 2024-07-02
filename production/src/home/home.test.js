@@ -2,8 +2,6 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { render } from '@testing-library/react';
 
-import { notificationService } from '../notification/notification-service';
-
 import { reduxStore } from '../store';
 
 import { HomeNotConnected } from './home';
@@ -13,8 +11,6 @@ jest.mock('./home-helper');
 describe('HomeNotConnected', () => {
   it('should render home component and side panel', () => {
     // given
-    const sessionRestoredSpy = jest.spyOn(notificationService, 'sessionRestored');
-
     // when
     const { getByText } = render(
       <Provider store={reduxStore}>
@@ -25,7 +21,6 @@ describe('HomeNotConnected', () => {
     // then
     expect(getByText('Excel')).toBeInTheDocument();
     expect(getByText('Username')).toBeInTheDocument();
-    expect(sessionRestoredSpy).toHaveBeenCalled();
   });
 
   it('should render no rights message if no authToken is provided', () => {
@@ -44,7 +39,7 @@ describe('HomeNotConnected', () => {
 
   it('should call connectionLost when offline event is triggered and dialog is not open', () => {
     // given
-    const connectionLostSpy = jest.spyOn(notificationService, 'connectionLost');
+    reduxStore.dispatch = jest.fn();
     const props = {
       loading: false,
       isDialogOpen: false,
@@ -63,6 +58,6 @@ describe('HomeNotConnected', () => {
     window.dispatchEvent(new Event('offline'));
 
     // then
-    expect(connectionLostSpy).toHaveBeenCalled();
+    expect(reduxStore.dispatch).toHaveBeenCalled();
   });
 });

@@ -10,7 +10,17 @@ const selectEditedObject = createSelector(
   [getPopupState],
   (popupReducer: PopupState) => popupReducer.editedObject
 );
+const selectIsEdit = createSelector(
+  [getPopupState],
+  (popupReducer: PopupState) => popupReducer.isEdit
+);
+const selectIsDuplicate = createSelector(
+  [getPopupState],
+  (popupReducer: PopupState) => popupReducer.isDuplicate
+);
 
 export const popupSelectors = {
   selectEditedObject,
+  selectIsEdit,
+  selectIsDuplicate,
 };

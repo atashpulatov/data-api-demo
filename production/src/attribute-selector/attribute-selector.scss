@@ -1,0 +1,17 @@
+.attribute-forms
+  .ant-tree
+  .ant-tree-treenode-switcher-close
+  .ant-tree-node-content-wrapper
+  .ant-tree-title
+  .item-title {
+  width: auto;
+}
+
+.attribute-selector-window {
+  user-select: none;
+  -webkit-user-select: none;
+
+  .dialog-footer {
+    min-width: 650px;
+  }
+}

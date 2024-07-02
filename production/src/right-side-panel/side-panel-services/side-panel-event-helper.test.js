@@ -1,10 +1,14 @@
+import { authenticationHelper } from '../../authentication/authentication-helper';
 import { notificationService } from '../../notification/notification-service';
 import { officeApiHelper } from '../../office/api/office-api-helper';
+import { officeApiService } from '../../office/api/office-api-service';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { sidePanelEventHelper } from './side-panel-event-helper';
 import { sidePanelService } from './side-panel-service';
 
 import { reduxStore } from '../../store';
+
+import { ObjectImportType } from '../../mstr-object/constants';
 
 describe('SidePanelService', () => {
   afterEach(() => {
@@ -23,7 +27,7 @@ describe('SidePanelService', () => {
       .mockImplementationOnce(() => mockContext);
 
     const spyGetSelectedCell = jest
-      .spyOn(officeApiHelper, 'getSelectedCell')
+      .spyOn(officeApiService, 'getSelectedCell')
       .mockImplementationOnce(() => mockActiveCell);
 
     const spyGetCurrentExcelSheet = jest
@@ -33,32 +37,40 @@ describe('SidePanelService', () => {
         id: mockActiveWorksheetId,
       }));
 
-    const mockSetActiveCellAddress = jest.fn();
+    const spyDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+
     const mockSetActiveSheetId = jest.fn();
     const mockIsAnyPopupOrSettingsDisplayed = false;
 
     const spyAddOnSelectionChangedListener = jest
-      .spyOn(officeApiHelper, 'addOnSelectionChangedListener')
+      .spyOn(officeApiService, 'addOnSelectionChangedListener')
       .mockImplementationOnce(() => {});
 
     // when
-    await sidePanelEventHelper.initActiveSelectionChangedListener(mockSetActiveCellAddress, mockSetActiveSheetId, mockIsAnyPopupOrSettingsDisplayed);
+    await sidePanelEventHelper.initActiveSelectionChangedListener(
+      mockSetActiveSheetId,
+      mockIsAnyPopupOrSettingsDisplayed
+    );
     // then
-    expect(spyGetExcelContext).toBeCalled();
-    expect(spyGetSelectedCell).toBeCalledWith(mockContext);
-    expect(spyGetCurrentExcelSheet).toBeCalledWith(mockContext);
-    expect(mockSetActiveCellAddress).toBeCalledWith(mockActiveCell);
-    expect(mockSetActiveSheetId).toBeCalledWith(mockActiveWorksheetId);
-    expect(spyAddOnSelectionChangedListener).toBeCalledWith(mockContext, mockSetActiveCellAddress, mockSetActiveSheetId, mockIsAnyPopupOrSettingsDisplayed);
+    expect(spyGetExcelContext).toHaveBeenCalled();
+    expect(spyGetSelectedCell).toHaveBeenCalledWith(mockContext);
+    expect(spyGetCurrentExcelSheet).toHaveBeenCalledWith(mockContext);
+    expect(spyDispatch).toHaveBeenCalled();
+    expect(mockSetActiveSheetId).toHaveBeenCalledWith(mockActiveWorksheetId);
+    expect(spyAddOnSelectionChangedListener).toHaveBeenCalledWith(
+      mockContext,
+      mockSetActiveSheetId,
+      mockIsAnyPopupOrSettingsDisplayed
+    );
   });
 
   it('should remove objects in setOnDeletedTablesEvent', async () => {
     // given
-    const object = { objectWorkingId: 1, bindId: 1 };
+    const object = { objectWorkingId: 123, bindId: 1, importType: ObjectImportType.TABLE };
     const eventObject = { tableId: 1 };
 
     const mockedExcelContext = jest
-      .spyOn(officeApiHelper, 'checkStatusOfSessions')
+      .spyOn(authenticationHelper, 'checkStatusOfSessions')
       .mockImplementation();
     const mockedGetObjects = jest
       .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByBindId')
@@ -66,7 +78,8 @@ describe('SidePanelService', () => {
     const mockedRemoveNotification = jest
       .spyOn(notificationService, 'removeExistingNotification')
       .mockImplementation();
-    const mockedRemove = jest.spyOn(sidePanelService, 'remove').mockImplementation();
+
+    reduxStore.dispatch = jest.fn();
 
     // when
     await sidePanelEventHelper.setOnDeletedTablesEvent(eventObject);
@@ -74,8 +87,7 @@ describe('SidePanelService', () => {
     expect(mockedExcelContext).toBeCalled();
     expect(mockedGetObjects).toBeCalled();
     expect(mockedRemoveNotification).toBeCalled();
-    expect(mockedRemove).toBeCalled();
-    expect(mockedRemove).toBeCalledWith(1);
+    expect(reduxStore.dispatch).toHaveBeenCalled();
   });
 
   it('should remove objects in setOnDeletedWorksheetEvent', async () => {
@@ -89,7 +101,7 @@ describe('SidePanelService', () => {
     const objectsOfSheets = [{ objectWorkingId: 1, id: 1 }];
 
     const mockedExcelContext = jest
-      .spyOn(officeApiHelper, 'checkStatusOfSessions')
+      .spyOn(authenticationHelper, 'checkStatusOfSessions')
       .mockImplementation();
     const mockedGetObjects = jest
       .spyOn(officeReducerHelper, 'getObjectsListFromObjectReducer')
@@ -167,7 +179,7 @@ describe('SidePanelService', () => {
     const mockedExcelContext = {
       sync: mockSync,
       workbook: {
-        worksheets: {}
+        worksheets: {},
       },
     };
 
@@ -177,17 +189,24 @@ describe('SidePanelService', () => {
     const mockedGetExcelContext = jest
       .spyOn(officeApiHelper, 'getExcelContext')
       .mockReturnValue(mockedExcelContext);
-    const mockedOnNameChangedHelper = jest.spyOn(sidePanelEventHelper, 'setObjectTrackingOnNameChangedWorksheetEvent').mockImplementation();
-    const mockedOnMovedHelper = jest.spyOn(sidePanelEventHelper, 'setObjectTrackingOnMovedWorksheetEvent').mockImplementation();
-    const mockedOnAddedHelper = jest.spyOn(sidePanelEventHelper, 'setObjectTrackingOnAddedWorksheetEvent').mockImplementation();
-    const mockedOnDeletedHelper = jest.spyOn(sidePanelEventHelper, 'setObjectTrackingOnDeletedWorksheetEvent').mockImplementation();
-
+    const mockedOnNameChangedHelper = jest
+      .spyOn(sidePanelEventHelper, 'setObjectTrackingOnNameChangedWorksheetEvent')
+      .mockImplementation();
+    const mockedOnMovedHelper = jest
+      .spyOn(sidePanelEventHelper, 'setObjectTrackingOnMovedWorksheetEvent')
+      .mockImplementation();
+    const mockedOnAddedHelper = jest
+      .spyOn(sidePanelEventHelper, 'setObjectTrackingOnAddedWorksheetEvent')
+      .mockImplementation();
+    const mockedOnDeletedHelper = jest
+      .spyOn(sidePanelEventHelper, 'setObjectTrackingOnDeletedWorksheetEvent')
+      .mockImplementation();
 
     // when
     await sidePanelEventHelper.initObjectWorksheetTrackingListeners();
 
     // then
-    expect(mockedGetState).toHaveBeenCalledTimes(1)
+    expect(mockedGetState).toHaveBeenCalledTimes(1);
     expect(mockedGetExcelContext).toHaveBeenCalledTimes(1);
     expect(mockedOnNameChangedHelper).toHaveBeenCalledTimes(1);
     expect(mockedOnMovedHelper).toHaveBeenCalledTimes(1);
@@ -200,7 +219,7 @@ describe('SidePanelService', () => {
     // given
     const mockedExcelContext = {
       workbook: {
-        worksheets: {}
+        worksheets: {},
       },
     };
 
@@ -210,13 +229,15 @@ describe('SidePanelService', () => {
     const mockedGetExcelContext = jest
       .spyOn(officeApiHelper, 'getExcelContext')
       .mockReturnValue(mockedExcelContext);
-    const mockedDocumentSelectionChangedHelper = jest.spyOn(sidePanelEventHelper, 'setObjectTrackingDocumentSelectionChangedEvent').mockImplementation();
+    const mockedDocumentSelectionChangedHelper = jest
+      .spyOn(sidePanelEventHelper, 'setObjectTrackingDocumentSelectionChangedEvent')
+      .mockImplementation();
 
     // when
     await sidePanelEventHelper.initObjectWorksheetTrackingListeners();
 
     // then
-    expect(mockedGetState).toHaveBeenCalledTimes(1)
+    expect(mockedGetState).toHaveBeenCalledTimes(1);
     expect(mockedGetExcelContext).toHaveBeenCalledTimes(1);
     expect(mockedDocumentSelectionChangedHelper).toHaveBeenCalledTimes(1);
   });
@@ -240,7 +261,10 @@ describe('SidePanelService', () => {
     const mockedExcelContext = {};
 
     // when
-    sidePanelEventHelper.setObjectTrackingOnMovedWorksheetEvent(mockedWorksheets, mockedExcelContext);
+    sidePanelEventHelper.setObjectTrackingOnMovedWorksheetEvent(
+      mockedWorksheets,
+      mockedExcelContext
+    );
 
     // then
     expect(mockAddEvent).toHaveBeenCalledTimes(1);
@@ -253,7 +277,10 @@ describe('SidePanelService', () => {
     const mockedExcelContext = {};
 
     // when
-    sidePanelEventHelper.setObjectTrackingOnAddedWorksheetEvent(mockedWorksheets, mockedExcelContext);
+    sidePanelEventHelper.setObjectTrackingOnAddedWorksheetEvent(
+      mockedWorksheets,
+      mockedExcelContext
+    );
 
     // then
     expect(mockAddEvent).toHaveBeenCalledTimes(1);
@@ -266,7 +293,10 @@ describe('SidePanelService', () => {
     const mockedExcelContext = {};
 
     // when
-    sidePanelEventHelper.setObjectTrackingOnDeletedWorksheetEvent(mockedWorksheets, mockedExcelContext);
+    sidePanelEventHelper.setObjectTrackingOnDeletedWorksheetEvent(
+      mockedWorksheets,
+      mockedExcelContext
+    );
 
     // then
     expect(mockAddEvent).toHaveBeenCalledTimes(1);
@@ -279,7 +309,7 @@ describe('SidePanelService', () => {
       context: {
         document: {
           addHandlerAsync: mockedAddHandlerAsync,
-        }
+        },
       },
       EventType: {
         DocumentSelectionChanged: 'DocumentSelectionChanged',
@@ -289,7 +319,10 @@ describe('SidePanelService', () => {
     const mockedExcelContext = {};
 
     // when
-    sidePanelEventHelper.setObjectTrackingDocumentSelectionChangedEvent(mockedWorksheets, mockedExcelContext);
+    sidePanelEventHelper.setObjectTrackingDocumentSelectionChangedEvent(
+      mockedWorksheets,
+      mockedExcelContext
+    );
 
     // then
     expect(mockedAddHandlerAsync).toHaveBeenCalledTimes(1);

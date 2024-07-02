@@ -1,5 +1,7 @@
 import { shapeProps, sheetCollectionProps } from './shape-properties';
 
+const ITEM_NOT_FOUND = 'ItemNotFound';
+
 class OfficeShapeApiHelper {
   /**
    * Gets the excel shape referenced by shapeId from the workbook.
@@ -78,6 +80,32 @@ class OfficeShapeApiHelper {
     if (shape) {
       shape.delete();
       await excelContext.sync();
+    }
+  };
+
+  /**
+   * Deletes the shape group linked to office table from the worksheet.
+   *
+   * @param officeTable Reference to Excel Table
+   * @param shapeGroupId Shape group Id
+   * @param excelContext Reference to Excel Context used by Excel API functions
+   */
+  deleteShapeGroupLinkedToOfficeTable = async (officeTable: Excel.Table, shapeGroupId: string, excelContext: Excel.RequestContext): Promise<void> => {
+    try {
+      const shapeGroup = officeTable.worksheet.shapes.getItem(shapeGroupId);
+      shapeGroup?.delete();
+
+      await excelContext.sync();
+    } catch (error) {
+      /*
+      If the error is InvalidSelection it means that the requested resource(shape) doesn't exist.
+      https://learn.microsoft.com/en-us/office/dev/add-ins/testing/application-specific-api-error-handling
+      Shape group could be deleted manually from worksheet. Currently there is no Excel api/events to track user's actions
+      on removal of images. Hence we will swallow the error and proceed further. 
+      */
+      if (error.code !== ITEM_NOT_FOUND) {
+        throw error;
+      }
     }
   };
 }

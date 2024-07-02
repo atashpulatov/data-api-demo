@@ -5,6 +5,7 @@ import {
   LoadSidePanelObjectInfoSettingAction,
   LoadWorksheetObjectInfoSettingAction,
   SetDefaultImportTypeAction,
+  SetEnableDataAutoRefresh,
   SetPageByDisplaySettingAction,
   SetPivotTableAddAttributesToColumnsAction,
   SetPivotTableAddMetricsToValuesAction,
@@ -36,6 +37,7 @@ const initialState: SettingsState = {
   pageByDisplaySetting: PageByDisplayType.SELECT_PAGES,
   pivotTableAddAttributesToColumns: false,
   pivotTableAddMetricsToValues: false,
+  enableDataAutoRefresh: false,
 };
 
 // eslint-disable-next-line default-param-last
@@ -67,6 +69,8 @@ export const settingsReducer = (state = initialState, action: SettingsActions): 
       return setPivotTableAddAttributesToColumns(state, action);
     case SettingsActionTypes.SET_PIVOT_TABLE_ADD_METRICS_TO_VALUES:
       return setPivotTableAddMetricsToValues(state, action);
+    case SettingsActionTypes.SET_ENABLE_DATA_AUTO_REFRESH:
+      return setEnableDataAutoRefresh(state, action);
     default:
       return state;
   }
@@ -199,4 +203,11 @@ function setPivotTableAddMetricsToValues(
   action: SetPivotTableAddMetricsToValuesAction
 ): SettingsState {
   return { ...state, pivotTableAddMetricsToValues: action.payload };
+}
+
+function setEnableDataAutoRefresh(
+  state: SettingsState,
+  action: SetEnableDataAutoRefresh
+): SettingsState {
+  return { ...state, enableDataAutoRefresh: action.payload };
 }

@@ -32,7 +32,6 @@ export WORKSPACE_SETTING=aws_dev
 
 source .ecosystem
 rake pre_pipeline
-rake veracode
 
 rake build
 

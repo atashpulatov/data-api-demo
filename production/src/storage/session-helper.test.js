@@ -1,15 +1,14 @@
-import { waitFor } from '@testing-library/react';
 import { createStore } from 'redux';
 
-import { authenticationService } from '../authentication/auth-rest-service';
-import { homeHelper } from '../home/home-helper';
+import { authenticationRestApi } from '../authentication/auth-rest-service';
+import { errorService } from '../error/error-service';
+import { browserHelper } from '../helpers/browser-helper';
 import { sessionHelper } from './session-helper';
 
 import { reduxStore } from '../store';
 
 import { SessionActionTypes } from '../redux-reducer/session-reducer/session-reducer-types';
 
-import { errorService } from '../error/error-handler';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import { sessionReducer } from '../redux-reducer/session-reducer/session-reducer';
 import { ErrorMessages } from '../error/constants';
@@ -41,38 +40,6 @@ describe('sessionHelper', () => {
     window.location = savedLocation;
   });
 
-  it('should throw error due to logOutError', () => {
-    // given
-    authenticationService.logout = jest.fn().mockImplementationOnce(() => {
-      throw new Error();
-    });
-    jest.spyOn(errorService, 'handleError').mockImplementation();
-
-    // when
-    sessionHelper.logOutRest();
-
-    // then
-    expect(errorService.handleError).toHaveBeenCalled();
-  });
-  it('should call redirect logOutRedirect', () => {
-    // given
-    jest.spyOn(sessionHelper, 'isDevelopment').mockReturnValueOnce(false);
-    // when
-    sessionHelper.logOutRedirect();
-    // then
-    expect(window.location.replace).toBeCalled();
-  });
-  it('should disable loading for localhost in logOutRedirect', () => {
-    // given
-    jest.spyOn(sessionHelper, 'isDevelopment').mockReturnValueOnce(true);
-    const loadingHelper = jest.spyOn(sessionActions, 'disableLoading');
-    homeHelper.getWindowLocation = jest.fn().mockReturnValueOnce({ origin: 'localhost' });
-
-    // when
-    sessionHelper.logOutRedirect();
-    // then
-    expect(loadingHelper).toBeCalled();
-  });
   it('should save authToken in redux on login', () => {
     // given
 
@@ -106,7 +73,7 @@ describe('sessionHelper', () => {
   it('should call putSessions on installSessionProlongingHandler invocation', () => {
     // given
     const onSessionExpire = jest.fn();
-    const putSessionsMock = jest.spyOn(authenticationService, 'putSessions').mockImplementation();
+    const putSessionsMock = jest.spyOn(authenticationRestApi, 'putSessions').mockImplementation();
     jest.spyOn(window.navigator, 'onLine', 'get').mockReturnValueOnce(true);
     jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({
       sessionReducer: { authToken: 'x-mstr-authToken', envUrl: 'Url' },
@@ -133,7 +100,7 @@ describe('sessionHelper', () => {
       },
     };
     const onSessionExpire = jest.fn();
-    authenticationService.putSessions = jest.fn().mockImplementationOnce(() => {
+    authenticationRestApi.putSessions = jest.fn().mockImplementationOnce(() => {
       throw sessionFailureError;
     });
     jest.spyOn(errorService, 'handleError').mockImplementation();
@@ -156,7 +123,7 @@ describe('sessionHelper', () => {
       },
     };
     const onSessionExpire = jest.fn();
-    authenticationService.putSessions = jest.fn().mockImplementationOnce(() => {
+    authenticationRestApi.putSessions = jest.fn().mockImplementationOnce(() => {
       throw sessionFailureError;
     });
     jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({
@@ -199,21 +166,6 @@ describe('sessionHelper', () => {
     expect(sessionHelper.keepSessionAlive).toHaveBeenCalledWith(onSessionExpire);
   });
 
-  it('handleLogoutForPrivilegeMissing should work correctly', async () => {
-    // given
-    const logOutRestMock = jest.spyOn(sessionHelper, 'logOutRest').mockResolvedValue(() => {});
-    const logOutMock = jest.spyOn(sessionActions, 'logOut').mockImplementation(() => {});
-    const logOutRedirectMock = jest.spyOn(sessionHelper, 'logOutRedirect').mockImplementation();
-
-    // when
-    sessionHelper.handleLogoutForPrivilegeMissing();
-
-    // then
-    expect(logOutRestMock).toHaveBeenCalled();
-    await waitFor(() => expect(logOutMock).toBeCalled());
-    await waitFor(() => expect(logOutRedirectMock).toBeCalled());
-  });
-
   it('getUserAttributeFormPrivilege should work correctly', async () => {
     // given
     const authToken = '12-abc-34';
@@ -225,12 +177,12 @@ describe('sessionHelper', () => {
       },
     }));
 
-    const isDevelopmentMock = jest.spyOn(sessionHelper, 'isDevelopment').mockReturnValueOnce(false);
+    const isDevelopmentMock = jest.spyOn(browserHelper, 'isDevelopment').mockReturnValueOnce(false);
     const getTokenFromStorageMock = jest
-      .spyOn(homeHelper, 'getTokenFromStorage')
+      .spyOn(sessionHelper, 'getTokenFromStorage')
       .mockImplementation(() => '12-abc-34');
     const getOfficePrivilege = jest
-      .spyOn(authenticationService, 'getOfficePrivilege')
+      .spyOn(authenticationRestApi, 'getOfficePrivilege')
       .mockResolvedValueOnce(true);
 
     // when

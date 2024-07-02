@@ -13,6 +13,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     ANT_BUTTON = '.ant-btn'
 
     IMPORT_BUTTON_ELEM = 'import'
+    IMPORT_FORMATTED_DATA_BUTTON_ELEM = 'import-formatted-data'
     BACK_BUTTON_ELEM = 'back'
     CANCEL_BUTTON_ELEM = 'cancel'
 
@@ -25,7 +26,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     SUBTOTALS_TOGGLE_CONTAINER = '.subtotal-container'
     SUBTOTALS_TOGGLE = SUBTOTALS_TOGGLE_CONTAINER + ' button.ant-switch'
 
-    FOOTER_BUTTON_CSS = '.popup-buttons.popup-footer button'
+    FOOTER_BUTTON_CSS = '.dialog-buttons.dialog-footer button'
     BACK_BUTTON_ID = 'back'
 
     def __init__(self):
@@ -75,6 +76,11 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_popup_frame()
 
         self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.IMPORT_BUTTON_ELEM).click()
+
+    def click_import_formatted_data_button_without_success_check(self):
+        self.focus_on_add_in_popup_frame()
+
+        self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.IMPORT_FORMATTED_DATA_BUTTON_ELEM).click()    
 
     def click_import_button(self):
         self.click_import_button_without_success_check()

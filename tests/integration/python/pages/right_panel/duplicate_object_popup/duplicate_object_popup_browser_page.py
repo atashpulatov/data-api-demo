@@ -3,9 +3,9 @@ from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import Rig
 
 
 class DuplicateObjectPopupBrowserPage(BaseBrowserPage):
-    DUPLICATE_POPUP_IMPORT_BUTTON = '.duplicate-popup-footer-buttons > button:nth-child(1)'
+    DUPLICATE_POPUP_IMPORT_BUTTON = '.base-popup-footer-buttons > button:nth-child(1)'
 
-    DUPLICATE_POPUP_EDIT_BUTTON = '.duplicate-popup-footer-buttons > button:nth-child(2)'
+    DUPLICATE_POPUP_EDIT_BUTTON = '.base-popup-footer-buttons > button:nth-child(2)'
 
     DUPLICATE_POPUP_ACTIVE_CELL_OPTION = 'active_cell'
 

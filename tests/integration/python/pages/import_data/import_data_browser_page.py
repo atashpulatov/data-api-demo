@@ -36,15 +36,21 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
     ALL_OBJECTS_LIST = '.mstrd-SearchFilter li#searchFilterOption_all'
     FIRST_OBJECT_LIBRARY = '.mstrd-SearchResultsList li:nth-child(1)'
-
-    IMPORT_BUTTON_ELEM = '.import-button__action-button'
+    
     IMPORT_BUTTON_DISABLED = 'disabled'
+    ITEM_IN_IMPORT_DROPDOWN_DISABLED = 'aria-disabled'
     PREPARE_BUTTON_ELEM = 'prepare'
     IMPORT_IMAGE_BUTTON_ELEM = 'import-image'
     IMPORT_TYPE_BUTTON_XPATH = '//button[contains(@class, "mstr-rc-3-button-with-options__action-button") and contains(text(), "%s")]'
     EXPAND_IMPORT_ARROW = '.mstr-rc-3-button-with-options__dropdown-button[aria-label="Show options"]'
     SELECT_IMPORT_OPTION = '''li[aria-label='%s']'''
     IMPORT_OPTION = '.mstr-rc-3-button-with-options > .mstr-rc-3-button-with-options__action-button'
+
+    IMPORT_BUTTON_ELEM = 'import'
+    IMPORT_FORMATTED_DATA_BUTTON_ELEM = 'import-formatted-data'
+    IMPORT_WITH_DROPDOWN_BUTTON_ELEM = '.mstr-rc-3-button-with-options > .import-button__action-button'
+    IMPORT_DROPDOWN_BUTTON_ELEM = '.import-button__dropdown-button'
+    ITEM_IN_IMPORT_DROPDOWN_ELEM = '''li[aria-label='%s']'''
 
     NOTIFICATION_TEXT_ELEM = '.selection-title'
     COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = 'Columns & Filters Selection'
@@ -53,7 +59,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
     ADD_TO_LIBRARY_BUTTON_TEXT = 'Add to Library'
     ADD_TO_LIBRARY_BUTTON_SEARCH_TIMEOUT = 5
 
-    CLOSE_IMPORT_DATA_BUTTON = '.popup-buttons > button'
+    CLOSE_IMPORT_DATA_BUTTON = '.dialog-buttons > button'
     FILTERS_BUTTON = '.filter-button'
     FILTERS_SELECTED_NUMBER = '.filters-selected'
 
@@ -62,8 +68,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
     DISABLED_BUTTON_TOOLTIP = '.ant-popover-inner-content'
 
     COLUMN_HEADER = '''div[aria-label='%s']'''
-    BUTTON_TOOLTIP = '.ant-popover-inner-content'
-    IMAGE_IMPORT_BUTTON_TOOLTIP = '.mstr-rc-standard-tooltip__content'
+    BUTTON_TOOLTIP = '.mstr-rc-3-tooltip__content'
 
     ATTRIBUTE_METRIC_SELECTOR_ITEM_CSS = '.mstrmojo-FilterBox .item-wrapper'
 
@@ -188,32 +193,37 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
     def click_import_button(self, not_used_reset_framework_method, not_used_context):
         self.focus_on_add_in_popup_frame()
-        self.get_element_by_css(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
+        self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
 
         self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully()
 
     def click_import_button_without_checking_results(self):
         self.focus_on_add_in_popup_frame()
-        self.get_element_by_css(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
+        self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
 
     def click_import_image_button_without_checking_results(self):
         self.focus_on_add_in_popup_frame()
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_IMAGE_BUTTON_ELEM).click()
 
+    def click_import_with_dropdown_button_without_checking_results(self):
+        self.focus_on_add_in_popup_frame()
+        self.get_element_by_css(ImportDataBrowserPage.IMPORT_WITH_DROPDOWN_BUTTON_ELEM).click()
+        
     def click_import_button_to_import_with_error(self, error_message):
         self.focus_on_add_in_popup_frame()
-        self.get_element_by_css(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
+        self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
 
         self.right_panel_tile_browser_page.wait_for_operation_error_and_accept(error_message)
 
     def click_import_button_to_import_with_global_error(self, error_message):
-        self.get_element_by_css(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
+        self.focus_on_add_in_popup_frame()
+        self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
 
         self.right_panel_tile_browser_page.wait_for_operation_global_error_and_accept(error_message)
 
     def click_import_button_to_open_import_dossier(self):
         self.focus_on_add_in_popup_frame()
-        self.get_element_by_css(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
+        self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
 
     def is_prepare_data_button_enabled(self):
         self.focus_on_add_in_popup_frame()
@@ -294,8 +304,33 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
     def verify_if_import_button_is_enabled(self):
         self.focus_on_add_in_popup_frame()
-        element = self.get_element_by_css(ImportDataBrowserPage.IMPORT_BUTTON_ELEM)
+        element = self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM)
         return element.get_attribute(ImportDataBrowserPage.IMPORT_BUTTON_DISABLED) is None
+
+    def verify_if_import_with_dropdown_button_is_enabled(self):
+        self.focus_on_add_in_popup_frame()
+        element = self.get_element_by_css(ImportDataBrowserPage.IMPORT_WITH_DROPDOWN_BUTTON_ELEM)
+        return element.get_attribute(ImportDataBrowserPage.IMPORT_BUTTON_DISABLED) is None
+
+    def verify_if_import_formatted_data_button_enabled(self):
+        self.focus_on_add_in_popup_frame()
+        element = self.get_element_by_id(ImportDataBrowserPage.IMPORT_FORMATTED_DATA_BUTTON_ELEM)
+        return element.get_attribute(ImportDataBrowserPage.IMPORT_BUTTON_DISABLED) is None
+
+    def get_item_in_import_dropdown(self, item_name):
+        self.focus_on_add_in_popup_frame()
+        return self.get_element_by_css(ImportDataBrowserPage.ITEM_IN_IMPORT_DROPDOWN_ELEM % item_name)
+
+    def select_item_in_import_dropdown(self, item_name):
+        self.get_item_in_import_dropdown(item_name).click()        
+
+    def verify_if_item_in_import_dropdown_is_enabled(self, item_name):
+        element = self.get_item_in_import_dropdown(item_name)
+        return element.get_attribute(ImportDataBrowserPage.ITEM_IN_IMPORT_DROPDOWN_DISABLED) == 'false'
+
+    def click_import_dropdown_button(self):
+        self.focus_on_add_in_popup_frame()
+        self.get_element_by_css(ImportDataBrowserPage.IMPORT_DROPDOWN_BUTTON_ELEM).click()
     
     def verify_if_import_image_button_is_enabled(self):
         self.focus_on_add_in_popup_frame()
@@ -321,7 +356,12 @@ class ImportDataBrowserPage(BaseBrowserPage):
     def hover_over_import_button(self):
         self.focus_on_add_in_popup_frame()
 
-        self.get_element_by_css(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).move_to()
+        self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).move_to()
+
+    def hover_over_import_formatted_data_button(self):
+        self.focus_on_add_in_popup_frame()
+
+        self.get_element_by_id(ImportDataBrowserPage.IMPORT_FORMATTED_DATA_BUTTON_ELEM).move_to()
 
     def hover_over_import_image_button(self):
         self.focus_on_add_in_popup_frame()
@@ -332,11 +372,6 @@ class ImportDataBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_popup_frame()
 
         return self.get_element_by_css(ImportDataBrowserPage.BUTTON_TOOLTIP).text
-    
-    def get_tooltip_message_for_image_button(self):
-        self.focus_on_add_in_popup_frame()
-
-        return self.get_element_by_css(ImportDataBrowserPage.IMAGE_IMPORT_BUTTON_TOOLTIP).text
 
     def scroll_objects_list_by_number_of_pages(self, number):
         for i in range(int(number)):

@@ -1,10 +1,13 @@
+import { errorService } from '../error/error-service';
 import { officeApiCrosstabHelper } from '../office/api/office-api-crosstab-helper';
 import { pivotTableHelper } from '../office/pivot-table/pivot-table-helper';
 import { officeRemoveHelper } from '../office/remove/office-remove-helper';
 import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
+import officeStoreHelper from '../office/store/office-store-helper';
 
 import officeStoreObject from '../office/store/office-store-object';
+import { reduxStore } from '../store';
 
 import {
   MstrTable,
@@ -12,22 +15,16 @@ import {
 } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../types/object-types';
 
-import { errorService } from '../error/error-handler';
 import { deleteObjectNotification } from '../redux-reducer/notification-reducer/notification-action-creators';
 import { removeObject, restoreObjectBackup } from '../redux-reducer/object-reducer/object-actions';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { cancelOperation } from '../redux-reducer/operation-reducer/operation-actions';
 import { executeNextRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import { OperationTypes } from './operation-type-names';
+import { OfficeSettingsEnum } from '../constants/office-constants';
 import { ObjectImportType } from '../mstr-object/constants';
 
 class OperationErrorHandler {
-  reduxStore: any;
-
-  init(reduxStore: any): void {
-    this.reduxStore = reduxStore;
-  }
-
   /**
    * Main function responsible for error handling in operations.
    * Based on operation type further function will called to handle error that could occur during operation.
@@ -43,12 +40,11 @@ class OperationErrorHandler {
   ): Promise<void> {
     const callback = this.getCallback(objectData, operationData);
     if (callback) {
-      await errorService.handleObjectBasedError(
-        objectData.objectWorkingId,
-        error,
+      errorService.handleError(error, {
+        objectWorkingId: objectData.objectWorkingId,
+        operationData,
         callback,
-        operationData
-      );
+      });
     }
   }
 
@@ -105,7 +101,7 @@ class OperationErrorHandler {
     const { excelContext, objectWorkingId, officeTable } = operationData;
     const { worksheet } = officeTable;
 
-    const objectDataReducer = this.reduxStore.getState().objectReducer.objects as ObjectData[];
+    const objectDataReducer = reduxStore.getState().objectReducer.objects;
 
     const objectDataIndex = objectDataReducer.findIndex(
       (object: ObjectData) => object.objectWorkingId === objectWorkingId
@@ -132,13 +128,13 @@ class OperationErrorHandler {
    */
   clearFailedObjectFromRedux(objectWorkingId: number): void {
     // Make sure that object isn't removed from redux if it's still in reprompt queue
-    const { total = 0 } = this.reduxStore.getState().repromptsQueueReducer;
+    const { total = 0 } = reduxStore.getState().repromptsQueueReducer;
     if (total === 0) {
-      this.reduxStore.dispatch(removeObject(objectWorkingId));
+      reduxStore.dispatch(removeObject(objectWorkingId));
     }
-    this.reduxStore.dispatch(cancelOperation(objectWorkingId));
-    this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
-    this.reduxStore.dispatch(executeNextRepromptTask());
+    reduxStore.dispatch(cancelOperation(objectWorkingId));
+    reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
+    reduxStore.dispatch(executeNextRepromptTask());
   }
 
   /**
@@ -162,12 +158,12 @@ class OperationErrorHandler {
       officeTable.showTotals = isTotalsRowVisible; // display totals rows if we fail on refresh
     }
     if (backupObjectData) {
-      this.reduxStore.dispatch(restoreObjectBackup(backupObjectData));
+      reduxStore.dispatch(restoreObjectBackup(backupObjectData));
     }
 
-    this.reduxStore.dispatch(cancelOperation(objectWorkingId));
+    reduxStore.dispatch(cancelOperation(objectWorkingId));
 
-    this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
+    reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
   }
 
   /**
@@ -184,11 +180,12 @@ class OperationErrorHandler {
 
     for (let index = clearDataOperations.length - 1; index >= 0; index--) {
       const operation = clearDataOperations[index];
-      this.reduxStore.dispatch(cancelOperation(operation.objectWorkingId));
-      this.reduxStore.dispatch(deleteObjectNotification(operation.objectWorkingId));
+      reduxStore.dispatch(cancelOperation(operation.objectWorkingId));
+      reduxStore.dispatch(deleteObjectNotification(operation.objectWorkingId));
     }
 
-    officeActions.toggleIsClearDataFailedFlag(true)(this.reduxStore.dispatch);
+    officeActions.toggleIsClearDataFailedFlag(true)(reduxStore.dispatch);
+    officeStoreHelper.setPropertyValue(OfficeSettingsEnum.isClearDataFailed, true);
   }
 
   /**
@@ -197,12 +194,12 @@ class OperationErrorHandler {
    *
    * @param objectData Unique Id of the object allowing to reference specific object
    */
-  async handleGenericOperationError(objectData: any): Promise<void> {
+  async handleGenericOperationError(objectData: ObjectData): Promise<void> {
     const { objectWorkingId } = objectData;
 
-    this.reduxStore.dispatch(cancelOperation(objectWorkingId));
+    reduxStore.dispatch(cancelOperation(objectWorkingId));
 
-    this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
+    reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
   }
 
   /**

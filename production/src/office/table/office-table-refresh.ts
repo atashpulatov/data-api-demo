@@ -1,5 +1,6 @@
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import { officeApiHelper } from '../api/office-api-helper';
+import { officeApiService } from '../api/office-api-service';
 
 import {
   InstanceDefinition,
@@ -229,7 +230,7 @@ class OfficeTableRefresh {
     headerCell.load('address');
     await excelContext.sync();
     const startCellOfRange = officeApiHelper.getStartCellOfRange(headerCell.address);
-    return officeApiHelper.offsetCellBy(startCellOfRange, -1, 0);
+    return officeApiService.offsetCellBy(startCellOfRange, -1, 0);
   }
 
   /**
@@ -268,7 +269,7 @@ class OfficeTableRefresh {
         prevCrosstabDimensions.columnsY = validColumnsY;
       }
       if (tableChanged) {
-        startCellAddress = officeApiHelper.offsetCellBy(
+        startCellAddress = officeApiService.offsetCellBy(
           startCellAddress,
           -(prevCrosstabDimensions.columnsY - 1),
           -prevCrosstabDimensions.rowsX
@@ -336,7 +337,7 @@ class OfficeTableRefresh {
     const { rowsX, columnsY } = crosstabHeaderDimensions || prevCrosstabDimensions;
 
     if ((isCrosstab && !tableChanged) || fromCrosstabChange) {
-      return officeApiHelper.offsetCellBy(startCellAddress, -columnsY + 1, -rowsX);
+      return officeApiService.offsetCellBy(startCellAddress, -columnsY + 1, -rowsX);
     }
 
     return startCellAddress;

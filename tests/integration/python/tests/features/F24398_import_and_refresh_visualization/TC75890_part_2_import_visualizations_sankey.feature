@@ -6,13 +6,12 @@ Feature: TF9328 - Release Validation
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-      And I found object by ID "02CE0EF511EB7B3C979B0080EF95806F" and selected "Best Snakey"
+      And I found and selected object "Best Snakey"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I selected dossier page or chapter 1
       And I selected visualization "Best Snakey"
-      And I clicked import dossier
+      And I selected import type "Import Data" and clicked import
       And I closed last notification
      Then I verified that cells ["A2", "B2"] have values ["Furniture", "FUR-BO-10000112"]
 

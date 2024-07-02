@@ -2,17 +2,15 @@ import React, { lazy, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Spinner } from '@mstr/rc';
 
-import { HomeHelper } from './home/home-helper';
+import { homeHelper } from './home/home-helper';
 import officeReducerHelper from './office/store/office-reducer-helper';
-import { sessionHelper } from './storage/session-helper';
-
-import { reduxStore } from './store';
 
 import 'core-js/stable';
-import { diContainer } from './dependency-container';
 import i18next from './i18n';
+import { operationBus } from './operation/operation-bus';
+import subscribeSteps from './operation/operation-subscribe-steps';
 
-import './index.css';
+import './index.scss';
 
 const LazySidebar = lazy(() => import('./entry-point/sidebar-entry-point'));
 const LazyDialog = lazy(() => import('./entry-point/dialog-entry-point'));
@@ -38,11 +36,9 @@ function goReact() {
 
 function officeInitialize() {
   window.Office.onReady().then(async () => {
-    const homeHelperSingle = diContainer.initilizeSingle(HomeHelper, [reduxStore, sessionHelper]);
-
     if (window.location.href.indexOf('popupType') === -1) {
       // Loading from sidebar
-      homeHelperSingle.storeShowHidden();
+      homeHelper.storeShowHidden();
     } else {
       // Loading from dialog/popup
       // Add handler from dialog (child) window to be triggered when the parent sends a message
@@ -67,7 +63,8 @@ function officeInitialize() {
       });
     }
     goReact();
-    diContainer.initializeAll();
+    operationBus.init();
+    subscribeSteps.init();
   });
 }
 

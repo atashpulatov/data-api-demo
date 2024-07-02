@@ -35,6 +35,9 @@ export const operationReducer = (
     case OperationActionTypes.CANCEL_OPERATION:
       return cancelOperation(state, action.payload);
 
+    case OperationActionTypes.CANCEL_OPERATION_BY_OPERATION_ID:
+      return cancelOperationByOperationId(state, action.payload);
+
     default:
       return state;
   }
@@ -88,6 +91,19 @@ function cancelOperation(
 ): OperationState {
   const processedOperationIndex = getProcessedOperationIndex(state.operations, objectWorkingId);
   state.operations.splice(processedOperationIndex, 1);
+  return { ...state };
+}
+
+function cancelOperationByOperationId(
+  state: OperationState,
+  { operationId }: { operationId: string }
+): OperationState {
+  const processedOperationIndex = state.operations.findIndex(
+    operation => operation.operationId === operationId
+  );
+  if (processedOperationIndex !== -1) {
+    state.operations.splice(processedOperationIndex, 1);
+  }
   return { ...state };
 }
 

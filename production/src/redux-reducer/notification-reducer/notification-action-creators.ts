@@ -7,11 +7,16 @@ import {
   CreateGlobalNotificationAction,
   CreateSessionExpiredNotificationAction,
   DeleteObjectNotificationAction,
+  DismissAllNotificationsAction,
+  DismissSingleNotificationAction,
   DisplayGlobalNotificationAction,
+  DisplayNotificationCompletedAction,
   DisplayObjectWarningAction,
   Notification,
   NotificationActionTypes,
   RestoreAllNotificationsAction,
+  SetSidePanelBannerAction,
+  SidePanelBanner,
 } from './notification-reducer-types';
 
 export const createConnectionLostNotification = (): CreateConnectionLostNotificationAction => ({
@@ -37,6 +42,17 @@ export const deleteObjectNotification = (
 ): DeleteObjectNotificationAction => ({
   type: NotificationActionTypes.DELETE_NOTIFICATION,
   payload: { objectWorkingId },
+});
+
+export const dismissSingleNotification = (
+  objectWorkingId: number
+): DismissSingleNotificationAction => ({
+  type: NotificationActionTypes.DISMISS_SINGLE_NOTIFICATION,
+  payload: { objectWorkingId },
+});
+
+export const dismissAllObjectsNotifications = (): DismissAllNotificationsAction => ({
+  type: NotificationActionTypes.DISMISS_ALL_NOTIFICATIONS,
 });
 
 export const displayObjectWarning = (
@@ -67,4 +83,19 @@ export const createGlobalNotification = (
 ): CreateGlobalNotificationAction => ({
   type: NotificationActionTypes.CREATE_GLOBAL_NOTIFICATION,
   payload: globalNotification,
+});
+
+export const displaySuccessNotification = (
+  objectWorkingId: number,
+  dismissNotificationCallback: () => void
+): DisplayNotificationCompletedAction => ({
+  type: NotificationActionTypes.DISPLAY_NOTIFICATION_COMPLETED,
+  payload: { objectWorkingId, dismissNotificationCallback },
+});
+
+export const setSidePanelBannerNotification = (
+  bannerNotification: SidePanelBanner
+): SetSidePanelBannerAction => ({
+  type: NotificationActionTypes.SET_SIDE_PANEL_BANNER,
+  payload: bannerNotification,
 });

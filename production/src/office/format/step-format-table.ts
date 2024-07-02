@@ -3,6 +3,7 @@ import { ObjectData } from '../../types/object-types';
 
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import officeApiDataLoader from '../api/office-api-data-loader';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 const AUTOFIT_COLUMN_LIMIT = 50;
 
@@ -32,7 +33,9 @@ class StepFormatTable {
     if (shouldFormat) {
       if (columns < AUTOFIT_COLUMN_LIMIT) {
         try {
-          this.formatCrosstabHeaders(officeTable, isCrosstab, crosstabHeaderDimensions.rowsX);
+          if (_objectData.importType !== ObjectImportType.FORMATTED_DATA) {
+            this.formatCrosstabHeaders(officeTable, isCrosstab, crosstabHeaderDimensions.rowsX);
+          }
 
           await this.formatColumns(excelContext, officeTable.columns);
 

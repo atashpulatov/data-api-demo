@@ -27,7 +27,7 @@ Feature: TF9328 - Release Validation
       # TODO These maximize/minimize steps are implemented for Chrome only
       And I maximized "Visualization 2, KPI" on Info Window
       And I minimized "Visualization 2, KPI" on Info Window
-      And I clicked import dossier
+      And I selected import type "Import Data" and clicked import
       And I closed last notification
      Then I verified that cells ["A2", "A3"] have values ["Jan", "Feb"]
 

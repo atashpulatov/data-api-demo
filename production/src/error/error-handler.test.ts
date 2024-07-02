@@ -1,13 +1,14 @@
-import { notificationService } from '../notification/notification-service';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { pageByHelper } from '../page-by/page-by-helper';
+import { errorService } from './error-service';
+
+import { reduxStore } from '../store';
 
 import { PageByDisplayType } from '../page-by/page-by-types';
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../types/object-types';
 
 import { OperationTypes } from '../operation/operation-type-names';
-import { errorService } from './error-handler';
 import { ErrorType } from './constants';
 
 jest.mock('../notification/notification-service');
@@ -36,7 +37,8 @@ describe('ErrorService', () => {
     const operationData = { operationType } as OperationData;
 
     errorService.getErrorDetails = jest.fn().mockReturnValue('error details');
-    errorService.reduxStore = {
+
+    const mockedReduxStore = {
       getState: jest.fn().mockReturnValue({
         popupStateReducer: { isDataOverviewOpen: true },
         officeReducer: { isDialogOpen: false },
@@ -44,6 +46,11 @@ describe('ErrorService', () => {
       }),
       dispatch: jest.fn(),
     };
+
+    jest.mock('../store', () => ({
+      ...jest.requireActual('../store'),
+      store: mockedReduxStore,
+    }));
 
     jest.spyOn(errorService, 'closePromptsDialogInOverview').mockImplementation();
     jest
@@ -53,7 +60,7 @@ describe('ErrorService', () => {
     const errorType = errorService.getErrorType(error, operationData);
 
     // when
-    await errorService.handleObjectBasedError(objectWorkingId, error, callback, operationData);
+    await errorService.handleError(error, { objectWorkingId, callback, operationData });
 
     // then
     expect(errorType).toEqual(expectedErrorType);
@@ -86,30 +93,30 @@ describe('ErrorService', () => {
       .spyOn(pageByHelper, 'getAllPageByObjects')
       .mockReturnValueOnce({ pageBySiblings: mockedObjectData, sourceObject: mockedObjectData[0] });
 
-    errorService.reduxStore = {
-      getState: jest.fn().mockReturnValue({
-        objectReducer: { objects: mockedObjectData },
-        operationReducer: {
-          operations: [
-            {
-              objectWorkingId: 1,
-              operationType: OperationTypes.REFRESH_OPERATION,
-            },
-            {
-              objectWorkingId: 2,
-              operationType: OperationTypes.REFRESH_OPERATION,
-            },
-          ],
-        },
-      }),
-      dispatch: jest.fn(),
+    const mockedReduxStore = {
+      objectReducer: { objects: mockedObjectData },
+      operationReducer: {
+        operations: [
+          {
+            objectWorkingId: 1,
+            operationType: OperationTypes.REFRESH_OPERATION,
+          },
+          {
+            objectWorkingId: 2,
+            operationType: OperationTypes.REFRESH_OPERATION,
+          },
+        ],
+      },
     };
+    reduxStore.dispatch = jest.fn();
+    // @ts-expect-error
+    jest.spyOn(reduxStore, 'getState').mockReturnValue(mockedReduxStore);
 
     // when
     errorService.clearOperationsForPageBySiblings(mockedObjectData[0].objectWorkingId);
 
     // then
-    expect(errorService.reduxStore.dispatch).toHaveBeenCalled();
+    expect(reduxStore.dispatch).toHaveBeenCalled();
   });
 
   it('should handle overlapping tables error', async () => {
@@ -122,26 +129,26 @@ describe('ErrorService', () => {
     const errorMessageFactoryMock = jest.fn().mockReturnValue(jest.fn());
     errorService.getErrorType = jest.fn().mockReturnValue('OVERLAPPING_TABLES_ERR');
     errorService.getErrorDetails = jest.fn().mockReturnValue('error details');
-    errorService.reduxStore = {
-      getState: jest.fn().mockReturnValue({
-        popupStateReducer: { isDataOverviewOpen: true },
-        officeReducer: { isDialogOpen: false },
-      }),
-    };
+
+    jest.spyOn(reduxStore, 'getState').mockReturnValue({
+      popupStateReducer: { isDataOverviewOpen: true },
+      // @ts-expect-error
+      officeReducer: { isDialogOpen: false },
+    });
 
     officeReducerHelper.displayPopup = jest.fn();
-    jest.spyOn(errorService, 'handleError').mockImplementation();
     jest.spyOn(errorService, 'closePromptsDialogInOverview').mockImplementation();
+    jest.spyOn(officeReducerHelper, 'displayPopup').mockImplementation();
+    reduxStore.dispatch = jest.fn();
 
     // when
-    await errorService.handleObjectBasedError(objectWorkingId, error, callback, operationData);
+    await errorService.handleError(error, { objectWorkingId, callback, operationData });
 
     // then
-    expect(errorService.handleError).toHaveBeenCalled();
     expect(errorMessageFactoryMock).not.toHaveBeenCalled();
     expect(errorService.getErrorDetails).toHaveBeenCalled();
     expect(errorService.closePromptsDialogInOverview).toHaveBeenCalled();
-    expect(notificationService.showObjectWarning).not.toHaveBeenCalled();
+    expect(reduxStore.dispatch).toHaveBeenCalled();
   });
 
   it('should handle non-overlapping tables error', async () => {
@@ -151,32 +158,38 @@ describe('ErrorService', () => {
     const callback = jest.fn();
     const operationData = {} as OperationData;
 
-    const errorMessageFactoryMock = jest.fn().mockReturnValue(jest.fn());
     errorService.getErrorType = jest.fn().mockReturnValue('NON_OVERLAPPING_TABLES_ERR');
     errorService.getErrorDetails = jest.fn().mockReturnValue('error details');
-    errorService.reduxStore = {
+    errorService.closePromptsDialogInOverview = jest.fn();
+    errorService.closeDialogIfOpen = jest.fn().mockResolvedValue(true);
+
+    const mockedReduxStore = {
       getState: jest.fn().mockReturnValue({
         popupStateReducer: { isDataOverviewOpen: false },
         officeReducer: { isDialogOpen: false },
       }),
     };
-    errorService.closePromptsDialogInOverview = jest.fn();
-    errorService.closePopupIfOpen = jest.fn().mockResolvedValue(true);
-    jest.spyOn(notificationService, 'showObjectWarning').mockImplementation();
 
-    jest.spyOn(errorService, 'handleError').mockImplementation();
+    jest.mock('../store', () => ({
+      ...jest.requireActual('../store'),
+      store: mockedReduxStore,
+    }));
+
+    jest.spyOn(reduxStore, 'getState').mockReturnValue({
+      popupStateReducer: { isDataOverviewOpen: false },
+      // @ts-expect-error
+      officeReducer: { isDialogOpen: false },
+    });
+
     jest.spyOn(errorService, 'closePromptsDialogInOverview').mockImplementation();
 
     // when
-    await errorService.handleObjectBasedError(objectWorkingId, error, callback, operationData);
+    await errorService.handleError(error, { objectWorkingId, callback, operationData });
 
     // then
-    expect(errorService.handleError).not.toHaveBeenCalled();
-    expect(errorMessageFactoryMock).not.toHaveBeenCalled();
     expect(errorService.getErrorDetails).toHaveBeenCalled();
     expect(errorService.closePromptsDialogInOverview).not.toHaveBeenCalled();
-    expect(errorService.closePopupIfOpen).toHaveBeenCalledWith(true);
-    expect(notificationService.showObjectWarning).not.toHaveBeenCalled();
+    expect(errorService.closeDialogIfOpen).toHaveBeenCalledWith(undefined, true);
     expect(officeReducerHelper.displayPopup).not.toHaveBeenCalled();
   });
 

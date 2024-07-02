@@ -4,6 +4,7 @@ import {
 } from '../../helpers/visualization-image-utils';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { officeApiHelper } from '../api/office-api-helper';
+import { officeApiService } from '../api/office-api-service';
 import { officeShapeApiHelper } from './office-shape-api-helper';
 import { determineImagePropsToBeAddedToBook } from './shape-helper-util';
 
@@ -68,7 +69,7 @@ class StepManipulateVisualizationImage {
       const { vizDimensions, visualizationKey } = visualizationInfo as VisualizationInfo;
 
       // Get the position of the selected range
-      const selectedRangePos = await officeApiHelper.getSelectedRangePosition(excelContext);
+      const selectedRangePos = await officeApiService.getSelectedRangePosition(excelContext);
 
       // Get the properties of image and the sheet where it needs to be inserted
       const { top, left, width, height, sheet } = determineImagePropsToBeAddedToBook({

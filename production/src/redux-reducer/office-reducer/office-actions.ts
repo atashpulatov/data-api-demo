@@ -1,10 +1,10 @@
 import { Dispatch } from 'react';
 
-import officeStoreHelper from '../../office/store/office-store-helper';
-
 import {
+  DialogToOpen,
   OfficeActionsTypes,
   SetActiveCellAddressAction,
+  SetDialogToOpenAction,
   SetIsAdvancedWorksheetTrackingSupported,
   SetIsDialogLoadedAction,
   SetIsInsertWorksheetAPISupportedAction,
@@ -27,8 +27,12 @@ const hideDialog = () => (dispatch: Dispatch<any>) => {
   dispatch({ type: OfficeActionsTypes.HIDE_DIALOG });
 };
 
+const setDialogToOpen = (dialogToOpen: DialogToOpen): SetDialogToOpenAction => ({
+  type: OfficeActionsTypes.SET_DIALOG_TO_OPEN,
+  dialogToOpen,
+});
+
 const toggleSecuredFlag = (isSecured: boolean) => (dispatch: Dispatch<any>) => {
-  officeStoreHelper.setFileSecuredFlag(isSecured);
   dispatch({
     type: OfficeActionsTypes.TOGGLE_SECURED_FLAG,
     isSecured,
@@ -47,7 +51,6 @@ const toggleIsConfirmFlag = (isConfirm: boolean) => (dispatch: Dispatch<any>) =>
 };
 
 const toggleIsClearDataFailedFlag = (isClearDataFailed: boolean) => (dispatch: Dispatch<any>) => {
-  officeStoreHelper.setIsClearDataFailed(isClearDataFailed);
   dispatch({
     type: OfficeActionsTypes.TOGGLE_IS_CLEAR_DATA_FAILED_FLAG,
     isClearDataFailed,
@@ -69,10 +72,6 @@ const toggleReusePromptAnswersFlag = (reusePromptAnswers: boolean) => (dispatch:
   });
 };
 
-const toggleRenderSettingsFlag = () => (dispatch: Dispatch<any>) => {
-  dispatch({ type: OfficeActionsTypes.TOGGLE_RENDER_SETTINGS_FLAG });
-};
-
 const toggleImportAsPivotTableFlag =
   (isImportAsPivotTableSupported: boolean) => (dispatch: Dispatch<any>) => {
     dispatch({
@@ -85,10 +84,6 @@ const setActiveCellAddress = (activeCellAddress: string): SetActiveCellAddressAc
   type: OfficeActionsTypes.SET_ACTIVE_CELL_ADDRESS,
   activeCellAddress,
 });
-
-const updateActiveCellAddress = (activeCellAddress: string) => (dispatch: Dispatch<any>) => {
-  dispatch(setActiveCellAddress(activeCellAddress));
-};
 
 const setPopupData = (popupData: any): SetPopupDataAction => ({
   type: OfficeActionsTypes.SET_POPUP_DATA,
@@ -132,16 +127,15 @@ export const officeActions = {
   showDialog,
   hideDialog,
   setIsDialogLoaded,
+  setDialogToOpen,
   toggleSecuredFlag,
   toggleIsSettingsFlag,
   toggleIsConfirmFlag,
   toggleIsClearDataFailedFlag,
   toggleSettingsPanelLoadedFlag,
   toggleReusePromptAnswersFlag,
-  toggleRenderSettingsFlag,
   toggleImportAsPivotTableFlag,
   setActiveCellAddress,
-  updateActiveCellAddress,
   setPopupData,
   clearPopupData,
   setIsShapeAPISupported,

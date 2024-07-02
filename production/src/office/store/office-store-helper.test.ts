@@ -1,6 +1,5 @@
+import { errorService } from '../../error/error-service';
 import officeStoreHelper from './office-store-helper';
-
-import { errorService } from '../../error/error-handler';
 
 describe.each`
   officeParam
@@ -146,47 +145,5 @@ describe('OfficeStoreHelper setters', () => {
     expect(settingsMock.get).toBeCalledWith('propertyNameTest');
 
     expect(result).toEqual('isFileSecuredTest');
-  });
-});
-
-describe('OfficeStoreHelper getters', () => {
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
-
-  it.each`
-    expectedPropertyName   | setterNameParam
-    ${'isSecured'}         | ${'setFileSecuredFlag'}
-    ${'isClearDataFailed'} | ${'setIsClearDataFailed'}
-  `('setters should work as expected', ({ expectedPropertyName, setterNameParam }) => {
-    // given
-    jest.spyOn(officeStoreHelper, 'setPropertyValue').mockImplementation();
-
-    // when
-    // @ts-expect-error
-    officeStoreHelper[setterNameParam]('valueTest');
-
-    // then
-    expect(officeStoreHelper.setPropertyValue).toBeCalledTimes(1);
-    expect(officeStoreHelper.setPropertyValue).toBeCalledWith(expectedPropertyName, 'valueTest');
-  });
-
-  it.each`
-    propertyNameParam      | getterNameParam
-    ${'isSecured'}         | ${'isFileSecured'}
-    ${'isClearDataFailed'} | ${'isClearDataFailed'}
-  `('getters should work as expected', ({ propertyNameParam, getterNameParam }) => {
-    // given
-    jest.spyOn(officeStoreHelper, 'getPropertyValue').mockReturnValue('valueTest');
-
-    // when
-    // @ts-expect-error
-    const result = officeStoreHelper[getterNameParam](propertyNameParam);
-
-    // then
-    expect(officeStoreHelper.getPropertyValue).toBeCalledTimes(1);
-    expect(officeStoreHelper.getPropertyValue).toBeCalledWith(propertyNameParam);
-
-    expect(result).toEqual('valueTest');
   });
 });

@@ -4,6 +4,7 @@ import {
   OfficeActionsTypes,
   OfficeState,
   SetActiveCellAddressAction,
+  SetDialogToOpenAction,
   SetIsAdvancedWorksheetTrackingSupported,
   SetIsDialogLoadedAction,
   SetIsInsertWorksheetAPISupportedAction,
@@ -20,7 +21,6 @@ import {
 } from './office-reducer-types';
 
 const initialState: OfficeState = {
-  shouldRenderSettings: false,
   isConfirm: false,
   isSettings: false,
   supportForms: true,
@@ -28,6 +28,7 @@ const initialState: OfficeState = {
   popupData: null,
   isDialogOpen: false,
   isDialogLoaded: false,
+  dialogToOpen: null,
   settingsPanelLoaded: false,
   reusePromptAnswers: false,
   isSecured: false,
@@ -51,6 +52,9 @@ export const officeReducer = (state = initialState, action: OfficeActions): Offi
     case OfficeActionsTypes.SET_IS_DIALOG_LOADED:
       return setIsDialogLoaded(state, action);
 
+    case OfficeActionsTypes.SET_DIALOG_TO_OPEN:
+      return setDialogToOpen(state, action);
+
     case OfficeActionsTypes.TOGGLE_SECURED_FLAG:
       return toggleSecuredFlag(state, action);
 
@@ -59,9 +63,6 @@ export const officeReducer = (state = initialState, action: OfficeActions): Offi
 
     case OfficeActionsTypes.TOGGLE_IS_CONFIRM_FLAG:
       return toggleIsConfirmFlag(state, action);
-
-    case OfficeActionsTypes.TOGGLE_RENDER_SETTINGS_FLAG:
-      return toggleRenderSettingsFlag(state);
 
     case OfficeActionsTypes.TOGGLE_IS_CLEAR_DATA_FAILED_FLAG:
       return toggleIsClearDataFailedFlag(state, action);
@@ -126,10 +127,17 @@ function setIsDialogLoaded(state: OfficeState, action: SetIsDialogLoadedAction):
   };
 }
 
+const setDialogToOpen = (state: OfficeState, action: SetDialogToOpenAction): OfficeState => ({
+  ...state,
+  dialogToOpen: action.dialogToOpen,
+});
+
 function toggleSecuredFlag(state: OfficeState, action: ToggleSecuredFlagAction): OfficeState {
+  const { isSecured } = action;
+
   return {
     ...state,
-    isSecured: action.isSecured,
+    isSecured,
   };
 }
 
@@ -148,21 +156,14 @@ function toggleIsConfirmFlag(state: OfficeState, action: ToggleIsConfirmFlagActi
   };
 }
 
-function toggleRenderSettingsFlag(state: OfficeState): OfficeState {
-  return {
-    ...state,
-    shouldRenderSettings: !state.shouldRenderSettings,
-    isSettings: false,
-  };
-}
-
 function toggleIsClearDataFailedFlag(
   state: OfficeState,
   action: ToggleIsClearDataFailedFlagAction
 ): OfficeState {
+  const { isClearDataFailed } = action;
   return {
     ...state,
-    isClearDataFailed: action.isClearDataFailed,
+    isClearDataFailed,
   };
 }
 
@@ -263,4 +264,3 @@ function setIsAdvancedWorksheetTrackingSupported(
     isAdvancedWorksheetTrackingSupported: action.isAdvancedWorksheetTrackingSupported,
   };
 }
-

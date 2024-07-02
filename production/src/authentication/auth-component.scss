@@ -1,0 +1,14 @@
+.auth-form {
+  .grid-container {
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: auto;
+    grid-row-gap: 2px;
+  }
+
+  h1 {
+    padding: 10px 0 0 0;
+    font-size: 18px;
+    font-weight: 200;
+  }
+}

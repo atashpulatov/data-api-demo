@@ -1,4 +1,9 @@
-import type { GlobalNotificationTypes, ObjectNotificationTypes } from '@mstr/connector-components';
+import type {
+  GlobalNotificationTypes,
+  ObjectNotificationTypes,
+  SidePanelBannerStatus,
+} from '@mstr/connector-components';
+import { SidePanelBannerProps } from '@mstr/connector-components/lib/side-panel/banner/side-panel-banner-types';
 import type { Action } from 'redux';
 
 import type { OperationData } from '../operation-reducer/operation-reducer-types';
@@ -22,6 +27,7 @@ export interface Notification {
   title: string;
   type: ObjectNotificationTypes;
   operationType: OperationTypes;
+  operationId?: string;
   percentage?: number;
   isFetchingComplete?: boolean;
   isIndeterminate?: boolean;
@@ -42,6 +48,11 @@ export interface GlobalNotification {
 export interface NotificationState {
   notifications: Notification[];
   globalNotification: GlobalNotification;
+  sidePanelBannerNotification: SidePanelBanner;
+}
+
+export interface SidePanelBanner extends SidePanelBannerProps {
+  type: SidePanelBannerStatus;
 }
 
 export enum NotificationActionTypes {
@@ -52,6 +63,8 @@ export enum NotificationActionTypes {
   CLEAR_DATA_OPERATION = 'CLEAR_DATA_OPERATION',
   DUPLICATE_OPERATION = 'DUPLICATE_OPERATION',
   DELETE_NOTIFICATION = 'DELETE_NOTIFICATION',
+  DISMISS_SINGLE_NOTIFICATION = 'DISMISS_SINGLE_NOTIFICATION',
+  DISMISS_ALL_NOTIFICATIONS = 'DISMISS_ALL_NOTIFICATIONS',
   MOVE_NOTIFICATION_TO_IN_PROGRESS = 'MOVE_NOTIFICATION_TO_IN_PROGRESS',
   DISPLAY_NOTIFICATION_COMPLETED = 'DISPLAY_NOTIFICATION_COMPLETED',
   CREATE_GLOBAL_NOTIFICATION = 'CREATE_GLOBAL_NOTIFICATION',
@@ -61,6 +74,7 @@ export enum NotificationActionTypes {
   RESTORE_ALL_NOTIFICATIONS = 'RESTORE_ALL_NOTIFICATIONS',
   MARK_STEP_COMPLETED = 'MARK_STEP_COMPLETED',
   TOGGLE_SECURED_FLAG = 'TOGGLE_SECURED_FLAG',
+  SET_SIDE_PANEL_BANNER = 'SET_SIDE_PANEL_BANNER',
 }
 
 export enum TitleOperationInProgressMap {
@@ -123,12 +137,12 @@ export interface EditOperationAction extends Action {
 
 export interface MoveNotificationToInProgressAction extends Action {
   type: NotificationActionTypes.MOVE_NOTIFICATION_TO_IN_PROGRESS;
-  payload: { objectWorkingId: number };
+  payload: { objectWorkingId: number; operationId: string };
 }
 
 export interface DisplayNotificationCompletedAction extends Action {
   type: NotificationActionTypes.DISPLAY_NOTIFICATION_COMPLETED;
-  payload: { objectWorkingId: number };
+  payload: { objectWorkingId: number; dismissNotificationCallback: () => void };
 }
 
 export interface CreateConnectionLostNotificationAction extends Action {
@@ -153,6 +167,14 @@ export interface DisplayGlobalNotificationAction extends Action {
 export interface DeleteObjectNotificationAction extends Action {
   type: NotificationActionTypes.DELETE_NOTIFICATION;
   payload: { objectWorkingId: number };
+}
+export interface DismissSingleNotificationAction extends Action {
+  type: NotificationActionTypes.DISMISS_SINGLE_NOTIFICATION;
+  payload: { objectWorkingId: number };
+}
+
+export interface DismissAllNotificationsAction extends Action {
+  type: NotificationActionTypes.DISMISS_ALL_NOTIFICATIONS;
 }
 
 export interface DisplayObjectWarningAction extends Action {
@@ -188,6 +210,12 @@ export interface ToggleSecuredFlagAction extends Action {
   isSecured: boolean;
 }
 
+export interface SetSidePanelBannerAction extends Action {
+  type: NotificationActionTypes.SET_SIDE_PANEL_BANNER;
+  payload: SidePanelBanner;
+  [key: string]: any;
+}
+
 export type NotificationActions =
   | ImportOperationAction
   | RefreshOperationAction
@@ -203,8 +231,11 @@ export type NotificationActions =
   | CreateSessionExpiredNotificationAction
   | DisplayGlobalNotificationAction
   | DeleteObjectNotificationAction
+  | DismissSingleNotificationAction
+  | DismissAllNotificationsAction
   | DisplayObjectWarningAction
   | ClearNotificationsAction
   | ClearGlobalNotificationAction
   | RestoreAllNotificationsAction
-  | CreateGlobalNotificationAction;
+  | CreateGlobalNotificationAction
+  | SetSidePanelBannerAction;

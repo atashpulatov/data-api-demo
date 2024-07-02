@@ -4,29 +4,29 @@ import { connect, useDispatch } from 'react-redux';
 import { ObjectWindowTitle } from '@mstr/connector-components';
 import { Spinner } from '@mstr/rc';
 
-import useGetImportOptions from '../../popup/popup-buttons/dialog-import-button/use-get-import-options';
-import useGetImportType from '../../popup/popup-buttons/dialog-import-button/use-get-import-type';
+import useGetImportOptions from '../../dialog/dialog-buttons/dialog-import-button/use-get-import-options';
+import useGetImportType from '../../dialog/dialog-buttons/dialog-import-button/use-get-import-type';
 
 import { authenticationHelper } from '../../authentication/authentication-helper';
+import { dialogHelper } from '../../dialog/dialog-helper';
+import { dialogViewSelectorHelper } from '../../dialog/dialog-view-selector-helper';
 import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { pageByHelper } from '../../page-by/page-by-helper';
-import { popupHelper } from '../../popup/popup-helper';
-import { popupViewSelectorHelper } from '../../popup/popup-view-selector-helper';
 import { EXTEND_SESSION, sessionHelper } from '../../storage/session-helper';
 
+import { DialogCommands } from '../../dialog/dialog-controller-types';
 import { ItemType, LibraryWindowProps } from './library-window-types';
 
-import { selectorProperties } from '../../attribute-selector/selector-properties';
+import { DialogButtons } from '../../dialog/dialog-buttons/dialog-buttons';
 import i18n from '../../i18n';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
 import { EmbeddedLibrary } from './embedded-library';
 import { DisplayAttrFormNames, ObjectImportType } from '../../mstr-object/constants';
 
-import './library.css';
+import './library.scss';
 
 const {
   isPrompted,
@@ -93,7 +93,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
           // than content discovery and search page. In this case we set use docId as the id
           id = docId;
         } catch (error) {
-          popupHelper.handlePopupErrors(error);
+          dialogHelper.handlePopupErrors(error);
         }
       }
 
@@ -106,7 +106,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
           const cubeInfo: any = await getCubeInfo(id, projectId);
           isCubePublished = cubeInfo.status !== 0 || cubeInfo.serverMode === 2;
         } catch (error) {
-          popupHelper.handlePopupErrors(error);
+          dialogHelper.handlePopupErrors(error);
         }
       }
 
@@ -149,13 +149,13 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
         const shouldOpenPageByModal = pageByHelper.getShouldOpenPageByModal(pageBy, importType);
 
         if (shouldOpenPageByModal) {
-          await popupViewSelectorHelper.handleRequestPageByModalOpen({
+          await dialogViewSelectorHelper.handleRequestPageByModalOpen({
             objectId: chosenObjectId,
             projectId: chosenProjectId,
             instanceId: instance.instanceId,
             requestPageByModalOpen,
             importCallback: pageByConfigurations =>
-              popupViewSelectorHelper.proceedToImport({ ...props, pageByConfigurations }),
+              dialogViewSelectorHelper.proceedToImport({ ...props, pageByConfigurations }),
           });
         }
       } else if (chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dossier) {
@@ -183,7 +183,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
         requestImport(promptedResponse);
       }
     } catch (e) {
-      popupHelper.handlePopupErrors(e);
+      dialogHelper.handlePopupErrors(e);
     }
   };
 
@@ -209,7 +209,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
       }
       handlePrepare();
     } catch (err) {
-      popupHelper.handlePopupErrors(err);
+      dialogHelper.handlePopupErrors(err);
     }
   };
 
@@ -217,14 +217,11 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
    * sends a command to cancel the object selection and closes the popup
    */
   const handleCancel = useCallback(() => {
-    const { commandCancel } = selectorProperties;
-    const message = { command: commandCancel };
-    popupHelper.officeMessageParent(message);
+    const message = { command: DialogCommands.COMMAND_CANCEL };
+    dialogHelper.officeMessageParent(message);
   }, []);
 
-  const { installSessionProlongingHandler } = sessionHelper;
-
-  const prolongSession = installSessionProlongingHandler(handleCancel);
+  const prolongSession = sessionHelper.installSessionProlongingHandler(handleCancel);
 
   const extendSession = useCallback(
     (message: any) => {
@@ -245,7 +242,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
 
   const validateSession = (): void => {
     authenticationHelper.validateAuthToken().catch((error: object) => {
-      popupHelper.handlePopupErrors(error);
+      dialogHelper.handlePopupErrors(error);
     });
   };
 
@@ -264,7 +261,7 @@ export const LibraryWindowNotConnected: React.FC<LibraryWindowProps> = props => 
       </Spinner>
       {/* @ts-expect-error fix types after removing connect HOC */}
       <EmbeddedLibrary handleSelection={handleSelection} handleIframeLoadEvent={validateSession} />
-      <PopupButtons
+      <DialogButtons
         disableActiveActions={!chosenObjectId || disableActiveActions}
         handleOk={handleOk}
         handleSecondary={handleSecondary}

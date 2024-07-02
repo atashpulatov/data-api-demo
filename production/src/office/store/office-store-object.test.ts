@@ -1,10 +1,12 @@
 /* eslint-disable no-import-assign */
+import { errorService } from '../../error/error-service';
 import officeStoreHelper from './office-store-helper';
 
 import { reduxStore } from '../../store';
 import officeStoreObject from './office-store-object';
 
-import { errorService } from '../../error/error-handler';
+import { ObjectData } from '../../types/object-types';
+
 import * as objectActions from '../../redux-reducer/object-reducer/object-actions';
 import { excludableObjectImportTypes, ObjectImportType } from '../../mstr-object/constants';
 
@@ -30,11 +32,6 @@ describe('OfficeStoreObject', () => {
     objectActions.removeObject = jest.fn().mockReturnValue('removeObjectTest');
   });
 
-  beforeEach(() => {
-    // @ts-expect-error
-    officeStoreObject.init(reduxStore);
-  });
-
   afterEach(() => {
     jest.restoreAllMocks();
 
@@ -46,16 +43,6 @@ describe('OfficeStoreObject', () => {
   afterAll(() => {
     // @ts-expect-error
     objectActions.removeObject = removeObjectObject;
-  });
-
-  it('init work as expected', () => {
-    // given
-    // when
-    // @ts-expect-error
-    officeStoreObject.init('initTest');
-
-    // then
-    expect(officeStoreObject.reduxStore).toEqual('initTest');
   });
 
   it('removeObjectInExcelStore should handle exception', () => {
@@ -142,14 +129,19 @@ describe('OfficeStoreObject', () => {
 
   it('mergeStoreObjectsToRedux should work as expected', async () => {
     // given
-    const objectsInOfficeStore = [{ objectWorkingId: 12345673, importType: ObjectImportType.FORMATTED_DATA }];
+    const objectsInOfficeStore = [
+      { objectWorkingId: 12345673, importType: ObjectImportType.FORMATTED_DATA },
+    ];
     const objectInRedux: any = [{ objectWorkingId: 62345674, importType: ObjectImportType.TABLE }];
 
     jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
     jest.spyOn(settingsMock, 'get').mockReturnValue(objectsInOfficeStore);
 
     // when
-    const objects = officeStoreObject.mergeStoreObjectsToRedux(objectInRedux, ObjectImportType.FORMATTED_DATA);
+    const objects = officeStoreObject.mergeStoreObjectsToRedux(
+      objectInRedux,
+      ObjectImportType.FORMATTED_DATA
+    );
 
     // then
     expect(officeStoreHelper.getOfficeSettings).toHaveBeenCalled();
@@ -159,12 +151,13 @@ describe('OfficeStoreObject', () => {
 
   it('saveObjectsInExcelStore should work as expected', async () => {
     // given
-    const objects = ['objectsTest'];
+    const objects = ['objectsTest'] as unknown as ObjectData[];
 
-    jest
-      .spyOn(reduxStore, 'getState')
+    jest.spyOn(reduxStore, 'getState').mockReturnValue({
+      objectReducer: { objects },
       // @ts-expect-error
-      .mockReturnValue({ objectReducer: { objects }, officeReducer: { isShapeAPISupported: true, isInsertWorksheetAPISupported: true } });
+      officeReducer: { isShapeAPISupported: true, isInsertWorksheetAPISupported: true },
+    });
 
     jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
 
@@ -178,7 +171,9 @@ describe('OfficeStoreObject', () => {
 
     expect(settingsMock.get('storedObjects')).toEqual(objects);
 
-    expect(officeStoreObject.mergeStoreObjectsToRedux).toHaveBeenCalledTimes(excludableObjectImportTypes.length);
+    expect(officeStoreObject.mergeStoreObjectsToRedux).toHaveBeenCalledTimes(
+      excludableObjectImportTypes.length
+    );
 
     expect(settingsMock.saveAsync).toHaveBeenCalledTimes(1);
   });

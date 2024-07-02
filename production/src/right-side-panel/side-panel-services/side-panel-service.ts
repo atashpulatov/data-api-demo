@@ -1,32 +1,50 @@
-import { PopupProps } from '@mstr/connector-components';
+import { ReactElement } from 'react';
+import { PopupProps, SidePanelBannerStatus } from '@mstr/connector-components';
+import { SidePanelBannerButtons } from '@mstr/connector-components/lib/side-panel/banner/side-panel-banner-buttons';
+import { SidePanelBannerButtonTypes } from '@mstr/connector-components/lib/side-panel/banner/side-panel-banner-types';
 
+import { errorService } from '../../error/error-service';
+import { notificationService } from '../../notification/notification-service';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
+import { officeShapeApiHelper } from '../../office/shapes/office-shape-api-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
+import officeStoreHelper from '../../office/store/office-store-helper';
+import { popupHelper } from '../../redux-reducer/popup-reducer/popup-helper';
 import { sidePanelHelper } from './side-panel-helper';
 import { sidePanelNotificationHelper } from './side-panel-notification-helper';
 
 import officeStoreObject from '../../office/store/office-store-object';
 import { reduxStore } from '../../store';
 
+import {
+  SidePanelBanner,
+  TitleOperationInProgressMap,
+} from '../../redux-reducer/notification-reducer/notification-reducer-types';
+import { DialogToOpen } from '../../redux-reducer/office-reducer/office-reducer-types';
+import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
 
+import i18n from '../../i18n';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-import { popupController } from '../../popup/popup-controller';
+import { OperationTypes } from '../../operation/operation-type-names';
 import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { setSidePanelBannerNotification } from '../../redux-reducer/notification-reducer/notification-action-creators';
 import { updateObject } from '../../redux-reducer/object-reducer/object-actions';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 import {
+  clearDataRequested,
   highlightRequested,
   refreshRequested,
   removeRequested,
 } from '../../redux-reducer/operation-reducer/operation-actions';
-import { popupActions } from '../../redux-reducer/popup-reducer/popup-actions';
 import {
   addRepromptTask,
   executeNextRepromptTask,
 } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import sidePanelOperationDecorator from './side-panel-operation-decorator';
+import { OfficeSettingsEnum } from '../../constants/office-constants';
+import { ObjectImportType } from '../../mstr-object/constants';
 
 export class SidePanelService {
   /**
@@ -37,7 +55,7 @@ export class SidePanelService {
   async addData(): Promise<void> {
     // @ts-expect-error
     reduxStore.dispatch(navigationTreeActions.cancelImportRequest());
-    await popupController.runPopupNavigation();
+    reduxStore.dispatch(officeActions.setDialogToOpen(DialogToOpen.POPUP_NAVIGATION));
   }
 
   /**
@@ -67,6 +85,88 @@ export class SidePanelService {
   }
 
   /**
+   * Generates the side panel banner buttons.
+   * Consisted of only one button for stopping the refresh operation.
+   *
+   * @param title - string to show as message in banner
+   * @param onClickHandler - handler to be called when button is clicked
+   * @param tooltip - string to show as tooltip for the button
+   * @returns
+   */
+  getSidePanelBannerButtons(
+    title: string,
+    onClickHandler: () => void,
+    tooltip?: string
+  ): ReactElement {
+    return SidePanelBannerButtons({
+      buttons: [
+        { label: title, onClick: onClickHandler, type: SidePanelBannerButtonTypes.STOP, tooltip },
+      ],
+    });
+  }
+
+  /**
+   * Shows the refresh in progress notification in the side panel.
+   * Generates the handler objects and dispatches notification to the side panel.
+   */
+  showRefreshInProgressBanner(operations: OperationData[]): void {
+    // Close banner notification handler
+    const onDismissHandler = (): void => {
+      reduxStore.dispatch(setSidePanelBannerNotification({ type: SidePanelBannerStatus.NONE }));
+    };
+
+    // Stop refresh all operation handler
+    const onClickHandler = (): void => {
+      reduxStore.dispatch(
+        setSidePanelBannerNotification({
+          title: i18n.t('Stopping...'),
+          type: SidePanelBannerStatus.STOPPED,
+        })
+      );
+
+      // Get current notifications and create a map for easy access
+      const { notifications } = reduxStore.getState().notificationReducer;
+      const notificationMap = notifications.reduce((map, notification) => {
+        map.set(notification.objectWorkingId, notification);
+        return map;
+      }, new Map());
+
+      if (notificationMap) {
+        // Filter out the refresh operations and cancel the corresponding notification
+        // only if the notification associated with the operation is in pending state.
+        operations
+          ?.filter(operation => operation.operationType === OperationTypes.REFRESH_OPERATION)
+          .forEach((operation: OperationData) => {
+            const { operationId, objectWorkingId } = operation;
+            const operationNotification = notificationMap.get(objectWorkingId);
+            // Cancel the operation only if its notification is in pending state
+            if (
+              operationNotification?.objectWorkingId === objectWorkingId &&
+              operationNotification.title === TitleOperationInProgressMap.PENDING_OPERATION
+            ) {
+              notificationService.cancelOperationFromNotification(operationId);
+              notificationService.dismissNotification(objectWorkingId);
+            }
+          });
+      }
+
+      reduxStore.dispatch(setSidePanelBannerNotification({ type: SidePanelBannerStatus.NONE }));
+    };
+
+    const buttons = this.getSidePanelBannerButtons('', onClickHandler, i18n.t('Stop refresh'));
+
+    const sidePanelBannerObj = {
+      title: i18n.t('Refresh in progress...'),
+      type: SidePanelBannerStatus.IN_PROGRESS,
+      onDismissBanner: onDismissHandler,
+      children: buttons,
+    } as SidePanelBanner;
+
+    // Dispatch the notification to the side panel to show the SidePanelNotification component.
+    sidePanelBannerObj && reduxStore.dispatch(setSidePanelBannerNotification(sidePanelBannerObj));
+  }
+
+  /**
    * Handles the refresh object and refresh selected.
    * Creates refresh operation per each passed objectWorkingId
    *
@@ -79,6 +179,9 @@ export class SidePanelService {
         officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
       reduxStore.dispatch(refreshRequested(objectWorkingId, sourceObject?.importType));
     });
+
+    const { operations } = reduxStore.getState().operationReducer;
+    this.showRefreshInProgressBanner(operations);
   }
 
   /**
@@ -88,13 +191,46 @@ export class SidePanelService {
   async viewData(): Promise<void> {
     // @ts-expect-error
     reduxStore.dispatch(officeActions.toggleSecuredFlag(false));
+    officeStoreHelper.setPropertyValue(OfficeSettingsEnum.isSecured, false);
+
     // @ts-expect-error
     reduxStore.dispatch(officeActions.toggleIsClearDataFailedFlag(false));
+    officeStoreHelper.setPropertyValue(OfficeSettingsEnum.isClearDataFailed, false);
+
     this.refresh(
       ...officeReducerHelper
         .getObjectsListFromObjectReducer()
         .map(({ objectWorkingId }) => objectWorkingId)
     );
+  }
+
+  async secureData(objects: any[]): Promise<void> {
+    try {
+      const { dispatch } = reduxStore;
+      officeActions.toggleIsConfirmFlag(false)(dispatch);
+
+      setTimeout(async () => {
+        const excelContext = await officeApiHelper.getExcelContext();
+        await officeApiWorksheetHelper.checkIfAnySheetProtected(excelContext, objects);
+
+        for (const object of objects) {
+          // Bypass the image object if it was deleted from worksheet manually to not block
+          // the queue of clear data operation.
+          let triggerClearData = true;
+          if (object?.importType === ObjectImportType.IMAGE) {
+            const shapeInWorksheet =
+              object?.bindId && (await officeShapeApiHelper.getShape(excelContext, object.bindId));
+            if (!shapeInWorksheet) {
+              triggerClearData = false;
+            }
+          }
+          triggerClearData &&
+            reduxStore.dispatch(clearDataRequested(object.objectWorkingId, object.importType));
+        }
+      }, 0);
+    } catch (error) {
+      errorService.handleError(error);
+    }
   }
 
   /**
@@ -146,11 +282,9 @@ export class SidePanelService {
       await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
 
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-        // @ts-expect-error
-        reduxStore.dispatch(popupActions.callForEditDossier(objectData));
+        await popupHelper.callForEditDossier(objectData);
       } else {
-        // @ts-expect-error
-        reduxStore.dispatch(popupActions.callForEdit(objectData));
+        popupHelper.callForEdit(objectData);
       }
     }
   }

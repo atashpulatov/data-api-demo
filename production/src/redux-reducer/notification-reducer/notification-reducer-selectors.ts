@@ -16,7 +16,13 @@ const selectNotifications = createSelector(
   notificationState => notificationState.notifications
 );
 
+const selectSidePanelBannerNotification = createSelector(
+  [getNotificationsState],
+  notificationState => notificationState.sidePanelBannerNotification
+);
+
 export const notificationReducerSelectors = {
   selectGlobalNotification,
   selectNotifications,
+  selectSidePanelBannerNotification,
 };

@@ -1,13 +1,18 @@
 // @ts-expect-error
 import throttle from 'lodash.throttle';
 
-import { authenticationService } from '../authentication/auth-rest-service';
-import { homeHelper } from '../home/home-helper';
+import { authenticationRestApi } from '../authentication/auth-rest-service';
+import { authenticationHelper } from '../authentication/authentication-helper';
+import { errorService } from '../error/error-service';
+import { browserHelper } from '../helpers/browser-helper';
+import { storageHelper } from '../helpers/storage-helper';
 import { userRestService } from '../home/user-rest-service';
+import officeStoreHelper from '../office/store/office-store-helper';
+
+import { reduxStore } from '../store';
 
 import { ObjectData } from '../types/object-types';
 
-import { errorService } from '../error/error-handler';
 import { importRequested } from '../redux-reducer/operation-reducer/operation-actions';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import { httpStatusCodes, IncomingErrorStrings } from '../error/constants';
@@ -15,85 +20,13 @@ import { httpStatusCodes, IncomingErrorStrings } from '../error/constants';
 export const EXTEND_SESSION = 'EXTEND_SESSION';
 const DEFAULT_SESSION_REFRESH_TIME = 60000;
 class SessionHelper {
-  reduxStore: any;
-
-  init = (reduxStore: any): void => {
-    this.reduxStore = reduxStore;
-
-    // bind methods
-    this.logOutRest = this.logOutRest.bind(this);
-    this.handleLogoutForPrivilegeMissing = this.handleLogoutForPrivilegeMissing.bind(this);
-    this.logOutRedirect = this.logOutRedirect.bind(this);
-    this.getSession = this.getSession.bind(this);
-    this.keepSessionAlive = this.keepSessionAlive.bind(this);
-    this.installSessionProlongingHandler = this.installSessionProlongingHandler.bind(this);
-    this.getUserInfo = this.getUserInfo.bind(this);
-    this.getUserAttributeFormPrivilege = this.getUserAttributeFormPrivilege.bind(this);
-    this.getCanUseOfficePrivilege = this.getCanUseOfficePrivilege.bind(this);
-    this.getUrl = this.getUrl.bind(this);
-    this.isDevelopment = this.isDevelopment.bind(this);
-    this.importObjectWithouPopup = this.importObjectWithouPopup.bind(this);
-  };
-
-  /**
-   * Handles terminating Rest session and logging out the user from plugin
-   *
-   */
-  async logOutRest(): Promise<void> {
-    const { authToken } = this.reduxStore.getState().sessionReducer;
-    const { envUrl } = this.reduxStore.getState().sessionReducer;
-    try {
-      authenticationService.logout(envUrl, authToken);
-    } catch (error) {
-      errorService.handleError(error, { isLogout: true } as any);
-    }
-  }
-
-  /**
-   * Handles terminating Rest session and logging out the user from plugin
-   * with redirect to login page from Privilege Error Screen
-   */
-  async handleLogoutForPrivilegeMissing(): Promise<void> {
-    try {
-      await this.logOutRest();
-      sessionActions.logOut();
-    } catch (error) {
-      errorService.handleError(error);
-    } finally {
-      this.logOutRedirect(true);
-    }
-  }
-
-  /**
-   * Redirect to user to the login page. If it's development mode
-   * we can optionally refresh to avoid stale cache issues when
-   * changing users.
-   *
-   * @param shouldReload Reload on logout when in development
-   */
-  logOutRedirect(shouldReload = false): void {
-    const isDevelopment = this.isDevelopment();
-    if (!isDevelopment) {
-      const currentPath = window.location.pathname;
-      const pathBeginning = currentPath.split('/apps/')[0];
-      const loginParams = 'source=addin-mstr-office';
-      const url = encodeURI(`${pathBeginning}/static/loader-mstr-office/index.html?${loginParams}`);
-      window.location.replace(url);
-    } else {
-      sessionActions.disableLoading();
-      if (shouldReload) {
-        window.location.reload();
-      }
-    }
-  }
-
   /**
    * Return Information about envUrl, authToken and USE_PROXY from redux store
    *
    * @return Information about current session
    */
   getSession(): any {
-    const currentStore = this.reduxStore.getState();
+    const currentStore = reduxStore.getState();
     const session = {
       USE_PROXY: false,
       envUrl: currentStore.sessionReducer.envUrl,
@@ -115,11 +48,11 @@ class SessionHelper {
    * @param onSessionExpire is callback function e.g closePopup()
    */
   async keepSessionAlive(onSessionExpire: () => void = null): Promise<void> {
-    const { envUrl, authToken } = this.reduxStore.getState().sessionReducer;
+    const { envUrl, authToken } = reduxStore.getState().sessionReducer;
     const { onLine } = window.navigator;
     try {
       if (authToken && onLine) {
-        await authenticationService.putSessions(envUrl, authToken);
+        await authenticationRestApi.putSessions(envUrl, authToken);
       }
     } catch (error) {
       if (onSessionExpire && error.response && error.response.statusCode) {
@@ -160,17 +93,19 @@ class SessionHelper {
    */
   async getUserInfo(): Promise<void> {
     let userData: any = {};
-    const isDevelopment = this.isDevelopment();
-    const { getState } = this.reduxStore;
-    const envUrl = isDevelopment ? getState().sessionReducer.envUrl : homeHelper.saveLoginValues();
+    const isDevelopment = browserHelper.isDevelopment();
+    const { getState } = reduxStore;
+    const envUrl = isDevelopment
+      ? getState().sessionReducer.envUrl
+      : authenticationHelper.saveLoginValues();
     const authToken = isDevelopment
       ? getState().sessionReducer.authToken
-      : homeHelper.getTokenFromStorage();
+      : this.getTokenFromStorage();
     try {
       userData = await userRestService.getUserInfo(authToken, envUrl);
       !userData.userInitials && sessionActions.saveUserInfo(userData);
     } catch (error) {
-      errorService.handleError(error, { isLogout: !isDevelopment } as any);
+      errorService.handleError(error, { isLogout: !isDevelopment });
     }
   }
 
@@ -180,16 +115,15 @@ class SessionHelper {
    */
   async getUserAttributeFormPrivilege(): Promise<void> {
     let canChooseAttrForm = false;
-    const isDevelopment = this.isDevelopment();
-    const { reduxStore } = this;
+    const isDevelopment = browserHelper.isDevelopment();
     const envUrl = isDevelopment
       ? reduxStore.getState().sessionReducer.envUrl
-      : homeHelper.saveLoginValues();
+      : authenticationHelper.saveLoginValues();
     const authToken = isDevelopment
       ? reduxStore.getState().sessionReducer.authToken
-      : homeHelper.getTokenFromStorage();
+      : this.getTokenFromStorage();
     try {
-      canChooseAttrForm = await authenticationService.getAttributeFormPrivilege(envUrl, authToken);
+      canChooseAttrForm = await authenticationRestApi.getAttributeFormPrivilege(envUrl, authToken);
       sessionActions.setAttrFormPrivilege(canChooseAttrForm);
     } catch (error) {
       console.error(error);
@@ -197,38 +131,29 @@ class SessionHelper {
   }
 
   async getCanUseOfficePrivilege(): Promise<boolean> {
-    const { reduxStore } = this;
-    const isDevelopment = this.isDevelopment();
+    const isDevelopment = browserHelper.isDevelopment();
     const { envUrl } = reduxStore.getState().sessionReducer;
 
     const authToken = isDevelopment
       ? reduxStore.getState().sessionReducer.authToken
-      : homeHelper.getTokenFromStorage();
-    const canUseOffice = await authenticationService.getOfficePrivilege(envUrl, authToken);
+      : this.getTokenFromStorage();
+    const canUseOffice = await authenticationRestApi.getOfficePrivilege(envUrl, authToken);
 
     return canUseOffice;
   }
 
   /**
-   * Return Url of the current page
+   * With the introduction of http-only we cannot get the iSession token from the cookies
+   * Retrieve the stored token from localstorage or Excel settings and save in redux store
    *
-   * @return Page Url
+   * @returns iSession token
    */
-  getUrl(): string {
-    return window.location.href;
-  }
-
-  /**
-   * Checks what type of build is currently used
-   *
-   * @return Determines if used build is development or test build
-   */
-  isDevelopment(): boolean {
-    try {
-      const isDevelopment = ['development', 'test'].includes(process.env.NODE_ENV);
-      return isDevelopment;
-    } catch (error) {
-      return false;
+  getTokenFromStorage(): string {
+    const iSession =
+      storageHelper.getStorageItem('iSession') || officeStoreHelper.getPropertyValue('iSession');
+    if (iSession) {
+      sessionActions.logIn(iSession);
+      return iSession;
     }
   }
 
@@ -239,7 +164,7 @@ class SessionHelper {
    * @param object ObjectData needed for import
    */
   async importObjectWithouPopup(object: ObjectData): Promise<void> {
-    this.reduxStore.dispatch(importRequested(object));
+    reduxStore.dispatch(importRequested(object));
   }
 }
 

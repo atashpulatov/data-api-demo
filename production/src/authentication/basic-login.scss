@@ -1,3 +1,5 @@
+@import '~@mstr/rc/es/assets/scss/msdl_universal.scss';
+
 .auth-form {
   padding: 2em;
 
@@ -47,11 +49,11 @@
 
     &[type='submit'] {
       border-radius: 4px;
-      border: 1px solid #1c91dc;
-      background-color: #1c91dc;
+      border: 1px solid $msdl-blue;
+      background-color: $msdl-blue;
       height: 2.7em;
       font-size: 1em;
-      color: white;
+      color: $msdl-white;
     }
   }
 }

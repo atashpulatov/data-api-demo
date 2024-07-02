@@ -1,6 +1,9 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import { ObjectData } from '../../types/object-types';
 import {
   CancelOperationAction,
+  CancelOperationByOperationIdAction,
   ClearDataOperationAction,
   DuplicateOperationAction,
   EditOperationAction,
@@ -42,6 +45,7 @@ function createOperation(
     backupObjectData,
     objectEditedData,
     preparedInstanceDefinition,
+    operationId: uuidv4(),
   };
 }
 
@@ -175,4 +179,11 @@ export const updateOperation = (
 export const cancelOperation = (objectWorkingId: number): CancelOperationAction => ({
   type: OperationActionTypes.CANCEL_OPERATION,
   payload: { objectWorkingId },
+});
+
+export const cancelOperationByOperationId = (
+  operationId: string
+): CancelOperationByOperationIdAction => ({
+  type: OperationActionTypes.CANCEL_OPERATION_BY_OPERATION_ID,
+  payload: { operationId },
 });

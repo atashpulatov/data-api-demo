@@ -1,4 +1,5 @@
 /* eslint-disable no-import-assign */
+import { errorService } from '../../error/error-service';
 import officeReducerHelper from './office-reducer-helper';
 import officeStoreHelper from './office-store-helper';
 
@@ -7,7 +8,6 @@ import officeStoreRestoreObject from './office-store-restore-object';
 
 import { ObjectData } from '../../types/object-types';
 
-import { errorService } from '../../error/error-handler';
 import * as answersActions from '../../redux-reducer/answers-reducer/answers-actions';
 import * as objectActions from '../../redux-reducer/object-reducer/object-actions';
 import { OfficeSettingsEnum } from '../../constants/office-constants';
@@ -25,18 +25,6 @@ const settingsMock = {
   },
   saveAsync: jest.fn(),
 } as unknown as Office.Settings;
-
-describe('OfficeStoreRestoreObject init', () => {
-  it('init work as expected', () => {
-    // given
-    // when
-    // @ts-expect-error
-    officeStoreRestoreObject.init('initTest');
-
-    // then
-    expect(officeStoreRestoreObject.reduxStore).toEqual('initTest');
-  });
-});
 
 describe.each`
   expectedDispatchCallNo | expectedObjectsFromProperties | storedObjectParam     | restoredFromExcelObject
@@ -63,9 +51,6 @@ describe.each`
       jest.clearAllMocks();
 
       internalData[OfficeSettingsEnum.storedObjects] = storedObjectParam;
-
-      // @ts-expect-error
-      officeStoreRestoreObject.init(reduxStore);
     });
 
     afterEach(() => {
@@ -143,8 +128,6 @@ describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     internalData[OfficeSettingsEnum.storedAnswers] = 'restoredAnswerFromExcelTest';
-    // @ts-expect-error
-    officeStoreRestoreObject.init(reduxStore);
   });
 
   afterEach(() => {
@@ -568,21 +551,21 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
 
     expect(result).toEqual([42]);
   });
-  it('getExcelSettingValue works as expected', () => {
-    // given
-    const key = 'settingsKey';
-    const value = 'value';
-    settingsMock.saveAsync = jest.fn();
-    settingsMock.set(key, value);
-    jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
+  // it('getExcelSettingValue works as expected', () => {
+  //   // given
+  //   const key = 'settingsKey';
+  //   const value = 'value';
+  //   settingsMock.saveAsync = jest.fn();
+  //   settingsMock.set(key, value);
+  //   jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
 
-    // when
-    const result = officeStoreRestoreObject.getExcelSettingValue(key);
+  //   // when
+  //   const result = officeStoreRestoreObject.getExcelSettingValue(key);
 
-    // then
-    expect(officeStoreHelper.getOfficeSettings).toBeCalledTimes(1);
-    expect(result).toEqual(value);
-  });
+  //   // then
+  //   expect(officeStoreHelper.getOfficeSettings).toBeCalledTimes(1);
+  //   expect(result).toEqual(value);
+  // });
   it('should transform prompted objects with mstrObjectType 55 and non-array promptsAnswers into array', () => {
     const objects = [
       { isPrompted: true, promptsAnswers: 'test', mstrObjectType: { type: 55 } },

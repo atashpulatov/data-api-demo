@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
+import { reduxStore } from '../store';
+
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
 
 import { OperationSteps } from './operation-steps';
@@ -12,26 +14,24 @@ import { OperationSteps } from './operation-steps';
  *
  */
 class OperationBus {
-  store: any;
-
   subscribedCallbacksMap: any;
 
   previousOperationCopy: any;
 
-  init(store: any): void {
+  init(): void {
     this.listener = this.listener.bind(this);
-    this.store = store;
+
     this.subscribedCallbacksMap = {};
 
-    const { operationReducer } = this.store.getState();
+    const { operationReducer } = reduxStore.getState();
     const currentOperation: OperationData =
       operationReducer && operationReducer.operations && operationReducer.operations[0];
     this.previousOperationCopy = this.copyOperationInfo(currentOperation);
-    this.store.subscribe(this.listener);
+    reduxStore.subscribe(this.listener);
   }
 
   listener(): void {
-    const { operationReducer } = this.store.getState();
+    const { operationReducer } = reduxStore.getState();
     const currentOperation =
       operationReducer && operationReducer.operations && operationReducer.operations[0];
 
@@ -74,7 +74,7 @@ class OperationBus {
    *
    */
   getCurrentObject(objectWorkingId: number): any {
-    const { objects } = this.store.getState().objectReducer;
+    const { objects } = reduxStore.getState().objectReducer;
     return objects.find((object: any) => object.objectWorkingId === objectWorkingId);
   }
 
@@ -84,6 +84,7 @@ class OperationBus {
       return {
         operationType: currentOperation.operationType,
         objectWorkingId: currentOperation.objectWorkingId,
+        operationId: currentOperation.operationId,
         stepsQueue,
       };
     }
@@ -95,7 +96,8 @@ class OperationBus {
       return (
         previousOperationCopy.operationType === currentOperationToCompare.operationType &&
         previousOperationCopy.objectWorkingId === currentOperationToCompare.objectWorkingId &&
-        previousOperationCopy.stepsQueue === currentOperationToCompare.stepsQueue
+        previousOperationCopy.stepsQueue === currentOperationToCompare.stepsQueue &&
+        previousOperationCopy.operationId === currentOperationToCompare.operationId
       );
     }
     return false;

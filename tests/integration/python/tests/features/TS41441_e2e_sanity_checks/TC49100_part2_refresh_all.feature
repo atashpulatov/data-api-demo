@@ -8,19 +8,19 @@ Feature: TS41441 - Sanity checks
       And I clicked Import Data button
       And I found and selected object "Report with prompt - Attribute element prompt of Category | Required | Not default"
 
-     When I clicked Import button without checking results
+    When I selected import type "Import Data" and clicked import
       And I waited for Run button to be enabled
       And I selected "Electronics" as an answer for "1. Category" prompt - object prompt
       And I clicked Run button
       And I waited for object to be imported successfully
       And I closed last notification
      Then I verified that object number 1 is called "Report with prompt - Attribute element prompt of Category | Required | Not default"
-      And I verified that cells ["A3", "B3"] have values ["2014", "Mid-Atlantic"]
+      And I verified that cells ["A3", "B3"] have values ["2020", "Mid-Atlantic"]
 
      When I selected cell "G1"
       And I clicked Add Data button
       And I found and selected object "Report with a subtotal & prompt"
-      And I clicked Import button without checking results
+      And I selected import type "Import Data" and clicked import
       And I waited for Run button to be enabled
       And I selected "Electronics" as an answer for "1. Category" prompt - object prompt
       And I clicked Run button
@@ -31,32 +31,32 @@ Feature: TS41441 - Sanity checks
      When I selected cell "M1"
       And I clicked Add Data button
       And I found and selected object "01. • !#$%&'()*+,-:;<=>@^`{|}~¢£¥¬«» Polish Pójdźże, kiń tę chmurność w głąb flaszy!"
-      And I clicked Import button
+      And I selected import type "Import Data" and clicked import
 
       And I selected cell "R1"
       And I clicked Add Data button
       And I found and selected object "Seasonal Report"
-      And I clicked Import button
+      And I selected import type "Import Data" and clicked import
 
       And I selected cell "W1"
       And I clicked Add Data button
       And I found and selected object "Grid/graph"
-      And I clicked Import button
+      And I selected import type "Import Data" and clicked import
 
       And I selected cell "AB1"
       And I clicked Add Data button
       And I found and selected object "this name is so long that it has ellipsis when it is displayed and in fact it is more than 100 chara"
-      And I clicked Import button
+      And I selected import type "Import Data" and clicked import
 
       And I selected cell "AR1"
       And I clicked Add Data button
       And I found and selected object "100_dataset"
-      And I clicked Import button
+      And I selected import type "Import Data" and clicked import
 
       And I selected cell "BG1"
       And I clicked Add Data button
       And I found and selected object "100_dataset"
-      And I clicked Import button
+      And I selected import type "Import Data" and clicked import
 
       And I refreshed all objects
       And I waited for all progress notifications to disappear

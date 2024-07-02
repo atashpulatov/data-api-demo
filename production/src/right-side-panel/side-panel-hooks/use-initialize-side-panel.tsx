@@ -7,42 +7,37 @@ import { sidePanelEventHelper } from '../side-panel-services/side-panel-event-he
 import { sidePanelHelper } from '../side-panel-services/side-panel-helper';
 
 const useInitializeSidePanel = (
-  updateActiveCellAddress: (cellAddress: string) => void,
   setActiveSheetId: Dispatch<SetStateAction<string>>,
   isAnyPopupOrSettingsDisplayedRef: React.MutableRefObject<boolean>
 ): void => {
-  // Assign most event listeners and initialize settings
   useEffect(() => {
-    async function initializeSidePanel(): Promise<void> {
-      await sidePanelEventHelper.addRemoveObjectListener();
-      await sidePanelEventHelper.initObjectWorksheetTrackingListeners();
+    async function initializeSettings(): Promise<void> {
       await settingsSidePanelHelper.initReusePromptAnswers();
       await settingsSidePanelHelper.initPageByDisplayAnswers();
       await settingsSidePanelHelper.initWorksheetNamingAnswers();
       await settingsSidePanelHelper.initObjectInfoSettings();
+      await settingsSidePanelHelper.initDataAutoRefreshSetting();
       await formattingSettingsHelper.initImportFormattingSettings();
       await pivotTableSettingsHelper.initPivotTableSettings();
       sidePanelHelper.clearRepromptTask();
       sidePanelHelper.initializeClearDataFlags();
     }
 
-    initializeSidePanel();
+    initializeSettings();
   }, []);
 
-  // Separately assign active selection changed event listener due to dependency differences
   useEffect(() => {
-    async function initializeSidePanelActiveSelectionChangedListener(): Promise<void> {
+    async function initializeListeners(): Promise<void> {
+      await sidePanelEventHelper.addRemoveObjectListener();
+      await sidePanelEventHelper.initObjectWorksheetTrackingListeners();
       await sidePanelEventHelper.initActiveSelectionChangedListener(
-        updateActiveCellAddress,
         setActiveSheetId,
         isAnyPopupOrSettingsDisplayedRef
       );
     }
 
-    initializeSidePanelActiveSelectionChangedListener();
-  // disable exhaustive-deps rule because this effect should only run once
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    initializeListeners();
+  }, [setActiveSheetId, isAnyPopupOrSettingsDisplayedRef]);
 };
 
 export default useInitializeSidePanel;

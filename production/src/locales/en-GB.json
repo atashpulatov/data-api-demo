@@ -303,5 +303,10 @@
    "Report Filter": "Report Filter",
    "Report Limits": "Report Limits",
    "View Filter": "View Filter",
-   "Selected non-grid visualization cannot be imported as formatted data": "Selected non-grid visualization cannot be imported as formatted data"
+   "Selected non-grid visualization cannot be imported as formatted data": "Selected non-grid visualization cannot be imported as formatted data",
+   "Data Refresh": "Data Refresh",
+   "Auto Refresh": "Auto Refresh",
+   "If enabled, the data will be automatically refreshed each time you open the Excel document.": "If enabled, the data will be automatically refreshed each time you open the PowerPoint presentation.",
+   "Refresh in progress...": "Refresh in progress...",
+   "Stop refresh": "Stop refresh"
 }

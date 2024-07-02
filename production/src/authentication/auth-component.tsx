@@ -2,16 +2,18 @@
 import React, { FC, useCallback } from 'react';
 import { connect } from 'react-redux';
 
+import { errorService } from '../error/error-service';
 import { authenticationHelper } from './authentication-helper';
 
 import { AuthenticateComponent } from './auth-component-types';
 import { InputProps, LoginProps, SelectInputProps } from './basic-login-types';
 
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
+import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import defaultLoginProps from './default-login-props';
 
 import './basic-login.scss';
-import './auth-component.css';
+import './auth-component.scss';
 
 const Input = (props: InputProps): React.ReactElement => {
   const { label } = props;
@@ -59,7 +61,14 @@ export const AuthenticateNotConnected: FC<AuthenticateComponent> = props => {
     async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       if (event.currentTarget.checkValidity()) {
-        await authenticationHelper.loginUser(null, formData);
+        try {
+          await authenticationHelper.loginUser(formData);
+        } catch (error) {
+          console.error(error);
+          errorService.handleError(error, { isLogout: true });
+        } finally {
+          sessionActions.disableLoading();
+        }
       }
     },
     [formData]

@@ -1,4 +1,4 @@
-import { ReduxStore } from '../../store';
+import { reduxStore } from '../../store';
 import officeStoreObject from './office-store-object';
 
 import {
@@ -13,12 +13,6 @@ import { clearRepromptTask } from '../../redux-reducer/reprompt-queue-reducer/re
 import { ObjectImportType } from '../../mstr-object/constants';
 
 class StepSaveObjectInExcel {
-  reduxStore: ReduxStore;
-
-  init(reduxStore: ReduxStore): void {
-    this.reduxStore = reduxStore;
-  }
-
   /**
    * Adds refreshDate field to object.
    * Adds previousTableDimensions field to object.
@@ -78,8 +72,7 @@ class StepSaveObjectInExcel {
       operationErrorHandler.handleOperationError(objectData, operationData, error);
 
       // Clear reprompt task queue if any error occurs.
-      // @ts-expect-error
-      this.reduxStore.dispatch(clearRepromptTask());
+      reduxStore.dispatch(clearRepromptTask());
     } finally {
       console.timeEnd('Total');
       console.groupEnd();

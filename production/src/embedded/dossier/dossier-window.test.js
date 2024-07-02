@@ -2,15 +2,16 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { fireEvent, render } from '@testing-library/react';
 
-import { popupHelper } from '../../popup/popup-helper';
+import { dialogHelper } from '../../dialog/dialog-helper';
 import { sessionHelper } from '../../storage/session-helper';
 
 import { reduxStore } from '../../store';
 
-import { selectorProperties } from '../../attribute-selector/selector-properties';
+import { DialogCommands } from '../../dialog/dialog-controller-types';
+
 import { DossierWindowNotConnected } from './dossier-window';
 
-jest.mock('../../popup/popup-helper');
+jest.mock('../../dialog/dialog-helper');
 
 describe('Dossierwindow', () => {
   afterEach(() => {
@@ -33,9 +34,8 @@ describe('Dossierwindow', () => {
 
   it('should call proper method on cancel action', () => {
     // given
-    const { commandCancel } = selectorProperties;
-    const message = { command: commandCancel };
-    jest.spyOn(popupHelper, 'officeMessageParent');
+    const message = { command: DialogCommands.COMMAND_CANCEL };
+    jest.spyOn(dialogHelper, 'officeMessageParent');
 
     // when
     const { getByText } = render(
@@ -46,7 +46,7 @@ describe('Dossierwindow', () => {
     fireEvent.click(getByText('Cancel'));
 
     // then
-    expect(popupHelper.officeMessageParent).toHaveBeenCalledWith(message);
+    expect(dialogHelper.officeMessageParent).toHaveBeenCalledWith(message);
   });
 
   it('should call installSessionProlongingHandler on mount', () => {

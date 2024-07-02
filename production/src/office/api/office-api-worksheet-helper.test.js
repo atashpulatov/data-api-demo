@@ -1,11 +1,6 @@
 import { officeApiWorksheetHelper } from './office-api-worksheet-helper';
 
-import { reduxStore } from '../../store';
-
 describe('OfficeApiWorksheetHelper', () => {
-  beforeAll(() => {
-    officeApiWorksheetHelper.init(reduxStore);
-  });
   afterEach(() => {
     jest.restoreAllMocks();
   });

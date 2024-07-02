@@ -1,8 +1,10 @@
 import { Dispatch, SetStateAction } from 'react';
 import { ObjectNotificationTypes } from '@mstr/connector-components';
 
+import { authenticationHelper } from '../../authentication/authentication-helper';
 import { notificationService } from '../../notification/notification-service';
 import { officeApiHelper } from '../../office/api/office-api-helper';
+import { officeApiService } from '../../office/api/office-api-service';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { sidePanelService } from './side-panel-service';
 
@@ -13,6 +15,8 @@ import { ObjectData } from '../../types/object-types';
 
 import { officeContext } from '../../office/office-context';
 import { updateObjects } from '../../redux-reducer/object-reducer/object-actions';
+import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
+import { removeRequested } from '../../redux-reducer/operation-reducer/operation-actions';
 import initializationErrorDecorator from '../settings-side-panel/initialization-error-decorator';
 
 class SidePanelEventHelper {
@@ -41,14 +45,12 @@ class SidePanelEventHelper {
   }
 
   /**
-   * Gets initial active cell address and stores it state of RightSidePanel via callback.
-   * Creates event listener for cell selection change and passes a state setter callback to event handler.
+   * Gets initial active cell address and stores it in state of RightSidePanel.
+   * Creates event listener for cell selection change
    *
-   * @param {Function} setActiveCellAddress Callback to modify the activeCellAddress in state of RightSidePanel
    */
   @initializationErrorDecorator.initializationWrapper
   async initActiveSelectionChangedListener(
-    setActiveCellAddress: (cellAddress: string) => void,
     setActiveSheetId: Dispatch<SetStateAction<string>>,
     isAnyPopupOrSettingsDisplayedRef: React.MutableRefObject<boolean>
   ): Promise<void> {
@@ -63,13 +65,12 @@ class SidePanelEventHelper {
       activeWorksheet.id && setActiveSheetId(activeWorksheet.id);
     }
     // initiatilize active cell address
-    const initialCellAddress = await officeApiHelper.getSelectedCell(excelContext);
+    const initialCellAddress = await officeApiService.getSelectedCell(excelContext);
 
-    setActiveCellAddress(initialCellAddress);
+    reduxStore.dispatch(officeActions.setActiveCellAddress(initialCellAddress));
 
-    await officeApiHelper.addOnSelectionChangedListener(
+    await officeApiService.addOnSelectionChangedListener(
       excelContext,
-      setActiveCellAddress,
       setActiveSheetId,
       isAnyPopupOrSettingsDisplayedRef
     );
@@ -106,10 +107,13 @@ class SidePanelEventHelper {
    * @param event Contains information about deleted object
    */
   async setOnDeletedTablesEvent(event: Excel.TableDeletedEventArgs): Promise<void> {
-    const ObjectToDelete = officeReducerHelper.getObjectFromObjectReducerByBindId(event.tableId);
-    notificationService.removeExistingNotification(ObjectToDelete.objectWorkingId);
-    await officeApiHelper.checkStatusOfSessions();
-    sidePanelService.remove(ObjectToDelete.objectWorkingId);
+    const { objectWorkingId, importType } = officeReducerHelper.getObjectFromObjectReducerByBindId(
+      event.tableId
+    );
+
+    notificationService.removeExistingNotification(objectWorkingId);
+    await authenticationHelper.checkStatusOfSessions();
+    reduxStore.dispatch(removeRequested(objectWorkingId, importType));
   }
 
   /**
@@ -118,7 +122,7 @@ class SidePanelEventHelper {
    * @param excelContext Reference to Excel Context used by Excel API functions
    */
   async setOnDeletedWorksheetEvent(excelContext: Excel.RequestContext): Promise<void> {
-    await officeApiHelper.checkStatusOfSessions();
+    await authenticationHelper.checkStatusOfSessions();
     excelContext.workbook.tables.load('items');
     await excelContext.sync();
 

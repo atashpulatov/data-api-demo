@@ -1,3 +1,4 @@
+import { errorService } from '../../error/error-service';
 import { mstrObjectRestService } from '../mstr-object-rest-service';
 import { visualizationInfoService } from '../visualization-info-service';
 
@@ -7,7 +8,6 @@ import {
 } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData, VisualizationInfo } from '../../types/object-types';
 
-import { errorService } from '../../error/error-handler';
 import { OperationTypes } from '../../operation/operation-type-names';
 import mstrObjectEnum from '../mstr-object-type-enum';
 import { ErrorMessages, ErrorType, IncomingErrorStrings } from '../../error/constants';

@@ -303,5 +303,10 @@
    "Report Filter": "レポート フィルター",
    "Report Limits": "レポート制限",
    "View Filter": "ビュー フィルター",
-   "Selected non-grid visualization cannot be imported as formatted data": "選択した非グリッド ビジュアリゼーションは、書式設定したデータとしてインポートできません"
+   "Selected non-grid visualization cannot be imported as formatted data": "選択した非グリッド ビジュアリゼーションは、書式設定したデータとしてインポートできません",
+   "Data Refresh": "データ更新",
+   "Auto Refresh": "自動更新",
+   "If enabled, the data will be automatically refreshed each time you open the Excel document.": "有効な場合、PowerPoint プレゼンテーションを開くたびに、データが自動的に更新されます。",
+   "Refresh in progress...": "更新が進行中...",
+   "Stop refresh": "更新の停止"
 }

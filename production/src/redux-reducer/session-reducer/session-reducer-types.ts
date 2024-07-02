@@ -16,6 +16,7 @@ export interface LogInValues {
 
 export interface SessionState {
   envUrl?: string;
+  username?: string;
   authToken?: string;
   userID?: string;
   userFullName?: string;

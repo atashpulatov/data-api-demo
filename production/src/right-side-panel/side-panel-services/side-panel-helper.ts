@@ -1,11 +1,10 @@
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
-import { officeRemoveHelper } from '../../office/remove/office-remove-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import officeStoreHelper from '../../office/store/office-store-helper';
-import { pageByHelper } from '../../page-by/page-by-helper';
+import { popupHelper } from '../../redux-reducer/popup-reducer/popup-helper';
 
-import officeStoreObject from '../../office/store/office-store-object';
+import { reduxStore } from '../../store';
 
 import { MstrObjectTypes } from '../../mstr-object/mstr-object-types';
 import { DialogType } from '../../redux-reducer/popup-state-reducer/popup-state-reducer-types';
@@ -13,51 +12,19 @@ import { ObjectData } from '../../types/object-types';
 
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
-import {
-  duplicateRequested,
-  removeRequested,
-} from '../../redux-reducer/operation-reducer/operation-actions';
-import { popupActions } from '../../redux-reducer/popup-reducer/popup-actions';
+import { duplicateRequested } from '../../redux-reducer/operation-reducer/operation-actions';
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
 import { clearRepromptTask } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import initializationErrorDecorator from '../settings-side-panel/initialization-error-decorator';
+import { OfficeSettingsEnum } from '../../constants/office-constants';
 import { ObjectImportType } from '../../mstr-object/constants';
 
 class SidePanelHelper {
-  reduxStore: any;
-
-  init = (reduxStore: any): void => {
-    this.reduxStore = reduxStore;
-
-    this.clearRepromptTask = this.clearRepromptTask.bind(this);
-    this.createRepromptTask = this.createRepromptTask.bind(this);
-  };
-
   /**
    * Clears the reprompt task queue and resets the index.
    */
   clearRepromptTask(): void {
-    this.reduxStore.dispatch(clearRepromptTask());
-  }
-
-  /**
-   * Revert PageBy Import: If already imported, removes from the Excel worksheet; if not yet imported, deletes from the Redux store.
-   *
-   * @param objectWorkingId Contains unique Id of the object, allowing to reference source object.
-   */
-  async revertPageByImportForSiblings(objectWorkingId: number): Promise<void> {
-    const excelContext = await officeApiHelper.getExcelContext();
-    const { pageBySiblings } = pageByHelper.getAllPageByObjects(objectWorkingId);
-    pageBySiblings.forEach(async (pageByObject: ObjectData) => {
-      const objectExist = await officeRemoveHelper.checkIfObjectExist(pageByObject, excelContext);
-      if (objectExist) {
-        this.reduxStore.dispatch(
-          removeRequested(pageByObject.objectWorkingId, pageByObject?.importType)
-        );
-      } else {
-        officeStoreObject.removeObjectFromStore(pageByObject.objectWorkingId);
-      }
-    });
+    reduxStore.dispatch(clearRepromptTask());
   }
 
   /**
@@ -86,15 +53,15 @@ class SidePanelHelper {
           const popupType = isDossier
             ? DialogType.repromptDossierDataOverview
             : DialogType.repromptReportDataOverview;
-          this.reduxStore.dispatch(popupStateActions.setPopupType(popupType));
+          // @ts-expect-error
+          reduxStore.dispatch(popupStateActions.setPopupType(popupType));
         }
 
-        // Based on the type of object, call the appropriate popup
-        const popupAction = isDossier
-          ? popupActions.callForRepromptDossier(objectData)
-          : popupActions.callForReprompt(objectData);
-
-        this.reduxStore.dispatch(popupAction);
+        if (isDossier) {
+          await popupHelper.callForRepromptDossier(objectData);
+        } else {
+          popupHelper.callForReprompt(objectData);
+        }
       },
     };
   }
@@ -111,7 +78,11 @@ class SidePanelHelper {
    * @param insertNewWorksheet  Flag which shows whether the duplication should happen to new excel worksheet.
    * @param withEdit Flag which shows whether the duplication should happen with additional edit popup.
    */
-  duplicateObject(objectWorkingId: number, insertNewWorksheet: boolean, withEdit: boolean): void {
+  async duplicateObject(
+    objectWorkingId: number,
+    insertNewWorksheet: boolean,
+    withEdit: boolean
+  ): Promise<void> {
     const sourceObject =
       officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
     const object: ObjectData = JSON.parse(JSON.stringify(sourceObject));
@@ -132,18 +103,25 @@ class SidePanelHelper {
     }
 
     if (withEdit) {
-      this.reduxStore.dispatch(popupActions.callForDuplicate(object));
+      await popupHelper.callForDuplicate(object);
     } else {
-      this.reduxStore.dispatch(duplicateRequested(object));
+      reduxStore.dispatch(duplicateRequested(object));
     }
   }
 
   @initializationErrorDecorator.initializationWrapper
   initializeClearDataFlags(): void {
-    officeStoreHelper.isFileSecured() &&
-      this.reduxStore.dispatch(officeActions.toggleSecuredFlag(true));
-    officeStoreHelper.isClearDataFailed() &&
-      this.reduxStore.dispatch(officeActions.toggleIsClearDataFailedFlag(true));
+    if (officeStoreHelper.getPropertyValue(OfficeSettingsEnum.isSecured)) {
+      // @ts-expect-error
+      reduxStore.dispatch(officeActions.toggleSecuredFlag(true));
+      officeStoreHelper.setPropertyValue(OfficeSettingsEnum.isSecured, true);
+    }
+
+    if (officeStoreHelper.getPropertyValue(OfficeSettingsEnum.isClearDataFailed)) {
+      // @ts-expect-error
+      reduxStore.dispatch(officeActions.toggleIsClearDataFailedFlag(true));
+      officeStoreHelper.setPropertyValue(OfficeSettingsEnum.isClearDataFailed, true);
+    }
   }
 }
 

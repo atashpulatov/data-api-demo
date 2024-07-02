@@ -20,6 +20,7 @@ describe('settingsReducer', () => {
     pageByDisplaySetting: PageByDisplayType.SELECT_PAGES,
     pivotTableAddAttributesToColumns: false,
     pivotTableAddMetricsToValues: false,
+    enableDataAutoRefresh: false,
   };
 
   it('should return correct initial state', () => {

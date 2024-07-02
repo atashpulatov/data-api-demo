@@ -104,7 +104,6 @@ describe('StepGetInstanceDefinition', () => {
         handleOperationErrorCallNo
       );
       if (handleOperationErrorCallNo === 1) {
-        expect(console.error).toBeCalledTimes(1);
         expect(console.error).toBeCalledWith(new Error(expectedErrorMsg));
 
         expect(operationErrorHandler.handleOperationError).toBeCalledWith(

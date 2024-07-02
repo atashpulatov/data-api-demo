@@ -1,22 +1,9 @@
+import { mstrObjectRestService } from './mstr-object-rest-service';
 import { generateDossierFilterText } from './object-filter-helper';
 
 import { VisualizationInfo } from '../types/object-types';
 
 class VisualizationInfoService {
-  mstrObjectRestService: any;
-
-  constructor() {
-    this.getVisualizationInfo = this.getVisualizationInfo.bind(this);
-    this.prepareVisualizationInfoObject = this.prepareVisualizationInfoObject.bind(this);
-    this.parseVisualizations = this.parseVisualizations.bind(this);
-    this.parsePanelStacks = this.parsePanelStacks.bind(this);
-    this.parseDossierPage = this.parseDossierPage.bind(this);
-  }
-
-  init = (mstrObjectRestService: any): any => {
-    this.mstrObjectRestService = mstrObjectRestService;
-  };
-
   /**
    * Get visualization key, page key, chapter key, dossier structure with names from dossier hierarchy.
    * In case if visualization key is not found in dossier, it returns null.
@@ -35,7 +22,7 @@ class VisualizationInfoService {
     visualizationKey: string,
     dossierInstance: any
   ): Promise<{ vizInfo: VisualizationInfo; viewFilterText: string }> {
-    const dossierDefinition = await this.mstrObjectRestService.getDossierInstanceDefinition(
+    const dossierDefinition = await mstrObjectRestService.getDossierInstanceDefinition(
       projectId,
       objectId,
       dossierInstance
