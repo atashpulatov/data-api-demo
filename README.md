@@ -45,9 +45,9 @@ Add-in for Microsoft Office applications and MicroStrategy.
       - [ ] This project is shipped (included in some kind of install program)
   -->
 - [ ] This project is containerized (it is included in some MicroStrategy generated container)
-  <!-- Alternatively:
-      - [ ] This project is containerized (it is included in some MicroStrategy generated container)
-  -->
+<!-- Alternatively:
+    - [ ] This project is containerized (it is included in some MicroStrategy generated container)
+-->
 - [ ] This project is actively used in-house. (For example it is a build tool, or it is used for testing.)
 <!-- Alternatively:
     - [ ] This project is actively used in-house.  (For example it is a build tool, or it is used for testing.)
@@ -74,9 +74,9 @@ Add-in for Microsoft Office applications and MicroStrategy.
         Contact: Fred Bloggs (fbloggs)
 -->
 
-Team:  AC-MSFT-365
+Team: AC-MSFT-365
 
-Contact: Piotr Nastaj (pnastaj)  
+Contact: Piotr Nastaj (pnastaj)
 
 DevOps POC: Yurii Zhuk (yzhuk)
 
@@ -91,6 +91,7 @@ stage-2-e2e-desktop-test-python-mac POC: Michał Duong (miduong)
 stage-2-e2e-desktop-test-python-win POC: Michał Duong (miduong)
 
 stage-2-e2e-general-windows-desktop-job POC: Michał Duong (miduong)
+
 <!-- End: Owner -->
 
 ## Documentation
@@ -100,7 +101,8 @@ stage-2-e2e-general-windows-desktop-job POC: Michał Duong (miduong)
 [Design Documents](https://microstrategy.atlassian.net/wiki/spaces/TECCLIENTS/pages/357894789/Modern+MSTR+Office+Plugin+-+JS+Solution)
 
 This repository is based on Excel task pane add-in Template. Code can be split into 2 parts:
-- mstr-office: Implementation of plugin UI and functionalities 
+
+- mstr-office: Implementation of plugin UI and functionalities
 - office-loader: Initilisation and Authentication
 
 More information can be found [here](./production/README.md)
@@ -117,7 +119,7 @@ More information can be found [here](./production/README.md)
 - Install a Code Editor tool, Visual Studio Code recommended.
 - Office Online, Office 365, Office 2016 or later
 - ssh-key added to your github account (our project depends on 2nd repository, that we contribute, that contains reusable MicroStrategy React components)
-To add key follow instructions on our [github](https://help.github.com/enterprise/2.16/user/articles/generating-an-ssh-key/)
+  To add key follow instructions on our [github](https://help.github.com/enterprise/2.16/user/articles/generating-an-ssh-key/)
 
 ### Installing
 
@@ -135,11 +137,13 @@ npm install
 ```
 
 To start project type
+
 ```
 npm run start
 ```
 
 To run unit tests
+
 ```
 npm test
 ```
@@ -148,7 +152,7 @@ npm test
 
 #### Manifest file
 
-To sideload our plugin on any of the platforms you will need manifest file. 
+To sideload our plugin on any of the platforms you will need manifest file.
 The file is being stored in mstr-react/production/office-react-manifest.xml
 Below you can find information and links describe process of sideloading the add-in.
 
@@ -157,6 +161,7 @@ Below you can find information and links describe process of sideloading the add
 ##### Automated
 
 Run the following command in production.
+
 ```
 npm run sideload
 ```
@@ -164,11 +169,12 @@ npm run sideload
 ##### Manually
 
 You need to copy manifest file to Office location in Library like so
+
 ```
 cp mstr-office/production/office-react-manifest.xml ~/Library/Containers/com.microsoft.Excel/documents/wef
 ```
 
-Now you can run add-in using Insert -> My Add-ins. 
+Now you can run add-in using Insert -> My Add-ins.
 MicroStrategy for Office should appear under Developer Add-ins.
 You may be required to accept self-signed certificate in order to start add-in.
 
@@ -176,16 +182,16 @@ Additional information can be found on [Microsoft page](https://docs.microsoft.c
 
 #### Office for Windows
 
-Simply follow instruction from official [Microsoft page](https://docs.microsoft.com/en-us/office/dev/add-ins/testing/create-a-network-shared-folder-catalog-for-task-pane-and-content-add-ins) 
+Simply follow instruction from official [Microsoft page](https://docs.microsoft.com/en-us/office/dev/add-ins/testing/create-a-network-shared-folder-catalog-for-task-pane-and-content-add-ins)
 
 #### Office Online
 
 Simply follow instruction from official [Microsoft page](https://docs.microsoft.com/en-us/office/dev/add-ins/testing/sideload-office-add-ins-for-testing)
 
-
 ### Troubleshooting
 
 #### Dossier or prompts are not working
+
 Make sure embeddinglib.js is present in your environment. [More information](production/public/javascript/README.md).
 
 ## Deployment
@@ -195,30 +201,33 @@ Currently we do not support production builds.
 ## Manually uploading addin to AWS instance and uploading the test data
 
 ### Get Office addin and Office addin loader from Nexus at link:
+
 1. go to https://nexus.internal.microstrategy.com/#browse/browse:releases:com%2Fmicrostrategy
 2. choose a branch folder (e.g. “m2020”)
 3. get addin:
-    1. find folder “office”
-    2. choose a version folder (e.g. “11.1.3.1050”)
-    3. click file ending in “.zip”
-    4. download link for plugin is on the pane to the right under “Path”
+   1. find folder “office”
+   2. choose a version folder (e.g. “11.1.3.1050”)
+   3. click file ending in “.zip”
+   4. download link for plugin is on the pane to the right under “Path”
 4. get addin loader:
-    1. find folder “office-loader”
-    2. choose a version folder (e.g. “11.1.3.1050”)
-    3. click file ending in “.zip”
-    4. download link for plugin is on the pane to the right under “Path”
+   1. find folder “office-loader”
+   2. choose a version folder (e.g. “11.1.3.1050”)
+   3. click file ending in “.zip”
+   4. download link for plugin is on the pane to the right under “Path”
 
 ### Upload office addin and addin loader to the env
 
 In case where deploying code to library is required, both Office-Loader and Mstr-Office-Plugin parts of the code can be uploaded to library by using following scripts:
- - [Office-Loader](./office-loader/aws-deploy.sh)
- - [Mstr-Office-Plugin](./production//aws-deploy.sh)
+
+- [Office-Loader](./office-loader/aws-deploy.sh)
+- [Mstr-Office-Plugin](./production//aws-deploy.sh)
 
 <!-- End: Use -->
 
 ## Build Pipeline
 
 <!-- Begin: Build -->
+
 mstr-office-.-m2021-.-stage-1-dev
 
 [![Build Status](https://jenkins.internal.microstrategy.com/buildStatus/icon?job=mstr-office-.-m2021-.-stage-1-dev)](https://jenkins.internal.microstrategy.com/view/mstr-office/view/m2021/job/mstr-office-.-m2021-.-stage-1-dev/)
@@ -244,7 +253,7 @@ The scanning tools in use for this project:
     If the repo is not scanned then uncheck the box and erase the link.
 -->
 
-- [x] This project is scanned by SonarQube. See [dashboard link](https://sonarqube.internal.microstrategy.com/dashboard?id=Kiai%3Amstr-office)
+- [x] This project is scanned by SonarQube. See [dashboard link](https://sonarqube.internal.microstrategy.com/dashboard?id=mstr-kiai%3Amstr-office)
 
 <!--
     If the repo is scanned by Veracode then fill in a link on where to see outcome
