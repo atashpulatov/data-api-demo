@@ -1,3 +1,5 @@
+import { ObjectImportType } from '../../mstr-object/constants';
+
 export enum ObjectAndWorksheetNamingOption {
   REPORT_NAME = 'reportName',
   PAGE_NAME = 'pageName',
@@ -28,6 +30,11 @@ export enum UserPreferenceKey {
   EXCEL_PIVOT_TABLE_ADD_ATTRIBUTES_TO_COLUMNS = 'excelPivotTableAddAttributesToColumns',
   EXCEL_PIVOT_TABLE_ADD_METRICS_TO_VALUES = 'excelPivotTableAddMetricsToValues',
   EXCEL_DATA_AUTO_REFRESH = 'excelDataAutoRefresh',
+}
+
+export interface ImportFormatOptions {
+  key: ObjectImportType;
+  value: string;
 }
 
 export const EXCEL_IMPORT_ATTRIBUTES_AS_TEXT = 'excelImportAttributesAsText';
