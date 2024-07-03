@@ -1,0 +1,15 @@
+# <https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#about-the-dependabotyml-file>
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/production"
+    allow:
+      - dependency-type: all
+    reviewers:
+      - "bkoziel_mstr"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "08:00"
+      timezone: "Europe/Warsaw"
+    open-pull-requests-limit: 0 # Disable pure non-SEC versions updates
