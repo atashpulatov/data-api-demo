@@ -76,9 +76,9 @@ Add-in for Microsoft Office applications and MicroStrategy.
 
 Team: AC-MSFT-365
 
-Contact: Piotr Nastaj (pnastaj)
+Contact: Bartosz Koziel (bkoziel)
 
-DevOps POC: Yurii Zhuk (yzhuk)
+DevOps POC: Kacper Skoczek (kskoczek)
 
 stage-2-e2e-browser-test-python-mac POC: Michał Duong (miduong)
 
