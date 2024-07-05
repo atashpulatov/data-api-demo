@@ -393,7 +393,12 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
           msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptAnsweredHandler);
           msgRouter.removeEventhandler(EventType.ON_PROMPT_LOADED, promptLoadedHandler);
           msgRouter.removeEventhandler(EventType.ON_ERROR, onEmbeddedError);
-          const currentAnswers = givenPromptsAnswers;
+          // Get the new answers from the prompts dialog otherwise from the givenPromptsAnswers.
+          const currentAnswers =
+            [...newPromptsAnswers.current].length > 0
+              ? [...newPromptsAnswers.current]
+              : givenPromptsAnswers;
+
           deleteDossierInstance(projectId, objectId, instanceId);
 
           // dossierData should eventually be removed as data should be gathered via REST from report, not dossier
