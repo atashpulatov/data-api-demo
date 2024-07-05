@@ -362,8 +362,6 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
             isImportingOrPreparingDataWithPreviousPromptAnswers || isMultipleRepromptWithReuse
           );
 
-          console.log('editedObject', editedObject);
-
           documentProps.instance = await preparePromptedReport(
             chosenObjectIdLocal,
             projectId,
