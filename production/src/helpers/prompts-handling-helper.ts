@@ -224,6 +224,25 @@ export async function preparePromptedDossier(
   return dossierInstanceDefinition;
 }
 
+async function forceOpenPromptDialog(
+  chosenObjectIdLocal: string,
+  dossierInstanceDefinition: any,
+  projectId: string
+): Promise<any> {
+  const repromptResponse = await mstrObjectRestService.rePromptDossier(
+    chosenObjectIdLocal,
+    dossierInstanceDefinition.mid,
+    projectId
+  );
+
+  if (repromptResponse?.mid) {
+    dossierInstanceDefinition.mid = repromptResponse.mid;
+    dossierInstanceDefinition.id = chosenObjectIdLocal;
+  }
+
+  return dossierInstanceDefinition;
+}
+
 /**
  * Resets current prompted instance by deleting in and creating a new one based on the report.
  * This is used to ensure that the prompts are rendered with default values and force the user
@@ -267,7 +286,8 @@ export async function preparePromptedReport(
   chosenObjectIdLocal: string,
   projectId: string,
   promptsAnswers: AnswersState[],
-  previousAnswers: PromptsAnswer[]
+  previousAnswers: PromptsAnswer[],
+  openPromptDialog: boolean = true
 ): Promise<any> {
   const config: any = { objectId: chosenObjectIdLocal, projectId };
   const instanceDefinition = await mstrObjectRestService.createInstance(config);
@@ -311,18 +331,15 @@ export async function preparePromptedReport(
     }
   }
 
-  // Re-prompt the Dossier's instance to change execution status to 2 and force Prompts' dialog to open.
-  const repromptResponse = await mstrObjectRestService.rePromptDossier(
-    chosenObjectIdLocal,
-    dossierInstanceDefinition.mid,
-    projectId
-  );
-
-  if (repromptResponse?.mid) {
-    dossierInstanceDefinition.mid = repromptResponse.mid;
-    dossierInstanceDefinition.id = chosenObjectIdLocal;
+  if (openPromptDialog) {
+    dossierInstanceDefinition = await forceOpenPromptDialog(
+      chosenObjectIdLocal,
+      dossierInstanceDefinition,
+      projectId
+    );
   }
 
+  // Re-prompt the Dossier's instance to change execution status to 2 and force Prompts' dialog to open.
   return dossierInstanceDefinition;
 }
 

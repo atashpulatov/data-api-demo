@@ -19,7 +19,7 @@ const selectPromptKeys = createSelector(
 
 const doesRepromptQueueContainItems = createSelector(
   selectRepromptQueue,
-  repromptsQueue => repromptsQueue?.length > 0
+  repromptsQueue => repromptsQueue.length > 0
 );
 
 export const repromptsQueueSelector = {
