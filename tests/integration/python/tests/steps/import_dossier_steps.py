@@ -29,6 +29,9 @@ def step_impl(context):
 def step_impl(context):
     context.pages.import_dossier_page().click_import_formatted_data_without_waiting_for_results()
 
+@step('I clicked import data without waiting for results')
+def step_impl(context):
+    context.pages.import_dossier_page().click_import_data_without_waiting_for_results()
 
 
 @step('I clicked import dossier to duplicate')

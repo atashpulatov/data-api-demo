@@ -6,10 +6,14 @@ Feature: F25949 - Display filters and prompts
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
+      
 
      When I found object by ID "E659E86811E58C918D6F0080EF453539" and selected "Simple Report"
-      And I clicked Import button
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+      And I clicked Import with dropdown buttonAnd I clicked Import button
       And I closed last notification
       And I clicked toggle details button on object 1
 
@@ -41,8 +45,12 @@ Feature: F25949 - Display filters and prompts
 
      When I selected cell "F1"
       And I clicked Add Data button
-      And I found object by ID "074DC2204EC5FC4C17387495F0FA953F" and selected "Subtotals"
-      And I clicked Import button
+      And I found and selected object "Subtotals"
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+      And I clicked Import with dropdown button
       And I closed last notification
       And I clicked toggle details button on object 1
 
@@ -65,7 +73,7 @@ Feature: F25949 - Display filters and prompts
       And I clicked attribute "Employee"
       And I clicked metric "Revenue"
       And I selected filters { "Region" : ["Central", "Northwest"] }
-      And I clicked Import button
+      And I clicked Import Data button in Columns and Filters Selection without success check
       And I closed last notification
       And I clicked toggle details button on object 1
 

@@ -8,7 +8,11 @@ Feature: TS41441 - Sanity checks
       And I clicked Import Data button
 
      When I found and selected object "Number Formatting"
-      And I clicked Import button
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+      And I clicked Import with dropdown button
       And I closed all notifications
      Then I verified that cell "B2" has value "$4,560.00"
 

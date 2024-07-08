@@ -12,6 +12,7 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
     RESET_CONFIRMATION_YES = '.mstrd-ConfirmationDialog-button'
 
     IMPORT_BUTTON = 'import'
+    IMPORT_DATA_BUTTON = 'import-data'
 
     IMPORT_FORMATTED_DATA_BUTTON = 'import-formatted-data'
 
@@ -93,6 +94,18 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_popup_frame()
 
         self.get_element_by_id(ImportDossierMainBrowserPage.IMPORT_BUTTON).click()
+
+    def click_import_data(self):
+        self.focus_on_add_in_popup_frame()
+
+        self.get_element_by_id(ImportDossierMainBrowserPage.IMPORT_DATA_BUTTON).click()  
+
+        # self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully()
+
+    def click_import_data_without_waiting_for_results(self):
+        self.focus_on_add_in_popup_frame()
+
+        self.get_element_by_id(ImportDossierMainBrowserPage.IMPORT_DATA_BUTTON).click()
 
     def reset_dossier(self):
         self.focus_on_dossier_frame()

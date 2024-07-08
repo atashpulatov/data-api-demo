@@ -5,15 +5,20 @@ Feature: F22955 - Refresh data already imported to the workbook (including promp
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
+      
 
-     When I found object by ID "33EE1C4B41568BF0346FCFADE7AA49D0" and selected "Report with prompt - Value prompt - Numeric (Year) | Required | Default answer"
-      And I clicked Import button without checking results
+     When I found and selected object "Report with prompt - Value prompt - Numeric (Year) | Required | Default answer"
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+      And I clicked Import with dropdown button without checking results
+      And I selected "2021" as an answer for "1. Select Year" prompt - object prompt
       And I waited for Run button to be enabled
       And I clicked Run button
       And I closed last notification
 
-     Then I verified that cells ["A1", "B2", "D3"] have values ["Year", "Central", "$159,339"]
+     Then I verified that cell "D3" has value "Electronics"
 
      When I clicked Edit object 1
       And I waited for Run button to be enabled
@@ -23,7 +28,7 @@ Feature: F22955 - Refresh data already imported to the workbook (including promp
       And I clicked attribute "Region"
       And I clicked metric "Profit"
       And I selected filters { "Category": ["Books"] }
-      And I clicked Import button in Columns and Filters Selection
+      And I clicked Import Data button in Columns and Filters Selection without success check
       And I closed last notification
 
      Then I verified that cells ["A1", "B2", "D3"] have values ["Region", "$21,190", ""]

@@ -5,24 +5,20 @@ Feature: F31681 - Authentication and Prepare Data workflow improvements
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
+      
 
      When I found object by ID "C437801F11EA82FBF70F0080EFC55790" and selected "Unpublished cube"
      Then I verified that Import button is disabled
 
      When I hover over Import button
-     Then I verified that tooltip for Import button shows message "You cannot import an unpublished cube."
-
-     When I switched on MyLibrary
-      And I switched off MyLibrary
-
+     And I verified that tooltip for Import button shows message "You cannot import an unpublished cube."
      Then I verified that Import button is disabled
 
      When I hover over Import button
      Then I verified that tooltip for Import button shows message "You cannot import an unpublished cube."
 
      When I cleared search box
-      And I found object "report"
+      And I found object "report graph"
       And I hovered over the first object in the list
 
      Then I verified that the background color of the first object is "#f9f9f9"
@@ -31,7 +27,7 @@ Feature: F31681 - Authentication and Prepare Data workflow improvements
      Then I verified that the background color of the first object is "#f0f7fe"
 
      When I cleared search box
-      And I found object by ID "6D70D06949B83CD9DBFAC0AF5FE0010E" and selected "Report with prompt - Object prompt | Required | Default answer"
+      And I found and selected object "Report with prompt - Object prompt | Required | Default answer"
       And I clicked Prepare Data button
       And I waited for Run button to be enabled
       And I clicked Run button

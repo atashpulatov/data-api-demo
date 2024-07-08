@@ -5,7 +5,7 @@ Feature: F25968 - Filters numbers
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
+      
 
       And I clicked Filters button
       And I opened All for Owner category

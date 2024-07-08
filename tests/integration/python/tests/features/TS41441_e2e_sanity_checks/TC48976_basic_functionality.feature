@@ -13,7 +13,7 @@ Feature: TS41441 - Sanity checks
 
      When I logged in as default user
       And I clicked Import Data button
-      And I found object "Seasonal"
+      And I found object "Seasonal Report"
       And I cleared search box
       And I found object "no_such_object"
       And I cleared search box
@@ -79,20 +79,25 @@ Feature: TS41441 - Sanity checks
       And I selected filter "Region" with all elements
       And I clicked Data Preview button
       And I clicked Close Preview button
-      And I selected import type "Import Data" and clicked import
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+      And I clicked Import Data button in Columns and Filters Selection
       And I waited for object to be imported successfully
       And I closed last notification
+
       And I selected cell "H1"
       And I clicked Add Data button
-      And I found object "100_dataset"
+      And I found object "Category Performance Dataset"
       And I found object "100_report"
       And I cleared search box
-      And I found and selected object "100_dataset"
+      And I found and selected object "Category Performance Dataset"
      Then I verified that the background color of the first object is "#f0f7fe"
 
      When I clicked Prepare Data button
      Then I verified that Columns & Filters Selection is visible
-      And I verified popup title is "100_dataset"
+      And I verified popup title is "Category Performance Dataset"
       And I verified that counter of "attributes" shows "0" of "8" selected
       And I verified that counter of "metrics" shows "0" of "7" selected
       And I verified that counter of "filters" shows "0" of "8" selected
@@ -125,7 +130,11 @@ Feature: TS41441 - Sanity checks
 
      When I clicked Data Preview button
       And I clicked Close Preview button
-      And I clicked Import button in Columns and Filters Selection
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+      And I clicked Import Data button in Columns and Filters Selection
       And I waited for object to be imported successfully
       And I closed last notification
       And I clicked on object 2
@@ -142,14 +151,14 @@ Feature: TS41441 - Sanity checks
 
      When I clicked Edit object 1
      Then I verified that Columns & Filters Selection is visible
-      And I verified popup title is "100_dataset"
+      And I verified popup title is "Category Performance Dataset"
       And I verified that counter of "attributes" shows "3" of "8" selected
       And I verified that counter of "metrics" shows "3" of "7" selected
       And I verified that counter of "filters" shows "1" of "8" selected
 
      When I clicked attribute "Item Type" for dataset
       And I clicked metric "Unit Cost"
-      And I clicked Import button in Columns and Filters Selection
+      And I clicked Import Data button in Columns and Filters Selection
       And I waited for object to be imported successfully
       And I closed notification on object 1
       And I clicked on object 1

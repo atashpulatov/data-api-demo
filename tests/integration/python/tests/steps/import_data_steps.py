@@ -2,21 +2,6 @@ from behave import *
 
 from framework.util.assert_util import AssertUtil
 
-
-@step('I ensured that MyLibrary Switch is OFF')
-def step_impl(context):
-    context.pages.import_data_page().ensure_mylibrary_switch_is_off()
-
-
-@step('I switched on MyLibrary')
-def step_impl(context):
-    context.pages.import_data_page().ensure_mylibrary_switch_is_on()
-
-
-@step('I switched off MyLibrary')
-def step_impl(context):
-    context.pages.import_data_page().ensure_mylibrary_switch_is_off()
-
 @step('I opened All objects list')
 def step_imp(context):
     context.pages.import_data_page().go_to_all_objects_list()
@@ -73,7 +58,11 @@ def step_impl(context):
 
 @step('I clicked Import with dropdown button without checking results')
 def step_impl(context):
-    context.pages.import_data_page().click_import_with_dropdown_button_without_checking_results()
+    context.pages.import_data_page().click_import_with_dropdown_button_without_checking_results()   
+
+@step('I clicked Import with dropdown button')
+def step_impl(context):
+    context.pages.import_data_page().click_import_with_dropdown_button()
 
 @step('I clicked Import dropdown button')
 def step_impl(context):

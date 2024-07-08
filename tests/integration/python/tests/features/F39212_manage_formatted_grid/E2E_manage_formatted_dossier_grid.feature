@@ -36,12 +36,12 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
         And I selected "Import Formatted Data" item in Import dropdown
         And I clicked Import with dropdown button without checking results
         And I closed last notification
-        And I verified that cell "C3" has value "$529"
+        Then I verified that cell "C3" has value "$529"
 
     # Refresh formatted grid
         When I clicked Refresh on object 1
         And I closed notification on object 1
-        And I verified that cell "C3" has value "$529"
+        Then I verified that cell "C3" has value "$529"
 
     # Edit formatted grid
         When I clicked Edit object 1
@@ -56,7 +56,7 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
         And I selected visualization "Compound Grid"
         And I clicked import formatted data without waiting for results
         And I closed last notification
-        And I verified that cell "C3" has value "$4,779"
+        Then I verified that cell "C3" has value "$4,779"
 
     # Clear entire data
         When I clicked clear data

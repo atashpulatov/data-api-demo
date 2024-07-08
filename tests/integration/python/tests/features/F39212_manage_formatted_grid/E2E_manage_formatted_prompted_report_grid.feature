@@ -25,12 +25,12 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
     # Import formatted grid into worksheet
         And I clicked Run button
         And I closed last notification
-        And I verified that cell "C3" has value "$681,179"
+        Then I verified that cell "C3" has value "$681,179"
 
     # Refresh formatted grid
         When I clicked Refresh on object 1
         And I closed notification on object 1
-        And I verified that cell "C3" has value "$681,179"
+        Then I verified that cell "C3" has value "$681,179"
 
 
     # Reprompt formatted grid
@@ -40,7 +40,7 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
         And I selected "Electronics" as an answer for "1. Category" prompt - object prompt
         And I clicked Run button
         And I closed last notification
-        And I verified that cell "C3" has value "$6,610,260"
+        Then I verified that cell "C3" has value "$6,610,260"
 
     # Edit formatted grid and import formatted compound grid
         When I clicked Edit object 1
@@ -53,7 +53,7 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
         And I verified that counter of "filters" shows "0" of "2" selected
         And I clicked Import Formatted Data button in Columns and Filters Selection without success check
         And I closed last notification  
-        And I verified that cell "C3" has value "$4,970,513"
+        Then I verified that cell "C3" has value "$4,970,513"
 
     # Clear entire data
         When I clicked clear data
@@ -73,7 +73,7 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
         And I clicked Import button in Duplicate popup without checking results
         And I closed last notification
         Then I verified that object number 1 is called "Reprompt - Prompt on Category (2)"
-        And I verified that cell "Y53" has value "Books"
+        Then I verified that cell "Y53" has value "Books"
 
     # Remove duplicated formatted grid
         When I removed object 1 using context menu

@@ -5,9 +5,13 @@ Feature: TF9328 - Release Validation
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-      And I found object by ID "A6E8885611E99CC31A6E0080EFF50C15" and selected "Report with crosstab 123"
-      And I clicked Import button
+      
+      And I found and selected object "Report with crosstab 123"
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+      And I clicked Import with dropdown button
       And I closed last notification
      Then I verified that cells ["B3", "E5", "V6"] have values ["", "$ 7,382", "$1,405"]
       And I verified that object number 1 is called "Report with crosstab 123"
@@ -43,7 +47,7 @@ Feature: TF9328 - Release Validation
 
      When I clicked Edit object 1
       And I verified that Columns & Filters Selection is visible
-      And I clicked Import button in Columns and Filters Selection
+      And I clicked Import Data button in Columns and Filters Selection without success check
       And I waited for object to be imported successfully
       And I closed last notification
      Then I verified that cells ["B3", "E5", "H3", "V6", "B43", "B49"] have values ["", "$ 7,382", "", "$1,405", "400870.8", "#REF!"]
@@ -85,16 +89,24 @@ Feature: TF9328 - Release Validation
 
      When I added a new worksheet
       And I clicked Import Data button
-      And I found object by ID "A6E8885611E99CC31A6E0080EFF50C15" and selected "Report with crosstab 123"
-      And I clicked Import button
+      And I found and selected object "Report with crosstab 123"
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+      And I clicked Import with dropdown button
       And I closed last notification
      Then I verified that cells ["B3", "E5", "V6"] have values ["", "$ 7,382", "$1,405"]
       And I verified that object number 1 is called "Report with crosstab 123"
 
      When I selected cell "A49"
       And I clicked Add Data button
-      And I found object by ID "F3DA2FE611E75A9600000080EFC5B53B" and selected "Seasonal Report"
-      And I clicked Import button
+      And I found and selected object "Seasonal Report"
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+      And I clicked Import with dropdown button
       And I closed last notification
       And I removed object 2 using icon
       And I closed notification on object 2

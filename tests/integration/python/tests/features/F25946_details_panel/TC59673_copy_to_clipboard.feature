@@ -5,9 +5,9 @@ Feature: F25946 - Details panel
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
+      
 
-      And I found object by ID "B40A496C11EA9A8C299F0080EF05BE92" and selected "CategorySubCategoryQuarter"
+      And I found and selected object "CategorySubCategoryQuarter"
 
      When I displayed details for object number 1
      Then I verified that copying the details to clipboard works correctly

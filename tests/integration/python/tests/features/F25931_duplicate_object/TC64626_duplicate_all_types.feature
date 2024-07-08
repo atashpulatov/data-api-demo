@@ -5,15 +5,24 @@ Feature: F25931 - Duplicate object
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
+      
 
       And I found and selected object "Secure data - always working"
-      And I clicked Import button
+      
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+      And I clicked Import with dropdown button
 
       And I added a new worksheet
       And I clicked Add Data button
-      And I found and selected object "1k Sales Records.csv"
-      And I clicked Import button
+      And I found and selected object "1k report"
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+      And I clicked Import with dropdown button
 
       And I added a new worksheet
       And I clicked Add Data button
@@ -40,7 +49,7 @@ Feature: F25931 - Duplicate object
       And I clicked Import button in Duplicate popup
       And I closed last notification
 
-     Then I verified that object number 1 is called "1k Sales Records.csv Copy"
+     Then I verified that object number 1 is called "1k report Copy"
 
      When I selected worksheet number 3
       And I selected cell "A10"

@@ -5,8 +5,8 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-      And I found object by ID "300DBAFA4A1D8EC546AC6AB8CDE7834E" and selected "Report with a subtotal & prompt"
+      
+      And I found and selected object "Report with a subtotal & prompt"
 
      When I clicked Prepare Data button
       And I waited for Run button to be enabled
@@ -17,7 +17,11 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
       And I clicked attribute "Month"
       And I clicked metric "Profit"
       And I selected filters { "Subcategory": ["Audio Equipment", "TV's"] }
-      And I clicked Import button in Columns and Filters Selection
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+      And I clicked Import with dropdown button
 
      Then I closed last notification
 
@@ -29,7 +33,7 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
       And I verified that counter of "metrics" shows "1" of "4" selected
       And I verified that counter of "attributes" shows "1" of "2" selected
       And I verified that counter of "filters" shows "1" of "2" selected
-      And I clicked Import button in Columns and Filters Selection
+      And I clicked Import Data button in Columns and Filters Selection without success check
 
      Then I closed last notification
 
@@ -45,7 +49,11 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
       And I selected all metrics
       And I selected filter "Year" with all elements
       And I selected filters { "Region": ["Central", "South"] }
-      And I clicked Import button in Columns and Filters Selection
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+      And I clicked Import with dropdown button
 
      Then I closed last notification
 

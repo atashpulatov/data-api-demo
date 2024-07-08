@@ -8,10 +8,14 @@ Feature: F25933 - Range taken
       And I selected cell "A1"
 
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-      And I found object by ID "B7743F5A11E97AED00000080EF257000" and selected "100_report"
+      
+      And I found and selected object "100_report"
 
-     When I clicked Import button without checking results
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+    When I clicked Import with dropdown button without checking results
       And I clicked OK button in Range Taken popup
       And I waited for object to be imported successfully
       And I closed last notification

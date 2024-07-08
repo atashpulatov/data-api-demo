@@ -50,7 +50,11 @@ Feature: TS41441 - Sanity checks
      When I selected cell "G1"
       And I clicked Add Data button
       And I found and selected object "Report with a subtotal & prompt"
-      And I clicked Import button without checking results
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+      And I clicked Import with dropdown button without checking results
       And I waited for Run button to be enabled
       And I selected "Electronics" as an answer for "1. Category" prompt - object prompt
       And I clicked Run button
@@ -96,7 +100,11 @@ Feature: TS41441 - Sanity checks
      When I added a new worksheet
       And I clicked Add Data button
       And I found and selected object "Report with prompt - Object prompt | Required | Default answer"
-      And I clicked Import button without checking results
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+      And I clicked Import with dropdown button without checking results
       And I waited for Run button to be enabled
       And I clicked Run button
       And I closed last notification

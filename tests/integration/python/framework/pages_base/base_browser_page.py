@@ -165,6 +165,27 @@ class BaseBrowserPage(BasePage):
 
         raise MstrException(('Value not found', selector, attribute, expected_value))
 
+
+
+    def wait_for_element_to_have_attribute_value_by_id(self, selector, attribute, expected_value,
+                                                        timeout=Const.DEFAULT_TIMEOUT):
+        end_time = time.time() + timeout
+        while True:
+            self.pause(Const.AFTER_OPERATION_WAIT_TIME)
+
+            notification_text_elem = self.get_element_by_id(selector)
+            value = notification_text_elem.get_attribute(attribute)
+
+            if value == expected_value:
+                return
+
+            self.pause(Const.DEFAULT_WAIT_BETWEEN_CHECKS)
+
+            if time.time() > end_time:
+                break
+
+        raise MstrException(('Value not found', selector, attribute, expected_value))
+
     def wait_for_elements_to_disappear_from_dom(self, selector, timeout=Const.DEFAULT_TIMEOUT):
         end_time = time.time() + timeout
 

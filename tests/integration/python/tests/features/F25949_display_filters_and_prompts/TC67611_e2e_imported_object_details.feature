@@ -6,14 +6,18 @@ Feature: F25949 - Display filters and prompts
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
+      
 
-      And I found object by ID "3633950911EAA96889F00080EF25F8A4" and selected "titanic_wiblgjlprj"
+      And I found and selected object "report_formatting"
       And I clicked Prepare Data button
       And I verified that Columns & Filters Selection is visible
       And I selected all attributes
       And I selected all metrics
-      And I clicked Import button in Columns and Filters Selection
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+      And I clicked Import with dropdown button
       And I closed last notification
 
      When I hovered over toggle details button on object 1
@@ -35,7 +39,7 @@ Feature: F25949 - Display filters and prompts
 
      When I added a new worksheet
       And I clicked Add Data button
-      And I found object by ID "4BF6385A11EA638B25610080EFC58CB1" and selected "Prompted report with subtotals"
+      And I found and selected object "Prompted report with subtotals"
       And I clicked Prepare Data button
       And I waited for Run button to be enabled
       And I clicked Run button
@@ -44,7 +48,11 @@ Feature: F25949 - Display filters and prompts
       And I selected all metrics
       And I selected filter "Call Center" with all elements
       And I selected filter "Employee" with all elements
-      And I clicked Import button in Columns and Filters Selection
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+      And I clicked Import with dropdown button
       And I closed last notification
 
       And I clicked toggle details button on object 1
@@ -65,7 +73,7 @@ Feature: F25949 - Display filters and prompts
 
      When I added a new worksheet
       And I clicked Add Data button
-      And I found object by ID "5902C03A11E9FEF1DC670080EF856919" and selected "Prompted dossier"
+      And I found and selected object "Prompted dossier"
       And I clicked Import button to open Import Dossier
       And I clicked Run button for prompted dossier if prompts not already answered
       And I imported visualization "Visualization 1"
@@ -95,7 +103,7 @@ Feature: F25949 - Display filters and prompts
       And I unselected all metrics
       And I clicked metric "survived"
       And I selected filter "age" with all elements
-      And I clicked Import button in Columns and Filters Selection
+      And I clicked Import Data button in Columns and Filters Selection without success check
       And I closed notification on object 3
 
       And I clicked toggle details button on object 3

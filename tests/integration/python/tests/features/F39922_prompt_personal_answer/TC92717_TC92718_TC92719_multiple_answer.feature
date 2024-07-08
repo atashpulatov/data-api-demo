@@ -17,7 +17,11 @@ Scenario: [TC92717_TC92717_TC92717] - My Prompt Answers | FUN | Single Personal 
     And I clicked on folder "_Automation"
     And I clicked on folder "Personal Answer"
     And I found and clicked "Report" object "Year-multi-answer-report" in "Content Discovery"
-    And I clicked Import button without checking results
+    And I verified that Import with dropdown button is enabled
+    And I clicked Import dropdown button
+    And I verified that "Import Data" item in Import dropdown is enabled
+    And I selected "Import Data" item in Import dropdown
+    And I clicked Import with dropdown button without checking results
     And I clear the current personal answer
     And I create a new personal personal named "2020"
     And Ignore error I unselected "2021" as an answer for "1. Year" prompt - object prompt
@@ -31,7 +35,11 @@ Scenario: [TC92717_TC92717_TC92717] - My Prompt Answers | FUN | Single Personal 
     And I clicked Add Data button
     And I switched to Content Discovery
     And I found and clicked "Report" object "Year-multi-answer-report" in "Content Discovery"
-    And I clicked Import button without checking results
+    And I verified that Import with dropdown button is enabled
+    And I clicked Import dropdown button
+    And I verified that "Import Data" item in Import dropdown is enabled
+    And I selected "Import Data" item in Import dropdown
+    And I clicked Import with dropdown button without checking results
     And I unselected "2020" as an answer for "1. Year" prompt - object prompt
     And I unselected "2022" as an answer for "1. Year" prompt - object prompt
     And I unselected "2023" as an answer for "1. Year" prompt - object prompt
@@ -46,7 +54,11 @@ Scenario: [TC92717_TC92717_TC92717] - My Prompt Answers | FUN | Single Personal 
     And I clicked Add Data button
     And I switched to Content Discovery
     And I found and clicked "Report" object "Year-multi-answer-report" in "Content Discovery"
-    And I clicked Import button without checking results
+    And I verified that Import with dropdown button is enabled
+    And I clicked Import dropdown button
+    And I verified that "Import Data" item in Import dropdown is enabled
+    And I selected "Import Data" item in Import dropdown
+    And I clicked Import with dropdown button without checking results
     And I verified "2021" is a selected answer for "1. Year" prompt - object prompt
     And I load "2020" as the current answer
     And I verified "2020" is a selected answer for "1. Year" prompt - object prompt
@@ -64,7 +76,11 @@ Scenario: [TC92717_TC92717_TC92717] - My Prompt Answers | FUN | Single Personal 
     And I clicked Add Data button
     And I switched to Content Discovery
     And I found and clicked "Report" object "Year-multi-answer-report" in "Content Discovery"
-    And I clicked Import button without checking results
+    And I verified that Import with dropdown button is enabled
+    And I clicked Import dropdown button
+    And I verified that "Import Data" item in Import dropdown is enabled
+    And I selected "Import Data" item in Import dropdown
+    And I clicked Import with dropdown button without checking results
     And I verified "2020" is a selected answer for "1. Year" prompt - object prompt
     And I delete personal answer "2021-1"
     And I clicked Run button
@@ -77,7 +93,11 @@ Scenario: [TC92717_TC92717_TC92717] - My Prompt Answers | FUN | Single Personal 
     And I clicked Add Data button
     And I switched to Content Discovery
     And I found and clicked "Report" object "Year-multi-answer-report" in "Content Discovery"
-    And I clicked Import button without checking results
+    And I verified that Import with dropdown button is enabled
+    And I clicked Import dropdown button
+    And I verified that "Import Data" item in Import dropdown is enabled
+    And I selected "Import Data" item in Import dropdown
+    And I clicked Import with dropdown button without checking results
     And I delete personal answer "2020"
     And I clicked Run button
     And I verified that New Sheet is selected

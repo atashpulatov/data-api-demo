@@ -33,12 +33,12 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
         And I selected "Import Formatted Data" item in Import dropdown
         And I clicked Import with dropdown button without checking results
         And I closed last notification
-        And I verified that cell "B2" has value "Atlanta"
+        Then I verified that cell "B2" has value "Atlanta"
 
     # Refresh formatted grid
         When I clicked Refresh on object 1
         And I closed notification on object 1
-        And I verified that cell "B2" has value "Atlanta"
+        Then I verified that cell "B2" has value "Atlanta"
 
 
     # Reprompt formatted grid
@@ -48,7 +48,7 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
         And I selected in dashboard prompt "Web" as an answer for "1. Country" prompt - object prompt
         And I clicked Run button for prompted dossier if prompts not already answered
         And I closed last notification
-        And I verified that cell "B2" has value "Web"
+        Then I verified that cell "B2" has value "Web"
 
     # Edit formatted grid and import formatted compound grid
         When I clicked Edit object 1
@@ -57,7 +57,7 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
         And I verified that Import Formatted Data button is enabled
         And I clicked import formatted data without waiting for results
         And I closed last notification  
-        And I verified that cell "B2" has value "Web"
+        Then I verified that cell "B2" has value "Web"
 
     # Clear entire data
         When I clicked clear data
@@ -77,7 +77,7 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
         And I clicked Import button in Duplicate popup without checking results
         And I closed last notification
         Then I verified that object number 1 is called "Visualization 1 (2)"
-        And I verified that cell "Y53" has value "Web"
+        Then I verified that cell "Y53" has value "Web"
 
     # Remove duplicated formatted grid
         When I removed object 1 using context menu

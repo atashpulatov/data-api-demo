@@ -4,12 +4,6 @@ from pages.right_panel.right_panel_tile.right_panel_tile_mac_desktop_page import
 
 
 class ImportDataMacDesktopPage(BaseMacDesktopPage):
-    MY_LIBRARY_SWITCH_ELEM = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[0]/AXGroup[0]/" \
-                                                                     "AXCheckBox[@AXSubrole='AXSwitch']"
-
-    MY_LIBRARY_SWITCH_VALUE_ATTR = 'AXValue'
-    MY_LIBRARY_SWITCH_VALUE_ATTR_ON_VALUE = '1'
-
     SEARCH_BAR_ELEM_GROUPS = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[0]/AXGroup[%s]"
     SEARCH_BAR_ELEM = SEARCH_BAR_ELEM_GROUPS + "/AXTextField[0]"
 
@@ -27,16 +21,6 @@ class ImportDataMacDesktopPage(BaseMacDesktopPage):
         super().__init__()
 
         self.right_panel_tile_mac_desktop_page = RightPanelTileMacDesktopPage()
-
-    def ensure_mylibrary_switch_is_off(self):
-        element = self.get_element_by_xpath(ImportDataMacDesktopPage.MY_LIBRARY_SWITCH_ELEM)
-
-        if self._is_on(element):
-            element.click()
-
-    def _is_on(self, element):
-        value = element.get_attribute(ImportDataMacDesktopPage.MY_LIBRARY_SWITCH_VALUE_ATTR)
-        return value == ImportDataMacDesktopPage.MY_LIBRARY_SWITCH_VALUE_ATTR_ON_VALUE
 
     def find_and_select_object(self, object_name):
         search_box_groups_no = self.get_elements_by_xpath(ImportDataMacDesktopPage.SEARCH_BAR_ELEM_GROUPS)

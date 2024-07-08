@@ -17,21 +17,29 @@ Feature: F25943 - Notifications side panel
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-      And I found object by ID "56A532DD11EA9A91D5440080EF853B57" and selected "50k columns report - pivoted"
+      
+      And I found and selected object "50k columns report - pivoted"
      Then I clicked Import button and saw error "The table you try to import exceeds the worksheet limits."
 
      When I selected cell "A1"
       And I clicked Import Data button
-      And I found object by ID "B7743F5A11E97AED00000080EF257000" and selected "100_report"
-      And I clicked Import button
+      And I found and selected object "100_report"
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+      And I clicked Import with dropdown button
      Then I waited for object operation to complete successfully with message "Import successful"
       And I closed last notification
 
      When I added a new worksheet
       And I clicked Add Data button
-      And I found object by ID "4BF6385A11EA638B25610080EFC58CB1" and selected "Prompted report with subtotals"
-      And I clicked Import button without checking results
+      And I found and selected object "Prompted report with subtotals"
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+      And I clicked Import with dropdown button without checking results
       And I waited for Run button to be enabled
       And I clicked Run button
      Then I waited for object operation to complete successfully with message "Import successful"
@@ -39,14 +47,18 @@ Feature: F25943 - Notifications side panel
 
      When I added a new worksheet
       And I clicked Add Data button
-      And I found object by ID "82991A3411E99CC7299C0080EFE5EB12" and selected "Report with crosstab (2 attributes on column axis)"
-      And I clicked Import button
+      And I found and selected object "Report with crosstab (2 attributes on column axis)"
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+      And I clicked Import with dropdown button
      Then I waited for object operation to complete successfully with message "Import successful"
       And I closed last notification
 
      When I added a new worksheet
       And I clicked Add Data button
-      And I found object by ID "31B3E1DE11EA6531B0020080EF95EB52" and selected "Dossier for certification"
+      And I found and selected object "Dossier for certification"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I imported visualization "Visualization 1"
@@ -55,8 +67,12 @@ Feature: F25943 - Notifications side panel
 
      When I added a new worksheet
       And I clicked Add Data button
-      And I found object by ID "942B7F4411E95F8730610080EF45E0F5" and selected "50k Sales Records.csv"
-      And I clicked Import button without checking results
+      And I found and selected object "report 50k sales records"
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+      And I clicked Import with dropdown button without checking results
      Then I verified that the object 1 action in progress name is "Importing"
       And I verified that the object 1 action in progress is executed on total "50,000 rows"
       And I verified that the object 1 action displayed percentage progress

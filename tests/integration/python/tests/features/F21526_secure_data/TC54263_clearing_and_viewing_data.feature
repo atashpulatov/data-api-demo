@@ -7,14 +7,23 @@ Feature: F21526 - Secure data
      When I logged in as default user
       And I clicked Import Data button
       And I found and selected object "Revenue by Region and Category - secure data"
-      And I selected import type "Import Data" and clicked import
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+      And I clicked Import with dropdown button without checking results
       And I waited for object to be imported successfully
      Then I closed last notification
 
      When I selected cell "E1"
       And I clicked Add Data button
       And I found and selected object "Secure data - always working"
-      And I selected import type "Import Data" and clicked import
+
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+      And I clicked Import with dropdown button without checking results
       And I waited for object to be imported successfully
      Then I closed all notifications
       And I verified that cells ["A1", "B33", "E1", "F77"] have values ["Region", "Music", "Country", "Sub-Saharan Africa"]

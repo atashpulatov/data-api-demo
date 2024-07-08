@@ -30,12 +30,12 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
         And I selected "Import Formatted Data" item in Import dropdown
         And I clicked Import with dropdown button without checking results
         And I closed last notification
-        And I verified that cell "D2" has value "Central"
+        Then I verified that cell "D2" has value "Central"
 
     # Refresh formatted grid
         When I clicked Refresh on object 1
         And I closed notification on object 1
-        And I verified that cell "D2" has value "Central"
+        Then I verified that cell "D2" has value "Central"
 
     # Edit formatted grid and import formatted compound grid
         When I clicked Edit object 1
@@ -45,7 +45,7 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
         And I verified that Import Formatted Data button is enabled
         And I clicked import formatted data without waiting for results
         And I closed last notification  
-        And I verified that cell "D2" has value "East"
+        Then I verified that cell "D2" has value "East"
 
     # Clear entire data
         When I clicked clear data
@@ -65,7 +65,7 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
         And I clicked Import button in Duplicate popup without checking results
         And I closed last notification
         Then I verified that object number 1 is called "Visualization 1 (2)"
-        And I verified that cell "Y55" has value "Furniture"
+        Then I verified that cell "Y55" has value "Furniture"
 
     # Remove duplicated formatted grid
         When I removed object 1 using context menu

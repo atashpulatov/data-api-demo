@@ -39,7 +39,6 @@ Feature: F30479 - Hardening of importing data from Dossier to Excel
      When I selected cell "F1"
       And I clicked Add Data button
       And I found and selected object "dossier with attribute/metric selector"
-      
       And I clicked Import button to open Import Dossier
      Then I waited for dossier to load successfully
 

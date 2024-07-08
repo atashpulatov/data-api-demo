@@ -9,7 +9,6 @@ import time
 
 
 class ImportDataBrowserPage(BaseBrowserPage):
-    MY_LIBRARY_SWITCH_ELEM = '''div[aria-label='My Library']'''
     ARIA_CHECKED_ATTRIBUTE = 'aria-checked'
     ARIA_SORT_ATTRIBUTE = 'aria-sort'
 
@@ -89,22 +88,6 @@ class ImportDataBrowserPage(BaseBrowserPage):
         super().__init__()
 
         self.right_panel_tile_browser_page = RightPanelTileBrowserPage()
-
-    def ensure_mylibrary_switch_is_off(self):
-        self.focus_on_add_in_popup_frame()
-
-        element = self.get_element_by_css(ImportDataBrowserPage.MY_LIBRARY_SWITCH_ELEM)
-
-        if self._is_on(element):
-            element.click()
-
-    def ensure_mylibrary_switch_is_on(self):
-        self.focus_on_add_in_popup_frame()
-
-        element = self.get_element_by_css(ImportDataBrowserPage.MY_LIBRARY_SWITCH_ELEM)
-
-        if not self._is_on(element):
-            element.click()
 
     def _is_on(self, element):
         return element.get_attribute(ImportDataBrowserPage.ARIA_CHECKED_ATTRIBUTE) == 'true'
@@ -204,6 +187,12 @@ class ImportDataBrowserPage(BaseBrowserPage):
     def click_import_image_button_without_checking_results(self):
         self.focus_on_add_in_popup_frame()
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_IMAGE_BUTTON_ELEM).click()
+
+    def click_import_with_dropdown_button(self):
+        self.focus_on_add_in_popup_frame()
+        self.get_element_by_css(ImportDataBrowserPage.IMPORT_WITH_DROPDOWN_BUTTON_ELEM).click()
+
+        self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully()
 
     def click_import_with_dropdown_button_without_checking_results(self):
         self.focus_on_add_in_popup_frame()
@@ -326,7 +315,8 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
     def verify_if_item_in_import_dropdown_is_enabled(self, item_name):
         element = self.get_item_in_import_dropdown(item_name)
-        return element.get_attribute(ImportDataBrowserPage.ITEM_IN_IMPORT_DROPDOWN_DISABLED) == 'false'
+        is_disabled = element.get_attribute(ImportDataBrowserPage.ITEM_IN_IMPORT_DROPDOWN_DISABLED)
+        return is_disabled is None or is_disabled == 'false'
 
     def click_import_dropdown_button(self):
         self.focus_on_add_in_popup_frame()

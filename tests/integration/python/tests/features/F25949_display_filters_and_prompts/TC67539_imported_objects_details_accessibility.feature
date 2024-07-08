@@ -5,9 +5,9 @@ Feature: F25949 - Display filters and prompts
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
+      # 
 
-     When I found object by ID "300DBAFA4A1D8EC546AC6AB8CDE7834E" and selected "Report with a subtotal & prompt"
+     When I found and selected object "Report with a subtotal & prompt"
       And I clicked Prepare Data button
       And I waited for Run button to be enabled
       And I selected "Books" as an answer for "1. Category" prompt - object prompt
@@ -19,27 +19,35 @@ Feature: F25949 - Display filters and prompts
       And I selected all attributes
       And I selected all metrics
       And I selected filter "Subcategory" with all elements
-      And I clicked Import button in Columns and Filters Selection
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+      And I clicked Import with dropdown button without checking results
       And I closed last notification
 
      Then I verified that cells ["A10", "B10", "C10", "D10"] have values ["Jan-14", "Computers", "$6,530", "$5,347"]
 
      When I selected cell "H1"
       And I clicked Add Data button
-      And I found object by ID "5BBA2D6911EA906EE92E0080EF1515C7" and selected "100 Sales Records.csv"
+      And I found and selected object "100 Sales Records.csv"
       And I clicked Prepare Data button
       And I verified that Columns & Filters Selection is visible
       And I selected all attributes
       And I selected all metrics
       And I selected filter "Item Type" with all elements
-      And I clicked Import button in Columns and Filters Selection
+      And I verified that Import with dropdown button is enabled
+      And I clicked Import dropdown button
+      And I verified that "Import Data" item in Import dropdown is enabled
+      And I selected "Import Data" item in Import dropdown
+      And I clicked Import with dropdown button
       And I closed last notification
 
      Then I verified that cells ["J15", "K15", "L15", "M15"] have values ["519820964", "C", "Sub-Saharan Africa", "Offline"]
 
      When I selected cell "X1"
       And I clicked Add Data button
-      And I found object by ID "69CC877E11E9FEEDDC670080EFD50918" and selected "Dossier with many visualisations and pages"
+      And I found and selected object "Dossier with many visualisations and pages"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I selected visualization "Visualization 1"
