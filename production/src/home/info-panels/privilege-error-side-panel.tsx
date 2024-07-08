@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { OfficeApplicationType, SideInfoPanel } from '@mstr/connector-components';
+import { SideInfoPanel } from '@mstr/connector-components';
 
 import { authenticationService } from '../../authentication/authentication-service';
 import { errorService } from '../../error/error-service';
@@ -12,7 +12,6 @@ const PrivilegeErrorSidePanel: React.FC = () => {
 
   return (
     <SideInfoPanel
-      applicationType={OfficeApplicationType.EXCEL}
       panelId='no-privilege-screen'
       infoMessageHeading={t('MicroStrategy for Office')}
       infoMessageText={t('You do not have the rights to access MicroStrategy for Office')}

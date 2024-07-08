@@ -1,10 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  OfficeApplicationType,
-  SidePanel,
-  SidePanelBannerStatus,
-} from '@mstr/connector-components';
+import { SidePanel, SidePanelBannerStatus } from '@mstr/connector-components';
 
 import { useGetFilteredObjectListForSidePanelDetails } from '../redux-reducer/settings-reducer/settings-hooks';
 import useAutoRefreshObjects from './side-panel-hooks/use-auto-refresh-objects';
@@ -148,7 +144,6 @@ export const RightSidePanel: React.FC = () => {
           }
           onShowInOverviewClick={showOverviewModal}
           isPopupRendered={isDialogOpen}
-          applicationType={OfficeApplicationType.EXCEL}
           banner={
             bannerNotification.type === SidePanelBannerStatus.NONE ? undefined : bannerNotification
           }
