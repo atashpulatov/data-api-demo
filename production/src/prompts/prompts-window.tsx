@@ -243,7 +243,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
             initializeImportForReprompt(chosenObjectIdLocal, projectId, pageByConfigurations),
         } as any);
       } else {
-        initializeImportForReprompt(chosenObjectIdLocal, projectId, null, currentAnswers);
+        initializeImportForReprompt(chosenObjectIdLocal, projectId, currentAnswers);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
