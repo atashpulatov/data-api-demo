@@ -5,7 +5,7 @@ import { getBooleanUserPreference } from '../settings-side-panel-helper';
 
 import { reduxStore } from '../../../store';
 
-import { ImportFormattingOption, UserPreferenceKey } from '../settings-side-panel-types';
+import { ImportFormatOptions, ImportFormattingOption, UserPreferenceKey } from '../settings-side-panel-types';
 
 import i18n from '../../../i18n';
 import { settingsActions } from '../../../redux-reducer/settings-reducer/settings-actions';
@@ -113,56 +113,72 @@ class FormattingSettingsHelper {
     importAttributesAsTextValue: boolean,
     mergeCrosstabColumnsValue: boolean,
     defaultImportType: ObjectImportType
-  ): SettingsSection => ({
-    key: 'import-settings',
-    label: i18n.t('Import'),
-    initialExpand: false,
-    settingsGroups: [
-      {
-        key: 'default-import-type',
-        type: SettingPanelSection.SELECT,
-        onChange: this.handleDefaultImportTypeChange,
-        settings: [
-          {
-            key: ImportFormattingOption.DEFAULT_IMPORT_TYPE,
-            label: i18n.t('Default import format:'),
-            description: i18n.t(
-              'Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.'
-            ),
-            options: [
-              { key: ObjectImportType.TABLE, value: i18n.t('Data') },
-              { key: ObjectImportType.FORMATTED_DATA, value: i18n.t('Formatted Data') },
-              { key: ObjectImportType.IMAGE, value: i18n.t('Visualization') },
-              { key: ObjectImportType.PIVOT_TABLE, value: i18n.t('Pivot Table') },
-            ],
-            value: defaultImportType,
-          },
-        ],
-      },
-      {
-        key: 'import-formatting',
-        type: SettingPanelSection.SWITCH,
-        onSwitch: this.handleImportFormattingChange,
-        settings: [
-          {
-            key: ImportFormattingOption.IMPORT_ATTRIBUTES_AS_TEXT,
-            label: i18n.t('Import data as text'),
-            value: importAttributesAsTextValue,
-            description: i18n.t(
-              'If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.'
-            ),
-          },
-          {
-            key: ImportFormattingOption.MERGE_CROSSTAB_COLUMNS,
-            label: i18n.t('Merge columns'),
-            value: mergeCrosstabColumnsValue,
-            description: i18n.t(
-              'If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.'
-            ),
-          },
-        ],
-      },
-    ],
-  });
+  ): SettingsSection => {
+    const storeState = reduxStore.getState();
+    const { isShapeAPISupported, isInsertWorksheetAPISupported, isPivotTableSupported } = storeState.officeReducer;
+
+    const options: ImportFormatOptions[] = [];
+
+    options.push({ key: ObjectImportType.TABLE, value: i18n.t('Data') });
+
+    if (isInsertWorksheetAPISupported) {
+      options.push({ key: ObjectImportType.FORMATTED_DATA, value: i18n.t('Formatted Data') });
+    }
+
+    if (isShapeAPISupported) {
+      options.push({ key: ObjectImportType.IMAGE, value: i18n.t('Visualization') });
+    }
+
+    if (isPivotTableSupported) {
+      options.push({ key: ObjectImportType.PIVOT_TABLE, value: i18n.t('Pivot Table') });
+    }
+
+    return ({
+      key: 'import-settings',
+      label: i18n.t('Import'),
+      initialExpand: false,
+      settingsGroups: [
+        {
+          key: 'default-import-type',
+          type: SettingPanelSection.SELECT,
+          onChange: this.handleDefaultImportTypeChange,
+          settings: [
+            {
+              key: ImportFormattingOption.DEFAULT_IMPORT_TYPE,
+              label: i18n.t('Default import format:'),
+              description: i18n.t(
+                'Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.'
+              ),
+              options,
+              value: defaultImportType,
+            },
+          ],
+        },
+        {
+          key: 'import-formatting',
+          type: SettingPanelSection.SWITCH,
+          onSwitch: this.handleImportFormattingChange,
+          settings: [
+            {
+              key: ImportFormattingOption.IMPORT_ATTRIBUTES_AS_TEXT,
+              label: i18n.t('Import data as text'),
+              value: importAttributesAsTextValue,
+              description: i18n.t(
+                'If enabled, attribute values will be imported as text, maintaining the formatting from MicroStrategy. This may impact Excel formulas.'
+              ),
+            },
+            {
+              key: ImportFormattingOption.MERGE_CROSSTAB_COLUMNS,
+              label: i18n.t('Merge columns'),
+              value: mergeCrosstabColumnsValue,
+              description: i18n.t(
+                'If enabled, adjacent column headers with identical values will be merged. Applies only to cross-tab reports.'
+              ),
+            },
+          ],
+        },
+      ],
+    });
+  }
 }
 export const formattingSettingsHelper = new FormattingSettingsHelper();

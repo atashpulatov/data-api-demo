@@ -1,11 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import {
-  DataOverview,
-  ObjectNotificationTypes,
-  OfficeApplicationType,
-} from '@mstr/connector-components';
+import { DataOverview, ObjectNotificationTypes } from '@mstr/connector-components';
 import { Button } from '@mstr/rc';
 
 import useGetOverviewWindowErrorPopup from './use-get-overview-window-error-popup';
@@ -101,7 +97,6 @@ export const OverviewWindow: React.FC = () => {
       <DataOverview
         loadedObjects={objectsToRender}
         popup={dialogPopup}
-        applicationType={OfficeApplicationType.EXCEL}
         onAddData={overviewHelper.sendImportRequest}
         onEdit={overviewHelper.sendEditRequest}
         onReprompt={overviewHelper.sendRepromptRequest}
