@@ -9,6 +9,7 @@ import { dialogHelper } from '../dialog/dialog-helper';
 import { dialogViewSelectorHelper } from '../dialog/dialog-view-selector-helper';
 import scriptInjectionHelper from '../embedded/utils/script-injection-helper';
 import {
+  collectPromptKeys,
   prepareGivenPromptAnswers,
   preparePromptedReport,
 } from '../helpers/prompts-handling-helper';
@@ -184,12 +185,12 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
     }
   };
 
-  const initializeImportForReprompt = async (
+  const initializeImportForReprompt = (
     chosenObjectIdLocal: string,
     projectId: string,
     pageByConfigurations?: PageByConfiguration[][],
     currentAnswers?: any[]
-  ): Promise<void> => {
+  ): void => {
     dialogHelper.officeMessageParent({
       command: DialogCommands.COMMAND_ON_UPDATE,
       chosenObjectId: chosenObjectIdLocal,
@@ -280,15 +281,6 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
     },
     [mstrData.promptsAnswers, editedObject.promptsAnswers]
   );
-
-  const collectPromptKeys = (promptObjs: any[], keys: string[] = []): string[] => {
-    promptObjs.forEach(promptObject => {
-      if (!keys.includes(promptObject?.key)) {
-        keys.push(promptObject?.key);
-      }
-    });
-    return keys;
-  };
 
   const loadEmbeddedDossier = useCallback(
     async (localContainer: any) => {

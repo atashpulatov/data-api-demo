@@ -224,6 +224,18 @@ export async function preparePromptedDossier(
   return dossierInstanceDefinition;
 }
 
+/**
+ * Forces the prompt dialog to open by making a re-prompt request for the dossier instance.
+ * Updates the dossier instance definition with the new mid if the re-prompt is successful.
+ * Happens only re-use prompt answers is turned off or when reuse prompt answer is on and
+ * the prompt answers are not provided yet by any other prompt in the reprompts queue.
+ *
+ * @param {string} chosenObjectIdLocal - The ID of the chosen dossier object.
+ * @param {any} dossierInstanceDefinition - The dossier instance definition to be updated.
+ * @param {string} projectId - The ID of the project.
+ * @returns {Promise<any>} - A promise that resolves to the updated dossier instance definition.
+ */
+
 async function forceOpenPromptDialog(
   chosenObjectIdLocal: string,
   dossierInstanceDefinition: any,
@@ -272,6 +284,15 @@ async function resetDossierInstance(
 
   return dossierInstanceDefinition;
 }
+
+export const collectPromptKeys = (promptObjs: any[], keys: string[] = []): string[] => {
+  promptObjs.forEach(promptObject => {
+    if (!keys.includes(promptObject?.key)) {
+      keys.push(promptObject?.key);
+    }
+  });
+  return keys;
+};
 
 /**
  * This function is used to prepare the prompted report to apply previously saved ir given answers
@@ -332,14 +353,13 @@ export async function preparePromptedReport(
   }
 
   if (openPromptDialog) {
+    // Re-prompt the Dossier's instance to change execution status to 2 and force Prompts' dialog to open.
     dossierInstanceDefinition = await forceOpenPromptDialog(
       chosenObjectIdLocal,
       dossierInstanceDefinition,
       projectId
     );
   }
-
-  // Re-prompt the Dossier's instance to change execution status to 2 and force Prompts' dialog to open.
   return dossierInstanceDefinition;
 }
 

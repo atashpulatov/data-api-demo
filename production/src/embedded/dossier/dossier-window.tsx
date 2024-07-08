@@ -313,12 +313,15 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
     [vizualizationsData]
   );
 
-  const handleUniquePromptKeys = useCallback(
-    (newPromptKeys: string[]) => {
-      setPromptKeys(newPromptKeys);
-    },
-    [setPromptKeys]
-  );
+  /**
+   * Updates the state of unique prompt keys with the provided array of prompt keys in that execution of multiple reprompt.
+   * This function is used to handle and update the prompt keys.
+   *
+   * @param {string[]} newPromptKeys - An array of new prompt keys to update the state with.
+   */
+  const handleUniquePromptKeys = (newPromptKeys: string[]): void => {
+    setPromptKeys(newPromptKeys);
+  };
 
   /**
    * Change state of component so that informative message is showed only after embedded dossier is loaded.

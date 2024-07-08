@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import { dialogHelper } from '../../dialog/dialog-helper';
 import {
+  collectPromptKeys,
   ObjectExecutionStatus,
   prepareGivenPromptAnswers,
   preparePromptedDossier,
@@ -310,16 +311,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     }
   };
 
-  // Collect all unique prompt keys from prompt objects
-  collectPromptKeys = (promptObjects: any[], keys: string[] = []): string[] => {
-    promptObjects.forEach(promptObject => {
-      if (!keys.includes(promptObject?.key)) {
-        keys.push(promptObject?.key);
-      }
-    });
-    return keys;
-  };
-
   loadEmbeddedDossier = async (container: any): Promise<void> => {
     const {
       mstrData,
@@ -389,7 +380,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
 
       // check if all keys from promptObjectAnswers are present in the promptKeys set
       if (isMultipleRepromptWithReuse) {
-        const allPromptKeys = this.collectPromptKeys(promptObjectAnswers);
+        const allPromptKeys = collectPromptKeys(promptObjectAnswers);
         const areAllKeysPresent = allPromptKeys.every(key => promptKeys.includes(key));
         if (!areAllKeysPresent) {
           // Proceed with opening prompt dialog if applicable.
