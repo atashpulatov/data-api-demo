@@ -401,7 +401,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
             currentAnswers
           );
         });
-        // add keys to the promptKeys
+        // Add unique keys from allPromptKeys to promptKeys
         promptKeys.push(...allPromptKeys.filter(key => !promptKeys.includes(key)));
       } catch (error) {
         console.error({ error });
