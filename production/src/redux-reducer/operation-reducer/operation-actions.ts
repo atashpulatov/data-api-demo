@@ -29,12 +29,19 @@ function getStepsQueue(
   return operationsStepsMap[operationType];
 }
 
-function createOperation(
-  operationType: OperationTypes,
-  objectWorkingId: number,
-  objectData: any = {},
-  importType = ObjectImportType.TABLE
-): OperationData {
+function createOperation({
+  operationType,
+  objectWorkingId,
+  objectData = {},
+  importType = ObjectImportType.TABLE,
+  startCell,
+}: {
+  operationType: OperationTypes;
+  objectWorkingId: number;
+  objectData?: any;
+  importType?: ObjectImportType;
+  startCell?: string;
+}): OperationData {
   const { backupObjectData, objectEditedData, preparedInstanceDefinition } = objectData;
   return {
     operationType,
@@ -46,26 +53,35 @@ function createOperation(
     objectEditedData,
     preparedInstanceDefinition,
     operationId: uuidv4(),
+    startCell,
   };
 }
 
-export const importRequested = (
-  object: any,
-  preparedInstanceDefinition?: any,
-  pageByIndex = 0
-): ImportOperationAction => {
+export const importRequested = ({
+  object,
+  preparedInstanceDefinition,
+  pageByIndex = 0,
+  startCell,
+}: {
+  object: ObjectData;
+  preparedInstanceDefinition?: any;
+  pageByIndex?: number;
+  startCell?: string;
+}): ImportOperationAction => {
   // TODO find better way for unique Id
   const objectWorkingId = Date.now() + pageByIndex;
   object.objectWorkingId = objectWorkingId;
+
   return {
     type: OperationActionTypes.IMPORT_OPERATION,
     payload: {
-      operation: createOperation(
-        OperationTypes.IMPORT_OPERATION,
+      operation: createOperation({
+        operationType: OperationTypes.IMPORT_OPERATION,
         objectWorkingId,
-        { preparedInstanceDefinition },
-        object.importType
-      ),
+        objectData: { preparedInstanceDefinition },
+        importType: object.importType,
+        startCell,
+      }),
       object,
     },
   };
@@ -77,7 +93,12 @@ export const refreshRequested = (
 ): RefreshOperationAction => ({
   type: OperationActionTypes.REFRESH_OPERATION,
   payload: {
-    operation: createOperation(OperationTypes.REFRESH_OPERATION, objectWorkingId, {}, importType),
+    operation: createOperation({
+      operationType: OperationTypes.REFRESH_OPERATION,
+      objectWorkingId,
+      objectData: {},
+      importType,
+    }),
   },
 });
 
@@ -92,12 +113,12 @@ export const editRequested = (
   return {
     type: OperationActionTypes.EDIT_OPERATION,
     payload: {
-      operation: createOperation(
-        OperationTypes.EDIT_OPERATION,
+      operation: createOperation({
+        operationType: OperationTypes.EDIT_OPERATION,
         objectWorkingId,
-        { backupObjectData, objectEditedData },
-        objectData.importType
-      ),
+        objectData: { backupObjectData, objectEditedData },
+        importType: objectData.importType,
+      }),
     },
   };
 };
@@ -110,12 +131,12 @@ export const duplicateRequested = (
   return {
     type: OperationActionTypes.DUPLICATE_OPERATION,
     payload: {
-      operation: createOperation(
-        OperationTypes.DUPLICATE_OPERATION,
+      operation: createOperation({
+        operationType: OperationTypes.DUPLICATE_OPERATION,
         objectWorkingId,
-        { objectEditedData },
-        importType
-      ),
+        objectData: { objectEditedData },
+        importType,
+      }),
       object,
     },
   };
@@ -127,19 +148,22 @@ export const removeRequested = (
 ): RemoveOperationAction => ({
   type: OperationActionTypes.REMOVE_OPERATION,
   payload: {
-    operation: createOperation(
-      OperationTypes.REMOVE_OPERATION,
+    operation: createOperation({
+      operationType: OperationTypes.REMOVE_OPERATION,
       objectWorkingId,
-      {} as ObjectData,
-      importType
-    ),
+      objectData: {},
+      importType,
+    }),
   },
 });
 
 export const highlightRequested = (objectWorkingId: number): HighlightOperationAction => ({
   type: OperationActionTypes.HIGHLIGHT_OPERATION,
   payload: {
-    operation: createOperation(OperationTypes.HIGHLIGHT_OPERATION, objectWorkingId),
+    operation: createOperation({
+      operationType: OperationTypes.HIGHLIGHT_OPERATION,
+      objectWorkingId,
+    }),
   },
 });
 
@@ -149,12 +173,12 @@ export const clearDataRequested = (
 ): ClearDataOperationAction => ({
   type: OperationActionTypes.CLEAR_DATA_OPERATION,
   payload: {
-    operation: createOperation(
-      OperationTypes.CLEAR_DATA_OPERATION,
+    operation: createOperation({
+      operationType: OperationTypes.CLEAR_DATA_OPERATION,
       objectWorkingId,
-      {} as ObjectData,
-      importType
-    ),
+      objectData: {},
+      importType,
+    }),
   },
 });
 

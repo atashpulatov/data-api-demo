@@ -16,6 +16,9 @@ const SettingsSidePanel: React.FC<any> = () => {
     settingsReducerSelectors.selectObjectAndWorksheetNamingSetting
   );
   const pageByDisplaySetting = useSelector(settingsReducerSelectors.selectPageByDisplaySetting);
+  const tableImportPosition = useSelector(
+    settingsReducerSelectors.selectTableImportPositionSetting
+  );
   const sidePanelObjectInfoSettings = useSelector(
     settingsReducerSelectors.selectSidePanelObjectInfoSettings
   );
@@ -44,8 +47,13 @@ const SettingsSidePanel: React.FC<any> = () => {
     settingsReducerSelectors.selectPivotTableAddMetricsToValues
   );
 
-  const { getPromptSection, getObjectInfoSection, getPageBySection, getAutoRefreshSection } =
-    settingsSidePanelHelper;
+  const {
+    getPromptSection,
+    getObjectInfoSection,
+    getPageBySection,
+    getAutoRefreshSection,
+    getImportPositionSection,
+  } = settingsSidePanelHelper;
 
   const { getImportFormattingSection } = formattingSettingsHelper;
 
@@ -55,6 +63,7 @@ const SettingsSidePanel: React.FC<any> = () => {
     getImportFormattingSection(importAttributesAsText, mergeCrosstabColumns, defaultImportType),
     getPromptSection(reusePromptAnswers),
     getPageBySection(objectAndWorksheetNamingSetting, pageByDisplaySetting),
+    getImportPositionSection(tableImportPosition),
     getObjectInfoSection(
       sidePanelObjectInfoSettings,
       worksheetObjectInfoSettings,

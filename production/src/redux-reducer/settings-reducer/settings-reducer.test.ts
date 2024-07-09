@@ -1,5 +1,6 @@
 import { PageByDisplayType } from '../../page-by/page-by-types';
 import { ObjectAndWorksheetNamingOption } from '../../right-side-panel/settings-side-panel/settings-side-panel-types';
+import { TableImportPosition } from './settings-reducer-types';
 
 import { settingsActions } from './settings-actions';
 import { settingsReducer } from './settings-reducer';
@@ -21,6 +22,7 @@ describe('settingsReducer', () => {
     pivotTableAddAttributesToColumns: false,
     pivotTableAddMetricsToValues: false,
     enableDataAutoRefresh: false,
+    tableImportPosition: TableImportPosition.HORIZONTAL,
   };
 
   it('should return correct initial state', () => {

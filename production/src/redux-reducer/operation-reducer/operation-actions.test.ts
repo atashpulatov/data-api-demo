@@ -21,7 +21,7 @@ describe('OperationActions', () => {
     const exampleObject = { objectWorkingId: 2137 } as ObjectData;
 
     // when
-    const importAction = importRequested(exampleObject);
+    const importAction = importRequested({ object: exampleObject });
 
     // then
     expect(importAction.type).toEqual(OperationTypes.IMPORT_OPERATION);

@@ -2,6 +2,7 @@ import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
 import { mstrObjectRestService } from '../mstr-object-rest-service';
 
 import { PageByData, PageByDisplayType } from '../../page-by/page-by-types';
+import { InstanceDefinition } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { Body } from '../../types/object-types';
 
 import { DisplayAttrFormNames } from '../constants';
@@ -139,7 +140,7 @@ class InstanceDefinitionHelper {
    * @param objectData Contains information about MSTR object
    * @returns instanceDefinition object containing information about MSTR object
    */
-  createReportInstance = async (objectData: any): Promise<any> => {
+  createReportInstance = async (objectData: any): Promise<InstanceDefinition> => {
     const body = this.setupBodyTemplate(objectData.body);
 
     const instanceDefinition = await mstrObjectRestService.createInstance(objectData);

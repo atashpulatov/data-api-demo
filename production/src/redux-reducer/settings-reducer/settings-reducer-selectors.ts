@@ -39,6 +39,11 @@ const selectPageByDisplaySetting = createSelector(
   settingsState => settingsState.pageByDisplaySetting
 );
 
+const selectTableImportPositionSetting = createSelector(
+  [getSettingsState],
+  settingsState => settingsState.tableImportPosition
+);
+
 const selectImportAttributesAsText = createSelector(
   [getSettingsState],
   settingsState => settingsState.importAttributesAsText
@@ -72,6 +77,7 @@ export const settingsReducerSelectors = {
   selectImportType,
   selectObjectAndWorksheetNamingSetting,
   selectPageByDisplaySetting,
+  selectTableImportPositionSetting,
   selectImportAttributesAsText,
   selectMergeCrosstabColumns,
   selectPivotTableAddAttributesToColumns,

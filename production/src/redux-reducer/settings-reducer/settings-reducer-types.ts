@@ -16,6 +16,7 @@ export type SettingsState = {
   pivotTableAddAttributesToColumns: boolean;
   pivotTableAddMetricsToValues: boolean;
   enableDataAutoRefresh: boolean;
+  tableImportPosition: TableImportPosition;
 };
 
 export enum SettingsActionTypes {
@@ -29,10 +30,16 @@ export enum SettingsActionTypes {
   TOGGLE_MAIN_WORKSHEET_OBJECT_INFO_SETTING = 'SETTINGS_TOGGLE_MAIN_WORKSHEET_OBJECT_INFO_SETTING',
   SET_OBJECT_AND_WORKSHEET_NAMING_SETTING = 'SET_OBJECT_AND_WORKSHEET_NAMING_SETTING',
   SET_PAGE_BY_DISPLAY_SETTING = 'SET_PAGE_BY_DISPLAY_SETTING',
+  SET_TABLE_IMPORT_POSITION_SETTING = 'SET_TABLE_IMPORT_POSITION_SETTING',
   SET_DEFAULT_IMPORT_TYPE = 'SET_DEFAULT_IMPORT_TYPE',
   SET_PIVOT_TABLE_ADD_ATTRIBUTES_TO_COLUMNS = 'SET_PIVOT_TABLE_ADD_ATTRIBUTES_TO_COLUMNS',
   SET_PIVOT_TABLE_ADD_METRICS_TO_VALUES = 'SET_PIVOT_TABLE_ADD_METRICS_TO_VALUES',
   SET_ENABLE_DATA_AUTO_REFRESH = 'SET_ENABLE_DATA_AUTO_REFRESH',
+}
+
+export enum TableImportPosition {
+  HORIZONTAL = 'HORIZONTAL',
+  VERTICAL = 'VERTICAL',
 }
 
 export interface ToggleMergeCrosstabColumnsFlagAction extends Action {
@@ -85,6 +92,11 @@ export interface SetPageByDisplaySettingAction extends Action {
   pageByDisplaySetting: PageByDisplayType;
 }
 
+export interface SetTableImportPositionAction extends Action {
+  type: SettingsActionTypes.SET_TABLE_IMPORT_POSITION_SETTING;
+  tableImportPosition: TableImportPosition;
+}
+
 export interface SetDefaultImportTypeAction extends Action {
   type: SettingsActionTypes.SET_DEFAULT_IMPORT_TYPE;
   defaultImportType: ObjectImportType;
@@ -116,6 +128,7 @@ export type SettingsActions =
   | ToggleMainWorksheetObjectInfoSettingAction
   | SetWorksheetNamingSettingAction
   | SetPageByDisplaySettingAction
+  | SetTableImportPositionAction
   | SetDefaultImportTypeAction
   | SetPivotTableAddAttributesToColumnsAction
   | SetPivotTableAddMetricsToValuesAction

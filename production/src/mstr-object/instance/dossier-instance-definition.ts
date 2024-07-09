@@ -1,4 +1,4 @@
-import { errorService } from '../../error/error-service';
+import { errorServiceHelper } from '../../error/error-service-helper';
 import { mstrObjectRestService } from '../mstr-object-rest-service';
 import { visualizationInfoService } from '../visualization-info-service';
 
@@ -134,7 +134,7 @@ class DossierInstanceDefinition {
       }
       throw new Error(ErrorMessages.DOSSIER_HAS_CHANGED);
     } catch (error) {
-      if (errorService.getErrorMessage(error) === ErrorMessages.DOSSIER_HAS_CHANGED) {
+      if (errorServiceHelper.getErrorMessage(error) === ErrorMessages.DOSSIER_HAS_CHANGED) {
         throw new Error(ErrorMessages.DOSSIER_HAS_CHANGED);
       }
       throw new Error(ErrorMessages.INVALID_VIZ_KEY_MESSAGE);

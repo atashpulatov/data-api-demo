@@ -163,8 +163,10 @@ class SessionHelper {
    *
    * @param object ObjectData needed for import
    */
-  async importObjectWithouPopup(object: ObjectData): Promise<void> {
-    reduxStore.dispatch(importRequested(object));
+  async importObjectWithoutPopup(objects: ObjectData[]): Promise<void> {
+    objects.forEach(object => {
+      reduxStore.dispatch(importRequested({ object }));
+    });
   }
 }
 

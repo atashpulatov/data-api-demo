@@ -10,6 +10,7 @@ import {
   LoadSidePanelObjectInfoSettingAction,
   LoadWorksheetObjectInfoSettingAction,
   ObjectInfoSetting,
+  TableImportPosition,
 } from '../../redux-reducer/settings-reducer/settings-reducer-types';
 import {
   OBJECT_INFO_KEY_VALUE,
@@ -327,6 +328,31 @@ class SettingsSidePanelHelper {
   }
 
   /**
+   * Updates the table import position settings value
+   * @param tableImportPosition - table import position value.
+   */
+  async handleTableImportPositionChange(tableImportPosition: TableImportPosition): Promise<void> {
+    reduxStore.dispatch(settingsActions.setTableImportPositionSetting(tableImportPosition));
+    // TODO request to change settings
+  }
+
+  /**
+   * Initializes the table import position option
+   * Retrieves the user preference for the table import position from the userRestService,
+   * updates the redux store with the retrieved value.
+   */
+  @initializationErrorDecorator.initializationWrapper
+  async initTableImportPosition(): Promise<void> {
+    // TODO uncomment when settings added
+    // const { value } = await userRestService.getUserPreference(
+    //   UserPreferenceKey.EXCEL_PAGE_BY_SELECTION
+    // );
+    reduxStore.dispatch(
+      settingsActions.setTableImportPositionSetting(TableImportPosition.HORIZONTAL)
+    );
+  }
+
+  /**
    * Initializes the worksheet naming option
    * Retrieves the user preference for the worksheet naming from the userRestService,
    * updates the redux store with the retrieved value.
@@ -520,7 +546,38 @@ class SettingsSidePanelHelper {
       },
     ],
   });
+
+  /**
+   * Returns the settings section for the import position settings.
+   * @param tableImportPosition - The import position setting for the table.
+   * @returns The settings section for the import position settings.
+   */
+  getImportPositionSection = (tableImportPosition: TableImportPosition): SettingsSection => ({
+    key: 'Table-Import-Position-section',
+    label: 'Import Position', // Add translation
+    initialExpand: false,
+    settingsGroups: [
+      {
+        key: 'import-position-section',
+        label: 'Import Position', // Add translation
+        type: SettingPanelSection.RADIO,
+        selectedOption: tableImportPosition,
+        onChange: this.handleTableImportPositionChange,
+        settings: [
+          {
+            key: TableImportPosition.HORIZONTAL,
+            label: 'Import Tables in Row', // Add translation
+          },
+          {
+            key: TableImportPosition.VERTICAL,
+            label: 'Import Tables in Column', // Add translation
+          },
+        ],
+      },
+    ],
+  });
 }
+
 export const settingsSidePanelHelper = new SettingsSidePanelHelper();
 
 /**

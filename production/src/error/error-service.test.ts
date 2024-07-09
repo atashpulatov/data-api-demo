@@ -1,6 +1,7 @@
 import { browserHelper } from '../helpers/browser-helper';
 import { SidePanelOperationDecorator } from '../right-side-panel/side-panel-services/side-panel-operation-decorator';
 import { errorService } from './error-service';
+import { errorServiceHelper } from './error-service-helper';
 
 import { DialogType } from '../redux-reducer/popup-state-reducer/popup-state-reducer-types';
 
@@ -21,7 +22,7 @@ describe('ErrorService', () => {
       // given
       const error = { response: {} };
       // when
-      const result = errorService.getRestErrorType(error);
+      const result = errorServiceHelper.getRestErrorType(error);
       // then
       expect(result).toBe(ErrorType.UNKNOWN_ERR);
     });
@@ -31,7 +32,7 @@ describe('ErrorService', () => {
       const response = { body: { iServerCode: '-2147171501' } };
       const error = { status: 404, response };
       // when
-      const resultType = errorService.getRestErrorType(error);
+      const resultType = errorServiceHelper.getRestErrorType(error);
       // then
       expect(resultType).toBe(ErrorType.ENV_NOT_FOUND_ERR);
     });
@@ -40,7 +41,7 @@ describe('ErrorService', () => {
       // given
       const error = { message: 'Possible causes: the network is offline,' };
       // when
-      const resultType = errorService.getRestErrorType(error);
+      const resultType = errorServiceHelper.getRestErrorType(error);
       // then
       expect(resultType).toBe(ErrorType.CONNECTION_BROKEN_ERR);
     });
@@ -49,7 +50,7 @@ describe('ErrorService', () => {
       // given
       const error = { response: { status: 400 } };
       // when
-      const resultType = errorService.getRestErrorType(error);
+      const resultType = errorServiceHelper.getRestErrorType(error);
       // then
       expect(resultType).toBe(ErrorType.BAD_REQUEST_ERR);
     });
@@ -59,7 +60,7 @@ describe('ErrorService', () => {
       const response = { status: 401 };
       const error = { response };
       // when
-      const resultType = errorService.getRestErrorType(error);
+      const resultType = errorServiceHelper.getRestErrorType(error);
       // then
       expect(resultType).toBe(ErrorType.UNAUTHORIZED_ERR);
     });
@@ -69,7 +70,7 @@ describe('ErrorService', () => {
       const response = { status: 403 };
       const error = { response };
       // when
-      const resultType = errorService.getRestErrorType(error);
+      const resultType = errorServiceHelper.getRestErrorType(error);
       // then
       expect(resultType).toBe(ErrorType.INTERNAL_SERVER_ERR);
     });
@@ -79,7 +80,7 @@ describe('ErrorService', () => {
       const response = { status: 404 };
       const error = { response };
       // when
-      const resultType = errorService.getRestErrorType(error);
+      const resultType = errorServiceHelper.getRestErrorType(error);
       // then
       expect(resultType).toBe(ErrorType.ENV_NOT_FOUND_ERR);
     });
@@ -89,7 +90,7 @@ describe('ErrorService', () => {
       const response = { status: 500, body: { iServerCode: '-2147171501' } };
       const error = { response };
       // when
-      const resultType = errorService.getRestErrorType(error);
+      const resultType = errorServiceHelper.getRestErrorType(error);
       // then
       expect(resultType).toBe(ErrorType.INTERNAL_SERVER_ERR);
     });
@@ -99,7 +100,7 @@ describe('ErrorService', () => {
       const response = { status: 500 };
       const error = { response };
       // when
-      const resultType = errorService.getRestErrorType(error);
+      const resultType = errorServiceHelper.getRestErrorType(error);
       // then
       expect(resultType).toBe(ErrorType.INTERNAL_SERVER_ERR);
     });
@@ -109,7 +110,7 @@ describe('ErrorService', () => {
       const response = { status: 501 };
       const error = { response };
       // when
-      const resultType = errorService.getRestErrorType(error);
+      const resultType = errorServiceHelper.getRestErrorType(error);
       // then
       expect(resultType).toBe(ErrorType.INTERNAL_SERVER_ERR);
     });
@@ -119,7 +120,7 @@ describe('ErrorService', () => {
       const response = { status: 502 };
       const error = { response };
       // when
-      const resultType = errorService.getRestErrorType(error);
+      const resultType = errorServiceHelper.getRestErrorType(error);
       // then
       expect(resultType).toBe(ErrorType.CONNECTION_BROKEN_ERR);
     });
@@ -129,7 +130,7 @@ describe('ErrorService', () => {
       const response = { status: 503 };
       const error = { response };
       // when
-      const resultType = errorService.getRestErrorType(error);
+      const resultType = errorServiceHelper.getRestErrorType(error);
       // then
       expect(resultType).toBe(ErrorType.CONNECTION_BROKEN_ERR);
     });
@@ -139,7 +140,7 @@ describe('ErrorService', () => {
       const response = { status: 504 };
       const error = { response };
       // when
-      const resultType = errorService.getRestErrorType(error);
+      const resultType = errorServiceHelper.getRestErrorType(error);
       // then
       expect(resultType).toBe(ErrorType.CONNECTION_BROKEN_ERR);
     });
@@ -149,7 +150,7 @@ describe('ErrorService', () => {
       const response = { status: 510 };
       const error = { response };
       // when
-      const resultType = errorService.getRestErrorType(error);
+      const resultType = errorServiceHelper.getRestErrorType(error);
       // then
       expect(resultType).toBe(ErrorType.UNKNOWN_ERR);
     });
@@ -410,7 +411,7 @@ describe('ErrorService', () => {
         message: 'Excel is not defined',
       };
       // when
-      const returnedError = errorService.getOfficeErrorType(error);
+      const returnedError = errorServiceHelper.getOfficeErrorType(error);
       // then
       expect(returnedError).toBe(ErrorType.RUN_OUTSIDE_OFFICE_ERR);
     });
@@ -421,7 +422,7 @@ describe('ErrorService', () => {
         message: "A table can't overlap another table. ",
       };
       // when
-      const returnedError = errorService.getOfficeErrorType(error);
+      const returnedError = errorServiceHelper.getOfficeErrorType(error);
       // then
       expect(returnedError).toBe(ErrorType.OVERLAPPING_TABLES_ERR);
     });
@@ -433,7 +434,7 @@ describe('ErrorService', () => {
         message: 'This object binding is no longer valid due to previous updates.',
       };
       // when
-      const returnedError = errorService.getOfficeErrorType(error);
+      const returnedError = errorServiceHelper.getOfficeErrorType(error);
       // then
       expect(returnedError).toBe(ErrorType.TABLE_REMOVED_FROM_EXCEL_ERR);
     });
@@ -446,7 +447,7 @@ describe('ErrorService', () => {
         message: exampleMessage,
       };
       // when
-      const returnedError = errorService.getOfficeErrorType(error);
+      const returnedError = errorServiceHelper.getOfficeErrorType(error);
       // then
       expect(returnedError).toBe(ErrorType.GENERIC_OFFICE_ERR);
     });

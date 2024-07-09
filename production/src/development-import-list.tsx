@@ -137,7 +137,9 @@ export const DevelopmentImportList = (): React.ReactElement => {
       selectedValue={selectedObject}
       onOptionChange={handleOptionChange}
       onClick={() =>
-        sessionHelper.importObjectWithouPopup(objectList[selectedObject] as unknown as ObjectData)
+        sessionHelper.importObjectWithoutPopup([
+          objectList[selectedObject],
+        ] as unknown as ObjectData[])
       }
     >
       Quick Import

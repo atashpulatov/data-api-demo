@@ -1,6 +1,7 @@
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { pageByHelper } from '../page-by/page-by-helper';
 import { errorService } from './error-service';
+import { errorServiceHelper } from './error-service-helper';
 
 import { reduxStore } from '../store';
 
@@ -36,7 +37,7 @@ describe('ErrorService', () => {
     const callback = jest.fn();
     const operationData = { operationType } as OperationData;
 
-    errorService.getErrorDetails = jest.fn().mockReturnValue('error details');
+    errorServiceHelper.getErrorDetails = jest.fn().mockReturnValue('error details');
 
     const mockedReduxStore = {
       getState: jest.fn().mockReturnValue({
@@ -57,14 +58,14 @@ describe('ErrorService', () => {
       .spyOn(pageByHelper, 'getAllPageByObjects')
       .mockReturnValue({ pageBySiblings: [], sourceObject: {} as ObjectData });
 
-    const errorType = errorService.getErrorType(error, operationData);
+    const errorType = errorServiceHelper.getErrorType(error, operationData);
 
     // when
     await errorService.handleError(error, { objectWorkingId, callback, operationData });
 
     // then
     expect(errorType).toEqual(expectedErrorType);
-    expect(errorService.getErrorDetails).toHaveBeenCalled();
+    expect(errorServiceHelper.getErrorDetails).toHaveBeenCalled();
     expect(pageByHelper.getAllPageByObjects).toHaveBeenCalled();
   });
 
@@ -127,8 +128,8 @@ describe('ErrorService', () => {
     const operationData = {} as OperationData;
 
     const errorMessageFactoryMock = jest.fn().mockReturnValue(jest.fn());
-    errorService.getErrorType = jest.fn().mockReturnValue('OVERLAPPING_TABLES_ERR');
-    errorService.getErrorDetails = jest.fn().mockReturnValue('error details');
+    errorServiceHelper.getErrorType = jest.fn().mockReturnValue('OVERLAPPING_TABLES_ERR');
+    errorServiceHelper.getErrorDetails = jest.fn().mockReturnValue('error details');
 
     jest.spyOn(reduxStore, 'getState').mockReturnValue({
       popupStateReducer: { isDataOverviewOpen: true },
@@ -146,7 +147,7 @@ describe('ErrorService', () => {
 
     // then
     expect(errorMessageFactoryMock).not.toHaveBeenCalled();
-    expect(errorService.getErrorDetails).toHaveBeenCalled();
+    expect(errorServiceHelper.getErrorDetails).toHaveBeenCalled();
     expect(errorService.closePromptsDialogInOverview).toHaveBeenCalled();
     expect(reduxStore.dispatch).toHaveBeenCalled();
   });
@@ -158,8 +159,8 @@ describe('ErrorService', () => {
     const callback = jest.fn();
     const operationData = {} as OperationData;
 
-    errorService.getErrorType = jest.fn().mockReturnValue('NON_OVERLAPPING_TABLES_ERR');
-    errorService.getErrorDetails = jest.fn().mockReturnValue('error details');
+    errorServiceHelper.getErrorType = jest.fn().mockReturnValue('NON_OVERLAPPING_TABLES_ERR');
+    errorServiceHelper.getErrorDetails = jest.fn().mockReturnValue('error details');
     errorService.closePromptsDialogInOverview = jest.fn();
     errorService.closeDialogIfOpen = jest.fn().mockResolvedValue(true);
 
@@ -187,7 +188,7 @@ describe('ErrorService', () => {
     await errorService.handleError(error, { objectWorkingId, callback, operationData });
 
     // then
-    expect(errorService.getErrorDetails).toHaveBeenCalled();
+    expect(errorServiceHelper.getErrorDetails).toHaveBeenCalled();
     expect(errorService.closePromptsDialogInOverview).not.toHaveBeenCalled();
     expect(errorService.closeDialogIfOpen).toHaveBeenCalledWith(undefined, true);
     expect(officeReducerHelper.displayPopup).not.toHaveBeenCalled();
@@ -207,7 +208,7 @@ describe('ErrorService', () => {
         .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId')
         .mockReturnValue(objectFromObjectReducer);
       // when
-      const errorType = errorService.getPageByError(
+      const errorType = errorServiceHelper.getPageByError(
         {
           operationType,
           objectWorkingId: 1,

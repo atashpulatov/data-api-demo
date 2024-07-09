@@ -10,8 +10,10 @@ import {
   SetPageByDisplaySettingAction,
   SetPivotTableAddAttributesToColumnsAction,
   SetPivotTableAddMetricsToValuesAction,
+  SetTableImportPositionAction,
   SettingsActionTypes,
   SetWorksheetNamingSettingAction,
+  TableImportPosition,
   ToggleImportAttributesAsTextFlagAction,
   ToggleMainSidePanelObjectInfoSettingAction,
   ToggleMainWorksheetObjectInfoSettingAction,
@@ -92,6 +94,13 @@ const setPageByDisplaySetting = (
   pageByDisplaySetting,
 });
 
+const setTableImportPositionSetting = (
+  tableImportPosition: TableImportPosition
+): SetTableImportPositionAction => ({
+  type: SettingsActionTypes.SET_TABLE_IMPORT_POSITION_SETTING,
+  tableImportPosition,
+});
+
 const setDefaultImportType = (importType: ObjectImportType): SetDefaultImportTypeAction => ({
   type: SettingsActionTypes.SET_DEFAULT_IMPORT_TYPE,
   defaultImportType: importType,
@@ -127,6 +136,7 @@ export const settingsActions = {
   toggleMainWorksheetObjectInfoSetting,
   setWorksheetNamingSetting,
   setPageByDisplaySetting,
+  setTableImportPositionSetting,
   setDefaultImportType,
   setPivotTableAddAttributesToColumns,
   setPivotTableAddMetricsToValues,

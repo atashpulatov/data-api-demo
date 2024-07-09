@@ -3,21 +3,28 @@ import { Action } from 'redux';
 import { v4 as uuidv4 } from 'uuid';
 
 import instanceDefinitionHelper from '../mstr-object/instance/instance-definition-helper';
+import { officeApiService } from '../office/api/office-api-service';
 import { pageByHelper } from '../page-by/page-by-helper';
 
 import { reduxStore } from '../store';
 
 import { PageByDataElement, PageByDisplayType } from '../page-by/page-by-types';
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
+import { TableImportPosition } from '../redux-reducer/settings-reducer/settings-reducer-types';
 import { ObjectData } from '../types/object-types';
 import { DialogResponse, ReportParams } from './dialog-controller-types';
 
+import dossierInstanceDefinition from '../mstr-object/instance/dossier-instance-definition';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { importRequested } from '../redux-reducer/operation-reducer/operation-actions';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
-import { DisplayAttrFormNames, ObjectImportType } from '../mstr-object/constants';
+import {
+  DEFAULT_CELL_POSITION,
+  DisplayAttrFormNames,
+  ObjectImportType,
+} from '../mstr-object/constants';
 
 class DialogControllerHelper {
   clearPopupStateIfNeeded = (): void => {
@@ -69,7 +76,7 @@ class DialogControllerHelper {
       pageByData: response.pageByData,
     };
 
-    await this.handleImport(objectData, response.pageByConfigurations);
+    await this.handleImport([objectData], response.pageByConfigurations);
   };
 
   /**
@@ -94,7 +101,7 @@ class DialogControllerHelper {
         displayAttrFormNames: response.displayAttrFormNames,
       };
 
-      await this.handleImport(objectData, response.pageByConfigurations);
+      await this.handleImport([objectData], response.pageByConfigurations);
     }
   };
 
@@ -102,66 +109,54 @@ class DialogControllerHelper {
    * Method used for handling import of the object selected by the user.
    * For Page-by Reports, it will loop through all valid combinations of Page-by elements, creating new import request for each.
    *
-   * @param objectData Contains information about the MSTR object
+   * @param objectsToImport Contains information about the MSTR objects
    * @param pageByConfigurations Contains information about Page-by configurations selected in the Page-by modal
    */
   handleImport = async (
-    objectData: ObjectData,
+    objectsToImport: ObjectData[],
     pageByConfigurations: PageByConfiguration[][]
   ): Promise<void | Action> => {
-    const { mstrObjectType, importType } = objectData;
+    let startCell = DEFAULT_CELL_POSITION; // Needed only for importing multiple objects
+    let preparedInstanceDefinition: InstanceDefinition;
 
-    let preparedInstanceDefinition;
+    for (let index = 0; index < objectsToImport.length; index++) {
+      const objectToImport = objectsToImport[index];
 
-    if (mstrObjectType === mstrObjectEnum.mstrObjectType.report) {
-      preparedInstanceDefinition = await instanceDefinitionHelper.createReportInstance(objectData);
-    }
+      if (objectToImport.mstrObjectType === mstrObjectEnum.mstrObjectType.report) {
+        preparedInstanceDefinition =
+          await instanceDefinitionHelper.createReportInstance(objectToImport);
+      } else if (objectToImport.mstrObjectType === mstrObjectEnum.mstrObjectType.visualization) {
+        const dossierInstanceDefintion =
+          await dossierInstanceDefinition.getDossierInstanceDefinition(objectToImport);
+        preparedInstanceDefinition = dossierInstanceDefintion.instanceDefinition;
+      }
 
-    const { pageBy } = preparedInstanceDefinition?.definition.grid ?? {};
+      const { pageBy } = preparedInstanceDefinition?.definition.grid ?? {};
 
-    if (!pageBy?.length || importType === ObjectImportType.PIVOT_TABLE) {
-      return reduxStore.dispatch(importRequested({ ...objectData }, preparedInstanceDefinition));
-    }
-
-    const pageByLinkId = uuidv4();
-
-    const { settingsReducer } = reduxStore.getState();
-    const { pageByDisplaySetting } = settingsReducer;
-
-    const parsedPageByConfigurations =
-      pageByConfigurations && pageByHelper.parseSelectedPageByConfigurations(pageByConfigurations);
-
-    const validPageByData = await pageByHelper.getValidPageByData(
-      objectData,
-      preparedInstanceDefinition
-    );
-
-    switch (pageByDisplaySetting) {
-      case PageByDisplayType.DEFAULT_PAGE:
-        return this.handleDefaultPageImport(
-          pageByLinkId,
-          objectData,
-          preparedInstanceDefinition,
-          pageByDisplaySetting
+      if (objectsToImport.length > 1) {
+        const { rowCellOffset, columnCellOffset } = this.getMultipleImportOffset(
+          preparedInstanceDefinition
         );
-      case PageByDisplayType.ALL_PAGES:
-        return this.handleMultiplePagesImport(
-          pageByLinkId,
-          validPageByData,
-          objectData,
-          preparedInstanceDefinition,
-          pageByDisplaySetting
+
+        reduxStore.dispatch(
+          importRequested({
+            object: { ...objectToImport, insertNewWorksheet: !index },
+            preparedInstanceDefinition,
+            startCell,
+          })
         );
-      case PageByDisplayType.SELECT_PAGES:
-        return this.handleMultiplePagesImport(
-          pageByLinkId,
-          parsedPageByConfigurations,
-          objectData,
-          preparedInstanceDefinition,
-          pageByDisplaySetting
+        startCell = officeApiService.offsetCellBy(startCell, rowCellOffset, columnCellOffset);
+      } else if (!pageBy?.length || objectToImport.importType === ObjectImportType.PIVOT_TABLE) {
+        reduxStore.dispatch(
+          importRequested({ object: objectToImport, preparedInstanceDefinition })
         );
-      default:
-        break;
+      } else {
+        await this.handlePageByImport(
+          pageByConfigurations,
+          objectToImport,
+          preparedInstanceDefinition
+        );
+      }
     }
   };
 
@@ -186,7 +181,7 @@ class DialogControllerHelper {
     };
 
     return reduxStore.dispatch(
-      importRequested({ ...objectData, pageByData }, preparedInstanceDefinition)
+      importRequested({ object: { ...objectData, pageByData }, preparedInstanceDefinition })
     );
   };
 
@@ -214,15 +209,15 @@ class DialogControllerHelper {
       };
 
       reduxStore.dispatch(
-        importRequested(
-          {
+        importRequested({
+          object: {
             ...objectData,
             pageByData,
             insertNewWorksheet: true,
           },
           preparedInstanceDefinition,
-          pageByIndex
-        )
+          pageByIndex,
+        })
       );
     });
   };
@@ -270,6 +265,96 @@ class DialogControllerHelper {
     const { index = 0, total = 0 } = reduxStore.getState().repromptsQueueReducer;
     return total > 1 && index > 1;
   };
+
+  /**
+   * Method used for handling import of the page-by object selected by the user.
+   * It will loop through all valid combinations of Page-by elements, creating new import request for each.
+   *
+   * @param pageByConfigurations Contains information about the Page-by configurations selected in the Page-by modal
+   * @param objectData Contains information about the MSTR object
+   * @param preparedInstanceDefinition Contains information about the object's instance
+   */
+  async handlePageByImport(
+    pageByConfigurations: PageByConfiguration[][],
+    objectData: ObjectData,
+    preparedInstanceDefinition: InstanceDefinition
+  ): Promise<void> {
+    const pageByLinkId = uuidv4();
+
+    const { settingsReducer } = reduxStore.getState();
+    const { pageByDisplaySetting } = settingsReducer;
+
+    const parsedPageByConfigurations =
+      pageByConfigurations && pageByHelper.parseSelectedPageByConfigurations(pageByConfigurations);
+
+    const validPageByData = await pageByHelper.getValidPageByData(
+      objectData,
+      preparedInstanceDefinition
+    );
+
+    switch (pageByDisplaySetting) {
+      case PageByDisplayType.DEFAULT_PAGE:
+        this.handleDefaultPageImport(
+          pageByLinkId,
+          objectData,
+          preparedInstanceDefinition,
+          pageByDisplaySetting
+        );
+        break;
+      case PageByDisplayType.ALL_PAGES:
+        this.handleMultiplePagesImport(
+          pageByLinkId,
+          validPageByData,
+          objectData,
+          preparedInstanceDefinition,
+          pageByDisplaySetting
+        );
+        break;
+      case PageByDisplayType.SELECT_PAGES:
+        this.handleMultiplePagesImport(
+          pageByLinkId,
+          parsedPageByConfigurations,
+          objectData,
+          preparedInstanceDefinition,
+          pageByDisplaySetting
+        );
+        break;
+      default:
+        break;
+    }
+  }
+
+  /**
+   * Method used for calculating the offset for the next import operation when importing multiple objects.
+   *
+   * @param preparedInstanceDefinition Contains information about the object's instance
+   * @returns rowCellOffset and columnCellOffset
+   */
+  getMultipleImportOffset(preparedInstanceDefinition: InstanceDefinition): {
+    rowCellOffset: number;
+    columnCellOffset: number;
+  } {
+    const {
+      mstrTable: { crosstabHeaderDimensions, tableSize },
+    } = preparedInstanceDefinition;
+    const { columns, rows } = tableSize;
+
+    const { tableImportPosition } = reduxStore.getState().settingsReducer;
+    let columnCellOffset = 0;
+    let rowCellOffset = 0;
+    const { columnsY, rowsX } = crosstabHeaderDimensions || {};
+
+    if (tableImportPosition === TableImportPosition.HORIZONTAL) {
+      const crosstabColumnOffset = crosstabHeaderDimensions ? rowsX : 0;
+
+      columnCellOffset = columns + crosstabColumnOffset + 1; // +1 for empty row between imported tables
+    } else if (tableImportPosition === TableImportPosition.VERTICAL) {
+      const crosstabRowOffset = crosstabHeaderDimensions ? columnsY - 1 : 0; // -1 since we dont need empty line for table header
+
+      rowCellOffset = rows + crosstabRowOffset + 2; // +2 for empty row between imported tables + headers
+    }
+    return { rowCellOffset, columnCellOffset };
+  }
 }
 
 export const dialogControllerHelper = new DialogControllerHelper();

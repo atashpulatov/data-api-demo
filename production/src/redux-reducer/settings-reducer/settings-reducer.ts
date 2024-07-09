@@ -9,10 +9,12 @@ import {
   SetPageByDisplaySettingAction,
   SetPivotTableAddAttributesToColumnsAction,
   SetPivotTableAddMetricsToValuesAction,
+  SetTableImportPositionAction,
   SettingsActions,
   SettingsActionTypes,
   SettingsState,
   SetWorksheetNamingSettingAction,
+  TableImportPosition,
   ToggleImportAttributesAsTextFlagAction,
   ToggleMainSidePanelObjectInfoSettingAction,
   ToggleMainWorksheetObjectInfoSettingAction,
@@ -38,6 +40,7 @@ const initialState: SettingsState = {
   pivotTableAddAttributesToColumns: false,
   pivotTableAddMetricsToValues: false,
   enableDataAutoRefresh: false,
+  tableImportPosition: TableImportPosition.HORIZONTAL,
 };
 
 // eslint-disable-next-line default-param-last
@@ -63,6 +66,8 @@ export const settingsReducer = (state = initialState, action: SettingsActions): 
       return setWorksheetNamingSetting(state, action);
     case SettingsActionTypes.SET_PAGE_BY_DISPLAY_SETTING:
       return setPageByDisplaySetting(state, action);
+    case SettingsActionTypes.SET_TABLE_IMPORT_POSITION_SETTING:
+      return setTableImportPositionSetting(state, action);
     case SettingsActionTypes.SET_DEFAULT_IMPORT_TYPE:
       return setDefaultImportType(state, action);
     case SettingsActionTypes.SET_PIVOT_TABLE_ADD_ATTRIBUTES_TO_COLUMNS:
@@ -182,6 +187,13 @@ function setPageByDisplaySetting(
   action: SetPageByDisplaySettingAction
 ): SettingsState {
   return { ...state, pageByDisplaySetting: action.pageByDisplaySetting };
+}
+
+function setTableImportPositionSetting(
+  state: SettingsState,
+  action: SetTableImportPositionAction
+): SettingsState {
+  return { ...state, tableImportPosition: action.tableImportPosition };
 }
 
 function setDefaultImportType(
