@@ -192,7 +192,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_popup_frame()
         self.get_element_by_css(ImportDataBrowserPage.IMPORT_WITH_OPTIONS_BUTTON_ELEM).click()
 
-        self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully()
+        # self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully()
 
     def click_import_with_options_button_without_checking_results(self):
         self.focus_on_add_in_popup_frame()

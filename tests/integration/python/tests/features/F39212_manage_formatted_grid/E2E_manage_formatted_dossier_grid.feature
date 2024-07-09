@@ -54,7 +54,7 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
        Then I verified that tooltip for Import button shows message "Selected non-grid visualization cannot be imported as formatted data"     
         # Then import formatted compound grid    
         And I selected visualization "Compound Grid"
-        And I clicked import formatted data without waiting for results
+        And I clicked Import Formatted Data button without waiting for results
         And I closed last notification
        Then I verified that cell "C3" has value "$4,779"
 
