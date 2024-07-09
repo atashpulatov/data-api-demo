@@ -4,10 +4,17 @@ job 'stage-2-codeql' do
   configure_common_items{}
 
   assigned_node_string 'rhel8_vra'
-  triggers do
-    github_push do
 
+  triggers do
+    scm_polling do
+      minute 'H'
+      hour 'H'
+      month '*'
+      day_of_week '0'
+      day_of_month '*'
     end
+  end
+
   end
   builders do
     bash do
@@ -29,5 +36,5 @@ rake post_pipeline
 '
     end
   end
-end
+
 
