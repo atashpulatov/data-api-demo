@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { connect, useDispatch } from 'react-redux';
+import { OfficeApplicationType, useApplicationType } from '@mstr/connector-components';
 import { Spinner } from '@mstr/rc';
 
 import useOfficePrivilege from '../hooks/use-office-privilege';
@@ -51,6 +52,7 @@ export const HomeNotConnected: React.FC<HomeProps> = props => {
   const canUseOffice = useOfficePrivilege(authToken as string);
 
   const [t] = useTranslation('common', { i18n });
+  const { setApplicationType } = useApplicationType();
 
   const handleConnectionRestored = (): void => {
     // @ts-expect-error
@@ -66,6 +68,7 @@ export const HomeNotConnected: React.FC<HomeProps> = props => {
   useResetDialog();
 
   useEffect(() => {
+    setApplicationType(OfficeApplicationType.EXCEL);
     window.addEventListener('online', handleConnectionRestored);
     window.addEventListener('offline', handleConnectionLost);
     return () => {

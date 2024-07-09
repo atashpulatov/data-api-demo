@@ -126,7 +126,6 @@ export interface GroupData {
 }
 
 export interface ObjectData {
-  shapeGroupId?: string;
   body?: Body;
   objectWorkingId?: number;
   bindId?: string;
@@ -161,6 +160,7 @@ export interface ObjectData {
   insertNewWorksheet?: boolean;
   bindIdToBeDuplicated?: string;
   shapeProps?: any;
+  shapeGroupId?: string;
   // TODO fix type
   visualizationInfo?: false | VisualizationInfo;
   objectSettings?: ObjectSettings;
