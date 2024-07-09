@@ -9,7 +9,6 @@ import { dialogHelper } from '../dialog/dialog-helper';
 import { dialogViewSelectorHelper } from '../dialog/dialog-view-selector-helper';
 import scriptInjectionHelper from '../embedded/utils/script-injection-helper';
 import {
-  collectPromptKeys,
   prepareGivenPromptAnswers,
   preparePromptedReport,
 } from '../helpers/prompts-handling-helper';
@@ -155,16 +154,22 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
    *
    * @param {*} newAnswer prompt answers entered by the user.
    */
-  const promptAnsweredHandler = (newAnswer: any): void => {
-    setIsPromptLoading(true);
-    if (newPromptsAnswers.current.length > 0) {
-      const newArray = [...newPromptsAnswers.current, newAnswer];
-      newPromptsAnswers.current = newArray;
-    } else {
-      // Initialize newPromptsAnswers with the new answer.
-      newPromptsAnswers.current = [newAnswer];
-    }
-  };
+  const promptAnsweredHandler = useCallback(
+    (newAnswer: any): void => {
+      setIsPromptLoading(true);
+      if (newPromptsAnswers.current.length > 0) {
+        const newArray = [...newPromptsAnswers.current, newAnswer];
+        newPromptsAnswers.current = newArray;
+      } else {
+        // Initialize newPromptsAnswers with the new answer.
+        newPromptsAnswers.current = [newAnswer];
+      }
+      // Add unique keys from allPromptKeys to promptKeys
+      const keysFromNewAnswer = newAnswer.answers.map((answer: any) => answer.key);
+      promptKeys.push(...keysFromNewAnswer.filter((key: string) => !promptKeys.includes(key)));
+    },
+    [setIsPromptLoading, newPromptsAnswers, promptKeys]
+  );
 
   const promptLoadedHandler = (): void => {
     setIsPromptLoading(false);
@@ -208,7 +213,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
       objectWorkingId: editedObject.objectWorkingId,
       instanceId: editedObject.instanceId,
       promptsAnswers: currentAnswers || newPromptsAnswers.current,
-      isPrompted: !!currentAnswers.length || !!newPromptsAnswers.current.length,
+      isPrompted: !!currentAnswers?.length || !!newPromptsAnswers.current.length,
       subtotalsInfo: editedObject.subtotalsInfo,
       displayAttrFormNames: editedObject.displayAttrFormNames,
       pageByData: editedObject.pageByData,
@@ -242,8 +247,10 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
           importCallback: (pageByConfigurations: PageByConfiguration[][]) =>
             initializeImportForReprompt(chosenObjectIdLocal, projectId, pageByConfigurations),
         } as any);
+      } else if (newPromptsAnswers.current.length > 0) {
+        initializeImportForReprompt(chosenObjectIdLocal, projectId);
       } else {
-        initializeImportForReprompt(chosenObjectIdLocal, projectId, currentAnswers);
+        initializeImportForReprompt(chosenObjectIdLocal, projectId, null, currentAnswers);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -304,6 +311,9 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
 
       try {
         let msgRouter: any = null;
+
+        const currentPrompts: any[] = [];
+
         const serverURL = envUrl.slice(0, envUrl.lastIndexOf('/api'));
         // delete last occurence of '/api' from the enviroment url
         const { CustomAuthenticationType } = microstrategy.dossier;
@@ -329,10 +339,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
             msgRouter.registerEventHandler(EventType.ON_ERROR, onEmbeddedError);
           },
         };
-        let givenPromptsAnswers: any[];
-        const allPromptKeys = collectPromptKeys(editedObject.promptsAnswers[0]?.answers);
-        const areAllKeysPresent = allPromptKeys.every(key => promptKeys.includes(key));
-        const openPromptDialog = !areAllKeysPresent && isMultipleRepromptWithReuse;
+
         // Replace the instance with the one from the prompt answers resolved for importing prompted report/dossier
         // or preparing data on a report if re-use prompt answers setting is enabled and there are previous prompt answers
         if (isReprompt || isImportOrPrepateWithPrevAnswers || isMultipleRepromptWithReuse) {
@@ -348,7 +355,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
           // Update givenPromptsAnswers collection with previous prompt answers if importing
           // a report/dossier or preparing data on a report; and reusePromptAnswers flag is enabled.
           // Indicate to try to use saved prompt answers if any when multiple reprompt is in progress.
-          givenPromptsAnswers = prepareAndHandlePromptAnswers(
+          const givenPromptsAnswers = prepareAndHandlePromptAnswers(
             updatedPromptObjects,
             previousPromptsAnswers,
             isImportingOrPreparingDataWithPreviousPromptAnswers || isMultipleRepromptWithReuse
@@ -359,7 +366,8 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
             projectId,
             givenPromptsAnswers,
             previousPromptsAnswers,
-            openPromptDialog
+            promptKeys,
+            currentPrompts
           );
         }
 
@@ -383,11 +391,8 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
           msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptAnsweredHandler);
           msgRouter.removeEventhandler(EventType.ON_PROMPT_LOADED, promptLoadedHandler);
           msgRouter.removeEventhandler(EventType.ON_ERROR, onEmbeddedError);
-          // Get the new answers from the prompts dialog otherwise from the givenPromptsAnswers.
           const currentAnswers =
-            [...newPromptsAnswers.current].length > 0
-              ? [...newPromptsAnswers.current]
-              : givenPromptsAnswers;
+            newPromptsAnswers.current.length > 0 ? [...newPromptsAnswers.current] : currentPrompts;
 
           deleteDossierInstance(projectId, objectId, instanceId);
 
@@ -401,8 +406,6 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
             currentAnswers
           );
         });
-        // Add unique keys from allPromptKeys to promptKeys
-        promptKeys.push(...allPromptKeys.filter(key => !promptKeys.includes(key)));
       } catch (error) {
         console.error({ error });
         dialogHelper.handlePopupErrors(error);
@@ -410,7 +413,9 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
     },
     [
       chosenObjectId,
-      editedObject,
+      editedObject.chosenObjectId,
+      editedObject.projectId,
+      editedObject.promptsAnswers,
       mstrData.chosenProjectId,
       session,
       previousPromptsAnswers,
@@ -420,8 +425,9 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
       reusePromptAnswers,
       isReprompt,
       isMultipleRepromptWithReuse,
-      prepareAndHandlePromptAnswers,
+      promptAnsweredHandler,
       promptKeys,
+      prepareAndHandlePromptAnswers,
       promptsAnswered,
       finishRepromptWithoutEditFilters,
     ]

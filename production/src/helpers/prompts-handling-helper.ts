@@ -104,7 +104,8 @@ export async function answerDossierPromptsHelper(
   objectId: string,
   projectId: string,
   promptsAnswers: AnswersState[],
-  previousPromptAnswers: PromptsAnswer[]
+  previousPromptAnswers: PromptsAnswer[],
+  currentReportPromptKeys: any[]
 ): Promise<any> {
   const currentInstanceDefinition = { ...instanceDefinition };
   let count = 0;
@@ -123,8 +124,9 @@ export async function answerDossierPromptsHelper(
           },
       ignoreValidateRequiredCheck: true,
     };
-
+    let tempPromptsAnswers: AnswersState;
     if (promptsAnswers[count] !== undefined) {
+      tempPromptsAnswers = promptsAnswers[count];
       await mstrObjectRestService.answerDossierPrompts(config);
     } else {
       const prompts = await mstrObjectRestService.getObjectPrompts(
@@ -134,6 +136,7 @@ export async function answerDossierPromptsHelper(
       );
       const [preparedAnswers] = prepareGivenPromptAnswers(prompts, previousPromptAnswers);
       config.promptsAnswers = preparedAnswers;
+      tempPromptsAnswers = preparedAnswers;
       await mstrObjectRestService.answerDossierPrompts(config);
     }
 
@@ -154,6 +157,9 @@ export async function answerDossierPromptsHelper(
         projectId
       );
     }
+
+    // add keys from prompts to the currentReportPromptKeys
+    currentReportPromptKeys.push(tempPromptsAnswers);
     currentInstanceDefinition.status = dossierStatusResponse.body.status;
 
     count += 1;
@@ -196,7 +202,8 @@ export async function preparePromptedDossier(
         dossierId,
         projectId,
         promptsAnswers,
-        previousPromptsAnswers
+        previousPromptsAnswers,
+        []
       );
     } catch (error) {
       console.error('Error applying prompt answers:', error);
@@ -287,8 +294,12 @@ async function resetDossierInstance(
 
 export const collectPromptKeys = (promptObjs: any[], keys: string[] = []): string[] => {
   promptObjs.forEach(promptObject => {
-    if (!keys.includes(promptObject?.key)) {
-      keys.push(promptObject?.key);
+    if (promptObject?.key && !keys.includes(promptObject.key)) {
+      keys.push(promptObject.key);
+    }
+
+    if (Array.isArray(promptObject.answers)) {
+      collectPromptKeys(promptObject.answers, keys);
     }
   });
   return keys;
@@ -308,7 +319,8 @@ export async function preparePromptedReport(
   projectId: string,
   promptsAnswers: AnswersState[],
   previousAnswers: PromptsAnswer[],
-  openPromptDialog: boolean = true
+  promptKeys: string[],
+  currentReportPromptKeys: any[]
 ): Promise<any> {
   const config: any = { objectId: chosenObjectIdLocal, projectId };
   const instanceDefinition = await mstrObjectRestService.createInstance(config);
@@ -334,7 +346,8 @@ export async function preparePromptedReport(
         chosenObjectIdLocal,
         projectId,
         promptsAnswers,
-        previousAnswers
+        previousAnswers,
+        currentReportPromptKeys
       );
     } catch (error) {
       console.error('Error applying prompt answers:', error);
@@ -352,7 +365,13 @@ export async function preparePromptedReport(
     }
   }
 
-  if (openPromptDialog) {
+  // compare currentReportPromptKeys with promptKeys
+  const currentReportPromptKeysArray = currentReportPromptKeys.flatMap(obj =>
+    obj.answers.map((answer: { key: any }) => answer.key)
+  );
+  const hasAllKeys = currentReportPromptKeysArray.every(key => promptKeys.includes(key));
+
+  if (!hasAllKeys) {
     // Re-prompt the Dossier's instance to change execution status to 2 and force Prompts' dialog to open.
     dossierInstanceDefinition = await forceOpenPromptDialog(
       chosenObjectIdLocal,
