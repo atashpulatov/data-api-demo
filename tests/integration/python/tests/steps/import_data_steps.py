@@ -172,7 +172,7 @@ def step_impl(context):
 
     AssertUtil.assert_simple(is_disabled, True)
 
-@step('I verified that Import with dropdown button is disabled')
+@step('I verified that Import with options button is disabled')
 def step_impl(context):
     is_disabled = context.pages.import_data_page().verify_if_import_with_options_button_is_enabled()
 
