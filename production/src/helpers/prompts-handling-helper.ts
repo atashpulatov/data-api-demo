@@ -292,14 +292,17 @@ async function resetDossierInstance(
   return dossierInstanceDefinition;
 }
 
-export const collectPromptKeys = (promptObjs: any[], keys: string[] = []): string[] => {
+/**
+ * Collects unique prompt keys from an array of prompt objects.
+ *
+ * @param {Object[]} promptObjs - An array of prompt objects potentially containing keys
+ * @param {string[]} [keys=[]] - The unique prompt keys from redux reprompt queue state.
+ * @returns {string[]} An array of unique keys collected from the prompt objects.
+ */
+export const collectPromptKeys = (promptObjs: { key: string }[], keys: string[] = []): string[] => {
   promptObjs.forEach(promptObject => {
-    if (promptObject?.key && !keys.includes(promptObject.key)) {
+    if (promptObject.key && !keys.includes(promptObject.key)) {
       keys.push(promptObject.key);
-    }
-
-    if (Array.isArray(promptObject.answers)) {
-      collectPromptKeys(promptObject.answers, keys);
     }
   });
   return keys;

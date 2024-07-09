@@ -78,19 +78,23 @@ describe('PromptsHandlingHelper', () => {
     const objectId = 'objectId';
     const projectId = 'projectId';
     const promptsAnswers = [{ key: '1', type: 'type', answers: ['2'], values: ['2'] }];
+    const previousPromptAnswers = []; 
+    const currentReportPromptKeys = []; 
     const config = {
       objectId,
       projectId,
       instanceId: mid,
       promptsAnswers: promptsAnswers[0],
       ignoreValidateRequiredCheck: true,
-    };
+    };  
     // when
     const result = await answerDossierPromptsHelper(
       instanceDefinition,
       objectId,
       projectId,
-      promptsAnswers
+      promptsAnswers, 
+      previousPromptAnswers,
+      currentReportPromptKeys // Pass the initialized array to the function
     );
     // then
     expect(answerDossierPromptsSpy).toHaveBeenCalledTimes(1);
@@ -98,6 +102,7 @@ describe('PromptsHandlingHelper', () => {
     expect(getDossierStatusSpy).toHaveBeenCalledTimes(1);
     expect(getDossierStatusSpy).toHaveBeenCalledWith(objectId, mid, projectId);
     expect(result).toEqual({ status: 1, mid: 'mid' });
+    expect(currentReportPromptKeys).toEqual([promptsAnswers[0]]);
   });
 
   it('preparePromptedDossier should return proper contents and call proper functions when given instanceDef + objectId + projectId + promptsAnswers', async () => {
@@ -125,12 +130,27 @@ describe('PromptsHandlingHelper', () => {
     const chosenObjectIdLocal = 'chosenObjectIdLocal';
     const projectId = 'projectId';
     const promptsAnswers = [{ key: '1', type: 'type', answers: ['2'], values: ['2'] }];
+    const previousAnswers = []; // Add a mock for previousAnswers
+    const promptKeys = []; // Add a mock for promptKeys
+    const currentReportPromptKeys = []; // Add a mock for currentReportPromptKeys
     const config = {
       objectId: chosenObjectIdLocal,
       projectId,
     };
+  
+    // Mock the responses for the service calls if necessary
+    // ...
+  
     // when
-    const result = await preparePromptedReport(chosenObjectIdLocal, projectId, promptsAnswers);
+    const result = await preparePromptedReport(
+      chosenObjectIdLocal,
+      projectId,
+      promptsAnswers,
+      previousAnswers,
+      promptKeys,
+      currentReportPromptKeys
+    );
+  
     // then
     expect(createInstanceSpy).toHaveBeenCalledTimes(1);
     expect(createInstanceSpy).toHaveBeenCalledWith(config);
@@ -147,5 +167,9 @@ describe('PromptsHandlingHelper', () => {
       id: 'chosenObjectIdLocal',
       mid: 'mid',
     });
+  
+    // Add any additional expectations for the new parameters if necessary
+    // For example, if forceOpenPromptDialog is called when hasAllKeys is false,
+    // you should add expectations for that as well.
   });
 });
