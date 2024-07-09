@@ -16,7 +16,7 @@ job 'stage-2-codeql' do
   end
 
 
-  end
+  
   builders do
     bash do
       script '#!/usr/bin/env bash
@@ -39,3 +39,5 @@ rake post_pipeline
   end
 
 
+
+end
