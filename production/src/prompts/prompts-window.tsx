@@ -19,6 +19,7 @@ import { RootState } from '../store';
 
 import { DialogCommands } from '../dialog/dialog-controller-types';
 import { PageByDisplayType } from '../page-by/page-by-types';
+import { AnswersState } from '../redux-reducer/answers-reducer/answers-reducer-types';
 import {
   EditedObject,
   MstrData,
@@ -194,7 +195,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
     chosenObjectIdLocal: string,
     projectId: string,
     pageByConfigurations?: PageByConfiguration[][],
-    currentAnswers?: any[]
+    currentAnswers?: AnswersState[]
   ): void => {
     dialogHelper.officeMessageParent({
       command: DialogCommands.COMMAND_ON_UPDATE,
@@ -231,7 +232,12 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
    * @returns {void}
    */
   const finishRepromptWithoutEditFilters = useCallback(
-    (chosenObjectIdLocal: string, projectId: string, dossierData: any, currentAnswers: any[]) => {
+    (
+      chosenObjectIdLocal: string,
+      projectId: string,
+      dossierData: any,
+      currentAnswers: AnswersState[]
+    ) => {
       // for the Reprompt workflow only, skip edit filter screen.
       if (!isReprompt || isEdit) {
         return;
@@ -312,7 +318,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
       try {
         let msgRouter: any = null;
 
-        const currentPrompts: any[] = [];
+        const currentPrompts: AnswersState[] = [];
 
         const serverURL = envUrl.slice(0, envUrl.lastIndexOf('/api'));
         // delete last occurence of '/api' from the enviroment url

@@ -105,7 +105,7 @@ export async function answerDossierPromptsHelper(
   projectId: string,
   promptsAnswers: AnswersState[],
   previousPromptAnswers: PromptsAnswer[],
-  currentReportPromptKeys: any[]
+  currentReportPromptKeys: AnswersState[]
 ): Promise<any> {
   const currentInstanceDefinition = { ...instanceDefinition };
   let count = 0;
@@ -320,7 +320,7 @@ export async function preparePromptedReport(
   promptsAnswers: AnswersState[],
   previousAnswers: PromptsAnswer[],
   promptKeys: string[],
-  currentReportPromptKeys: any[]
+  currentReportPromptKeys: AnswersState[]
 ): Promise<any> {
   const config: any = { objectId: chosenObjectIdLocal, projectId };
   const instanceDefinition = await mstrObjectRestService.createInstance(config);

@@ -7,6 +7,7 @@ import {
   RepromptQueueActionTypes,
 } from './reprompt-queue-reducer-types';
 
+import { OperationTypes } from '../../operation/operation-type-names';
 import * as RepromptQueueReducer from './reprompt-queue-reducer';
 
 describe('reprompt-queue-reducer', () => {
@@ -110,6 +111,10 @@ describe('reprompt-queue-reducer', () => {
           objectEditedData: {
             promptKeys: ['key1', 'key2'],
           },
+          operationType: OperationTypes.EDIT_OPERATION,
+          objectWorkingId: 0,
+          stepsQueue: [],
+          operationId: '',
         },
       },
     };
@@ -119,6 +124,10 @@ describe('reprompt-queue-reducer', () => {
       payload: {
         operation: {
           objectEditedData: {},
+          operationType: OperationTypes.EDIT_OPERATION,
+          objectWorkingId: 0,
+          stepsQueue: [],
+          operationId: '',
         },
       },
     };

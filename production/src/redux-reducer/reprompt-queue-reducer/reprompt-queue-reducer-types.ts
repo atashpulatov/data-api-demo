@@ -1,5 +1,12 @@
 import { Action } from 'redux';
 
+import { OperationData } from '../operation-reducer/operation-reducer-types';
+
+// Define the structure for the payload that includes the operation
+interface EditOperationPayload {
+  operation: OperationData;
+}
+
 export interface RepromptsQueueState {
   repromptsQueue: any[];
   total?: number;
@@ -33,7 +40,7 @@ export interface ClearRepromptTasksAction extends Action {
 
 export interface EditOperationAction extends Action {
   type: RepromptQueueActionTypes.EDIT_OPERATION;
-  payload: any;
+  payload: EditOperationPayload;
 }
 
 export type RepromptQueueActions =
