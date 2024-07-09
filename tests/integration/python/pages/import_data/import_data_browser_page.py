@@ -49,7 +49,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
     IMPORT_FORMATTED_DATA_BUTTON_ELEM = 'import-formatted-data'
     IMPORT_WITH_DROPDOWN_BUTTON_ELEM = '.mstr-rc-3-button-with-options > .import-button__action-button'
     IMPORT_DROPDOWN_BUTTON_ELEM = '.import-button__dropdown-button'
-    ITEM_IN_IMPORT_DROPDOWN_ELEM = '''li[aria-label='%s']'''
+    OPTION_IN_OPTIONS_DROPDOWN_ELEM = '''li[aria-label='%s']'''
 
     NOTIFICATION_TEXT_ELEM = '.selection-title'
     COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = 'Columns & Filters Selection'
@@ -188,13 +188,13 @@ class ImportDataBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_popup_frame()
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_IMAGE_BUTTON_ELEM).click()
 
-    def click_import_with_dropdown_button(self):
+    def click_import_with_options_button(self):
         self.focus_on_add_in_popup_frame()
         self.get_element_by_css(ImportDataBrowserPage.IMPORT_WITH_DROPDOWN_BUTTON_ELEM).click()
 
         self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully()
 
-    def click_import_with_dropdown_button_without_checking_results(self):
+    def click_import_with_options_button_without_checking_results(self):
         self.focus_on_add_in_popup_frame()
         self.get_element_by_css(ImportDataBrowserPage.IMPORT_WITH_DROPDOWN_BUTTON_ELEM).click()
         
@@ -296,7 +296,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
         element = self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM)
         return element.get_attribute(ImportDataBrowserPage.IMPORT_BUTTON_DISABLED) is None
 
-    def verify_if_import_with_dropdown_button_is_enabled(self):
+    def verify_if_import_with_options_button_is_enabled(self):
         self.focus_on_add_in_popup_frame()
         element = self.get_element_by_css(ImportDataBrowserPage.IMPORT_WITH_DROPDOWN_BUTTON_ELEM)
         return element.get_attribute(ImportDataBrowserPage.IMPORT_BUTTON_DISABLED) is None
@@ -306,19 +306,19 @@ class ImportDataBrowserPage(BaseBrowserPage):
         element = self.get_element_by_id(ImportDataBrowserPage.IMPORT_FORMATTED_DATA_BUTTON_ELEM)
         return element.get_attribute(ImportDataBrowserPage.IMPORT_BUTTON_DISABLED) is None
 
-    def get_item_in_import_dropdown(self, item_name):
+    def get_option_in_options_dropdown(self, item_name):
         self.focus_on_add_in_popup_frame()
         return self.get_element_by_css(ImportDataBrowserPage.ITEM_IN_IMPORT_DROPDOWN_ELEM % item_name)
 
-    def select_item_in_import_dropdown(self, item_name):
-        self.get_item_in_import_dropdown(item_name).click()        
+    def select_option_in_options_dropdown(self, item_name):
+        self.get_option_in_options_dropdown(item_name).click()        
 
-    def verify_if_item_in_import_dropdown_is_enabled(self, item_name):
-        element = self.get_item_in_import_dropdown(item_name)
+    def verify_if_option_in_options_dropdown_is_enabled(self, item_name):
+        element = self.get_option_in_options_dropdown(item_name)
         is_disabled = element.get_attribute(ImportDataBrowserPage.ITEM_IN_IMPORT_DROPDOWN_DISABLED)
         return is_disabled is None or is_disabled == 'false'
 
-    def click_import_dropdown_button(self):
+    def click_options_button(self):
         self.focus_on_add_in_popup_frame()
         self.get_element_by_css(ImportDataBrowserPage.IMPORT_DROPDOWN_BUTTON_ELEM).click()
     
