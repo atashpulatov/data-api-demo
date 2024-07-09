@@ -79,10 +79,10 @@ Feature: TS41441 - Sanity checks
       And I selected filter "Region" with all elements
       And I clicked Data Preview button
       And I clicked Close Preview button
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
       And I clicked Import Data button in Columns and Filters Selection
       And I waited for object to be imported successfully
       And I closed last notification
@@ -130,10 +130,10 @@ Feature: TS41441 - Sanity checks
 
      When I clicked Data Preview button
       And I clicked Close Preview button
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
       And I clicked Import Data button in Columns and Filters Selection
       And I waited for object to be imported successfully
       And I closed last notification

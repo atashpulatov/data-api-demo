@@ -14,10 +14,10 @@ Feature: TF9328 - Release Validation
      When I selected all attributes
       And I selected all metrics
 
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
       And I clicked Import Data button in Columns and Filters Selection
       And I closed last notification
      Then I verified that cells ["B1", "J3", "H3"] have values ["Item Type", "81320.96", "Maximum"]
@@ -34,10 +34,10 @@ Feature: TF9328 - Release Validation
      Then I verified that Columns & Filters Selection is visible
 
      When I clicked Include Subtotals and Totals switch
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
       And I clicked Import Data button in Columns and Filters Selection
       And I waited for object to be imported successfully
       And I closed last notification
@@ -56,10 +56,10 @@ Feature: TF9328 - Release Validation
      When I selected all attributes
       And I selected all metrics
 
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
       And I clicked Import Data button in Columns and Filters Selection
       And I waited for object to be imported successfully
       And I closed last notification
@@ -94,10 +94,10 @@ Feature: TF9328 - Release Validation
      When I selected all attributes
       And I selected all metrics
 
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
       And I clicked Import Data button in Columns and Filters Selection
       And I waited for object to be imported successfully
       And I closed last notification

@@ -13,11 +13,11 @@ Feature: F25949 - Display filters and prompts
       And I verified that Columns & Filters Selection is visible
       And I selected all attributes
       And I selected all metrics
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
       And I closed last notification
 
      When I hovered over toggle details button on object 1
@@ -48,11 +48,11 @@ Feature: F25949 - Display filters and prompts
       And I selected all metrics
       And I selected filter "Call Center" with all elements
       And I selected filter "Employee" with all elements
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
       And I closed last notification
 
       And I clicked toggle details button on object 1
@@ -103,7 +103,7 @@ Feature: F25949 - Display filters and prompts
       And I unselected all metrics
       And I clicked metric "survived"
       And I selected filter "age" with all elements
-      And I clicked Import Data button in Columns and Filters Selection without success check
+      And I clicked Import Data button in Columns and Filters Selection
       And I closed notification on object 3
 
       And I clicked toggle details button on object 3

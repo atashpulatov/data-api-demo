@@ -37,11 +37,11 @@ Feature: F25946 - Details panel
 
 
      When I selected object "single_attribute"
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
       And I waited for object operation to complete successfully with message "Import successful"
      Then I closed last notification
       And I verified that cells ["A1", "A2", "B2"] have values ["Id", "1", "1"]

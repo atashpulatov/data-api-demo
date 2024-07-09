@@ -14,10 +14,10 @@ Feature: F25946 - Display filters and prompts
       And I verified that Columns & Filters Selection is visible
       And I selected all attributes
       And I selected all metrics
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
       And I clicked Import Data button in Columns and Filters Selection
       And I closed last notification
 

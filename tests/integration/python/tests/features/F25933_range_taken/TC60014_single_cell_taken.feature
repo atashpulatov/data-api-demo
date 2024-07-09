@@ -11,11 +11,11 @@ Feature: F25933 - Range taken
       
       And I found and selected object "100_report"
 
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-    When I clicked Import with dropdown button without checking results
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+    When I clicked Import with options button without checking results
       And I clicked OK button in Range Taken popup
       And I waited for object to be imported successfully
       And I closed last notification

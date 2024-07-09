@@ -8,11 +8,11 @@ Feature: F22954 - Edit dataset
       
       And I found and selected object "Category Performance Dataset"
 
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      When I clicked Import with dropdown button
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      When I clicked Import with options button
 
       And I closed last notification
      Then I verified that cell "A2" has value "Central"

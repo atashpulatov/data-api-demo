@@ -7,11 +7,11 @@ Feature: TF9328 - Release Validation
       And I clicked Import Data button
       
       And I found and selected object "01 Basic Report"
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
       And I closed all notifications
      Then I verified that the name of item number 1 in Name Box, ignoring timestamp at the end, is "_01_Basic_Report_"
 
@@ -46,7 +46,7 @@ Feature: TF9328 - Release Validation
       And I selected attribute element number 1
       And I unselected all metrics
       And I selected metric element number 1
-      And I clicked Import Data button in Columns and Filters Selection without success check
+      And I clicked Import Data button in Columns and Filters Selection
       And I closed last notification
 #    TODO Investigate why I verified that cell "A3" has value "Mid-Atlantic" step doesn't work correctly
 #     Then I verified that cell "A3" has value "Mid-Atlantic"

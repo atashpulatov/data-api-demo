@@ -27,11 +27,11 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
 
     # Import formatted grid into worksheet
         And I selected visualization "Visualization 1"
-        And I verified that Import with dropdown button is enabled
-        And I clicked Import dropdown button
-        And I verified that "Import Formatted Data" item in Import dropdown is enabled
+        And I verified that Import with options button is enabled
+        And I clicked options button
+        And I verified that "Import Formatted Data" option is enabled in options dropdown
         And I selected "Import Formatted Data" item in Import dropdown
-        And I clicked Import with dropdown button without checking results
+        And I clicked Import with options button without checking results
         And I closed last notification
         Then I verified that cell "B2" has value "Atlanta"
 

@@ -11,10 +11,10 @@ Feature: F25933 - Range taken
       And I verified that Columns & Filters Selection is visible
       And I clicked attribute "Country"
       And I clicked metric "Total Cost"
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
       And I clicked Import Data button in Columns and Filters Selection
 
      Then I closed all notifications
@@ -22,11 +22,11 @@ Feature: F25933 - Range taken
      When I selected cell "C4"
       And I clicked Add Data button
       And I found and selected object "01 Basic Report"
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
 
      Then I closed all notifications
 

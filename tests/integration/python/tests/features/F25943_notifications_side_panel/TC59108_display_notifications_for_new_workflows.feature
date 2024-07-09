@@ -24,22 +24,22 @@ Feature: F25943 - Notifications side panel
      When I selected cell "A1"
       And I clicked Import Data button
       And I found and selected object "100_report"
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
      Then I waited for object operation to complete successfully with message "Import successful"
       And I closed last notification
 
      When I added a new worksheet
       And I clicked Add Data button
       And I found and selected object "Prompted report with subtotals"
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button without checking results
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button without checking results
       And I waited for Run button to be enabled
       And I clicked Run button
      Then I waited for object operation to complete successfully with message "Import successful"
@@ -48,11 +48,11 @@ Feature: F25943 - Notifications side panel
      When I added a new worksheet
       And I clicked Add Data button
       And I found and selected object "Report with crosstab (2 attributes on column axis)"
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
      Then I waited for object operation to complete successfully with message "Import successful"
       And I closed last notification
 
@@ -68,11 +68,11 @@ Feature: F25943 - Notifications side panel
      When I added a new worksheet
       And I clicked Add Data button
       And I found and selected object "report 50k sales records"
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button without checking results
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button without checking results
      Then I verified that the object 1 action in progress name is "Importing"
       And I verified that the object 1 action in progress is executed on total "50,000 rows"
       And I verified that the object 1 action displayed percentage progress

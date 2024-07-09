@@ -10,11 +10,11 @@ Feature: Ability to perform UB testing
      And I clicked Import Data button
     And I found and selected object "10k report"
     Then I saved execution start time to "10K_import_time_1"
-     And I verified that Import with dropdown button is enabled
-     And I clicked Import dropdown button
-     And I verified that "Import Data" item in Import dropdown is enabled
-     And I selected "Import Data" item in Import dropdown
-     And I clicked Import with dropdown button
+     And I verified that Import with options button is enabled
+     And I clicked options button
+     And I verified that "Import Data" option is enabled in options dropdown
+     And I selected "Import Data" option in options dropdown
+     And I clicked Import with options button
      And I waited for object to be imported successfully
     Then I saved execution duration to "10K_import_time_1"
      And I closed last notification 
@@ -24,11 +24,11 @@ Feature: Ability to perform UB testing
     And I clicked Add Data button
     And I found and selected object "10k report"
     Then I saved execution start time to "10K_import_time_2"
-     And I verified that Import with dropdown button is enabled
-     And I clicked Import dropdown button
-     And I verified that "Import Data" item in Import dropdown is enabled
-     And I selected "Import Data" item in Import dropdown
-     And I clicked Import with dropdown button
+     And I verified that Import with options button is enabled
+     And I clicked options button
+     And I verified that "Import Data" option is enabled in options dropdown
+     And I selected "Import Data" option in options dropdown
+     And I clicked Import with options button
      And I waited for object to be imported successfully
     Then I saved execution duration to "10K_import_time_2"
      And I closed last notification 
@@ -38,11 +38,11 @@ Feature: Ability to perform UB testing
     And I clicked Add Data button
     And I found and selected object "10k report"
     Then I saved execution start time to "10K_import_time_3"
-     And I verified that Import with dropdown button is enabled
-     And I clicked Import dropdown button
-     And I verified that "Import Data" item in Import dropdown is enabled
-     And I selected "Import Data" item in Import dropdown
-     And I clicked Import with dropdown button
+     And I verified that Import with options button is enabled
+     And I clicked options button
+     And I verified that "Import Data" option is enabled in options dropdown
+     And I selected "Import Data" option in options dropdown
+     And I clicked Import with options button
      And I waited for object to be imported successfully
     Then I saved execution duration to "10K_import_time_3"
      And I closed last notification 
@@ -52,11 +52,11 @@ Feature: Ability to perform UB testing
      And I clicked Add Data button
     And I found and selected object "report 50k sales record"
     Then I saved execution start time to "50K_import_time_1"
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
      And I waited for object to be imported successfully
     Then I saved execution duration to "50K_import_time_1"
      And I added a new worksheet
@@ -65,11 +65,11 @@ Feature: Ability to perform UB testing
      And I clicked Add Data button
     And I found and selected object "report 50k sales record"
     Then I saved execution start time to "50K_import_time_2"
-     And I verified that Import with dropdown button is enabled
-     And I clicked Import dropdown button
-     And I verified that "Import Data" item in Import dropdown is enabled
-     And I selected "Import Data" item in Import dropdown
-     And I clicked Import with dropdown button
+     And I verified that Import with options button is enabled
+     And I clicked options button
+     And I verified that "Import Data" option is enabled in options dropdown
+     And I selected "Import Data" option in options dropdown
+     And I clicked Import with options button
      And I waited for object to be imported successfully
     Then I saved execution duration to "50K_import_time_2"
      And I added a new worksheet
@@ -78,11 +78,11 @@ Feature: Ability to perform UB testing
      And I clicked Add Data button
      And I found and selected object "report 50k sales record"
     Then I saved execution start time to "50K_import_time_3"
-     And I verified that Import with dropdown button is enabled
-     And I clicked Import dropdown button
-     And I verified that "Import Data" item in Import dropdown is enabled
-     And I selected "Import Data" item in Import dropdown
-     And I clicked Import with dropdown button
+     And I verified that Import with options button is enabled
+     And I clicked options button
+     And I verified that "Import Data" option is enabled in options dropdown
+     And I selected "Import Data" option in options dropdown
+     And I clicked Import with options button
      And I waited for object to be imported successfully
     Then I saved execution duration to "50K_import_time_3"
      And I removed all objects
@@ -91,11 +91,11 @@ Feature: Ability to perform UB testing
      And I clicked Add Data button
     And I found and selected object "100k_rows_report"
     Then I saved execution start time to "100K_import_time_1"
-     And I verified that Import with dropdown button is enabled
-     And I clicked Import dropdown button
-     And I verified that "Import Data" item in Import dropdown is enabled
-     And I selected "Import Data" item in Import dropdown
-     And I clicked Import with dropdown button
+     And I verified that Import with options button is enabled
+     And I clicked options button
+     And I verified that "Import Data" option is enabled in options dropdown
+     And I selected "Import Data" option in options dropdown
+     And I clicked Import with options button
      And I waited for object to be imported successfully
     Then I saved execution duration to "100K_import_time_1"
      And I added a new worksheet
@@ -104,11 +104,11 @@ Feature: Ability to perform UB testing
      And I clicked Add Data button
     And I found and selected object "100k_rows_report"
     Then I saved execution start time to "100K_import_time_2"
-     And I verified that Import with dropdown button is enabled
-     And I clicked Import dropdown button
-     And I verified that "Import Data" item in Import dropdown is enabled
-     And I selected "Import Data" item in Import dropdown
-     And I clicked Import with dropdown button
+     And I verified that Import with options button is enabled
+     And I clicked options button
+     And I verified that "Import Data" option is enabled in options dropdown
+     And I selected "Import Data" option in options dropdown
+     And I clicked Import with options button
      And I waited for object to be imported successfully
     Then I saved execution duration to "100K_import_time_2"
      And I added a new worksheet
@@ -117,11 +117,11 @@ Feature: Ability to perform UB testing
      And I clicked Add Data button
     And I found and selected object "100k_rows_report"
     Then I saved execution start time to "100K_import_time_3"
-     And I verified that Import with dropdown button is enabled
-     And I clicked Import dropdown button
-     And I verified that "Import Data" item in Import dropdown is enabled
-     And I selected "Import Data" item in Import dropdown
-     And I clicked Import with dropdown button
+     And I verified that Import with options button is enabled
+     And I clicked options button
+     And I verified that "Import Data" option is enabled in options dropdown
+     And I selected "Import Data" option in options dropdown
+     And I clicked Import with options button
      And I waited for object to be imported successfully
     Then I saved execution duration to "100K_import_time_3"
      And I removed all objects

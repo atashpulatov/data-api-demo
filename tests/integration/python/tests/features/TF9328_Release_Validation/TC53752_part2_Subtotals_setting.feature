@@ -15,11 +15,11 @@ Feature: TF9328 - Release Validation
      When I selected all attributes
       And I selected all metrics
       And I clicked Include Subtotals and Totals switch
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
       And I waited for object to be imported successfully
       And I closed last notification
      Then I verified that cells ["B3", "D2"] have values ["USA", "$157,963"]
@@ -36,11 +36,11 @@ Feature: TF9328 - Release Validation
      When I clicked Include Subtotals and Totals switch
       And I selected all attributes
       And I selected all metrics
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
       And I waited for object to be imported successfully
       And I closed last notification
      Then I verified that cells ["B7", "C4", "AV14"] have values ["USA", "", "$3,319,225"]
@@ -106,11 +106,11 @@ Feature: TF9328 - Release Validation
 
      When I selected all attributes
       And I selected all metrics
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
       And I waited for object to be imported successfully
       And I closed last notification
      Then I verified that cells ["B1", "D2"] have values ["Avg (Item)", "$5,293,624"]

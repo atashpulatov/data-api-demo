@@ -8,11 +8,11 @@ Feature: F25949 - Display filters and prompts
       
 
       And I found and selected object "titanic_wiblgjlprj"
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
       And I closed last notification
 
       And I added a new worksheet
@@ -24,11 +24,11 @@ Feature: F25949 - Display filters and prompts
       And I selected all attributes
       And I selected all metrics
       And I selected filter "Region" with all elements
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
       And I closed last notification
 
       And I added a new worksheet

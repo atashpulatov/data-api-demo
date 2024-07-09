@@ -7,11 +7,11 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
       And I clicked Import Data button
       And I found and selected object "Report with nested prompt"
 
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      When I clicked Import with dropdown button without checking results
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button without checking results
 
       And I waited for Run button to be enabled
       And I clicked Run button
@@ -43,7 +43,7 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
      When I clicked metric "Profit"
       And I clicked attribute "Region"
       And I selected filters { "Region": ["Central", "South"] }
-      And I clicked Import Data button in Columns and Filters Selection without success check
+      And I clicked Import Data button in Columns and Filters Selection
       And I closed last notification
      Then I verified that cells ["A2", "C3", "E3"] have values ["2020", "$1,891,551", ""]
 

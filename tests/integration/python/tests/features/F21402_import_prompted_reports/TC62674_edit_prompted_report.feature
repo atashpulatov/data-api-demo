@@ -61,7 +61,7 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
 
      When I clicked metric "Profit"
       And I clicked attribute "Subcategory"
-      And I clicked Import Data button in Columns and Filters Selection without success check
+      And I clicked Import Data button in Columns and Filters Selection
       And I closed last notification
      Then I verified that cells ["A2", "C3", "E3"] have values ["2016", "Books", "$5,137"]
 

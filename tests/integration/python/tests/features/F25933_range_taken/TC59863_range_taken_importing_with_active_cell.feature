@@ -7,22 +7,22 @@ Feature: F25933 - Range taken
       And I clicked Import Data button
       
       And I found and selected object "100_report"
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
 
      Then I closed all notifications
 
      When I selected cell "E4"
       And I clicked Add Data button
       And I found and selected object "01 Basic Report"
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button without checking results
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button without checking results
       And I selected Active Cell option in Range Taken popup
       And I selected cell "P2"
       And I clicked OK button in Range Taken popup
@@ -33,11 +33,11 @@ Feature: F25933 - Range taken
       And I selected cell "F5"
       And I clicked Add Data button
       And I found and selected object "Category Performance Dataset"
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button without checking results
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button without checking results
       And I selected Active Cell option in Range Taken popup
       And I selected cell "W2"
       And I clicked OK button in Range Taken popup

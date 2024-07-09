@@ -26,11 +26,11 @@ Feature: F38412 - Re-use prompt answers across multiple prompts when importing c
      And I found and clicked "Report" object "Reprompt - Prompt on Category" in "Content Discovery"
      And I verified that Import button is enabled
      And I verified that Prepare Data button is enabled
-     And I verified that Import with dropdown button is enabled
-     And I clicked Import dropdown button
-     And I verified that "Import Data" item in Import dropdown is enabled
-     And I selected "Import Data" item in Import dropdown
-     And I clicked Import with dropdown button without checking results
+     And I verified that Import with options button is enabled
+     And I clicked options button
+     And I verified that "Import Data" option is enabled in options dropdown
+     And I selected "Import Data" option in options dropdown
+     And I clicked Import with options button without checking results
      And I waited for Run button to be enabled
      And I clicked Run button
      #Add temporary logic due to DE280291
@@ -38,11 +38,11 @@ Feature: F38412 - Re-use prompt answers across multiple prompts when importing c
      And I found and clicked "Report" object "Reprompt - Prompt on Category" in "Content Discovery"
      And I verified that Import button is enabled
      And I verified that Prepare Data button is enabled
-     And I verified that Import with dropdown button is enabled
-     And I clicked Import dropdown button
-     And I verified that "Import Data" item in Import dropdown is enabled
-     And I selected "Import Data" item in Import dropdown
-     And I clicked Import with dropdown button without checking results
+     And I verified that Import with options button is enabled
+     And I clicked options button
+     And I verified that "Import Data" option is enabled in options dropdown
+     And I selected "Import Data" option in options dropdown
+     And I clicked Import with options button without checking results
     #Change remembered answer to Movies
      And I unselected "Music" as an answer for "1. Category" prompt - object prompt
      And I verified "Music" is a available answer for "1. Category" prompt - object prompt
@@ -56,11 +56,11 @@ Feature: F38412 - Re-use prompt answers across multiple prompts when importing c
       And I found and clicked "Report" object "Reprompt - Prompt on Category" in "Content Discovery"
       And I verified that Import button is enabled
       And I verified that Prepare Data button is enabled
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button without checking results
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button without checking results
       Then I verified "Movies" is a selected answer for "1. Category" prompt - object prompt
       #Change remembered answer to Movies, Music Books
       And I selected "Music" as an answer for "1. Category" prompt - object prompt
@@ -76,11 +76,11 @@ Feature: F38412 - Re-use prompt answers across multiple prompts when importing c
       And I found and clicked "Report" object "Reprompt - Prompt on Category" in "Content Discovery"
       And I verified that Import button is enabled
       And I verified that Prepare Data button is enabled
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button without checking results
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button without checking results
       And I selected "Electronics" as an answer for "1. Category" prompt - object prompt
       And I verified "Electronics" is a selected answer for "1. Category" prompt - object prompt
       And I waited for Run button to be enabled

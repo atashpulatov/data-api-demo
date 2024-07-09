@@ -26,11 +26,11 @@ Feature: F38417 - Ability to navigate the folder structure when importing conten
     And I found and clicked "Report" object "Reprompt - Prompt on Category" in "Content Discovery"
     And I verified that Import button is enabled
     And I verified that Prepare Data button is enabled
-    And I verified that Import with dropdown button is enabled
-    And I clicked Import dropdown button
-    And I verified that "Import Data" item in Import dropdown is enabled
-    And I selected "Import Data" item in Import dropdown
-    And I clicked Import with dropdown button without checking results
+    And I verified that Import with options button is enabled
+    And I clicked options button
+    And I verified that "Import Data" option is enabled in options dropdown
+    And I selected "Import Data" option in options dropdown
+    And I clicked Import with options button without checking results
     Then I verified "Movies" is a selected answer for "1. Category" prompt - object prompt
     And I verified "Music" is a selected answer for "1. Category" prompt - object prompt
     And I verified "Books" is a available answer for "1. Category" prompt - object prompt
@@ -49,11 +49,11 @@ Feature: F38417 - Ability to navigate the folder structure when importing conten
       And I found and clicked "Report" object "Reprompt - Prompt on Category" in "Content Discovery"
       And I verified that Import button is enabled
       And I verified that Prepare Data button is enabled
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button without checking results
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button without checking results
       Then I verified "Movies" is a selected answer for "1. Category" prompt - object prompt
       And I verified "Music" is a available answer for "1. Category" prompt - object prompt
       And I verified "Books" is a available answer for "1. Category" prompt - object prompt
@@ -75,11 +75,11 @@ Feature: F38417 - Ability to navigate the folder structure when importing conten
       And I found and clicked "Report" object "Reprompt - Prompt on Category" in "Content Discovery"
       And I verified that Import button is enabled
       And I verified that Prepare Data button is enabled
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button without checking results
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button without checking results
       Then I verified "Movies" is a selected answer for "1. Category" prompt - object prompt
       And I verified "Music" is a selected answer for "1. Category" prompt - object prompt
       And I verified "Books" is a selected answer for "1. Category" prompt - object prompt
@@ -100,11 +100,11 @@ Feature: F38417 - Ability to navigate the folder structure when importing conten
       And I found and clicked "Report" object "Reprompt - Prompt on Category" in "Content Discovery"
       And I verified that Import button is enabled
       And I verified that Prepare Data button is enabled
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button without checking results
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button without checking results
       #Check default answer should be Music, Movies
       Then I verified "Music" is a selected answer for "1. Category" prompt - object prompt
       And I verified "Movies" is a selected answer for "1. Category" prompt - object prompt
@@ -131,11 +131,11 @@ Feature: F38417 - Ability to navigate the folder structure when importing conten
       And I found and clicked "Report" object "Reprompt - Prompt on Category" in "Content Discovery"
       And I verified that Import button is enabled
       And I verified that Prepare Data button is enabled
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button without checking results
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button without checking results
       #Check remembered answer Electronics is applied
       Then I verified "Electronics" is a selected answer for "1. Category" prompt - object prompt
       And I verified "Movies" is a selected answer for "1. Category" prompt - object prompt

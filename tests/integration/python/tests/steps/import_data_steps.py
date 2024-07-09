@@ -56,15 +56,15 @@ def step_impl(context):
 def step_impl(context):
     context.pages.import_data_page().click_import_image_button_without_checking_results()
 
-@step('I clicked Import with dropdown button without checking results')
+@step('I clicked Import with options button without checking results')
 def step_impl(context):
     context.pages.import_data_page().click_import_with_dropdown_button_without_checking_results()   
 
-@step('I clicked Import with dropdown button')
+@step('I clicked Import with options button')
 def step_impl(context):
     context.pages.import_data_page().click_import_with_dropdown_button()
 
-@step('I clicked Import dropdown button')
+@step('I clicked options button')
 def step_impl(context):
     context.pages.import_data_page().click_import_dropdown_button()
 
@@ -191,26 +191,25 @@ def step_impl(context):
     AssertUtil.assert_simple(is_disabled, False)
 
 
-@step('I verified that Import with dropdown button is enabled')
+@step('I verified that Import with options button is enabled')
 def step_impl(context):
     is_disabled = context.pages.import_data_page().verify_if_import_with_dropdown_button_is_enabled()
 
     AssertUtil.assert_simple(is_disabled, True)
 
-@step('I verified that "{item_name}" item in Import dropdown is disabled')
+@step('I verified that "{item_name}" option is disabled in options dropdown')
 def step_impl(context, item_name):
     is_disabled = context.pages.import_data_page().verify_if_item_in_import_dropdown_is_enabled(item_name)
 
     AssertUtil.assert_simple(is_disabled, False)
 
-
-@step('I verified that "{item_name}" item in Import dropdown is enabled')
+@step('I verified that "{item_name}" option is enabled in options dropdown')
 def step_impl(context, item_name):
     is_disabled = context.pages.import_data_page().verify_if_item_in_import_dropdown_is_enabled(item_name)
 
     AssertUtil.assert_simple(is_disabled, True)
 
-@step('I selected "{item_name}" item in Import dropdown')
+@step('I selected "{item_name}" option in options dropdown')
 def step_impl(context, item_name):
     context.pages.import_data_page().select_item_in_import_dropdown(item_name)
 

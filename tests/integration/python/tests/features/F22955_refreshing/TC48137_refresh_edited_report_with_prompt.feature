@@ -8,11 +8,11 @@ Feature: F22955 - Refresh data already imported to the workbook (including promp
       
 
      When I found and selected object "Report with prompt - Value prompt - Numeric (Year) | Required | Default answer"
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button without checking results
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button without checking results
       And I selected "2021" as an answer for "1. Select Year" prompt - object prompt
       And I waited for Run button to be enabled
       And I clicked Run button

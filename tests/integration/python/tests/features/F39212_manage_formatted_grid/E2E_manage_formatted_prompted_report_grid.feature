@@ -13,11 +13,11 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
         And I verified that Prepare Data button is disabled
         And I found and selected object "Reprompt - Prompt on Category"
         And I verified that Prepare Data button is enabled
-        And I verified that Import with dropdown button is enabled
-        And I clicked Import dropdown button
-        And I verified that "Import Formatted Data" item in Import dropdown is enabled
+        And I verified that Import with options button is enabled
+        And I clicked options button
+        And I verified that "Import Formatted Data" option is enabled in options dropdown
         And I selected "Import Formatted Data" item in Import dropdown
-        And I clicked Import with dropdown button without checking results
+        And I clicked Import with options button without checking results
         And I unselected "Movies" as an answer for "1. Category" prompt - object prompt
         And I unselected "Music" as an answer for "1. Category" prompt - object prompt
         And I selected "Books" as an answer for "1. Category" prompt - object prompt

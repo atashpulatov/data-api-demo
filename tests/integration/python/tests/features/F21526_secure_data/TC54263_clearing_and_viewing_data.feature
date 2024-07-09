@@ -7,11 +7,11 @@ Feature: F21526 - Secure data
      When I logged in as default user
       And I clicked Import Data button
       And I found and selected object "Revenue by Region and Category - secure data"
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button without checking results
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button without checking results
       And I waited for object to be imported successfully
      Then I closed last notification
 
@@ -19,11 +19,11 @@ Feature: F21526 - Secure data
       And I clicked Add Data button
       And I found and selected object "Secure data - always working"
 
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button without checking results
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button without checking results
       And I waited for object to be imported successfully
      Then I closed all notifications
       And I verified that cells ["A1", "B33", "E1", "F77"] have values ["Region", "Music", "Country", "Sub-Saharan Africa"]

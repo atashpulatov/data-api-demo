@@ -24,17 +24,17 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
 
     # Verify whether the import formatted data button is disabled
         And I selected visualization "Bar Chart"
-        And I verified that Import with dropdown button is enabled
-        And I clicked Import dropdown button
-        And I verified that "Import Formatted Data" item in Import dropdown is disabled
+        And I verified that Import with options button is enabled
+        And I clicked options button
+        And I verified that "Import Formatted Data" option is disabled in options dropdown
 
     # Import formatted grid into worksheet
         And I selected visualization "Grid"
-        And I verified that Import with dropdown button is enabled
-        And I clicked Import dropdown button
-        And I verified that "Import Formatted Data" item in Import dropdown is enabled
+        And I verified that Import with options button is enabled
+        And I clicked options button
+        And I verified that "Import Formatted Data" option is enabled in options dropdown
         And I selected "Import Formatted Data" item in Import dropdown
-        And I clicked Import with dropdown button without checking results
+        And I clicked Import with options button without checking results
         And I closed last notification
         Then I verified that cell "C3" has value "$529"
 

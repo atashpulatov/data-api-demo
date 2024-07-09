@@ -40,11 +40,11 @@ Feature: F38417 - Ability to navigate the folder structure when importing conten
       And I found and clicked "Report" object "(AUTO) Simple Report" in "Content Discovery"
       And I verified that Import button is enabled
       And I verified that Prepare Data button is enabled
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button without checking results
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button without checking results
      Then I verified that number of worksheets is 1
 
     #Import Dossier from Content Discovery
@@ -77,11 +77,11 @@ Feature: F38417 - Ability to navigate the folder structure when importing conten
       And I found and clicked "Cube" object "(AUTO) Region OLAP Cube" in "Content Discovery"
       And I verified that Import button is enabled
       And I verified that Prepare Data button is enabled
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button without checking results
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button without checking results
       And I clicked OK button in Range Taken popup
       And I closed all notifications
      Then I verified that number of worksheets is 3
@@ -97,11 +97,11 @@ Feature: F38417 - Ability to navigate the folder structure when importing conten
       And I found and clicked "Cube" object "(AUTO) Airline MTDI Cube" in "Content Discovery"
       And I verified that Import button is enabled
       And I verified that Prepare Data button is enabled
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button without checking results
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button without checking results
       And I clicked OK button in Range Taken popup
       And I closed all notifications
      Then I verified that number of worksheets is 4

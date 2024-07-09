@@ -17,11 +17,11 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
       And I clicked attribute "Month"
       And I clicked metric "Profit"
       And I selected filters { "Subcategory": ["Audio Equipment", "TV's"] }
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
 
      Then I closed last notification
 
@@ -33,7 +33,7 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
       And I verified that counter of "metrics" shows "1" of "4" selected
       And I verified that counter of "attributes" shows "1" of "2" selected
       And I verified that counter of "filters" shows "1" of "2" selected
-      And I clicked Import Data button in Columns and Filters Selection without success check
+      And I clicked Import Data button in Columns and Filters Selection
 
      Then I closed last notification
 
@@ -49,11 +49,11 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
       And I selected all metrics
       And I selected filter "Year" with all elements
       And I selected filters { "Region": ["Central", "South"] }
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
 
      Then I closed last notification
 

@@ -5,7 +5,6 @@ Feature: F25949 - Display filters and prompts
 
      When I logged in as default user
       And I clicked Import Data button
-      # 
 
      When I found and selected object "Report with a subtotal & prompt"
       And I clicked Prepare Data button
@@ -19,11 +18,11 @@ Feature: F25949 - Display filters and prompts
       And I selected all attributes
       And I selected all metrics
       And I selected filter "Subcategory" with all elements
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button without checking results
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import Data button in Columns and Filters Selection
       And I closed last notification
 
      Then I verified that cells ["A10", "B10", "C10", "D10"] have values ["Jan-14", "Computers", "$6,530", "$5,347"]
@@ -36,11 +35,11 @@ Feature: F25949 - Display filters and prompts
       And I selected all attributes
       And I selected all metrics
       And I selected filter "Item Type" with all elements
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import Data button in Columns and Filters Selection
       And I closed last notification
 
      Then I verified that cells ["J15", "K15", "L15", "M15"] have values ["519820964", "C", "Sub-Saharan Africa", "Offline"]

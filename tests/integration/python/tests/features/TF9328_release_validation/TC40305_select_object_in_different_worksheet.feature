@@ -8,11 +8,11 @@ Feature: TF9328 - Release Validation
       
 
      When I found object by ID "B7743F5A11E97AED00000080EF257000" and selected "100_report"
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
       And I closed all notifications
      Then I verified that number of worksheets is 1
       And I verified that cells ["A2", "D2"] have values ["Albania", "385383069"]
@@ -21,11 +21,11 @@ Feature: TF9328 - Release Validation
      When I added a new worksheet
       And I clicked Add Data button
       And I found and selected object "01 Basic Report"
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
       And I closed all notifications
      Then I verified that number of worksheets is 2
       And I verified that cells ["A2", "D2"] have values ["Central", "$847,227"]

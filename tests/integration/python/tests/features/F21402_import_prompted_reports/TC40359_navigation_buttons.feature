@@ -8,11 +8,11 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
       And I found object "Report with prompt - Object prompt | Required | Default answer"
       And I opened All objects list
       And I selected first found object from the objects list
-      And I verified that Import with dropdown button is enabled
-      And I clicked Import dropdown button
-      And I verified that "Import Data" item in Import dropdown is enabled
-      And I selected "Import Data" item in Import dropdown
-      And I clicked Import with dropdown button without checking results
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button without checking results
 
       And I waited for Run button to be enabled
      Then I clicked Back button
