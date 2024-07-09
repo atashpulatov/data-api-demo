@@ -394,6 +394,15 @@ export default class EmbeddedDossierNotConnected extends React.Component {
           );
           handleUniquePromptKeys(allPromptKeys);
         }
+      } else {
+        await this.openPromptDialog(
+          dossierId,
+          instance,
+          projectId,
+          dossierOpenRequested,
+          isImportedObjectPrompted,
+          isMultipleRepromptWithReuse
+        );
       }
     } catch (error) {
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
