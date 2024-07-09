@@ -306,15 +306,15 @@ class ImportDataBrowserPage(BaseBrowserPage):
         element = self.get_element_by_id(ImportDataBrowserPage.IMPORT_FORMATTED_DATA_BUTTON_ELEM)
         return element.get_attribute(ImportDataBrowserPage.IMPORT_BUTTON_DISABLED) is None
 
-    def get_option_in_options_dropdown(self, item_name):
+    def get_option_in_options_dropdown(self, option_name):
         self.focus_on_add_in_popup_frame()
-        return self.get_element_by_css(ImportDataBrowserPage.ITEM_IN_IMPORT_DROPDOWN_ELEM % item_name)
+        return self.get_element_by_css(ImportDataBrowserPage.ITEM_IN_IMPORT_DROPDOWN_ELEM % option_name)
 
-    def select_option_in_options_dropdown(self, item_name):
-        self.get_option_in_options_dropdown(item_name).click()        
+    def select_option_in_options_dropdown(self, option_name):
+        self.get_option_in_options_dropdown(option_name).click()        
 
-    def verify_if_option_in_options_dropdown_is_enabled(self, item_name):
-        element = self.get_option_in_options_dropdown(item_name)
+    def verify_if_option_in_options_dropdown_is_enabled(self, option_name):
+        element = self.get_option_in_options_dropdown(option_name)
         is_disabled = element.get_attribute(ImportDataBrowserPage.ITEM_IN_IMPORT_DROPDOWN_DISABLED)
         return is_disabled is None or is_disabled == 'false'
 

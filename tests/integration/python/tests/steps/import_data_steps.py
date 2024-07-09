@@ -197,21 +197,21 @@ def step_impl(context):
 
     AssertUtil.assert_simple(is_disabled, True)
 
-@step('I verified that "{item_name}" option is disabled in options dropdown')
-def step_impl(context, item_name):
-    is_disabled = context.pages.import_data_page().verify_if_option_in_options_dropdown_is_enabled(item_name)
+@step('I verified that "{option_name}" option is disabled in options dropdown')
+def step_impl(context, option_name):
+    is_disabled = context.pages.import_data_page().verify_if_option_in_options_dropdown_is_enabled(option_name)
 
     AssertUtil.assert_simple(is_disabled, False)
 
-@step('I verified that "{item_name}" option is enabled in options dropdown')
-def step_impl(context, item_name):
-    is_disabled = context.pages.import_data_page().verify_if_option_in_options_dropdown_is_enabled(item_name)
+@step('I verified that "{option_name}" option is enabled in options dropdown')
+def step_impl(context, option_name):
+    is_disabled = context.pages.import_data_page().verify_if_option_in_options_dropdown_is_enabled(option_name)
 
     AssertUtil.assert_simple(is_disabled, True)
 
-@step('I selected "{item_name}" option in options dropdown')
-def step_impl(context, item_name):
-    context.pages.import_data_page().select_option_in_options_dropdown(item_name)
+@step('I selected "{option_name}" option in options dropdown')
+def step_impl(context, option_name):
+    context.pages.import_data_page().select_option_in_options_dropdown(option_name)
 
 @step('I cleared search box')
 def step_impl(context):

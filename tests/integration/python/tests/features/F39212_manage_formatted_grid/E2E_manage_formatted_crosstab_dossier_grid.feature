@@ -27,7 +27,7 @@ Feature: F39212 - Ability to import formatted grids into Excel worksheet
         And I verified that Import with options button is enabled
         And I clicked options button
         And I verified that "Import Formatted Data" option is enabled in options dropdown
-        And I selected "Import Formatted Data" item in Import dropdown
+        And I selected "Import Formatted Data" option in options dropdown
         And I clicked Import with options button without checking results
         And I closed last notification
         Then I verified that cell "D2" has value "Central"
