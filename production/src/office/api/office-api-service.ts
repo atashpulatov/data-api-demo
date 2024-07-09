@@ -180,7 +180,12 @@ class OfficeApiService {
     excelContext.trackedObjects.add(sourceRange);
 
     // Retrieve the column properties of source table
-    const sourceRangeColumnWidth = sourceRange.getColumnProperties({ format: { columnWidth: true } });
+    const sourceRangeColumnWidth = sourceRange.getColumnProperties({
+      format: {
+        columnWidth: true,
+        rowHeight: true
+      }
+    });
     await excelContext.sync();
 
     const targetRange = targetWorksheet.getRange(targetTableRange);
