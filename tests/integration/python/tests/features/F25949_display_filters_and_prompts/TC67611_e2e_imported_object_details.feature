@@ -6,7 +6,6 @@ Feature: F25949 - Display filters and prompts
 
      When I logged in as default user
       And I clicked Import Data button
-      
 
       And I found and selected object "report_formatting"
       And I clicked Prepare Data button

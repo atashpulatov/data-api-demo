@@ -13,7 +13,6 @@ Feature: TF9328 - Release Validation
 
      When I selected all attributes
       And I selected all metrics
-
       And I verified that Import with options button is enabled
       And I clicked options button
       And I verified that "Import Data" option is enabled in options dropdown
@@ -55,7 +54,6 @@ Feature: TF9328 - Release Validation
 
      When I selected all attributes
       And I selected all metrics
-
       And I verified that Import with options button is enabled
       And I clicked options button
       And I verified that "Import Data" option is enabled in options dropdown
@@ -93,7 +91,6 @@ Feature: TF9328 - Release Validation
 
      When I selected all attributes
       And I selected all metrics
-
       And I verified that Import with options button is enabled
       And I clicked options button
       And I verified that "Import Data" option is enabled in options dropdown

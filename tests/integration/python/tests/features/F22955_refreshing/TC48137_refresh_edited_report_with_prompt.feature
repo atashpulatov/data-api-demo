@@ -5,7 +5,6 @@ Feature: F22955 - Refresh data already imported to the workbook (including promp
 
      When I logged in as default user
       And I clicked Import Data button
-      
 
      When I found and selected object "Report with prompt - Value prompt - Numeric (Year) | Required | Default answer"
       And I verified that Import with options button is enabled
@@ -28,7 +27,7 @@ Feature: F22955 - Refresh data already imported to the workbook (including promp
       And I clicked attribute "Region"
       And I clicked metric "Profit"
       And I selected filters { "Category": ["Books"] }
-      And I clicked Import Data button in Columns and Filters Selection without success check
+      And I clicked Import Data button in Columns and Filters Selection
       And I closed last notification
 
      Then I verified that cells ["A1", "B2", "D3"] have values ["Region", "$21,190", ""]

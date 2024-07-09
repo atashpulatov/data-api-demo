@@ -9,7 +9,6 @@ Feature: TF9328 - Release Validation
 
      When I logged in with username "No library" and empty password
       And I clicked Import Data button
-
       And I found and selected object "Multinational Bank Dossier"
      Then I clicked Import button and saw global error "This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty."
 
@@ -30,7 +29,6 @@ Feature: TF9328 - Release Validation
      When I logged in as default user
       And I added a new worksheet
       And I clicked Add Data button
-
       And I found and selected object "Multinational Bank Dossier"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully

@@ -5,7 +5,6 @@ Feature: F25946 - Details panel
 
      When I logged in as default user
       And I clicked Import Data button
-      
 
       And I found and selected object "CategorySubCategoryQuarter"
 

@@ -6,7 +6,6 @@ Feature: F32651 - Enable authors to create information-rich dossiers with Panel 
 
      When I logged in as default user
       And I clicked Import Data button
-
       And I found and selected object "Dossier with multiple Panel stacks, pages, chapters"
       And I clicked Import button to open Import Dossier
       And I selected dossier page or chapter 3

@@ -99,7 +99,6 @@ Feature: F25931 - Duplicate object
       And I selected cell "A1"
       And I clicked Add Data button
       And I found and selected object "Merged Header Report"
-
       And I verified that Import with options button is enabled
       And I clicked options button
       And I verified that "Import Data" option is enabled in options dropdown

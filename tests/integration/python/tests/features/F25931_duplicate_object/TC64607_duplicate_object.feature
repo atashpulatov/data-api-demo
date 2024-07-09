@@ -6,9 +6,7 @@ Feature: F25931 - Duplicate object
      When I logged in as default user
       And I clicked Import Data button
       
-
       And I found and selected object "100_report"
-
       And I verified that Import with options button is enabled
       And I clicked options button
       And I verified that "Import Data" option is enabled in options dropdown

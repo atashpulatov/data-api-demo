@@ -6,7 +6,6 @@ Feature: F25943 - Notifications side panel
      When I logged in as default user
       And I clicked Import Data button
       
-
       And I found and selected object "100_report"
       And I verified that Import with options button is enabled
       And I clicked options button

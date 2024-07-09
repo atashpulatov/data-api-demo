@@ -4,8 +4,7 @@ Feature: F31681 - Authentication and Prepare Data workflow improvements
     Given I initialized Excel
 
      When I logged in as default user
-      And I clicked Import Data button
-      
+      And I clicked Import Data button 
 
      When I found object by ID "C437801F11EA82FBF70F0080EFC55790" and selected "Unpublished cube"
      Then I verified that Import button is disabled

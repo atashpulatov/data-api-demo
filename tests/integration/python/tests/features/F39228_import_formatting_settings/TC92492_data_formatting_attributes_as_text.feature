@@ -13,7 +13,6 @@ Feature: F39228 - Introduce Excel add-in formatting settings for importing as te
      When I click back button in Settings
       And I clicked Import Data button
       And I found and selected object "Date format report"
-
       And I verified that Import with options button is enabled
       And I clicked options button
       And I verified that "Import Data" option is enabled in options dropdown
@@ -102,7 +101,6 @@ Feature: F39228 - Introduce Excel add-in formatting settings for importing as te
      When I selected cell "E1"
       And I clicked Add Data button
       And I found and selected object "Shoe Size and tracking number Report"
-
       And I verified that Import with options button is enabled
       And I clicked options button
       And I verified that "Import Data" option is enabled in options dropdown
@@ -157,13 +155,11 @@ Feature: F39228 - Introduce Excel add-in formatting settings for importing as te
      When I added a new worksheet
       And I clicked Add Data button
       And I found and selected object "Signs report"
-
        And I verified that Import with options button is enabled
        And I clicked options button
        And I verified that "Import Data" option is enabled in options dropdown
        And I selected "Import Data" option in options dropdown
        And I clicked Import with options button
-
       And I verified that object 1 in group 3 has displayed message "An error has occurred in Excel. The argument is invalid or missing or has an incorrect format."
       And I closed all warning notifications
 

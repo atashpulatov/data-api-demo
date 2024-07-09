@@ -5,7 +5,6 @@ Feature: F25949 - Display filters and prompts
 
      When I logged in as default user
       And I clicked Import Data button
-      
 
       And I found and selected object "titanic_wiblgjlprj"
       And I verified that Import with options button is enabled

@@ -6,7 +6,6 @@ Feature: F25949 - Display filters and prompts
 
      When I logged in as default user
       And I clicked Import Data button
-      
 
      When I found object by ID "E659E86811E58C918D6F0080EF453539" and selected "Simple Report"
       And I verified that Import with options button is enabled

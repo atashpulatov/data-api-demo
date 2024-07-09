@@ -7,7 +7,6 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
       And I clicked Import Data button
       
       And I found and selected object "Report with a subtotal & prompt"
-
      When I clicked Prepare Data button
       And I waited for Run button to be enabled
       And I selected "Electronics" as an answer for "1. Category" prompt - object prompt

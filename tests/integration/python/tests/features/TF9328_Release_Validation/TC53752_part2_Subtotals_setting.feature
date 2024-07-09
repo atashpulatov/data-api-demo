@@ -6,7 +6,6 @@ Feature: TF9328 - Release Validation
 
      When I logged in as default user
       And I clicked Import Data button
-      
       And I found and selected object "Report Totals Subtotals 1"
       And I clicked Prepare Data button
      Then I verified that Columns & Filters Selection is visible

@@ -5,7 +5,6 @@ Feature: F22954 - Edit dataset
 
      When I logged in as default user
       And I clicked Import Data button
-      
       And I found and selected object "Category Performance Dataset"
 
       And I verified that Import with options button is enabled
@@ -23,7 +22,7 @@ Feature: F22954 - Edit dataset
       And I clicked metric "Revenue"
       And I clicked attribute "Region"
       And I selected filters { "Region": ["Asia", "Europe", "North America"] }
-      And I clicked Import Data button in Columns and Filters Selection without success check
+      And I clicked Import Data button in Columns and Filters Selection
       And I closed last notification
 
      Then I verified that cells ["A1", "B2"] have values ["Region", "15233245.15"]

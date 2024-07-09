@@ -165,8 +165,6 @@ class BaseBrowserPage(BasePage):
 
         raise MstrException(('Value not found', selector, attribute, expected_value))
 
-
-
     def wait_for_element_to_have_attribute_value_by_id(self, selector, attribute, expected_value,
                                                         timeout=Const.DEFAULT_TIMEOUT):
         end_time = time.time() + timeout
