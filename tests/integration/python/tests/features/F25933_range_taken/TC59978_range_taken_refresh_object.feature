@@ -5,10 +5,13 @@ Feature: F25933 - Range taken
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-
-      And I found object by ID "B7743F5A11E97AED00000080EF257000" and selected "100_report"
-      And I clicked Import button
+      
+      And I found and selected object "100_report"
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
       And I closed all notifications
 
      Then I verified that number of worksheets is 1
@@ -16,8 +19,12 @@ Feature: F25933 - Range taken
      When I removed 4 columns starting from column "K"
       And I selected cell "L1"
       And I clicked Add Data button
-      And I found and selected object "100_dataset"
-      And I clicked Import button
+      And I found and selected object "Category Performance Dataset"
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
       And I closed all notifications
 
      Then I verified that number of worksheets is 1

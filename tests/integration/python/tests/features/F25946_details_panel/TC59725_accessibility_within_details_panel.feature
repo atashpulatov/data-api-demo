@@ -8,7 +8,7 @@ Feature: F25946 - Details panel
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
+      
       And I found object "8738171C11E97AED00000080EF155102"
       And I selected the first object from the list
 

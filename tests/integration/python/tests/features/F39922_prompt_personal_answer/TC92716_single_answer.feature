@@ -15,7 +15,11 @@ Scenario: [TC92716] - My Prompt Answers | FUN | Single Personal Answer case
     And I clicked on folder "_Automation"
     And I clicked on folder "Personal Answer"
     And I found and clicked "Report" object "Year-single-answer-report" in "Content Discovery"
-    And I clicked Import button without checking results
+    And I verified that Import with options button is enabled
+    And I clicked options button
+    And I verified that "Import Data" option is enabled in options dropdown
+    And I selected "Import Data" option in options dropdown
+    And I clicked Import with options button without checking results
     And I uncheck save answer checkbox
     And I clicked Run button
     And I closed all notifications
@@ -25,7 +29,11 @@ Scenario: [TC92716] - My Prompt Answers | FUN | Single Personal Answer case
     And I clicked Add Data button
     And I switched to Content Discovery
     And I found and clicked "Report" object "Year-single-answer-report" in "Content Discovery"
-    And I clicked Import button without checking results
+    And I verified that Import with options button is enabled
+    And I clicked options button
+    And I verified that "Import Data" option is enabled in options dropdown
+    And I selected "Import Data" option in options dropdown
+    And I clicked Import with options button without checking results
     And I unselected "2020" as an answer for "1. Year" prompt - object prompt
     And I selected "2021" as an answer for "1. Year" prompt - object prompt
     And I checked save answer checkbox
@@ -39,7 +47,11 @@ Scenario: [TC92716] - My Prompt Answers | FUN | Single Personal Answer case
     And I clicked Add Data button
     And I switched to Content Discovery
     And I found and clicked "Report" object "Year-single-answer-report" in "Content Discovery"
-    And I clicked Import button without checking results
+    And I verified that Import with options button is enabled
+    And I clicked options button
+    And I verified that "Import Data" option is enabled in options dropdown
+    And I selected "Import Data" option in options dropdown
+    And I clicked Import with options button without checking results
     And I verified "2021" is a selected answer for "1. Year" prompt - object prompt
     And I uncheck save answer checkbox
     And I clicked Run button
@@ -51,7 +63,11 @@ Scenario: [TC92716] - My Prompt Answers | FUN | Single Personal Answer case
     And I clicked Add Data button
     And I switched to Content Discovery
     And I found and clicked "Report" object "Year-single-answer-report" in "Content Discovery"
-    And I clicked Import button without checking results
+    And I verified that Import with options button is enabled
+    And I clicked options button
+    And I verified that "Import Data" option is enabled in options dropdown
+    And I selected "Import Data" option in options dropdown
+    And I clicked Import with options button without checking results
     And I clicked Run button
     And I verified that New Sheet is selected
     And I clicked OK button in Range Taken popup

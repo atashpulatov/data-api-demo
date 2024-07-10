@@ -57,7 +57,6 @@ Feature: F24086 - Improved browsing by adding filters
 
      When I added a new worksheet
       And I clicked Add Data button
-      And I switched off MyLibrary
       And I clicked Filters button
       And I clicked Application "MicroStrategy Tutorial"
       And I clicked Type "Dataset"

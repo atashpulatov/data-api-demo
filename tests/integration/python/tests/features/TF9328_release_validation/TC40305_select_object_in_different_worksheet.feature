@@ -5,10 +5,14 @@ Feature: TF9328 - Release Validation
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
+      
 
      When I found object by ID "B7743F5A11E97AED00000080EF257000" and selected "100_report"
-      And I clicked Import button
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
       And I closed all notifications
      Then I verified that number of worksheets is 1
       And I verified that cells ["A2", "D2"] have values ["Albania", "385383069"]
@@ -16,8 +20,12 @@ Feature: TF9328 - Release Validation
 
      When I added a new worksheet
       And I clicked Add Data button
-      And I found object by ID "13CFD83A458A68655A13CBA8D7C62CD5" and selected "01 Basic Report"
-      And I clicked Import button
+      And I found and selected object "01 Basic Report"
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
       And I closed all notifications
      Then I verified that number of worksheets is 2
       And I verified that cells ["A2", "D2"] have values ["Central", "$847,227"]

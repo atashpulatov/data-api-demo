@@ -5,8 +5,8 @@ Feature: F32651 - Enable authors to create information-rich dossiers with Panel 
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-      And I found object by ID "D392B6DF4A4A9A6BD245698AE53FA23C" and selected "Dossier with Panel stacks and different navigation styles"
+      
+      And I found and selected object "Dossier with Panel stacks and different navigation styles"
       And I clicked Import button to open Import Dossier
       And I selected dossier page or chapter 2
       And I selected panel stack "Panel 1"

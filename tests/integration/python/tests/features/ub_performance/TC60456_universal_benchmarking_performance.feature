@@ -27,7 +27,6 @@ Feature: Ability to perform UB testing
    # Filters setup and first iteration
     When I selected cell "A1"
      And I clicked Import Data button
-     And I switched off MyLibrary
      And I found object "Platform Analytics Cube"
      And I clicked Filters button
      And I opened All for Application category

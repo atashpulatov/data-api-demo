@@ -5,9 +5,8 @@ Feature: F24398 - Import and refresh visualization
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-
-      And I found object by ID "4480FEA011EA686AD8590080EF35B31F" and selected "Dossier with all the type of prompts"
+       
+      And I found and selected object "Dossier with all the type of prompts"
       And I clicked Import button to open Import Dossier
 #      TODO: And I waited for Run button for dossier to be enabled
       And I clicked Run button for prompted dossier if prompts not already answered
@@ -19,7 +18,7 @@ Feature: F24398 - Import and refresh visualization
 
      When I selected cell "F1"
       And I clicked Add Data button
-      And I found object by ID "624DB01811EA678EB8250080EF558D4C" and selected "Nested prompt dossier"
+      And I found and selected object "Nested prompt dossier"
       And I clicked Import button to open Import Dossier
 #      TODO: And I waited for Run button for dossier to be enabled
       And I clicked Run button for prompted dossier if prompts not already answered

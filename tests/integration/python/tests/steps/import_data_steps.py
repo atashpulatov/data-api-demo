@@ -2,21 +2,6 @@ from behave import *
 
 from framework.util.assert_util import AssertUtil
 
-
-@step('I ensured that MyLibrary Switch is OFF')
-def step_impl(context):
-    context.pages.import_data_page().ensure_mylibrary_switch_is_off()
-
-
-@step('I switched on MyLibrary')
-def step_impl(context):
-    context.pages.import_data_page().ensure_mylibrary_switch_is_on()
-
-
-@step('I switched off MyLibrary')
-def step_impl(context):
-    context.pages.import_data_page().ensure_mylibrary_switch_is_off()
-
 @step('I opened All objects list')
 def step_imp(context):
     context.pages.import_data_page().go_to_all_objects_list()
@@ -71,13 +56,17 @@ def step_impl(context):
 def step_impl(context):
     context.pages.import_data_page().click_import_image_button_without_checking_results()
 
-@step('I clicked Import with dropdown button without checking results')
+@step('I clicked Import with options button without checking results')
 def step_impl(context):
-    context.pages.import_data_page().click_import_with_dropdown_button_without_checking_results()
+    context.pages.import_data_page().click_import_with_options_button_without_checking_results()   
 
-@step('I clicked Import dropdown button')
+@step('I clicked Import with options button')
 def step_impl(context):
-    context.pages.import_data_page().click_import_dropdown_button()
+    context.pages.import_data_page().click_import_with_options_button()
+
+@step('I clicked options button')
+def step_impl(context):
+    context.pages.import_data_page().click_options_button()
 
 @step('I verified that Prepare Data button is disabled')
 def step_impl(context):
@@ -183,9 +172,9 @@ def step_impl(context):
 
     AssertUtil.assert_simple(is_disabled, True)
 
-@step('I verified that Import with dropdown button is disabled')
+@step('I verified that Import with options button is disabled')
 def step_impl(context):
-    is_disabled = context.pages.import_data_page().verify_if_import_with_dropdown_button_is_enabled()
+    is_disabled = context.pages.import_data_page().verify_if_import_with_options_button_is_enabled()
 
     AssertUtil.assert_simple(is_disabled, False)
 
@@ -202,28 +191,27 @@ def step_impl(context):
     AssertUtil.assert_simple(is_disabled, False)
 
 
-@step('I verified that Import with dropdown button is enabled')
+@step('I verified that Import with options button is enabled')
 def step_impl(context):
-    is_disabled = context.pages.import_data_page().verify_if_import_with_dropdown_button_is_enabled()
+    is_disabled = context.pages.import_data_page().verify_if_import_with_options_button_is_enabled()
 
     AssertUtil.assert_simple(is_disabled, True)
 
-@step('I verified that "{item_name}" item in Import dropdown is disabled')
-def step_impl(context, item_name):
-    is_disabled = context.pages.import_data_page().verify_if_item_in_import_dropdown_is_enabled(item_name)
+@step('I verified that "{option_name}" option is disabled in options dropdown')
+def step_impl(context, option_name):
+    is_disabled = context.pages.import_data_page().verify_if_option_in_options_dropdown_is_enabled(option_name)
 
     AssertUtil.assert_simple(is_disabled, False)
 
-
-@step('I verified that "{item_name}" item in Import dropdown is enabled')
-def step_impl(context, item_name):
-    is_disabled = context.pages.import_data_page().verify_if_item_in_import_dropdown_is_enabled(item_name)
+@step('I verified that "{option_name}" option is enabled in options dropdown')
+def step_impl(context, option_name):
+    is_disabled = context.pages.import_data_page().verify_if_option_in_options_dropdown_is_enabled(option_name)
 
     AssertUtil.assert_simple(is_disabled, True)
 
-@step('I selected "{item_name}" item in Import dropdown')
-def step_impl(context, item_name):
-    context.pages.import_data_page().select_item_in_import_dropdown(item_name)
+@step('I selected "{option_name}" option in options dropdown')
+def step_impl(context, option_name):
+    context.pages.import_data_page().select_option_in_options_dropdown(option_name)
 
 @step('I cleared search box')
 def step_impl(context):

@@ -26,7 +26,11 @@ Feature: F38412 - Re-use prompt answers across multiple prompts when importing c
       And I found and clicked "Report" object "Reprompt Report 1 - Prompt on Country" in "Content Discovery"
       And I verified that Import button is enabled
       And I verified that Prepare Data button is enabled
-      And I clicked Import button without checking results
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button without checking results
       And I verified "USA" is a selected answer for "1. Country" prompt - object prompt
       And I verified "Web" is a selected answer for "1. Country" prompt - object prompt
       And I verified "Canada" is a available answer for "1. Country" prompt - object prompt
@@ -42,7 +46,11 @@ Feature: F38412 - Re-use prompt answers across multiple prompts when importing c
       And I switched to Content Discovery
       And I found and clicked "Report" object "Reprompt Report 2 - Prompt on Country, Region" in "Content Discovery"
       And I verified that Import button is enabled
-      And I clicked Import button without checking results
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button without checking results
       And I verified "USA" is a selected answer for "1. Country" prompt - object prompt
       And I verified "Web" is a selected answer for "1. Country" prompt - object prompt
       And I verified "Canada" is a selected answer for "1. Country" prompt - object prompt
@@ -64,7 +72,11 @@ Feature: F38412 - Re-use prompt answers across multiple prompts when importing c
       And I switched to Content Discovery
       And I found and clicked "Report" object "Reprompt Report 2 - Prompt on Country, Region" in "Content Discovery"
       And I verified that Import button is enabled
-      And I clicked Import button without checking results
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button without checking results
       And I verified "Web" is a available answer for "1. Country" prompt - object prompt
       And I verified "Canada" is a available answer for "1. Country" prompt - object prompt
       And I verified "USA" is a selected answer for "1. Country" prompt - object prompt

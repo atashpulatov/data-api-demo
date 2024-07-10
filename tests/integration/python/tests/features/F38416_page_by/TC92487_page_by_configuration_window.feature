@@ -31,7 +31,11 @@ Feature: F38416 - Import reports with page-by as separate sheets in the Excel Ad
      Then I verified Settings is NOT visible
 
      When I clicked "Edit" using context menu in object 1
-      And I clicked Import button in Columns and Filters Selection without success check
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import Data button in Columns and Filters Selection without success check
      Then I verified that Page-by window is visible
 
     # Adding additional pages with "All elements" attribute selected
@@ -80,7 +84,11 @@ Feature: F38416 - Import reports with page-by as separate sheets in the Excel Ad
        And I verified that number of objects in side panel is 20
 
       When I edit object 1 using context menu without prompt
-       And I clicked Import button in Columns and Filters Selection without success check
+       And I verified that Import with options button is enabled
+       And I clicked options button
+       And I verified that "Import Data" option is enabled in options dropdown
+       And I selected "Import Data" option in options dropdown
+       And I clicked Import Data button in Columns and Filters Selection without success check
       Then I verified that Page-by window is visible
        #And I verified that number of pages is 20 in Page-by grid
 
@@ -117,7 +125,11 @@ Feature: F38416 - Import reports with page-by as separate sheets in the Excel Ad
       When I clicked "Edit" using context menu in object 3
        And I unselected "Books" as an answer for "1. Category" prompt - object prompt
        And I clicked Run button
-       And I clicked Import button in Columns and Filters Selection without success check
+       And I verified that Import with options button is enabled
+       And I clicked options button
+       And I verified that "Import Data" option is enabled in options dropdown
+       And I selected "Import Data" option in options dropdown
+       And I clicked Import Data button in Columns and Filters Selection without success check
       Then I verified that number of pages is 1 in Page-by grid
 
       When I clicked "Import" button without checking results

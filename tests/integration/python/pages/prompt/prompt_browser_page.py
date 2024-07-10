@@ -9,7 +9,7 @@ from pages.columns_and_filters_selection.columns_and_filters_selection_browser_p
 
 class PromptBrowserPage(BaseBrowserPage):
     PROMPT_MAIN_CONTAINER_ID = "mstrdossierPromptEditor"
-    PROMPT_RUN_BUTTON_CSS = '#run'
+    PROMPT_RUN_BUTTON_ID = 'run'
     PROMPTED_DOSSIER_RUN_BUTTON_CSS = '.mstrPromptEditorButtonRun'
     PROMPT_LIST_ELEM_CSS = '.mstrPromptTOCListItemIndex'
     PROMPT_OBJECT_SELECTED_ITEM_CSS = '.mstrListCartCellSelectedView .mstrListBlockItemName'
@@ -51,15 +51,15 @@ class PromptBrowserPage(BaseBrowserPage):
     def wait_for_run_button(self):
         self.focus_on_add_in_popup_frame()
 
-        self.wait_for_element_to_have_attribute_value_by_css(
-            PromptBrowserPage.PROMPT_RUN_BUTTON_CSS, 'disabled', None
+        self.wait_for_element_to_have_attribute_value_by_id(
+            PromptBrowserPage.PROMPT_RUN_BUTTON_ID, 'disabled', None
         )
     
     def wait_for_prompt_dialog(self):
         self.focus_on_add_in_popup_frame()
 
-        self.wait_for_element_to_have_attribute_value_by_css(
-            PromptBrowserPage.PROMPT_RUN_BUTTON_CSS, 'disabled', None
+        self.wait_for_element_to_have_attribute_value_by_id(
+            PromptBrowserPage.PROMPT_RUN_BUTTON_ID, 'disabled', None
         )
 
     def wait_for_prompt_dialog_ready(self):
@@ -69,7 +69,7 @@ class PromptBrowserPage(BaseBrowserPage):
     def click_run_button(self):
         self.focus_on_add_in_popup_frame()
 
-        self.get_element_by_css(PromptBrowserPage.PROMPT_RUN_BUTTON_CSS).click()
+        self.get_element_by_id(PromptBrowserPage.PROMPT_RUN_BUTTON_ID).click()
 
     def click_run_button_for_prompted_dossier_if_not_answered(self):
         self.focus_on_dossier_frame()

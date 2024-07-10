@@ -5,7 +5,7 @@ Feature: F25946 - Details panel
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
+      
 
      When I clicked Filters button
       And I clicked Application "MicroStrategy Tutorial"
@@ -37,7 +37,11 @@ Feature: F25946 - Details panel
 
 
      When I selected object "single_attribute"
-      And I clicked Import button
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
       And I waited for object operation to complete successfully with message "Import successful"
      Then I closed last notification
       And I verified that cells ["A1", "A2", "B2"] have values ["Id", "1", "1"]

@@ -5,8 +5,8 @@ Feature: F29365 - Import compound grid
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-      And I found object by ID "DB43CB0C11E9FEF1DC670080EF652715" and selected "Dossier with compound grid"
+      
+      And I found and selected object "Dossier with compound grid"
      Then I verified that Prepare Data button is disabled
 
       And I clicked Import button to open Import Dossier

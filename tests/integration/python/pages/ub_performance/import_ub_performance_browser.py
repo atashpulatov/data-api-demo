@@ -33,7 +33,6 @@ class UbPerformancePage(BaseBrowserPage):
     steps_list = '''
         When I selected cell "A1"
          And I clicked Import Data button
-         And I switched off MyLibrary
          And I found object "Platform Analytics Cube"
          And I selected object "Platform Analytics Cube"
          And I clicked Prepare Data button

@@ -13,7 +13,11 @@ Feature: F39228 - Introduce Excel add-in formatting settings for importing as te
      When I click back button in Settings
       And I clicked Import Data button
       And I found and selected object "Date format report"
-      And I selected import type "Import Data" and clicked import
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
       And I waited for object to be imported successfully
       And I closed notification for object 1 in group 1
 
@@ -37,7 +41,11 @@ Feature: F39228 - Introduce Excel add-in formatting settings for importing as te
       And I added a new worksheet
       And I clicked Add Data button
       And I found and selected object "Date format report"
-      And I selected import type "Import Data" and clicked import
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
       And I waited for object to be imported successfully
       And I closed notification for object 1 in group 2
 
@@ -57,7 +65,6 @@ Feature: F39228 - Introduce Excel add-in formatting settings for importing as te
       And I toggled the "Import data as text" setting to "OFF"
      Then I verified "Import data as text" setting is OFF
       And I click back button in Settings
-      And I closed all notifications
 
     # Edit the imported grid
      When I clicked Edit in options for object 1 in group 2
@@ -94,7 +101,11 @@ Feature: F39228 - Introduce Excel add-in formatting settings for importing as te
      When I selected cell "E1"
       And I clicked Add Data button
       And I found and selected object "Shoe Size and tracking number Report"
-      And I selected import type "Import Data" and clicked import
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
       And I closed notification for object 1 in group 2
 
     # Verify the state of imported grid with importAsText ON
@@ -121,7 +132,11 @@ Feature: F39228 - Introduce Excel add-in formatting settings for importing as te
      When I selected cell "P1"
       And I clicked Add Data button
       And I found and selected object "Shoe Size and tracking number Report"
-      And I selected import type "Import Data" and clicked import
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
       And I closed notification for object 1 in group 2
 
       # Verify the state of imported grid with importAsText OFF
@@ -140,7 +155,11 @@ Feature: F39228 - Introduce Excel add-in formatting settings for importing as te
      When I added a new worksheet
       And I clicked Add Data button
       And I found and selected object "Signs report"
-      And I selected import type "Import Data" and clicked import
+       And I verified that Import with options button is enabled
+       And I clicked options button
+       And I verified that "Import Data" option is enabled in options dropdown
+       And I selected "Import Data" option in options dropdown
+       And I clicked Import with options button
       And I verified that object 1 in group 3 has displayed message "An error has occurred in Excel. The argument is invalid or missing or has an incorrect format."
       And I closed all warning notifications
 
@@ -154,7 +173,11 @@ Feature: F39228 - Introduce Excel add-in formatting settings for importing as te
      When I added a new worksheet
       And I clicked Add Data button
       And I found and selected object "Signs report"
-      And I selected import type "Import Data" and clicked import
+       And I verified that Import with options button is enabled
+       And I clicked options button
+       And I verified that "Import Data" option is enabled in options dropdown
+       And I selected "Import Data" option in options dropdown
+       And I clicked Import with options button
       And I closed notification for object 1 in group 3
 
       # Verify the state of imported grid with importAsText ON

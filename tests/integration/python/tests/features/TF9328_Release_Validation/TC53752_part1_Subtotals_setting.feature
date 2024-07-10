@@ -13,7 +13,11 @@ Feature: TF9328 - Release Validation
 
      When I selected all attributes
       And I selected all metrics
-      And I selected import type "Import Data" and clicked import
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import Data button in Columns and Filters Selection
       And I closed last notification
      Then I verified that cells ["B1", "J3", "H3"] have values ["Item Type", "81320.96", "Maximum"]
       And I verified that bold button is selected for cell "H3"
@@ -29,7 +33,11 @@ Feature: TF9328 - Release Validation
      Then I verified that Columns & Filters Selection is visible
 
      When I clicked Include Subtotals and Totals switch
-      And I clicked Import button in Columns and Filters Selection
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import Data button in Columns and Filters Selection
       And I waited for object to be imported successfully
       And I closed last notification
      Then I verified that cells ["B1", "J3", "H3"] have values ["Item Type", "2104134.98", "27/04/2011"]
@@ -46,7 +54,11 @@ Feature: TF9328 - Release Validation
 
      When I selected all attributes
       And I selected all metrics
-      And I selected import type "Import Data" and clicked import
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import Data button in Columns and Filters Selection
       And I waited for object to be imported successfully
       And I closed last notification
      Then I verified that cells ["B1", "C7", "B8"] have values ["Subcategory", "$1,164", "Total"]
@@ -65,7 +77,7 @@ Feature: TF9328 - Release Validation
      Then I verified that Columns & Filters Selection is visible
 
      When I clicked Include Subtotals and Totals switch
-      And I clicked Import button in Columns and Filters Selection
+      And I clicked Import Data button in Columns and Filters Selection
       And I waited for object to be imported successfully
       And I closed last notification
      Then I verified that cells ["B1", "C7", "B8"] have values ["Subcategory", "$1,164", "Art & Architecture"]
@@ -79,7 +91,11 @@ Feature: TF9328 - Release Validation
 
      When I selected all attributes
       And I selected all metrics
-      And I selected import type "Import Data" and clicked import
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import Data button in Columns and Filters Selection
       And I waited for object to be imported successfully
       And I closed last notification
      Then I verified that cells ["B1", "B7", "C4", "W9"] have values ["Region", "Total", "", "$1"]
@@ -96,7 +112,7 @@ Feature: TF9328 - Release Validation
      Then I verified that Columns & Filters Selection is visible
 
      When I clicked Include Subtotals and Totals switch
-      And I clicked Import button in Columns and Filters Selection
+      And I clicked Import Data button in Columns and Filters Selection
       And I waited for object to be imported successfully
       And I closed last notification
      Then I verified that cells ["B1", "B7", "C4", "W9"] have values ["Region", "USA", "", "$1,263,442"]

@@ -16,16 +16,19 @@ Feature: TF9328 - Release Validation
       And I found and selected object "Report with a subtotal & prompt"
      Then I clicked Import button and saw global error "This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty."
 
-    When I clicked Import Data button
+     When I clicked Import Data button
       And I found and selected object "01 Basic Report"
-      And I selected import type "Import Data" and clicked import
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
      Then I verified that cells ["A2", "C3"] have values ["Central", "Loren"]
       And I logged out
 
      When I logged in as default user
       And I added a new worksheet
       And I clicked Add Data button
-      And I ensured that MyLibrary Switch is OFF
       And I found and selected object "Multinational Bank Dossier"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
@@ -38,7 +41,11 @@ Feature: TF9328 - Release Validation
      When I added a new worksheet
       And I clicked Add Data button
       And I found and selected object "Report with a subtotal & prompt"
-      And I clicked Import button without checking results
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button without checking results
       And I waited for Run button to be enabled
       And I selected "Books" as an answer for "1. Category" prompt - object prompt
       And I clicked Run button
@@ -49,7 +56,11 @@ Feature: TF9328 - Release Validation
      When I added a new worksheet
       And I clicked Add Data button
       And I found and selected object "01 Basic Report"
-      And I selected import type "Import Data" and clicked import
+      And I verified that Import with options button is enabled
+      And I clicked options button
+      And I verified that "Import Data" option is enabled in options dropdown
+      And I selected "Import Data" option in options dropdown
+      And I clicked Import with options button
      Then I verified that cells ["A2", "C3"] have values ["Central", "Loren"]
 
       And I logged out
