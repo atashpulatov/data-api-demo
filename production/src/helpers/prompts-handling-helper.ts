@@ -7,6 +7,7 @@ import {
   PromptObject,
   PromptsAnswer,
 } from '../redux-reducer/answers-reducer/answers-reducer-types';
+import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
 
 const sleep = (milliseconds: number): Promise<void> =>
   new Promise(resolve => {
@@ -104,7 +105,8 @@ export async function answerDossierPromptsHelper(
   objectId: string,
   projectId: string,
   promptsAnswers: AnswersState[],
-  previousPromptAnswers: PromptsAnswer[]
+  previousPromptAnswers: PromptsAnswer[],
+  currentReportPromptKeys: AnswersState[]
 ): Promise<any> {
   const currentInstanceDefinition = { ...instanceDefinition };
   let count = 0;
@@ -123,8 +125,9 @@ export async function answerDossierPromptsHelper(
           },
       ignoreValidateRequiredCheck: true,
     };
-
+    let tempPromptsAnswers: AnswersState;
     if (promptsAnswers[count] !== undefined) {
+      tempPromptsAnswers = promptsAnswers[count];
       await mstrObjectRestService.answerDossierPrompts(config);
     } else {
       const prompts = await mstrObjectRestService.getObjectPrompts(
@@ -134,6 +137,7 @@ export async function answerDossierPromptsHelper(
       );
       const [preparedAnswers] = prepareGivenPromptAnswers(prompts, previousPromptAnswers);
       config.promptsAnswers = preparedAnswers;
+      tempPromptsAnswers = preparedAnswers;
       await mstrObjectRestService.answerDossierPrompts(config);
     }
 
@@ -154,6 +158,9 @@ export async function answerDossierPromptsHelper(
         projectId
       );
     }
+
+    // add keys from prompts to the currentReportPromptKeys
+    currentReportPromptKeys.push(tempPromptsAnswers);
     currentInstanceDefinition.status = dossierStatusResponse.body.status;
 
     count += 1;
@@ -196,7 +203,8 @@ export async function preparePromptedDossier(
         dossierId,
         projectId,
         promptsAnswers,
-        previousPromptsAnswers
+        previousPromptsAnswers,
+        []
       );
     } catch (error) {
       console.error('Error applying prompt answers:', error);
@@ -219,6 +227,37 @@ export async function preparePromptedDossier(
 
       return dossierInstanceDefinition;
     }
+  }
+
+  return dossierInstanceDefinition;
+}
+
+/**
+ * Forces the prompt dialog to open by making a re-prompt request for the dossier instance.
+ * Updates the dossier instance definition with the new mid if the re-prompt is successful.
+ * Happens only re-use prompt answers is turned off or when reuse prompt answer is on and
+ * the prompt answers are not provided yet by any other prompt in the reprompts queue.
+ *
+ * @param chosenObjectIdLocal - The ID of the chosen dossier object.
+ * @param dossierInstanceDefinition - The dossier instance definition to be updated.
+ * @param projectId - The ID of the project.
+ * @returns - A promise that resolves to the updated dossier instance definition.
+ */
+
+async function forceOpenPromptDialog(
+  chosenObjectIdLocal: string,
+  dossierInstanceDefinition: any,
+  projectId: string
+): Promise<InstanceDefinition> {
+  const repromptResponse = await mstrObjectRestService.rePromptDossier(
+    chosenObjectIdLocal,
+    dossierInstanceDefinition.mid,
+    projectId
+  );
+
+  if (repromptResponse?.mid) {
+    dossierInstanceDefinition.mid = repromptResponse.mid;
+    dossierInstanceDefinition.id = chosenObjectIdLocal;
   }
 
   return dossierInstanceDefinition;
@@ -255,6 +294,22 @@ async function resetDossierInstance(
 }
 
 /**
+ * Collects unique prompt keys from an array of prompt objects.
+ *
+ * @param promptObjs - An array of prompt objects potentially containing keys
+ * @param  keys - The unique prompt keys from redux reprompt queue state.
+ * @returns  An array of unique keys collected from the prompt objects.
+ */
+export const collectPromptKeys = (promptObjs: { key: string }[], keys: string[] = []): string[] => {
+  promptObjs.forEach(promptObject => {
+    if (promptObject.key && !keys.includes(promptObject.key)) {
+      keys.push(promptObject.key);
+    }
+  });
+  return keys;
+};
+
+/**
  * This function is used to prepare the prompted report to apply previously saved ir given answers
  * if applicable. It will create an instance of the report and then create a Dossier based on that instance.
  * And it will apply the answers to the prompts of the Dossier's instance, including nested prompts.
@@ -267,7 +322,9 @@ export async function preparePromptedReport(
   chosenObjectIdLocal: string,
   projectId: string,
   promptsAnswers: AnswersState[],
-  previousAnswers: PromptsAnswer[]
+  previousAnswers: PromptsAnswer[],
+  promptKeys: string[],
+  currentReportPromptKeys: AnswersState[]
 ): Promise<any> {
   const config: any = { objectId: chosenObjectIdLocal, projectId };
   const instanceDefinition = await mstrObjectRestService.createInstance(config);
@@ -293,7 +350,8 @@ export async function preparePromptedReport(
         chosenObjectIdLocal,
         projectId,
         promptsAnswers,
-        previousAnswers
+        previousAnswers,
+        currentReportPromptKeys
       );
     } catch (error) {
       console.error('Error applying prompt answers:', error);
@@ -311,18 +369,20 @@ export async function preparePromptedReport(
     }
   }
 
-  // Re-prompt the Dossier's instance to change execution status to 2 and force Prompts' dialog to open.
-  const repromptResponse = await mstrObjectRestService.rePromptDossier(
-    chosenObjectIdLocal,
-    dossierInstanceDefinition.mid,
-    projectId
+  // compare currentReportPromptKeys with promptKeys
+  const currentReportPromptKeysArray = currentReportPromptKeys.flatMap(obj =>
+    obj.answers.map((answer: { key: any }) => answer.key)
   );
+  const hasAllKeys = currentReportPromptKeysArray.every(key => promptKeys.includes(key));
 
-  if (repromptResponse?.mid) {
-    dossierInstanceDefinition.mid = repromptResponse.mid;
-    dossierInstanceDefinition.id = chosenObjectIdLocal;
+  if (!hasAllKeys) {
+    // Re-prompt the Dossier's instance to change execution status to 2 and force Prompts' dialog to open.
+    dossierInstanceDefinition = await forceOpenPromptDialog(
+      chosenObjectIdLocal,
+      dossierInstanceDefinition,
+      projectId
+    );
   }
-
   return dossierInstanceDefinition;
 }
 

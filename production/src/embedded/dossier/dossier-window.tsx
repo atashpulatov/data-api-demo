@@ -50,6 +50,7 @@ interface DossierWindowProps {
 export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => {
   const [t] = useTranslation('common', { i18n });
   const [promptsAnswers, setPromptsAnswers] = useState([]);
+  const [promptKeys, setPromptKeys] = useState<string[]>([]);
   const instanceId = useRef('');
   const [vizualizationsData, setVizualizationsData] = useState([]);
   const [lastSelectedViz, setLastSelectedViz] = useState<any>({});
@@ -227,6 +228,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
       chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
       isPrompted: promptsAnswers?.length > 0,
       promptsAnswers,
+      promptKeys,
       importType,
       visualizationInfo: {
         chapterKey,
@@ -245,6 +247,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
     instanceId,
     isEdit,
     promptsAnswers,
+    promptKeys,
     visualizationKey,
     vizDimensions,
     importType,
@@ -311,6 +314,16 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
   );
 
   /**
+   * Updates the state of unique prompt keys with the provided array of prompt keys in that execution of multiple reprompt.
+   * This function is used to handle and update the prompt keys.
+   *
+   * @param newPromptKeys - An array of new prompt keys to update the state with.
+   */
+  const handleUniquePromptKeys = (newPromptKeys: string[]): void => {
+    setPromptKeys(newPromptKeys);
+  };
+
+  /**
    * Change state of component so that informative message is showed only after embedded dossier is loaded.
    *
    */
@@ -367,6 +380,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
               // @ts-expect-error
               handleSelection={handleSelection}
               handlePromptAnswer={handlePromptAnswer}
+              handleUniquePromptKeys={handleUniquePromptKeys}
               handleInstanceIdChange={handleInstanceIdChange}
               handleIframeLoadEvent={validateSession}
               handleEmbeddedDossierLoad={handleEmbeddedDossierLoad}

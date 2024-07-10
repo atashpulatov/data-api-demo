@@ -1,11 +1,13 @@
 import {
   AddRepromptTaskAction,
   ClearRepromptTasksAction,
+  EditOperationAction,
   ExecuteNextRepromptTaskAction,
   RepromptQueueActions,
   RepromptQueueActionTypes,
 } from './reprompt-queue-reducer-types';
 
+import { OperationTypes } from '../../operation/operation-type-names';
 import * as RepromptQueueReducer from './reprompt-queue-reducer';
 
 describe('reprompt-queue-reducer', () => {
@@ -16,6 +18,7 @@ describe('reprompt-queue-reducer', () => {
       index: 0,
       repromptsQueue: [],
       total: 0,
+      promptKeys: [],
     });
   });
 
@@ -36,6 +39,7 @@ describe('reprompt-queue-reducer', () => {
     if (isPrompted.isPrompted) {
       expect(RepromptQueueReducer.repromptsQueueReducer(undefined, action)).toEqual({
         index: 0,
+        promptKeys: [],
         repromptsQueue: [
           {
             callback: repromptCallback,
@@ -47,6 +51,7 @@ describe('reprompt-queue-reducer', () => {
     } else {
       expect(RepromptQueueReducer.repromptsQueueReducer(undefined, action)).toEqual({
         index: 0,
+        promptKeys: [],
         repromptsQueue: [
           {
             callback: repromptCallback,
@@ -92,8 +97,60 @@ describe('reprompt-queue-reducer', () => {
 
     expect(RepromptQueueReducer.repromptsQueueReducer(undefined, action)).toEqual({
       index: 0,
+      promptKeys: [],
       repromptsQueue: [],
       total: 0,
     });
+  });
+
+  it('should handle addMultiplePromptKeysTask correctly', () => {
+    const actionWithPromptKeys: EditOperationAction = {
+      type: RepromptQueueActionTypes.EDIT_OPERATION,
+      payload: {
+        operation: {
+          objectEditedData: {
+            promptKeys: ['key1', 'key2'],
+          },
+          operationType: OperationTypes.EDIT_OPERATION,
+          objectWorkingId: 0,
+          stepsQueue: [],
+          operationId: '',
+        },
+      },
+    };
+
+    const actionWithoutPromptKeys: EditOperationAction = {
+      type: RepromptQueueActionTypes.EDIT_OPERATION,
+      payload: {
+        operation: {
+          objectEditedData: {},
+          operationType: OperationTypes.EDIT_OPERATION,
+          objectWorkingId: 0,
+          stepsQueue: [],
+          operationId: '',
+        },
+      },
+    };
+
+    // State before the action
+    const initialState = {
+      index: 0,
+      repromptsQueue: [] as any[],
+      total: 0,
+      promptKeys: ['existingKey'],
+    };
+
+    // When promptKeys are present
+    expect(RepromptQueueReducer.repromptsQueueReducer(initialState, actionWithPromptKeys)).toEqual({
+      index: 0,
+      repromptsQueue: [] as any[],
+      total: 0,
+      promptKeys: ['existingKey', 'key1', 'key2'],
+    });
+
+    // When promptKeys are absent
+    expect(
+      RepromptQueueReducer.repromptsQueueReducer(initialState, actionWithoutPromptKeys)
+    ).toEqual(initialState);
   });
 });

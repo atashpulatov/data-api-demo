@@ -19,6 +19,7 @@ import { RootState } from '../store';
 
 import { DialogCommands } from '../dialog/dialog-controller-types';
 import { PageByDisplayType } from '../page-by/page-by-types';
+import { AnswersState } from '../redux-reducer/answers-reducer/answers-reducer-types';
 import {
   EditedObject,
   MstrData,
@@ -33,6 +34,7 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
+import { repromptsQueueSelector } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer-selector';
 import { settingsReducerSelectors } from '../redux-reducer/settings-reducer/settings-reducer-selectors';
 import { PromptsContainer } from './prompts-container';
 import { ErrorMessages } from '../error/constants';
@@ -56,6 +58,7 @@ interface PromptsWindowProps {
   isPreparedDataRequested?: boolean;
   promptObjects?: any[]; // Replace 'any' with the appropriate type
   repromptsQueue?: RepromptsQueueState;
+  promptKeys?: string[];
   isMultipleRepromptWithReuse?: boolean;
   setImportType?: (importType: ObjectImportType) => void;
   importType?: ObjectImportType;
@@ -80,6 +83,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
     isPreparedDataRequested,
     isMultipleRepromptWithReuse,
     repromptsQueue,
+    promptKeys,
     setImportType,
     importType,
   } = props;
@@ -151,16 +155,22 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
    *
    * @param {*} newAnswer prompt answers entered by the user.
    */
-  const promptAnsweredHandler = (newAnswer: any): void => {
-    setIsPromptLoading(true);
-    if (newPromptsAnswers.current.length > 0) {
-      const newArray = [...newPromptsAnswers.current, newAnswer];
-      newPromptsAnswers.current = newArray;
-    } else {
-      // Initialize newPromptsAnswers with the new answer.
-      newPromptsAnswers.current = [newAnswer];
-    }
-  };
+  const promptAnsweredHandler = useCallback(
+    (newAnswer: any): void => {
+      setIsPromptLoading(true);
+      if (newPromptsAnswers.current.length > 0) {
+        const newArray = [...newPromptsAnswers.current, newAnswer];
+        newPromptsAnswers.current = newArray;
+      } else {
+        // Initialize newPromptsAnswers with the new answer.
+        newPromptsAnswers.current = [newAnswer];
+      }
+      // Add unique keys from allPromptKeys to promptKeys
+      const keysFromNewAnswer = newAnswer.answers.map((answer: any) => answer.key);
+      promptKeys.push(...keysFromNewAnswer.filter((key: string) => !promptKeys.includes(key)));
+    },
+    [setIsPromptLoading, newPromptsAnswers, promptKeys]
+  );
 
   const promptLoadedHandler = (): void => {
     setIsPromptLoading(false);
@@ -184,8 +194,9 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
   const initializeImportForReprompt = (
     chosenObjectIdLocal: string,
     projectId: string,
-    pageByConfigurations?: PageByConfiguration[][]
-  ): void =>
+    pageByConfigurations?: PageByConfiguration[][],
+    currentAnswers?: AnswersState[]
+  ): void => {
     dialogHelper.officeMessageParent({
       command: DialogCommands.COMMAND_ON_UPDATE,
       chosenObjectId: chosenObjectIdLocal,
@@ -202,14 +213,15 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
       chosenObjectName: editedObject.chosenObjectName,
       objectWorkingId: editedObject.objectWorkingId,
       instanceId: editedObject.instanceId,
-      promptsAnswers: newPromptsAnswers.current,
-      isPrompted: !!newPromptsAnswers.current.length,
+      promptsAnswers: currentAnswers || newPromptsAnswers.current,
+      isPrompted: !!currentAnswers?.length || !!newPromptsAnswers.current.length,
       subtotalsInfo: editedObject.subtotalsInfo,
       displayAttrFormNames: editedObject.displayAttrFormNames,
       pageByData: editedObject.pageByData,
+      promptKeys,
       pageByConfigurations,
     });
-
+  };
   /**
    * This function is called at the end of the Reprompt (only Reprompt, not Edit) workflow,
    * after user applies new answers. It will bypass the Edit Filters step and update the Excel data
@@ -220,7 +232,12 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
    * @returns {void}
    */
   const finishRepromptWithoutEditFilters = useCallback(
-    (chosenObjectIdLocal: string, projectId: string, dossierData: any, currentAnswers: any[]) => {
+    (
+      chosenObjectIdLocal: string,
+      projectId: string,
+      dossierData: any,
+      currentAnswers: AnswersState[]
+    ) => {
       // for the Reprompt workflow only, skip edit filter screen.
       if (!isReprompt || isEdit) {
         return;
@@ -236,8 +253,10 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
           importCallback: (pageByConfigurations: PageByConfiguration[][]) =>
             initializeImportForReprompt(chosenObjectIdLocal, projectId, pageByConfigurations),
         } as any);
-      } else {
+      } else if (newPromptsAnswers.current.length > 0) {
         initializeImportForReprompt(chosenObjectIdLocal, projectId);
+      } else {
+        initializeImportForReprompt(chosenObjectIdLocal, projectId, undefined, currentAnswers);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -298,6 +317,9 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
 
       try {
         let msgRouter: any = null;
+
+        const currentPrompts: AnswersState[] = [];
+
         const serverURL = envUrl.slice(0, envUrl.lastIndexOf('/api'));
         // delete last occurence of '/api' from the enviroment url
         const { CustomAuthenticationType } = microstrategy.dossier;
@@ -349,7 +371,9 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
             chosenObjectIdLocal,
             projectId,
             givenPromptsAnswers,
-            previousPromptsAnswers
+            previousPromptsAnswers,
+            promptKeys,
+            currentPrompts
           );
         }
 
@@ -373,11 +397,9 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
           msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptAnsweredHandler);
           msgRouter.removeEventhandler(EventType.ON_PROMPT_LOADED, promptLoadedHandler);
           msgRouter.removeEventhandler(EventType.ON_ERROR, onEmbeddedError);
+          const currentAnswers =
+            newPromptsAnswers.current.length > 0 ? [...newPromptsAnswers.current] : currentPrompts;
 
-          // Get the new answers from the prompts dialog.
-          const currentAnswers = [...newPromptsAnswers.current];
-
-          // Since the dossier is no needed anymore after intercepting promptsAnswers, we can try removing the instanace
           deleteDossierInstance(projectId, objectId, instanceId);
 
           // dossierData should eventually be removed as data should be gathered via REST from report, not dossier
@@ -399,19 +421,21 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
       chosenObjectId,
       editedObject.chosenObjectId,
       editedObject.projectId,
-      isReprompt,
+      editedObject.promptsAnswers,
       mstrData.chosenProjectId,
-      promptsAnswered,
-      prepareAndHandlePromptAnswers,
       session,
-      importRequested,
       previousPromptsAnswers,
       promptObjects,
-      reusePromptAnswers,
-      finishRepromptWithoutEditFilters,
+      importRequested,
       isPreparedDataRequested,
+      reusePromptAnswers,
+      isReprompt,
       isMultipleRepromptWithReuse,
-      editedObject.promptsAnswers,
+      promptAnsweredHandler,
+      promptKeys,
+      prepareAndHandlePromptAnswers,
+      promptsAnswered,
+      finishRepromptWithoutEditFilters,
     ]
   );
 
@@ -528,6 +552,7 @@ export const mapStateToProps = (state: RootState): any => {
   const isReport =
     popupState && popupState.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
+  const promptKeys = repromptsQueueSelector.selectPromptKeys(state); // Use the selector here
 
   // Check whether prepared data is requested for import and includes prompt objects
   const hasPreparedRequestPromptObjects =
@@ -558,6 +583,7 @@ export const mapStateToProps = (state: RootState): any => {
     isPreparedDataRequested, // State flag indicating whether prepared data is requested for import
     repromptsQueue: { ...repromptsQueueReducer },
     isMultipleRepromptWithReuse: reusePromptAnswers && repromptsQueueReducer.total > 1,
+    promptKeys,
   };
 };
 

@@ -1,12 +1,18 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import {
   AddRepromptTaskAction,
+  EditOperationAction,
   RepromptQueueActions,
   RepromptQueueActionTypes,
   RepromptsQueueState,
 } from './reprompt-queue-reducer-types';
 
-const initialState: RepromptsQueueState = { repromptsQueue: [], index: 0, total: 0 };
+const initialState: RepromptsQueueState = {
+  repromptsQueue: [],
+  index: 0,
+  total: 0,
+  promptKeys: [],
+};
 
 export const repromptsQueueReducer = (
   // eslint-disable-next-line default-param-last
@@ -23,11 +29,13 @@ export const repromptsQueueReducer = (
     case RepromptQueueActionTypes.CLEAR_REPROMPT_TASKS:
       return clearRepromptTasks();
 
+    case RepromptQueueActionTypes.EDIT_OPERATION:
+      return addMultiplePromptKeysTask(action, state);
+
     default:
       return state;
   }
 };
-
 const addRepromptTask = (
   state: RepromptsQueueState,
   action: AddRepromptTaskAction
@@ -50,4 +58,27 @@ const executeNextRepromptTask = (state: RepromptsQueueState): RepromptsQueueStat
   return { ...initialState };
 };
 
+const addMultiplePromptKeysTask = (
+  action: EditOperationAction,
+  state: RepromptsQueueState
+): RepromptsQueueState => {
+  if (!action?.payload?.operation?.objectEditedData?.promptKeys) {
+    return state;
+  }
+
+  const newPromptKeys = action.payload.operation.objectEditedData.promptKeys.reduce(
+    (acc: string[], key: string) => {
+      if (!acc.includes(key)) {
+        acc.push(key);
+      }
+      return acc;
+    },
+    [...state.promptKeys]
+  );
+
+  return {
+    ...state,
+    promptKeys: newPromptKeys,
+  };
+};
 const clearRepromptTasks = (): RepromptsQueueState => ({ ...initialState });

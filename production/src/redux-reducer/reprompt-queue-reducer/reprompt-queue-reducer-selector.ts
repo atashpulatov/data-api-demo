@@ -12,6 +12,11 @@ const selectRepromptQueue = createSelector(
   (repromptsQueueReducer: RepromptsQueueState) => repromptsQueueReducer.repromptsQueue
 );
 
+const selectPromptKeys = createSelector(
+  [getRepromptsQueueState],
+  (repromptsQueueReducer: RepromptsQueueState) => repromptsQueueReducer.promptKeys
+);
+
 const doesRepromptQueueContainItems = createSelector(
   selectRepromptQueue,
   repromptsQueue => repromptsQueue.length > 0
@@ -20,4 +25,5 @@ const doesRepromptQueueContainItems = createSelector(
 export const repromptsQueueSelector = {
   selectRepromptQueue,
   doesRepromptQueueContainItems,
+  selectPromptKeys,
 };

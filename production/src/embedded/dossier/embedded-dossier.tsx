@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import { dialogHelper } from '../../dialog/dialog-helper';
 import {
+  collectPromptKeys,
   ObjectExecutionStatus,
   prepareGivenPromptAnswers,
   preparePromptedDossier,
@@ -25,6 +26,7 @@ import { VisualizationInfo } from '../../types/object-types';
 
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
+import { repromptsQueueSelector } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer-selector';
 import { ErrorMessages } from '../../error/constants';
 
 import './dossier.scss';
@@ -62,6 +64,7 @@ interface EmbeddedDossierProps {
   handleInstanceIdChange?: () => void;
   handleIframeLoadEvent?: () => void;
   handleEmbeddedDossierLoad?: () => void;
+  handleUniquePromptKeys?: (keys: string[]) => void;
   reusePromptAnswers?: boolean;
   previousPromptsAnswers?: PromptsAnswer[];
   dossierOpenRequested?: boolean;
@@ -71,6 +74,7 @@ interface EmbeddedDossierProps {
   isMultipleRepromptWithReuse?: boolean;
   handleEmbeddedDossierVisibility?: (flag?: boolean) => void;
   isReprompt?: boolean;
+  promptKeys?: string[];
 }
 
 export default class EmbeddedDossierNotConnected extends React.Component {
@@ -318,7 +322,9 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       isPrompted,
       isMultipleRepromptWithReuse,
       handleEmbeddedDossierVisibility,
+      handleUniquePromptKeys,
       isReprompt,
+      promptKeys,
     }: EmbeddedDossierProps = this.props;
     const {
       envUrl,
@@ -372,15 +378,32 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         previousPromptsAnswers
       );
 
-      // Proceed with opening prompt dialog if applicable.
-      await this.openPromptDialog(
-        dossierId,
-        instance,
-        projectId,
-        dossierOpenRequested,
-        isImportedObjectPrompted,
-        isMultipleRepromptWithReuse
-      );
+      // check if all keys from promptObjectAnswers are present in the promptKeys set
+      if (isMultipleRepromptWithReuse) {
+        const allPromptKeys = collectPromptKeys(promptObjectAnswers);
+        const areAllKeysPresent = allPromptKeys.every(key => promptKeys.includes(key));
+        if (!areAllKeysPresent) {
+          // Proceed with opening prompt dialog if applicable.
+          await this.openPromptDialog(
+            dossierId,
+            instance,
+            projectId,
+            dossierOpenRequested,
+            isImportedObjectPrompted,
+            isMultipleRepromptWithReuse
+          );
+          handleUniquePromptKeys(allPromptKeys);
+        }
+      } else {
+        await this.openPromptDialog(
+          dossierId,
+          instance,
+          projectId,
+          dossierOpenRequested,
+          isImportedObjectPrompted,
+          isMultipleRepromptWithReuse
+        );
+      }
     } catch (error) {
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
       dialogHelper.handlePopupErrors(error);
@@ -577,7 +600,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
 
     // Persist in Redux only the answers for the current prompt object.
     handlePromptAnswer(this.dossierData.promptsAnswers);
-
     if (this.embeddedDossier) {
       const payload = await this.embeddedDossier.getSelectedVizKeys();
       if (Object.keys(payload).length > 0) {
@@ -630,7 +652,7 @@ const mapStateToProps = (state: RootState): any => {
   };
   const { isReprompt = false } = popupStateReducer;
   const isMultipleRepromptWithReuse = reusePromptAnswers && repromptsQueueReducer.total > 1;
-
+  const promptKeys = repromptsQueueSelector.selectPromptKeys(state); // Use the selector here
   // Do not specify the instanceId if it is a multiple reprompt because, if it is specified,
   // the embedded dossier will not load the saved prompts and will use the default ones instead, the ones
   // in the definition when it was imported the first time.
@@ -652,6 +674,7 @@ const mapStateToProps = (state: RootState): any => {
     dossierOpenRequested,
     isPrompted,
     repromptsQueue: { ...repromptsQueueReducer },
+    promptKeys,
     isMultipleRepromptWithReuse,
     isReprompt,
   };
