@@ -7,6 +7,7 @@ import {
   PromptObject,
   PromptsAnswer,
 } from '../redux-reducer/answers-reducer/answers-reducer-types';
+import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
 
 const sleep = (milliseconds: number): Promise<void> =>
   new Promise(resolve => {
@@ -237,17 +238,17 @@ export async function preparePromptedDossier(
  * Happens only re-use prompt answers is turned off or when reuse prompt answer is on and
  * the prompt answers are not provided yet by any other prompt in the reprompts queue.
  *
- * @param {string} chosenObjectIdLocal - The ID of the chosen dossier object.
- * @param {any} dossierInstanceDefinition - The dossier instance definition to be updated.
- * @param {string} projectId - The ID of the project.
- * @returns {Promise<any>} - A promise that resolves to the updated dossier instance definition.
+ * @param chosenObjectIdLocal - The ID of the chosen dossier object.
+ * @param dossierInstanceDefinition - The dossier instance definition to be updated.
+ * @param projectId - The ID of the project.
+ * @returns - A promise that resolves to the updated dossier instance definition.
  */
 
 async function forceOpenPromptDialog(
   chosenObjectIdLocal: string,
   dossierInstanceDefinition: any,
   projectId: string
-): Promise<any> {
+): Promise<InstanceDefinition> {
   const repromptResponse = await mstrObjectRestService.rePromptDossier(
     chosenObjectIdLocal,
     dossierInstanceDefinition.mid,

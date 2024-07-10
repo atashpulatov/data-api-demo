@@ -317,7 +317,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
    * Updates the state of unique prompt keys with the provided array of prompt keys in that execution of multiple reprompt.
    * This function is used to handle and update the prompt keys.
    *
-   * @param {string[]} newPromptKeys - An array of new prompt keys to update the state with.
+   * @param newPromptKeys - An array of new prompt keys to update the state with.
    */
   const handleUniquePromptKeys = (newPromptKeys: string[]): void => {
     setPromptKeys(newPromptKeys);
