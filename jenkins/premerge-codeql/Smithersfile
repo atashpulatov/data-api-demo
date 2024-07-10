@@ -7,7 +7,7 @@ job 'stage-0-premerge-codeql' do
 
   triggers do
     pull_request_builder do
-      onlyTriggerPhrase "true"
+      
     end
   end
 
