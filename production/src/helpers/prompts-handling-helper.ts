@@ -296,9 +296,9 @@ async function resetDossierInstance(
 /**
  * Collects unique prompt keys from an array of prompt objects.
  *
- * @param {Object[]} promptObjs - An array of prompt objects potentially containing keys
- * @param {string[]} [keys=[]] - The unique prompt keys from redux reprompt queue state.
- * @returns {string[]} An array of unique keys collected from the prompt objects.
+ * @param promptObjs - An array of prompt objects potentially containing keys
+ * @param  keys - The unique prompt keys from redux reprompt queue state.
+ * @returns  An array of unique keys collected from the prompt objects.
  */
 export const collectPromptKeys = (promptObjs: { key: string }[], keys: string[] = []): string[] => {
   promptObjs.forEach(promptObject => {
