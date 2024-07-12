@@ -222,21 +222,25 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
   const handleOk = useCallback(() => {
     const message = {
       command: DialogCommands.COMMAND_OK,
-      chosenObjectName,
-      chosenObject: chosenObjectId,
-      chosenProject: chosenProjectId,
-      chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
-      isPrompted: promptsAnswers?.length > 0,
-      promptsAnswers,
-      promptKeys,
-      importType,
-      visualizationInfo: {
-        chapterKey,
-        visualizationKey,
-        vizDimensions,
-      },
-      preparedInstanceId: instanceId.current,
-      isEdit,
+      objectsDialogInfo: [
+        {
+          chosenObjectName,
+          chosenObject: chosenObjectId,
+          chosenProject: chosenProjectId,
+          chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
+          isPrompted: promptsAnswers?.length > 0,
+          promptsAnswers,
+          promptKeys,
+          importType,
+          visualizationInfo: {
+            chapterKey,
+            visualizationKey,
+            vizDimensions,
+          },
+          preparedInstanceId: instanceId.current,
+          isEdit,
+        },
+      ],
     };
     dialogHelper.officeMessageParent(message);
   }, [

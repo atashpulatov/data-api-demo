@@ -6,7 +6,7 @@ import officeReducerHelper from '../office/store/office-reducer-helper';
 
 import { reduxStore } from '../store';
 
-import { DialogResponse, ReportParams } from '../dialog/dialog-controller-types';
+import { ObjectDialogInfo, ReportParams } from '../dialog/dialog-controller-types';
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectAndWorksheetNamingOption } from '../right-side-panel/settings-side-panel/settings-side-panel-types';
 import { ObjectData } from '../types/object-types';
@@ -345,7 +345,7 @@ class PageByHelper {
    * @param reportParams Contains information about the currently selected object
    * @returns Flag indicating whether the Page-by objects should be removed
    */
-  getShouldRemovePages(response: DialogResponse, reportParams: ReportParams): boolean {
+  getShouldRemovePages(response: ObjectDialogInfo, reportParams: ReportParams): boolean {
     const { objectWorkingId, pageByData, pageByConfigurations, isPageBy } = response;
     const { pageByDisplaySetting } = reduxStore.getState().settingsReducer;
     const { pageBySiblings } = this.getAllPageByObjects(objectWorkingId) || {};
