@@ -5,9 +5,9 @@
   "connect_to_existing_session_enabled": false,
   "max_no_of_test_executions": 2,
   "cleanup_after_test_enabled": true,
-  "driver_path_windows_chrome": "framework\\resources\\chromedriver_123_win32.exe",
-  "excel_add_in_environment": "CI_local",
-  "excel_desktop_add_in_import_data_name": "CI_local",
+  "driver_path_windows_chrome": "framework\\resources\\chromedriver_126_win32.exe",
+  "excel_add_in_environment": "latest",
+  "excel_desktop_add_in_import_data_name": "latest",
   "excel_add_in_environment_default_user_name": "a",
   "excel_add_in_environment_default_password": ""
 }
