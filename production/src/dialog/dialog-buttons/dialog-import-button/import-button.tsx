@@ -58,7 +58,7 @@ export const ImportButton: React.FC<ImportButtonProps> = ({
   if (shouldDisplayOptions) {
     return (
       <Tooltip
-        disabled={!disableReason || importButtonClicked}
+        disabled={!disableReason}
         content={t(`${disableReason}`)}
         placement='top-end'
       >
@@ -81,7 +81,7 @@ export const ImportButton: React.FC<ImportButtonProps> = ({
 
   return (
     <Tooltip
-      disabled={!disableReason || importButtonClicked}
+      disabled={!disableReason}
       content={t(`${disableReason}`)}
       placement='top-end'
     >
