@@ -168,6 +168,9 @@ def step_impl(context, object_number):
 def step_impl(context, object_number):
     context.pages.right_panel_tile_page().remove_object_using_context_menu(object_number)
 
+@step('I refresh object {object_number} using context menu')
+def step_impl(context, object_number):
+    context.pages.right_panel_tile_page().refresh_object_using_context_menu(object_number)
 
 @step('I duplicate object {object_number} using context menu without prompt')
 def step_impl(context, object_number):
@@ -186,7 +189,7 @@ def step_impl(context):
 
 @step('I waited for object to be imported successfully')
 def step_impl(context):
-    context.pages.right_panel_tile_page().wait_for_import_object_to_finish_successfully()
+    context.pages.right_panel_tile_page().wait_for_import_to_finish_successfully()
 
 
 @step('I hover over import successfull message')
@@ -343,4 +346,4 @@ def step_impl(context, option_name, section_name):
 
 @step('I closed PivotTable window')
 def step_impl(context, option_name, section_name):
-    option_present_in_section = context.pages.right_panel_tile_page().close_pitvot_window()
+    option_present_in_section = context.pages.right_panel_tile_page().close_pivot_window()

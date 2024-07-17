@@ -8,7 +8,7 @@ Feature: F12909 - Import report
       And I found object "Report with All data filtered out"
       And I opened All objects list
       And I selected first found object from the objects list
-
-     Then I clicked Import button and saw error "This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty."
+      And I selected import type "Import Data" and clicked import
+     Then I saw global error message "This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty." and I clicked OK
 
       And I logged out
