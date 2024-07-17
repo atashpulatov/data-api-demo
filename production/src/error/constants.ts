@@ -38,6 +38,7 @@ export enum IncomingErrorStrings {
   BINDING_NOT_VALID = 'This object binding is no longer valid due to previous updates.',
   RESOURCE_NOT_EXIST = "The requested resource doesn't exist.",
   SHEET_HIDDEN = 'The current selection is invalid for this operation.',
+  SHEET_HIDDEN_IMAGE = 'This reference is invalid for the current operation.',
   CONNECTION_BROKEN = 'Possible causes: the network is offline,',
   INVALID_VIZ_KEY = 'Invalid visualization key',
 }
@@ -45,6 +46,7 @@ export enum IncomingErrorStrings {
 export enum ErrorLocation {
   MULTIPLE_RANGE_SELECTED = 'Workbook.getSelectedRange',
   SHEET_HIDDEN = 'Range.select',
+  SHEET_HIDDEN_IMAGE = 'Worksheet.activate',
 }
 
 export enum ErrorMessages {
@@ -96,6 +98,7 @@ export const stringMessageToErrorType = withDefaultValue(
     [IncomingErrorStrings.BINDING_NOT_VALID]: ErrorType.TABLE_REMOVED_FROM_EXCEL_ERR,
     [IncomingErrorStrings.RESOURCE_NOT_EXIST]: ErrorType.TABLE_REMOVED_FROM_EXCEL_ERR,
     [IncomingErrorStrings.SHEET_HIDDEN]: ErrorType.SHEET_HIDDEN_ERR,
+    [IncomingErrorStrings.SHEET_HIDDEN_IMAGE]: ErrorType.SHEET_HIDDEN_ERR,
     [IncomingErrorStrings.CONNECTION_BROKEN]: ErrorType.CONNECTION_BROKEN_ERR,
   },
   ErrorType.GENERIC_OFFICE_ERR
@@ -205,6 +208,7 @@ export const handleWrongRange = (error: any): string => {
 
   switch (error.debugInfo.errorLocation) {
     case ErrorLocation.SHEET_HIDDEN:
+    case ErrorLocation.SHEET_HIDDEN_IMAGE:
       return ErrorMessages.SHEET_HIDDEN;
     case ErrorLocation.MULTIPLE_RANGE_SELECTED:
       return ErrorMessages.WRONG_RANGE;
