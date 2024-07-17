@@ -47,12 +47,18 @@ export const ImportButton: React.FC<ImportButtonProps> = ({
     dispatch(popupStateActions.setImportType(type) as any);
   };
 
+  // DE297462: To prevent duplicate/spammed import requests, disable the import button after it's clicked once
+  const handleOkAndDisableImportButton = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>):void => {
+    e.currentTarget.disabled = true;
+    handleOk();
+  }
+
   if (shouldDisplayOptions) {
     return (
       <Tooltip disabled={!isDisabled} content={t(`${disableReason}`)} placement='top-end'>
         <ButtonWithOptions
           options={options}
-          onClick={handleOk}
+          onClick={handleOkAndDisableImportButton}
           selectedValue={importType}
           onOptionChange={handleOptionChange}
           variant={isPrimaryBtn ? 'primary' : 'secondary'}
@@ -72,7 +78,7 @@ export const ImportButton: React.FC<ImportButtonProps> = ({
       <Button
         id={importButtonProps.id}
         variant={isPrimaryBtn ? 'primary' : 'secondary'}
-        onClick={handleOk}
+        onClick={handleOkAndDisableImportButton}
         disabled={isDisabled}
       >
         {t(importButtonProps.actionType)}
