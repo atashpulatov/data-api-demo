@@ -50,7 +50,7 @@ export const ImportButton: React.FC<ImportButtonProps> = ({
 
   // DE297462: To prevent duplicate/spammed import requests, set importButtonClicked to true
   // which will then disable the import button after the first click.
-  const handleOkAndDisableImportButton = ():void => {
+  const handleOkAndDisableImportButton = (): void => {
     setImportButtonClicked(true);
     handleOk();
   }
