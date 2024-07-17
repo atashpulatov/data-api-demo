@@ -53,11 +53,15 @@ export const ImportButton: React.FC<ImportButtonProps> = ({
   const handleOkAndDisableImportButton = (): void => {
     setImportButtonClicked(true);
     handleOk();
-  }
+  };
 
   if (shouldDisplayOptions) {
     return (
-      <Tooltip disabled={!disableReason || importButtonClicked} content={t(`${disableReason}`)} placement='top-end'>
+      <Tooltip
+        disabled={!disableReason || importButtonClicked}
+        content={t(`${disableReason}`)}
+        placement='top-end'
+      >
         <ButtonWithOptions
           options={options}
           onClick={handleOkAndDisableImportButton}
@@ -76,7 +80,11 @@ export const ImportButton: React.FC<ImportButtonProps> = ({
   }
 
   return (
-    <Tooltip disabled={!disableReason || importButtonClicked} content={t(`${disableReason}`)} placement='top-end'>
+    <Tooltip
+      disabled={!disableReason || importButtonClicked}
+      content={t(`${disableReason}`)}
+      placement='top-end'
+    >
       <Button
         id={importButtonProps.id}
         variant={isPrimaryBtn ? 'primary' : 'secondary'}
