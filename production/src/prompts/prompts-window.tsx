@@ -199,27 +199,31 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
   ): void => {
     dialogHelper.officeMessageParent({
       command: DialogCommands.COMMAND_ON_UPDATE,
-      chosenObjectId: chosenObjectIdLocal,
-      projectId,
-      chosenObjectSubtype: editedObject.chosenObjectSubtype,
-      body: dialogViewSelectorHelper.createBody(
-        editedObject.selectedAttributes,
-        editedObject.selectedMetrics,
-        editedObject.selectedFilters,
-        // @ts-expect-error
-        editedObject.instanceId
-      ),
-      importType: editedObject.importType,
-      chosenObjectName: editedObject.chosenObjectName,
-      objectWorkingId: editedObject.objectWorkingId,
-      instanceId: editedObject.instanceId,
-      promptsAnswers: currentAnswers || newPromptsAnswers.current,
-      isPrompted: !!currentAnswers?.length || !!newPromptsAnswers.current.length,
-      subtotalsInfo: editedObject.subtotalsInfo,
-      displayAttrFormNames: editedObject.displayAttrFormNames,
-      pageByData: editedObject.pageByData,
-      promptKeys,
-      pageByConfigurations,
+      objectsDialogInfo: [
+        {
+          chosenObjectId: chosenObjectIdLocal,
+          projectId,
+          chosenObjectSubtype: editedObject.chosenObjectSubtype,
+          body: dialogViewSelectorHelper.createBody(
+            editedObject.selectedAttributes,
+            editedObject.selectedMetrics,
+            editedObject.selectedFilters,
+            // @ts-expect-error
+            editedObject.instanceId
+          ),
+          importType: editedObject.importType,
+          chosenObjectName: editedObject.chosenObjectName,
+          objectWorkingId: editedObject.objectWorkingId,
+          instanceId: editedObject.instanceId,
+          promptsAnswers: currentAnswers || newPromptsAnswers.current,
+          isPrompted: !!currentAnswers?.length || !!newPromptsAnswers.current.length,
+          subtotalsInfo: editedObject.subtotalsInfo,
+          displayAttrFormNames: editedObject.displayAttrFormNames,
+          pageByData: editedObject.pageByData,
+          promptKeys,
+          pageByConfigurations,
+        },
+      ],
     });
   };
   /**
