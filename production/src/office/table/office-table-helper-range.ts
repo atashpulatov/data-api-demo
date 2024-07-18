@@ -1,4 +1,4 @@
-import { calculateDimensionsCount } from '../../mstr-object/formatted-data-helper';
+import { formattedDataHelper } from '../../mstr-object/formatted-data-helper';
 import { officeShapeApiHelper } from '../shapes/office-shape-api-helper';
 
 import {
@@ -77,7 +77,7 @@ class OfficeTableHelperRange {
     let addedColumns: number;
 
     if (importType === ObjectImportType.FORMATTED_DATA) {
-      ({ addedRows, addedColumns } = await calculateDimensionsCount(excelContext, range, prevOfficeTable));
+      ({ addedRows, addedColumns } = await formattedDataHelper.calculateDimensionsCount(excelContext, range, prevOfficeTable));
     } else {
       ({ addedRows, addedColumns } = await this.calculateRowsAndColumnsSize(
         excelContext,
