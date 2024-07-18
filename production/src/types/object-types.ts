@@ -147,6 +147,7 @@ export interface ObjectData {
   importType?: ObjectImportType;
   preparedInstanceId?: string;
   crosstabHeaderDimensions?: CrosstabHeaderDimensions;
+  prevIsCrosstab?: boolean;
   isCrosstab?: boolean;
   details?: ObjectDetails;
   tableName?: string;

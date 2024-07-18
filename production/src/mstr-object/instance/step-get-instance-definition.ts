@@ -15,6 +15,7 @@ import { ObjectData, SubtotalsInfo } from '../../types/object-types';
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { OperationSteps } from '../../operation/operation-steps';
+import { OperationTypes } from '../../operation/operation-type-names';
 import mstrObjectEnum from '../mstr-object-type-enum';
 import dossierInstanceDefinition from './dossier-instance-definition';
 import { ErrorMessages } from '../../error/constants';
@@ -61,7 +62,7 @@ class StepGetInstanceDefinition {
         details,
       } = objectData;
       let { visualizationInfo, body, name, pageByData } = objectData;
-      const { preparedInstanceDefinition } = operationData;
+      const { preparedInstanceDefinition, operationType } = operationData;
 
       const excelContext = await officeApiHelper.getExcelContext();
 
@@ -171,6 +172,15 @@ class StepGetInstanceDefinition {
         shouldRenameExcelWorksheet,
         insertNewWorksheet: importType === ObjectImportType.PIVOT_TABLE || insertNewWorksheet,
       };
+
+
+      const isEditOrRefreshOperationType = operationType === OperationTypes.REFRESH_OPERATION
+        || operationType === OperationTypes.EDIT_OPERATION;
+      if (importType === ObjectImportType.FORMATTED_DATA && isEditOrRefreshOperationType) {
+        // Used to check the condition, before performing special logic on edit and refresh formatted data operations,
+        // in order to remove the crosstab tables. Reference {@link OfficeTableHelperRange.deletePrevOfficeTable()}
+        updatedObject.prevIsCrosstab = updatedObject.isCrosstab;
+      }
 
       if (objectTableImportType.has(importType)) {
         // update table specific props
