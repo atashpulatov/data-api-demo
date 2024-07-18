@@ -19,7 +19,7 @@ export const getShapeCollection = async (worksheet: Excel.Worksheet, excelContex
 }
 
 /**
- * Calculates added dimensions count of a table.
+ * Calculates the added dimensions count of a table.
  * 
  * @param excelContext Reference to Excel Context used by Excel API functions
  * @param range Reference to Excel range object.
