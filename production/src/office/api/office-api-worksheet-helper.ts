@@ -165,7 +165,8 @@ class OfficeApiWorksheetHelper {
   async prepareWorksheetName(
     excelContext: Excel.RequestContext,
     objectName: string,
-    pageByData?: PageByData
+    pageByData?: PageByData,
+    currentName?: string
   ): Promise<string> {
     const EXCEL_WORKSHEET_CHAR_LIMIT = 31;
 
@@ -200,6 +201,10 @@ class OfficeApiWorksheetHelper {
 
     if (newSheetName.length > EXCEL_WORKSHEET_CHAR_LIMIT) {
       newSheetName = `${newSheetName.substring(0, 28)}...`;
+    }
+
+    if (currentName && currentName === newSheetName) {
+      return newSheetName;
     }
 
     let counter = 2;
@@ -249,9 +254,17 @@ class OfficeApiWorksheetHelper {
     objectName: string,
     pageByData?: PageByData
   ): Promise<string> {
-    const currentSheet = excelContext.workbook.worksheets.getActiveWorksheet();
-    const newSheetName = await this.prepareWorksheetName(excelContext, objectName, pageByData);
+    const currentSheet = officeApiHelper.getCurrentExcelSheet(excelContext);
 
+    currentSheet.load('name');
+    await excelContext.sync();
+
+    const newSheetName = await this.prepareWorksheetName(
+      excelContext,
+      objectName,
+      pageByData,
+      currentSheet.name
+    );
     currentSheet.name = newSheetName;
     await excelContext.sync();
 
