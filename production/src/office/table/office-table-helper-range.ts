@@ -226,6 +226,9 @@ class OfficeTableHelperRange {
     if (addedColumns) {
       let range = this.prepareRangeColumns(prevOfficeTable, addedColumns);
 
+      // We obtain all formatted table dimensions (including crosstabular) from exported worksheet
+      // directly through xlsx parsing mechanism. We should skip crosstab dimensions claculations 
+      // for formatted data manipulations.
       if (importType !== ObjectImportType.FORMATTED_DATA) {
         range = this.prepareRangeColumnsCrosstab(
           range,
@@ -298,6 +301,9 @@ class OfficeTableHelperRange {
     if (addedRows) {
       let range = this.prepareRangeRows(prevOfficeTable, addedColumns, addedRows);
 
+      // We obtain all formatted table dimensions (including crosstabular) from exported worksheet
+      // directly through xlsx parsing mechanism. We should skip crosstab dimensions claculations 
+      // for formatted data manipulations.
       if (importType !== ObjectImportType.FORMATTED_DATA) {
         range = this.prepareRangeRowsCrosstab(
           range,
