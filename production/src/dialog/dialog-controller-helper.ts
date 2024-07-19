@@ -1,4 +1,3 @@
-import { PageByConfiguration } from '@mstr/connector-components';
 import { Action } from 'redux';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -11,8 +10,13 @@ import { reduxStore } from '../store';
 import { PageByDataElement, PageByDisplayType } from '../page-by/page-by-types';
 import { InstanceDefinition } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { TableImportPosition } from '../redux-reducer/settings-reducer/settings-reducer-types';
-import { ObjectData } from '../types/object-types';
-import { DialogResponse, ReportParams } from './dialog-controller-types';
+import { ObjectData, VisualizationInfo } from '../types/object-types';
+import {
+  DialogResponse,
+  ObjectDialogInfo,
+  ObjectToImport,
+  ReportParams,
+} from './dialog-controller-types';
 
 import dossierInstanceDefinition from '../mstr-object/instance/dossier-instance-definition';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
@@ -56,7 +60,7 @@ class DialogControllerHelper {
    *
    * @param response Message received from the dialog
    */
-  handleUpdateCommand = async (response: DialogResponse): Promise<void> => {
+  handleUpdateCommand = async (response: ObjectDialogInfo): Promise<void> => {
     const objectData = {
       name: response.chosenObjectName,
       objectWorkingId: response.objectWorkingId,
@@ -74,9 +78,10 @@ class DialogControllerHelper {
       displayAttrFormNames: response.displayAttrFormNames,
       definition: { filters: response.filterDetails },
       pageByData: response.pageByData,
+      pageByConfigurations: response.pageByConfigurations,
     };
 
-    await this.handleImport([objectData], response.pageByConfigurations);
+    await this.handleImport([objectData]);
   };
 
   /**
@@ -85,78 +90,48 @@ class DialogControllerHelper {
    * @param response Message received from the dialog
    */
   handleOkCommand = async (response: DialogResponse): Promise<void> => {
-    if (response.chosenObject) {
-      const objectData = {
-        name: response.chosenObjectName,
-        dossierData: response.dossierData,
-        objectId: response.chosenObject,
-        projectId: response.chosenProject,
-        mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(response.chosenSubtype),
-        importType: response.importType,
-        isPrompted: response.isPrompted || response.promptsAnswers?.answers?.length > 0,
-        promptsAnswers: response.promptsAnswers,
-        visualizationInfo: response.visualizationInfo,
-        preparedInstanceId: response.preparedInstanceId,
-        definition: { filters: response.filterDetails },
-        displayAttrFormNames: response.displayAttrFormNames,
-      };
+    const objectsToImport: ObjectToImport[] = [];
+    response.objectsDialogInfo.forEach(objectDialogInfo => {
+      if (objectDialogInfo.chosenObject) {
+        objectsToImport.push({
+          name: objectDialogInfo.chosenObjectName,
+          dossierData: objectDialogInfo.dossierData,
+          objectId: objectDialogInfo.chosenObject,
+          projectId: objectDialogInfo.chosenProject,
+          mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(objectDialogInfo.chosenSubtype),
+          importType: objectDialogInfo.importType,
+          isPrompted:
+            objectDialogInfo.isPrompted || objectDialogInfo.promptsAnswers?.answers?.length > 0,
+          promptsAnswers: objectDialogInfo.promptsAnswers,
+          visualizationInfo: objectDialogInfo.visualizationInfo,
+          preparedInstanceId: objectDialogInfo.preparedInstanceId,
+          definition: { filters: objectDialogInfo.filterDetails },
+          displayAttrFormNames: objectDialogInfo.displayAttrFormNames,
+          pageByConfigurations: objectDialogInfo.pageByConfigurations,
+        });
+      }
+    });
 
-      await this.handleImport([objectData], response.pageByConfigurations);
-    }
+    await this.handleImport(objectsToImport);
   };
 
   /**
    * Method used for handling import of the object selected by the user.
    * For Page-by Reports, it will loop through all valid combinations of Page-by elements, creating new import request for each.
    *
-   * @param objectsToImport Contains information about the MSTR objects
-   * @param pageByConfigurations Contains information about Page-by configurations selected in the Page-by modal
+   * @param objectsToImport Contains information about the MSTR objects to be imported
    */
-  handleImport = async (
-    objectsToImport: ObjectData[],
-    pageByConfigurations: PageByConfiguration[][]
-  ): Promise<void | Action> => {
+  handleImport = async (objectsToImport: ObjectToImport[]): Promise<void | Action> => {
     let startCell = DEFAULT_CELL_POSITION; // Needed only for importing multiple objects
-    let preparedInstanceDefinition: InstanceDefinition;
+    const pageKeysSet: Set<string> = new Set();
 
     for (let index = 0; index < objectsToImport.length; index++) {
-      const objectToImport = objectsToImport[index];
-
-      if (objectToImport.mstrObjectType === mstrObjectEnum.mstrObjectType.report) {
-        preparedInstanceDefinition =
-          await instanceDefinitionHelper.createReportInstance(objectToImport);
-      } else if (objectToImport.mstrObjectType === mstrObjectEnum.mstrObjectType.visualization) {
-        const dossierInstanceDefintion =
-          await dossierInstanceDefinition.getDossierInstanceDefinition(objectToImport);
-        preparedInstanceDefinition = dossierInstanceDefintion.instanceDefinition;
-      }
-
-      const { pageBy } = preparedInstanceDefinition?.definition.grid ?? {};
-
-      if (objectsToImport.length > 1) {
-        const { rowCellOffset, columnCellOffset } = this.getMultipleImportOffset(
-          preparedInstanceDefinition
-        );
-
-        reduxStore.dispatch(
-          importRequested({
-            object: { ...objectToImport, insertNewWorksheet: !index },
-            preparedInstanceDefinition,
-            startCell,
-          })
-        );
-        startCell = officeApiService.offsetCellBy(startCell, rowCellOffset, columnCellOffset);
-      } else if (!pageBy?.length || objectToImport.importType === ObjectImportType.PIVOT_TABLE) {
-        reduxStore.dispatch(
-          importRequested({ object: objectToImport, preparedInstanceDefinition })
-        );
-      } else {
-        await this.handlePageByImport(
-          pageByConfigurations,
-          objectToImport,
-          preparedInstanceDefinition
-        );
-      }
+      startCell = await this.handleSingleObjectImport(
+        objectsToImport,
+        index,
+        startCell,
+        pageKeysSet
+      );
     }
   };
 
@@ -267,19 +242,111 @@ class DialogControllerHelper {
   };
 
   /**
+   * Method used for handling import of a single object.
+   *
+   * @param objectsToImport Contains information about the MSTR objects and pageByConfigurations
+   * @param index Index of the object to be imported
+   * @param startCell Contains information about the starting cell for the import operation
+   * @param pageKeysSet Contains information about already imported Page-by keys
+   * @returns startCell with applied offset
+   */
+  async handleSingleObjectImport(
+    objectsToImport: ObjectToImport[],
+    index: number,
+    startCell: string,
+    pageKeysSet: Set<string>
+  ): Promise<string> {
+    const objectToImport = objectsToImport[index];
+    const preparedInstanceDefinition = await this.getPreparedInstanceDefinition(objectToImport);
+    const { pageBy } = preparedInstanceDefinition?.definition.grid ?? {};
+
+    if (objectsToImport.length > 1) {
+      const { rowCellOffset, columnCellOffset } = this.getMultipleImportOffset(
+        preparedInstanceDefinition
+      );
+      const insertNewWorksheetOnMultipleImport = this.checkInsertNewWorksheet(
+        objectToImport,
+        pageKeysSet,
+        index
+      );
+
+      reduxStore.dispatch(
+        importRequested({
+          object: { ...objectToImport, insertNewWorksheet: insertNewWorksheetOnMultipleImport },
+          preparedInstanceDefinition,
+          startCell,
+        })
+      );
+
+      startCell = officeApiService.offsetCellBy(startCell, rowCellOffset, columnCellOffset);
+    } else if (!pageBy?.length || objectToImport.importType === ObjectImportType.PIVOT_TABLE) {
+      reduxStore.dispatch(importRequested({ object: objectToImport, preparedInstanceDefinition }));
+    } else {
+      await this.handlePageByImport(objectToImport, preparedInstanceDefinition);
+    }
+    return startCell;
+  }
+
+  /**
+   * Method used for preparing the instance definition of the object to be imported.
+   *
+   * @param objectToImport Contains information about the MSTR object and pageByConfigurations
+   * @returns InstanceDefinition of object being imported
+   */
+  async getPreparedInstanceDefinition(objectToImport: ObjectData): Promise<InstanceDefinition> {
+    let preparedInstanceDefinition;
+    if (objectToImport.mstrObjectType === mstrObjectEnum.mstrObjectType.report) {
+      preparedInstanceDefinition =
+        await instanceDefinitionHelper.createReportInstance(objectToImport);
+    } else if (objectToImport.mstrObjectType === mstrObjectEnum.mstrObjectType.visualization) {
+      preparedInstanceDefinition = (
+        await dossierInstanceDefinition.getDossierInstanceDefinition(objectToImport)
+      ).instanceDefinition;
+    }
+    return preparedInstanceDefinition;
+  }
+
+  /**
+   * Method used for determining whether to insert new worksheet on multiple import.
+   *
+   * @param objectToImport Contains information about the MSTR object and pageByConfigurations
+   * @param pageKeysSet Contains information about the Page-by keys
+   * @param index Index of the object to be imported
+   * @returns Flag indicating whether to insert new worksheet on multiple import
+   */
+  checkInsertNewWorksheet(
+    objectToImport: ObjectData,
+    pageKeysSet: Set<string>,
+    index: number
+  ): boolean {
+    let insertNewWorksheetOnMultipleImport = !index;
+
+    if (objectToImport.mstrObjectType === mstrObjectEnum.mstrObjectType.visualization) {
+      const { pageKey } = objectToImport.visualizationInfo as VisualizationInfo;
+
+      if (pageKeysSet.has(pageKey)) {
+        insertNewWorksheetOnMultipleImport = false;
+      } else {
+        pageKeysSet.add(pageKey);
+        insertNewWorksheetOnMultipleImport = true;
+      }
+    }
+    return insertNewWorksheetOnMultipleImport;
+  }
+
+  /**
    * Method used for handling import of the page-by object selected by the user.
    * It will loop through all valid combinations of Page-by elements, creating new import request for each.
    *
-   * @param pageByConfigurations Contains information about the Page-by configurations selected in the Page-by modal
-   * @param objectData Contains information about the MSTR object
+   * @param objectToImport Contains information about the MSTR object and pageByConfigurations
    * @param preparedInstanceDefinition Contains information about the object's instance
    */
   async handlePageByImport(
-    pageByConfigurations: PageByConfiguration[][],
-    objectData: ObjectData,
+    objectToImport: ObjectToImport,
     preparedInstanceDefinition: InstanceDefinition
   ): Promise<void> {
     const pageByLinkId = uuidv4();
+    const { pageByConfigurations, ...objectData } = objectToImport;
 
     const { settingsReducer } = reduxStore.getState();
     const { pageByDisplaySetting } = settingsReducer;

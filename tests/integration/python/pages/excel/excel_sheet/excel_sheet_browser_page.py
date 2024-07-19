@@ -44,8 +44,8 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
 
     BUTTON_SELECTED_ARIA_VALUE = 'true'
 
-    EXCEL_SELECTED_COLUMN_HEADER = '.ewrch-col-cellsel > .ewr-chc'
-    EXCEL_SELECTED_ROW_HEADER = '.ewrch-row-cellsel > .ewr-rhc'
+    EXCEL_SELECTED_COLUMN_HEADER = '.ewr-colhdrcontainer .ewr-grdblk'
+    EXCEL_SELECTED_ROW_HEADER = '.ewrch-col-cellsel > .ewr-chc'
     EXCEL_ALL_COLUMN_HEADER_CSS = '.ewrch-col-cellsel > .ewr-chc, .ewrch-col-nosel  > .ewr-chc'
     EXCEL_ALL_ROW_HEADER_CSS = '.ewrch-row-cellsel > .ewr-rhc, .ewrch-row-nosel  > .ewr-rhc'
 

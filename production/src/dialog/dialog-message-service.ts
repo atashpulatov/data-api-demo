@@ -196,11 +196,13 @@ class DialogMessageService {
     }
 
     if (reportParams.isDuplicate) {
-      return reduxStore.dispatch(duplicateRequested(reportParams.object, response));
+      return reduxStore.dispatch(
+        duplicateRequested(reportParams.object, response.objectsDialogInfo[0])
+      );
     }
 
     const reportPreviousState = dialogControllerHelper.getObjectPreviousState(reportParams);
-    return reduxStore.dispatch(editRequested(reportPreviousState, response));
+    return reduxStore.dispatch(editRequested(reportPreviousState, response.objectsDialogInfo[0]));
   };
 
   /**
@@ -214,24 +216,29 @@ class DialogMessageService {
     response: DialogResponse,
     reportParams: ReportParams
   ): Promise<void | Action> => {
-    const { objectWorkingId } = response;
+    const { objectWorkingId } = response.objectsDialogInfo[0];
 
-    const shouldRemovePages = pageByHelper.getShouldRemovePages(response, reportParams);
+    const shouldRemovePages = pageByHelper.getShouldRemovePages(
+      response.objectsDialogInfo[0],
+      reportParams
+    );
 
     if (shouldRemovePages && objectWorkingId) {
       pageByHelper.handleRemovingMultiplePages(objectWorkingId);
     }
 
     if (!reportParams || shouldRemovePages) {
-      return dialogControllerHelper.handleUpdateCommand(response);
+      return dialogControllerHelper.handleUpdateCommand(response.objectsDialogInfo[0]);
     }
 
     if (reportParams.isDuplicate) {
-      return reduxStore.dispatch(duplicateRequested(reportParams.object, response));
+      return reduxStore.dispatch(
+        duplicateRequested(reportParams.object, response.objectsDialogInfo[0])
+      );
     }
 
     const reportPreviousState = dialogControllerHelper.getObjectPreviousState(reportParams);
-    return reduxStore.dispatch(editRequested(reportPreviousState, response));
+    return reduxStore.dispatch(editRequested(reportPreviousState, response.objectsDialogInfo[0]));
   };
 
   manageDialogType = async (

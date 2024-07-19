@@ -265,23 +265,29 @@ class DialogViewSelectorHelper {
 
     const message = {
       command: DialogCommands.COMMAND_OK,
-      chosenObject: props.chosenObjectId,
-      chosenProject: props.chosenProjectId,
-      chosenSubtype: props.chosenSubtype,
-      chosenObjectName: props.chosenObjectName,
-      isPrompted: props.promptsAnswers?.length > 0 && props.promptsAnswers[0].answers?.length > 0,
-      importType: props.importType,
-      promptsAnswers: props.promptsAnswers,
-      visualizationInfo,
-      preparedInstanceId: props.preparedInstanceId,
-      isEdit: props.isEdit,
-      displayAttrFormNames: props.displayAttrFormNames || DisplayAttrFormNames.AUTOMATIC,
-      dossierData: null as any,
-      body: null as any,
-      pageByConfigurations: props.pageByConfigurations,
+      objectsDialogInfo: [
+        {
+          chosenObject: props.chosenObjectId,
+          chosenProject: props.chosenProjectId,
+          chosenSubtype: props.chosenSubtype,
+          chosenObjectName: props.chosenObjectName,
+          isPrompted:
+            props.promptsAnswers?.length > 0 && props.promptsAnswers[0].answers?.length > 0,
+          importType: props.importType,
+          promptsAnswers: props.promptsAnswers,
+          visualizationInfo,
+          preparedInstanceId: props.preparedInstanceId,
+          isEdit: props.isEdit,
+          displayAttrFormNames: props.displayAttrFormNames || DisplayAttrFormNames.AUTOMATIC,
+          dossierData: null as any,
+          body: null as any,
+          pageByConfigurations: props.pageByConfigurations,
+        },
+      ],
     };
     if (props.dossierData) {
-      message.dossierData = {
+      // TODO: check if logic can be changed to not point to index 0
+      message.objectsDialogInfo[0].dossierData = {
         ...props.dossierData,
         chosenObjectName: props.chosenObjectName,
       };
@@ -290,7 +296,12 @@ class DialogViewSelectorHelper {
       if (isReprompt && !this.wasReportJustImported(props)) {
         const { selectedAttributes, selectedMetrics, selectedFilters } = props.editedObject;
         message.command = DialogCommands.COMMAND_ON_UPDATE;
-        message.body = this.createBody(selectedAttributes, selectedMetrics, selectedFilters, false);
+        message.objectsDialogInfo[0].body = this.createBody(
+          selectedAttributes,
+          selectedMetrics,
+          selectedFilters,
+          false
+        );
       }
     }
     props.startImport();

@@ -38,6 +38,10 @@ def step_impl(context, object_id, object_name):
 def step_impl(context, import_type):
     context.pages.import_data_page().expand_and_select_import_type(import_type)
 
+@step('I clicked "{import_type}" button after Edit')
+def step_impl(context, import_type):
+    context.pages.import_data_page().click_import_button_by_name(import_type)
+
 @step('I clicked Import button')
 def step_impl(context):
     context.pages.import_data_page().click_import_button(context.reset_framework, context)
@@ -119,11 +123,13 @@ def step_impl(context):
 def step_impl(context):
     context.pages.import_data_page().click_filters_button()
 
-
-@step('I clicked Import button and saw error "{error_message}"')
+@step('I saw global error message "{error_message}" and I clicked OK')
 def step_impl(context, error_message):
-    context.pages.import_data_page().click_import_button_to_import_with_error(error_message)
+    context.pages.import_data_page().click_after_import_with_global_error(error_message)
 
+@step('I saw error message "{error_message}" and I clicked OK')
+def step_impl(context, error_message):
+    context.pages.import_data_page().click_after_import_with_error(error_message)
 
 @step('I clicked Import button and saw global error "{error_message}"')
 def step_impl(context, error_message):

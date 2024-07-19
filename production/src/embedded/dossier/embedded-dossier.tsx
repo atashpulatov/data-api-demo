@@ -162,17 +162,12 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   onVizSelectionHandler(payload: any): void {
     // @ts-expect-error
     const { handleSelection } = this.props;
-    const [payloadChapterKey] = Object.keys(payload);
-    const chapterData = payload[payloadChapterKey];
-    const [payloadVisKey] = Object.keys(chapterData);
-    const vizInfo = chapterData[payloadVisKey];
-
-    let isGrid;
-    let vizDimensions;
-
-    if (vizInfo) {
-      ({ isGrid, ...vizDimensions } = vizInfo);
-    }
+    const {
+      chapterKey,
+      key: visualizationKey,
+      dimensions: vizDimensions,
+      isGrid,
+    } = payload.selectedComponents[0];
 
     if (vizDimensions) {
       // Currently scrollWidth is applied only to grid images
@@ -190,8 +185,8 @@ export default class EmbeddedDossierNotConnected extends React.Component {
 
     this.dossierData = {
       ...this.dossierData,
-      chapterKey: payloadChapterKey,
-      visualizationKey: payloadVisKey,
+      chapterKey,
+      visualizationKey,
       vizDimensions,
       isVizGrid: isGrid,
     };
@@ -419,72 +414,53 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       instanceId: instance.mid,
     };
 
-    const serverURL = envUrl.slice(0, envUrl.lastIndexOf('/api'));
+    const serverUrl = envUrl.slice(0, envUrl.lastIndexOf('/api'));
     // delete last occurence of '/api' from the enviroment url
 
     const { CustomAuthenticationType, EventType } = microstrategy.dossier;
 
     const props = {
       instance,
-      serverURL,
-      applicationID: projectId,
-      objectID: dossierId,
+      serverUrl,
+      projectId,
+      objectId: dossierId,
       enableCustomAuthentication: true,
       customAuthenticationType: CustomAuthenticationType.AUTH_TOKEN,
       enableResponsive: true,
-      reportInLibraryFeature: { enabled: false },
       getLoginToken() {
         return Promise.resolve(authToken);
       },
       placeholder: container,
-      enableCollaboration: false,
-      filterFeature: {
-        enabled: true,
-        edit: true,
-        summary: true,
+      customUi: {
+        dossierConsumption: {
+          navigationBar: {
+            enabled: true,
+            gotoLibrary: false,
+            title: true,
+            toc: true,
+            reset: true,
+            reprompt: true,
+            share: false,
+            comment: false,
+            notification: false,
+            filter: true,
+            options: false,
+            search: false,
+            bookmark: true,
+            edit: false,
+          },
+        },
       },
-      navigationBar: {
-        enabled: true,
-        gotoLibrary: false,
-        title: true,
-        toc: true,
-        reset: true,
-        reprompt: true,
-        share: false,
-        comment: false,
-        notification: false,
-        filter: true,
-        options: false,
-        search: false,
-        bookmark: true,
-        edit: false,
+      settings: {
+        dossierConsumption: {
+          componentSelectionMode: 'singleSelection',
+          disableManipulationsAutoSaving: true,
+        },
       },
-      optionsFeature: {
-        enabled: true,
-        help: true,
-        logout: true,
-        manage: true,
-        showTutorials: true,
-      },
-      shareFeature: {
-        enabled: true,
-        invite: true,
-        link: true,
-        email: true,
-        export: true,
-        download: true,
-        shareDossier: false,
-      },
-      tocFeature: { enabled: true },
-      uiMessage: {
-        enabled: true,
-        addToLibrary: true,
-      },
-      enableVizSelection: true,
       onMsgRouterReadyHandler: ({ MsgRouter }: any) => {
         this.msgRouter = MsgRouter;
         this.msgRouter.registerEventHandler(
-          EventType.ON_VIZ_SELECTION_CHANGED,
+          EventType.ON_COMPONENT_SELECTION_CHANGED,
           this.onVizSelectionHandler
         );
         this.msgRouter.registerEventHandler(
@@ -507,32 +483,15 @@ export default class EmbeddedDossierNotConnected extends React.Component {
           }
         });
       },
-      dossierFeature: {
-        visExport: {
-          enabled: false,
-          excel: false,
-          pdf: false,
-          csv: false,
-        },
-      },
     };
 
     if (microstrategy?.dossier) {
-      const embeddedDossier = await microstrategy.dossier.create(props);
+      const embeddedDossier =
+        await microstrategy.embeddingContexts.embedDossierConsumptionPage(props);
       this.embeddedDossier = embeddedDossier;
 
       if (selectedViz && visualizationInfo) {
-        const { pageKey, chapterKey, visualizationKey } = visualizationInfo;
-
-        const chapterList = embeddedDossier.getChapterList();
-
-        const selectedPageNodeKey = chapterList
-          .find((chapter: any) => chapter.nodeKey.includes(chapterKey))
-          .children.find((page: any) => page.nodeKey.includes(pageKey)).nodeKey;
-
-        const selectedPage = embeddedDossier.getPageByNodeKey(selectedPageNodeKey);
-
-        await embeddedDossier.navigateToPage(selectedPage);
+        const { visualizationKey } = visualizationInfo;
 
         await this.restoreVizSelection(visualizationKey);
       }
@@ -546,7 +505,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   async restoreVizSelection(visualizationKey: string): Promise<void> {
     try {
       this.retryCounter++;
-      await this.embeddedDossier.selectViz(visualizationKey);
+      await this.embeddedDossier.dossierConsumption.selectComponents([visualizationKey]);
     } catch (error) {
       if (this.retryCounter > VIZ_SELECTION_RETRY_LIMIT) {
         console.error(error);
@@ -601,8 +560,8 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     // Persist in Redux only the answers for the current prompt object.
     handlePromptAnswer(this.dossierData.promptsAnswers);
     if (this.embeddedDossier) {
-      const payload = await this.embeddedDossier.getSelectedVizKeys();
-      if (Object.keys(payload).length > 0) {
+      const payload = await this.embeddedDossier.dossierConsumption.getSelectedComponents();
+      if (payload.selectedComponents.length > 0) {
         this.onVizSelectionHandler(payload);
       }
     }

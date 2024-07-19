@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Button, ButtonWithOptions, Tooltip } from '@mstr/rc';
@@ -24,10 +24,17 @@ export const ImportButton: React.FC<ImportButtonProps> = ({
 }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const [buttonClicked, setButtonClicked] = useState(false);
+  let buttonDisableReason = disableReason;
 
-  const isNonGridVizNotSupported = disableReason === ErrorMessages.NON_GRID_VIZ_NOT_SUPPORTED;
+  if (buttonClicked) {
+    // DE297462: Set disable reason string to 'Loading...' after initial click to provide user some feedback
+    buttonDisableReason = t('Loading...');
+  }
 
-  const isDisabled = !!disableReason;
+  const isNonGridVizNotSupported = buttonDisableReason === ErrorMessages.NON_GRID_VIZ_NOT_SUPPORTED;
+
+  const isDisabled = !!buttonDisableReason;
 
   const supportedOptions = useGetImportOptions();
   const options = isDisabled && !isNonGridVizNotSupported ? [] : supportedOptions;
@@ -47,12 +54,19 @@ export const ImportButton: React.FC<ImportButtonProps> = ({
     dispatch(popupStateActions.setImportType(type) as any);
   };
 
+  // DE297462: To prevent duplicate/spammed import requests, set buttonClicked to true
+  // which will then disable the import button after the first click.
+  const handleOkAndDisableImportButton = (): void => {
+    setButtonClicked(true);
+    handleOk();
+  };
+
   if (shouldDisplayOptions) {
     return (
-      <Tooltip disabled={!isDisabled} content={t(`${disableReason}`)} placement='top-end'>
+      <Tooltip disabled={!isDisabled} content={t(`${buttonDisableReason}`)} placement='top-end'>
         <ButtonWithOptions
           options={options}
-          onClick={handleOk}
+          onClick={handleOkAndDisableImportButton}
           selectedValue={importType}
           onOptionChange={handleOptionChange}
           variant={isPrimaryBtn ? 'primary' : 'secondary'}
@@ -68,11 +82,11 @@ export const ImportButton: React.FC<ImportButtonProps> = ({
   }
 
   return (
-    <Tooltip disabled={!isDisabled} content={t(`${disableReason}`)} placement='top-end'>
+    <Tooltip disabled={!isDisabled} content={t(`${buttonDisableReason}`)} placement='top-end'>
       <Button
         id={importButtonProps.id}
         variant={isPrimaryBtn ? 'primary' : 'secondary'}
-        onClick={handleOk}
+        onClick={handleOkAndDisableImportButton}
         disabled={isDisabled}
       >
         {t(importButtonProps.actionType)}

@@ -59,6 +59,7 @@ describe('OfficeApiWorksheetHelper', () => {
       workbook: {
         worksheets: {
           getActiveWorksheet: jest.fn().mockImplementation(() => ({
+            load: jest.fn(),
             getUsedRangeOrNullObject: mockGetUsedRangeOrNullObject,
           })),
         },
@@ -71,6 +72,31 @@ describe('OfficeApiWorksheetHelper', () => {
 
     // then
     expect(prepareWorksheetNameMock).toBeCalledTimes(1);
-    expect(prepareWorksheetNameMock).toBeCalledWith(context, 'object name', undefined);
+    expect(prepareWorksheetNameMock).toBeCalledWith(context, 'object name', undefined, undefined);
+  });
+
+  it('prepareWorksheetName should return proper name given currentName argument', async () => {
+    // given
+    const mockSync = jest.fn();
+    const context = {
+      workbook: {
+        worksheets: {
+          load: jest.fn().mockImplementation(),
+          items: [{ name: 'object name' }],
+        },
+      },
+      sync: mockSync,
+    };
+
+    // when
+    const worksheetName = await officeApiWorksheetHelper.prepareWorksheetName(
+      context,
+      'object name',
+      null,
+      'object name'
+    );
+
+    // then
+    expect(worksheetName).toEqual('object name');
   });
 });

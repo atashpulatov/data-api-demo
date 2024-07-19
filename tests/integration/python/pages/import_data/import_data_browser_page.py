@@ -40,7 +40,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
     OPTION_IN_OPTIONS_DROPDOWN_DISABLED = 'aria-disabled'
     PREPARE_BUTTON_ELEM = 'prepare'
     IMPORT_IMAGE_BUTTON_ELEM = 'import-image'
-    IMPORT_TYPE_BUTTON_XPATH = '//button[contains(@class, "mstr-rc-3-button-with-options__action-button") and contains(text(), "%s")]'
+    IMPORT_TYPE_BUTTON_XPATH = '//button[contains(@class, "mstr-rc-3-button mstr-rc-3-button--primary mstr-rc-3-button--regular") and contains(text(), "%s")]'
     EXPAND_IMPORT_ARROW = '.mstr-rc-3-button-with-options__dropdown-button[aria-label="Show options"]'
     SELECT_IMPORT_OPTION = '''li[aria-label='%s']'''
     IMPORT_OPTION = '.mstr-rc-3-button-with-options > .mstr-rc-3-button-with-options__action-button'
@@ -180,6 +180,10 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
         self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully()
 
+    def click_import_button_by_name(self, import_type):
+        self.focus_on_add_in_popup_frame()
+        self.get_element_by_xpath(ImportDataBrowserPage.IMPORT_TYPE_BUTTON_XPATH % import_type).click()
+
     def click_import_button_without_checking_results(self):
         self.focus_on_add_in_popup_frame()
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
@@ -192,17 +196,15 @@ class ImportDataBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_popup_frame()
         self.get_element_by_css(ImportDataBrowserPage.IMPORT_WITH_OPTIONS_BUTTON_ELEM).click()
 
-        # self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully()
-
     def click_import_with_options_button_without_checking_results(self):
         self.focus_on_add_in_popup_frame()
         self.get_element_by_css(ImportDataBrowserPage.IMPORT_WITH_OPTIONS_BUTTON_ELEM).click()
         
-    def click_import_button_to_import_with_error(self, error_message):
-        self.focus_on_add_in_popup_frame()
-        self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
-
+    def click_after_import_with_error(self, error_message):
         self.right_panel_tile_browser_page.wait_for_operation_error_and_accept(error_message)
+
+    def click_after_import_with_global_error(self, error_message):
+        self.right_panel_tile_browser_page.wait_for_operation_global_error_and_accept(error_message)
 
     def click_import_button_to_import_with_global_error(self, error_message):
         self.focus_on_add_in_popup_frame()
@@ -328,7 +330,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
         return element.get_attribute(ImportDataBrowserPage.IMPORT_BUTTON_DISABLED) is None
 
     def clear_search_box(self):
-        self.focus_on_add_in_popup_frame()
+        self.focus_on_library_frame()
 
         search_box = self.get_element_by_css(ImportDataBrowserPage.SEARCH_BAR_ELEM)
         search_box.clear()

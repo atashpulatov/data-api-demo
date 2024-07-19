@@ -1,16 +1,28 @@
 import { PageByConfiguration } from '@mstr/connector-components';
 
 import { PageByData } from '../page-by/page-by-types';
-import { Body, DossierData, SubtotalsInfo, VisualizationInfo } from '../types/object-types';
+import {
+  Body,
+  DossierData,
+  ObjectData,
+  SubtotalsInfo,
+  VisualizationInfo,
+} from '../types/object-types';
+import { OverviewActionCommands } from './overview/overview-types';
 
 import mstrObjectType from '../mstr-object/mstr-object-type-enum';
 import { DisplayAttrFormNames, ObjectImportType } from '../mstr-object/constants';
 
 // TODO: Fix any types
 export interface DialogResponse {
-  command: string;
-  objectWorkingId?: number;
+  command: DialogCommands | OverviewActionCommands;
   objectWorkingIds?: number[];
+  error?: any;
+  objectsDialogInfo?: ObjectDialogInfo[];
+}
+
+export interface ObjectDialogInfo {
+  objectWorkingId?: number;
   insertNewWorksheet?: boolean;
   withEdit?: boolean;
   newName?: string;
@@ -31,12 +43,13 @@ export interface DialogResponse {
   body?: Body;
   instanceId?: string;
   subtotalsInfo?: SubtotalsInfo;
-  error?: any;
   filterDetails?: FilterDetails[];
   pageByData?: PageByData;
-  pageByConfigurations?: PageByConfiguration[][];
   isPageBy?: boolean;
+  pageByConfigurations?: PageByConfiguration[][];
 }
+
+export type ObjectToImport = ObjectData & { pageByConfigurations: PageByConfiguration[][] };
 
 export interface FilterDetails {
   items: string[];

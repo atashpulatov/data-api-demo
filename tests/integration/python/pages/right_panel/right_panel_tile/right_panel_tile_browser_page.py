@@ -9,6 +9,7 @@ import html
 class RightPanelTileBrowserPage(BaseBrowserPage):
     NOTIFICATION_CONTAINER_CLASS_NAME = 'notification-container'
     NOTIFICATION_TEXT_ELEM = '.notification-text'
+    NOTIFICATION_WARNING_BUTTON = '.warning-notification-button-container'
     PROGRESS_BAR = '.progress-bar'
 
     GLOBAL_ERROR_ELEM = '.global-warning-title'
@@ -58,7 +59,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     EDIT_OPTION_FOR_OBJECT_IN_GROUP = RIGHT_PANEL_TILE_GROUP + EDIT_OPTION_FOR_OBJECT
     DUPLICATE_OPTION_FOR_OBJECT_IN_GROUP = RIGHT_PANEL_TILE_GROUP + DUPLICATE_OPTION_FOR_OBJECT
     
-    NOTIFICATION_BUTTON = '.warning-notification-button-container'
+    NOTIFICATION_BUTTON = 'notification-container'
 
     NAME_INPUT_FOR_OBJECT = RIGHT_PANEL_TILE + ' .rename-input.view-only'
     NAME_INPUT_TEXT_FOR_OBJECT = RIGHT_PANEL_TILE + ' .rename-input.editable'
@@ -68,13 +69,13 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     RIGHT_PANEL_TILE_TOOLTIP = RIGHT_PANEL_TILE + ' .object-tile-name-row .__react_component_tooltip'
     RIGHT_PANEL_TILE_SUB_TITLE = '.mstr-rc-overflow-tooltip__child-container'
 
-    TILE_CONTEXT_MENU_ITEMS = '.react-contextmenu-item'
-    TILE_CONTEXT_MENU_OPTION_RENAME = 'Rename'
-    TILE_CONTEXT_MENU_OPTION_REMOVE = 'Remove'
-    TILE_CONTEXT_MENU_OPTION_DUPLICATE = 'Duplicate'
-    TILE_CONTEXT_MENU_OPTION_EDIT = 'Edit'
+    TILE_CONTEXT_MENU_OPTION_REFRESH = '//div[@class="context-menu-container"]//span[contains(text(), "Refresh")]'
+    TILE_CONTEXT_MENU_OPTION_RENAME = '//div[@class="context-menu-container"]//span[contains(text(), "Rename")]'
+    TILE_CONTEXT_MENU_OPTION_REMOVE = '//div[@class="context-menu-container"]//span[contains(text(), "Delete")]'
+    TILE_CONTEXT_MENU_OPTION_DUPLICATE = '//div[@class="context-menu-container"]//span[contains(text(), "Duplicate")]'
+    TILE_CONTEXT_MENU_OPTION_EDIT = '//div[@class="context-menu-container"]//span[contains(text(), "Edit")]'
 
-    TILE_CONTEXT_MENU_WRAPPER = '.react-contextmenu-wrapper'
+    TILE_CONTEXT_MENU_WRAPPER = '.object-tile-list .object-tile'
 
     NORMAL_TILE_CONTEXT_MENU_ITEMS = '.context-menu-item'
 
@@ -114,21 +115,38 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         self._wait_for_operation_with_status(expected_message, timeout)
 
     def wait_for_operation_error_and_accept(self, expected_message, timeout=Const.DEFAULT_TIMEOUT):
-        self._wait_for_operation_with_status(expected_message, timeout)
+        self._wait_for_operation_with_error(expected_message, timeout)
 
-        self.get_element_by_css(RightPanelTileBrowserPage.NOTIFICATION_BUTTON).click()
+        self.get_element_by_css(RightPanelTileBrowserPage.NOTIFICATION_WARNING_BUTTON).click()
 
     def wait_for_operation_global_error_and_accept(self, expected_message, timeout=Const.DEFAULT_TIMEOUT):
-        self._wait_for_global_error(expected_message, timeout)
+        self._wait_for_operation_with_global_error(expected_message, timeout)
 
         self.get_element_by_css(RightPanelTileBrowserPage.GLOBAL_WARNING_BUTTON).click()
 
     def _wait_for_operation_with_status(self, expected_message, timeout):
         self.focus_on_add_in_frame()
 
-        self.wait_for_element_to_have_attribute_value_by_css(
+        self.find_element_by_text_in_elements_list_by_css(
             RightPanelTileBrowserPage.NOTIFICATION_TEXT_ELEM,
-            Const.ATTRIBUTE_TEXT_CONTENT,
+            expected_message,
+            timeout=timeout
+        )
+
+    def _wait_for_operation_with_global_error(self, expected_message, timeout):
+        self.focus_on_add_in_frame()
+
+        self.find_element_by_text_in_elements_list_by_css(
+            RightPanelTileBrowserPage.GLOBAL_ERROR_ELEM,
+            expected_message,
+            timeout=timeout
+        )
+
+    def _wait_for_operation_with_error(self, expected_message, timeout):
+        self.focus_on_add_in_frame()
+
+        self.find_element_by_text_in_elements_list_by_css(
+            RightPanelTileBrowserPage.NOTIFICATION_TEXT_ELEM,
             expected_message,
             timeout=timeout
         )
@@ -191,8 +209,12 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
     def click_refresh(self, tile_no):
         self.focus_on_add_in_frame()
+        self._hover_over_tile(int(tile_no) - 1)
 
-        self.get_element_by_css(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT % tile_no).click()
+        refresh_selector = RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT % tile_no
+        
+        refresh_element = self.get_element_by_css(refresh_selector)
+        refresh_element.click()
 
     def hover_refresh(self, tile_no):
         self._hover_over_tile_button(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT, tile_no)
@@ -230,8 +252,9 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_frame()
 
         self._hover_over_tile(int(tile_no) - 1)
+        selector = RightPanelTileBrowserPage.OPTIONS_BUTTON_FOR_OBJECT % tile_no
 
-        self.get_elements_by_css(RightPanelTileBrowserPage.OPTIONS_BUTTON_FOR_OBJECT)[int(tile_no) - 1].click()
+        self.get_elements_by_css(selector)[int(tile_no) - 1].click()
 
     def click_options_for_object_in_group(self, tile_no, group_no):
         self.focus_on_add_in_frame()
@@ -335,8 +358,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         name_input = self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE % object_number)
         name_input.right_click()
 
-        self.find_element_in_list_by_text(
-            RightPanelTileBrowserPage.TILE_CONTEXT_MENU_ITEMS,
+        self.get_element_by_xpath(
             RightPanelTileBrowserPage.TILE_CONTEXT_MENU_OPTION_RENAME
         ).move_to_and_click()
 
@@ -345,14 +367,23 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         self.press_enter()
 
+    def refresh_object_using_context_menu(self, object_number):
+        self.focus_on_add_in_frame()
+
+        name_input = self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE % object_number)
+        name_input.right_click()
+
+        self.get_element_by_xpath(
+            RightPanelTileBrowserPage.TILE_CONTEXT_MENU_OPTION_REFRESH
+        ).move_to_and_click()
+    
     def remove_object_using_context_menu(self, object_number):
         self.focus_on_add_in_frame()
 
         name_input = self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE % object_number)
         name_input.right_click()
 
-        self.find_element_in_list_by_text_remove(
-            RightPanelTileBrowserPage.NORMAL_TILE_CONTEXT_MENU_ITEMS,
+        self.get_element_by_xpath(
             RightPanelTileBrowserPage.TILE_CONTEXT_MENU_OPTION_REMOVE
         ).move_to_and_click()
 
@@ -362,8 +393,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         name_input = self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE % object_number)
         name_input.right_click()
 
-        self.find_element_in_list_by_text_duplicate(
-            RightPanelTileBrowserPage.NORMAL_TILE_CONTEXT_MENU_ITEMS,
+        self.get_element_by_xpath(
             RightPanelTileBrowserPage.TILE_CONTEXT_MENU_OPTION_DUPLICATE
         ).move_to_and_click()
 
@@ -373,10 +403,9 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         name_input = self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE % object_number)
         name_input.right_click()
 
-        self.find_element_in_list_by_text_safe_edit(
-            RightPanelTileBrowserPage.NORMAL_TILE_CONTEXT_MENU_ITEMS,
+        self.get_element_by_xpath(
             RightPanelTileBrowserPage.TILE_CONTEXT_MENU_OPTION_EDIT
-        ).move_to_and_click()   
+        ).move_to_and_click()
 
     def get_object_name_from_tooltip(self, object_number):
         self.focus_on_add_in_frame()
@@ -521,18 +550,18 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         else:
             return False
         
-    def open_settings_menu():
+    def open_settings_menu(self):
         self.focus_on_add_in_frame()
 
         self.get_element_by_css(RightPanelTileBrowserPage.SETTINGS_BUTTON).click()
         self.get_element_by_name('Settings').click()
 
-    def toggle_pivot_table_checkbox(option):
+    def toggle_pivot_table_checkbox(self, option):
         self.focus_on_add_in_frame()
 
         self.get_element_by_xpath(RightPanelTileBrowserPage.PIVOT_TABLE_FIELD_XPATH % option).click()
 
-    def is_option_present_in_section(option, section_name):
+    def is_option_present_in_section(self, option, section_name):
         self.focus_on_add_in_frame()
 
         return self.check_if_element_exists_by_xpath(RightPanelTileBrowserPage.PIVOT_TABLE_OPTION_IN_SECTION_XPATH % (option, section_name))
@@ -571,7 +600,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         self._hover_over_tile_in_group(object_number, group_number)
 
-    def close_pitvot_window(self):
+    def close_pivot_window(self):
         self.focus_on_add_in_frame()
 
         self.get_element_by_css(RightPanelTileBrowserPage.PIVOT_TABLE_CLOSE_BUTTON_XPATH).click()

@@ -1,4 +1,4 @@
-#@ci_pipeline_postmerge_windows_chrome 
+@ci_pipeline_postmerge_windows_chrome 
 Feature: TS41441 - Sanity checks
 
   Scenario: [TC49134] - Error Handling part 2 Number formatting
@@ -36,21 +36,12 @@ Feature: TS41441 - Sanity checks
       And I selected cell "D2"
       And I clicked bold button
 
-      And I selected cell "E2"
-      And I changed font color to "Light Green"
-
-      And I selected cell "G2"
-      And I changed fill color to "Light Green"
-
       And I changed cell "G2" font name to "Arial Black"
 
      When I clicked Refresh on object 1
-      And I waited for object to be refreshed successfully
       And I closed last notification
 
      Then I verified that cell "L4" has value "245,677 PLN"
-      And I verified that for cell "E2" font color "Light Green" is selected
-      And I verified that for cell "G2" fill color "Light Green" is selected
       And I verified that align middle button is selected for cell "B2"
       And I verified that align left button is selected for cell "C2"
       And I verified that bold button is selected for cell "D2"

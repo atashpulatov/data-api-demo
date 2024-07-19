@@ -114,13 +114,17 @@ describe('Dialog Message Service', () => {
   it('should handle update command from popup for cube', async () => {
     // given
     officeApiHelper.getExcelSessionStatus = jest.fn();
-    const actionObject = {
-      command: DialogCommands.COMMAND_ON_UPDATE,
+    const objectDialogInfo = {
       chosenObjectId: 'chosenObjectId',
       projectId: 'projectId',
       chosenObjectSubtype: objectTypes.getTypeValues('Cube').subtype,
       body: {},
       chosenObjectName: 'testName',
+    };
+
+    const actionObject = {
+      command: DialogCommands.COMMAND_ON_UPDATE,
+      objectsDialogInfo: [objectDialogInfo],
     };
     const arg = { message: JSON.stringify(actionObject) };
     const spyValidateAuthToken = jest
@@ -142,13 +146,17 @@ describe('Dialog Message Service', () => {
   it('should handle update command from popup for report WITHOUT instance id', async () => {
     // given
     officeApiHelper.getExcelSessionStatus = jest.fn();
-    const actionObject = {
+
+    const objectDialogInfo = {
       chosenObjectName: 'name',
-      command: DialogCommands.COMMAND_ON_UPDATE,
       chosenObjectId: 'chosenObjectId',
       projectId: 'projectId',
       chosenObjectSubtype: objectTypes.getTypeValues('Report').subtype,
       body: {},
+    };
+    const actionObject = {
+      command: DialogCommands.COMMAND_ON_UPDATE,
+      objectsDialogInfo: [objectDialogInfo],
     };
     const arg = { message: JSON.stringify(actionObject) };
     const spyValidateAuthToken = jest
@@ -170,8 +178,8 @@ describe('Dialog Message Service', () => {
   it('should handle update command from popup for report with dossier data', async () => {
     // given
     officeApiHelper.getExcelSessionStatus = jest.fn();
-    const actionObject = {
-      command: DialogCommands.COMMAND_ON_UPDATE,
+
+    const objectDialogInfo = {
       chosenObjectId: 'chosenObjectId',
       projectId: 'projectId',
       dossierData: {
@@ -181,6 +189,11 @@ describe('Dialog Message Service', () => {
       chosenObjectSubtype: objectTypes.getTypeValues('Report').subtype,
       body: {},
       chosenObjectName: 'testName',
+    };
+
+    const actionObject = {
+      command: DialogCommands.COMMAND_ON_UPDATE,
+      objectsDialogInfo: [objectDialogInfo],
     };
     const arg = { message: JSON.stringify(actionObject) };
     const spyValidateAuthToken = jest
@@ -202,8 +215,8 @@ describe('Dialog Message Service', () => {
   it('should handle cancel command from popup for re-prompt', async () => {
     // given
     officeApiHelper.getExcelSessionStatus = jest.fn();
-    const actionObject = {
-      command: DialogCommands.COMMAND_CANCEL,
+
+    const objectDialogInfo = {
       chosenObjectId: 'chosenObjectId',
       projectId: 'projectId',
       dossierData: {
@@ -213,6 +226,10 @@ describe('Dialog Message Service', () => {
       chosenObjectSubtype: objectTypes.getTypeValues('Report').subtype,
       body: {},
       chosenObjectName: 'testName',
+    };
+    const actionObject = {
+      command: DialogCommands.COMMAND_CANCEL,
+      objectsDialogInfo: [objectDialogInfo],
     };
     const arg = { message: JSON.stringify(actionObject) };
     const spyValidateAuthToken = jest
@@ -284,11 +301,15 @@ describe('Dialog Message Service', () => {
       chosenObjectId: 'id 1',
       projectId: 'projectId',
     };
-    const actionObject = {
-      command: DialogCommands.COMMAND_ON_UPDATE,
+
+    const objectDialogInfo = {
       chosenObjectName: 'name 2',
       chosenObjectId: 'id 2',
       projectId: 'projectId',
+    };
+    const actionObject = {
+      command: DialogCommands.COMMAND_ON_UPDATE,
+      objectsDialogInfo: [objectDialogInfo],
     };
     const reportParams = {
       isDuplicate: true,
@@ -311,7 +332,10 @@ describe('Dialog Message Service', () => {
     expect(spyValidateAuthToken).toHaveBeenCalled();
 
     expect(operationActions.duplicateRequested).toBeCalledTimes(1);
-    expect(operationActions.duplicateRequested).toBeCalledWith(reportParams.object, actionObject);
+    expect(operationActions.duplicateRequested).toBeCalledWith(
+      reportParams.object,
+      objectDialogInfo
+    );
   });
 
   it('should dispatch duplicateRequested for commandOk - duplication with edit for dossier visualization', async () => {
@@ -321,11 +345,15 @@ describe('Dialog Message Service', () => {
       chosenObject: 'id 1',
       chosenProject: 'projectId',
     };
-    const actionObject = {
-      command: DialogCommands.COMMAND_OK,
+
+    const objectDialogInfo = {
       chosenObject: 'id 2',
       chosenObjectName: 'name 2',
       chosenProject: 'projectId',
+    };
+    const actionObject: DialogResponse = {
+      command: DialogCommands.COMMAND_OK,
+      objectsDialogInfo: [objectDialogInfo],
     };
     const reportParams = {
       isDuplicate: true,
@@ -348,7 +376,10 @@ describe('Dialog Message Service', () => {
     expect(spyValidateAuthToken).toHaveBeenCalled();
 
     expect(operationActions.duplicateRequested).toBeCalledTimes(1);
-    expect(operationActions.duplicateRequested).toBeCalledWith(reportParams.object, actionObject);
+    expect(operationActions.duplicateRequested).toBeCalledWith(
+      reportParams.object,
+      objectDialogInfo
+    );
   });
 
   it.each`
@@ -424,11 +455,15 @@ describe('Dialog Message Service', () => {
       chosenObject: 'id 1',
       chosenProject: 'projectId',
     };
-    const actionObject = {
-      command: DialogCommands.COMMAND_CANCEL,
+    const objectDialogInfo = {
       chosenObject: 'id 2',
       chosenObjectName: 'name 2',
       chosenProject: 'projectId',
+    };
+
+    const actionObject = {
+      command: DialogCommands.COMMAND_CANCEL,
+      objectsDialogInfo: [objectDialogInfo],
     };
     const reportParams = {
       isDuplicate: true,
@@ -472,11 +507,15 @@ describe('Dialog Message Service', () => {
       chosenObject: 'id 1',
       chosenProject: 'projectId',
     };
-    const actionObject = {
-      command: DialogCommands.COMMAND_ERROR,
+    const objectDialogInfo = {
       chosenObject: 'id 2',
       chosenObjectName: 'name 2',
       chosenProject: 'projectId',
+    };
+
+    const actionObject = {
+      command: DialogCommands.COMMAND_ERROR,
+      objectsDialogInfo: [objectDialogInfo],
     };
     const reportParams = {
       isDuplicate: true,
@@ -588,11 +627,15 @@ describe('Dialog Message Service', () => {
         .mockImplementation();
 
       const response = {
-        objectWorkingId: 1,
-        pageByData: pageByDisplayType && { pageByDisplayType },
-        pageByConfigurations,
-        isPageBy,
-      } as DialogResponse;
+        objectsDialogInfo: [
+          {
+            objectWorkingId: 1,
+            pageByData: pageByDisplayType && { pageByDisplayType },
+            pageByConfigurations,
+            isPageBy,
+          },
+        ],
+      } as unknown as DialogResponse;
 
       // when
       await dialogMessageService.onCommandUpdate(response, reportParams);

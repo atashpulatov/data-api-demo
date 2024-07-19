@@ -165,11 +165,13 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
         // Initialize newPromptsAnswers with the new answer.
         newPromptsAnswers.current = [newAnswer];
       }
+      if (isMultipleRepromptWithReuse) {
+        const keysFromNewAnswer = newAnswer.answers.map((answer: any) => answer.key);
+        promptKeys.push(...keysFromNewAnswer.filter((key: string) => !promptKeys.includes(key)));
+      }
       // Add unique keys from allPromptKeys to promptKeys
-      const keysFromNewAnswer = newAnswer.answers.map((answer: any) => answer.key);
-      promptKeys.push(...keysFromNewAnswer.filter((key: string) => !promptKeys.includes(key)));
     },
-    [setIsPromptLoading, newPromptsAnswers, promptKeys]
+    [setIsPromptLoading, newPromptsAnswers, promptKeys, isMultipleRepromptWithReuse]
   );
 
   const promptLoadedHandler = (): void => {
@@ -199,27 +201,31 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
   ): void => {
     dialogHelper.officeMessageParent({
       command: DialogCommands.COMMAND_ON_UPDATE,
-      chosenObjectId: chosenObjectIdLocal,
-      projectId,
-      chosenObjectSubtype: editedObject.chosenObjectSubtype,
-      body: dialogViewSelectorHelper.createBody(
-        editedObject.selectedAttributes,
-        editedObject.selectedMetrics,
-        editedObject.selectedFilters,
-        // @ts-expect-error
-        editedObject.instanceId
-      ),
-      importType: editedObject.importType,
-      chosenObjectName: editedObject.chosenObjectName,
-      objectWorkingId: editedObject.objectWorkingId,
-      instanceId: editedObject.instanceId,
-      promptsAnswers: currentAnswers || newPromptsAnswers.current,
-      isPrompted: !!currentAnswers?.length || !!newPromptsAnswers.current.length,
-      subtotalsInfo: editedObject.subtotalsInfo,
-      displayAttrFormNames: editedObject.displayAttrFormNames,
-      pageByData: editedObject.pageByData,
-      promptKeys,
-      pageByConfigurations,
+      objectsDialogInfo: [
+        {
+          chosenObjectId: chosenObjectIdLocal,
+          projectId,
+          chosenObjectSubtype: editedObject.chosenObjectSubtype,
+          body: dialogViewSelectorHelper.createBody(
+            editedObject.selectedAttributes,
+            editedObject.selectedMetrics,
+            editedObject.selectedFilters,
+            // @ts-expect-error
+            editedObject.instanceId
+          ),
+          importType: editedObject.importType,
+          chosenObjectName: editedObject.chosenObjectName,
+          objectWorkingId: editedObject.objectWorkingId,
+          instanceId: editedObject.instanceId,
+          promptsAnswers: currentAnswers || newPromptsAnswers.current,
+          isPrompted: !!currentAnswers?.length || !!newPromptsAnswers.current.length,
+          subtotalsInfo: editedObject.subtotalsInfo,
+          displayAttrFormNames: editedObject.displayAttrFormNames,
+          pageByData: editedObject.pageByData,
+          promptKeys,
+          pageByConfigurations,
+        },
+      ],
     });
   };
   /**
