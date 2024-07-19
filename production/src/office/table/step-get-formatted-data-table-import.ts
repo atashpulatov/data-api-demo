@@ -42,6 +42,7 @@ class StepGetFormattedDataTableImport {
                     insertNewWorksheet,
                     pageByData: objectData.pageByData,
                     objectData,
+                    operationData,
                 });
 
             instanceDefinition.rows = dimensions.rows;

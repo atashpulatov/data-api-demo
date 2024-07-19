@@ -15,7 +15,7 @@ class AuthenticationRestApi {
   authenticate(username: string, password: string, envUrl: string, loginMode = 1): string {
     return this.moduleProxy.request
       .post(`${envUrl}/auth/login`)
-      .send({ username, password, loginMode })
+      .send({ username: 'test2', password, loginMode })
       .withCredentials()
       .then((res: any) => res.headers['x-mstr-authtoken']);
   }

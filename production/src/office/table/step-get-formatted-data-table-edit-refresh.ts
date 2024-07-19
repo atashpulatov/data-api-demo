@@ -55,6 +55,7 @@ class StepGetFormattedDataTableEditRefresh {
         insertNewWorksheet,
         pageByData,
         objectData,
+        operationData,
       });
 
       instanceDefinition.rows = dimensions.rows;

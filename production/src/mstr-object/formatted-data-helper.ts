@@ -33,8 +33,8 @@ class FormattedDataHelper {
         range: Excel.Range,
         prevOfficeTable: Excel.Table,
     ): Promise<{ addedRows: number; addedColumns: number }> {
-        prevOfficeTable.columns.load('count');
-        prevOfficeTable.rows.load('count');
+        prevOfficeTable?.columns.load('count');
+        prevOfficeTable?.rows.load('count');
 
         range.load(['rowCount', 'columnCount'])
         await excelContext.sync();

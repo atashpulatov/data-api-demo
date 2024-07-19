@@ -173,15 +173,6 @@ class StepGetInstanceDefinition {
         insertNewWorksheet: importType === ObjectImportType.PIVOT_TABLE || insertNewWorksheet,
       };
 
-
-      const isEditOrRefreshOperationType = operationType === OperationTypes.REFRESH_OPERATION
-        || operationType === OperationTypes.EDIT_OPERATION;
-      if (importType === ObjectImportType.FORMATTED_DATA && isEditOrRefreshOperationType) {
-        // Used to check the condition, before performing special logic on edit and refresh formatted data operations,
-        // in order to remove the crosstab tables. Reference {@link OfficeTableHelperRange.deletePrevOfficeTable()}
-        updatedObject.prevIsCrosstab = updatedObject.isCrosstab;
-      }
-
       if (objectTableImportType.has(importType)) {
         // update table specific props
         updatedObject.crosstabHeaderDimensions = mstrTable.crosstabHeaderDimensions;

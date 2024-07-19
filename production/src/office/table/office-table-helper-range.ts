@@ -4,6 +4,7 @@ import { officeShapeApiHelper } from '../shapes/office-shape-api-helper';
 import {
   InstanceDefinition,
   MstrTable,
+  OperationData,
 } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { CrosstabHeaderDimensions, ObjectData } from '../../types/object-types';
 
@@ -30,12 +31,13 @@ class OfficeTableHelperRange {
     instanceDefinition: InstanceDefinition,
     isRepeatStep: boolean,
     objectData: ObjectData,
+    operationData?: OperationData,
     objectDetailsRange?: Excel.Range,
   ): Promise<void> {
     if (prevOfficeTable) {
       if (isRepeatStep) {
         await this.checkRangeValidity(excelContext, range);
-        await this.deletePrevOfficeTable(excelContext, prevOfficeTable, objectData);
+        await this.deletePrevOfficeTable(excelContext, prevOfficeTable, objectData, operationData);
       } else {
         await this.checkObjectRangeValidityOnRefresh(
           objectData.importType,
@@ -44,7 +46,7 @@ class OfficeTableHelperRange {
           excelContext,
           instanceDefinition,
         );
-        await this.deletePrevOfficeTable(excelContext, prevOfficeTable, objectData);
+        await this.deletePrevOfficeTable(excelContext, prevOfficeTable, objectData, operationData);
       }
     } else {
       await this.checkRangeValidity(excelContext, range);
@@ -142,11 +144,10 @@ class OfficeTableHelperRange {
     excelContext: Excel.RequestContext,
     prevOfficeTable: Excel.Table,
     objectData: ObjectData,
+    operationData: OperationData
   ): Promise<void> {
     excelContext.runtime.enableEvents = false;
     await excelContext.sync();
-
-    const { importType, prevIsCrosstab } = objectData;
 
     // Delete threshold shape group before deleting the entire table
     if (objectData?.shapeGroupId) {
@@ -154,7 +155,7 @@ class OfficeTableHelperRange {
     }
 
     // Clear the formatted crosstabular table range before refresh or edit operation
-    if (importType === ObjectImportType.FORMATTED_DATA && prevIsCrosstab) {
+    if (objectData?.importType === ObjectImportType.FORMATTED_DATA && operationData?.backupObjectData?.isCrosstab) {
       const range = prevOfficeTable.getRange().getOffsetRange(-1, 0).getResizedRange(1, 0);
       range.clear();
     } else {
