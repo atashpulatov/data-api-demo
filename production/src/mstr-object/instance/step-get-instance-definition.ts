@@ -15,7 +15,6 @@ import { ObjectData, SubtotalsInfo } from '../../types/object-types';
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { OperationSteps } from '../../operation/operation-steps';
-import { OperationTypes } from '../../operation/operation-type-names';
 import mstrObjectEnum from '../mstr-object-type-enum';
 import dossierInstanceDefinition from './dossier-instance-definition';
 import { ErrorMessages } from '../../error/constants';
@@ -62,7 +61,7 @@ class StepGetInstanceDefinition {
         details,
       } = objectData;
       let { visualizationInfo, body, name, pageByData } = objectData;
-      const { preparedInstanceDefinition, operationType } = operationData;
+      const { preparedInstanceDefinition } = operationData;
 
       const excelContext = await officeApiHelper.getExcelContext();
 
