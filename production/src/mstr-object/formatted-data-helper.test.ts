@@ -1,7 +1,7 @@
 import { formattedDataHelper } from './formatted-data-helper';
 
 describe('FormattedDataHelper', () => {
-    it('should return added dimensions of a table', async () => {
+    it('should return newly added dimensions of a table', async () => {
         // given
         const excelContextMock = { sync: jest.fn() } as unknown as Excel.RequestContext;
         const rangeMock = {
@@ -22,7 +22,7 @@ describe('FormattedDataHelper', () => {
         } as unknown as Excel.Table;
 
         // when
-        const result = await formattedDataHelper.calculateDimensionsCount(excelContextMock, rangeMock, officeTableMock);
+        const result = await formattedDataHelper.calculateRowsAndColumnsSize(excelContextMock, rangeMock, officeTableMock);
         // then
         expect(result).toEqual({ addedRows: 0, addedColumns: 7 });
     });

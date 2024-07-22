@@ -79,7 +79,7 @@ class OfficeTableHelperRange {
     let addedColumns: number;
 
     if (importType === ObjectImportType.FORMATTED_DATA) {
-      ({ addedRows, addedColumns } = await formattedDataHelper.calculateDimensionsCount(excelContext, range, prevOfficeTable));
+      ({ addedRows, addedColumns } = await formattedDataHelper.calculateRowsAndColumnsSize(excelContext, range, prevOfficeTable));
     } else {
       ({ addedRows, addedColumns } = await this.calculateRowsAndColumnsSize(
         excelContext,

@@ -28,7 +28,7 @@ class FormattedDataHelper {
      * @param prevOfficeTable previous office table
      * @returns
      */
-    async calculateDimensionsCount(
+    async calculateRowsAndColumnsSize(
         excelContext: Excel.RequestContext,
         range: Excel.Range,
         prevOfficeTable: Excel.Table,
