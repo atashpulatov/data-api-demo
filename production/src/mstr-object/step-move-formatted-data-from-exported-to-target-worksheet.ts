@@ -32,6 +32,8 @@ class StepMoveFormattedDataFromExportedToTargetWorkSheet {
     console.group('Moving exported formatted data to the selected worksheet');
     console.time('Total');
 
+    let sourceWorksheet: Excel.Worksheet;
+
     try {
       const {
         startCell,
@@ -64,7 +66,7 @@ class StepMoveFormattedDataFromExportedToTargetWorkSheet {
 
       const targetWorksheet = officeApiHelper.getExcelSheetById(excelContext, worksheet.id);
 
-      const sourceWorksheet = officeApiHelper.getExcelSheetById(excelContext, sourceWorksheetId);
+      sourceWorksheet = officeApiHelper.getExcelSheetById(excelContext, sourceWorksheetId);
 
       const previousShapeCollection = await formattedDataHelper.getShapeCollection(targetWorksheet, excelContext);
       const tableShapesStartIndex = previousShapeCollection?.items?.length || 0;
@@ -79,8 +81,11 @@ class StepMoveFormattedDataFromExportedToTargetWorkSheet {
         excelContext
       );
 
-      sourceWorksheet.delete();
-      await excelContext.sync();
+      // Remove source worksheet, once formatted data migration from source to target worksheet has completed
+      if (sourceWorksheet) {
+        sourceWorksheet.delete();
+        await excelContext.sync();
+      }
 
       const currentShapeCollection = await formattedDataHelper.getShapeCollection(targetWorksheet, excelContext);
       const tableShapesEndIndex = currentShapeCollection?.items?.length || 0;
@@ -105,6 +110,12 @@ class StepMoveFormattedDataFromExportedToTargetWorkSheet {
         objectWorkingId
       );
     } catch (error) {
+      // Remove exported worksheet from current workbook on error
+      if (sourceWorksheet) {
+        sourceWorksheet.delete();
+        await operationData.excelContext.sync();
+      }
+
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
     } finally {
