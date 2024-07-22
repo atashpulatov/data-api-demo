@@ -21,7 +21,7 @@ class FormattedDataHelper {
     }
 
     /**
-     * Calculates the added dimensions count of a table.
+     * Calculates the added dimensions size of a table including the headers/crosstab-headers.
      * 
      * @param excelContext Reference to Excel Context used by Excel API functions
      * @param range Reference to Excel range object.
