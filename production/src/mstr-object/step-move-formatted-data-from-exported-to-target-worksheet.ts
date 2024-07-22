@@ -1,6 +1,6 @@
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiService } from '../office/api/office-api-service';
-import { getShapeCollection } from './formatted-data-helper';
+import { formattedDataHelper } from './formatted-data-helper';
 
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../types/object-types';
@@ -66,7 +66,7 @@ class StepMoveFormattedDataFromExportedToTargetWorkSheet {
 
       const sourceWorksheet = officeApiHelper.getExcelSheetById(excelContext, sourceWorksheetId);
 
-      const previousShapeCollection = await getShapeCollection(targetWorksheet, excelContext);
+      const previousShapeCollection = await formattedDataHelper.getShapeCollection(targetWorksheet, excelContext);
       const tableShapesStartIndex = previousShapeCollection?.items?.length || 0;
 
       await officeApiService.copyRangeFromSourceWorksheet(
@@ -82,7 +82,7 @@ class StepMoveFormattedDataFromExportedToTargetWorkSheet {
       sourceWorksheet.delete();
       await excelContext.sync();
 
-      const currentShapeCollection = await getShapeCollection(targetWorksheet, excelContext);
+      const currentShapeCollection = await formattedDataHelper.getShapeCollection(targetWorksheet, excelContext);
       const tableShapesEndIndex = currentShapeCollection?.items?.length || 0;
 
       if (tableShapesEndIndex > 0 && tableShapesEndIndex > tableShapesStartIndex) {

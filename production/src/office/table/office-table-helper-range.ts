@@ -1,8 +1,10 @@
+import { formattedDataHelper } from '../../mstr-object/formatted-data-helper';
 import { officeShapeApiHelper } from '../shapes/office-shape-api-helper';
 
 import {
   InstanceDefinition,
   MstrTable,
+  OperationData,
 } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { CrosstabHeaderDimensions, ObjectData } from '../../types/object-types';
 
@@ -22,7 +24,16 @@ class OfficeTableHelperRange {
    *
    * @throws {OverlappingTablesError} when range is not empty.
    */
-  async checkObjectRangeValidity(
+  async checkObjectRangeValidity({
+    prevOfficeTable,
+    excelContext,
+    range,
+    instanceDefinition,
+    isRepeatStep,
+    objectData,
+    objectDetailsRange,
+    operationData,
+  }: {
     prevOfficeTable: Excel.Table | null,
     excelContext: Excel.RequestContext,
     range: Excel.Range,
@@ -30,18 +41,22 @@ class OfficeTableHelperRange {
     isRepeatStep: boolean,
     objectData: ObjectData,
     objectDetailsRange?: Excel.Range,
+    operationData?: OperationData,
+  }
   ): Promise<void> {
     if (prevOfficeTable) {
       if (isRepeatStep) {
         await this.checkRangeValidity(excelContext, range);
-        await this.deletePrevOfficeTable(excelContext, prevOfficeTable, objectData);
+        await this.deletePrevOfficeTable(excelContext, prevOfficeTable, objectData, operationData);
       } else {
         await this.checkObjectRangeValidityOnRefresh(
+          objectData.importType,
+          range,
           prevOfficeTable,
           excelContext,
           instanceDefinition,
         );
-        await this.deletePrevOfficeTable(excelContext, prevOfficeTable, objectData);
+        await this.deletePrevOfficeTable(excelContext, prevOfficeTable, objectData, operationData);
       }
     } else {
       await this.checkRangeValidity(excelContext, range);
@@ -52,29 +67,41 @@ class OfficeTableHelperRange {
   }
 
   /**
-   * Checks if range is valid on refresh.
-   *
+   * Checks if the range is valid on refresh.
+   * 
+   * @param importType Type of the import that is being made
+   * @param range Reference to Excel range object.
    * @param prevOfficeTable previous office table
    * @param excelContext Reference to Excel Context used by Excel API functions
    * @param instanceDefinition
    *
    */
   async checkObjectRangeValidityOnRefresh(
+    importType: ObjectImportType,
+    range: Excel.Range,
     prevOfficeTable: Excel.Table,
     excelContext: Excel.RequestContext,
     instanceDefinition: InstanceDefinition,
   ): Promise<void> {
     const { rows, columns, mstrTable } = instanceDefinition;
 
-    const { addedRows, addedColumns } = await this.calculateRowsAndColumnsSize(
-      excelContext,
-      mstrTable,
-      prevOfficeTable,
-      rows,
-      columns
-    );
+    let addedRows: number;
+    let addedColumns: number;
+
+    if (importType === ObjectImportType.FORMATTED_DATA) {
+      ({ addedRows, addedColumns } = await formattedDataHelper.calculateRowsAndColumnsSize(excelContext, range, prevOfficeTable));
+    } else {
+      ({ addedRows, addedColumns } = await this.calculateRowsAndColumnsSize(
+        excelContext,
+        mstrTable,
+        prevOfficeTable,
+        rows,
+        columns
+      ));
+    }
 
     await this.checkExtendedRangeRows(
+      importType,
       addedColumns,
       prevOfficeTable,
       mstrTable,
@@ -82,7 +109,13 @@ class OfficeTableHelperRange {
       addedRows
     );
 
-    await this.checkExtendedRangeColumns(addedColumns, prevOfficeTable, mstrTable, excelContext);
+    await this.checkExtendedRangeColumns(
+      importType,
+      addedColumns,
+      prevOfficeTable,
+      mstrTable,
+      excelContext
+    );
   }
 
   /**
@@ -121,18 +154,18 @@ class OfficeTableHelperRange {
     excelContext: Excel.RequestContext,
     prevOfficeTable: Excel.Table,
     objectData: ObjectData,
+    operationData: OperationData
   ): Promise<void> {
     excelContext.runtime.enableEvents = false;
     await excelContext.sync();
-
-    const { importType, isCrosstab } = objectData;
 
     // Delete threshold shape group before deleting the entire table
     if (objectData?.shapeGroupId) {
       await officeShapeApiHelper.deleteShapeGroupLinkedToOfficeTable(prevOfficeTable, objectData.shapeGroupId, excelContext);
     }
 
-    if (importType === ObjectImportType.FORMATTED_DATA && isCrosstab) {
+    // Clear the formatted crosstabular table range before refresh or edit operation
+    if (objectData?.importType === ObjectImportType.FORMATTED_DATA && operationData?.backupObjectData?.isCrosstab) {
       const range = prevOfficeTable.getRange().getOffsetRange(-1, 0).getResizedRange(1, 0);
       range.clear();
     } else {
@@ -183,6 +216,7 @@ class OfficeTableHelperRange {
   /**
    * Checks if range is valid on refresh for added columns.
    *
+   * @param importType Type of the import that is being made
    * @param addedColumns shows the number of added columns to the table
    * @param prevOfficeTable previous office table
    * @param mstrTable contains informations about mstr object
@@ -191,6 +225,7 @@ class OfficeTableHelperRange {
    * @throws {OverlappingTablesError} when range is not empty.
    */
   async checkExtendedRangeColumns(
+    importType: ObjectImportType,
     addedColumns: number,
     prevOfficeTable: Excel.Table,
     mstrTable: MstrTable,
@@ -199,14 +234,20 @@ class OfficeTableHelperRange {
     const { isCrosstab, prevCrosstabDimensions } = mstrTable;
 
     if (addedColumns) {
-      const range = this.prepareRangeColumns(prevOfficeTable, addedColumns);
-      const rangeCrosstab = this.prepareRangeColumnsCrosstab(
-        range,
-        (prevCrosstabDimensions as CrosstabHeaderDimensions).columnsY,
-        isCrosstab
-      );
+      let range = this.prepareRangeColumns(prevOfficeTable, addedColumns);
 
-      await this.checkRangeValidity(excelContext, rangeCrosstab);
+      // We obtain all formatted table dimensions (including crosstabular) from exported worksheet
+      // directly through xlsx parsing mechanism. We should skip redundant crosstab dimensions claculations 
+      // for formatted data manipulations.
+      if (importType !== ObjectImportType.FORMATTED_DATA) {
+        range = this.prepareRangeColumnsCrosstab(
+          range,
+          (prevCrosstabDimensions as CrosstabHeaderDimensions).columnsY,
+          isCrosstab
+        );
+      }
+
+      await this.checkRangeValidity(excelContext, range);
     }
   }
 
@@ -248,6 +289,7 @@ class OfficeTableHelperRange {
   /**
    * Checks if range is valid on refresh for added rows.
    *
+   * @param importType Type of the import that is being made
    * @param addedColumns shows the number of added columns to the table
    * @param prevOfficeTable Reference to previously imported Excel table
    * @param mstrTable contains informations about mstr object
@@ -257,6 +299,7 @@ class OfficeTableHelperRange {
    * @throws {OverlappingTablesError} when range is not empty.
    */
   async checkExtendedRangeRows(
+    importType: ObjectImportType,
     addedColumns: number,
     prevOfficeTable: Excel.Table,
     mstrTable: MstrTable,
@@ -266,14 +309,20 @@ class OfficeTableHelperRange {
     const { isCrosstab, prevCrosstabDimensions } = mstrTable;
 
     if (addedRows) {
-      const range = this.prepareRangeRows(prevOfficeTable, addedColumns, addedRows);
-      const rangeCrosstab = this.prepareRangeRowsCrosstab(
-        range,
-        (prevCrosstabDimensions as CrosstabHeaderDimensions).rowsX,
-        isCrosstab
-      );
+      let range = this.prepareRangeRows(prevOfficeTable, addedColumns, addedRows);
 
-      await this.checkRangeValidity(excelContext, rangeCrosstab);
+      // We obtain all formatted table dimensions (including crosstabular) from exported worksheet
+      // directly through xlsx parsing mechanism. We should skip redundant crosstab dimensions claculations 
+      // for formatted data manipulations.
+      if (importType !== ObjectImportType.FORMATTED_DATA) {
+        range = this.prepareRangeRowsCrosstab(
+          range,
+          (prevCrosstabDimensions as CrosstabHeaderDimensions).rowsX,
+          isCrosstab
+        );
+      }
+
+      await this.checkRangeValidity(excelContext, range);
     }
   }
 

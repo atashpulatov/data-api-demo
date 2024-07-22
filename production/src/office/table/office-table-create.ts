@@ -11,7 +11,7 @@ import officeTableHelperRange from './office-table-helper-range';
 import { reduxStore } from '../../store';
 
 import { PageByData } from '../../page-by/page-by-types';
-import { InstanceDefinition } from '../../redux-reducer/operation-reducer/operation-reducer-types';
+import { InstanceDefinition, OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
 
 import { calculateOffsetForObjectInfoSettings } from '../../mstr-object/get-object-details-methods';
@@ -123,13 +123,15 @@ class OfficeTableCreate {
     }
 
     await officeTableHelperRange.checkObjectRangeValidity(
-      prevOfficeTable,
-      excelContext,
-      range,
-      instanceDefinition,
-      isRepeatStep,
-      objectData,
-      objectDetailsRange
+      {
+        prevOfficeTable,
+        excelContext,
+        range,
+        instanceDefinition,
+        isRepeatStep,
+        objectData,
+        objectDetailsRange
+      }
     );
 
     range.numberFormat = '' as unknown as any[][];
@@ -192,6 +194,7 @@ class OfficeTableCreate {
     insertNewWorksheet,
     pageByData,
     objectData,
+    operationData,
   }: {
     instanceDefinition: InstanceDefinition;
     excelContext: Excel.RequestContext;
@@ -204,6 +207,7 @@ class OfficeTableCreate {
     insertNewWorksheet: boolean;
     pageByData?: PageByData;
     objectData: ObjectData;
+    operationData: OperationData;
   }): Promise<any> {
     const {
       mstrTable,
@@ -245,12 +249,15 @@ class OfficeTableCreate {
     excelContext.trackedObjects.add(range);
 
     await officeTableHelperRange.checkObjectRangeValidity(
-      prevOfficeTable,
-      excelContext,
-      range,
-      instanceDefinition,
-      isRepeatStep,
-      objectData
+      {
+        prevOfficeTable,
+        excelContext,
+        range,
+        instanceDefinition,
+        isRepeatStep,
+        objectData,
+        operationData
+      }
     );
 
     const officeTable = worksheet.tables.add(tableRange, true); // create office table based on the range
