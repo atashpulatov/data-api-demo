@@ -123,13 +123,15 @@ class OfficeTableCreate {
     }
 
     await officeTableHelperRange.checkObjectRangeValidity(
-      prevOfficeTable,
-      excelContext,
-      range,
-      instanceDefinition,
-      isRepeatStep,
-      objectData,
-      objectDetailsRange
+      {
+        prevOfficeTable,
+        excelContext,
+        range,
+        instanceDefinition,
+        isRepeatStep,
+        objectData,
+        objectDetailsRange
+      }
     );
 
     range.numberFormat = '' as unknown as any[][];
@@ -247,13 +249,15 @@ class OfficeTableCreate {
     excelContext.trackedObjects.add(range);
 
     await officeTableHelperRange.checkObjectRangeValidity(
-      prevOfficeTable,
-      excelContext,
-      range,
-      instanceDefinition,
-      isRepeatStep,
-      objectData,
-      operationData
+      {
+        prevOfficeTable,
+        excelContext,
+        range,
+        instanceDefinition,
+        isRepeatStep,
+        objectData,
+        operationData
+      }
     );
 
     const officeTable = worksheet.tables.add(tableRange, true); // create office table based on the range

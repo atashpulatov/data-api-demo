@@ -24,7 +24,16 @@ class OfficeTableHelperRange {
    *
    * @throws {OverlappingTablesError} when range is not empty.
    */
-  async checkObjectRangeValidity(
+  async checkObjectRangeValidity({
+    prevOfficeTable,
+    excelContext,
+    range,
+    instanceDefinition,
+    isRepeatStep,
+    objectData,
+    objectDetailsRange,
+    operationData,
+  }: {
     prevOfficeTable: Excel.Table | null,
     excelContext: Excel.RequestContext,
     range: Excel.Range,
@@ -33,6 +42,7 @@ class OfficeTableHelperRange {
     objectData: ObjectData,
     operationData?: OperationData,
     objectDetailsRange?: Excel.Range,
+  }
   ): Promise<void> {
     if (prevOfficeTable) {
       if (isRepeatStep) {
