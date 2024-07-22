@@ -40,8 +40,8 @@ class OfficeTableHelperRange {
     instanceDefinition: InstanceDefinition,
     isRepeatStep: boolean,
     objectData: ObjectData,
-    operationData?: OperationData,
     objectDetailsRange?: Excel.Range,
+    operationData?: OperationData,
   }
   ): Promise<void> {
     if (prevOfficeTable) {
