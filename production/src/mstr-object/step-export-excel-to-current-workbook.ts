@@ -89,10 +89,14 @@ class StepExportExcelToCurrentWorkbook {
       operationStepDispatcher.updateOperation(operationData);
       operationStepDispatcher.completeExportExcelToCurrentWorkbook(objectWorkingId);
     } catch (error) {
-      // Remove exported worksheet from current workbook on error
-      if (exportEngineWorksheet) {
-        exportEngineWorksheet.delete();
-        await excelContext.sync();
+      try {
+        // Remove exported worksheet from current workbook on error
+        if (exportEngineWorksheet) {
+          exportEngineWorksheet.delete();
+          await excelContext.sync();
+        }
+      } catch (ignoredError) {
+        // Ignore the 'ignoredError' error and handle the original 'error' below
       }
 
       console.error(error);

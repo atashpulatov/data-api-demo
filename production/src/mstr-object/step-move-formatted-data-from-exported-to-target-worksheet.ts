@@ -110,10 +110,14 @@ class StepMoveFormattedDataFromExportedToTargetWorkSheet {
         objectWorkingId
       );
     } catch (error) {
-      // Remove exported worksheet from current workbook on error
-      if (sourceWorksheet) {
-        sourceWorksheet.delete();
-        await operationData.excelContext.sync();
+      try {
+        // Remove exported worksheet from current workbook on error
+        if (sourceWorksheet) {
+          sourceWorksheet.delete();
+          await operationData.excelContext.sync();
+        }
+      } catch (ignoredError) {
+        // Ignore the 'ignoredError' error and handle the original 'error' below
       }
 
       console.error(error);
