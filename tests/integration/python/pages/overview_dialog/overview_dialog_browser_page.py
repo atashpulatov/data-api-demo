@@ -16,7 +16,7 @@ class OverviewDialogBrowserPage(BaseBrowserPage):
     BUTTONS_SELECTOR = {
         "Add Data": ADD_DATA,
         "Refresh": ACTION_BUTTON,
-        "Re-Prompt": ACTION_BUTTON,
+        "Reprompt": ACTION_BUTTON,
         "Duplicate": ACTION_BUTTON,
         "Delete": ACTION_BUTTON,
         "Filter": FILTER_BUTTON,
@@ -85,6 +85,13 @@ class OverviewDialogBrowserPage(BaseBrowserPage):
         for index in range(len(all_elements)):
             selector = '//div[@row-id="%s"]/div[@aria-colindex="10"]//span[text()="Refresh successful"]' % index
             self.get_element_by_xpath(selector)
+
+    def wait_for_all_objects_to_import_successfully(self, object_row):
+        self.focus_on_add_in_popup_frame()
+
+        selector = '//div[@row-id="%s"]/div[@aria-colindex="10"]//span[text()="Import successful"]' % (int(object_row) - 1)
+        self.pause(2)
+        self.get_element_by_xpath(selector)
 
     def click_row_checkbox(self, row_index):
         self.focus_on_add_in_popup_frame()
