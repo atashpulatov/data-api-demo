@@ -46,9 +46,9 @@ task :py_e2e_test_win,[:tag_name, :build_no] do | t, args|
     shell_command! "npm install -g allure-commandline --save-dev",  cwd: "#{test_dir}"
     shell_command! "allure generate #{allure_folder} --clean ", cwd: "#{test_dir}"
     shell_command! "npm install", cwd: get_browser_test_dir()
-    info "publish e2e test result to Rally"
+    # info "publish e2e test result to Rally"
 
-    shell_command! "npm run rally verdict=all build=#{build_no} os=#{test_os} target=#{PY_WIN_TEST_PARAM[tag_name]}", cwd: get_browser_test_dir()
+    # shell_command! "npm run rally verdict=all build=#{build_no} os=#{test_os} target=#{PY_WIN_TEST_PARAM[tag_name]}", cwd: get_browser_test_dir()
   end
 
   if PY_MAC_TEST_PARAM[tag_name] == "windows_desktop"

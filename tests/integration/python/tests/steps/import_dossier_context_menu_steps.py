@@ -57,4 +57,7 @@ def step_impl(context, selected_element, attribute_name, visualization_name):
         attribute_name,
         visualization_name
     )
-    
+
+@step('I clicked "{selected_element}" element on current visualization')
+def step_impl(context, selected_element):
+    context.pages.import_dossier_context_menu_page().select_attribute_element_current_visualization(selected_element)

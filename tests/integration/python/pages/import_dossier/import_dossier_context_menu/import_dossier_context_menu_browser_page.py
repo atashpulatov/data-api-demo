@@ -178,4 +178,10 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
 
         self.get_element_by_xpath(ImportDossierContextMenuBrowserPage.CONTEXT_MENU_EXCLUDE_XPATH).click()
 
+    def select_attribute_element_current_visualization(self, selected_element):
+        self.focus_on_dossier_frame()
+
+        self.get_element_by_xpath(ImportDossierContextMenuBrowserPage.ELEMENT_CONTEXT_MENU % selected_element).click()
+
+
         
