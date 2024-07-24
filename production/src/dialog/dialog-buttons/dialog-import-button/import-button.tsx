@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Button, ButtonWithOptions, Tooltip } from '@mstr/rc';
@@ -15,18 +15,29 @@ interface ImportButtonProps {
   handleOk: () => void;
   isPrimaryBtn: boolean;
   disableReason: string;
+  reportPromptLayer?: number;
 }
 
 export const ImportButton: React.FC<ImportButtonProps> = ({
   disableReason,
   isPrimaryBtn,
   handleOk,
+  reportPromptLayer = 0,
 }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [buttonClicked, setButtonClicked] = useState(false);
-  let buttonDisableReason = disableReason;
 
+  useEffect(() => {
+    // DE297462: For nested prompts in Reports, we need to check the layer # and reset the buttonClicked state
+    // at 2+ to prevent the button from being disabled after the first layer. Nested prompts have no issue in
+    // Dashboard View, so we can ignore that case.
+    if (reportPromptLayer >= 2) {
+      setButtonClicked(false);
+    }
+  }, [reportPromptLayer]);
+
+  let buttonDisableReason = disableReason;
   if (buttonClicked) {
     // DE297462: Set disable reason string to 'Loading...' after initial click to provide user some feedback
     buttonDisableReason = t('Loading...');

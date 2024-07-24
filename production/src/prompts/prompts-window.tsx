@@ -99,6 +99,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
   }
 
   const newPromptsAnswers = useRef([]);
+  const [promptLayer, setPromptLayer] = useState(0);
   const [isPromptLoading, setIsPromptLoading] = useState(true);
   const [embeddedDocument, setEmbeddedDocument] = useState(null);
 
@@ -176,6 +177,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
 
   const promptLoadedHandler = (): void => {
     setIsPromptLoading(false);
+    setPromptLayer(layer => layer + 1);
   };
 
   /**
@@ -528,6 +530,7 @@ export const PromptsWindowNotConnected: React.FC<PromptsWindowProps> = props => 
         hideSecondary
         handleBack={!isReprompt && handleBack}
         disableActiveActions={isPromptLoading}
+        reportPromptLayer={promptLayer}
       />
     </div>
   );

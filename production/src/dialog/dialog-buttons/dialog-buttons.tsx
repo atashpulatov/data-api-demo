@@ -25,6 +25,7 @@ interface DialogButtonsProps {
   checkingSelection?: boolean;
   hideOk?: boolean;
   isImportReport?: boolean;
+  reportPromptLayer?: number;
 }
 
 export const DialogButtons: React.FC<DialogButtonsProps> = ({
@@ -42,6 +43,7 @@ export const DialogButtons: React.FC<DialogButtonsProps> = ({
   checkingSelection,
   hideOk,
   isImportReport,
+  reportPromptLayer
 }) => {
   const disableReason = dialogButtonHelper.getDisableReason(
     isPublished,
@@ -73,6 +75,7 @@ export const DialogButtons: React.FC<DialogButtonsProps> = ({
           handleOk={handleOk}
           isPrimaryBtn={isImportReport ? !handleSecondary : true}
           disableReason={disableReasonForImport}
+          reportPromptLayer={reportPromptLayer}
         />
       )}
       {shouldRenderPrepareDataButton && (
