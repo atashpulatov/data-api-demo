@@ -1,3 +1,5 @@
+import { officeApiHelper } from '../api/office-api-helper';
+
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
 
@@ -71,6 +73,20 @@ class StepGetFormattedDataTableImport {
             operationStepDispatcher.updateObject(updatedObject);
             operationStepDispatcher.completeGetFormattedDataTableImport(objectWorkingId);
         } catch (error) {
+            try {
+                const { excelContext, formattedData } = operationData;
+                const sourceWorksheet = officeApiHelper.getExcelSheetById(excelContext, formattedData?.sourceWorksheetId);
+
+                // Remove exported worksheet from current workbook on error
+                if (sourceWorksheet) {
+                    sourceWorksheet.delete();
+                    await operationData.excelContext.sync();
+                }
+            } catch (ignoredError) {
+                // Ignore the 'ignoredError' error and handle the original 'error' below
+                console.error(ignoredError)
+            }
+
             console.error(error);
             operationErrorHandler.handleOperationError(objectData, operationData, error);
         } finally {
