@@ -118,6 +118,7 @@ class StepMoveFormattedDataFromExportedToTargetWorkSheet {
         }
       } catch (ignoredError) {
         // Ignore the 'ignoredError' error and handle the original 'error' below
+        console.error(ignoredError)
       }
 
       console.error(error);
