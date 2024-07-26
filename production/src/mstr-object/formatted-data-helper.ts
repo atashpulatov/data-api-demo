@@ -77,7 +77,7 @@ class FormattedDataHelper {
      * @param sourceWorksheetId Exported worksheet ID
      * @returns
      */
-    async getxportedWorksheetById(
+    async getExportedWorksheetById(
         excelContext: Excel.RequestContext,
         sourceWorksheetId: string,
     ): Promise<Excel.Worksheet> {

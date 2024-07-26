@@ -39,7 +39,7 @@ class StepGetFormattedDataTableImport {
                 formattedData: { dimensions: rangeDimensions, sourceWorksheetId },
             } = operationData;
 
-            sourceWorksheet = await formattedDataHelper.getxportedWorksheetById(excelContext, sourceWorksheetId);
+            sourceWorksheet = await formattedDataHelper.getExportedWorksheetById(excelContext, sourceWorksheetId);
 
             const { officeTable, bindId, tableName, worksheet, startCell, groupData, dimensions } =
                 await officeTableCreate.createFormattedDataOfficeTable({

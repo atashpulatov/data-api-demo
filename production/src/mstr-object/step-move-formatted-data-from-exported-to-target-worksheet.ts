@@ -45,7 +45,7 @@ class StepMoveFormattedDataFromExportedToTargetWorkSheet {
 
       const targetWorksheet = officeApiHelper.getExcelSheetById(excelContext, worksheet.id);
 
-      sourceWorksheet = await formattedDataHelper.getxportedWorksheetById(excelContext, sourceWorksheetId);
+      sourceWorksheet = await formattedDataHelper.getExportedWorksheetById(excelContext, sourceWorksheetId);
 
       const { rows, columns } = instanceDefinition;
       let sourceTableRows = rows;

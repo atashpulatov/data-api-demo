@@ -43,7 +43,7 @@ class StepGetFormattedDataTableEditRefresh {
       const { excelContext, instanceDefinition, oldBindId, insertNewWorksheet, formattedData: { dimensions: rangeDimensions, sourceWorksheetId } } =
         operationData;
 
-      sourceWorksheet = await formattedDataHelper.getxportedWorksheetById(excelContext, sourceWorksheetId);
+      sourceWorksheet = await formattedDataHelper.getExportedWorksheetById(excelContext, sourceWorksheetId);
 
       const isRepeatStep = !!operationData.startCell; // If we have startCell on refresh it means that we are repeating step
 
