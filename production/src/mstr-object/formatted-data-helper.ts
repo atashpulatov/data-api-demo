@@ -48,6 +48,13 @@ class FormattedDataHelper {
         return { addedRows, addedColumns };
     }
 
+    /**
+     * Deletes the exported worksheet from workbook.
+     * 
+     * @param excelContext Reference to Excel Context used by Excel API functions
+     * @param sourceWorksheet Exported worksheet, where the formatted table resides
+     * @returns
+     */
     async deleteExportedWorksheet(
         excelContext: Excel.RequestContext,
         sourceWorksheet: Excel.Worksheet,
@@ -58,11 +65,18 @@ class FormattedDataHelper {
                 await excelContext.sync();
             }
         } catch (err) {
-            // Ignore the thrown exceptions (error)
+            // Ignore the thrown exception (error)
             console.error(err)
         }
     }
 
+    /**
+     * Retrieves the exported sheet by sheet id. In addition verifies the existence of source worksheet.
+     * 
+     * @param excelContext Reference to Excel Context used by Excel API functions
+     * @param sourceWorksheetId Exported worksheet ID
+     * @returns
+     */
     async getxportedWorksheetById(
         excelContext: Excel.RequestContext,
         sourceWorksheetId: string,
