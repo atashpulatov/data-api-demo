@@ -69,6 +69,21 @@ const selectEnableDataAutoRefresh = createSelector(
   settingsState => settingsState.enableDataAutoRefresh
 );
 
+const selectChapterNameVisibility = createSelector(
+  [getSettingsState],
+  settingState => settingState.displayChapterName
+);
+
+const selectChapterNamePosition = createSelector(
+  [getSettingsState],
+  settingState => settingState.chapterNamePosition
+);
+
+const selectContentPositioning = createSelector(
+  [getSettingsState],
+  settingState => settingState.contentPositioning
+);
+
 export const settingsReducerSelectors = {
   selectSidePanelObjectInfoSettings,
   selectSidePanelMainSwitchValue,
@@ -83,4 +98,7 @@ export const settingsReducerSelectors = {
   selectPivotTableAddAttributesToColumns,
   selectPivotTableAddMetricsToValues,
   selectEnableDataAutoRefresh,
+  selectChapterNameVisibility,
+  selectChapterNamePosition,
+  selectContentPositioning,
 };

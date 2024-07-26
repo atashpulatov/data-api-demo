@@ -1,4 +1,8 @@
-import { ObjectImportType } from '../../mstr-object/constants';
+import {
+  ChapterNamePosition,
+  ContentPositioning,
+  ObjectImportType,
+} from '../../mstr-object/constants';
 
 export enum ObjectAndWorksheetNamingOption {
   REPORT_NAME = 'reportName',
@@ -11,6 +15,9 @@ export enum ImportFormattingOption {
   IMPORT_ATTRIBUTES_AS_TEXT = 'importAttributesAsText',
   MERGE_CROSSTAB_COLUMNS = 'mergeCrosstabColumns',
   DEFAULT_IMPORT_TYPE = 'defaultImportType',
+  DISPLAY_CHAPTER_NAME = 'chapterNameVisibility',
+  CHAPTER_NAME_POSITION = 'chapterNamePosition',
+  CONTENT_POSITIONING = 'contentPositioning',
 }
 
 export enum PivotTableOption {
@@ -30,6 +37,9 @@ export enum UserPreferenceKey {
   EXCEL_PIVOT_TABLE_ADD_ATTRIBUTES_TO_COLUMNS = 'excelPivotTableAddAttributesToColumns',
   EXCEL_PIVOT_TABLE_ADD_METRICS_TO_VALUES = 'excelPivotTableAddMetricsToValues',
   EXCEL_DATA_AUTO_REFRESH = 'excelDataAutoRefresh',
+  EXCEL_IMPORT_SHEET_CHAPTER_NAME_VISIBILITY = 'excelImportSheetChapterNameVisibility',
+  EXCEL_IMPORT_SHEET_CHAPTER_NAME_POSITION = 'excelImportSheetChapterNamePosition',
+  EXCEL_TABLES_FROM_SAME_DASHBOARD_PAGE_POSITIONING = 'excelTablesFromTheSameDashboardPagePositioning',
 }
 
 export interface ImportFormatOptions {
@@ -56,3 +66,13 @@ export const OBJECT_INFO_KEY_VALUE = {
   filter: 'Filter',
   pageBy: 'Page-By Information',
 };
+
+export interface ChapterNamePositionOptions {
+  key: ChapterNamePosition;
+  value: string;
+}
+
+export interface ContentPositioningOptions {
+  key: ContentPositioning;
+  value: string;
+}

@@ -4,6 +4,8 @@ import { ObjectAndWorksheetNamingOption } from '../../right-side-panel/settings-
 import {
   LoadSidePanelObjectInfoSettingAction,
   LoadWorksheetObjectInfoSettingAction,
+  SetChapterNamePositonAction,
+  SetContentPositioningAction,
   SetDefaultImportTypeAction,
   SetEnableDataAutoRefresh,
   SetPageByDisplaySettingAction,
@@ -15,6 +17,7 @@ import {
   SettingsState,
   SetWorksheetNamingSettingAction,
   TableImportPosition,
+  ToggleChapterNameVisibilityAction,
   ToggleImportAttributesAsTextFlagAction,
   ToggleMainSidePanelObjectInfoSettingAction,
   ToggleMainWorksheetObjectInfoSettingAction,
@@ -23,7 +26,11 @@ import {
   ToggleWorksheetObjectInfoSettingAction,
 } from './settings-reducer-types';
 
-import { ObjectImportType } from '../../mstr-object/constants';
+import {
+  ChapterNamePosition,
+  ContentPositioning,
+  ObjectImportType,
+} from '../../mstr-object/constants';
 import {
   initialSidePanelObjectInfoSettings,
   initialWorksheetObjectInfoSettings,
@@ -41,6 +48,9 @@ const initialState: SettingsState = {
   pivotTableAddMetricsToValues: false,
   enableDataAutoRefresh: false,
   tableImportPosition: TableImportPosition.HORIZONTAL,
+  displayChapterName: true,
+  chapterNamePosition: ChapterNamePosition.BEFORE_PAGE_NAME,
+  contentPositioning: ContentPositioning.STACKED,
 };
 
 // eslint-disable-next-line default-param-last
@@ -76,6 +86,12 @@ export const settingsReducer = (state = initialState, action: SettingsActions): 
       return setPivotTableAddMetricsToValues(state, action);
     case SettingsActionTypes.SET_ENABLE_DATA_AUTO_REFRESH:
       return setEnableDataAutoRefresh(state, action);
+    case SettingsActionTypes.TOGGLE_CHAPTER_NAME_VISIBILTY:
+      return toggleChapterNameVisibility(state, action);
+    case SettingsActionTypes.SET_CHAPTER_NAME_POSITION:
+      return setChapterNamePosition(state, action);
+    case SettingsActionTypes.SET_CONTENT_POSITIONING:
+      return setContentPositioning(state, action);
     default:
       return state;
   }
@@ -222,4 +238,25 @@ function setEnableDataAutoRefresh(
   action: SetEnableDataAutoRefresh
 ): SettingsState {
   return { ...state, enableDataAutoRefresh: action.payload };
+}
+
+function toggleChapterNameVisibility(
+  state: SettingsState,
+  action: ToggleChapterNameVisibilityAction
+): SettingsState {
+  return { ...state, displayChapterName: action.payload };
+}
+
+function setChapterNamePosition(
+  state: SettingsState,
+  action: SetChapterNamePositonAction
+): SettingsState {
+  return { ...state, chapterNamePosition: action.chapterNamePosition };
+}
+
+function setContentPositioning(
+  state: SettingsState,
+  action: SetContentPositioningAction
+): SettingsState {
+  return { ...state, contentPositioning: action.contentPositioning };
 }
