@@ -66,10 +66,7 @@ Feature: TS41441 - Sanity checks
       And I verified that cells ["G8", "H8", "L8"] have values ["Jan 2020", "Audio Equipment", "$ 47,970"]
 
      When I hovered over Refresh button on object 2
-     # Then I verified that tooltip "Refresh" is displayed on object 2
-
-     When I clicked Refresh on object 2
-     # And I closed notification on object 2
+      And I clicked Refresh on object 2
      Then I verified that cells ["A3", "B3"] have values ["2020", "Northeast"]
 
 
@@ -94,7 +91,6 @@ Feature: TS41441 - Sanity checks
       And I verified that counter of "filters" shows "1" of "2" selected
      
      When I clicked "Import Data" button after Edit
-      # And I waited for object to be imported successfully
       And I closed last notification 
      Then I verified that cells ["G4", "H4", "I8", "K4"] have values ["", "Total", "", "$ 1,197,222"]
 
