@@ -2,6 +2,7 @@ import { read } from 'xlsx';
 
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiService } from '../office/api/office-api-service';
+import { formattedDataHelper } from './formatted-data-helper';
 import { mstrObjectRestService } from './mstr-object-rest-service';
 
 import { OperationData } from '../redux-reducer/operation-reducer/operation-reducer-types';
@@ -89,16 +90,7 @@ class StepExportExcelToCurrentWorkbook {
       operationStepDispatcher.updateOperation(operationData);
       operationStepDispatcher.completeExportExcelToCurrentWorkbook(objectWorkingId);
     } catch (error) {
-      try {
-        // Remove exported worksheet from current workbook on error
-        if (exportEngineWorksheet) {
-          exportEngineWorksheet.delete();
-          await excelContext.sync();
-        }
-      } catch (ignoredError) {
-        // Ignore the 'ignoredError' error and handle the original 'error' below
-        console.error(ignoredError)
-      }
+      formattedDataHelper.deleteExportedWorksheet(excelContext, exportEngineWorksheet)
 
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);

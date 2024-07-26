@@ -1,3 +1,6 @@
+import { officeApiHelper } from '../office/api/office-api-helper';
+
+import { ErrorMessages } from '../error/constants';
 import { OFFICE_TABLE_EXTA_ROW } from './constants';
 
 
@@ -44,6 +47,36 @@ class FormattedDataHelper {
 
         return { addedRows, addedColumns };
     }
+
+    async deleteExportedWorksheet(
+        excelContext: Excel.RequestContext,
+        sourceWorksheet: Excel.Worksheet,
+    ): Promise<void> {
+        try {
+            if (sourceWorksheet) {
+                sourceWorksheet.delete();
+                await excelContext.sync();
+            }
+        } catch (err) {
+            // Ignore the thrown exceptions (error)
+            console.error(err)
+        }
+    }
+
+    async getxportedWorksheetById(
+        excelContext: Excel.RequestContext,
+        sourceWorksheetId: string,
+    ): Promise<Excel.Worksheet> {
+        const sourceWorksheet = officeApiHelper.getExcelSheetById(excelContext, sourceWorksheetId);
+
+        if (!sourceWorksheet) {
+            throw new Error(ErrorMessages.FORMATTED_DATA_MANIPULATION_FAILURE_MESSAGE);
+        }
+
+        return sourceWorksheet;
+    }
+
+
 }
 
 export const formattedDataHelper = new FormattedDataHelper();

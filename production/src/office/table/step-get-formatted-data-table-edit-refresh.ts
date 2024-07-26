@@ -1,4 +1,4 @@
-import { officeApiHelper } from '../api/office-api-helper';
+import { formattedDataHelper } from '../../mstr-object/formatted-data-helper';
 
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
@@ -30,6 +30,8 @@ class StepGetFormattedDataTableEditRefresh {
     objectData: ObjectData,
     operationData: OperationData
   ): Promise<void> {
+    let sourceWorksheet: Excel.Worksheet;
+
     try {
       console.time('Create formatted data table - edit or refresh');
       const {
@@ -38,8 +40,11 @@ class StepGetFormattedDataTableEditRefresh {
         pageByData,
         importType,
       } = objectData;
-      const { excelContext, instanceDefinition, oldBindId, insertNewWorksheet, formattedData: { dimensions: rangeDimensions } } =
+      const { excelContext, instanceDefinition, oldBindId, insertNewWorksheet, formattedData: { dimensions: rangeDimensions, sourceWorksheetId } } =
         operationData;
+
+      sourceWorksheet = await formattedDataHelper.getxportedWorksheetById(excelContext, sourceWorksheetId);
+
       const isRepeatStep = !!operationData.startCell; // If we have startCell on refresh it means that we are repeating step
 
       const prevOfficeTable = await officeTableRefresh.getPreviousOfficeTable(
@@ -97,19 +102,7 @@ class StepGetFormattedDataTableEditRefresh {
       operationStepDispatcher.completeGetDefaultOfficeTableTemplateEditRefresh(objectWorkingId);
     } catch (error) {
       if (error.type !== ErrorType.OVERLAPPING_TABLES_ERR) {
-        try {
-          const { excelContext, formattedData } = operationData;
-          const sourceWorksheet = officeApiHelper.getExcelSheetById(excelContext, formattedData?.sourceWorksheetId);
-
-          // Remove exported worksheet from current workbook on error
-          if (sourceWorksheet) {
-            sourceWorksheet.delete();
-            await operationData.excelContext.sync();
-          }
-        } catch (ignoredError) {
-          // Ignore the 'ignoredError' error and handle the original 'error' below
-          console.error(ignoredError)
-        }
+        formattedDataHelper.deleteExportedWorksheet(operationData?.excelContext, sourceWorksheet)
       }
 
       console.error(error);

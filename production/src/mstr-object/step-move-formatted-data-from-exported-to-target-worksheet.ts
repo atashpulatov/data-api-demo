@@ -43,6 +43,10 @@ class StepMoveFormattedDataFromExportedToTargetWorkSheet {
       } = operationData;
       const { isCrosstab, objectWorkingId, worksheet } = objectData;
 
+      const targetWorksheet = officeApiHelper.getExcelSheetById(excelContext, worksheet.id);
+
+      sourceWorksheet = await formattedDataHelper.getxportedWorksheetById(excelContext, sourceWorksheetId);
+
       const { rows, columns } = instanceDefinition;
       let sourceTableRows = rows;
 
@@ -63,10 +67,6 @@ class StepMoveFormattedDataFromExportedToTargetWorkSheet {
         startCell,
         rows - OFFICE_TABLE_EXTA_ROW
       );
-
-      const targetWorksheet = officeApiHelper.getExcelSheetById(excelContext, worksheet.id);
-
-      sourceWorksheet = officeApiHelper.getExcelSheetById(excelContext, sourceWorksheetId);
 
       const previousShapeCollection = await formattedDataHelper.getShapeCollection(targetWorksheet, excelContext);
       const tableShapesStartIndex = previousShapeCollection?.items?.length || 0;
@@ -110,16 +110,7 @@ class StepMoveFormattedDataFromExportedToTargetWorkSheet {
         objectWorkingId
       );
     } catch (error) {
-      try {
-        // Remove exported worksheet from current workbook on error
-        if (sourceWorksheet) {
-          sourceWorksheet.delete();
-          await operationData.excelContext.sync();
-        }
-      } catch (ignoredError) {
-        // Ignore the 'ignoredError' error and handle the original 'error' below
-        console.error(ignoredError)
-      }
+      formattedDataHelper.deleteExportedWorksheet(operationData?.excelContext, sourceWorksheet)
 
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);

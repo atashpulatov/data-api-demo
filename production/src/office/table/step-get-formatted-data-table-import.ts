@@ -1,3 +1,4 @@
+import { formattedDataHelper } from '../../mstr-object/formatted-data-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
@@ -6,7 +7,7 @@ import { ObjectData } from '../../types/object-types';
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import officeTableCreate from './office-table-create';
-import { ErrorType } from '../../error/constants';
+import { ErrorMessages, ErrorType } from '../../error/constants';
 
 class StepGetFormattedDataTableImport {
     /**
@@ -25,6 +26,8 @@ class StepGetFormattedDataTableImport {
      * @param operationData.insertNewWorksheet Specify if new worksheet has to be created
      */
     async getFormattedDataTableImport(objectData: ObjectData, operationData: OperationData): Promise<void> {
+        let sourceWorksheet: Excel.Worksheet;
+
         try {
             console.time('Create formatted data table - import');
             const {
@@ -33,8 +36,10 @@ class StepGetFormattedDataTableImport {
                 instanceDefinition,
                 startCell: selectedCell,
                 insertNewWorksheet,
-                formattedData: { dimensions: rangeDimensions },
+                formattedData: { dimensions: rangeDimensions, sourceWorksheetId },
             } = operationData;
+
+            sourceWorksheet = await formattedDataHelper.getxportedWorksheetById(excelContext, sourceWorksheetId);
 
             const { officeTable, bindId, tableName, worksheet, startCell, groupData, dimensions } =
                 await officeTableCreate.createFormattedDataOfficeTable({
@@ -75,20 +80,7 @@ class StepGetFormattedDataTableImport {
             operationStepDispatcher.completeGetFormattedDataTableImport(objectWorkingId);
         } catch (error) {
             if (error.type !== ErrorType.OVERLAPPING_TABLES_ERR) {
-                try {
-                    const { excelContext, formattedData } = operationData;
-                    const sourceWorksheet = officeApiHelper.getExcelSheetById(excelContext, formattedData?.sourceWorksheetId);
-
-                    // Remove exported worksheet from current workbook on error
-                    if (sourceWorksheet) {
-                        sourceWorksheet.delete();
-                        await operationData.excelContext.sync();
-                    }
-                } catch (ignoredError) {
-                    // Ignore the 'ignoredError' error and handle the original 'error' below
-                    console.error(ignoredError)
-                }
-
+                formattedDataHelper.deleteExportedWorksheet(operationData?.excelContext, sourceWorksheet)
             }
             console.error(error);
             operationErrorHandler.handleOperationError(objectData, operationData, error);

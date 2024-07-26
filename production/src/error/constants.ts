@@ -89,6 +89,7 @@ export enum ErrorMessages {
   WRONG_RANGE = 'Please select only one range before import.',
   MICROSTRATEGY_API_MISSING = 'Cannot find microstrategy.dossier, please check if embeddinglib.js is present in your environment.',
   PAGE_BY_REFRESH_ERROR_MESSAGE = 'The source object has been modified. You can either edit it or delete it.',
+  FORMATTED_DATA_MANIPULATION_FAILURE_MESSAGE = 'The Formatted Data manipulation has failed.'
 }
 
 export const stringMessageToErrorType = withDefaultValue(
