@@ -30,6 +30,7 @@ export const initialState: NavigationTreeState = {
   chosenLibraryElement: {},
   chosenEnvElement: {},
   selectedMenu: { pageKey: 'all', groupId: null },
+  isDossierPageSelected: false,
 };
 
 export const navigationTree = (
@@ -85,6 +86,9 @@ export const navigationTree = (
 
     case NavigationTreeActionTypes.UPDATE_IS_CHOSEN_VIZ_OF_GRID_TYPE:
       return updateIsChosenVizOfGridType(state, action.isVizGrid);
+
+    case NavigationTreeActionTypes.IS_DOSSIER_PAGE_SELECTED:
+      return updateIsDossierPageSelected(state, action.isDossierPageSelected);
 
     default:
       return state;
@@ -255,8 +259,16 @@ const setPopupType = (state: NavigationTreeState, popupType: DialogType): Naviga
   return newState;
 };
 
-const updateIsChosenVizOfGridType = (state: NavigationTreeState, isVizGrid: boolean): NavigationTreeState => {
+const updateIsChosenVizOfGridType = (
+  state: NavigationTreeState,
+  isVizGrid: boolean
+): NavigationTreeState => {
   const newState = { ...state };
   newState.isChosenVisOfGridType = isVizGrid;
   return newState;
 };
+
+const updateIsDossierPageSelected = (
+  state: NavigationTreeState,
+  isDossierPageSelected: boolean
+): NavigationTreeState => ({ ...state, isDossierPageSelected });
