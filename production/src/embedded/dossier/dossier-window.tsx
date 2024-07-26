@@ -39,6 +39,7 @@ interface DossierWindowProps {
   handleBack: () => void;
   setImportType: (importType: ObjectImportType) => void;
   updateIsChosenVizOfGridType: (isVizGrid: boolean) => void;
+  updateIsDossierPageSelected: (isDossierPageSelected: boolean) => void;
   editedObject: EditedObject;
   isReprompt: boolean;
   importType: ObjectImportType;
@@ -69,6 +70,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
     handleBack,
     setImportType,
     updateIsChosenVizOfGridType,
+    updateIsDossierPageSelected,
     editedObject = {} as EditedObject,
     chosenObjectId = 'default id',
     chosenProjectId = 'default id',
@@ -146,6 +148,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
         isVizGrid: chosenVizIsGrid,
         promptsAnswers: chosenVizPromptAnswers,
         instanceId: chosenVizInstanceId,
+        isDossierPageSelected,
       } = dossierData;
 
       if (chosenVizInstanceId) {
@@ -159,6 +162,9 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
           updateIsChosenVizOfGridType(chosenVizIsGrid);
         }
 
+        updateIsDossierPageSelected(isDossierPageSelected);
+        setImportType(isDossierPageSelected ? ObjectImportType.TABLE : defaultImportType);
+
         setPromptsAnswers(chosenVizPromptAnswers);
         instanceId.current = chosenVizInstanceId;
 
@@ -168,8 +174,6 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
           )
         ) {
           let isVizSupported = true;
-
-          setImportType(defaultImportType);
 
           const checkIfVizDataCanBeImported = async (): Promise<any> => {
             // @ts-expect-error
@@ -216,6 +220,7 @@ export const DossierWindowNotConnected: React.FC<DossierWindowProps> = props => 
       defaultImportType,
       setImportType,
       updateIsChosenVizOfGridType,
+      updateIsDossierPageSelected,
     ]
   );
 
@@ -469,6 +474,7 @@ const mapActionsToProps = {
   handleBack: popupStateActions.onPopupBack,
   setImportType: popupStateActions.setImportType,
   updateIsChosenVizOfGridType: navigationTreeActions.updateIsChosenVizOfGridType,
+  updateIsDossierPageSelected: navigationTreeActions.updateIsDossierPageSelected,
 };
 
 export const DossierWindow = connect(mapStateToProps, mapActionsToProps)(DossierWindowNotConnected);

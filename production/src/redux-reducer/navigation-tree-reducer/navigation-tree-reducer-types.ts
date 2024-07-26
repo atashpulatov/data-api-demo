@@ -24,7 +24,8 @@ export enum NavigationTreeActionTypes {
   SET_PROMPT_OBJECTS = 'SET_PROMPT_OBJECTS',
   UPDATE_SELECTED_MENU = 'UPDATE_SELECTED_MENU',
   SET_POPUP_TYPE = 'SET_POPUP_TYPE',
-  UPDATE_IS_CHOSEN_VIZ_OF_GRID_TYPE = 'UPDATE_IS_CHOSEN_VIZ_OF_GRID_TYPE'
+  UPDATE_IS_CHOSEN_VIZ_OF_GRID_TYPE = 'UPDATE_IS_CHOSEN_VIZ_OF_GRID_TYPE',
+  IS_DOSSIER_PAGE_SELECTED = 'IS_DOSSIER_PAGE_SELECTED',
 }
 
 export interface NavigationTreeState {
@@ -54,6 +55,7 @@ export interface NavigationTreeState {
   promptObjects?: string[];
   pageByResponse?: PageByResponse;
   importPageByConfigurations?: (pageByConfigurations: PageByConfiguration[][]) => void;
+  isDossierPageSelected?: boolean;
 }
 
 export interface RequestPageByModalOpenData {
@@ -136,6 +138,11 @@ interface UpdateIsChosenVizOfGridTypeAction extends Action {
   isVizGrid: boolean;
 }
 
+interface UpdateIsDossierPageSelectedAction extends Action {
+  type: NavigationTreeActionTypes.IS_DOSSIER_PAGE_SELECTED;
+  isDossierPageSelected: boolean;
+}
+
 export type NavigationTreeActions =
   | SelectObjectAction
   | SetPromptObjectsAction
@@ -152,4 +159,5 @@ export type NavigationTreeActions =
   | UpdateDisplayAttrFormOnImportAction
   | UpdateSelectedMenuAction
   | SetPopupTypeAction
-  | UpdateIsChosenVizOfGridTypeAction;
+  | UpdateIsChosenVizOfGridTypeAction
+  | UpdateIsDossierPageSelectedAction;

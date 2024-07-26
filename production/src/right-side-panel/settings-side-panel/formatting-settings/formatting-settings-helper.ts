@@ -1,16 +1,30 @@
-import { SettingPanelSection, SettingsSection } from '@mstr/connector-components';
+import {
+  MultiSectionSettingType,
+  SettingPanelSection,
+  SettingsSection,
+} from '@mstr/connector-components';
 
 import { userRestService } from '../../../home/user-rest-service';
 import { getBooleanUserPreference } from '../settings-side-panel-helper';
 
 import { reduxStore } from '../../../store';
 
-import { ImportFormatOptions, ImportFormattingOption, UserPreferenceKey } from '../settings-side-panel-types';
+import {
+  ChapterNamePositionOptions,
+  ContentPositioningOptions,
+  ImportFormatOptions,
+  ImportFormattingOption,
+  UserPreferenceKey,
+} from '../settings-side-panel-types';
 
 import i18n from '../../../i18n';
 import { settingsActions } from '../../../redux-reducer/settings-reducer/settings-actions';
 import initializationErrorDecorator from '../initialization-error-decorator';
-import { ObjectImportType } from '../../../mstr-object/constants';
+import {
+  ChapterNamePosition,
+  ContentPositioning,
+  ObjectImportType,
+} from '../../../mstr-object/constants';
 
 class FormattingSettingsHelper {
   /**
@@ -46,7 +60,6 @@ class FormattingSettingsHelper {
   /**
    * Toggles the importAttributeAsText flag
    * @param importAttributesAsText - The new value for the importAttributesAsText flag.
-   * @returns A Promise that resolves when the user preference is updated.
    */
   toggleImportAsText = async (importAttributesAsText: boolean): Promise<void> => {
     await userRestService.setUserPreference(
@@ -62,7 +75,6 @@ class FormattingSettingsHelper {
   /**
    * Toggles the merge crosstab columns flag
    * @param mergeCrosstabColumns - The new value for the merge crosstab columns flag.
-   * @returns A Promise that resolves when the user preference is updated.
    */
   toggleMergeCrosstabColumns = async (mergeCrosstabColumns: boolean): Promise<void> => {
     await userRestService.setUserPreference(
@@ -103,6 +115,46 @@ class FormattingSettingsHelper {
   };
 
   /**
+   * Toggles the displayChapterName flag
+   * @param displayChapterName - The new value for the importAttributesAsText flag.
+   */
+  handleDisplayChapterNameSwitch = async (displayChapterName: boolean): Promise<void> => {
+    await userRestService.setUserPreference(
+      UserPreferenceKey.EXCEL_IMPORT_SHEET_CHAPTER_NAME_VISIBILITY,
+      displayChapterName
+    );
+    reduxStore.dispatch(settingsActions.toggleChapterNameVisibility(displayChapterName));
+  };
+
+  /**
+   * Handles chapterNamePosition change
+   * @param position - The new value for the chapterNamePosition flag.
+   */
+  handleChapterNamePositionSelectionChange = async (
+    position: ChapterNamePosition
+  ): Promise<void> => {
+    await userRestService.setUserPreference(
+      UserPreferenceKey.EXCEL_IMPORT_SHEET_CHAPTER_NAME_POSITION,
+      position
+    );
+    reduxStore.dispatch(settingsActions.setChapterNamePosition(position));
+  };
+
+  /**
+   * Handles contentPositioning change
+   * @param contentPositioning - The new value for the contentPositioning flag.
+   */
+  handleContentPositioningSelectionChange = async (
+    contentPositioning: ContentPositioning
+  ): Promise<void> => {
+    await userRestService.setUserPreference(
+      UserPreferenceKey.EXCEL_TABLES_FROM_SAME_DASHBOARD_PAGE_POSITIONING,
+      contentPositioning
+    );
+    reduxStore.dispatch(settingsActions.setContentPositioning(contentPositioning));
+  };
+
+  /**
    * Returns the settings section for the import formatting settings.
    * @param importAttributesAsTextValue - The value of the importAttributesAsText setting.
    * @param mergeCrosstabColumnsValue - The value of the mergeCrosstabColumns setting.
@@ -112,45 +164,92 @@ class FormattingSettingsHelper {
   getImportFormattingSection = (
     importAttributesAsTextValue: boolean,
     mergeCrosstabColumnsValue: boolean,
-    defaultImportType: ObjectImportType
+    defaultImportType: ObjectImportType,
+    chapterNameVisibilityValue: boolean,
+    defaultChapterNamePosition: ChapterNamePosition,
+    defaultContentPositioning: ContentPositioning
   ): SettingsSection => {
     const storeState = reduxStore.getState();
-    const { isShapeAPISupported, isInsertWorksheetAPISupported, isPivotTableSupported } = storeState.officeReducer;
+    const { isShapeAPISupported, isInsertWorksheetAPISupported, isPivotTableSupported } =
+      storeState.officeReducer;
 
-    const options: ImportFormatOptions[] = [];
+    const importFormatOptions: ImportFormatOptions[] = [];
 
-    options.push({ key: ObjectImportType.TABLE, value: i18n.t('Data') });
+    importFormatOptions.push({ key: ObjectImportType.TABLE, value: i18n.t('Data') });
 
     if (isInsertWorksheetAPISupported) {
-      options.push({ key: ObjectImportType.FORMATTED_DATA, value: i18n.t('Formatted Data') });
+      importFormatOptions.push({
+        key: ObjectImportType.FORMATTED_DATA,
+        value: i18n.t('Formatted Data'),
+      });
     }
 
     if (isShapeAPISupported) {
-      options.push({ key: ObjectImportType.IMAGE, value: i18n.t('Visualization') });
+      importFormatOptions.push({ key: ObjectImportType.IMAGE, value: i18n.t('Visualization') });
     }
 
     if (isPivotTableSupported) {
-      options.push({ key: ObjectImportType.PIVOT_TABLE, value: i18n.t('Pivot Table') });
+      importFormatOptions.push({ key: ObjectImportType.PIVOT_TABLE, value: i18n.t('Pivot Table') });
     }
 
-    return ({
+    const chapterNamePositionOptions: ChapterNamePositionOptions[] = [
+      {
+        key: ChapterNamePosition.BEFORE_PAGE_NAME,
+        value: i18n.t('Before page name'),
+      },
+      {
+        key: ChapterNamePosition.TOP_OF_SHEET,
+        value: i18n.t('On top of sheet'),
+      },
+    ];
+
+    const contentPositioningOptions: ContentPositioningOptions[] = [
+      {
+        key: ContentPositioning.STACKED,
+        value: i18n.t('Stacked'),
+      },
+      {
+        key: ContentPositioning.SIDE_BY_SIDE,
+        value: i18n.t('Side by Side'),
+      },
+    ];
+
+    return {
       key: 'import-settings',
       label: i18n.t('Import'),
       initialExpand: false,
       settingsGroups: [
         {
-          key: 'default-import-type',
-          type: SettingPanelSection.SELECT,
-          onChange: this.handleDefaultImportTypeChange,
+          key: 'multi-section-import',
+          type: SettingPanelSection.MULTI,
           settings: [
             {
+              type: MultiSectionSettingType.SELECT,
               key: ImportFormattingOption.DEFAULT_IMPORT_TYPE,
               label: i18n.t('Default import format:'),
               description: i18n.t(
                 'Objects that cannot be imported in the selected format will be imported as data. You can change the format during import.'
               ),
-              options,
+              onChange: this.handleDefaultImportTypeChange,
+              options: importFormatOptions,
               value: defaultImportType,
+            },
+            {
+              type: MultiSectionSettingType.SWITCH,
+              key: ImportFormattingOption.DISPLAY_CHAPTER_NAME,
+              label: i18n.t('Chapter name'),
+              onSwitch: this.handleDisplayChapterNameSwitch,
+              value: chapterNameVisibilityValue,
+            },
+            {
+              type: MultiSectionSettingType.SELECT,
+              key: ImportFormattingOption.CHAPTER_NAME_POSITION,
+              label: i18n.t('Chapter name position'),
+              onChange: this.handleChapterNamePositionSelectionChange,
+              options: chapterNamePositionOptions,
+              value: defaultChapterNamePosition,
+              customItemCssClass: 'chapter-name-position',
+              disabled: !chapterNameVisibilityValue,
             },
           ],
         },
@@ -177,8 +276,24 @@ class FormattingSettingsHelper {
             },
           ],
         },
+        {
+          key: 'content-positioning',
+          type: SettingPanelSection.SELECT,
+          onChange: this.handleContentPositioningSelectionChange,
+          settings: [
+            {
+              key: ImportFormattingOption.CONTENT_POSITIONING,
+              description: i18n.t(
+                'Choose content arrangement for importing entire Dashboard page onto one sheet.'
+              ),
+              label: i18n.t('Positioning'),
+              options: contentPositioningOptions,
+              value: defaultContentPositioning,
+            },
+          ],
+        },
       ],
-    });
-  }
+    };
+  };
 }
 export const formattingSettingsHelper = new FormattingSettingsHelper();

@@ -79,6 +79,11 @@ function updateIsChosenVizOfGridType(isVizGrid: any) {
     dispatch({ type: NavigationTreeActionTypes.UPDATE_IS_CHOSEN_VIZ_OF_GRID_TYPE, isVizGrid });
 }
 
+function updateIsDossierPageSelected(isDossierPageSelected: any) {
+  return (dispatch: Dispatch<any>) =>
+    dispatch({ type: NavigationTreeActionTypes.IS_DOSSIER_PAGE_SELECTED, isDossierPageSelected });
+}
+
 export const navigationTreeActions = {
   selectObject,
   requestImport,
@@ -94,5 +99,6 @@ export const navigationTreeActions = {
   updateDisplayAttrFormOnImport,
   setPromptObjects,
   updateSelectedMenu,
-  updateIsChosenVizOfGridType
+  updateIsChosenVizOfGridType,
+  updateIsDossierPageSelected,
 };

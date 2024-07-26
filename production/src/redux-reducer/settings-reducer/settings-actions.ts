@@ -5,6 +5,8 @@ import {
   LoadSidePanelObjectInfoSettingAction,
   LoadWorksheetObjectInfoSettingAction,
   ObjectInfoSetting,
+  SetChapterNamePositonAction,
+  SetContentPositioningAction,
   SetDefaultImportTypeAction,
   SetEnableDataAutoRefresh,
   SetPageByDisplaySettingAction,
@@ -14,6 +16,7 @@ import {
   SettingsActionTypes,
   SetWorksheetNamingSettingAction,
   TableImportPosition,
+  ToggleChapterNameVisibilityAction,
   ToggleImportAttributesAsTextFlagAction,
   ToggleMainSidePanelObjectInfoSettingAction,
   ToggleMainWorksheetObjectInfoSettingAction,
@@ -22,7 +25,11 @@ import {
   ToggleWorksheetObjectInfoSettingAction,
 } from './settings-reducer-types';
 
-import { ObjectImportType } from '../../mstr-object/constants';
+import {
+  ChapterNamePosition,
+  ContentPositioning,
+  ObjectImportType,
+} from '../../mstr-object/constants';
 
 const toggleImportAttributesAsTextFlag = (
   importAttributesAsText: boolean
@@ -125,6 +132,25 @@ const setEnableDataAutoRefresh = (payload: boolean): SetEnableDataAutoRefresh =>
   payload,
 });
 
+const toggleChapterNameVisibility = (payload: boolean): ToggleChapterNameVisibilityAction => ({
+  type: SettingsActionTypes.TOGGLE_CHAPTER_NAME_VISIBILTY,
+  payload,
+});
+
+const setChapterNamePosition = (
+  chapterNamePosition: ChapterNamePosition
+): SetChapterNamePositonAction => ({
+  type: SettingsActionTypes.SET_CHAPTER_NAME_POSITION,
+  chapterNamePosition,
+});
+
+const setContentPositioning = (
+  contentPositioning: ContentPositioning
+): SetContentPositioningAction => ({
+  type: SettingsActionTypes.SET_CONTENT_POSITIONING,
+  contentPositioning,
+});
+
 export const settingsActions = {
   toggleImportAttributesAsTextFlag,
   toggleMergeCrosstabColumnsFlag,
@@ -141,4 +167,7 @@ export const settingsActions = {
   setPivotTableAddAttributesToColumns,
   setPivotTableAddMetricsToValues,
   setEnableDataAutoRefresh,
+  toggleChapterNameVisibility,
+  setChapterNamePosition,
+  setContentPositioning,
 };

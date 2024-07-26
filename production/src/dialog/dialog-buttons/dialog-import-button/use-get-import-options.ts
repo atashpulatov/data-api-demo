@@ -19,10 +19,13 @@ import { optionsDictionary } from './import-button-constants';
 const useGetImportOptions = (): ImportButtonOptionsType[] => {
   const isPivotTableSupported = useSelector(officeSelectors.selectIsPivotTableSupported);
   const isShapeAPISupported = useSelector(officeSelectors.selectIsShapeAPISupported);
-  const isInsertWorksheetAPISupported = useSelector(officeSelectors.selectIsInsertWorksheetAPISupported);
+  const isInsertWorksheetAPISupported = useSelector(
+    officeSelectors.selectIsInsertWorksheetAPISupported
+  );
   const selectedMstrObjectType = useSelector(navigationTreeSelectors.selectMstrObjectType);
   const isChosenVisOfGridType = useSelector(navigationTreeSelectors.selectIsChosenVisOfGridType);
   const isEdit = useSelector(navigationTreeSelectors.selectIsEdit);
+  const isDossierPageSelected = useSelector(navigationTreeSelectors.selectIsDossierPageSelected);
   const editedObject = useSelector(popupSelectors.selectEditedObject);
 
   const options: ImportButtonOptionsType[] = [];
@@ -40,15 +43,24 @@ const useGetImportOptions = (): ImportButtonOptionsType[] => {
 
   // Formatted data import type is supported by default
   if (isInsertWorksheetAPISupported && (!selectedMstrObjectType || isSelectedObjectTypeSupported)) {
-    options.push({ disabled: !isChosenVisOfGridType, ...optionsDictionary[ObjectImportType.FORMATTED_DATA] });
+    options.push({
+      disabled: !isChosenVisOfGridType || isDossierPageSelected,
+      ...optionsDictionary[ObjectImportType.FORMATTED_DATA],
+    });
   }
 
   if (isShapeAPISupported && selectedMstrObjectType === mstrObjectType.mstrObjectType.dossier) {
-    options.push(optionsDictionary[ObjectImportType.IMAGE]);
+    options.push({
+      disabled: isDossierPageSelected,
+      ...optionsDictionary[ObjectImportType.IMAGE],
+    });
   }
 
   if (isPivotTableSupported) {
-    options.push(optionsDictionary[ObjectImportType.PIVOT_TABLE]);
+    options.push({
+      disabled: isDossierPageSelected,
+      ...optionsDictionary[ObjectImportType.PIVOT_TABLE],
+    });
   }
 
   return options;
