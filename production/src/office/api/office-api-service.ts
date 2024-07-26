@@ -176,7 +176,7 @@ class OfficeApiService {
     const { sourceTableRange, sourceWorksheet, targetTableRange, targetWorksheet } =
       rangeMigrationInfo;
 
-    const sourceRange = sourceWorksheet.getRange(sourceTableRange);
+    const sourceRange = sourceWorksheet?.getRange(sourceTableRange);
     excelContext.trackedObjects.add(sourceRange);
 
     // Retrieve the column properties of source table

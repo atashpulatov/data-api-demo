@@ -7,6 +7,7 @@ import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import officeTableCreate from './office-table-create';
 import officeTableRefresh from './office-table-refresh';
+import { ErrorType } from '../../error/constants';
 
 class StepGetFormattedDataTableEditRefresh {
   /**
@@ -95,18 +96,20 @@ class StepGetFormattedDataTableEditRefresh {
       operationStepDispatcher.updateObject(updatedObject);
       operationStepDispatcher.completeGetDefaultOfficeTableTemplateEditRefresh(objectWorkingId);
     } catch (error) {
-      try {
-        const { excelContext, formattedData } = operationData;
-        const sourceWorksheet = officeApiHelper.getExcelSheetById(excelContext, formattedData?.sourceWorksheetId);
+      if (error.type !== ErrorType.OVERLAPPING_TABLES_ERR) {
+        try {
+          const { excelContext, formattedData } = operationData;
+          const sourceWorksheet = officeApiHelper.getExcelSheetById(excelContext, formattedData?.sourceWorksheetId);
 
-        // Remove exported worksheet from current workbook on error
-        if (sourceWorksheet) {
-          sourceWorksheet.delete();
-          await operationData.excelContext.sync();
+          // Remove exported worksheet from current workbook on error
+          if (sourceWorksheet) {
+            sourceWorksheet.delete();
+            await operationData.excelContext.sync();
+          }
+        } catch (ignoredError) {
+          // Ignore the 'ignoredError' error and handle the original 'error' below
+          console.error(ignoredError)
         }
-      } catch (ignoredError) {
-        // Ignore the 'ignoredError' error and handle the original 'error' below
-        console.error(ignoredError)
       }
 
       console.error(error);

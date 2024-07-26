@@ -71,7 +71,7 @@ class StepExportExcelToCurrentWorkbook {
 
       exportEngineWorksheet = await this.insertExcelWorksheet(excelBlob, excelContext);
 
-      const exportedTableRange = exportEngineWorksheet.getRange(exportedWorksheetTableRange);
+      const exportedTableRange = exportEngineWorksheet?.getRange(exportedWorksheetTableRange);
       exportedTableRange.load(['rowCount', 'columnCount']);
       await excelContext.sync();
 
@@ -83,7 +83,7 @@ class StepExportExcelToCurrentWorkbook {
           rows,
           columns: exportedTableRange.columnCount,
         },
-        sourceWorksheetId: exportEngineWorksheet.id,
+        sourceWorksheetId: exportEngineWorksheet?.id,
       };
 
       operationStepDispatcher.updateOperation(operationData);

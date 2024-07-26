@@ -6,6 +6,7 @@ import { ObjectData } from '../../types/object-types';
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import officeTableCreate from './office-table-create';
+import { ErrorType } from '../../error/constants';
 
 class StepGetFormattedDataTableImport {
     /**
@@ -73,20 +74,22 @@ class StepGetFormattedDataTableImport {
             operationStepDispatcher.updateObject(updatedObject);
             operationStepDispatcher.completeGetFormattedDataTableImport(objectWorkingId);
         } catch (error) {
-            try {
-                const { excelContext, formattedData } = operationData;
-                const sourceWorksheet = officeApiHelper.getExcelSheetById(excelContext, formattedData?.sourceWorksheetId);
+            if (error.type !== ErrorType.OVERLAPPING_TABLES_ERR) {
+                try {
+                    const { excelContext, formattedData } = operationData;
+                    const sourceWorksheet = officeApiHelper.getExcelSheetById(excelContext, formattedData?.sourceWorksheetId);
 
-                // Remove exported worksheet from current workbook on error
-                if (sourceWorksheet) {
-                    sourceWorksheet.delete();
-                    await operationData.excelContext.sync();
+                    // Remove exported worksheet from current workbook on error
+                    if (sourceWorksheet) {
+                        sourceWorksheet.delete();
+                        await operationData.excelContext.sync();
+                    }
+                } catch (ignoredError) {
+                    // Ignore the 'ignoredError' error and handle the original 'error' below
+                    console.error(ignoredError)
                 }
-            } catch (ignoredError) {
-                // Ignore the 'ignoredError' error and handle the original 'error' below
-                console.error(ignoredError)
-            }
 
+            }
             console.error(error);
             operationErrorHandler.handleOperationError(objectData, operationData, error);
         } finally {
