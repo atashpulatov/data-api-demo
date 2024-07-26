@@ -70,3 +70,13 @@ export const displayAttrFormNamesOptions = [
     displayName: 'Off',
   },
 ];
+
+export enum ChapterNamePosition {
+  BEFORE_PAGE_NAME = 'beforePageName',
+  TOP_OF_SHEET = 'topOfSheet',
+}
+
+export enum ContentPositioning {
+  STACKED = 'vertically',
+  SIDE_BY_SIDE = 'horizontally',
+}

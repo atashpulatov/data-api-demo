@@ -47,6 +47,14 @@ const SettingsSidePanel: React.FC<any> = () => {
     settingsReducerSelectors.selectPivotTableAddMetricsToValues
   );
 
+  const displayChapterName = useSelector(settingsReducerSelectors.selectChapterNameVisibility);
+
+  const defaultChapterNamePosition = useSelector(
+    settingsReducerSelectors.selectChapterNamePosition
+  );
+
+  const defaultContentPositioning = useSelector(settingsReducerSelectors.selectContentPositioning);
+
   const {
     getPromptSection,
     getObjectInfoSection,
@@ -60,7 +68,14 @@ const SettingsSidePanel: React.FC<any> = () => {
   const { getPivotTableSection } = pivotTableSettingsHelper;
 
   const settingsSections: SettingsSection[] = [
-    getImportFormattingSection(importAttributesAsText, mergeCrosstabColumns, defaultImportType),
+    getImportFormattingSection(
+      importAttributesAsText,
+      mergeCrosstabColumns,
+      defaultImportType,
+      displayChapterName,
+      defaultChapterNamePosition,
+      defaultContentPositioning
+    ),
     getPromptSection(reusePromptAnswers),
     getPageBySection(objectAndWorksheetNamingSetting, pageByDisplaySetting),
     getImportPositionSection(tableImportPosition),

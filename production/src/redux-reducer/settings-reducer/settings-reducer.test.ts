@@ -4,7 +4,11 @@ import { TableImportPosition } from './settings-reducer-types';
 
 import { settingsActions } from './settings-actions';
 import { settingsReducer } from './settings-reducer';
-import { ObjectImportType } from '../../mstr-object/constants';
+import {
+  ChapterNamePosition,
+  ContentPositioning,
+  ObjectImportType,
+} from '../../mstr-object/constants';
 import {
   initialSidePanelObjectInfoSettings,
   initialWorksheetObjectInfoSettings,
@@ -23,6 +27,9 @@ describe('settingsReducer', () => {
     pivotTableAddMetricsToValues: false,
     enableDataAutoRefresh: false,
     tableImportPosition: TableImportPosition.HORIZONTAL,
+    displayChapterName: true,
+    chapterNamePosition: ChapterNamePosition.BEFORE_PAGE_NAME,
+    contentPositioning: ContentPositioning.STACKED,
   };
 
   it('should return correct initial state', () => {

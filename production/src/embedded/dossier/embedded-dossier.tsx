@@ -189,6 +189,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       visualizationKey,
       vizDimensions,
       isVizGrid: isGrid,
+      isDossierPageSelected: payload.selectedPages?.length > 0,
     };
 
     handleSelection(this.dossierData);

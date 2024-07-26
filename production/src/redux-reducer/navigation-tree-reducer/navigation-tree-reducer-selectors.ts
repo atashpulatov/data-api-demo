@@ -56,6 +56,11 @@ const selectIsChosenVisOfGridType = createSelector(
   navigationTree => navigationTree.isChosenVisOfGridType
 );
 
+const selectIsDossierPageSelected = createSelector(
+  [getNavigationTreeState],
+  navigationTree => navigationTree.isDossierPageSelected
+);
+
 export const navigationTreeSelectors = {
   selectMstrObjectType,
   selectIsObjectSelected,
@@ -66,5 +71,6 @@ export const navigationTreeSelectors = {
   selectChosenObjectName,
   selectIsPageByModalOpenRequested,
   selectImportPageByConfigurations,
-  selectIsChosenVisOfGridType
+  selectIsChosenVisOfGridType,
+  selectIsDossierPageSelected,
 };

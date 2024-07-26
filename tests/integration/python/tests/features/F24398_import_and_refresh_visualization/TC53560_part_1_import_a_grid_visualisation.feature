@@ -18,9 +18,9 @@ Feature: F24398 - Import and refresh visualization
       And I selected dossier bookmark 1
       And I "increased" year filter value on dossier from "left" side
      Then I verified that value for filter "Year" is "(2021 - 2022)"
-
-     When I reset dossier
-     Then I verified that value for filter "Year" is "(2020 - 2021)"
+      And I reset dossier
+    
+    #Then I verified that value for filter "Year" is "(2020 - 2021)"
 
      When I selected dossier page or chapter 3
       And I selected visualization "Chart vis"

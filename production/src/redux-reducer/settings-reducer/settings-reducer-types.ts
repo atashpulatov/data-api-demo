@@ -3,7 +3,11 @@ import { Action } from 'redux';
 import { PageByDisplayType } from '../../page-by/page-by-types';
 import { ObjectAndWorksheetNamingOption } from '../../right-side-panel/settings-side-panel/settings-side-panel-types';
 
-import { ObjectImportType } from '../../mstr-object/constants';
+import {
+  ChapterNamePosition,
+  ContentPositioning,
+  ObjectImportType,
+} from '../../mstr-object/constants';
 
 export type SettingsState = {
   mergeCrosstabColumns: boolean;
@@ -17,6 +21,9 @@ export type SettingsState = {
   pivotTableAddMetricsToValues: boolean;
   enableDataAutoRefresh: boolean;
   tableImportPosition: TableImportPosition;
+  displayChapterName: boolean;
+  chapterNamePosition: ChapterNamePosition;
+  contentPositioning: ContentPositioning;
 };
 
 export enum SettingsActionTypes {
@@ -35,6 +42,9 @@ export enum SettingsActionTypes {
   SET_PIVOT_TABLE_ADD_ATTRIBUTES_TO_COLUMNS = 'SET_PIVOT_TABLE_ADD_ATTRIBUTES_TO_COLUMNS',
   SET_PIVOT_TABLE_ADD_METRICS_TO_VALUES = 'SET_PIVOT_TABLE_ADD_METRICS_TO_VALUES',
   SET_ENABLE_DATA_AUTO_REFRESH = 'SET_ENABLE_DATA_AUTO_REFRESH',
+  TOGGLE_CHAPTER_NAME_VISIBILTY = 'TOGGLE_CHAPTER_NAME_VISIBILTY',
+  SET_CHAPTER_NAME_POSITION = 'SET_CHAPTER_NAME_POSITION',
+  SET_CONTENT_POSITIONING = 'SET_CONTENT_POSITIONING',
 }
 
 export enum TableImportPosition {
@@ -117,6 +127,21 @@ export interface SetEnableDataAutoRefresh extends Action {
   payload: boolean;
 }
 
+export interface ToggleChapterNameVisibilityAction extends Action {
+  type: SettingsActionTypes.TOGGLE_CHAPTER_NAME_VISIBILTY;
+  payload: boolean;
+}
+
+export interface SetChapterNamePositonAction extends Action {
+  type: SettingsActionTypes.SET_CHAPTER_NAME_POSITION;
+  chapterNamePosition: ChapterNamePosition;
+}
+
+export interface SetContentPositioningAction extends Action {
+  type: SettingsActionTypes.SET_CONTENT_POSITIONING;
+  contentPositioning: ContentPositioning;
+}
+
 export type SettingsActions =
   | ToggleMergeCrosstabColumnsFlagAction
   | ToggleImportAttributesAsTextFlagAction
@@ -132,7 +157,10 @@ export type SettingsActions =
   | SetDefaultImportTypeAction
   | SetPivotTableAddAttributesToColumnsAction
   | SetPivotTableAddMetricsToValuesAction
-  | SetEnableDataAutoRefresh;
+  | SetEnableDataAutoRefresh
+  | ToggleChapterNameVisibilityAction
+  | SetChapterNamePositonAction
+  | SetContentPositioningAction;
 
 export type ObjectInfoSetting = {
   key: string;

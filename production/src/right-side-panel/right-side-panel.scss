@@ -1,3 +1,5 @@
+@import '~@mstr/rc/es/assets/scss/msdl_universal.scss';
+
 .side-panel {
   height: 100%;
   display: flex;
@@ -20,6 +22,16 @@
 
   section {
     margin-left: 10px;
+
+    .chapter-name-position {
+      label {
+        color: $msdl-dark-gray;
+      }
+
+      [class*='select__container'] {
+        width: 45%;
+      }
+    }
   }
 }
 
