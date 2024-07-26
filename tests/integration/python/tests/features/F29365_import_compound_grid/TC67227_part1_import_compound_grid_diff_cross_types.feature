@@ -1,4 +1,4 @@
-#@ci_pipeline_postmerge_windows_chrome 
+@ci_pipeline_postmerge_windows_chrome 
 Feature: F29365 - Import compound grid
 
   Scenario: [TC67227] - part 1 -Import compound grid visualization with different cross type

@@ -22,7 +22,7 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
       And I clicked Add Data button
       And I found and selected object "Bursting Report - Multiple attribute in page-by"
       And I selected import type "Import Data" and clicked import
-      #TODO new step for new page-by window
+      And I clicked "Import" button
       And I waited for object to be imported successfully
       And I hover over import successfull message
 
@@ -38,7 +38,8 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
     #Import object 4: Dossier viz as Image
       And I added a new worksheet
       And I clicked Add Data button
-      And I found and selected object "User Embedded Dashboard"
+      And I found object "User Embedded Dashboard"
+      And I selected object "User Embedded Dashboard"
       And I clicked import dossier without waiting for results
       And I selected Visualization "Last 30 Days Trend"
       And I selected import type "Import Visualization" and clicked import
@@ -48,7 +49,8 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
     #Import object 5: Normal report
       And I added a new worksheet
       And I clicked Add Data button
-      And I found and selected object "User Embedded Dashboard"
+      And I found object "User Embedded Dashboard"
+      And I selected object "User Embedded Dashboard"
       And I clicked import dossier without waiting for results
       And I selected Visualization "Top 10 Objects by Total Runs for the Last 30 Days"
       And I selected import type "Import Data" and clicked import
@@ -76,11 +78,12 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
       And I waited for all objects to be refreshed successfully
 
      When I selected object "6" using object checkbox in Overview window
-     Then I verified "Re-Prompt" button in Overview window is enabled
-      And I clicked "Re-Prompt" button in Overview window
+     Then I verified "Reprompt" button in Overview window is enabled
+      And I clicked "Reprompt" button in Overview window
       And I unselected "Books" as an answer for "1. Category" prompt - object prompt
       And I selected "Movies" as an answer for "1. Category" prompt - object prompt
       And I clicked Run button
+      And I waited for object "6" to be imported successfully
 
      When I selected object "2" using object checkbox in Overview window
      Then I verified "Duplicate" button in Overview window is enabled

@@ -27,7 +27,6 @@ class StepGetOfficeTableImport {
         objectWorkingId,
         excelContext,
         instanceDefinition,
-        startCell: selectedCell,
         insertNewWorksheet,
         operationType,
       } = operationData;
@@ -36,7 +35,7 @@ class StepGetOfficeTableImport {
         await officeTableCreate.createOfficeTable({
           excelContext,
           instanceDefinition,
-          startCell: selectedCell,
+          startCell: operationData.startCell,
           insertNewWorksheet,
           pageByData: objectData.pageByData,
           objectData,

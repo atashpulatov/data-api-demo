@@ -329,3 +329,4 @@ tests/integration/python/allureFolder*
 
 # UB benchmarking
 tests/integration/python/framework/resources/ub_benchmarking/modified_manifest.xml
+production/venv_win

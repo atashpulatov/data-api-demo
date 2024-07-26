@@ -1,3 +1,5 @@
+import { officeApiHelper } from '../api/office-api-helper';
+
 import { OperationData } from '../../redux-reducer/operation-reducer/operation-reducer-types';
 import { ObjectData } from '../../types/object-types';
 
@@ -21,6 +23,7 @@ class StepGetFormattedDataTableEditRefresh {
    * @param operationData.instanceDefinition Object containing information about MSTR object
    * @param operationData.oldBindId Id of the Office table created on import
    * @param operationData.insertNewWorksheet Specify if new worksheet has to be created
+   * @param operationData.startCell Address of the cell in Excel spreadsheet
    */
   async getFormattedDataTableEditRefresh(
     objectData: ObjectData,
@@ -36,6 +39,7 @@ class StepGetFormattedDataTableEditRefresh {
       } = objectData;
       const { excelContext, instanceDefinition, oldBindId, insertNewWorksheet, formattedData: { dimensions: rangeDimensions } } =
         operationData;
+      const isRepeatStep = !!operationData.startCell; // If we have startCell on refresh it means that we are repeating step
 
       const prevOfficeTable = await officeTableRefresh.getPreviousOfficeTable(
         excelContext,
@@ -45,13 +49,15 @@ class StepGetFormattedDataTableEditRefresh {
       const { officeTable, bindId, startCell, dimensions } = await officeTableCreate.createFormattedDataOfficeTable({
         instanceDefinition,
         excelContext,
-        startCell: objectData.startCell,
+        startCell: isRepeatStep ? operationData.startCell : objectData.startCell,
         rangeDimensions,
         tableName,
         prevOfficeTable,
+        isRepeatStep,
         insertNewWorksheet,
         pageByData,
         objectData,
+        operationData,
       });
 
       instanceDefinition.rows = dimensions.rows;
@@ -89,6 +95,20 @@ class StepGetFormattedDataTableEditRefresh {
       operationStepDispatcher.updateObject(updatedObject);
       operationStepDispatcher.completeGetDefaultOfficeTableTemplateEditRefresh(objectWorkingId);
     } catch (error) {
+      try {
+        const { excelContext, formattedData } = operationData;
+        const sourceWorksheet = officeApiHelper.getExcelSheetById(excelContext, formattedData?.sourceWorksheetId);
+
+        // Remove exported worksheet from current workbook on error
+        if (sourceWorksheet) {
+          sourceWorksheet.delete();
+          await operationData.excelContext.sync();
+        }
+      } catch (ignoredError) {
+        // Ignore the 'ignoredError' error and handle the original 'error' below
+        console.error(ignoredError)
+      }
+
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
     } finally {

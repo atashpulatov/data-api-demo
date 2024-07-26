@@ -33,6 +33,10 @@ def step_impl(context, action):
 def step_impl(context):
     context.pages.overview_dialog_page().wait_for_all_objects_to_refresh_successfully()
 
+@step('I waited for object "{object_row}" to be imported successfully')
+def step_impl(context, object_row):
+    context.pages.overview_dialog_page().wait_for_all_objects_to_import_successfully(object_row)
+
 @step('I selected object "{row_index}" using object checkbox in Overview window')
 def step_impl(context, row_index):
     context.pages.overview_dialog_page().click_row_checkbox(row_index)

@@ -36,11 +36,13 @@ class StepExportExcelToCurrentWorkbook {
     console.group('Export excel workbook');
     console.time('Total');
 
+    let exportEngineWorksheet: Excel.Worksheet;
+    const excelContext = await officeApiHelper.getExcelContext();
+
     try {
       const { instanceDefinition } = operationData;
       const { objectWorkingId, objectId, visualizationInfo, projectId, mstrObjectType } =
         objectData;
-      const excelContext = await officeApiHelper.getExcelContext();
 
       let response: Response;
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
@@ -67,7 +69,7 @@ class StepExportExcelToCurrentWorkbook {
         excelContext
       );
 
-      const exportEngineWorksheet = await this.insertExcelWorksheet(excelBlob, excelContext);
+      exportEngineWorksheet = await this.insertExcelWorksheet(excelBlob, excelContext);
 
       const exportedTableRange = exportEngineWorksheet.getRange(exportedWorksheetTableRange);
       exportedTableRange.load(['rowCount', 'columnCount']);
@@ -87,6 +89,17 @@ class StepExportExcelToCurrentWorkbook {
       operationStepDispatcher.updateOperation(operationData);
       operationStepDispatcher.completeExportExcelToCurrentWorkbook(objectWorkingId);
     } catch (error) {
+      try {
+        // Remove exported worksheet from current workbook on error
+        if (exportEngineWorksheet) {
+          exportEngineWorksheet.delete();
+          await excelContext.sync();
+        }
+      } catch (ignoredError) {
+        // Ignore the 'ignoredError' error and handle the original 'error' below
+        console.error(ignoredError)
+      }
+
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
     } finally {

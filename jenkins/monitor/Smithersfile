@@ -1,4 +1,4 @@
-job 'stage-0-monitor' do
+job 'stage-0-string-monitor' do
   description 'monitor String DB change'
 
   configure_common_items{}

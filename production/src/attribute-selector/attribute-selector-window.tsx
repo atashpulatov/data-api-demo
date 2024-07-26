@@ -69,7 +69,7 @@ export const AttributeSelectorWindowNotConnected: React.FC<
 
     let instance;
 
-    const body = instanceDefinitionHelper.setupBodyTemplate(message.body);
+    const body = instanceDefinitionHelper.setupBodyTemplate(message.objectsDialogInfo[0].body);
 
     if (!editedObject?.instanceId) {
       instance = await mstrObjectRestService.createInstance({
@@ -100,12 +100,16 @@ export const AttributeSelectorWindowNotConnected: React.FC<
         instanceId: instance.instanceId,
         requestPageByModalOpen,
         importCallback: pageByConfigurations => {
-          dialogHelper.officeMessageParent({ ...message, isPageBy, pageByConfigurations });
+          const messageObjectsData = [
+            { ...message.objectsDialogInfo[0], isPageBy, pageByConfigurations },
+          ];
+          dialogHelper.officeMessageParent({ ...message, objectsDialogInfo: messageObjectsData });
         },
       });
     } else {
       const pageByData = isPageBy ? editedObject?.pageByData : undefined;
-      dialogHelper.officeMessageParent({ ...message, isPageBy, pageByData });
+      const messageObjectsData = [{ ...message.objectsDialogInfo[0], isPageBy, pageByData }];
+      dialogHelper.officeMessageParent({ ...message, objectsDialogInfo: messageObjectsData });
     }
   };
 
@@ -134,19 +138,23 @@ export const AttributeSelectorWindowNotConnected: React.FC<
 
     const message = {
       command: DialogCommands.COMMAND_ON_UPDATE,
-      objectWorkingId: editedObject?.objectWorkingId,
-      chosenObjectId,
-      projectId,
-      chosenObjectSubtype,
-      body,
-      chosenObjectName,
-      instanceId: chosenObject.preparedInstanceId,
-      promptsAnswers: chosenObject.promptsAnswers,
-      importType,
-      isPrompted: !!chosenObject.promptsAnswers,
-      subtotalsInfo,
-      displayAttrFormNames: displayAttrFormNamesSet,
-      filterDetails,
+      objectsDialogInfo: [
+        {
+          objectWorkingId: editedObject?.objectWorkingId,
+          chosenObjectId,
+          projectId,
+          chosenObjectSubtype,
+          body,
+          chosenObjectName,
+          instanceId: chosenObject.preparedInstanceId,
+          promptsAnswers: chosenObject.promptsAnswers,
+          importType,
+          isPrompted: !!chosenObject.promptsAnswers,
+          subtotalsInfo,
+          displayAttrFormNames: displayAttrFormNamesSet,
+          filterDetails,
+        },
+      ],
     };
     handleImport(message);
   };

@@ -14,16 +14,16 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
     VISUALIZATION_TABLE_CONTEXT_MENU_ITEMS = '.mstrmojo-ui-Menu-item'
     VISUALIZATION_TABLE_CONTEXT_MENU_LIST_ITEMS = '.mstrmojo-ListBase > div > div > span'
 
-    CONTEXT_MENU_SHOW_TOTALS = 'Show Totals'
-    CONTEXT_MENU_DRILL = 'Drill'
+    CONTEXT_MENU_SHOW_TOTALS_XPATH = '//a[@class="item pop  mstrmojo-ui-Menu-item"]//div[contains(text(), "Show Totals")]'
+    CONTEXT_MENU_DRILL_XPATH = '//a[@class="item pop  mnu--xtab-drill mstrmojo-ui-Menu-item"]//div[contains(text(), "Drill")]'
     CONTEXT_MENU_ABSOLUTE_SORT = 'Absolute Sort'
     CONTEXT_MENU_TOTAL_ITEMS = '.mstrmojo-vi-subtotals > div > div > div > span'
     CONTEXT_MENU_BOX = '.mstrmojo-ui-Menu'
-    CONTEXT_MENU_BUTTONS = '.mstrmojo-Button-text'
-    CONTEXT_MENU_BUTTON_OK = 'OK'
+    CONTEXT_MENU_BUTTON_OK_XPATH = '//div[@class="mstrmojo-Button-text " and contains(text(), "OK")]'
     CONTEXT_MENU_TEXT_ELEMENTS = '.mtxt'
-    CONTEXT_MENU_REPLACE_WITH = 'Replace With'
-    CONTEXT_MENU_EXCLUDE = 'Exclude'
+    CONTEXT_MENU_REPLACE_WITH_XPATH = '//a[@class="item pop  mstrmojo-ui-Menu-item"]//div[contains(text(), "Replace With")]'
+    ELEMENT_CONTEXT_MENU = '//div[contains(@class, "mstrmojo-XtabZone")]//table//tbody//tr//td[1][text() = "%s"]'
+    CONTEXT_MENU_EXCLUDE_XPATH = '//a[@class="item mnu--xtab-exclude mstrmojo-ui-Menu-item"]//div[contains(text(), "Exclude")]'
 
     ALLOWED_SORT_ORDER = ('Ascending', 'Descending')
 
@@ -35,20 +35,14 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
 
         self._open_context_menu(attribute_name, visualization_name)
 
-        self.find_element_in_list_by_text(
-            ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_CONTEXT_MENU_ITEMS,
-            ImportDossierContextMenuBrowserPage.CONTEXT_MENU_SHOW_TOTALS
-        ).click()
+        self.get_element_by_xpath(ImportDossierContextMenuBrowserPage.CONTEXT_MENU_SHOW_TOTALS_XPATH).click()
 
         self.find_element_in_list_by_text(
             ImportDossierContextMenuBrowserPage.CONTEXT_MENU_TOTAL_ITEMS,
             totals_to_select
         ).click()
 
-        self.find_element_in_list_by_text(
-            ImportDossierContextMenuBrowserPage.CONTEXT_MENU_BUTTONS,
-            ImportDossierContextMenuBrowserPage.CONTEXT_MENU_BUTTON_OK
-        ).click()
+        self.get_element_by_xpath(ImportDossierContextMenuBrowserPage.CONTEXT_MENU_BUTTON_OK_XPATH).click()
 
     def select_sort_order_for_metric(self, sort_order, metric_name, visualization_name):
         if sort_order not in ImportDossierContextMenuBrowserPage.ALLOWED_SORT_ORDER:
@@ -78,10 +72,7 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
 
         self._open_context_menu(attribute_name, visualization_name)
 
-        self.find_element_in_list_by_text(
-            ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_CONTEXT_MENU_ITEMS,
-            ImportDossierContextMenuBrowserPage.CONTEXT_MENU_DRILL
-        ).click()
+        self.get_element_by_xpath(ImportDossierContextMenuBrowserPage.CONTEXT_MENU_DRILL_XPATH).click()
 
         menu_boxes = self.get_elements_by_css(ImportDossierContextMenuBrowserPage.CONTEXT_MENU_BOX)
         menu_items = menu_boxes[1].get_elements_by_css(ImportDossierContextMenuBrowserPage.CONTEXT_MENU_TEXT_ELEMENTS)
@@ -107,10 +98,7 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
 
         self._open_context_menu(attribute_name, visualization_name)
 
-        self.find_element_in_list_by_text(
-            ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_CONTEXT_MENU_ITEMS,
-            ImportDossierContextMenuBrowserPage.CONTEXT_MENU_REPLACE_WITH
-        ).click()
+        self.get_element_by_xpath(ImportDossierContextMenuBrowserPage.CONTEXT_MENU_REPLACE_WITH_XPATH).click()
 
         menu_items = self.get_elements_by_css(
             ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_CONTEXT_MENU_LIST_ITEMS
@@ -148,13 +136,14 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
         # index_of_column + 1 because indices of elements starts from 0 but css selector nth-child starts from 1
         column_selector = ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_COLUMN_X_ITEMS % (index_of_column + 1)
 
-        self.find_element_in_list_by_text(
+        element_to_click = self.find_element_in_list_by_text(
             column_selector,
             selected_element
-        ).click()
+        )
+        element_to_click.click()
 
     # TODO visualization_name
-    def select_exclude_for_attribute_element(self, exclude, attribute_name, visualization_name):
+    def select_exclude_for_attribute_element_old(self, exclude, attribute_name, visualization_name):
         """
         Excludes given attribute element from visualization context menu.
 
@@ -181,3 +170,18 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
             ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_CONTEXT_MENU_ITEMS,
             ImportDossierContextMenuBrowserPage.CONTEXT_MENU_EXCLUDE
         ).click()
+
+    def select_exclude_for_attribute_element(self, exclude, attribute_name, visualization_name):
+        self.focus_on_dossier_frame()
+
+        self.get_element_by_xpath(ImportDossierContextMenuBrowserPage.ELEMENT_CONTEXT_MENU % exclude).right_click()
+
+        self.get_element_by_xpath(ImportDossierContextMenuBrowserPage.CONTEXT_MENU_EXCLUDE_XPATH).click()
+
+    def select_attribute_element_current_visualization(self, selected_element):
+        self.focus_on_dossier_frame()
+
+        self.get_element_by_xpath(ImportDossierContextMenuBrowserPage.ELEMENT_CONTEXT_MENU % selected_element).click()
+
+
+        
