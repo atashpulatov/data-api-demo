@@ -20,7 +20,7 @@
     "validate": "office-addin-manifest validate manifest.xml"
   },
   "dependencies": {
-    "@mstr/connector-components": "^6.8.0",
+    "@mstr/connector-components": "^6.9.2",
     "@mstr/mstr-icons": "^2.47.1",
     "@mstr/mstr-react-library": "2.0.0",
     "@mstr/rc": "^3.16.10",
