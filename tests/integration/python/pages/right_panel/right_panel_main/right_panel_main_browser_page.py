@@ -15,7 +15,7 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
 
     SELECT_ALL_TILES = 'div.object-tile-container-header > span > span > '
     SELECT_ALL_TILES_CHECKBOX = '.object-tile-container-header .mstr-rc-3-selector'
-    REFRESH_SELECTED_BUTTON = SELECT_ALL_TILES + 'button:nth-of-type(3)'
+    REFRESH_ALL_BUTTON = "button[aria-label='Refresh All']"
     REMOVE_SELECTED_BUTTON = SELECT_ALL_TILES + 'button:nth-of-type(4)'
 
     CLEAR_DATA = '.clear-data'
@@ -72,7 +72,7 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     def click_refresh_selected_button(self):
         self.focus_on_add_in_frame()
 
-        self.get_element_by_css(RightPanelMainBrowserPage.REFRESH_SELECTED_BUTTON).click()
+        self.get_element_by_css(RightPanelMainBrowserPage.REFRESH_ALL_BUTTON).click()
 
     def remove_all(self):
         self.focus_on_add_in_frame()
